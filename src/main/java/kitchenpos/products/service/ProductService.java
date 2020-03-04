@@ -1,19 +1,20 @@
-package kitchenpos.products.bo;
+package kitchenpos.products.service;
 
 import kitchenpos.products.tobe.domain.ProductDao;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-@Component
-public class ProductBo {
+@Service
+public class ProductService {
     private final ProductDao productDao;
 
-    public ProductBo(final ProductDao productDao) {
+    public ProductService(final ProductDao productDao) {
         this.productDao = productDao;
     }
 

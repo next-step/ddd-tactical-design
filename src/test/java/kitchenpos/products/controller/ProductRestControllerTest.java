@@ -1,6 +1,6 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.bo.ProductBo;
+import kitchenpos.products.service.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class ProductRestControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductBo productBo;
+    private ProductService productBo;
 
     @Test
     void create() throws Exception {
