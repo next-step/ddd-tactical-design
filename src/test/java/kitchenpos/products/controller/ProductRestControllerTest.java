@@ -49,9 +49,9 @@ class ProductRestControllerTest {
 
     @Test
     void create() throws Exception {
-        String name = "후라이드치킨";
-        BigDecimal price = BigDecimal.valueOf(16000);
-        Product saved = Product.registerProduct(name, price);
+        final String name = "후라이드치킨";
+        final BigDecimal price = BigDecimal.valueOf(16000);
+        final Product saved = Product.registerProduct(name, price);
         saved.forceSetId(1L);
         given(productService.create(name, price)).willReturn(saved);
 

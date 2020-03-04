@@ -17,7 +17,7 @@ class ProductDomainTests {
     @ParameterizedTest
     @MethodSource("validPrices")
     public void createProductWithValidPrice(BigDecimal price) {
-        Product product = Product.registerProduct("후라이드치킨", price);
+        final Product product = Product.registerProduct("후라이드치킨", price);
 
         assertThat(product.getName()).isEqualTo("후라이드치킨");
         assertThat(product.getPrice()).isEqualTo(price);

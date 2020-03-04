@@ -16,8 +16,8 @@ class ProductPriceVoTests {
     @DisplayName("값을 0원 이상으로 상품 가격 책정 시 성공")
     @ParameterizedTest
     @MethodSource("validPrices")
-    public void valueOfProductPriceWithValidValue(BigDecimal price) {
-        ProductPrice productPrice = ProductPrice.valueOf(price);
+    public void valueOfProductPriceWithValidValue(final BigDecimal price) {
+        final ProductPrice productPrice = ProductPrice.valueOf(price);
 
         assertThat(productPrice.checkProductPriceValue()).isEqualTo(price);
     }
@@ -32,7 +32,7 @@ class ProductPriceVoTests {
     @ParameterizedTest
     @NullSource
     @MethodSource("invalidPrices")
-    public void valueOfProductPriceWithInValidValue(BigDecimal price) {
+    public void valueOfProductPriceWithInValidValue(final BigDecimal price) {
         assertThatThrownBy(() -> {
             ProductPrice.valueOf(price);
         }).isInstanceOf(IllegalArgumentException.class);

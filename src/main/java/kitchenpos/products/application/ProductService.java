@@ -18,7 +18,7 @@ public class ProductService {
     }
 
     public Product create(final String name, final BigDecimal price) {
-        Product target = Product.registerProduct(name, price);
+        final Product target = Product.registerProduct(name, price);
 
         return productRepository.save(target);
     }

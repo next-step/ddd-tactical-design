@@ -38,8 +38,8 @@ class ProductServiceTest {
     @Test
     void create() {
         // given
-        String name = "후라이드치킨";
-        BigDecimal price = BigDecimal.valueOf(16000);
+        final String name = "후라이드치킨";
+        final BigDecimal price = BigDecimal.valueOf(16000);
         given(productRepository.save(any(Product.class))).willReturn(Product.registerProduct(name, price));
 
         // when
@@ -70,9 +70,9 @@ class ProductServiceTest {
     @Test
     void list() {
         // given
-        Product friedChicken = Product.registerProduct("후라이드치킨", BigDecimal.valueOf(16000));
-        Product soyChicken = Product.registerProduct("간장치킨", BigDecimal.valueOf(17000));
-        List<Product> products = Arrays.asList(friedChicken, soyChicken);
+        final Product friedChicken = Product.registerProduct("후라이드치킨", BigDecimal.valueOf(16000));
+        final Product soyChicken = Product.registerProduct("간장치킨", BigDecimal.valueOf(17000));
+        final List<Product> products = Arrays.asList(friedChicken, soyChicken);
         given(productRepository.findAll()).willReturn(products);
 
         // when

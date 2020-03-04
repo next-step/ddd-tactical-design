@@ -26,7 +26,7 @@ public class Product {
         return new Product(name, price);
     }
 
-    public void forceSetId(Long id) {
+    public void forceSetId(final Long id) {
         this.id = id;
     }
 
