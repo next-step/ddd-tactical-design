@@ -1,17 +1,24 @@
 package kitchenpos.products.tobe.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Embeddable
 public class ProductPrice {
+    @Column(name = "price")
     private BigDecimal value;
 
-    private ProductPrice(final int price) {
-        validate(price);
-        this.value = BigDecimal.valueOf(price);
+    protected ProductPrice() {
     }
 
-    public static ProductPrice valueOf(final int price) {
+    private ProductPrice(final BigDecimal value) {
+        validate(value);
+        this.value = value;
+    }
+
+    public static ProductPrice valueOf(final BigDecimal price) {
         return new ProductPrice(price);
     }
 
@@ -19,8 +26,8 @@ public class ProductPrice {
         return value;
     }
 
-    private void validate(final int price) {
-        if (price < 0) throw new IllegalArgumentException();
+    private void validate(final BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException();
     }
 
     @Override

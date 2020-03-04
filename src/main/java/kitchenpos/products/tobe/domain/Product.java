@@ -1,19 +1,34 @@
 package kitchenpos.products.tobe.domain;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Entity
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
     private String name;
+
+    @Embedded
     private ProductPrice productPrice;
 
-    private Product(final String name, final int price) {
+    protected Product() {
+    }
+
+    private Product(final String name, final BigDecimal price) {
         this.name = name;
         this.productPrice = ProductPrice.valueOf(price);
     }
 
-    public static Product registerProduct(final String name, final int price) {
+    public static Product registerProduct(final String name, final BigDecimal price) {
         return new Product(name, price);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
