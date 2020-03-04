@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProductDomainTests {
     @DisplayName("가격이 0원 이상인 상품 생성 시 성공")
     @ParameterizedTest
-    @MethodSource("validPrice")
+    @MethodSource("validPrices")
     public void createProductWithValidPrice(BigDecimal price) {
         Product product = Product.registerProduct("후라이드치킨", price);
 
         assertThat(product.getName()).isEqualTo("후라이드치킨");
         assertThat(product.getPrice()).isEqualTo(price);
     }
-    private static Stream<Arguments> validPrice() {
+    private static Stream<Arguments> validPrices() {
         return Stream.of(
                 Arguments.of(BigDecimal.valueOf(16000)),
                 Arguments.of(BigDecimal.valueOf(10000))

@@ -9,7 +9,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String name;
 
     @Embedded
@@ -25,6 +24,10 @@ public class Product {
 
     public static Product registerProduct(final String name, final BigDecimal price) {
         return new Product(name, price);
+    }
+
+    public void forceSetId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
