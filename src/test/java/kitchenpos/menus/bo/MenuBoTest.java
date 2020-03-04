@@ -5,7 +5,7 @@ import kitchenpos.menus.dao.MenuGroupDao;
 import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
 import kitchenpos.products.bo.InMemoryProductDao;
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.tobe.domain.ProductDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
