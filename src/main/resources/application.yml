@@ -1,0 +1,17 @@
+logging:
+  level:
+    org.springframework.jdbc: TRACE
+
+spring:
+  datasource:
+    data: classpath*:db/data.sql
+    schema: classpath*:db/schema.sql
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
