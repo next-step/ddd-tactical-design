@@ -1,51 +1,63 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.dto.ProductRequestDto;
+import kitchenpos.products.tobe.domain.Product;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.junit.jupiter.api.TestInstance;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.util.Collections;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductRestController.class)
-@Import(HttpEncodingAutoConfiguration.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductRestControllerTest {
-    @Autowired
+
     private MockMvc mockMvc;
 
-    @MockBean
-    private ProductBo productBo;
+    @InjectMocks
+    private ProductRestController productRestController;
+
+    @Mock
+    private ProductService productService;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeAll
+    public void setupMockMvc() {
+        MockitoAnnotations.initMocks(this);
+
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(productRestController)
+                .alwaysDo(print())
+                .build();
+    }
 
     @Test
     void create() throws Exception {
-        // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        final String name = "후라이드치킨";
+        final BigDecimal price = BigDecimal.valueOf(16000);
+        final Product saved = Product.registerProduct(name, price);
+        saved.forceSetId(1L);
+        given(productService.create(name, price)).willReturn(saved);
 
-        // when
-        final ResultActions resultActions = mockMvc.perform(post("/api/products")
+        mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"후라이드\",\"price\":16000}")
-        );
-
-        // then
-        resultActions.andDo(print())
+                .content(objectMapper.writeValueAsBytes(new ProductRequestDto(name, price))))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.id").isNumber())
@@ -56,17 +68,13 @@ class ProductRestControllerTest {
 
     @Test
     void list() throws Exception {
-        // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        given(productService.list()).willReturn(Collections.singletonList(
+                Product.registerProduct("후라이드치킨", BigDecimal.valueOf(16000))
+        ));
 
-        // when
-        final ResultActions resultActions = mockMvc.perform(get("/api/products"));
-
-        // then
-        resultActions.andDo(print())
+        mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").isString())
                 .andExpect(jsonPath("$[0].price").isNumber())
         ;
