@@ -5,16 +5,11 @@ import java.math.BigDecimal;
 public class Product {
     private Long id;
     private String name;
-    private BigDecimal price;
+    private ProductPrice productPrice;
 
     private Product(final String name, final int price) {
-        validatePrice(price);
         this.name = name;
-        this.price = BigDecimal.valueOf(price);
-    }
-
-    private void validatePrice(final int price) {
-        if (price < 0) throw new IllegalArgumentException();
+        this.productPrice = ProductPrice.valueOf(price);
     }
 
     public static Product registerProduct(final String name, final int price) {
@@ -26,6 +21,6 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return productPrice.checkProductPriceValue();
     }
 }
