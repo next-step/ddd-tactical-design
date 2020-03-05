@@ -13,8 +13,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
+import static kitchenpos.products.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -47,13 +46,8 @@ class ProductServiceTest {
     @NullSource
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
-        // given
-        final Product expected = friedChicken();
-        expected.setPrice(price);
-
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productService.create(expected));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> productService.create(productWithPrice(price)));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")

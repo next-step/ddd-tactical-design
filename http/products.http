@@ -3,8 +3,11 @@ POST {{host}}/api/products
 Content-Type: application/json
 
 {
+  "id": 1,
   "name": "강정치킨",
-  "price": 17000
+  "price": {
+    "value": 17000
+  }
 }
 
 ###

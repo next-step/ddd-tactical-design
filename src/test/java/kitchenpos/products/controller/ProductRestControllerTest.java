@@ -41,7 +41,7 @@ class ProductRestControllerTest {
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"후라이드\",\"price\":16000}")
+                .content("{\"name\":\"후라이드\",\"price\":{\"value\":16000}}")
         );
 
         // then
@@ -50,7 +50,7 @@ class ProductRestControllerTest {
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.price").isNumber())
+                .andExpect(jsonPath("$.price.value").isNumber())
         ;
     }
 
@@ -68,7 +68,7 @@ class ProductRestControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").isString())
-                .andExpect(jsonPath("$[0].price").isNumber())
+                .andExpect(jsonPath("$[0].price.value").isNumber())
         ;
     }
 }

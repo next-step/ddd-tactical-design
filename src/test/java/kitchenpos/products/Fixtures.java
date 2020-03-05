@@ -21,4 +21,11 @@ public class Fixtures {
                 "양념치킨",
                 BigDecimal.valueOf(16_000L));
     }
+
+    public static Product productWithPrice(final BigDecimal price) {
+        return Product.from(
+                SEASONED_CHICKEN_ID,
+                "양념치킨",
+                price);
+    }
 }
