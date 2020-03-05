@@ -1,7 +1,8 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.product.application.ProductService;
+import kitchenpos.products.tobe.domain.product.controller.ProductRestController;
+import kitchenpos.products.tobe.domain.product.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -31,12 +32,12 @@ class ProductRestControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductBo productBo;
+    private ProductService productService;
 
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        given(productService.create(any(Product.class))).willReturn(friedChicken());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -57,7 +58,7 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        given(productService.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));
