@@ -27,7 +27,6 @@ public class Product {
         }
     }
 
-
     private void validateName() {
         if (Strings.isBlank(name)) {
             throw new IllegalArgumentException("상품 이름이 잘못 되었습니다.");
