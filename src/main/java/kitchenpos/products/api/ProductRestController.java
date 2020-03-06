@@ -1,7 +1,8 @@
-package kitchenpos.products.controller;
+package kitchenpos.products.api;
 
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,8 @@ public class ProductRestController {
     }
 
     @PostMapping("/api/products")
-    public ResponseEntity<Product> create(@RequestBody final Product product) {
-        final Product created = productService.create(product);
+    public ResponseEntity<Product> create(@RequestBody final ProductRequestDto productRequestDto) {
+        final Product created = productService.create(productRequestDto);
         final URI uri = URI.create("/api/products/" + created.getId());
         return ResponseEntity.created(uri)
                 .body(created)

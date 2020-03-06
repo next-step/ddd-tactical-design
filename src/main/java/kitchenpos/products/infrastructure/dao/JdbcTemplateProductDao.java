@@ -1,6 +1,7 @@
 package kitchenpos.products.infrastructure.dao;
 
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -61,10 +62,11 @@ public class JdbcTemplateProductDao implements ProductDao {
     }
 
     private Product toEntity(final ResultSet resultSet) throws SQLException {
-        final Product entity = new Product();
+        final ProductRequestDto productRequestDto = new ProductRequestDto();
+        final Product entity = productRequestDto.toEntity();
         entity.setId(resultSet.getLong(KEY_COLUMN_NAME));
         entity.setName(resultSet.getString("name"));
-        entity.setPrice(resultSet.getBigDecimal("price"));
+        entity.changeProductPrice(resultSet.getBigDecimal("price"));
         return entity;
     }
 }
