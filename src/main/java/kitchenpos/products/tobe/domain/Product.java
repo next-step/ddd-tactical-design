@@ -1,4 +1,4 @@
-package kitchenpos.products.model;
+package kitchenpos.products.tobe.domain;
 
 import java.math.BigDecimal;
 

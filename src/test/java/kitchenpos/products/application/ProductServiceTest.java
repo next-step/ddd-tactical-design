@@ -1,7 +1,7 @@
-package kitchenpos.products.bo;
+package kitchenpos.products.application;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.infrastructure.dao.ProductDao;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,14 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ProductBoTest {
+class ProductServiceTest {
     private final ProductDao productDao = new InMemoryProductDao();
 
-    private ProductBo productBo;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao);
+        productService = new ProductService(productDao);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -36,7 +36,7 @@ class ProductBoTest {
         final Product expected = friedChicken();
 
         // when
-        final Product actual = productBo.create(expected);
+        final Product actual = productService.create(expected);
 
         // then
         assertProduct(expected, actual);
@@ -53,7 +53,7 @@ class ProductBoTest {
 
         // when
         // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productBo.create(expected));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productService.create(expected));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
@@ -64,7 +64,7 @@ class ProductBoTest {
         final Product seasonedChicken = productDao.save(seasonedChicken());
 
         // when
-        final List<Product> actual = productBo.list();
+        final List<Product> actual = productService.list();
 
         // then
         assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));

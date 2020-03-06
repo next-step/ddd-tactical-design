@@ -1,7 +1,7 @@
-package kitchenpos.products.bo;
+package kitchenpos.products.application;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.infrastructure.dao.ProductDao;
+import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ProductBo {
+public class ProductService {
     private final ProductDao productDao;
 
-    public ProductBo(final ProductDao productDao) {
+    public ProductService(final ProductDao productDao) {
         this.productDao = productDao;
     }
 
