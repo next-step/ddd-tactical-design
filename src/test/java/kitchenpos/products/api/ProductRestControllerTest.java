@@ -1,7 +1,8 @@
-package kitchenpos.products.controller;
+package kitchenpos.products.api;
 
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -27,6 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductRestController.class)
 @Import(HttpEncodingAutoConfiguration.class)
 class ProductRestControllerTest {
+    public static final Long FRIED_CHICKEN_ID = 1L;
+    public static final Long SEASONED_CHICKEN_ID = 2L;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +40,10 @@ class ProductRestControllerTest {
     @Test
     void create() throws Exception {
         // given
-        given(productService.create(any(Product.class))).willReturn(friedChicken());
+        Product friedChickenProduct = friedChicken();
+        friedChickenProduct.setId(FRIED_CHICKEN_ID);
+
+        given(productService.create(any(ProductRequestDto.class))).willReturn(friedChickenProduct);
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -57,7 +64,13 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productService.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        Product friedChickenProduct = friedChicken();
+        friedChickenProduct.setId(FRIED_CHICKEN_ID);
+
+        Product seasonedChickenProduct = seasonedChicken();
+        seasonedChickenProduct.setId(SEASONED_CHICKEN_ID);
+
+        given(productService.list()).willReturn(Arrays.asList(friedChickenProduct, seasonedChickenProduct));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));
