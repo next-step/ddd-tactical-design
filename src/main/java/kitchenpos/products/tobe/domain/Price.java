@@ -11,14 +11,14 @@ public class Price {
     protected Price() {
     }
 
-    private Price(BigDecimal value) {
+    private Price(final BigDecimal value) {
         if (isInValidPrice(value)) {
             throw new IllegalArgumentException();
         }
         this.value = value;
     }
 
-    public static Price of(BigDecimal price) {
+    public static Price of(final BigDecimal price) {
         return new Price(price);
     }
 
@@ -26,7 +26,7 @@ public class Price {
         return value;
     }
 
-    private boolean isInValidPrice(BigDecimal price) {
+    private boolean isInValidPrice(final BigDecimal price) {
         return Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0;
     }
 }
