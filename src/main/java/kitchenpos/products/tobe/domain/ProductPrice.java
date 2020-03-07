@@ -10,13 +10,9 @@ class ProductPrice {
 
     protected ProductPrice() {}
 
-    private ProductPrice(final Long price) {
+    public ProductPrice(final Long price) {
         validate(price);
         this.price = price;
-    }
-
-    static ProductPrice valueOf(final Long price) {
-        return new ProductPrice(price);
     }
 
     private void validate(final Long price) {

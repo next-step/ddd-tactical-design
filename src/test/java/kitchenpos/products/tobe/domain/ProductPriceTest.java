@@ -21,7 +21,7 @@ class ProductPriceTest {
     void create(final Long price) {
         // given
         // when
-        ProductPrice productPrice = ProductPrice.valueOf(price);
+        ProductPrice productPrice = new ProductPrice(price);
 
         // then
         assertThat(productPrice.toLong()).isEqualTo(price);
@@ -35,7 +35,7 @@ class ProductPriceTest {
         // when
         // then
         assertThatThrownBy(() -> {
-                ProductPrice.valueOf(price);
+                new ProductPrice(price);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 

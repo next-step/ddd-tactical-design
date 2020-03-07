@@ -24,7 +24,7 @@ public class Product {
         }
 
         this.name = name;
-        this.price = ProductPrice.valueOf(price);
+        this.price = new ProductPrice(price);
     }
 
     public Long getId() {
