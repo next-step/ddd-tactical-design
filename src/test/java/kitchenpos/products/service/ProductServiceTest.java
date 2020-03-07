@@ -1,6 +1,7 @@
 package kitchenpos.products.service;
 
 import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import static kitchenpos.products.Fixtures.*;
@@ -36,7 +36,7 @@ class ProductServiceTest {
         final ProductRequest expected = friedChickenRequest();
 
         // when
-        final Product actual = productService.create(expected);
+        final ProductResponse actual = productService.create(expected);
 
         // then
         assertProduct(expected, actual);
@@ -59,17 +59,18 @@ class ProductServiceTest {
         final Product seasonedChicken = productRepository.save(seasonedChicken());
 
         // when
-        final List<Product> actual = productService.list();
+        final List<ProductResponse> actual = productService.list();
 
         // then
-        assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
+        assertThat(actual.get(0)).isEqualToComparingOnlyGivenFields(friedChicken);
+        assertThat(actual.get(1)).isEqualToComparingOnlyGivenFields(seasonedChicken);
     }
 
-    private void assertProduct(final ProductRequest expected, final Product actual) {
+    private void assertProduct(final ProductRequest expected, final ProductResponse actual) {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getPrice().getValue()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
         );
     }
 }

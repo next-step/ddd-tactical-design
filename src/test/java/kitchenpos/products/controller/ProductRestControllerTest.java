@@ -1,10 +1,7 @@
 package kitchenpos.products.controller;
 
 import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.service.InMemoryProductRepository;
 import kitchenpos.products.service.ProductService;
-import kitchenpos.products.tobe.domain.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -17,10 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
-import java.util.List;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
+import static kitchenpos.products.Fixtures.friedChickenResponse;
+import static kitchenpos.products.Fixtures.seasonedChickenResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,18 +33,11 @@ class ProductRestControllerTest {
     @MockBean
     private ProductService productService;
 
-    private InMemoryProductRepository inMemoryProductRepository;
-
-    @BeforeEach
-    void setUp() {
-        inMemoryProductRepository = new InMemoryProductRepository();
-    }
-
     @Test
     void create() throws Exception {
         // given
         given(productService.create(any(ProductRequest.class)))
-                .willReturn(inMemoryProductRepository.save(friedChicken()));
+                .willReturn(friedChickenResponse());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -62,17 +51,14 @@ class ProductRestControllerTest {
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.price.value").isNumber())
+                .andExpect(jsonPath("$.price").isNumber())
         ;
     }
 
     @Test
     void list() throws Exception {
         // given
-        List<Product> list = inMemoryProductRepository.saveAll(Arrays.asList(friedChicken(), seasonedChicken()));
-        given(productService.list()).willReturn(
-                list
-        );
+        given(productService.list()).willReturn(Arrays.asList(friedChickenResponse(), seasonedChickenResponse()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));
@@ -83,7 +69,7 @@ class ProductRestControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").isString())
-                .andExpect(jsonPath("$[0].price.value").isNumber())
+                .andExpect(jsonPath("$[0].price").isNumber())
         ;
     }
 }
