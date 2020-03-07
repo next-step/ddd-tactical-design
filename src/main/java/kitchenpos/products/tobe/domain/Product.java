@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @Table(name = "product")
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -18,14 +19,13 @@ public class Product {
     protected Product() {
     }
 
-    private Product(final Long id, final String name, final Price price) {
-        this.id = id;
+    private Product(final String name, final Price price) {
         this.name = name;
         this.price = price;
     }
 
-    public static Product from(final Long id, final String name, final BigDecimal price) {
-        return new Product(id, name, Price.of(price));
+    public static Product from(final String name, final BigDecimal price) {
+        return new Product(name, Price.of(price));
     }
 
     public Long getId() {

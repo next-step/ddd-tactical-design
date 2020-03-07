@@ -1,7 +1,10 @@
 package kitchenpos.products.controller;
 
+import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.service.InMemoryProductRepository;
 import kitchenpos.products.service.ProductService;
 import kitchenpos.products.tobe.domain.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -14,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static kitchenpos.products.Fixtures.friedChicken;
 import static kitchenpos.products.Fixtures.seasonedChicken;
@@ -31,17 +35,25 @@ class ProductRestControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductService productBo;
+    private ProductService productService;
+
+    private InMemoryProductRepository inMemoryProductRepository;
+
+    @BeforeEach
+    void setUp() {
+        inMemoryProductRepository = new InMemoryProductRepository();
+    }
 
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        given(productService.create(any(ProductRequest.class)))
+                .willReturn(inMemoryProductRepository.save(friedChicken()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"후라이드\",\"price\":{\"value\":16000}}")
+                .content("{\"name\":\"후라이드\",\"price\":16000}")
         );
 
         // then
@@ -57,7 +69,10 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        List<Product> list = inMemoryProductRepository.saveAll(Arrays.asList(friedChicken(), seasonedChicken()));
+        given(productService.list()).willReturn(
+                list
+        );
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));

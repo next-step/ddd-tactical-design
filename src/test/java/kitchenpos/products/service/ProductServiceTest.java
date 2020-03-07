@@ -1,5 +1,6 @@
 package kitchenpos.products.service;
 
+import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class ProductServiceTest {
     @Test
     void create() {
         // given
-        final Product expected = friedChicken();
+        final ProductRequest expected = friedChickenRequest();
 
         // when
         final Product actual = productService.create(expected);
@@ -47,7 +48,7 @@ class ProductServiceTest {
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> productService.create(productWithPrice(price)));
+                .isThrownBy(() -> productService.create(productWithPriceRequest(price)));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
@@ -64,11 +65,11 @@ class ProductServiceTest {
         assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
     }
 
-    private void assertProduct(final Product expected, final Product actual) {
+    private void assertProduct(final ProductRequest expected, final Product actual) {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getPrice().getValue()).isEqualTo(expected.getPrice())
         );
     }
 }

@@ -7,15 +7,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<Long, Product> entities = new HashMap<>();
+    volatile private Long id = 1L;
 
     @Override
     public Product save(final Product entity) {
-        entities.put(entity.getId(), entity);
+        setId(entity);
+        entities.put(id, entity);
+        id++;
         return entity;
+    }
+
+    private void setId(Product entity) {
+        try {
+            Field field = entity.getClass().getDeclaredField("id");
+            field.setAccessible(true);
+            field.set(entity, id);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -73,7 +87,12 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public <S extends Product> List<S> saveAll(Iterable<S> entities) {
-        return null;
+        ArrayList<S> saved = new ArrayList<>();
+        for (S entity : entities) {
+            Product product = save(entity);
+            saved.add((S) product);
+        }
+        return saved;
     }
 
     @Override
