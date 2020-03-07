@@ -1,14 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
-import org.assertj.core.api.Assertions;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.math.BigDecimal;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,24 +22,16 @@ class ProductPriceTest {
         assertThat(productPrice.toLong()).isEqualTo(price);
     }
 
-    @DisplayName("제품 가격이 0원 이상이여야한다.")
+    @DisplayName("제품 가격은 0원 이상이다.")
     @ParameterizedTest
-    @MethodSource(value = "provideInvalidPrice")
-    void createFails(final Long price) {
+    @NullSource
+    @ValueSource(longs = { -1L, -1000L, -1000000000L })
+    void createOnlyWhenProductAdditionPolicySatisfied(final Long invalidPrice) {
         // given
         // when
         // then
         assertThatThrownBy(() -> {
-                new ProductPrice(price);
+                new ProductPrice(invalidPrice);
         }).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    private static Stream provideInvalidPrice() {
-        return Stream.of(
-                null,
-                -1L,
-                -1000L,
-                -1000000000L
-        );
     }
 }
