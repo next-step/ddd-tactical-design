@@ -1,7 +1,7 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
+import static kitchenpos.products.Fixtures.friedChickenResponse;
+import static kitchenpos.products.Fixtures.seasonedChickenResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,12 +31,13 @@ class ProductRestControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductBo productBo;
+    private ProductService productService;
 
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        given(productService.create(any(ProductRequest.class)))
+                .willReturn(friedChickenResponse());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -57,7 +58,7 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        given(productService.list()).willReturn(Arrays.asList(friedChickenResponse(), seasonedChickenResponse()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));
