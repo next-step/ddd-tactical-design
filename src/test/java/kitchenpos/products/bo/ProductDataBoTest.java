@@ -1,7 +1,7 @@
 package kitchenpos.products.bo;
 
 import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.model.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ProductBoTest {
+class ProductDataBoTest {
     private final ProductDao productDao = new InMemoryProductDao();
 
     private ProductBo productBo;
@@ -33,10 +33,10 @@ class ProductBoTest {
     @Test
     void create() {
         // given
-        final Product expected = friedChicken();
+        final ProductData expected = friedChicken();
 
         // when
-        final Product actual = productBo.create(expected);
+        final ProductData actual = productBo.create(expected);
 
         // then
         assertProduct(expected, actual);
@@ -48,7 +48,7 @@ class ProductBoTest {
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
         // given
-        final Product expected = friedChicken();
+        final ProductData expected = friedChicken();
         expected.setPrice(price);
 
         // when
@@ -60,17 +60,17 @@ class ProductBoTest {
     @Test
     void list() {
         // given
-        final Product friedChicken = productDao.save(friedChicken());
-        final Product seasonedChicken = productDao.save(seasonedChicken());
+        final ProductData friedChicken = productDao.save(friedChicken());
+        final ProductData seasonedChicken = productDao.save(seasonedChicken());
 
         // when
-        final List<Product> actual = productBo.list();
+        final List<ProductData> actual = productBo.list();
 
         // then
         assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
     }
 
-    private void assertProduct(final Product expected, final Product actual) {
+    private void assertProduct(final ProductData expected, final ProductData actual) {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),

@@ -6,7 +6,7 @@ import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
 import kitchenpos.menus.model.MenuProduct;
 import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.model.ProductData;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,9 +50,9 @@ public class MenuBo {
 
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menuProducts) {
-            final Product product = productDao.findById(menuProduct.getProductId())
+            final ProductData productData = productDao.findById(menuProduct.getProductId())
                     .orElseThrow(IllegalArgumentException::new);
-            sum = sum.add(product.getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
+            sum = sum.add(productData.getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
         }
 
         if (price.compareTo(sum) > 0) {

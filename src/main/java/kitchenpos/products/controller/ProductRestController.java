@@ -1,7 +1,7 @@
 package kitchenpos.products.controller;
 
 import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.model.ProductData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +20,8 @@ public class ProductRestController {
     }
 
     @PostMapping("/api/products")
-    public ResponseEntity<Product> create(@RequestBody final Product product) {
-        final Product created = productBo.create(product);
+    public ResponseEntity<ProductData> create(@RequestBody final ProductData productData) {
+        final ProductData created = productBo.create(productData);
         final URI uri = URI.create("/api/products/" + created.getId());
         return ResponseEntity.created(uri)
                 .body(created)
@@ -29,7 +29,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/api/products")
-    public ResponseEntity<List<Product>> list() {
+    public ResponseEntity<List<ProductData>> list() {
         return ResponseEntity.ok()
                 .body(productBo.list())
                 ;

@@ -2,7 +2,7 @@ package kitchenpos.products.model;
 
 import java.math.BigDecimal;
 
-public class Product {
+public class ProductData {
     private Long id;
     private String name;
     private BigDecimal price;

@@ -1,7 +1,8 @@
 package kitchenpos.products.bo;
 
 import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.model.ProductData;
+import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +19,18 @@ public class ProductBo {
     }
 
     @Transactional
-    public Product create(final Product product) {
-        final BigDecimal price = product.getPrice();
+    public ProductData create(final ProductData productData) {
 
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+        Product newProduct = new Product(productData.getName(), productData.getPrice());
 
-        return productDao.save(product);
+        productData.setId(newProduct.getId());
+        productData.setName(newProduct.getName());
+        productData.setPrice(newProduct.getPrice());
+
+        return productDao.save(productData);
     }
 
-    public List<Product> list() {
+    public List<ProductData> list() {
         return productDao.findAll();
     }
 }

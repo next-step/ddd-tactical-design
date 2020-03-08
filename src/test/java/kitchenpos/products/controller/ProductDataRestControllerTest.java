@@ -1,7 +1,7 @@
 package kitchenpos.products.controller;
 
 import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.model.ProductData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductRestController.class)
 @Import(HttpEncodingAutoConfiguration.class)
-class ProductRestControllerTest {
+class ProductDataRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +36,7 @@ class ProductRestControllerTest {
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        given(productBo.create(any(ProductData.class))).willReturn(friedChicken());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
