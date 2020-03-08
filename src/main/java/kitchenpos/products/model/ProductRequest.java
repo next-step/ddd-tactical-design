@@ -1,19 +1,14 @@
 package kitchenpos.products.model;
 
 import java.math.BigDecimal;
+import javax.validation.constraints.NotBlank;
 
-public class Product {
-    private Long id;
+public class ProductRequest {
+
+    @NotBlank
     private String name;
+
     private BigDecimal price;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
