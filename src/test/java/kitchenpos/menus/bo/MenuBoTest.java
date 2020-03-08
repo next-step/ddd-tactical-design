@@ -4,8 +4,8 @@ import kitchenpos.menus.dao.MenuDao;
 import kitchenpos.menus.dao.MenuGroupDao;
 import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
-import kitchenpos.products.bo.InMemoryProductDao;
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.bo.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,15 +28,15 @@ class MenuBoTest {
     private final MenuDao menuDao = new InMemoryMenuDao();
     private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
     private final MenuProductDao menuProductDao = new InMemoryMenuProductDao();
-    private final ProductDao productDao = new InMemoryProductDao();
+    private final ProductRepository productRepository = new InMemoryProductRepository();
 
     private MenuBo menuBo;
 
     @BeforeEach
     void setUp() {
-        menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productDao);
+        menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productRepository);
         menuGroupDao.save(twoChickens());
-        productDao.save(friedChicken());
+        productRepository.save(friedChicken());
     }
 
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

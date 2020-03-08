@@ -1,11 +1,11 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.model.ProductData;
 
 import java.util.*;
 
-public class InMemoryProductDao implements ProductDao {
+public class InMemoryProductRepository implements ProductRepository {
     private final Map<Long, ProductData> entities = new HashMap<>();
 
     @Override

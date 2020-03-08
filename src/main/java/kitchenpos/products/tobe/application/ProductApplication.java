@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.model.ProductData;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductApplication {
-    private final ProductDao productDao;
+    private final ProductRepository productRepository;
 
-    public ProductApplication (final ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductApplication (final ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public Product RegisterNewProduct(String name, BigDecimal price){
@@ -22,12 +22,12 @@ public class ProductApplication {
         productData.setName(product.getName());
         productData.setPrice(product.getPrice());
 
-        productDao.save(productData);
+        productRepository.save(productData);
 
         return product;
     }
 
     public List<ProductData> productList() {
-        return productDao.findAll();
+        return productRepository.findAll();
     }
 }

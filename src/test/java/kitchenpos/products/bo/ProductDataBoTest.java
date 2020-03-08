@@ -1,6 +1,6 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.model.ProductData;
 import kitchenpos.products.tobe.application.ProductApplication;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductDataBoTest {
-    private final ProductDao productDao = new InMemoryProductDao();
+    private final ProductRepository productRepository = new InMemoryProductRepository();
     private ProductApplication productApplication ;
     private ProductBo productBo;
 
     @BeforeEach
     void setUp() {
-        productApplication = new ProductApplication(productDao);
+        productApplication = new ProductApplication(productRepository);
         productBo = new ProductBo(productApplication);
     }
 
@@ -62,8 +62,8 @@ class ProductDataBoTest {
     @Test
     void list() {
         // given
-        final ProductData friedChicken = productDao.save(friedChicken());
-        final ProductData seasonedChicken = productDao.save(seasonedChicken());
+        final ProductData friedChicken = productRepository.save(friedChicken());
+        final ProductData seasonedChicken = productRepository.save(seasonedChicken());
 
         // when
         final List<ProductData> actual = productBo.list();
