@@ -2,6 +2,7 @@ package kitchenpos.products.bo;
 
 import kitchenpos.products.dao.ProductDao;
 import kitchenpos.products.model.ProductData;
+import kitchenpos.products.tobe.application.ProductApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductDataBoTest {
     private final ProductDao productDao = new InMemoryProductDao();
+    private final ProductApplication productApplication = new ProductApplication();
 
     private ProductBo productBo;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao);
+        productBo = new ProductBo(productDao, productApplication);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
