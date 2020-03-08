@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductDataBoTest {
     private final ProductDao productDao = new InMemoryProductDao();
-    private final ProductApplication productApplication = new ProductApplication();
-
+    private ProductApplication productApplication ;
     private ProductBo productBo;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao, productApplication);
+        productApplication = new ProductApplication(productDao);
+        productBo = new ProductBo(productApplication);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

@@ -1,6 +1,5 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
 import kitchenpos.products.model.ProductData;
 import kitchenpos.products.tobe.application.ProductApplication;
 import kitchenpos.products.tobe.domain.Product;
@@ -11,11 +10,9 @@ import java.util.List;
 
 @Component
 public class ProductBo {
-    private final ProductDao productDao;
     private final ProductApplication productApplication;
 
-    public ProductBo(final ProductDao productDao, ProductApplication productApplication) {
-        this.productDao = productDao;
+    public ProductBo(final ProductApplication productApplication) {
         this.productApplication = productApplication;
     }
 
@@ -28,10 +25,10 @@ public class ProductBo {
         productData.setName(newProduct.getName());
         productData.setPrice(newProduct.getPrice());
 
-        return productDao.save(productData);
+        return productData;
     }
 
     public List<ProductData> list() {
-        return productDao.findAll();
+        return productApplication.productList();
     }
 }
