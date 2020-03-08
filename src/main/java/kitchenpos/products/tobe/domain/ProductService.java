@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Service
@@ -24,5 +25,9 @@ public class ProductService {
         final Product product = new Product(productName, price);
 
         return productDao.save(product);
+    }
+
+    public List<Product> list() {
+        return productDao.findAll();
     }
 }
