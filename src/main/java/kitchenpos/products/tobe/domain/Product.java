@@ -2,14 +2,24 @@ package kitchenpos.products.tobe.domain;
 
 import org.apache.logging.log4j.util.Strings;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "product")
 public class Product {
     private static final Long MIN_PRODUCT_ID = 0L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private final Long id;
+
+    @Column(name = "name")
     private final String name;
+
+    @Column(name = "price")
     private final BigDecimal price;
 
     public Product(Long id, String name, BigDecimal price) {
