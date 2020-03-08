@@ -1,0 +1,22 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    data: classpath*:db/data.sql
+    schema: classpath*:db/schema.sql
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  http:
+    encoding:
+      force: true
+
+logging:
+  level:
+    org.springframework.jdbc: trace
+
