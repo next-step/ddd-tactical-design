@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("조회 객체 크기 비교")
     void compareToSize() {
         // give
         given(productRepository.findAll())
@@ -45,5 +47,20 @@ class ProductServiceTest {
 
         // then
         assertThat(size).isEqualTo(products.size());
+    }
+
+    @Test
+    @DisplayName("객체 생성")
+    void createProduct() {
+        // give
+        Product realChicken = new Product(1L, "진짜 치킨", BigDecimal.valueOf(20_000));
+        given(productRepository.save(new Product(1L, "가짜치킨", BigDecimal.valueOf(10_000))))
+                .willReturn(realChicken);
+
+        // when
+        Product product = productService.createProduct(new Product(1L, "가짜치킨", BigDecimal.valueOf(10_000)));
+
+        // then
+        assertThat(product).isEqualTo(realChicken);
     }
 }
