@@ -16,6 +16,15 @@ public class Product {
         this.price = price;
     };
 
+    public Product(Long id, String name, BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    };
+
     public static Product RegisterNewProduct (String name, BigDecimal price) {
         return new Product(name,price);
     }

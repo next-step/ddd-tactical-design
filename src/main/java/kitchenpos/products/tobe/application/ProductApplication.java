@@ -22,13 +22,18 @@ public class ProductApplication {
     public ProductData registerNewProduct(String name, BigDecimal price){
         Product product = new Product(name, price);
 
+        ProductData productData = convertToProductData(product);
+
+        productRepository.save(productData);
+
+        return productData;
+    }
+
+    private ProductData convertToProductData(Product product) {
         ProductData productData = new ProductData();
         productData.setId(product.getId());
         productData.setName(product.getName());
         productData.setPrice(product.getPrice());
-
-        productRepository.save(productData);
-
         return productData;
     }
 
@@ -37,6 +42,7 @@ public class ProductApplication {
     }
 
     public Optional<ProductData> findByProductId(Long productId) {
+
         return productRepository.findById(productId);
     }
 }
