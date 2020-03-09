@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
 
@@ -16,12 +16,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    @Transactional
     public Product add(final String name, final Long price) {
         final Product newProduct = new Product(name, price);
         return productRepository.save(newProduct);
     }
 
+    @Transactional(readOnly = true)
     public List<Product> list() {
         return productRepository.findAll();
     }
