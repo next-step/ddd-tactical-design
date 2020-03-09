@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ class ProductServiceTest {
 
         given(productRepository.save(any(Product.class))).willAnswer(invocation -> {
             final Product product = new Product(name, price);
-            Fixtures.setId(product, 1L);
+            ReflectionTestUtils.setField(product, "id", 1L);
             return product;
         });
 
