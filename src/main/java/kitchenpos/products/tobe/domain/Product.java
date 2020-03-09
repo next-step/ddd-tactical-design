@@ -21,31 +21,17 @@ public class Product {
 
     public Product(String name, BigDecimal price) {
         validProductName(name);
-        
+
         this.name = name;
         this.price = new ProductPrice(price);
-    }
-
-    private void validProductName(String name) {
-        if(StringUtils.isEmptyOrWhitespace(name)) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public BigDecimal getPrice() {
@@ -54,6 +40,12 @@ public class Product {
 
     public void changeProductPrice(final BigDecimal price) {
         this.price = new ProductPrice(price);
+    }
+
+    private void validProductName(String name) {
+        if(StringUtils.isEmptyOrWhitespace(name)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

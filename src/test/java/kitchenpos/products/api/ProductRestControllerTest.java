@@ -41,7 +41,6 @@ class ProductRestControllerTest {
     void create() throws Exception {
         // given
         Product friedChickenProduct = friedChicken();
-        friedChickenProduct.setId(FRIED_CHICKEN_ID);
 
         given(productService.create(any(ProductRequestDto.class))).willReturn(friedChickenProduct);
 
@@ -55,7 +54,6 @@ class ProductRestControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").isString())
                 .andExpect(jsonPath("$.price").isNumber())
         ;
@@ -65,10 +63,8 @@ class ProductRestControllerTest {
     void list() throws Exception {
         // given
         Product friedChickenProduct = friedChicken();
-        friedChickenProduct.setId(FRIED_CHICKEN_ID);
 
         Product seasonedChickenProduct = seasonedChicken();
-        seasonedChickenProduct.setId(SEASONED_CHICKEN_ID);
 
         given(productService.list()).willReturn(Arrays.asList(friedChickenProduct, seasonedChickenProduct));
 
@@ -79,7 +75,6 @@ class ProductRestControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").isString())
                 .andExpect(jsonPath("$[0].price").isNumber())
         ;
