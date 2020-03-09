@@ -6,6 +6,7 @@ import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
 import kitchenpos.products.application.InMemoryProductDao;
 import kitchenpos.products.infrastructure.dao.ProductDao;
+import kitchenpos.products.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,13 @@ import java.util.List;
 
 import static kitchenpos.menus.Fixtures.twoChickens;
 import static kitchenpos.menus.Fixtures.twoFriedChickens;
-import static kitchenpos.products.Fixtures.friedChicken;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuBoTest {
+    public static final Long FRIED_CHICKEN_ID = 1L;
+
     private final MenuDao menuDao = new InMemoryMenuDao();
     private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
     private final MenuProductDao menuProductDao = new InMemoryMenuProductDao();
@@ -35,8 +37,14 @@ class MenuBoTest {
     @BeforeEach
     void setUp() {
         menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productDao);
+
+        Product product = new Product();
+        product.setId(FRIED_CHICKEN_ID);
+        product.setPrice(BigDecimal.valueOf(16_000L));
+        product.setName("후라이드");
+
         menuGroupDao.save(twoChickens());
-        productDao.save(friedChicken());
+        productDao.save(product);
     }
 
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
