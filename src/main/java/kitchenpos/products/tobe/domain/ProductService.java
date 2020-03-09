@@ -15,8 +15,7 @@ public class ProductService {
     }
 
     public List<Product> getProducts() {
-        Products products = new Products(productRepository.findAll());
-        return products.getProducts();
+        return productRepository.findAll();
     }
 
     @Transactional
