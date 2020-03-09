@@ -1,26 +1,23 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.products.tobe.Fixtures;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -40,13 +37,17 @@ class ProductServiceTest {
         String name = "제품1";
         Long price = 1000L;
 
-        given(productRepository.save(any(Product.class))).willReturn(new Product(name, price));
+        given(productRepository.save(any(Product.class))).willAnswer(invocation -> {
+            final Product product = new Product(name, price);
+            Fixtures.setId(product, 1L);
+            return product;
+        });
 
         // when
         Product result = productService.add(name, price);
 
         // then
-//        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getName()).isEqualTo(name);
         assertThat(result.getPrice()).isEqualTo(price);
     }
@@ -85,10 +86,7 @@ class ProductServiceTest {
     @Test
     void list() {
         // given
-        final Product product1 = new Product("삼선짬뽕", 8500L);
-        final Product product2 = new Product("고추짬뽕", 9000L);
-        final Product product3 = new Product("삼선간짜장", 8000L);
-        final List<Product> products = Arrays.asList(product1, product2, product3);
+        final List<Product> products = Arrays.asList(Fixtures.friedChicken(), Fixtures.seasonedChicken());
 
         given(productRepository.findAll()).willReturn(products);
 
