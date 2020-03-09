@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import org.thymeleaf.util.StringUtils;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -18,8 +20,16 @@ public class Product {
     }
 
     public Product(String name, BigDecimal price) {
+        validProductName(name);
+        
         this.name = name;
         this.price = new ProductPrice(price);
+    }
+
+    private void validProductName(String name) {
+        if(StringUtils.isEmptyOrWhitespace(name)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Long getId() {
