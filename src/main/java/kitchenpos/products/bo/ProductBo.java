@@ -4,7 +4,6 @@ import kitchenpos.products.model.ProductData;
 import kitchenpos.products.tobe.application.ProductApplication;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,16 +15,8 @@ public class ProductBo {
         this.productApplication = productApplication;
     }
 
-    @Transactional
     public ProductData create(final ProductData productData) {
-
-        Product newProduct = productApplication.RegisterNewProduct(productData.getName(), productData.getPrice());
-
-        productData.setId(newProduct.getId());
-        productData.setName(newProduct.getName());
-        productData.setPrice(newProduct.getPrice());
-
-        return productData;
+        return productApplication.registerNewProduct(productData.getName(), productData.getPrice());
     }
 
     public List<ProductData> list() {

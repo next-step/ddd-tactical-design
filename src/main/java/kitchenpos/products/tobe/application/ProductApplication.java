@@ -3,10 +3,14 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.model.ProductData;
 import kitchenpos.products.tobe.domain.Product;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
+@Component
 public class ProductApplication {
     private final ProductRepository productRepository;
 
@@ -14,7 +18,8 @@ public class ProductApplication {
         this.productRepository = productRepository;
     }
 
-    public Product RegisterNewProduct(String name, BigDecimal price){
+    @Transactional
+    public ProductData registerNewProduct(String name, BigDecimal price){
         Product product = new Product(name, price);
 
         ProductData productData = new ProductData();
@@ -24,10 +29,14 @@ public class ProductApplication {
 
         productRepository.save(productData);
 
-        return product;
+        return productData;
     }
 
     public List<ProductData> productList() {
         return productRepository.findAll();
+    }
+
+    public Optional<ProductData> findByProductId(Long productId) {
+        return productRepository.findById(productId);
     }
 }
