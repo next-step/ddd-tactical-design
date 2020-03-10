@@ -16,7 +16,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product add(final String name, final Long price) {
+    public Product create(final String name, final Long price) {
         final Product newProduct = new Product(name, price);
         return productRepository.save(newProduct);
     }

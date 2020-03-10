@@ -33,7 +33,7 @@ class ProductServiceTest {
 
     @DisplayName("새로운 제품을 생성할 수 있다.")
     @Test
-    void add() {
+    void create() {
         // given
         String name = "제품1";
         Long price = 1000L;
@@ -45,7 +45,7 @@ class ProductServiceTest {
         });
 
         // when
-        Product result = productService.add(name, price);
+        Product result = productService.create(name, price);
 
         // then
         assertThat(result.getId()).isEqualTo(1L);
@@ -57,14 +57,14 @@ class ProductServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(longs = { -1L, -1000L, -1000000000L })
-    void addOnlyWhenPriceIsPositive(Long invalidPrice) {
+    void createOnlyWhenPriceIsPositive(Long invalidPrice) {
         // given
         String name = "제품1";
 
         // when
         // then
         assertThatThrownBy(() -> {
-            productService.add(name, invalidPrice);
+            productService.create(name, invalidPrice);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -72,14 +72,14 @@ class ProductServiceTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = { "", "   " })
-    void addOnlyWhenNameEntered(String invalidName) {
+    void createOnlyWhenNameEntered(String invalidName) {
         // given
         Long price = 1000L;
 
         // when
         // then
         assertThatThrownBy(() -> {
-            productService.add(invalidName, price);
+            productService.create(invalidName, price);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
