@@ -16,9 +16,9 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product create(final String name, final Long price) {
+    public Long create(final String name, final Long price) {
         final Product newProduct = new Product(name, price);
-        return productRepository.save(newProduct);
+        return productRepository.save(newProduct).getId();
     }
 
     @Transactional(readOnly = true)

@@ -44,13 +44,14 @@ class ProductServiceTest {
             return product;
         });
 
+
         // when
-        Product result = productService.create(name, price);
+        Long newProductId = productService.create(name, price);
 
         // then
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getName()).isEqualTo(name);
-        assertThat(result.getPrice()).isEqualTo(price);
+        assertThat(newProductId).isEqualTo(1L);
+//        assertThat(result.getName()).isEqualTo(name);
+//        assertThat(result.getPrice()).isEqualTo(price);
     }
 
     @DisplayName("제품 생성 시, 제품 가격은 0원 이상이다.")
