@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.products.tobe.Fixtures;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +58,7 @@ class ProductServiceTest {
     @DisplayName("제품 생성 시, 제품 가격은 0원 이상이다.")
     @ParameterizedTest
     @NullSource
-    @ValueSource(longs = { -1L, -1000L, -1000000000L })
+    @ValueSource(longs = {-1L, -1000L, -1000000000L})
     void createOnlyWhenPriceIsPositive(Long invalidPrice) {
         // given
         String name = "제품1";
@@ -72,7 +73,7 @@ class ProductServiceTest {
     @DisplayName("제품 생성 시, 제품명이 입력되어야한다.")
     @ParameterizedTest
     @NullSource
-    @ValueSource(strings = { "", "   " })
+    @ValueSource(strings = {"", "   "})
     void createOnlyWhenNameEntered(String invalidName) {
         // given
         Long price = 1000L;

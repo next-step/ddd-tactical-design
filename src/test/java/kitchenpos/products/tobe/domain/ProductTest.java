@@ -13,10 +13,10 @@ class ProductTest {
         // given
         final String name = "새로운 제품";
         final Long price = 1000L;
-        
+
         // when
         Product product = new Product(name, price);
-        
+
         // then
         assertThat(product.getName()).isEqualTo(name);
         assertThat(product.getPrice()).isEqualTo(price);

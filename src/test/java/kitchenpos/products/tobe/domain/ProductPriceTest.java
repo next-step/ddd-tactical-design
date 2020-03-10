@@ -12,7 +12,7 @@ class ProductPriceTest {
 
     @DisplayName("제품 가격을 생성할 수 있다.")
     @ParameterizedTest
-    @ValueSource(longs = { 0L, 1000L, 1000000000L })
+    @ValueSource(longs = {0L, 1000L, 1000000000L})
     void create(final Long price) {
         // given
         // when
@@ -25,13 +25,13 @@ class ProductPriceTest {
     @DisplayName("제품 가격은 0원 이상이다.")
     @ParameterizedTest
     @NullSource
-    @ValueSource(longs = { -1L, -1000L, -1000000000L })
+    @ValueSource(longs = {-1L, -1000L, -1000000000L})
     void createOnlyWhenProductAdditionPolicySatisfied(final Long invalidPrice) {
         // given
         // when
         // then
         assertThatThrownBy(() -> {
-                new ProductPrice(invalidPrice);
+            new ProductPrice(invalidPrice);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -16,10 +16,11 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    protected Product() {}
+    protected Product() {
+    }
 
     public Product(final String name, final Long price) {
-        if(Strings.isBlank(name)) {
+        if (Strings.isBlank(name)) {
             throw new IllegalArgumentException("제품명은 빈 문자열일 수 없습니다.");
         }
 
