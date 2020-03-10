@@ -1,7 +1,7 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +11,10 @@ import java.util.Objects;
 
 @Component
 public class ProductBo {
-    private final ProductDao productDao;
+    private final ProductRepository productRepository;
 
-    public ProductBo(final ProductDao productDao) {
-        this.productDao = productDao;
+    public ProductBo(final ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @Transactional
@@ -25,10 +25,10 @@ public class ProductBo {
             throw new IllegalArgumentException();
         }
 
-        return productDao.save(product);
+        return productRepository.save(product);
     }
 
     public List<Product> list() {
-        return productDao.findAll();
+        return productRepository.findAll();
     }
 }
