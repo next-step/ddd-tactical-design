@@ -1,7 +1,8 @@
 package kitchenpos.products.controller;
 
+import kitchenpos.products.Fixtures;
 import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -13,10 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,7 +36,8 @@ class ProductRestControllerTest {
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        final Product expected = new Product(Fixtures.FRIED_CHICKEN_ID, "후라이드", BigDecimal.valueOf(16_000L));
+        given(productBo.create(any(Product.class))).willReturn(expected);
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -57,7 +58,9 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        final Product friedChicken = new Product(Fixtures.FRIED_CHICKEN_ID, "후라이드", BigDecimal.valueOf(16_000L));
+        final Product seasonedChicken = new Product(Fixtures.SEASONED_CHICKEN_ID, "양념치킨", BigDecimal.valueOf(16_000L));
+        given(productBo.list()).willReturn(Arrays.asList(friedChicken, seasonedChicken));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));

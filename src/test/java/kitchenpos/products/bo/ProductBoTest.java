@@ -1,39 +1,45 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.Fixtures;
+import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class ProductBoTest {
-    private final ProductDao productDao = new InMemoryProductDao();
-
     private ProductBo productBo;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao);
+        productBo = new ProductBo(productRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
         // given
-        final Product expected = friedChicken();
+        final Product expected = new Product(Fixtures.FRIED_CHICKEN_ID, "후라이드", BigDecimal.valueOf(16_000L));
+        given(productRepository.save(expected)).willReturn(expected);
 
         // when
         final Product actual = productBo.create(expected);
@@ -48,20 +54,22 @@ class ProductBoTest {
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
         // given
-        final Product expected = friedChicken();
-        expected.setPrice(price);
+        final Product expected = new Product(Fixtures.FRIED_CHICKEN_ID, "후라이드", BigDecimal.valueOf(16_000L));
+        given(productRepository.save(expected)).willThrow(NumberFormatException.class);
 
         // when
         // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productBo.create(expected));
+        assertThatExceptionOfType(NumberFormatException.class).isThrownBy(() -> productBo.create(expected));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void list() {
         // given
-        final Product friedChicken = productDao.save(friedChicken());
-        final Product seasonedChicken = productDao.save(seasonedChicken());
+        final Product friedChicken = new Product(Fixtures.FRIED_CHICKEN_ID, "후라이드", BigDecimal.valueOf(16_000L));
+        final Product seasonedChicken = new Product(Fixtures.SEASONED_CHICKEN_ID, "양념치킨", BigDecimal.valueOf(16_000L));
+
+        given(productRepository.findAll()).willReturn(Arrays.asList(friedChicken, seasonedChicken));
 
         // when
         final List<Product> actual = productBo.list();
