@@ -6,11 +6,10 @@ import java.util.Objects;
 
 @Embeddable
 public class Price {
-    public static final BigDecimal ZERO = BigDecimal.ZERO;
-    private final BigDecimal price;
+    private static final BigDecimal ZERO = BigDecimal.ZERO;
+    private BigDecimal price;
 
-    public Price() {
-        price = null;
+    protected Price() {
     }
 
     private Price(BigDecimal price) {
@@ -49,7 +48,7 @@ public class Price {
             return false;
         }
 
-        Price other = (Price)object;
+        Price other = (Price) object;
         return Objects.equals(price, other.price);
     }
 

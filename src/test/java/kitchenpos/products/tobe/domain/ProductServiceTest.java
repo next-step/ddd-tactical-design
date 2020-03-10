@@ -1,7 +1,5 @@
-package kitchenpos.products.tobe.application;
+package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,12 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static kitchenpos.products.ProductFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -26,9 +23,15 @@ class ProductServiceTest {
     private ProductRepository productRepository;
 
     private ProductService productService;
+    private List<Product> chickenSet;
+    private ProductDto friedChicken;
+    private ProductDto seasonedChicken;
 
     @BeforeEach
     void setUp() {
+        chickenSet = chickenSet();
+        friedChicken = new ProductDto(friedChicken());
+        seasonedChicken = new ProductDto(seasonedChicken());
         productService = new ProductService(productRepository);
     }
 
@@ -36,12 +39,12 @@ class ProductServiceTest {
     @Test
     void create() {
         // given
-        final Product expected = friedChicken();
-        given(productRepository.save(any(Product.class))).willReturn(expected);
-        ProductDto dto = new ProductDto(expected);
+        final Product friedChicken = friedChicken();
+        given(productRepository.save(any(Product.class))).willReturn(friedChicken);
+        ProductDto expected = new ProductDto(friedChicken);
 
         // when
-        final Product actual = productService.create(dto);
+        final ProductDto actual = productService.create(expected);
 
         // then
         assertProduct(expected, actual);
@@ -51,16 +54,20 @@ class ProductServiceTest {
     @Test
     void list() {
         // given
-        given(productService.findAll()).willReturn(chickenSet());
+        given(productRepository.findAll()).willReturn(chickenSet);
 
         // when
-        final List<Product> actual = productService.findAll();
+        final List<ProductDto> actual = productService.findAll();
 
         // then
-        assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken(), seasonedChicken()));
+        assertAll(
+                () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actual.get(0).getName()).isEqualTo(friedChicken.getName()),
+                () -> assertThat(actual.get(1).getName()).isEqualTo(seasonedChicken.getName())
+        );
     }
 
-    private void assertProduct(final Product expected, final Product actual) {
+    private void assertProduct(final ProductDto expected, final ProductDto actual) {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
