@@ -5,21 +5,21 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class ProductPrice {
     private BigDecimal value;
 
-    protected Price() {
+    protected ProductPrice() {
     }
 
-    private Price(final BigDecimal value) {
+    private ProductPrice(final BigDecimal value) {
         if (isInValidPrice(value)) {
             throw new IllegalArgumentException();
         }
         this.value = value;
     }
 
-    public static Price of(final BigDecimal price) {
-        return new Price(price);
+    public static ProductPrice of(final BigDecimal price) {
+        return new ProductPrice(price);
     }
 
     public BigDecimal getValue() {

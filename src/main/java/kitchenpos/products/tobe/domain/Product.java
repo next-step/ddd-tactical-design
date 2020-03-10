@@ -14,18 +14,18 @@ public class Product {
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "price"))
-    private Price price;
+    private ProductPrice productPrice;
 
     protected Product() {
     }
 
-    private Product(final String name, final Price price) {
+    private Product(final String name, final ProductPrice productPrice) {
         this.name = name;
-        this.price = price;
+        this.productPrice = productPrice;
     }
 
     public static Product from(final String name, final BigDecimal price) {
-        return new Product(name, Price.of(price));
+        return new Product(name, ProductPrice.of(price));
     }
 
     public Long getId() {
@@ -36,7 +36,7 @@ public class Product {
         return name;
     }
 
-    public Price getPrice() {
-        return price;
+    public ProductPrice getProductPrice() {
+        return productPrice;
     }
 }

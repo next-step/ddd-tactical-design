@@ -10,17 +10,17 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-class PriceTest {
+class ProductPriceTest {
 
     @DisplayName("값이 0이상이면 price 생성")
     @ParameterizedTest
     @ValueSource(strings = {"0", "1", "1000"})
     void validPrice(final long value) {
         // when
-        final Price price = Price.of(BigDecimal.valueOf(value));
+        final ProductPrice productPrice = ProductPrice.of(BigDecimal.valueOf(value));
 
         // then
-        assertThat(price).isNotNull();
+        assertThat(productPrice).isNotNull();
     }
 
     @DisplayName("값이 null 이거나 0보다 작으면 예외 던짐")
@@ -29,6 +29,6 @@ class PriceTest {
     @ValueSource(strings = {"-1", "-2000"})
     void shouldThrowExceptionIfInvalidPrice(final BigDecimal value) {
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> Price.of(value));
+                .isThrownBy(() -> ProductPrice.of(value));
     }
 }
