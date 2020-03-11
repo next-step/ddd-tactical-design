@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.StringUtils;
 
 @Entity
 public class Product {
@@ -24,7 +26,7 @@ public class Product {
     }
 
     public Product(String name, Price price) {
-        if (Objects.isNull(name)) {
+        if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException();
         }
         this.name = name;
