@@ -1,4 +1,5 @@
-package kitchenpos.products.dao;
+package kitchenpos.products.infrastructure.dao;
+
 
 import kitchenpos.products.model.Product;
 

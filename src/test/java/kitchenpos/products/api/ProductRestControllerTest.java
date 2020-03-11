@@ -1,7 +1,8 @@
-package kitchenpos.products.controller;
+package kitchenpos.products.api;
 
-import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -27,16 +28,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ProductRestController.class)
 @Import(HttpEncodingAutoConfiguration.class)
 class ProductRestControllerTest {
+    public static final Long FRIED_CHICKEN_ID = 1L;
+    public static final Long SEASONED_CHICKEN_ID = 2L;
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductBo productBo;
+    private ProductService productService;
 
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(Product.class))).willReturn(friedChicken());
+        Product friedChickenProduct = friedChicken();
+
+        given(productService.create(any(ProductRequestDto.class))).willReturn(friedChickenProduct);
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -48,7 +54,6 @@ class ProductRestControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").isString())
                 .andExpect(jsonPath("$.price").isNumber())
         ;
@@ -57,7 +62,11 @@ class ProductRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        Product friedChickenProduct = friedChicken();
+
+        Product seasonedChickenProduct = seasonedChicken();
+
+        given(productService.list()).willReturn(Arrays.asList(friedChickenProduct, seasonedChickenProduct));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));
@@ -66,7 +75,6 @@ class ProductRestControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].name").isString())
                 .andExpect(jsonPath("$[0].price").isNumber())
         ;
