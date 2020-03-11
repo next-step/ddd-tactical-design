@@ -15,8 +15,21 @@ public class MenuGroup {
     @Column(name = "name")
     private String name;
 
+    public MenuGroup() {
+
+    }
+
     public MenuGroup(String name) {
+        this(null, name);
+    }
+
+    public MenuGroup(Long id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public boolean isId(Long id) {
+        return this.id.equals(id);
     }
 
     @Override
