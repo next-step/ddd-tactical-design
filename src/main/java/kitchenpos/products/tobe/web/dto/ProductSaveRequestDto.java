@@ -10,6 +10,9 @@ public class ProductSaveRequestDto {
 
     private BigDecimal price;
 
+    public ProductSaveRequestDto() {
+    }
+
     public ProductSaveRequestDto(String name, BigDecimal price) {
         this.name = name;
         this.price = price;

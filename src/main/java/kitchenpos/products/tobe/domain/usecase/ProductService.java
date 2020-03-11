@@ -1,8 +1,10 @@
 package kitchenpos.products.tobe.domain.usecase;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.entity.ProductRepository;
+import kitchenpos.products.tobe.web.dto.ProductResponseDto;
 import kitchenpos.products.tobe.web.dto.ProductSaveRequestDto;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +17,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product create(final ProductSaveRequestDto requestDto) {
-        return productRepository.save(requestDto.toEntity());
+    public ProductResponseDto create(final ProductSaveRequestDto requestDto) {
+        Product created = productRepository.save(requestDto.toEntity());
+        return new ProductResponseDto(created);
     }
 
-    public List<Product> list() {
-        return productRepository.findAll();
+    public List<ProductResponseDto> list() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(ProductResponseDto::new).collect(Collectors.toList());
     }
 }

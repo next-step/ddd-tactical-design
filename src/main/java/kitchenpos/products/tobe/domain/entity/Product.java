@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain.entity;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -23,6 +24,9 @@ public class Product {
     }
 
     public Product(String name, Price price) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
         this.name = name;
         this.price = price;
     }
