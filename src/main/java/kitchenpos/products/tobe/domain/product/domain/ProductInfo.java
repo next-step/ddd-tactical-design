@@ -6,23 +6,15 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductInfo {
-
     private String name;
-
-    private BigDecimal price;
+    private Price price;
 
     public ProductInfo() {
     }
 
-    public ProductInfo(Product product) {
-        final BigDecimal price = product.getPrice();
-
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        this.name = product.getName();
-        this.price = product.getPrice();
+    public ProductInfo(String name, BigDecimal price) {
+        this.name = name;
+        this.price = new Price(price);
     }
 
     public String getName() {
@@ -30,6 +22,20 @@ public class ProductInfo {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInfo that = (ProductInfo) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price);
     }
 }
