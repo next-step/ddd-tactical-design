@@ -38,4 +38,8 @@ public class MenuService {
         menu.validate(sum);
         return menuRepository.save(menu);
     }
+
+    public List<Menu> list() {
+        return menuRepository.findAll();
+    }
 }

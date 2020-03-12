@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.mockito.BDDMockito.given;
 
 
-//@SpringBootTest
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class MenuServiceTest {
 
@@ -80,5 +81,18 @@ class MenuServiceTest {
                 .willReturn(Optional.of(new Product(1L, "양념", BigDecimal.valueOf(17_000))));
         assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(menu));
 
+    }
+
+    @Test
+    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    void list() {
+        // give
+        given(menuRepository.findAll())
+                .willReturn(Arrays.asList(expectedMenu));
+        List<Menu> menus = menuService.list();
+        // when
+        boolean includeObject = menus.contains(expectedMenu);
+        // then
+        assertThat(includeObject).isTrue();
     }
 }
