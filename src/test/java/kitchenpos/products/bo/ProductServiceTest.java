@@ -55,13 +55,7 @@ class ProductServiceTest {
     @NullSource
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
-        // given
-        final Product expected = friedChicken();
-        expected.setPrice(price);
-
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productService.create(expected));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productService.create(friedChicken(price)));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
