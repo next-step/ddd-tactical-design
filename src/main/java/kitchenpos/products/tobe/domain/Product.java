@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -38,5 +39,20 @@ public class Product {
 
     public Long getPrice() {
         return price.toLong();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return getId().equals(product.getId()) &&
+                getName().equals(product.getName()) &&
+                getPrice().equals(product.getPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPrice());
     }
 }
