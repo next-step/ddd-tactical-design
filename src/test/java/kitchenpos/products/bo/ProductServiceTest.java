@@ -1,16 +1,20 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.product.service.ProductService;
+import kitchenpos.products.tobe.domain.product.domain.Product;
+import kitchenpos.products.tobe.domain.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import static kitchenpos.products.Fixtures.friedChicken;
@@ -19,14 +23,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ProductBoTest {
-    private final ProductDao productDao = new InMemoryProductDao();
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
+class ProductServiceTest {
 
-    private ProductBo productBo;
+    @Autowired
+    private ProductRepository productRepository;
+
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao);
+        productService = new ProductService(productRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -36,7 +44,7 @@ class ProductBoTest {
         final Product expected = friedChicken();
 
         // when
-        final Product actual = productBo.create(expected);
+        final Product actual = productService.create(expected);
 
         // then
         assertProduct(expected, actual);
@@ -47,27 +55,17 @@ class ProductBoTest {
     @NullSource
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
-        // given
-        final Product expected = friedChicken();
-        expected.setPrice(price);
-
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productBo.create(expected));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productService.create(friedChicken(price)));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void list() {
-        // given
-        final Product friedChicken = productDao.save(friedChicken());
-        final Product seasonedChicken = productDao.save(seasonedChicken());
-
         // when
-        final List<Product> actual = productBo.list();
+        final List<Product> actual = productService.list();
 
         // then
-        assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
+        assertThat(actual).contains(friedChicken(), seasonedChicken());
     }
 
     private void assertProduct(final Product expected, final Product actual) {
