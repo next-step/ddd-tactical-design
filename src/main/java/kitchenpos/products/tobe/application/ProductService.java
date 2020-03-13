@@ -1,5 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.application;
 
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
