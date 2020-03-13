@@ -1,6 +1,6 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.tobe.domain.product.application.ProductService;
+import kitchenpos.products.tobe.domain.product.service.ProductService;
 import kitchenpos.products.tobe.domain.product.domain.Product;
 import kitchenpos.products.tobe.domain.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
