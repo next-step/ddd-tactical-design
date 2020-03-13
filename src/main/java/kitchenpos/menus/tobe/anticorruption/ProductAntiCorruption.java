@@ -14,11 +14,11 @@ import java.util.List;
  * MenuProduct의 금액의 합은 Menu의 가격보다 크거나 같다.
  */
 @Service
-public class ProductService {
+public class ProductAntiCorruption {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductAntiCorruption(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
