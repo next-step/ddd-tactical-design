@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -20,7 +21,7 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final String name, final Long price) {
+    public Product(final String name, final BigDecimal price) {
         if (Strings.isBlank(name)) {
             throw new IllegalArgumentException("제품명은 빈 문자열일 수 없습니다.");
         }
@@ -37,15 +38,15 @@ public class Product {
         return name;
     }
 
-    public Long getPrice() {
-        return price.toLong();
+    public BigDecimal getPrice() {
+        return price.get();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
+        final Product product = (Product) o;
         return getId().equals(product.getId()) &&
                 getName().equals(product.getName()) &&
                 getPrice().equals(product.getPrice());
@@ -56,3 +57,4 @@ public class Product {
         return Objects.hash(getId(), getName(), getPrice());
     }
 }
+
