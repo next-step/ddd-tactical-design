@@ -13,7 +13,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 /**
  * Menu는 번호와 이름, 가격, MenuProducts를 가진다.
  * Menu는 특정 MenuGroup에 속한다.
