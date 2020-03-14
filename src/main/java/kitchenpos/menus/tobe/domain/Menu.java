@@ -28,7 +28,7 @@ public class Menu {
     @JoinColumn(name = "menu_id")
     private List<MenuProduct> menuProducts;
 
-    public Menu() {
+    protected Menu() {
 
     }
 

@@ -21,7 +21,7 @@ public class MenuProduct {
     @Column(name = "quantity")
     private Long quantity;
 
-    public MenuProduct() {
+    protected MenuProduct() {
 
     }
 
