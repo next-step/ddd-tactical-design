@@ -42,13 +42,13 @@ public class Menu {
 
     private void validate() {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("금액이 잘못 되었습니다.");
         }
     }
 
     public void validate(BigDecimal sum) {
         if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴의 금액이 메뉴에 속한 상품 금액보다 더 많습니다.");
         }
     }
 
@@ -57,7 +57,7 @@ public class Menu {
                 .anyMatch(menuGroup -> menuGroup.isId(this.menuGroupId));
 
         if (!existMenuGroup) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴 그룹이 존재하지 않습니다.");
         }
     }
 

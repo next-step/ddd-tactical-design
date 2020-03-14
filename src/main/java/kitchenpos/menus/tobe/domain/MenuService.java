@@ -34,7 +34,7 @@ public class MenuService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menuProducts) {
             final Product product = productRepository.findById(menuProduct.getProductId())
-                    .orElseThrow(IllegalArgumentException::new);
+                    .orElseThrow(() -> new IllegalArgumentException("해당 상품은 존재하지 않습니다."));
             sum = sum.add(menuProduct.applyQuantity(product.getPrice()));
         }
         menu.validate(sum);
