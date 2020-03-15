@@ -4,18 +4,21 @@ import kitchenpos.menus.dao.MenuDao;
 import kitchenpos.menus.dao.MenuGroupDao;
 import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
-import kitchenpos.products.bo.InMemoryProductDao;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static kitchenpos.menus.Fixtures.twoChickens;
 import static kitchenpos.menus.Fixtures.twoFriedChickens;
@@ -23,20 +26,23 @@ import static kitchenpos.products.Fixtures.friedChicken;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class MenuBoTest {
     private final MenuDao menuDao = new InMemoryMenuDao();
     private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
     private final MenuProductDao menuProductDao = new InMemoryMenuProductDao();
-    private final ProductRepository productDao = new InMemoryProductDao();
+    @Mock
+    private ProductRepository productRepository;
 
     private MenuBo menuBo;
 
     @BeforeEach
     void setUp() {
-        menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productDao);
+        menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productRepository);
         menuGroupDao.save(twoChickens());
-        productDao.save(friedChicken());
     }
 
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
@@ -44,6 +50,9 @@ class MenuBoTest {
     void create() {
         // given
         final Menu expected = twoFriedChickens();
+
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.of(friedChicken()));
 
         // when
         final Menu actual = menuBo.create(expected);
