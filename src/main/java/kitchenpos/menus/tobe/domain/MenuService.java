@@ -13,21 +13,21 @@ import java.util.List;
 public class MenuService {
 
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
+    private MenuGroupService menuGroupService;
     private ProductRepository productRepository;
 
     public MenuService(
             MenuRepository menuRepository,
-            MenuGroupRepository menuGroupRepository,
+            MenuGroupService menuGroupService,
             ProductRepository productRepository
     ) {
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupService = menuGroupService;
         this.productRepository = productRepository;
     }
 
     public Menu create(final Menu menu) {
-        menu.isMenuGroupId(menuGroupRepository.findAll());
+        menu.validateByMenuGroup(menuGroupService.list());
 
         final List<MenuProduct> menuProducts = menu.getMenuProducts();
 

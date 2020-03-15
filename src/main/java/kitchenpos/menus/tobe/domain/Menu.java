@@ -52,7 +52,7 @@ public class Menu {
         }
     }
 
-    public void isMenuGroupId(List<MenuGroup> menuGroups) {
+    public void validateByMenuGroup(List<MenuGroup> menuGroups) {
         boolean existMenuGroup = menuGroups.stream()
                 .anyMatch(menuGroup -> menuGroup.isId(this.menuGroupId));
 
