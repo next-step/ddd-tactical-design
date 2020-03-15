@@ -7,6 +7,7 @@ import kitchenpos.menus.model.Menu;
 import kitchenpos.menus.model.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class MenuBo {
             final MenuDao menuDao,
             final MenuGroupDao menuGroupDao,
             final MenuProductDao menuProductDao,
+            @Qualifier("JpaProductRepository")
             final ProductRepository productRepository
     ) {
         this.menuDao = menuDao;
