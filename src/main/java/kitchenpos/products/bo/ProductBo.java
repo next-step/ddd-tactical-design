@@ -1,7 +1,7 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.dao.ProductDao;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +11,9 @@ import java.util.Objects;
 
 @Component
 public class ProductBo {
-    private final ProductDao productDao;
+    private final ProductRepository productDao;
 
-    public ProductBo(final ProductDao productDao) {
+    public ProductBo(final ProductRepository productDao) {
         this.productDao = productDao;
     }
 

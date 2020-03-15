@@ -5,7 +5,7 @@ import kitchenpos.menus.dao.MenuGroupDao;
 import kitchenpos.menus.dao.MenuProductDao;
 import kitchenpos.menus.model.Menu;
 import kitchenpos.products.bo.InMemoryProductDao;
-import kitchenpos.products.dao.ProductDao;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class MenuBoTest {
     private final MenuDao menuDao = new InMemoryMenuDao();
     private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
     private final MenuProductDao menuProductDao = new InMemoryMenuProductDao();
-    private final ProductDao productDao = new InMemoryProductDao();
+    private final ProductRepository productDao = new InMemoryProductDao();
 
     private MenuBo menuBo;
 

@@ -12,7 +12,7 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    protected Product() {
+    public Product() {
     }
 
     public Product(String name, BigDecimal price) {
@@ -30,5 +30,17 @@ public class Product {
 
     public BigDecimal getPrice() {
         return price.getPrice();
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
