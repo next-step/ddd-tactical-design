@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.tobe.Fixtures;
+import kitchenpos.products.tobe.ProductFixtures;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -99,7 +99,7 @@ class ProductServiceTest {
     @Test
     void list() {
         // given
-        final List<Product> products = Arrays.asList(Fixtures.friedChicken(), Fixtures.seasonedChicken());
+        final List<Product> products = Arrays.asList(ProductFixtures.friedChicken(), ProductFixtures.seasonedChicken());
 
         given(productRepository.findAll()).willReturn(products);
 

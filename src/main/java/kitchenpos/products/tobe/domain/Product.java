@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)

@@ -15,10 +15,11 @@ public class MenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected MenuGroup() {}
+    protected MenuGroup() {
+    }
 
     public MenuGroup(final String name) {
-        if(Strings.isBlank(name)) {
+        if (Strings.isBlank(name)) {
             throw new IllegalArgumentException("메뉴그룹명은 빈 문자열일 수 없습니다.");
         }
 

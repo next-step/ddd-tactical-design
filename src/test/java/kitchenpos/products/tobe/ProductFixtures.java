@@ -5,7 +5,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 
-public class Fixtures {
+public class ProductFixtures {
 
     public static final Long FRIED_CHICKEN_ID = 1L;
     public static final Long SEASONED_CHICKEN_ID = 2L;

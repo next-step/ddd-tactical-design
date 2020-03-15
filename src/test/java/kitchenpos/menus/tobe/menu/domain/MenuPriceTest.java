@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,18 +11,18 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ProductPriceTest {
+class MenuPriceTest {
 
-    @DisplayName("제품 가격을 생성할 수 있다.")
+    @DisplayName("제품가격을 생성할 수 있다.")
     @ParameterizedTest
     @MethodSource(value = "provideValidPrice")
-    void create(final BigDecimal price) {
+    void create(BigDecimal price) {
         // given
         // when
-        ProductPrice productPrice = new ProductPrice(price);
+        final MenuPrice menuPrice = new MenuPrice(price);
 
         // then
-        assertThat(productPrice.get()).isEqualTo(price);
+        assertThat(menuPrice.get()).isEqualTo(price);
     }
 
     private static Stream provideValidPrice() {
@@ -33,16 +33,16 @@ class ProductPriceTest {
         );
     }
 
-    @DisplayName("제품 가격은 0원 이상이다.")
+    @DisplayName("제품가격 생성 시, 0원 이상이여야합니다.")
     @ParameterizedTest
     @NullSource
     @MethodSource(value = "provideInvalidPrice")
-    void createOnlyWhenProductAdditionPolicySatisfied(final BigDecimal invalidPrice) {
+    void createFailsWhenPriceIsNegative(BigDecimal price) {
         // given
         // when
         // then
         assertThatThrownBy(() -> {
-            new ProductPrice(invalidPrice);
+            new MenuPrice(price);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 

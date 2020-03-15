@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.menuGroup.application;
 
-import kitchenpos.menus.tobe.Fixtures;
+import kitchenpos.menus.tobe.MenuFixtures;
 import kitchenpos.menus.tobe.menuGroup.domain.MenuGroup;
 import kitchenpos.menus.tobe.menuGroup.domain.MenuGroupRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +66,7 @@ class MenuGroupServiceTest {
     @Test
     void list() {
         // given
-        final List<MenuGroup> menuGroups = Arrays.asList(Fixtures.twoChickens());
+        final List<MenuGroup> menuGroups = Arrays.asList(MenuFixtures.twoChickens());
 
         given(menuGroupRepository.findAll()).willReturn(menuGroups);
 

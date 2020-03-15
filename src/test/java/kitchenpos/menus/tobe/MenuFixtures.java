@@ -3,10 +3,7 @@ package kitchenpos.menus.tobe;
 import kitchenpos.menus.tobe.menuGroup.domain.MenuGroup;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-
-public class Fixtures {
+public class MenuFixtures {
     public static final Long TWO_FRIED_CHICKENS_ID = 1L;
     public static final Long TWO_CHICKENS_ID = 1L;
     public static final Long FRIED_CHICKEN_ID = 1L;
