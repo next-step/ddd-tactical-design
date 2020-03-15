@@ -46,13 +46,13 @@ public class Menu {
         }
     }
 
-    public void validate(BigDecimal sum) {
+    void validate(BigDecimal sum) {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException("메뉴의 금액이 메뉴에 속한 상품 금액보다 더 많습니다.");
         }
     }
 
-    public void validateByMenuGroup(List<MenuGroup> menuGroups) {
+    void validateByMenuGroup(List<MenuGroup> menuGroups) {
         boolean existMenuGroup = menuGroups.stream()
                 .anyMatch(menuGroup -> menuGroup.isId(this.menuGroupId));
 

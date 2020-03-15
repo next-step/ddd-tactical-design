@@ -21,6 +21,8 @@ public class MenuProduct {
     @Column(name = "quantity")
     private Long quantity;
 
+    private BigDecimal price;
+
     protected MenuProduct() {
 
     }
@@ -35,8 +37,12 @@ public class MenuProduct {
         return productId;
     }
 
-    public BigDecimal applyQuantity(BigDecimal price) {
-        return price.multiply(BigDecimal.valueOf(quantity));
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void calculatePrice(BigDecimal price) {
+        this.price = price.multiply(BigDecimal.valueOf(quantity));
     }
 
 }

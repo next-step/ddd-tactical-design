@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.menus.tobe.infra.MenuProductAntiCorruption;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,30 +13,24 @@ public class MenuService {
 
     private MenuRepository menuRepository;
     private MenuGroupService menuGroupService;
-    private ProductRepository productRepository;
+    private MenuProductAntiCorruption menuProductAntiCorruption;
 
     public MenuService(
             MenuRepository menuRepository,
             MenuGroupService menuGroupService,
-            ProductRepository productRepository
+            MenuProductAntiCorruption menuProductAntiCorruption
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupService = menuGroupService;
-        this.productRepository = productRepository;
+        this.menuProductAntiCorruption = menuProductAntiCorruption;
     }
 
     public Menu create(final Menu menu) {
         menu.validateByMenuGroup(menuGroupService.list());
 
-        final List<MenuProduct> menuProducts = menu.getMenuProducts();
+        BigDecimal totalPrice = menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts());
+        menu.validate(totalPrice);
 
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menuProducts) {
-            final Product product = productRepository.findById(menuProduct.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 상품은 존재하지 않습니다."));
-            sum = sum.add(menuProduct.applyQuantity(product.getPrice()));
-        }
-        menu.validate(sum);
         return menuRepository.save(menu);
     }
 

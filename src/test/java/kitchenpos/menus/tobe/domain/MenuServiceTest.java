@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.menus.tobe.infra.MenuProductAntiCorruption;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,19 +8,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.BDDMockito.given;
 
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class MenuServiceTest {
 
@@ -29,10 +25,10 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
 
     @Mock
-    private MenuGroupRepository menuGroupRepository;
+    private MenuGroupService menuGroupService;
 
     @Mock
-    private ProductRepository productRepository;
+    private MenuProductAntiCorruption menuProductAntiCorruption;
 
     @InjectMocks
     private MenuService menuService;
@@ -57,12 +53,15 @@ class MenuServiceTest {
     @Test
     @DisplayName("객체 생성 테스트")
     void create() {
-        Menu menu = new Menu("후라", BigDecimal.valueOf(1_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
         // give
-        given(menuGroupRepository.findAll())
+        Menu menu = new Menu("후라", BigDecimal.valueOf(1_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
+
+        given(menuGroupService.list())
                 .willReturn(expectedMenuGroups);
-        given(productRepository.findById(1L))
-                .willReturn(Optional.of(new Product(1L, "양념", BigDecimal.valueOf(17_000))));
+
+        given(menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts()))
+                .willReturn(BigDecimal.valueOf(1_500));
+
         given(menuRepository.save(menu))
                 .willReturn(expectedMenu);
 
@@ -75,10 +74,13 @@ class MenuServiceTest {
     void comparePrice() {
         // give
         Menu menu = new Menu("후라", BigDecimal.valueOf(18_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
-        given(menuGroupRepository.findAll())
+
+        given(menuGroupService.list())
                 .willReturn(expectedMenuGroups);
-        given(productRepository.findById(1L))
-                .willReturn(Optional.of(new Product(1L, "양념", BigDecimal.valueOf(17_000))));
+
+        given(menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts()))
+                .willReturn(BigDecimal.valueOf(1_500));
+
         assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(menu));
 
     }
