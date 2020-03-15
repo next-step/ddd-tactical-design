@@ -1,6 +1,9 @@
 package kitchenpos.menus.tobe.menu.application;
 
+import kitchenpos.menus.tobe.MenuFixtures;
 import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.products.tobe.ProductFixtures;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -212,5 +215,22 @@ class MenuServiceTest {
         assertThatThrownBy(() -> {
             menuService.create(menuCreationRequestDto);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("메뉴 목록을 조회할 수 있다.")
+    @Test
+    void list() {
+        // given
+        final List<Menu> menus = Arrays.asList(MenuFixtures.twoFriedChickens());
+        final List<MenuProduct> menuProducts = menus.get(0).getMenuProducts();
+
+        given(menuRepository.findAll()).willReturn(menus);
+
+        // when
+        final List<Menu> result = menuService.list();
+
+        // then
+        assertThat(result).containsExactlyInAnyOrderElementsOf(menus);
+        assertThat(result.get(0).getMenuProducts()).containsExactlyInAnyOrderElementsOf(menuProducts);
     }
 }

@@ -62,4 +62,8 @@ public class MenuService {
 
         return new MenuCreationResponseDto(menuRepository.save(newMenu).getId());
     }
+
+    public List<Menu> list() {
+        return menuRepository.findAll();
+    }
 }
