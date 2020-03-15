@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
+import static kitchenpos.products.Fixtures.friedChickenData;
+import static kitchenpos.products.Fixtures.seasonedChickenData;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,7 +36,7 @@ class ProductDataRestControllerTest {
     @Test
     void create() throws Exception {
         // given
-        given(productBo.create(any(ProductData.class))).willReturn(friedChicken());
+        given(productBo.create(any(ProductData.class))).willReturn(friedChickenData());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
@@ -57,7 +57,7 @@ class ProductDataRestControllerTest {
     @Test
     void list() throws Exception {
         // given
-        given(productBo.list()).willReturn(Arrays.asList(friedChicken(), seasonedChicken()));
+        given(productBo.list()).willReturn(Arrays.asList(friedChickenData(), seasonedChickenData()));
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/products"));

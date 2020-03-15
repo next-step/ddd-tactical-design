@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.infrastructure;
 
 import kitchenpos.products.model.ProductData;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -33,14 +34,14 @@ public class JdbcTemplateProductRepository implements ProductRepository {
     }
 
     @Override
-    public ProductData save(final ProductData entity) {
+    public Product save(final Product entity) {
         final SqlParameterSource parameters = new BeanPropertySqlParameterSource(entity);
         final Number key = jdbcInsert.executeAndReturnKey(parameters);
         return select(key.longValue());
     }
 
     @Override
-    public Optional<ProductData> findById(final Long id) {
+    public Optional<Product> findById(final Long id) {
         try {
             return Optional.of(select(id));
         } catch (final EmptyResultDataAccessException e) {
@@ -49,23 +50,22 @@ public class JdbcTemplateProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<ProductData> findAll() {
+    public List<Product> findAll() {
         final String sql = "SELECT id, name, price FROM product";
         return jdbcTemplate.query(sql, (resultSet, rowNumber) -> toEntity(resultSet));
     }
 
-    private ProductData select(final Long id) {
+    private Product select(final Long id) {
         final String sql = "SELECT id, name, price FROM product WHERE id = (:id)";
         final SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("id", id);
         return jdbcTemplate.queryForObject(sql, parameters, (resultSet, rowNumber) -> toEntity(resultSet));
     }
 
-    private ProductData toEntity(final ResultSet resultSet) throws SQLException {
-        final ProductData entity = new ProductData();
-        entity.setId(resultSet.getLong(KEY_COLUMN_NAME));
-        entity.setName(resultSet.getString("name"));
-        entity.setPrice(resultSet.getBigDecimal("price"));
+    private Product toEntity(final ResultSet resultSet) throws SQLException {
+        final Product entity = new Product(resultSet.getLong(KEY_COLUMN_NAME),
+                resultSet.getString("name"),
+                resultSet.getBigDecimal("price"));
         return entity;
     }
 }

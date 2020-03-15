@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductApplication {
@@ -21,16 +22,14 @@ public class ProductApplication {
     @Transactional
     public ProductData registerNewProduct(String name, BigDecimal price){
         Product product = new Product(name, price);
-
+        productRepository.save(product);
         ProductData productData = convertToProductData(product);
-
-        productRepository.save(productData);
 
         return productData;
     }
 
-    private ProductData convertToProductData(Product product) {
-        ProductData productData = new ProductData();
+    public static ProductData convertToProductData(Product product) {
+        final ProductData productData = new ProductData();
         productData.setId(product.getId());
         productData.setName(product.getName());
         productData.setPrice(product.getPrice());
@@ -38,11 +37,18 @@ public class ProductApplication {
     }
 
     public List<ProductData> productList() {
-        return productRepository.findAll();
+        final List<ProductData> productDataList = productRepository
+                .findAll()
+                .stream()
+                .map(product -> convertToProductData(product))
+                .collect(Collectors.toList());
+        return productDataList;
     }
 
     public Optional<ProductData> findByProductId(Long productId) {
-
-        return productRepository.findById(productId);
+        final ProductData productData = convertToProductData(productRepository
+                .findById(productId).
+                        get());
+        return Optional.of(productData);
     }
 }

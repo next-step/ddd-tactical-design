@@ -20,7 +20,6 @@ import java.util.List;
 
 import static kitchenpos.menus.Fixtures.twoChickens;
 import static kitchenpos.menus.Fixtures.twoFriedChickens;
-import static kitchenpos.products.Fixtures.friedChicken;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -38,7 +37,6 @@ class MenuBoTest {
     void setUp() {
         menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productApplication);
         menuGroupDao.save(twoChickens());
-        productRepository.save(friedChicken());
     }
 
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

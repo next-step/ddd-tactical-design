@@ -14,8 +14,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static kitchenpos.products.Fixtures.friedChicken;
-import static kitchenpos.products.Fixtures.seasonedChicken;
+import static kitchenpos.products.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -35,7 +34,7 @@ class ProductDataBoTest {
     @Test
     void create() {
         // given
-        final ProductData expected = friedChicken();
+        final ProductData expected = friedChickenData();
 
         // when
         final ProductData actual = productBo.create(expected);
@@ -50,7 +49,7 @@ class ProductDataBoTest {
     @ValueSource(strings = "-1000")
     void create(final BigDecimal price) {
         // given
-        final ProductData expected = friedChicken();
+        final ProductData expected = friedChickenData();
         expected.setPrice(price);
 
         // when
@@ -62,14 +61,15 @@ class ProductDataBoTest {
     @Test
     void list() {
         // given
-        final ProductData friedChicken = productRepository.save(friedChicken());
-        final ProductData seasonedChicken = productRepository.save(seasonedChicken());
+        final ProductData friedChicken = ProductApplication.convertToProductData(productRepository.save(friedChicken()));
+        final ProductData seasonedChicken = ProductApplication.convertToProductData(productRepository.save(seasonedChicken()));
 
         // when
         final List<ProductData> actual = productBo.list();
 
         // then
-        assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
+//        assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
+        assertThat(actual).containsOnlyElementsOf(Arrays.asList(friedChicken, seasonedChicken));
     }
 
     private void assertProduct(final ProductData expected, final ProductData actual) {
