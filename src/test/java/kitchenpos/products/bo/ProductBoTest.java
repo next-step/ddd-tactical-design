@@ -1,32 +1,36 @@
 package kitchenpos.products.bo;
 
-import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
 import static kitchenpos.products.Fixtures.friedChicken;
 import static kitchenpos.products.Fixtures.seasonedChicken;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class ProductBoTest {
-    private final ProductRepository productDao = new InMemoryProductDao();
+    @Mock
+    private ProductRepository productRepository;
 
+    @InjectMocks
     private ProductBo productBo;
 
     @BeforeEach
     void setUp() {
-        productBo = new ProductBo(productDao);
+        productBo = new ProductBo(productRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -34,6 +38,7 @@ class ProductBoTest {
     void create() {
         // given
         final Product expected = friedChicken();
+        given(productRepository.save(any(Product.class))).willReturn(expected);
 
         // when
         final Product actual = productBo.create(expected);
@@ -42,27 +47,14 @@ class ProductBoTest {
         assertProduct(expected, actual);
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
-    @ParameterizedTest
-    @NullSource
-    @ValueSource(strings = "-1000")
-    void create(final BigDecimal price) {
-        // given
-        final Product expected = friedChicken();
-        expected.setPrice(price);
-
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> productBo.create(expected));
-    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void list() {
         // given
-        final Product friedChicken = productDao.save(friedChicken());
-        final Product seasonedChicken = productDao.save(seasonedChicken());
-
+        final Product friedChicken = productRepository.save(friedChicken());
+        final Product seasonedChicken = productRepository.save(seasonedChicken());
+        given(productRepository.findAll()).willReturn(Arrays.asList(friedChicken, seasonedChicken));
         // when
         final List<Product> actual = productBo.list();
 
