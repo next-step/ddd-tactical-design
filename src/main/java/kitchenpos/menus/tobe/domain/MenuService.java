@@ -26,7 +26,7 @@ public class MenuService {
     }
 
     public Menu create(final Menu menu) {
-        menu.validateByMenuGroup(menuGroupService.list());
+        menuGroupService.existsMenuGroupById(menu.getMenuGroupId());
 
         BigDecimal totalPrice = menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts());
         menu.validate(totalPrice);

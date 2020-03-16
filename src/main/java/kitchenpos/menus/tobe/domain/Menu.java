@@ -53,13 +53,8 @@ public class Menu {
         }
     }
 
-    void validateByMenuGroup(List<MenuGroup> menuGroups) {
-        boolean existMenuGroup = menuGroups.stream()
-                .anyMatch(menuGroup -> menuGroup.isId(this.menuGroupId));
-
-        if (!existMenuGroup) {
-            throw new IllegalArgumentException("메뉴 그룹이 존재하지 않습니다.");
-        }
+    public Long getMenuGroupId() {
+        return menuGroupId;
     }
 
     public List<MenuProduct> getMenuProducts() {

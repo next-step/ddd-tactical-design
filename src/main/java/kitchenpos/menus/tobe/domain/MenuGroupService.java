@@ -23,4 +23,9 @@ public class MenuGroupService {
     public List<MenuGroup> list() {
         return menuGroupRepository.findAll();
     }
+
+    public void existsMenuGroupById(Long groupId) {
+        menuGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴 그룹이 존재하지 않습니다."));
+    }
 }

@@ -16,6 +16,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.doThrow;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -56,9 +58,6 @@ class MenuServiceTest {
         // give
         Menu menu = new Menu("후라", BigDecimal.valueOf(1_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
 
-        given(menuGroupService.list())
-                .willReturn(expectedMenuGroups);
-
         given(menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts()))
                 .willReturn(BigDecimal.valueOf(1_500));
 
@@ -74,9 +73,6 @@ class MenuServiceTest {
     void comparePrice() {
         // give
         Menu menu = new Menu("후라", BigDecimal.valueOf(18_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
-
-        given(menuGroupService.list())
-                .willReturn(expectedMenuGroups);
 
         given(menuProductAntiCorruption.menuTotalPrice(menu.getMenuProducts()))
                 .willReturn(BigDecimal.valueOf(1_500));
@@ -96,5 +92,21 @@ class MenuServiceTest {
         boolean includeObject = menus.contains(expectedMenu);
         // then
         assertThat(includeObject).isTrue();
+    }
+
+    @Test
+    @DisplayName("메뉴 그룹아이디 예외 처리")
+    void exceptByMenuGroupId() {
+        // give
+        doThrow(new IllegalArgumentException("메뉴 그룹이 존재하지 않습니다."))
+                .when(menuGroupService)
+                .existsMenuGroupById(3L);
+
+        Menu menu = new Menu("후라", BigDecimal.valueOf(2_000), 3L, Arrays.asList(new MenuProduct(null, 1L, 1L)));
+
+        // when then
+        assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(menu))
+                .withMessageMatching("메뉴 그룹이 존재하지 않습니다.");
+
     }
 }
