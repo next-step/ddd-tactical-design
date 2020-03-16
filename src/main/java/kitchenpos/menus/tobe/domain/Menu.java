@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +63,6 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return new ArrayList<>(menuProducts);
+        return Collections.unmodifiableList(this.menuProducts);
     }
 }
