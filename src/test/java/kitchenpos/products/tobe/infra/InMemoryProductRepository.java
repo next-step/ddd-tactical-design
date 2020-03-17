@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.infra;
 
+<<<<<<< HEAD
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Repository;
 
@@ -43,4 +44,7 @@ public class InMemoryProductRepository implements ProductRepository {
         }
         return false;
     }
+=======
+public class InMemoryProductRepository {
+>>>>>>> refactoring(kitchenpos) : JpaRepository 추가.
 }

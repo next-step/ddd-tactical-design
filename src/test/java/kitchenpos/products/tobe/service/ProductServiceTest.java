@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.service;
 
+<<<<<<< HEAD
 import kitchenpos.products.tobe.Fixtures;
 import kitchenpos.products.tobe.application.DefaultProductService;
 import kitchenpos.products.tobe.application.ProductService;
@@ -66,4 +67,7 @@ public class ProductServiceTest {
         assertThatExceptionOfType(WrongProductPriceException.class)
             .isThrownBy(() -> productService.register(new ProductDto(Fixtures.noPriceProduct())));
     }
+=======
+public class ProductServiceTest {
+>>>>>>> refactoring(kitchenpos) : JpaRepository 추가.
 }
