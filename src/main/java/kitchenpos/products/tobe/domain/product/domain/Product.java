@@ -16,7 +16,7 @@ public class Product {
     @Embedded
     private ProductInfo productInfo;
 
-    public Product() {
+    private Product() {
     }
 
     public Product(Long id, String name, BigDecimal price) {
