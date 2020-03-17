@@ -28,10 +28,6 @@ public class MenuGroup {
         this.name = name;
     }
 
-    public boolean isId(Long id) {
-        return this.id.equals(id);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
