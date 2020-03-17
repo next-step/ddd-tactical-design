@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu.domain;
 
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.menus.tobe.domain.menu.ProductPriceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +13,7 @@ import static kitchenpos.menus.TobeFixtures.menuProduct;
 import static kitchenpos.menus.TobeFixtures.twoFriedChickens;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuTest {
 
@@ -45,6 +44,6 @@ class MenuTest {
         Menu result = twoFriedChickens(BigDecimal.valueOf(33_000L));
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> result.validateMenuPrice(Arrays.asList(new ProductPriceResponse(1L, BigDecimal.valueOf(16_000L)))));
+                .isThrownBy(() -> result.validateMenuPrice(BigDecimal.valueOf(16_000L)));
     }
 }

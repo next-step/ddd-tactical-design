@@ -18,9 +18,6 @@ public class MenuProduct {
 
     private long quantity;
 
-    @Embedded
-    private Price price;
-
     private MenuProduct() {
     }
 
@@ -37,11 +34,7 @@ public class MenuProduct {
         return quantity;
     }
 
-    public Price getPrice() {
-        return price;
-    }
-
-    public BigDecimal calculateTest(Price price) {
+    public BigDecimal multiply(Price price) {
         return price.multiply(quantity);
     }
 

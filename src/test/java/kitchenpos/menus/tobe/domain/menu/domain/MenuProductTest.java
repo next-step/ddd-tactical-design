@@ -30,7 +30,7 @@ class MenuProductTest {
         MenuProduct sample = menuProduct();
 
         // when
-        BigDecimal result = sample.calculateTest(new Price(BigDecimal.valueOf(16_000)));
+        BigDecimal result = sample.multiply(new Price(BigDecimal.valueOf(16_000)));
 
         // then
         assertThat(result).isEqualTo(BigDecimal.valueOf(32_000));
