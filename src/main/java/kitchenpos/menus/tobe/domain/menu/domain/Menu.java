@@ -2,13 +2,11 @@ package kitchenpos.menus.tobe.domain.menu.domain;
 
 import kitchenpos.common.tobe.domain.Name;
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.menus.tobe.domain.menu.ProductPriceResponse;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "menu")
@@ -28,9 +26,8 @@ public class Menu {
     @Column(name = "menu_group_id")
     private Long menuGroupId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "menu_product", joinColumns = @JoinColumn(name = "menu_id"))
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     public Menu() {
     }
@@ -40,7 +37,7 @@ public class Menu {
         this.name = new Name(name);
         this.price = new Price(price);
         this.menuGroupId = menuGroupId;
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     private void validate(Long menuGroupId) {
@@ -66,26 +63,15 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.getMenuProducts();
     }
 
     public List<Long> getMenuProductIds() {
-        return menuProducts.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList());
+        return menuProducts.getMenuProductIds();
     }
 
-    public void validateMenuPrice(List<ProductPriceResponse> prices) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (ProductPriceResponse priceResponse : prices) {
-            for(MenuProduct menuProduct : menuProducts) {
-                if (priceResponse.getId().equals(menuProduct.getProductId())) {
-                    sum = sum.add(menuProduct.calculateTest(priceResponse.getPrice()));
-                }
-            }
-        }
-
-        if (price.compareTo(sum) > 0) {
+    public void validateMenuPrice(BigDecimal totalPrice) {
+        if (price.compareTo(totalPrice) > 0) {
             throw new IllegalArgumentException();
         }
     }

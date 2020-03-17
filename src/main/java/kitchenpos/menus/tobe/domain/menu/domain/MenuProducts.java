@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu.domain;
 
-import kitchenpos.menus.tobe.domain.menu.ProductPriceResponse;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +28,5 @@ public class MenuProducts {
         return menuProducts.stream()
                 .map(MenuProduct::getProductId)
                 .collect(Collectors.toList());
-    }
-
-    public void test(ProductPriceResponse priceResponse) {
-
     }
 }
