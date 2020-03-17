@@ -1,6 +1,4 @@
 package kitchenpos.products.tobe;
-
-<<<<<<< HEAD
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
@@ -42,7 +40,4 @@ public class Fixtures {
             .price(null)
             .build();
     }
-=======
-public class Fixtures {
->>>>>>> refactoring(kitchenpos) : JpaRepository 추가.
 }
