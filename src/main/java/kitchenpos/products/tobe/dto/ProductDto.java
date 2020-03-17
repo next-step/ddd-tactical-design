@@ -16,4 +16,16 @@ public class ProductDto {
         this.price = product.getPrice();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
 }

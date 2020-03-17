@@ -13,7 +13,7 @@ public class ProductName {
     protected ProductName(){}
 
     public ProductName(String name){
-        this.name = validateProductName(name.replaceAll("\\p{Z}", ""));
+        this.name = validateProductName(name);
     }
 
     public String valueOf(){
@@ -21,10 +21,11 @@ public class ProductName {
     }
 
     public String validateProductName (String name){
-        if(StringUtils.isBlank(name)){
+        String inputName = name != null ? name.replaceAll("\\p{Z}", "") : null;
+        if(StringUtils.isEmpty(inputName)){
             throw new WrongProductNameException("제품명을 한글자 이상 넣어주세요.");
         }
-        return name;
+        return inputName;
     }
 
 }

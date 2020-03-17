@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Entity
 public class Product {
@@ -18,9 +17,10 @@ public class Product {
 
     protected Product (){}
 
-    public Product(String name, BigDecimal price) {
-        this.name = new ProductName(name);
-        this.price = new ProductPrice(price);
+    public Product(Builder builder){
+        this.id = builder.id;
+        this.name = builder.name;
+        this.price = builder.price;
     }
 
     public Long getId() {
@@ -34,4 +34,31 @@ public class Product {
     public BigDecimal getPrice() {
         return this.price.valueOf();
     }
+
+    public static class Builder {
+        private Long id;
+        private ProductName name;
+        private ProductPrice price;
+
+        public Builder id (Long id){
+            this.id = id;
+            return this;
+        }
+
+        public Builder name (String name){
+            this.name = new ProductName(name);
+            return this;
+        }
+
+        public Builder price (BigDecimal price){
+            this.price = new ProductPrice(price);
+            return this;
+        }
+
+        public Product build (){
+            return new Product(this);
+        }
+    }
+
+
 }
