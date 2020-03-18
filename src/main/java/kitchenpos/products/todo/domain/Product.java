@@ -2,7 +2,6 @@ package kitchenpos.products.todo.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity(name = "product")
 public class Product {
@@ -13,14 +12,10 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
     @Embedded
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private ProductPrice price;
 
     public Product() {
-    }
-
-    public Product(String name, ProductPrice price) {
-        this(null, name, price);
     }
 
     public Product(Long id, String name, ProductPrice price) {
@@ -29,24 +24,16 @@ public class Product {
         this.price = price;
     }
 
+    public Product(String name, ProductPrice price) {
+        this(null, name, price);
+    }
+
+    public Product(String name, BigDecimal price) {
+        this(name, new ProductPrice(price));
+    }
+
     public Product(ProductRequest request) {
-        this.name = request.getName();
-        this.price = new ProductPrice(request.getPrice());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id) &&
-                Objects.equals(name, product.name) &&
-                Objects.equals(price, product.price);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, price);
+        this(request.getName(), request.getPrice());
     }
 
     public Long getId() {
@@ -67,10 +54,6 @@ public class Product {
 
     public BigDecimal getPrice() {
         return price.getPrice();
-    }
-
-    public void setPrice(ProductPrice price) {
-        this.price = price;
     }
 
     public void setPrice(BigDecimal price) {
