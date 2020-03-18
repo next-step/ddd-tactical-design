@@ -73,10 +73,11 @@ class MenuServiceTest {
     @Test
     void list() {
         final Menu twoFriedChickens = menuService.create(twoFriedChickens());
+        System.out.println("뚜 쁘라우두 " + twoFriedChickens);
 
         final List<Menu> actual = menuService.list();
 
-        assertMenu(actual.get(actual.size() -1), twoFriedChickens);
+        assertThat(actual).contains(twoFriedChickens);
     }
 
     private void assertMenu(final Menu expected, final Menu actual) {
