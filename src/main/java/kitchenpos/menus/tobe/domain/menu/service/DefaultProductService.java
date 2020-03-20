@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu.service;
 
-import kitchenpos.menus.tobe.domain.menu.ProductPriceResponse;
+import kitchenpos.menus.tobe.domain.menu.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.domain.MenuProducts;
 import kitchenpos.products.tobe.domain.product.repository.ProductRepository;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +18,10 @@ public class DefaultProductService implements ProductService {
     }
 
     @Override
-    public List<ProductPriceResponse> findAllPrices(List<Long> ids) {
-        return productRepository.findAllById(ids)
+    public MenuProducts findAllPrices(List<Long> ids) {
+        return new MenuProducts(productRepository.findAllById(ids)
                 .stream()
-                .map(product -> new ProductPriceResponse(product.getId(), product.getPrice()))
-                .collect(Collectors.toList());
+                .map(product -> new MenuProduct(product.getId(), product.getPrice()))
+                .collect(Collectors.toList()));
     }
 }

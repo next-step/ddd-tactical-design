@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain.menu.service;
 
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.menus.tobe.domain.menu.ProductPriceResponse;
 import kitchenpos.menus.tobe.domain.menu.domain.Menu;
 import kitchenpos.menus.tobe.domain.menu.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.repository.MenuRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +34,12 @@ public class MenuService {
         final Menu savedMenu = menuRepository.save(menu);
         List<MenuProduct> menuProducts = menu.getMenuProducts();
 
-        List<ProductPriceResponse> prices = productService.findAllPrices(menu.getMenuProductIds());
+        MenuProducts prices = productService.findAllPrices(menu.getMenuProductIds());
 
         BigDecimal totalPrice = menuProducts.stream()
                 .map(menuProduct -> {
-                    Price price = prices.stream()
-                            .filter(productPrice -> productPrice.getId().equals(menuProduct.getProductId()))
+                    Price price = prices.getMenuProducts().stream()
+                            .filter(productPrice -> productPrice.getProductId().equals(menuProduct.getProductId()))
                             .findAny()
                             .get()
                             .getPrice();
