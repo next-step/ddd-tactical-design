@@ -22,11 +22,15 @@ public class Product {
     public Product() {
     }
 
+    public Product(final Long id, final String name, final BigDecimal price){
+        this(name, price);
+        this.id = id;
+    }
+
     public Product(final String name, final BigDecimal price) {
         if (Strings.isEmpty(name)) {
             throw new IllegalArgumentException();
         }
-
         this.name = name;
         this.price = new ProductPrice(price);
     }
@@ -35,23 +39,11 @@ public class Product {
         return id;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public ProductPrice getPrice() {
         return price;
-    }
-
-    public void setPrice(final ProductPrice price) {
-        this.price = price;
     }
 }

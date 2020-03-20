@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +56,8 @@ public class ProductServiceTest {
 
         // when
         // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> expected.setPrice(new ProductPrice(price)));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() ->
+                new Product(expected.getName(), price));
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
@@ -64,7 +65,7 @@ public class ProductServiceTest {
     void list() {
         // given
         final List<Product> productList = Arrays.asList(friedChicken(), seasonedChicken());
-        when(productRepository.findAll()).thenReturn(productList);
+        given(productRepository.findAll()).willReturn(productList);
 
         // when
         final List<Product> actual = productService.list();

@@ -3,6 +3,8 @@ package kitchenpos.products.tobe.controller;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductRestController.class)
 @Import(HttpEncodingAutoConfiguration.class)
+@ExtendWith(MockitoExtension.class)
 public class ProductRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -41,7 +44,7 @@ public class ProductRestControllerTest {
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"후라이드\",\"price\":{\"value\":16000}}")
+                .content("{\"name\":\"후라이드\",\"price\":16000}")
         );
 
         // then

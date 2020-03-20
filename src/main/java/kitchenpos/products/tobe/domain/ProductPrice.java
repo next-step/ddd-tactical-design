@@ -11,16 +11,21 @@ public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    public ProductPrice(){
+    public ProductPrice() {
 
     }
-    public ProductPrice(final BigDecimal value){
+
+    public ProductPrice(final BigDecimal value) {
         validate(value);
         this.value = value;
     }
 
-    private void validate(final BigDecimal value){
-        if(Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0){
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    private void validate(final BigDecimal value) {
+        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
     }
