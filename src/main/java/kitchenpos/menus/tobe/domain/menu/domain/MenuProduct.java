@@ -18,7 +18,15 @@ public class MenuProduct {
 
     private long quantity;
 
-    private MenuProduct() {
+    @Transient
+    private Price price;
+
+    protected MenuProduct() {
+    }
+
+    public MenuProduct(Long productId, BigDecimal price) {
+        this.productId = productId;
+        this.price = new Price(price);
     }
 
     public MenuProduct(Long productId, long quantity) {
@@ -32,6 +40,10 @@ public class MenuProduct {
 
     public long getQuantity() {
         return quantity;
+    }
+
+    public Price getPrice() {
+        return price;
     }
 
     public BigDecimal multiply(Price price) {
