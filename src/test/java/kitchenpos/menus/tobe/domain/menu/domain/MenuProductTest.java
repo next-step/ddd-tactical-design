@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu.domain;
 
 import kitchenpos.common.tobe.domain.Price;
+import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,13 +27,10 @@ class MenuProductTest {
     @DisplayName("정상적으로 가격 계산하는 것 테스트.")
     @Test
     void calculateTest() {
-        // given
         MenuProduct sample = menuProduct();
 
-        // when
         BigDecimal result = sample.multiply(new Price(BigDecimal.valueOf(16_000)));
 
-        // then
-        assertThat(result).isEqualTo(BigDecimal.valueOf(32_000));
+        BDDAssertions.then(result).isEqualTo(BigDecimal.valueOf(32_000));
     }
 }

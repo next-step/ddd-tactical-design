@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain.menu.service;
 
 import kitchenpos.menus.tobe.domain.menu.domain.Menu;
 import kitchenpos.menus.tobe.domain.menu.repository.MenuRepository;
+import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,13 +45,10 @@ class MenuServiceTest {
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
     @Test
     void create() {
-        // given
         final Menu expected = twoFriedChickens();
 
-        // when
         final Menu actual = menuService.create(expected);
 
-        // then
         assertMenu(expected, actual);
     }
 
@@ -73,11 +71,10 @@ class MenuServiceTest {
     @Test
     void list() {
         final Menu twoFriedChickens = menuService.create(twoFriedChickens());
-        System.out.println("뚜 쁘라우두 " + twoFriedChickens);
 
         final List<Menu> actual = menuService.list();
 
-        assertThat(actual).contains(twoFriedChickens);
+        BDDAssertions.then(actual).contains(twoFriedChickens);
     }
 
     private void assertMenu(final Menu expected, final Menu actual) {

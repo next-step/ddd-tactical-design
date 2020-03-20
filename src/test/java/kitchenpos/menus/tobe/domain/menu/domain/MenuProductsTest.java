@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu.domain;
 
+import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -23,13 +24,10 @@ class MenuProductsTest {
     @DisplayName("ID 추출 테스트.")
     @Test
     void getMenuProductIds() {
-        //given
         MenuProducts sample = new MenuProducts(Collections.singletonList(menuProduct()));
 
-        // when
         List<Long> result = sample.getMenuProductIds();
 
-        // then
-        assertThat(result).isEqualTo(Collections.singletonList(1L));
+        BDDAssertions.then(result).isEqualTo(Collections.singletonList(1L));
     }
 }
