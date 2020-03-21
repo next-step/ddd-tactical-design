@@ -26,4 +26,8 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream().map(ProductResponseDto::new).collect(Collectors.toList());
     }
+
+    public ProductResponseDto get(Long id) {
+        return new ProductResponseDto(productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
+    }
 }

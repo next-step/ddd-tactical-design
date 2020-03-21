@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,6 @@ public class MenuProduct {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id")
     private Menu menu;
 
     @Column(name = "product_id")
@@ -32,6 +32,14 @@ public class MenuProduct {
         this.menu = menu;
         this.productId = productId;
         this.quantity = quantity;
+    }
+
+    public BigDecimal calculatePrice(BigDecimal price) {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public void registeredOn(Menu menu) {
+        this.menu = menu;
     }
 
     public Long getId() {
