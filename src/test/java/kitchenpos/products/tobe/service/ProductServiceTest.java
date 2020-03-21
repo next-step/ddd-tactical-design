@@ -4,8 +4,8 @@ import kitchenpos.products.tobe.application.DefaultProductService;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.dto.ProductDto;
 import kitchenpos.products.tobe.exception.ProductDuplicationException;
-import kitchenpos.products.tobe.exception.WrongProductNameException;
-import kitchenpos.products.tobe.exception.WrongProductPriceException;
+import kitchenpos.common.WrongNameException;
+import kitchenpos.common.WrongPriceException;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.infra.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,14 +55,14 @@ public class ProductServiceTest {
     @DisplayName("상품이름을이 입력해야한다.")
     @Test
     void registerWithoutProductName (){
-        assertThatExceptionOfType(WrongProductNameException.class)
+        assertThatExceptionOfType(WrongNameException.class)
             .isThrownBy(() -> productService.register(new ProductDto(Fixtures.nonameProduct())));
     }
 
     @DisplayName("상품가격을 입력해야한다.")
     @Test
     void registerWithoutProductPrice (){
-        assertThatExceptionOfType(WrongProductPriceException.class)
+        assertThatExceptionOfType(WrongPriceException.class)
             .isThrownBy(() -> productService.register(new ProductDto(Fixtures.noPriceProduct())));
     }
 }

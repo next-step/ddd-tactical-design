@@ -1,19 +1,17 @@
-package kitchenpos.products.tobe.domain;
-
-import kitchenpos.products.tobe.exception.WrongProductPriceException;
+package kitchenpos.common;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class Price {
 
     private BigDecimal price;
 
-    public ProductPrice (){}
+    protected Price () {}
 
-    public ProductPrice (BigDecimal price){
+    public Price(BigDecimal price){
         validatePrice(price);
         this.price = price;
     }
@@ -22,10 +20,9 @@ public class ProductPrice {
         return new BigDecimal(price.toString());
     }
 
-    public void validatePrice (final BigDecimal price){
+    private void validatePrice(final BigDecimal price){
         if(Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0){
-            throw new WrongProductPriceException("상품가격을 잘못 입력했습니다.");
+            throw new WrongPriceException("상품가격을 잘못 입력했습니다.");
         }
     }
-
 }
