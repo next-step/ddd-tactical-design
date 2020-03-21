@@ -13,7 +13,7 @@ public class Price {
         this.value = value;
     }
 
-    public static Price of(final BigDecimal value) {
+    public static Price valueOf(final BigDecimal value) {
         return new Price(value);
     }
 

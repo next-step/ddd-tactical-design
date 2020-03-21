@@ -3,14 +3,14 @@ package kitchenpos.products.tobe.domain;
 import java.math.BigDecimal;
 
 public class Product {
-    private Long id;
+    private ProductId id;
     private String name;
     private Price price;
 
     public Product(Long id, String name, BigDecimal price) {
-        this.id = id;
+        this.id = ProductId.fromNumber(id);
         this.name = name;
-        this.price = Price.of(price);
+        this.price = Price.valueOf(price);
     }
 
 }
