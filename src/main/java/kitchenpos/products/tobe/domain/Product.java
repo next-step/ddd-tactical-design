@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.Name;
+import kitchenpos.common.Price;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -10,10 +13,10 @@ public class Product {
     private Long id;
 
     @Embedded
-    private ProductName name;
+    private Name name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product (){}
 
@@ -37,8 +40,8 @@ public class Product {
 
     public static class Builder {
         private Long id;
-        private ProductName name;
-        private ProductPrice price;
+        private Name name;
+        private Price price;
 
         public Builder id (Long id){
             this.id = id;
@@ -46,12 +49,12 @@ public class Product {
         }
 
         public Builder name (String name){
-            this.name = new ProductName(name);
+            this.name = new Name(name);
             return this;
         }
 
         public Builder price (BigDecimal price){
-            this.price = new ProductPrice(price);
+            this.price = new Price(price);
             return this;
         }
 
