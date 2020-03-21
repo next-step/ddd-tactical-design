@@ -9,5 +9,5 @@ public interface ProductRepository{
     Product save (Product product);
     Optional<Product> findById (Long id);
     List<Product> list ();
-    boolean findByNameContaining (String name);
+    boolean findByName (String name);
 }

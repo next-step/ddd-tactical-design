@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ public class JpaProductRepository implements ProductRepository{
     }
 
     @Override
-    public boolean findByNameContaining(String name) {
+    public boolean findByName(String name) {
         List<Product> products = em.createQuery("select * from Product p where p.name = :name", Product.class)
             .setParameter("name", name)
             .getResultList();

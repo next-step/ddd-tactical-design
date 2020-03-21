@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository repository;
@@ -20,8 +19,8 @@ public class DefaultProductService implements ProductService {
         this.repository = repository;
     }
 
-    @Override
     @Transactional
+    @Override
     public ProductDto register(ProductDto dto){
         validateRegisteredProduct(dto.getName());
 
@@ -36,6 +35,7 @@ public class DefaultProductService implements ProductService {
         return new ProductDto(savedProduct);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProductDto> list(){
         return repository.list()
@@ -45,7 +45,7 @@ public class DefaultProductService implements ProductService {
     }
 
     protected void validateRegisteredProduct (final String name){
-        if(repository.findByNameContaining(name)){
+        if(repository.findByName(name)){
             throw new ProductDuplicationException("동일한 상품이 이미 등록 되었습니다.");
         }
     }

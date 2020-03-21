@@ -4,7 +4,6 @@ import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
@@ -34,7 +33,7 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public boolean findByNameContaining(String name) {
+    public boolean findByName(String name) {
         List<Product> products = this.list();
 
         for(Product product : products){
@@ -42,7 +41,6 @@ public class InMemoryProductRepository implements ProductRepository {
                 return true;
             }
         }
-
         return false;
     }
 }
