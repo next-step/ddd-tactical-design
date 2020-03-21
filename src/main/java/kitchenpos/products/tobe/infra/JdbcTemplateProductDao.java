@@ -1,5 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.infra;
 
+import kitchenpos.products.tobe.domain.Product;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

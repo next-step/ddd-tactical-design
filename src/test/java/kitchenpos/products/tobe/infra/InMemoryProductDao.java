@@ -1,4 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.infra;
+
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.infra.ProductDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -16,7 +16,7 @@ public class Price {
             throw new IllegalArgumentException();
     }
 
-    BigDecimal toBigDecimal() {
+    public BigDecimal toBigDecimal() {
         return price;
     }
 }

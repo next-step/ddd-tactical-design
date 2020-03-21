@@ -1,4 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.infra;
+
+import kitchenpos.products.tobe.domain.Product;
 
 import java.util.List;
 
