@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,7 +20,7 @@ class MenuGroupTest {
 
         MenuGroup menuGroup = new MenuGroup(name);
 
-        assertThat(menuGroup.getName()).isEqualTo(name);
+        assertThat(menuGroup.menuName()).isEqualTo(name);
     }
 
     @DisplayName("이름이 없거나 부정확 할때 메뉴 그룹 생성 실패")

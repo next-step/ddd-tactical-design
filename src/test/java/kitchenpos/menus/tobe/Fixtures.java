@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

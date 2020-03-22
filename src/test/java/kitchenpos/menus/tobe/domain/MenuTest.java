@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,9 +38,9 @@ class MenuTest {
 
         assertAll(
                 () -> assertThat(menu.getMenuGroupId()).isEqualTo(menuGroupId),
-                () -> assertThat(menu.getName()).isEqualTo(name),
-                () -> assertThat(menu.getPrice()).isEqualTo(price),
-                () -> assertThat(menu.getMenuProducts().list()).containsAll(menuProducts)
+                () -> assertThat(menu.menuName()).isEqualTo(name),
+                () -> assertThat(menu.menuPrice()).isEqualTo(price),
+                () -> assertThat(menu.getMenuProducts()).containsAll(menuProducts)
         );
     }
 
