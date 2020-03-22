@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.menugroup.entity;
 import kitchenpos.common.Name;
 import kitchenpos.products.tobe.domain.Product;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +15,15 @@ public class MenuGroup {
     @GeneratedValue
     private Long id;
 
+    @Embedded
     private Name name;
+
+    protected MenuGroup () {};
+
+    public MenuGroup (Builder builder){
+        this.id = builder.getId();
+        this.name = builder.getName();
+    }
 
     public Long getId() {
         return id;
@@ -22,13 +31,6 @@ public class MenuGroup {
 
     public String getName() {
         return this.name.valueOf();
-    }
-
-    protected MenuGroup () {};
-
-    public MenuGroup (Builder builder){
-        this.id = builder.getId();
-        this.name = builder.getName();
     }
 
     public static class Builder {

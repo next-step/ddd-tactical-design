@@ -34,7 +34,7 @@ public class JpaMenuGroupRepository implements MenuGroupRepository{
     }
 
     @Override
-    public boolean findByNameContaining(String name) {
+    public boolean findByName(String name) {
         List<MenuGroup> menuGroups = em.createQuery("select * from MenuGroup m where m.name = :name")
             .setParameter("name", name)
             .getResultList();

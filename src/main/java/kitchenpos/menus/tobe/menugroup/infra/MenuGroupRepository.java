@@ -9,5 +9,5 @@ public interface MenuGroupRepository {
     MenuGroup save (MenuGroup menuGroup);
     Optional<MenuGroup> findById(Long id);
     List<MenuGroup> list();
-    boolean findByNameContaining(String name);
+    boolean findByName(String name);
 }
