@@ -25,7 +25,10 @@ public class DefaultMenuGroupService implements MenuGroupService{
     public MenuGroupDto register(MenuGroupDto dto) {
         validateRegisteredMenuGroup(dto.getName());
         MenuGroup menuGroup = new MenuGroup.Builder()
+<<<<<<< HEAD
                 .id(dto.getId())
+=======
+>>>>>>> 0d1e94fb190f30830130e9e491a54a89f691ce7c
                 .name(dto.getName())
                 .build();
         menuGroupRepository.save(menuGroup);
@@ -46,8 +49,13 @@ public class DefaultMenuGroupService implements MenuGroupService{
     }
 
     protected void validateRegisteredMenuGroup (final String name){
+<<<<<<< HEAD
         if(menuGroupRepository.findByName(name)){
             throw new MenuGroupDuplicationException("동일한 메뉴그룹이 이미 등록 되어있습니다.");
+=======
+        if(menuGroupRepository.findByNameContaining(name)){
+            throw new WrongNameException("동일한 메뉴그룹이 이미 등록 되어있습니다.");
+>>>>>>> 0d1e94fb190f30830130e9e491a54a89f691ce7c
         }
     }
 

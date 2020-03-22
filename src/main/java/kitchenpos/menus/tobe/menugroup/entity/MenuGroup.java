@@ -3,7 +3,10 @@ package kitchenpos.menus.tobe.menugroup.entity;
 import kitchenpos.common.Name;
 import kitchenpos.products.tobe.domain.Product;
 
+<<<<<<< HEAD
 import javax.persistence.Embedded;
+=======
+>>>>>>> 0d1e94fb190f30830130e9e491a54a89f691ce7c
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +18,7 @@ public class MenuGroup {
     @GeneratedValue
     private Long id;
 
+<<<<<<< HEAD
     @Embedded
     private Name name;
 
@@ -25,6 +29,10 @@ public class MenuGroup {
         this.name = builder.getName();
     }
 
+=======
+    private Name name;
+
+>>>>>>> 0d1e94fb190f30830130e9e491a54a89f691ce7c
     public Long getId() {
         return id;
     }
@@ -33,6 +41,16 @@ public class MenuGroup {
         return this.name.valueOf();
     }
 
+<<<<<<< HEAD
+=======
+    protected MenuGroup () {};
+
+    public MenuGroup (Builder builder){
+        this.id = builder.getId();
+        this.name = builder.getName();
+    }
+
+>>>>>>> 0d1e94fb190f30830130e9e491a54a89f691ce7c
     public static class Builder {
         private Long id;
         private Name name;
