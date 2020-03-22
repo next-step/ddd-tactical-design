@@ -1,17 +1,18 @@
 package kitchenpos.products.tobe.domain;
 
 public class ProductId {
+    private static Long maxId  = 0L;
+
     private Long id;
 
-    private ProductId(Long id){
-        this.id = id;
+    private ProductId(){
+        maxId = maxId + 1;
+        this.id = maxId;
     }
 
-    public static ProductId fromNumber(Long id){
-        return new ProductId(id);
-    }
+    protected static ProductId newProduct() { return new ProductId(); }
 
-    public Long getId() {
-        return id;
+    public Long getValue() {
+        return this.id;
     }
 }

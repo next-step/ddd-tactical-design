@@ -16,12 +16,11 @@ class ProductTest {
     @Test
     void create() {
         //given
-        Long id = 1L;
         String name = "치킨";
         BigDecimal price = BigDecimal.valueOf(1000);
 
         //when
-        Product product = new Product(id, name, price);
+        Product product = new Product(name, price);
 
         //then
         assertThat(product).isNotNull();
@@ -33,11 +32,10 @@ class ProductTest {
     @ValueSource(strings = {"-100", "-10", "-0.1"})
     void priceValidate(final BigDecimal price) {
         //given
-        Long id = 1L;
         String name = "치킨";
 
         //when
         //then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> new Product(id, name, price));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> new Product(name, price));
     }
 }

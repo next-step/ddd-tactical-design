@@ -13,8 +13,12 @@ public class Price {
         this.value = value;
     }
 
-    public static Price valueOf(final BigDecimal value) {
+    protected static Price valueOf(final BigDecimal value) {
         return new Price(value);
+    }
+
+    public BigDecimal getValue(){
+        return this.value;
     }
 
 }
