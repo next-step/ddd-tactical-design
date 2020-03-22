@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
 
