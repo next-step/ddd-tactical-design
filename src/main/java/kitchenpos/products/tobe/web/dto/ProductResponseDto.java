@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
-import kitchenpos.products.tobe.domain.entity.Price;
+import kitchenpos.commons.domain.Price;
 import kitchenpos.products.tobe.domain.entity.Product;
 
 public class ProductResponseDto {

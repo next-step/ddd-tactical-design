@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe;
 
 import java.math.BigDecimal;
-import kitchenpos.products.tobe.domain.entity.Price;
+import kitchenpos.commons.domain.Price;
 import kitchenpos.products.tobe.domain.entity.Product;
 
 public class Fixtures {
