@@ -1,13 +1,12 @@
 package kitchenpos.products.tobe.domain.entity;
 
-import java.util.Objects;
 import java.util.StringJoiner;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.apache.logging.log4j.util.Strings;
+import kitchenpos.commons.domain.Price;
 import org.springframework.util.StringUtils;
 
 @Entity

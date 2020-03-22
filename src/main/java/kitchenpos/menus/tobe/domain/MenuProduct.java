@@ -1,12 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -22,12 +22,12 @@ public class MenuProduct {
     @Column(name = "product_id")
     private Long productId;
 
-    private Long quantity;
+    private long quantity;
 
     public MenuProduct() {
     }
 
-    public MenuProduct(Long id, Menu menu, Long productId, Long quantity) {
+    public MenuProduct(Long id, Menu menu, Long productId, long quantity) {
         this.id = id;
         this.menu = menu;
         this.productId = productId;
@@ -54,7 +54,27 @@ public class MenuProduct {
         return productId;
     }
 
-    public Long getQuantity() {
+    public long getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MenuProduct)) {
+            return false;
+        }
+        MenuProduct that = (MenuProduct) o;
+        return quantity == that.quantity &&
+            Objects.equals(id, that.id) &&
+            Objects.equals(menu.getId(), that.menu.getId()) &&
+            Objects.equals(productId, that.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, menu.getId(), productId, quantity);
     }
 }

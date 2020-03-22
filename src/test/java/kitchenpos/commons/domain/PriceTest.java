@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.entity;
+package kitchenpos.commons.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
