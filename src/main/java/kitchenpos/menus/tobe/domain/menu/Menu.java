@@ -1,7 +1,9 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
+import kitchenpos.menus.tobe.tool.Price;
 import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -10,23 +12,34 @@ import java.util.Objects;
  * Menu는 번호와 이름, 가격, MenuProducts를 가진다.
  * Menu는 특정 MenuGroup에 속한다.
  */
+@Entity
 public class Menu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private BigDecimal price;
+
+    @Embedded
+    private Price price;
+
     private Long menuGroupId;
-    private MenuProducts menuProducts;
+
+    @OneToMany(mappedBy = "menu")
+    private List<MenuProduct> menuProducts;
+
+    public Menu() {
+    }
 
     public Menu(String name, BigDecimal price, Long menuGroupId, List<MenuProduct> menuProducts) {
         validName(name);
-        validPrice(price);
         validMenuProducts(menuProducts);
         validMenuGroup(menuGroupId);
 
         this.name = name;
-        this.price = price;
+        this.price = new Price(price);
         this.menuGroupId = menuGroupId;
-        this.menuProducts = new MenuProducts(menuProducts);
+        this.menuProducts = menuProducts;
     }
 
     private void validMenuGroup(Long menuGroupId) {
@@ -41,35 +54,29 @@ public class Menu {
         }
     }
 
-    private void validPrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     private void validName(String name) {
         if(Objects.isNull(name) || StringUtils.isEmptyOrWhitespace(name)) {
             throw new IllegalArgumentException();
         }
     }
 
-    public void changeMenuProducts(MenuProducts menuProducts) {
+    public void changeMenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;
     }
 
-    public String getName() {
+    public String menuName() {
         return name;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal menuPrice() {
+        return price.getPrice();
     }
 
     public Long getMenuGroupId() {
         return menuGroupId;
     }
 
-    public MenuProducts getMenuProducts() {
+    public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
 }
