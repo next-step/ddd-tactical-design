@@ -14,7 +14,8 @@ public class Fixtures {
     public static final Long FRIED_CHICKEN_ID = 1L;
 
     public static Menu twoFriedChickens() {
-        return new Menu(TWO_FRIED_CHICKENS_ID, "후라이드 + 후라이드", Price.valueOf(BigDecimal.valueOf(19_000L)), twoChickens(),
+        return new Menu(TWO_FRIED_CHICKENS_ID, "후라이드 + 후라이드",
+            Price.valueOf(BigDecimal.valueOf(19_000L)), twoChickens(),
             Arrays.asList(menuProduct()));
     }
 
@@ -23,7 +24,8 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        Menu menu = new Menu(TWO_FRIED_CHICKENS_ID, "후라이드 + 후라이드", Price.valueOf(BigDecimal.valueOf(19_000L)), twoChickens(), null);
+        Menu menu = new Menu(TWO_FRIED_CHICKENS_ID, "후라이드 + 후라이드",
+            Price.valueOf(BigDecimal.valueOf(19_000L)), twoChickens(), null);
         return new MenuProduct(null, menu, FRIED_CHICKEN_ID, 2L);
     }
 }

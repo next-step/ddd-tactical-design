@@ -28,7 +28,8 @@ class MenuServiceTest {
     @DisplayName("메뉴 생성한다.")
     @Test
     void create() {
-        MenuRequestDto requestDto = new MenuRequestDto("후라이드 + 후라이드", BigDecimal.valueOf(19_000L), Fixtures.twoChickens().getId(),
+        MenuRequestDto requestDto = new MenuRequestDto("후라이드 + 후라이드", BigDecimal.valueOf(19_000L),
+            Fixtures.twoChickens().getId(),
             Arrays.asList(Fixtures.menuProduct()));
 
         when(menuManager.create(any())).thenReturn(Fixtures.twoFriedChickens());

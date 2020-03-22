@@ -17,7 +17,8 @@ class MenuTest {
     @DisplayName("메뉴 객체를 생성한다.")
     @Test
     void create() {
-        assertThatCode(() -> new Menu("순대국", BigDecimal.valueOf(7_000L), menuGroup)).doesNotThrowAnyException();
+        assertThatCode(() -> new Menu("순대국", BigDecimal.valueOf(7_000L), menuGroup))
+            .doesNotThrowAnyException();
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 생성할 수 없다.")

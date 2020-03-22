@@ -11,7 +11,8 @@ public class MenuRequestDto {
     private Long menuGroupId;
     private List<MenuProduct> menuProducts;
 
-    public MenuRequestDto(String name, BigDecimal price, Long menuGroupId, List<MenuProduct> menuProducts) {
+    public MenuRequestDto(String name, BigDecimal price, Long menuGroupId,
+        List<MenuProduct> menuProducts) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;

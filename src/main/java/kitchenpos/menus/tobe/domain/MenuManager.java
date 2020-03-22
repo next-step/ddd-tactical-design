@@ -24,7 +24,8 @@ public class MenuManager {
     }
 
     public Menu create(MenuRequestDto requestDto) {
-        MenuGroup menuGroup = menuGroupRepository.findById(requestDto.getMenuGroupId()).orElseThrow(IllegalArgumentException::new);
+        MenuGroup menuGroup = menuGroupRepository.findById(requestDto.getMenuGroupId())
+            .orElseThrow(IllegalArgumentException::new);
 
         BigDecimal sum = requestDto.getMenuProducts().stream()
             .map(p -> p.calculatePrice(productPriceManager.getPrice(p.getProductId())))

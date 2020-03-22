@@ -28,7 +28,8 @@ class MenuGroupServiceTest {
     void create() {
         when(menuGroupRepository.save(any())).thenReturn(Fixtures.twoChickens());
 
-        assertThat(menuGroupService.create(Fixtures.twoChickens().getName())).isEqualTo(Fixtures.twoChickens().getName());
+        assertThat(menuGroupService.create(Fixtures.twoChickens().getName()))
+            .isEqualTo(Fixtures.twoChickens().getName());
     }
 
     @DisplayName("메뉴그룹 리스트를 가져온다.")

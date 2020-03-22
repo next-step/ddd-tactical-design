@@ -39,13 +39,15 @@ class MenuManagerTest {
     @DisplayName("메뉴를 등록한다.")
     @Test
     void create() {
-        MenuRequestDto requestDto = new MenuRequestDto("후라이드 + 후라이드", BigDecimal.valueOf(19_000L), Fixtures.twoChickens().getId(),
+        MenuRequestDto requestDto = new MenuRequestDto("후라이드 + 후라이드", BigDecimal.valueOf(19_000L),
+            Fixtures.twoChickens().getId(),
             Arrays.asList(Fixtures.menuProduct()));
 
         when(menuGroupRepository.findById(any())).thenReturn(Optional.of(Fixtures.twoChickens()));
         when(productPriceManager.getPrice(any())).thenReturn(BigDecimal.valueOf(9_500L));
         when(menuRepository.save(any())).thenReturn(Fixtures.twoFriedChickens());
-        when(menuProductRepository.findByMenuId(any())).thenReturn(Arrays.asList(Fixtures.menuProduct()));
+        when(menuProductRepository.findByMenuId(any()))
+            .thenReturn(Arrays.asList(Fixtures.menuProduct()));
 
         Menu created = menuManager.create(requestDto);
 
@@ -56,7 +58,8 @@ class MenuManagerTest {
     @Test
     void list() {
         when(menuRepository.findAll()).thenReturn(Arrays.asList(Fixtures.twoFriedChickens()));
-        when(menuProductRepository.findByMenuId(any())).thenReturn(Arrays.asList(Fixtures.menuProduct()));
+        when(menuProductRepository.findByMenuId(any()))
+            .thenReturn(Arrays.asList(Fixtures.menuProduct()));
 
         assertThat(menuManager.list())
             .containsExactlyInAnyOrderElementsOf(Arrays.asList(Fixtures.twoFriedChickens()));

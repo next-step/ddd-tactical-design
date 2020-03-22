@@ -21,7 +21,8 @@ class MenuProductTest {
         MenuProduct menuProduct = new MenuProduct(1L, menu, 1L, 2);
 
         //expect
-        assertThat(menuProduct.calculatePrice(price)).isEqualTo(price.multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
+        assertThat(menuProduct.calculatePrice(price))
+            .isEqualTo(price.multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
     }
 
     @DisplayName("메뉴 상품을 메뉴에 등록한다.")

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +37,8 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(Long id, String name, Price price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    public Menu(Long id, String name, Price price, MenuGroup menuGroup,
+        List<MenuProduct> menuProducts) {
         if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException();
         }
