@@ -1,4 +1,4 @@
-package kitchenpos.sharedKernel;
+package kitchenpos.common;
 
 import kitchenpos.common.WrongNameException;
 import kitchenpos.common.Name;
