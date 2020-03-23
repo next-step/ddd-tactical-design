@@ -23,16 +23,16 @@ public class Product {
     }
 
     public Product(final Long id, final String name, final BigDecimal price){
-        this(name, price);
-        this.id = id;
-    }
-
-    public Product(final String name, final BigDecimal price) {
         if (Strings.isEmpty(name)) {
             throw new IllegalArgumentException();
         }
+        this.id = id;
         this.name = name;
         this.price = new ProductPrice(price);
+    }
+
+    public Product(final String name, final BigDecimal price) {
+        this(null, name, price);
     }
 
     public Long getId() {
