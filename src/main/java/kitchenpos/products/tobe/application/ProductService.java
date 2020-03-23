@@ -26,4 +26,9 @@ public class ProductService {
     public List<Product> list() {
         return productRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public List<Product> findAllById(final List<Long> productIds) {
+        return productRepository.findAllById(productIds);
+    }
 }

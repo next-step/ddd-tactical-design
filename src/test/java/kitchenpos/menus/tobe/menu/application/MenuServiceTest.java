@@ -5,7 +5,10 @@ import kitchenpos.menus.tobe.menu.application.dto.MenuCreationRequestDto;
 import kitchenpos.menus.tobe.menu.application.dto.MenuCreationResponseDto;
 import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
 import kitchenpos.menus.tobe.menu.application.exception.MenuGroupNotExistsException;
-import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.menus.tobe.menu.domain.Menu;
+import kitchenpos.menus.tobe.menu.domain.MenuProduct;
+import kitchenpos.menus.tobe.menu.domain.MenuRepository;
+import kitchenpos.menus.tobe.menu.domain.Products;
 import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,9 +61,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
-                new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
-                new ProductPriceDto(2L, BigDecimal.valueOf(2000L))
+        given(products.getMenuProductsByProductIdsAndQuantities(any(), any())).willReturn(Arrays.asList(
+                new MenuProduct(1L, BigDecimal.valueOf(1000), 1L),
+                new MenuProduct(2L, BigDecimal.valueOf(2000), 2L)
         ));
 
         given(menuRepository.save(any(Menu.class))).willAnswer(invocation -> {
@@ -148,9 +151,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
-                new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
-                new ProductPriceDto(2L, BigDecimal.valueOf(2000L))
+        given(products.getMenuProductsByProductIdsAndQuantities(any(), any())).willReturn(Arrays.asList(
+                new MenuProduct(1L, BigDecimal.valueOf(1000), 1L),
+                new MenuProduct(2L, BigDecimal.valueOf(2000), 2L)
         ));
 
         // when
@@ -176,9 +179,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
-                new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
-                new ProductPriceDto(2L, BigDecimal.valueOf(2000L))
+        given(products.getMenuProductsByProductIdsAndQuantities(any(), any())).willReturn(Arrays.asList(
+                new MenuProduct(1L, BigDecimal.valueOf(1000), 1L),
+                new MenuProduct(2L, BigDecimal.valueOf(2000), 2L)
         ));
 
         // when
@@ -237,9 +240,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
-                new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
-                new ProductPriceDto(2L, BigDecimal.valueOf(2000L))
+        given(products.getMenuProductsByProductIdsAndQuantities(any(), any())).willReturn(Arrays.asList(
+                new MenuProduct(1L, BigDecimal.valueOf(1000), 1L),
+                new MenuProduct(2L, BigDecimal.valueOf(2000), 2L)
         ));
 
         // when

@@ -9,7 +9,6 @@ import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,6 @@ public class MenuService {
 
         try {
             menuGroupService.findById(menuCreationRequestDto.getMenuGroupId());
-            System.out.println("findByIdfindByIdfindByIdfindByIdfindById");
         } catch (IllegalArgumentException e) {
             throw new MenuGroupNotExistsException();
         }
@@ -56,19 +54,14 @@ public class MenuService {
                 .map(p -> p.getProductId())
                 .collect(Collectors.toList());
 
-        // 제품의 가격 정보 가져오기 (Anti-Corruption Layer)
-        final List<ProductPriceDto> productPriceDtos = products.getProductPricesByProductIds(productIds);
-
-        final List<MenuProduct> menuProducts = menuCreationRequestDto.getProductQuantityDtos()
+        // 제품 수량 리스트 생성
+        final List<Long> quantities = menuCreationRequestDto.getProductQuantityDtos()
                 .stream()
-                .map(productQuantityDto -> {
-                    final BigDecimal price = productPriceDtos.stream()
-                            .filter(productPrice -> productPrice.getProductId() == productQuantityDto.getProductId())
-                            .findFirst()
-                            .get()
-                            .getPrice();
-                    return new MenuProduct(productQuantityDto.getProductId(), price, productQuantityDto.getQuantity());
-                }).collect(Collectors.toList());
+                .map(p -> p.getQuantity())
+                .collect(Collectors.toList());
+
+        // MenuProduct 정보 가져오기 (Anti-Corruption Layer)
+        final List<MenuProduct> menuProducts = products.getMenuProductsByProductIdsAndQuantities(productIds, quantities);
 
         final Menu newMenu = new Menu(menuCreationRequestDto.getName(), menuCreationRequestDto.getPrice(), menuCreationRequestDto.getMenuGroupId(), menuProducts);
 
