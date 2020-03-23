@@ -1,6 +1,11 @@
 package kitchenpos.menus.tobe.menu.application;
 
+import kitchenpos.menus.tobe.menu.application.dto.MenuCreationRequestDto;
+import kitchenpos.menus.tobe.menu.application.dto.MenuCreationResponseDto;
+import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
+import kitchenpos.menus.tobe.menu.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,15 +19,22 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final Products products;
+    private final MenuGroupService menuGroupService;
 
-    public MenuService(final MenuRepository menuRepository, final Products products) {
+    public MenuService(final MenuRepository menuRepository, final Products products, final MenuGroupService menuGroupService) {
         this.menuRepository = menuRepository;
         this.products = products;
+        this.menuGroupService = menuGroupService;
     }
 
     public MenuCreationResponseDto create(final MenuCreationRequestDto menuCreationRequestDto) {
 
-        //TODO MenuGroup 존재 여부 체크
+        try {
+            menuGroupService.findById(menuCreationRequestDto.getMenuGroupId());
+            System.out.println("findByIdfindByIdfindByIdfindByIdfindById");
+        } catch (IllegalArgumentException e) {
+            throw new MenuGroupNotExistsException();
+        }
 
         // 제품 미지정 시 에러
         if (menuCreationRequestDto.getProductQuantityDtos() == null || menuCreationRequestDto.getProductQuantityDtos().isEmpty()) {

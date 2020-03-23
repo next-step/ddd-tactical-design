@@ -66,7 +66,7 @@ class MenuGroupServiceTest {
     @Test
     void list() {
         // given
-        final List<MenuGroup> menuGroups = Arrays.asList(MenuFixtures.twoChickens());
+        final List<MenuGroup> menuGroups = Arrays.asList(MenuFixtures.menuGroupTwoChickens());
 
         given(menuGroupRepository.findAll()).willReturn(menuGroups);
 

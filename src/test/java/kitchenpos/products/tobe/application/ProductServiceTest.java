@@ -99,7 +99,7 @@ class ProductServiceTest {
     @Test
     void list() {
         // given
-        final List<Product> products = Arrays.asList(ProductFixtures.friedChicken(), ProductFixtures.seasonedChicken());
+        final List<Product> products = Arrays.asList(ProductFixtures.productFriedChicken(), ProductFixtures.productSeasonedChicken());
 
         given(productRepository.findAll()).willReturn(products);
 

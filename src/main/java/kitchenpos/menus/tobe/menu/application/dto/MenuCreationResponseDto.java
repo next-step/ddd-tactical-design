@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.menu.application;
+package kitchenpos.menus.tobe.menu.application.dto;
 
 public class MenuCreationResponseDto {
     private Long id;

@@ -1,9 +1,12 @@
 package kitchenpos.menus.tobe.menu.application;
 
 import kitchenpos.menus.tobe.MenuFixtures;
+import kitchenpos.menus.tobe.menu.application.dto.MenuCreationRequestDto;
+import kitchenpos.menus.tobe.menu.application.dto.MenuCreationResponseDto;
+import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
+import kitchenpos.menus.tobe.menu.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menu.domain.*;
-import kitchenpos.products.tobe.ProductFixtures;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -36,6 +40,9 @@ class MenuServiceTest {
     @InjectMocks
     MenuService menuService;
 
+    @Mock
+    MenuGroupService menuGroupService;
+
     @DisplayName("메뉴를 생성할 수 있다.")
     @ParameterizedTest
     @MethodSource(value = "provideValidPrice")
@@ -48,6 +55,8 @@ class MenuServiceTest {
                 new ProductQuantityDto(2L, 2L)
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
+
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
         given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
                 new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
@@ -82,10 +91,23 @@ class MenuServiceTest {
     @Test
     void createFailsWhenMenuGroupNotFound() {
         // given
+        // given
+        final String name = "새로운 메뉴";
+        final BigDecimal price = BigDecimal.valueOf(1000);
+        final Long menuGroupId = 100L;
+        final List<ProductQuantityDto> productQuantityDtos = Arrays.asList(
+                new ProductQuantityDto(1L, 1L),
+                new ProductQuantityDto(2L, 2L)
+        );
+        MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
+
+        given(menuGroupService.findById(menuGroupId)).willThrow(IllegalArgumentException.class);
+
         // when
         // then
-
-        fail("메뉴 생성 시, 메뉴그룹이 존재해야한다.");
+        assertThatThrownBy(() -> {
+            menuService.create(menuCreationRequestDto);
+        }).isInstanceOf(MenuGroupNotExistsException.class);
     }
 
     @DisplayName("메뉴 생성 시, 제품이 중복될 수 없다.")
@@ -100,6 +122,8 @@ class MenuServiceTest {
                 new ProductQuantityDto(1L, 2L)
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
+
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
         // when
         // then
@@ -121,6 +145,8 @@ class MenuServiceTest {
                 new ProductQuantityDto(2L, 2L)
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
+
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
         given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
                 new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
@@ -147,6 +173,8 @@ class MenuServiceTest {
                 new ProductQuantityDto(2L, 2L)
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
+
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
         given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
                 new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
@@ -179,6 +207,8 @@ class MenuServiceTest {
         final Long menuGroupId = 1L;
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
 
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
+
         // when
         // then
         assertThatThrownBy(() -> {
@@ -205,6 +235,8 @@ class MenuServiceTest {
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
 
+        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
+
         given(products.getProductPricesByProductIds(any())).willReturn(Arrays.asList(
                 new ProductPriceDto(1L, BigDecimal.valueOf(1000L)),
                 new ProductPriceDto(2L, BigDecimal.valueOf(2000L))
@@ -221,7 +253,7 @@ class MenuServiceTest {
     @Test
     void list() {
         // given
-        final List<Menu> menus = Arrays.asList(MenuFixtures.twoFriedChickens());
+        final List<Menu> menus = Arrays.asList(MenuFixtures.menuTwoFriedChickens());
         final List<MenuProduct> menuProducts = menus.get(0).getMenuProducts();
 
         given(menuRepository.findAll()).willReturn(menus);
