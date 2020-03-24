@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain.product.domain;
 
+import kitchenpos.common.tobe.domain.Price;
+
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,7 +11,7 @@ public class ProductInfo {
     private String name;
     private Price price;
 
-    public ProductInfo() {
+    private ProductInfo() {
     }
 
     public ProductInfo(String name, BigDecimal price) {
