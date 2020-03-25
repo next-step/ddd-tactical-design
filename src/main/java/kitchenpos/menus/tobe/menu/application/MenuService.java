@@ -3,7 +3,7 @@ package kitchenpos.menus.tobe.menu.application;
 import kitchenpos.menus.tobe.menu.application.dto.MenuCreationRequestDto;
 import kitchenpos.menus.tobe.menu.application.dto.MenuCreationResponseDto;
 import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
-import kitchenpos.menus.tobe.menu.application.exception.MenuGroupNotExistsException;
+import kitchenpos.menus.tobe.menuGroup.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menu.domain.*;
 import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
 import org.springframework.stereotype.Service;
@@ -30,8 +30,8 @@ public class MenuService {
 
         try {
             menuGroupService.findById(menuCreationRequestDto.getMenuGroupId());
-        } catch (IllegalArgumentException e) {
-            throw new MenuGroupNotExistsException();
+        } catch (MenuGroupNotExistsException e) {
+            throw new IllegalArgumentException("메뉴그룹이 존재하지 않습니다.");
         }
 
         // 제품 미지정 시 에러

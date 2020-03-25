@@ -4,7 +4,7 @@ import kitchenpos.menus.tobe.MenuFixtures;
 import kitchenpos.menus.tobe.menu.application.dto.MenuCreationRequestDto;
 import kitchenpos.menus.tobe.menu.application.dto.MenuCreationResponseDto;
 import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
-import kitchenpos.menus.tobe.menu.application.exception.MenuGroupNotExistsException;
+import kitchenpos.menus.tobe.menuGroup.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menu.domain.Menu;
 import kitchenpos.menus.tobe.menu.domain.MenuProduct;
 import kitchenpos.menus.tobe.menu.domain.MenuRepository;
@@ -110,7 +110,7 @@ class MenuServiceTest {
         // then
         assertThatThrownBy(() -> {
             menuService.create(menuCreationRequestDto);
-        }).isInstanceOf(MenuGroupNotExistsException.class);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 생성 시, 제품이 중복될 수 없다.")

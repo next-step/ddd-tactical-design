@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.menuGroup.application;
 
+import kitchenpos.menus.tobe.menuGroup.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menuGroup.domain.MenuGroup;
 import kitchenpos.menus.tobe.menuGroup.domain.MenuGroupRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,6 @@ public class MenuGroupService {
 
     @Transactional(readOnly = true)
     public MenuGroup findById(Long id) {
-        return menuGroupRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return menuGroupRepository.findById(id).orElseThrow(MenuGroupNotExistsException::new);
     }
 }

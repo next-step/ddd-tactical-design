@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.menu.application.exception;
+package kitchenpos.menus.tobe.menuGroup.application.exception;
 
 public class MenuGroupNotExistsException extends RuntimeException {
 }
