@@ -6,8 +6,10 @@ import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
 import kitchenpos.menus.tobe.menuGroup.application.exception.MenuGroupNotExistsException;
 import kitchenpos.menus.tobe.menu.domain.*;
 import kitchenpos.menus.tobe.menuGroup.application.MenuGroupService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class MenuService {
         }
 
         // 제품 미지정 시 에러
-        if (menuCreationRequestDto.getProductQuantityDtos() == null || menuCreationRequestDto.getProductQuantityDtos().isEmpty()) {
+        if (CollectionUtils.isEmpty(menuCreationRequestDto.getProductQuantityDtos())) {
             throw new IllegalArgumentException("메뉴 내 제품을 1개 이상 지정해야합니다.");
         }
 
