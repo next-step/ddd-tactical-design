@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.menu.domain;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -38,7 +39,7 @@ public class Menu {
         if (menuGroupId == null) {
             throw new IllegalArgumentException("메뉴그룹이 지정되어야합니다.");
         }
-        if (menuProducts == null || menuProducts.isEmpty()) {
+        if (CollectionUtils.isEmpty(menuProducts)) {
             throw new IllegalArgumentException("제품을 1개 이상 지정해야합니다.");
         }
 

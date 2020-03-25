@@ -1,7 +1,9 @@
 package kitchenpos.menus.tobe.menu.domain;
 
+import kitchenpos.products.tobe.domain.Product;
+
 import java.util.List;
 
 public interface Products {
-    List<MenuProduct> getMenuProductsByProductIdsAndQuantities(final List<Long> productIds, final List<Long> quantities);
+    List<Product> getProductsByProductIds(final List<Long> productIds);
 }
