@@ -70,6 +70,7 @@ class ProductBoTest {
         assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(friedChicken, seasonedChicken));
     }
 
+
     private void assertProduct(final Product expected, final Product actual) {
         assertThat(actual).isNotNull();
         assertAll(

@@ -3,18 +3,18 @@ package kitchenpos.menus.tobe.application;
 import kitchenpos.common.WrongNameException;
 import kitchenpos.menus.tobe.Fixtures;
 import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.tobe.menugroup.application.DefaultMenuGroupService;
-import kitchenpos.menus.tobe.menugroup.application.MenuGroupService;
-import kitchenpos.menus.tobe.menugroup.dto.MenuGroupDto;
-import kitchenpos.menus.tobe.menugroup.entity.MenuGroup;
-import kitchenpos.menus.tobe.menugroup.exception.MenuGroupDuplicationException;
-import kitchenpos.menus.tobe.menugroup.infra.MenuGroupRepository;
-import org.assertj.core.api.Assertions;
+import kitchenpos.menus.tobe.domain.menugroup.application.DefaultMenuGroupService;
+import kitchenpos.menus.tobe.domain.menugroup.application.MenuGroupService;
+import kitchenpos.menus.tobe.domain.menugroup.dto.MenuGroupDto;
+import kitchenpos.menus.tobe.domain.menugroup.exception.MenuGroupDuplicationException;
+import kitchenpos.menus.tobe.domain.menugroup.exception.MenuGroupNotFoundException;
+import kitchenpos.menus.tobe.domain.menugroup.infra.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class MenuGroupServiceTest {
 
@@ -58,6 +58,13 @@ public class MenuGroupServiceTest {
     void registerWithoutManuGroupName () {
         assertThatExceptionOfType(WrongNameException.class)
                 .isThrownBy(() -> menuGroupService.register(new MenuGroupDto(Fixtures.nonameMenuGroup())));
+    }
+
+    @DisplayName("메뉴그룹이 등록되지 않았다.")
+    @Test
+    void notExistMenuGroup (){
+        assertThatExceptionOfType(MenuGroupNotFoundException.class)
+                .isThrownBy(() -> menuGroupService.isExist(Fixtures.TWO_CHICKENS_ID));
     }
 
 }

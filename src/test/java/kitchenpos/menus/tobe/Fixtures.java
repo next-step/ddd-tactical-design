@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.menus.tobe.menugroup.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.entity.MenuGroup;
 
 public class Fixtures {
 

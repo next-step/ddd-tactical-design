@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.infra.ProductEntity;
 import kitchenpos.products.tobe.dto.ProductDto;
 import kitchenpos.products.tobe.exception.ProductDuplicationException;
 import kitchenpos.products.tobe.infra.ProductRepository;
@@ -24,15 +24,15 @@ public class DefaultProductService implements ProductService {
     public ProductDto register(ProductDto dto){
         validateRegisteredProduct(dto.getName());
 
-        Product product = new Product.Builder()
+        ProductEntity productEntity = new ProductEntity.Builder()
             .id(dto.getId())
             .name(dto.getName())
             .price(dto.getPrice())
             .build();
 
-        Product savedProduct = repository.save(product);
+        ProductEntity savedProductEntity = repository.save(productEntity);
 
-        return new ProductDto(savedProduct);
+        return new ProductDto(savedProductEntity);
     }
 
     @Transactional(readOnly = true)

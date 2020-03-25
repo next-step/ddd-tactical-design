@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.infra;
 
 import kitchenpos.common.Name;
 import kitchenpos.common.Price;
@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-public class Product {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,9 +18,9 @@ public class Product {
     @Embedded
     private Price price;
 
-    protected Product (){}
+    protected ProductEntity(){}
 
-    public Product(Builder builder){
+    public ProductEntity(Builder builder){
         this.id = builder.id;
         this.name = builder.name;
         this.price = builder.price;
@@ -58,8 +58,8 @@ public class Product {
             return this;
         }
 
-        public Product build (){
-            return new Product(this);
+        public ProductEntity build (){
+            return new ProductEntity(this);
         }
     }
 

@@ -14,7 +14,7 @@ CREATE TABLE order_line_item (
     PRIMARY KEY (seq)
 );
 
-CREATE TABLE menu (
+CREATE TABLE menuEntity (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(19, 2) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE table_group (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE product (
+CREATE TABLE productEntity (
     id BIGINT(20) NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(19, 2) NOT NULL,
@@ -67,19 +67,19 @@ ALTER TABLE order_line_item
 
 ALTER TABLE order_line_item
     ADD CONSTRAINT fk_order_line_item_menu
-        FOREIGN KEY (menu_id) REFERENCES menu (id);
+        FOREIGN KEY (menu_id) REFERENCES menuEntity (id);
 
-ALTER TABLE menu
+ALTER TABLE menuEntity
     ADD CONSTRAINT fk_menu_menu_group
         FOREIGN KEY (menu_group_id) REFERENCES menu_group (id);
 
 ALTER TABLE menu_product
     ADD CONSTRAINT fk_menu_product_menu
-        FOREIGN KEY (menu_id) REFERENCES menu (id);
+        FOREIGN KEY (menu_id) REFERENCES menuEntity (id);
 
 ALTER TABLE menu_product
     ADD CONSTRAINT fk_menu_product_product
-        FOREIGN KEY (product_id) REFERENCES product (id);
+        FOREIGN KEY (product_id) REFERENCES productEntity (id);
 
 ALTER TABLE order_table
     ADD CONSTRAINT fk_order_table_table_group

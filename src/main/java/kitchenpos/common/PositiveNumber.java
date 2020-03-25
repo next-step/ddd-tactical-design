@@ -2,16 +2,17 @@ package kitchenpos.common;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class PositiveNumber {
 
     @Column(name = "number")
-    private long number;
+    private Long number;
 
     protected PositiveNumber () {}
 
-    public PositiveNumber(final long number){
+    public PositiveNumber(final Long number){
         validatePositiveNumber();
         this.number = number;
     }
@@ -21,8 +22,8 @@ public class PositiveNumber {
     }
 
     private void validatePositiveNumber (){
-        if(number <= 0){
-            throw new PositiveNumberException("자연수만 입력 할 수 있습니다.");
+        if(Objects.isNull(number) && number <= 0){
+            throw new PositiveNumberException("자연수를 입력해주세요.");
         }
     }
 }

@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.menugroup.dto;
+package kitchenpos.menus.tobe.domain.menugroup.dto;
 
-import kitchenpos.menus.tobe.menugroup.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.entity.MenuGroup;
 
 public class MenuGroupDto {
     private Long id;

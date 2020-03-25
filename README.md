@@ -59,17 +59,17 @@
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 상품이름 | product name | 상품의 이름 |
-| 상품가격 | product price | 상품의 가격 |
+| 상품 | productEntity | 메뉴를 관리하는 기준이 되는 데이터 |
+| 상품이름 | productEntity name | 상품의 이름 |
+| 상품가격 | productEntity price | 상품의 가격 |
 
 ### 메뉴
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 메뉴 그룹 | menu group | 메뉴 묶음, 분류 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
+| 메뉴 그룹 | menuEntity group | 메뉴 묶음, 분류 |
+| 메뉴 | menuEntity | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
+| 메뉴 상품 | menuEntity productEntity | 메뉴에 속하는 수량이 있는 상품 |
 | 금액 | amount | 가격 * 수량 |
 
 ### 매장 식사 주문
