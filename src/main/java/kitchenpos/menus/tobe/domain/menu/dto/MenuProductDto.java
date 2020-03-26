@@ -1,17 +1,27 @@
 package kitchenpos.menus.tobe.domain.menu.dto;
 
-import kitchenpos.common.PositiveNumber;
+import kitchenpos.menus.tobe.domain.menu.infra.MenuProductEntity;
 
 public class MenuProductDto {
-    private PositiveNumber menuId;
-    private PositiveNumber productId;
-    private PositiveNumber quantity;
+    private Long id;
+    private Long productId;
+    private Long quantity;
+
+    public MenuProductDto(MenuProductEntity menuProductEntity) {
+        this.id = menuProductEntity.getId();
+        this.productId = menuProductEntity.getProductId();
+        this.quantity = menuProductEntity.getQuantity();
+    }
+
+    public Long getId (){
+        return id;
+    }
 
     public Long getProductId() {
-        return productId.valueOf();
+        return productId;
     }
 
     public Long getQuantity (){
-        return quantity.valueOf();
+        return quantity;
     }
 }

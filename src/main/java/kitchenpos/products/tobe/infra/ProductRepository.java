@@ -11,5 +11,5 @@ public interface ProductRepository{
     Optional<ProductEntity> findById (Long id);
     List<ProductEntity> list ();
     boolean findByName (String name);
-    BigDecimal findProductPriceById (Long id)
+    BigDecimal findProductPriceById (Long id);
 }

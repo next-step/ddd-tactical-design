@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface MenuRepository {
 
-    MenuEntity register(MenuEntity menuEntity);
+    MenuEntity save(MenuEntity menuEntity);
     Optional<MenuEntity> findById(final Long id);
     List<MenuEntity> findAll();
-    long countByIdIn(final List<Long> ids);
+    boolean findByName(String name);
 
 }

@@ -1,12 +1,11 @@
 package kitchenpos.menus.tobe.domain.menu.service;
 
-import kitchenpos.menus.tobe.domain.menu.vo.NewMenuProduct;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProductVO;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
 import kitchenpos.products.tobe.infra.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class DefaultProductService implements ProductService{
@@ -18,16 +17,19 @@ public class DefaultProductService implements ProductService{
     }
 
     @Override
-    public List<NewMenuProduct> findAllProductPrice(List<NewMenuProduct> newMenuProducts) {
-        List<NewMenuProduct> findMenuProducts = new ArrayList<>();
-        newMenuProducts.stream()
+    public MenuProducts findAllPrice (MenuProducts menuProducts){
+        MenuProducts findMenuProducts = new MenuProducts();
+
+        menuProducts.list()
+            .stream()
             .forEach(menuProduct ->{
                 BigDecimal price = productRepository.findProductPriceById(menuProduct.getProductId());
                 findMenuProducts.add(
-                    new NewMenuProduct(
+                    new MenuProductVO(
                         menuProduct.getProductId(),
                         menuProduct.getQuantity(),
-                        price)
+                        price
+                    )
                 );
             });
 

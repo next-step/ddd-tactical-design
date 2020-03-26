@@ -25,7 +25,6 @@ public class Name {
         if(StringUtils.isEmpty(inputName)){
             throw new WrongNameException();
         }
-
         return name;
     }
 

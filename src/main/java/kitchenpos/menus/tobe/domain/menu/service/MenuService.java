@@ -6,8 +6,6 @@ import kitchenpos.menus.tobe.domain.menu.dto.MenuRegisterDto;
 import java.util.List;
 
 public interface MenuService {
-
-    MenuRegisterDto register(MenuRegisterDto menuDto);
+    MenuResponseDto register(MenuRegisterDto menuDto);
     List<MenuResponseDto> list();
-
 }

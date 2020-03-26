@@ -1,12 +1,12 @@
 package kitchenpos.menus.tobe.domain.menu.service;
 
-import kitchenpos.common.Price;
-import kitchenpos.menus.tobe.domain.menu.vo.NewMenuProduct;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProductVO;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface ProductService {
-    List<NewMenuProduct> findAllProductPrice (List<NewMenuProduct> newMenuProducts);
+    MenuProducts findAllPrice (MenuProducts menuProducts);
 }

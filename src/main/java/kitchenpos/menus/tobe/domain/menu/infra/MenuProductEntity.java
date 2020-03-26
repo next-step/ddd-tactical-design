@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain.menu.infra;
 
 import kitchenpos.common.PositiveNumber;
 import kitchenpos.common.Price;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProductVO;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
 
 import javax.persistence.*;
 
@@ -13,16 +15,9 @@ public class MenuProductEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "menu_id")
-//    private Menu menu;
-
-    @Embedded
-    @AttributeOverride(
-        name = "number",
-        column = @Column(name = "menu_id")
-    )
-    private PositiveNumber menuId;
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    private MenuEntity menu;
 
     @Embedded
     @AttributeOverride(
@@ -38,26 +33,22 @@ public class MenuProductEntity {
     )
     private PositiveNumber quantity;
 
-    @Transient
-    private Price price;
-
     protected MenuProductEntity(){}
 
-    public MenuProductEntity(Long id,
-                             PositiveNumber menuId,
-                             PositiveNumber productId,
-                             PositiveNumber quantity){
-        this.id = id;
-        this.menuId = menuId;
-        this.productId = productId;
-        this.quantity = quantity;
+    public MenuProductEntity (MenuProductVO menuProductVO){
+        this.productId = new PositiveNumber(menuProductVO.getProductId());
+        this.quantity = new PositiveNumber(menuProductVO.getQuantity());
     }
 
-    public PositiveNumber getProductId() {
-        return productId;
+    public Long getId (){
+        return id;
     }
 
-    public PositiveNumber getQuantity() {
-        return quantity;
+    public Long getProductId() {
+        return productId.valueOf();
+    }
+
+    public Long getQuantity() {
+        return quantity.valueOf();
     }
 }

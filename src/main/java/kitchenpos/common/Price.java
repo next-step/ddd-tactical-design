@@ -18,6 +18,22 @@ public class Price {
         this.price = price;
     }
 
+    public static Price zero (){
+        return new Price(BigDecimal.ZERO);
+    }
+
+    public Price multiply (Long acount){
+        return new Price(
+            this.price.multiply(new BigDecimal(acount))
+        );
+    }
+
+    public Price add (Price addPrice){
+        return new Price(
+            this.price.add(addPrice.valueOf())
+        );
+    }
+
     public BigDecimal valueOf (){
         return new BigDecimal(price.toString());
     }

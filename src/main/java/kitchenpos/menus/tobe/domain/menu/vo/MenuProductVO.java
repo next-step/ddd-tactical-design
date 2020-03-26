@@ -5,27 +5,35 @@ import kitchenpos.common.Price;
 
 import java.math.BigDecimal;
 
-public class NewMenuProduct {
+public class MenuProductVO {
     private PositiveNumber productId;
     private PositiveNumber quantity;
     private Price price;
 
-    public NewMenuProduct (NewMenuProduct newMenuProduct){
-        this(newMenuProduct.productId.valueOf(), newMenuProduct.quantity.valueOf());
+    public MenuProductVO(MenuProductVO menuProductVO){
+        this(menuProductVO.productId.valueOf(), menuProductVO.quantity.valueOf());
     }
 
-    public NewMenuProduct(Long productId, Long quantity) {
+    public MenuProductVO(Long productId, Long quantity) {
         this(productId, quantity, null);
     }
 
-    public NewMenuProduct(Long productId, Long quantity, BigDecimal price){
+    public MenuProductVO(Long productId, Long quantity, BigDecimal price){
         this.productId = new PositiveNumber(productId);
         this.quantity = new PositiveNumber(quantity);
         this.price = new Price(price);
     }
 
+    public BigDecimal getPrice (){
+        return price.valueOf();
+    }
+
     public Long getProductId (){
         return productId.valueOf();
+    }
+
+    public Price acount (){
+        return price.multiply(quantity.valueOf());
     }
 
     public Long getQuantity() {

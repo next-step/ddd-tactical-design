@@ -1,12 +1,13 @@
 package kitchenpos.menus.tobe.domain.menu.service;
 
+import kitchenpos.menus.tobe.domain.menu.dto.MenuResponseDto;
+import kitchenpos.menus.tobe.domain.menu.infra.MenuEntity;
 import kitchenpos.menus.tobe.domain.menu.infra.MenuRepository;
-import kitchenpos.menus.tobe.domain.menu.vo.NewMenu;
-import kitchenpos.menus.tobe.domain.menu.vo.NewMenuProduct;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuVO;
+import kitchenpos.menus.tobe.domain.menu.vo.WrongMenuPriceException;
 import kitchenpos.menus.tobe.domain.menugroup.application.MenuGroupService;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class MenuRegisterService {
@@ -25,37 +26,23 @@ public class MenuRegisterService {
         this.productService = productService;
     }
 
-    public void register(NewMenu newMenu, List<NewMenuProduct> newMenuProducts){
-        //이미 등록된 메뉴 그룹인지 확인
-        menuGroupService.isExist(newMenu.getMenuGroupiId());
+    public MenuResponseDto register(MenuVO menuVO, MenuProducts menuProducts){
+        //메뉴그룹이 등록되어있는지 확인.
+        menuGroupService.isExist(menuVO.getMenuGroupiId());
 
-        //Product의 가격들을 구한다.
-        List<NewMenuProduct> findMenuProduct = productService.findAllProductPrice(newMenuProducts);
+        //MenuProduct 정보를 완성.
+        MenuProducts findMenuProducts = productService.findAllPrice(menuProducts);
 
-        //이제 가격을 비교한다.
+        //메뉴가격이 상품가격 총합보다 크면, exception을 발생한다.
+        if(menuVO.getPrice().compareTo(findMenuProducts.totalAcount()) > 0){
+            throw new WrongMenuPriceException("메뉴가격을 잘못 설정했습니다.");
+        }
 
         //가격이 적당하면 Menu를 저장한다.
+        MenuEntity menuEntity = new MenuEntity(menuVO);
+        menuEntity.addMenuProducts(findMenuProducts);
 
-        //반환한다.
+        return new MenuResponseDto( menuRepository.save(menuEntity) );
     }
-
-//    public void register(MenuVO menuVO, )
-
-//    public MenuDto register (Menu menu, MenuGroup menuGroup, MenuProducts menuProducts){
-//        //menuGroupId 가 설정되었는지 확인.
-//        menuGroupService.isExist(menuGroup.getId());
-//
-//        //menuProduct 가 제대로 설정되었는지 확인.
-//        productService.
-//
-//        //menuProduct의 가격이 제대로 설정되었는지 확인.
-//        //
-//
-//        return null;
-//    }
-
-//    public void register (MenuRegisterDto menuRegisterDto){
-//
-//    }
 
 }

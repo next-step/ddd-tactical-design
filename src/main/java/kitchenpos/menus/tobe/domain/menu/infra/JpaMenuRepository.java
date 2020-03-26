@@ -14,22 +14,28 @@ public class JpaMenuRepository implements MenuRepository {
     private EntityManager em;
 
     @Override
-    public MenuEntity register(MenuEntity menuEntity) {
-        return null;
+    public MenuEntity save(MenuEntity menuEntity) {
+        em.persist(menuEntity);
+        return menuEntity;
     }
 
     @Override
     public Optional<MenuEntity> findById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(em.find(MenuEntity.class, id));
     }
 
     @Override
     public List<MenuEntity> findAll() {
-        return null;
+        return em.createQuery("select * from MenuEntity m")
+            .getResultList();
     }
 
     @Override
-    public long countByIdIn(List<Long> ids) {
-        return 0;
+    public boolean findByName(String name) {
+        List<MenuEntity> result = em.createQuery("select * from MenuEntity m where m.name = :name")
+            .setParameter("name", name)
+            .getResultList();
+
+        return result.size() > 0 ? true : false;
     }
 }
