@@ -61,9 +61,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductsByProductIds(any())).willReturn(Arrays.asList(
-                ProductFixtures.productFriedChicken(),
-                ProductFixtures.productSeasonedChicken()
+        given(products.getMenuProductsByProductIdsAndQuantities(any())).willReturn(Arrays.asList(
+                new MenuProduct(ProductFixtures.productFriedChicken().getId(), ProductFixtures.productFriedChicken().getPrice(), 1L),
+                new MenuProduct(ProductFixtures.productSeasonedChicken().getId(), ProductFixtures.productSeasonedChicken().getPrice(), 2L)
         ));
 
         given(menuRepository.save(any(Menu.class))).willAnswer(invocation -> {
@@ -120,14 +120,12 @@ class MenuServiceTest {
         final String name = "새로운 메뉴";
         final BigDecimal price = BigDecimal.valueOf(1000);
         final Long menuGroupId = MenuFixtures.MENUGROUP_TWO_CHICKENS_ID;
-        ;
+
         final List<ProductQuantityDto> productQuantityDtos = Arrays.asList(
                 new ProductQuantityDto(ProductFixtures.productFriedChicken().getId(), 1L),
                 new ProductQuantityDto(ProductFixtures.productFriedChicken().getId(), 2L)
         );
         MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
-
-        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
         // when
         // then
@@ -153,9 +151,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductsByProductIds(any())).willReturn(Arrays.asList(
-                ProductFixtures.productFriedChicken(),
-                ProductFixtures.productSeasonedChicken()
+        given(products.getMenuProductsByProductIdsAndQuantities(any())).willReturn(Arrays.asList(
+                new MenuProduct(ProductFixtures.productFriedChicken().getId(), ProductFixtures.productFriedChicken().getPrice(), 1L),
+                new MenuProduct(ProductFixtures.productSeasonedChicken().getId(), ProductFixtures.productSeasonedChicken().getPrice(), 2L)
         ));
 
         // when
@@ -182,9 +180,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductsByProductIds(any())).willReturn(Arrays.asList(
-                ProductFixtures.productFriedChicken(),
-                ProductFixtures.productSeasonedChicken()
+        given(products.getMenuProductsByProductIdsAndQuantities(any())).willReturn(Arrays.asList(
+                new MenuProduct(ProductFixtures.productFriedChicken().getId(), ProductFixtures.productFriedChicken().getPrice(), 1L),
+                new MenuProduct(ProductFixtures.productSeasonedChicken().getId(), ProductFixtures.productSeasonedChicken().getPrice(), 2L)
         ));
 
         // when
@@ -211,10 +209,8 @@ class MenuServiceTest {
         final String name = "새로운 메뉴";
         final BigDecimal price = BigDecimal.valueOf(1000);
         final Long menuGroupId = MenuFixtures.MENUGROUP_TWO_CHICKENS_ID;
-        ;
-        MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
 
-        given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
+        MenuCreationRequestDto menuCreationRequestDto = new MenuCreationRequestDto(name, price, menuGroupId, productQuantityDtos);
 
         // when
         // then
@@ -237,7 +233,7 @@ class MenuServiceTest {
         final BigDecimal price = ProductFixtures.productFriedChicken().getPrice().add(
                 ProductFixtures.productSeasonedChicken().getPrice().multiply(BigDecimal.valueOf(2))).add(BigDecimal.ONE);
         final Long menuGroupId = MenuFixtures.MENUGROUP_TWO_CHICKENS_ID;
-        ;
+
         final List<ProductQuantityDto> productQuantityDtos = Arrays.asList(
                 new ProductQuantityDto(ProductFixtures.productFriedChicken().getId(), 1L),
                 new ProductQuantityDto(ProductFixtures.productSeasonedChicken().getId(), 2L)
@@ -246,9 +242,9 @@ class MenuServiceTest {
 
         given(menuGroupService.findById(menuGroupId)).willReturn(MenuFixtures.menuGroupTwoChickens());
 
-        given(products.getProductsByProductIds(any())).willReturn(Arrays.asList(
-                ProductFixtures.productFriedChicken(),
-                ProductFixtures.productSeasonedChicken()
+        given(products.getMenuProductsByProductIdsAndQuantities(any())).willReturn(Arrays.asList(
+                new MenuProduct(ProductFixtures.productFriedChicken().getId(), ProductFixtures.productFriedChicken().getPrice(), 1L),
+                new MenuProduct(ProductFixtures.productSeasonedChicken().getId(), ProductFixtures.productSeasonedChicken().getPrice(), 2L)
         ));
 
         // when

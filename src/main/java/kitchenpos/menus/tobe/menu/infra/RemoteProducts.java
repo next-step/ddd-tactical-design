@@ -1,12 +1,13 @@
 package kitchenpos.menus.tobe.menu.infra;
 
+import kitchenpos.menus.tobe.menu.application.dto.ProductQuantityDto;
+import kitchenpos.menus.tobe.menu.domain.MenuProduct;
 import kitchenpos.menus.tobe.menu.domain.Products;
 import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class RemoteProducts implements Products {
@@ -17,15 +18,25 @@ public class RemoteProducts implements Products {
         this.productService = productService;
     }
 
+    // 외부(Product)가 일으키는 에러를 Menu Context가 알 필요가 없으므로, 에러가 났을 때 캐치하여 Menu가 알 수 있는 Error로 래핑하여 throw 해준다.
     @Override
-    public List<Product> getProductsByProductIds(final List<Long> productIds) {
-        if (CollectionUtils.isEmpty(productIds)) {
-            throw new IllegalArgumentException("productIds 가 입력되지 않았습니다.");
-        }
-        if (productIds.size() != productIds.parallelStream().distinct().count()) {
-            throw new IllegalArgumentException("제품은 중복될 수 없습니다.");
-        }
+    public List<MenuProduct> getMenuProductsByProductIdsAndQuantities(final List<ProductQuantityDto> productQuantityDtos) {
 
-        return productService.findAllById(productIds);
+        final List<Long> productIds = productQuantityDtos.stream()
+                .map(ProductQuantityDto::getProductId)
+                .collect(Collectors.toList());
+
+        final List<MenuProduct> menuProducts = productService.findAllById(productIds)
+                .stream()
+                .map(product -> {
+                    Long quantity = productQuantityDtos.stream()
+                            .filter(productQuantityDto -> product.getId().equals(productQuantityDto.getProductId()))
+                            .findFirst()
+                            .orElseThrow(IllegalArgumentException::new)
+                            .getQuantity();
+                    return new MenuProduct(product.getId(), product.getPrice(), quantity);
+                }).collect(Collectors.toList());
+
+        return menuProducts;
     }
 }
