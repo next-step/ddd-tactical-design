@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain.menu.infra;
 
+import kitchenpos.common.Index;
 import kitchenpos.common.Name;
 import kitchenpos.common.PositiveNumber;
 import kitchenpos.common.Price;
-import kitchenpos.menus.model.Menu;
 import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.vo.MenuVO;
 
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "menu")
@@ -20,7 +20,6 @@ public class MenuEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "menu_id")
     private Long id;
 
     @Embedded
@@ -40,10 +39,10 @@ public class MenuEntity {
     protected MenuEntity() {}
 
     public MenuEntity (MenuVO menuVO){
+        this.id = menuVO.getMenuId();
         this.price = new Price(menuVO.getPrice());
         this.name = new Name(menuVO.getName());
-        this.menuGroupId = new PositiveNumber(menuVO.getMenuGroupiId());
-        this.menuProducts = new ArrayList<>();
+        this.menuGroupId = new PositiveNumber(menuVO.getMenuGroupId());
     }
 
     public Long getId() {

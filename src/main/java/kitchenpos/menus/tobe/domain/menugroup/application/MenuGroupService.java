@@ -12,6 +12,6 @@ public interface MenuGroupService {
 
     MenuGroupDto findMenuGroup (Long id);
 
-    void isExist (Long id);
+    boolean isExist (Long id);
 
 }

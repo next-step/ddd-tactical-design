@@ -13,7 +13,7 @@ public class PositiveNumber {
     protected PositiveNumber () {}
 
     public PositiveNumber(final Long number){
-        validatePositiveNumber();
+        validatePositiveNumber(number);
         this.number = number;
     }
 
@@ -21,7 +21,7 @@ public class PositiveNumber {
         return number;
     }
 
-    private void validatePositiveNumber (){
+    private void validatePositiveNumber (Long number){
         if(Objects.isNull(number) && number <= 0){
             throw new PositiveNumberException("자연수를 입력해주세요.");
         }

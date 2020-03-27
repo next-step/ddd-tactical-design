@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.infra;
+package kitchenpos.menus.tobe.domain.menugroup.infra;
 
 import kitchenpos.menus.tobe.domain.menugroup.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.infra.MenuGroupRepository;

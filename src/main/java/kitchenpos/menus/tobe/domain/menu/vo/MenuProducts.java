@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu.vo;
 
-import kitchenpos.common.Price;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +17,7 @@ public class MenuProducts {
     }
 
     public void add (MenuProductVO menuProductVO){
+        validateProductDuplicate(menuProductVO);
         this.menuProducts.add(menuProductVO);
     }
 
@@ -26,15 +25,26 @@ public class MenuProducts {
         return new ArrayList<>(this.menuProducts);
     }
 
-    public BigDecimal totalAcount (){
-        Price totalAcount = Price.zero();
+    public void compare (BigDecimal menuPrice){
+        System.out.println(menuPrice + ", " + this.totalAcount());
+        if(menuPrice.compareTo(this.totalAcount()) > 0){
+            throw new WrongMenuPriceException("메뉴가격을 잘못 설정했습니다.");
+        }
+    }
 
+    private BigDecimal totalAcount (){
+        return menuProducts.stream()
+            .map(menuProduct -> menuProduct.getPrice().multiply(new BigDecimal(menuProduct.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void validateProductDuplicate (MenuProductVO newVO){
         menuProducts.stream()
             .forEach(menuProduct ->{
-                totalAcount.add(menuProduct.acount());
+                if(menuProduct.getProductId() == newVO.getProductId()){
+                    throw new WrongInputProductException ("새 메뉴에 상품을 중복으로 입력했습니다.");
+                }
             });
-
-        return totalAcount.valueOf();
     }
 
 }

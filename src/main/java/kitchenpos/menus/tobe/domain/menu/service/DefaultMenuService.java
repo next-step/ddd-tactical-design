@@ -30,13 +30,11 @@ public class DefaultMenuService implements MenuService{
     public MenuResponseDto register(MenuRegisterDto dto) {
         validateRegisteredMenu(new Name(dto.getName()));
 
-        //VO 변환
-        MenuVO menuVO = new MenuVO(dto.getPrice(),
-            dto.getName(),
+        MenuVO menuVO = new MenuVO(
             dto.getPrice(),
+            dto.getName(),
             dto.getMenuGroupId());
 
-        //MenuProduct의 Product가 제대로 설정됐는지 확인.
         MenuProducts menuProducts = new MenuProducts();
         dto.getMenuProducts().stream()
         .forEach(menuProduct -> {

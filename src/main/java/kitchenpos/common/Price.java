@@ -23,6 +23,7 @@ public class Price {
     }
 
     public Price multiply (Long acount){
+        System.out.println("Price.acount : " + this.price.multiply(new BigDecimal(acount)));
         return new Price(
             this.price.multiply(new BigDecimal(acount))
         );
@@ -39,7 +40,7 @@ public class Price {
     }
 
     private void validatePrice(final BigDecimal price){
-        if(Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0){
+        if( (!Objects.isNull(price)) && price.compareTo(BigDecimal.ZERO) < 0){
             throw new WrongPriceException("상품가격을 잘못 입력했습니다.");
         }
     }

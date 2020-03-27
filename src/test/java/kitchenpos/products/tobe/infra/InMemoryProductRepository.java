@@ -1,8 +1,9 @@
 package kitchenpos.products.tobe.infra;
-import kitchenpos.common.Price;
+
 import kitchenpos.products.tobe.exception.ProductNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Repository
@@ -45,16 +46,10 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<Price> findAllPrice(List<Long> ids) {
-        List<Price> prices = new ArrayList<>();
+    public BigDecimal findProductPriceById(Long id) {
+        ProductEntity findProductEntity = this.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("상품이 없습니다."));
 
-        ids.stream()
-            .forEach(id -> {
-                ProductEntity productEntity = this.findById(id).orElseThrow(() ->
-                    new ProductNotFoundException("입력한 상품이 존재하지 않습니다."));
-                prices.add(new Price(productEntity.getPrice()));
-            });
-
-        return prices;
+        return findProductEntity.getPrice();
     }
 }

@@ -51,10 +51,11 @@ public class DefaultMenuGroupService implements MenuGroupService{
 
     @Transactional(readOnly = true)
     @Override
-    public void isExist(Long id) {
+    public boolean isExist(Long id) {
         if(menuGroupRepository.findById(id).equals( Optional.empty() )){
             throw new MenuGroupNotFoundException("등록되지 않은 메뉴 그룹입니다.");
         }
+        return true;
     }
 
     protected void validateRegisteredMenuGroup (final String name){

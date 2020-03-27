@@ -1,14 +1,12 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menus.tobe.domain.menugroup.application;
 
 import kitchenpos.common.WrongNameException;
 import kitchenpos.menus.tobe.Fixtures;
-import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menugroup.application.DefaultMenuGroupService;
-import kitchenpos.menus.tobe.domain.menugroup.application.MenuGroupService;
 import kitchenpos.menus.tobe.domain.menugroup.dto.MenuGroupDto;
 import kitchenpos.menus.tobe.domain.menugroup.exception.MenuGroupDuplicationException;
 import kitchenpos.menus.tobe.domain.menugroup.exception.MenuGroupNotFoundException;
 import kitchenpos.menus.tobe.domain.menugroup.infra.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.menugroup.infra.InMemoryMenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

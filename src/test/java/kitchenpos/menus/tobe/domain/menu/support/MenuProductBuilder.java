@@ -1,7 +1,8 @@
-package kitchenpos.menus.tobe.support;
+package kitchenpos.menus.tobe.domain.menu.support;
 
 import kitchenpos.common.PositiveNumber;
 import kitchenpos.menus.tobe.domain.menu.infra.MenuProductEntity;
+import kitchenpos.menus.tobe.domain.menu.vo.MenuProductVO;
 
 public class MenuProductBuilder {
     private Long id;
@@ -30,6 +31,8 @@ public class MenuProductBuilder {
     }
 
     public MenuProductEntity build (){
-        return new MenuProductEntity(id, menuId, productId, quantity);
+        return new MenuProductEntity(
+            new MenuProductVO(productId.valueOf(), quantity.valueOf())
+        );
     }
 }
