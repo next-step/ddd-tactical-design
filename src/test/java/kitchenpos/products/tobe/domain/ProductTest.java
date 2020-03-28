@@ -24,6 +24,9 @@ class ProductTest {
 
         //then
         assertThat(product).isNotNull();
+        assertThat(product.getName()).isEqualTo(name);
+        assertThat(product.getPrice()).isEqualTo(price);
+
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")

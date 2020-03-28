@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductApplicationTest {
     private ProductRepository productRepository = new ImMemoryProductRepository();
@@ -27,6 +28,21 @@ class ProductApplicationTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void registerNewProduct() {
+        // given
+        final ProductData expected = new ProductData();
+        expected.setName("후라이드");
+        expected.setPrice(BigDecimal.valueOf(16_000L));;
+
+        // when
+        final ProductData actual =  productApplication.registerNewProduct(expected);
+
+        // then
+        assertThat(actual).isNotNull();
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+        );
+
 
     }
 
