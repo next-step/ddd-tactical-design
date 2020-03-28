@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.dto;
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.infra.ProductEntity;
 
 import java.math.BigDecimal;
 
@@ -10,10 +10,10 @@ public class ProductDto {
     private String name;
     private BigDecimal price;
 
-    public ProductDto (Product product){
-        this.id = product.getId();
-        this.name = product.getName();
-        this.price = product.getPrice();
+    public ProductDto (ProductEntity productEntity){
+        this.id = productEntity.getId();
+        this.name = productEntity.getName();
+        this.price = productEntity.getPrice();
     }
 
     public Long getId() {

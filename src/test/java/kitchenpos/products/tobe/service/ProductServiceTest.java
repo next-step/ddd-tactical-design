@@ -1,17 +1,21 @@
 package kitchenpos.products.tobe.service;
-
+import kitchenpos.common.Price;
 import kitchenpos.products.tobe.Fixtures;
 import kitchenpos.products.tobe.application.DefaultProductService;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.dto.ProductDto;
 import kitchenpos.products.tobe.exception.ProductDuplicationException;
-import kitchenpos.products.tobe.exception.WrongProductNameException;
-import kitchenpos.products.tobe.exception.WrongProductPriceException;
+import kitchenpos.common.WrongNameException;
+import kitchenpos.common.WrongPriceException;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.infra.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -56,14 +60,37 @@ public class ProductServiceTest {
     @DisplayName("상품이름을이 입력해야한다.")
     @Test
     void registerWithoutProductName (){
-        assertThatExceptionOfType(WrongProductNameException.class)
+        assertThatExceptionOfType(WrongNameException.class)
             .isThrownBy(() -> productService.register(new ProductDto(Fixtures.nonameProduct())));
     }
 
     @DisplayName("상품가격을 입력해야한다.")
     @Test
     void registerWithoutProductPrice (){
-        assertThatExceptionOfType(WrongProductPriceException.class)
+        assertThatExceptionOfType(WrongPriceException.class)
             .isThrownBy(() -> productService.register(new ProductDto(Fixtures.noPriceProduct())));
+    }
+
+    @DisplayName("여러 상품의 가격을 얻을 수 있다.")
+    @Test
+    void getAllPrice (){
+        repository.save(Fixtures.friedChicken());
+        repository.save(Fixtures.seasonedChicken());
+
+        List<Long> ids = new ArrayList<>();
+        ids.add(Fixtures.FRIED_CHICKEN_ID);
+        ids.add(Fixtures.SEASONED_CHICKEN_ID);
+
+        List<Price> expected = new ArrayList<>();
+        expected.add(new Price(
+            Fixtures.friedChicken().getPrice()
+            )
+        );
+        expected.add(new Price(
+            Fixtures.seasonedChicken().getPrice()
+            )
+        );
+
+//        productService
     }
 }

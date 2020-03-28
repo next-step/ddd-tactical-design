@@ -1,46 +1,55 @@
 package kitchenpos.products.tobe.infra;
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.exception.ProductNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
-    private Map<Long, Product> entities = new HashMap<>();
+    private Map<Long, ProductEntity> entities = new HashMap<>();
 
     @Override
-    public Product save(Product product) {
-        Product savedProduct = new Product.Builder()
-            .id(product.getId())
-            .name(product.getName())
-            .price(product.getPrice())
+    public ProductEntity save(ProductEntity productEntity) {
+        ProductEntity savedProductEntity = new ProductEntity.Builder()
+            .id(productEntity.getId())
+            .name(productEntity.getName())
+            .price(productEntity.getPrice())
             .build();
 
-        entities.put(savedProduct.getId(), savedProduct);
+        entities.put(savedProductEntity.getId(), savedProductEntity);
 
-        return savedProduct;
+        return savedProductEntity;
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
+    public Optional<ProductEntity> findById(Long id) {
         return Optional.ofNullable(entities.get(id));
     }
 
     @Override
-    public List<Product> list() {
+    public List<ProductEntity> list() {
         return new ArrayList<>(entities.values());
     }
 
     @Override
     public boolean findByName(String name) {
-        List<Product> products = this.list();
+        List<ProductEntity> productEntities = this.list();
 
-        for(Product product : products){
-            if(name.equals(product.getName())){
+        for(ProductEntity productEntity : productEntities){
+            if(name.equals(productEntity.getName())){
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public BigDecimal findProductPriceById(Long id) {
+        ProductEntity findProductEntity = this.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("상품이 없습니다."));
+
+        return findProductEntity.getPrice();
     }
 }

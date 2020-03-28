@@ -5,5 +5,4 @@ public class ProductDuplicationException extends RuntimeException {
     public ProductDuplicationException(String message){
         super(message);
     }
-
 }

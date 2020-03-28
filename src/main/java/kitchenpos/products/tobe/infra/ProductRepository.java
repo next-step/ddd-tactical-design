@@ -1,13 +1,15 @@
 package kitchenpos.products.tobe.infra;
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.common.Price;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository{
-    Product save (Product product);
-    Optional<Product> findById (Long id);
-    List<Product> list ();
+    ProductEntity save (ProductEntity productEntity);
+    Optional<ProductEntity> findById (Long id);
+    List<ProductEntity> list ();
     boolean findByName (String name);
+    BigDecimal findProductPriceById (Long id);
 }
