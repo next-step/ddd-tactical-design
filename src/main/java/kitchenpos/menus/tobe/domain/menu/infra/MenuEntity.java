@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -73,4 +74,20 @@ public class MenuEntity {
             });
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuEntity that = (MenuEntity) o;
+        return Objects.equals(id, that.id) &&
+            Objects.equals(price, that.price) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(menuGroupId, that.menuGroupId) &&
+            Objects.equals(menuProducts, that.menuProducts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, price, name, menuGroupId, menuProducts);
+    }
 }

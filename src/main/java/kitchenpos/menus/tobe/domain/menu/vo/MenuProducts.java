@@ -26,7 +26,6 @@ public class MenuProducts {
     }
 
     public void compare (BigDecimal menuPrice){
-        System.out.println(menuPrice + ", " + this.totalAcount());
         if(menuPrice.compareTo(this.totalAcount()) > 0){
             throw new WrongMenuPriceException("메뉴가격을 잘못 설정했습니다.");
         }
@@ -34,7 +33,7 @@ public class MenuProducts {
 
     private BigDecimal totalAcount (){
         return menuProducts.stream()
-            .map(menuProduct -> menuProduct.getPrice().multiply(new BigDecimal(menuProduct.getQuantity())))
+            .map(menuProduct -> menuProduct.getAccount())
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

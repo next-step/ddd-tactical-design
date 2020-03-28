@@ -38,6 +38,13 @@ public class MenuProductVO {
         return quantity.valueOf();
     }
 
+    public BigDecimal getAccount (){
+        return this.getPrice()
+            .multiply(
+            new BigDecimal(this.getQuantity())
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

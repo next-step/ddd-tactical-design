@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain.menu.dto;
 
 import kitchenpos.menus.tobe.domain.menu.infra.MenuProductEntity;
 
+import java.util.Objects;
+
 public class MenuProductDto {
     private Long id;
     private Long productId;
@@ -23,5 +25,20 @@ public class MenuProductDto {
 
     public Long getQuantity (){
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProductDto that = (MenuProductDto) o;
+        return Objects.equals(id, that.id) &&
+            Objects.equals(productId, that.productId) &&
+            Objects.equals(quantity, that.quantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productId, quantity);
     }
 }

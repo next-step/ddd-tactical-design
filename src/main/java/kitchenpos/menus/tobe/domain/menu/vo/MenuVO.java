@@ -40,4 +40,5 @@ public class MenuVO {
     public Long getMenuGroupId() {
         return menuGroupiId.valueOf();
     }
+
 }

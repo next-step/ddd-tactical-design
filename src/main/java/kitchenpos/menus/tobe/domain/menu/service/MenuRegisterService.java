@@ -36,7 +36,9 @@ public class MenuRegisterService {
         MenuEntity menuEntity = new MenuEntity(menuVO);
         menuEntity.addMenuProducts(findMenuProducts);
 
-        return new MenuResponseDto( menuRepository.save(menuEntity) );
+        menuRepository.save(menuEntity);
+
+        return new MenuResponseDto(menuEntity);
     }
 
 }

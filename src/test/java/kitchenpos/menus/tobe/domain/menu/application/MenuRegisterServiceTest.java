@@ -11,7 +11,6 @@ import kitchenpos.menus.tobe.domain.menu.vo.MenuVO;
 import kitchenpos.menus.tobe.domain.menu.vo.WrongMenuPriceException;
 import kitchenpos.menus.tobe.domain.menugroup.application.MenuGroupService;
 import kitchenpos.menus.tobe.domain.menugroup.exception.MenuGroupNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,11 +33,6 @@ public class MenuRegisterServiceTest {
 
     @InjectMocks
     private MenuRegisterService menuRegisterService;
-
-    @BeforeEach
-    void setup(){
-        menuRegisterService = new MenuRegisterService(menuRepository, menuGroupService, productService);
-    }
 
     @DisplayName("등록된 MenuGroup을 선택해야 한다.")
     @Test
@@ -95,11 +89,11 @@ public class MenuRegisterServiceTest {
         MenuEntity savedMenu = new MenuEntity(menuVO);
         savedMenu.addMenuProducts(findMenuProducts);
 
-        given(menuRepository.save(menu)).willReturn(savedMenu);
+        given(menuRepository.save(menu)).willReturn(menu);
 
         MenuResponseDto responseDto = new MenuResponseDto(savedMenu);
         assertThat(menuRegisterService.register(menuVO, menuProducts))
-            .isEqualToComparingFieldByField(responseDto);
+            .isEqualTo(responseDto);
     }
 
 }

@@ -6,6 +6,7 @@ import kitchenpos.menus.tobe.domain.menu.vo.MenuProductVO;
 import kitchenpos.menus.tobe.domain.menu.vo.MenuProducts;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "menu_product")
@@ -50,5 +51,21 @@ public class MenuProductEntity {
 
     public Long getQuantity() {
         return quantity.valueOf();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProductEntity that = (MenuProductEntity) o;
+        return Objects.equals(id, that.id) &&
+            Objects.equals(menu, that.menu) &&
+            Objects.equals(productId, that.productId) &&
+            Objects.equals(quantity, that.quantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, menu, productId, quantity);
     }
 }

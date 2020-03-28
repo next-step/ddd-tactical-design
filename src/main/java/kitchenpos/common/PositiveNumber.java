@@ -26,4 +26,17 @@ public class PositiveNumber {
             throw new PositiveNumberException("자연수를 입력해주세요.");
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PositiveNumber that = (PositiveNumber) o;
+        return Objects.equals(number, that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
+    }
 }
