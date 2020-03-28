@@ -1,8 +1,11 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.application;
 
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -14,7 +17,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Long create(final String name, final Long price) {
+    public Long create(final String name, final BigDecimal price) {
         final Product newProduct = new Product(name, price);
         return productRepository.save(newProduct).getId();
     }
@@ -22,5 +25,10 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> list() {
         return productRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findAllById(final List<Long> productIds) {
+        return productRepository.findAllById(productIds);
     }
 }
