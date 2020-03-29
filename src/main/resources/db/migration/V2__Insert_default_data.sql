@@ -24,7 +24,7 @@ INSERT INTO menu_product (menu_id, product_id, quantity) VALUES (4, 4, 1);
 INSERT INTO menu_product (menu_id, product_id, quantity) VALUES (5, 5, 1);
 INSERT INTO menu_product (menu_id, product_id, quantity) VALUES (6, 6, 1);
 
-INSERT INTO order_table (id, number_of_guests, empty) VALUES (1, 0, true);
+INSERT INTO order_table (id, number_of_guests, empty) VALUES (1, 2, false);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (2, 0, true);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (3, 0, true);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (4, 0, true);
