@@ -102,7 +102,7 @@
 
 ### Order
 - `Order`는 주문이 발생한 테이블인 `Table`, 주문 상태인 `Order Status`, 주문 시간인 `Ordered Time`, 주문 메뉴 리스트인 `Order Lines`를 가진다.
-- `Order`를 생성할 수 있m다.
+- `Order`를 생성할 수 있다.
     - `Table`, `Order Lines`를 입력한다.
     - `Ordering Policy`를 만족해야한다.
 - `Order Status`는 조리 중을 의미하는 `COOKING`, 식사 중을 의미하는 `EATING`, 완료를 의미하는 `COMPLETION` 상태를 표현할 수 있다.
