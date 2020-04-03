@@ -7,12 +7,14 @@ import kitchenpos.eatinorders.tobe.table.application.TableService;
 import kitchenpos.eatinorders.tobe.table.domain.Table;
 import kitchenpos.eatinorders.tobe.tableGroup.domain.exception.OrderNotCompletedException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class UngroupService {
 
     private final TableService tableService;
