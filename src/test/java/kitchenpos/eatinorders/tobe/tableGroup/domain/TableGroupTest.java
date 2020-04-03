@@ -17,7 +17,7 @@ class TableGroupTest {
     void create() {
         // given
         final List<Long> tableIds = Arrays.asList(
-            tableEmpty1().getId(), tableEmpty2().getId()
+                tableEmpty1().getId(), tableEmpty2().getId()
         );
 
         // when

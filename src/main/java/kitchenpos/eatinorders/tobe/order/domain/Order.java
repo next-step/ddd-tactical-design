@@ -65,7 +65,7 @@ public class Order {
     }
 
     void changeStatus(OrderStatus status) {
-        if(this.status == OrderStatus.COMPLETION) {
+        if (this.status == OrderStatus.COMPLETION) {
             throw new OrderAlreadyCompletedException("이미 완료된 주문의 주문 상태를 변경할 수 없습니다.");
         }
         this.status = status;

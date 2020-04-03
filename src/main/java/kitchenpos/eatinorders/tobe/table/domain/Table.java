@@ -18,7 +18,8 @@ public class Table {
     @Column(name = "empty")
     private boolean empty;
 
-    protected Table() {}
+    protected Table() {
+    }
 
     public Table(final int numberOfGuests, final boolean empty) {
         if (numberOfGuests < 0) {

@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.order.domain;
 
-import kitchenpos.eatinorders.tobe.EatinordersFixtures;
 import kitchenpos.eatinorders.tobe.order.domain.exception.OrderAlreadyCompletedException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,8 +13,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static kitchenpos.eatinorders.tobe.EatinordersFixtures.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderTest {
 
@@ -39,7 +37,7 @@ class OrderTest {
     @DisplayName("주문 생성 시, 테이블을 입력해야한다.")
     @ParameterizedTest
     @NullSource
-    @ValueSource(longs = { -1, 0 })
+    @ValueSource(longs = {-1, 0})
     void createFailsWhenTableNotEntered(final Long tableId) {
         // given
         final List<OrderLine> orderLines = Arrays.asList(orderLineOneFriedChicken());
@@ -67,9 +65,9 @@ class OrderTest {
 
     private static Stream provideOrderStatus() {
         return Stream.of(
-            OrderStatus.COOKING,
-            OrderStatus.MEAL,
-            OrderStatus.COMPLETION
+                OrderStatus.COOKING,
+                OrderStatus.MEAL,
+                OrderStatus.COMPLETION
         );
     }
 

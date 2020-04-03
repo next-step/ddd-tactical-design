@@ -1,31 +1,30 @@
 package kitchenpos.eatinorders.tobe.tableGroup.domain;
 
+import kitchenpos.eatinorders.tobe.table.application.TableService;
 import kitchenpos.eatinorders.tobe.table.domain.Table;
+import kitchenpos.eatinorders.tobe.tableGroup.application.TableGroupService;
 import kitchenpos.eatinorders.tobe.tableGroup.domain.exception.TableAlreadyGroupedException;
 import kitchenpos.eatinorders.tobe.tableGroup.domain.exception.TableNotEmptyException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
+@Transactional
 public class GroupService {
 
-    private final TableGroupRepository tableGroupRepository;
+    private final TableGroupService tableGroupService;
+    private final TableService tableService;
 
-    public GroupService(final TableGroupRepository tableGroupRepository) {
-        this.tableGroupRepository = tableGroupRepository;
+    public GroupService(final TableGroupService tableGroupService, final TableService tableService) {
+        this.tableGroupService = tableGroupService;
+        this.tableService = tableService;
     }
 
-    public TableGroup group(List<Table> tables) {
-        if (CollectionUtils.isEmpty(tables)) {
-            throw new IllegalArgumentException("지정할 테이블을 입력해야합니다.");
-        }
+    public TableGroup group(final List<Long> tableIds) {
 
-        if (tables.size() < 2) {
-            throw new IllegalArgumentException("지정할 테이블이 2개 이상이여야합니다.");
-        }
+        final List<Table> tables = tableService.findAllByIdIn(tableIds);
 
         tables.forEach(table -> {
             if (table.getTableGroupId() != null) {
@@ -36,9 +35,7 @@ public class GroupService {
             }
         });
 
-        final TableGroup tableGroup = tableGroupRepository.save(new TableGroup(tables.stream()
-                .map(Table::getId)
-                .collect(Collectors.toList())));
+        final TableGroup tableGroup = tableGroupService.create(tableIds);
 
         tables.forEach(table -> {
             table.group(tableGroup.getId());

@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.tobe.tableGroup.domain;
 
+import kitchenpos.eatinorders.tobe.table.application.TableService;
 import kitchenpos.eatinorders.tobe.table.domain.Table;
+import kitchenpos.eatinorders.tobe.tableGroup.application.TableGroupService;
 import kitchenpos.eatinorders.tobe.tableGroup.domain.exception.TableAlreadyGroupedException;
 import kitchenpos.eatinorders.tobe.tableGroup.domain.exception.TableNotEmptyException;
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,21 +18,22 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static kitchenpos.eatinorders.tobe.EatinordersFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {
 
     @Mock
-    TableGroupRepository tableGroupRepository;
+    TableGroupService tableGroupService;
+
+    @Mock
+    TableService tableService;
 
     @InjectMocks
     GroupService groupService;
@@ -43,20 +44,23 @@ class GroupServiceTest {
         // given
         final Table table1 = tableEmpty1();
         final Table table2 = tableEmpty2();
+        final List<Long> tableIds = Arrays.asList(
+                table1.getId(), table2.getId()
+        );
 
-        given(tableGroupRepository.save(any(TableGroup.class))).willAnswer(invocation -> {
-            final TableGroup tableGroup = new TableGroup(Arrays.asList(
-                    table1.getId(), table2.getId()
-            ));
+        given(tableService.findAllByIdIn(tableIds)).willReturn(Arrays.asList(
+                table1, table2
+        ));
+
+        given(tableGroupService.create(tableIds)).willAnswer(invocation -> {
+            final TableGroup tableGroup = new TableGroup(tableIds);
             ReflectionTestUtils.setField(tableGroup, "id", 1L);
             ReflectionTestUtils.setField(tableGroup, "createdDate", LocalDateTime.now());
             return tableGroup;
         });
 
         // when
-        final TableGroup tableGroup = groupService.group(Arrays.asList(
-                table1, table2
-        ));
+        final TableGroup tableGroup = groupService.group(tableIds);
 
         // then
         assertThat(tableGroup.getId()).isEqualTo(1L);
@@ -71,35 +75,21 @@ class GroupServiceTest {
 //        assertThat(argument.getValue()).isEqualTo(tableGroup.getId());
     }
 
-    @DisplayName("단체테이블 지정 시, 테이블을 2개 이상 입력해야한다.")
-    @ParameterizedTest
-    @NullSource
-    @MethodSource(value = "provideLessThanTwoTables")
-    void groupFailsWhenTablesAreLessThanTwo(List<Table> tables) {
-        // given
-        // when
-        // then
-        assertThatThrownBy(() -> {
-            groupService.group(tables);
-        }).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    private static Stream provideLessThanTwoTables() {
-        return Stream.of(
-                Arrays.asList(),
-                Arrays.asList(tableEmpty1())
-        );
-    }
-
     @DisplayName("단체테이블 지정 시, 모든 테이블이 공석이여야한다.")
     @ParameterizedTest
     @MethodSource(value = "provideNotEmptyTables")
     void groupFailsWhenTableIsNotEmpty(List<Table> tables) {
         // given
+        final List<Long> tableIds = tables.stream()
+                .map(Table::getId)
+                .collect(Collectors.toList());
+
+        given(tableService.findAllByIdIn(tableIds)).willReturn(tables);
+
         // when
         // then
         assertThatThrownBy(() -> {
-            groupService.group(tables);
+            groupService.group(tableIds);
         }).isInstanceOf(TableNotEmptyException.class);
     }
 
@@ -115,10 +105,16 @@ class GroupServiceTest {
     @MethodSource(value = "provideAlreadyGroupedTables")
     void groupFailsWhenTableIsAlreadyGrouped(List<Table> tables) {
         // given
+        final List<Long> tableIds = tables.stream()
+                .map(Table::getId)
+                .collect(Collectors.toList());
+
+        given(tableService.findAllByIdIn(tableIds)).willReturn(tables);
+
         // when
         // then
         assertThatThrownBy(() -> {
-            groupService.group(tables);
+            groupService.group(tableIds);
         }).isInstanceOf(TableAlreadyGroupedException.class);
     }
 
