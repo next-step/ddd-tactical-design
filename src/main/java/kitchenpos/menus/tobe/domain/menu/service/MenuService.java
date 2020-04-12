@@ -54,4 +54,8 @@ public class MenuService {
     public List<Menu> list() {
         return menuRepository.findAll();
     }
+
+    public int countByMenuId(List<Long> menuIds) {
+        return menuRepository.countByIdIn(menuIds);
+    }
 }

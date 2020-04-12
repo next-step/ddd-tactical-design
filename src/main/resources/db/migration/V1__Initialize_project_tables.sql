@@ -57,6 +57,11 @@ CREATE TABLE product (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE table_group_order_tables (
+    table_group_id  BIGINT NOT NULL,
+    order_tables_id BIGINT NOT NULL
+);
+
 ALTER TABLE orders
     ADD CONSTRAINT fk_orders_order_table
         FOREIGN KEY (order_table_id) REFERENCES order_table (id);
@@ -84,3 +89,11 @@ ALTER TABLE menu_product
 ALTER TABLE order_table
     ADD CONSTRAINT fk_order_table_table_group
         FOREIGN KEY (table_group_id) REFERENCES table_group (id);
+
+ALTER TABLE table_group_order_tables
+    ADD CONSTRAINT pk_table_group_order_tables_id
+        FOREIGN KEY (order_tables_id) REFERENCES order_table;
+
+ALTER TABLE table_group_order_tables
+    ADD CONSTRAINT pk_table_group_order_tables_group_id
+        FOREIGN KEY (table_group_id) REFERENCES table_group;
