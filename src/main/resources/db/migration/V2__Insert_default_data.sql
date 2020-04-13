@@ -32,3 +32,13 @@ INSERT INTO order_table (id, number_of_guests, empty) VALUES (5, 0, true);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (6, 0, true);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (7, 0, true);
 INSERT INTO order_table (id, number_of_guests, empty) VALUES (8, 0, true);
+
+INSERT INTO orders (id, order_table_id, order_status, ordered_time) VALUES (1, 1, 'COOKING', now());
+INSERT INTO orders (id, order_table_id, order_status, ordered_time) VALUES (2, 1, 'COMPLETION', now());
+INSERT INTO orders (id, order_table_id, order_status, ordered_time) VALUES (3, 2, 'COOKING', now());
+INSERT INTO orders (id, order_table_id, order_status, ordered_time) VALUES (4, 2, 'COMPLETION', now());
+
+INSERT INTO order_line_item (order_id, menu_id, quantity) VALUES (1, 1, 1);
+INSERT INTO order_line_item (order_id, menu_id, quantity) VALUES (2, 2, 2);
+INSERT INTO order_line_item (order_id, menu_id, quantity) VALUES (3, 3, 2);
+INSERT INTO order_line_item (order_id, menu_id, quantity) VALUES (4, 4, 2);
