@@ -1,19 +1,24 @@
 package kitchenpos.products.tobe.domain;
 
+import java.math.BigDecimal;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Access(AccessType.FIELD)
 @Table(name = "product")
 public class Product {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -22,12 +27,25 @@ public class Product {
     @AttributeOverride(column = @Column(name = "price"), name = "value")
     private Price price;
 
-    private Product() {
+    protected Product() {
+    }
+
+    private Product(Long id, String name, Price price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public Product(Long id, String name, BigDecimal price) {
+        this(id, name, Price.of(price));
     }
 
     public Product(String name, Price price) {
-        this.name = name;
-        this.price = price;
+        this(null, name, price);
+    }
+
+    public Product(String name, BigDecimal price) {
+        this(name, Price.of(price));
     }
 
     public Long getId() {

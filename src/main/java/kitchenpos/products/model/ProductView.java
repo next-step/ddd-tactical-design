@@ -3,6 +3,7 @@ package kitchenpos.products.model;
 import java.math.BigDecimal;
 
 public class ProductView {
+
     private Long id;
     private String name;
     private BigDecimal price;
