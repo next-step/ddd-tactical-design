@@ -19,7 +19,7 @@ class PriceTest {
             .isThrownBy(() -> Price.of(price));
     }
 
-    @DisplayName("가격이 음수일경우 예외가 발생한다.")
+    @DisplayName("price는 곱셉 연산을 지원한다.")
     @ParameterizedTest
     @CsvSource(
         value = {
