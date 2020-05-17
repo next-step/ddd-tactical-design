@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name = "product")
 public class Product {
 
