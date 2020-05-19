@@ -1,7 +1,6 @@
 package kitchenpos.menus.controller;
 
 import kitchenpos.menus.bo.MenuGroupBo;
-import kitchenpos.menus.model.MenuGroup;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

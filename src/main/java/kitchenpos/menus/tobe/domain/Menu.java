@@ -7,15 +7,19 @@ public class Menu {
 
     private Long id;
     private String name;
-    private BigDecimal price;
+    private Price price;
     private Long menuGroupId;
     private MenuProducts menuProducts;
 
     public Menu(String name, BigDecimal price, Long menuGroupId, MenuProducts menuProducts) {
-        this(null, name, price, menuGroupId, menuProducts);
+        this(null, name, Price.of(price), menuGroupId, menuProducts);
     }
 
     public Menu(Long id, String name, BigDecimal price, Long menuGroupId, MenuProducts menuProducts) {
+        this(id, name, Price.of(price), menuGroupId, menuProducts);
+    }
+
+    public Menu(Long id, String name, Price price, Long menuGroupId, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,7 +39,7 @@ public class Menu {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
