@@ -23,9 +23,6 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
 
     private final Map<ID, T> entities = new HashMap<>();
     private final AtomicLong atomicLong = new AtomicLong();
-    private final ParameterizedTypeReference<T> parameterizedTypeReference = new ParameterizedTypeReference<T>() {
-    };
-
     private Class entityType;
 
     public AbstractInMemoryJpaRepository() {
@@ -51,30 +48,6 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
         bindId(entity);
         entities.put(getId(entity), entity);
         return entity;
-    }
-
-    private ID getId(T entity) {
-        try {
-            Field id = entityType.getDeclaredField("id");
-            id.setAccessible(true);
-            return (ID) id.get(entity);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-    }
-
-    private void bindId(T entity) {
-        try {
-            Field id = entityType.getDeclaredField("id");
-            id.setAccessible(true);
-
-            if(id.get(entity) != null){
-                return;
-            }
-            id.set(entity, atomicLong.incrementAndGet());
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
     }
 
     @Override
@@ -188,6 +161,31 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
     @Override
     public <S extends T> boolean exists(Example<S> example) {
         return false;
+    }
+
+
+    private ID getId(T entity) {
+        try {
+            Field id = entityType.getDeclaredField("id");
+            id.setAccessible(true);
+            return (ID) id.get(entity);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private void bindId(T entity) {
+        try {
+            Field id = entityType.getDeclaredField("id");
+            id.setAccessible(true);
+
+            if(id.get(entity) != null){
+                return;
+            }
+            id.set(entity, atomicLong.incrementAndGet());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 }
 

@@ -104,7 +104,7 @@ class MenuBoTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getName()).isEqualTo(request.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(request.getPrice()),
+            () -> assertThat(actual.getPrice().getValue()).isEqualTo(request.getPrice()),
             () -> assertThat(actual.getMenuGroupId()).isEqualTo(request.getMenuGroupId())
 
         );
