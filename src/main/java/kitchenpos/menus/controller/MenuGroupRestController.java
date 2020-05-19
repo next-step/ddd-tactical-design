@@ -1,5 +1,7 @@
 package kitchenpos.menus.controller;
 
+import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 import kitchenpos.menus.bo.MenuGroupBo;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
@@ -10,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 public class MenuGroupRestController {
@@ -37,8 +36,8 @@ public class MenuGroupRestController {
         return ResponseEntity.ok()
             .body(
                 menuGroupBo.list().stream()
-                .map(this::map)
-                .collect(Collectors.toList())
+                    .map(this::map)
+                    .collect(Collectors.toList())
             )
             ;
     }

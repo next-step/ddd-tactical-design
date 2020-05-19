@@ -15,7 +15,8 @@ public class MenuProducts {
     @CollectionTable(name = "menu_product", joinColumns = @JoinColumn(name = "menu_id"))
     private List<MenuProduct> menuProducts;
 
-    protected MenuProducts(){}
+    protected MenuProducts() {
+    }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;

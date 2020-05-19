@@ -22,6 +22,7 @@ public class MenuProductServiceAdapter implements MenuProductService {
             .map(product -> map(product, quantity))
             .orElseThrow(() -> new IllegalArgumentException("not exist product"));
     }
+
     private MenuProduct map(Product product, long quantity) {
         return new MenuProduct(product.getId(), quantity, product.getPrice());
     }

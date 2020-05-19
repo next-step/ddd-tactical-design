@@ -11,6 +11,7 @@ import kitchenpos.common.model.Price;
 @Embeddable
 @Access(AccessType.FIELD)
 public class MenuProduct {
+
     //private Long seq;
     //private Long menuId;
     private long productId;
@@ -19,12 +20,13 @@ public class MenuProduct {
     @Transient
     private Price productPrice;
 
-    protected MenuProduct(){}
+    protected MenuProduct() {
+    }
 
     public MenuProduct(Long productId, long quantity, Price productPrice) {
-       this.productId = productId;
-       this.quantity = quantity;
-       this.productPrice = productPrice;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productPrice = productPrice;
     }
 
     public MenuProduct(Long productId, long quantity, BigDecimal productPrice) {

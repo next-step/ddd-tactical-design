@@ -37,7 +37,8 @@ public class Menu {
         this(null, name, Price.of(price), menuGroupId, menuProducts);
     }
 
-    public Menu(Long id, String name, BigDecimal price, Long menuGroupId, MenuProducts menuProducts) {
+    public Menu(Long id, String name, BigDecimal price, Long menuGroupId,
+        MenuProducts menuProducts) {
         this(id, name, Price.of(price), menuGroupId, menuProducts);
     }
 
@@ -48,7 +49,8 @@ public class Menu {
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
     }
-    public void addMenuProduct(MenuProduct menuProduct){
+
+    public void addMenuProduct(MenuProduct menuProduct) {
         menuProducts.add(menuProduct);
     }
 

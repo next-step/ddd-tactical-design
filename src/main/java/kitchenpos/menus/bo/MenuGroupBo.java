@@ -1,15 +1,15 @@
 package kitchenpos.menus.bo;
 
+import java.util.List;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Component
 public class MenuGroupBo {
+
     private final MenuGroupRepository menuGroupRepository;
 
     public MenuGroupBo(MenuGroupRepository menuGroupRepository) {

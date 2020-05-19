@@ -86,6 +86,7 @@ public class MenuView {
     }
 
     public static class MenuProductView {
+
         private Long productId;
         private long quantity;
 

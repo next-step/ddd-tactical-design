@@ -1,5 +1,8 @@
 package kitchenpos.menus.bo;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import kitchenpos.common.model.Price;
 import kitchenpos.menus.model.MenuCreateRequest;
@@ -12,12 +15,9 @@ import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
-
 @Component
 public class MenuBo {
+
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final MenuProductService menuProductService;
@@ -40,7 +40,7 @@ public class MenuBo {
             throw new IllegalArgumentException();
         }
 
-        if(!menuGroupRepository.existsById(menuCreateRequest.getMenuGroupId())){
+        if (!menuGroupRepository.existsById(menuCreateRequest.getMenuGroupId())) {
             throw new IllegalArgumentException();
         }
 
@@ -61,7 +61,8 @@ public class MenuBo {
 
     private Menu map(MenuCreateRequest menuCreateRequest) {
         List<MenuProduct> menuProducts = menuCreateRequest.getMenuProducts().stream()
-            .map(product -> menuProductService.getMenuProduct(product.getProductId(), product.getQuantity()))
+            .map(product -> menuProductService
+                .getMenuProduct(product.getProductId(), product.getQuantity()))
             .collect(Collectors.toList());
 
         return new Menu(

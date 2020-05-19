@@ -16,7 +16,10 @@ public class MenuGroup {
 
     private String name;
 
-    protected MenuGroup(){};
+    protected MenuGroup() {
+    }
+
+    ;
 
     public MenuGroup(String name) {
         this.name = name;

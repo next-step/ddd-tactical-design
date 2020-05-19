@@ -1,6 +1,7 @@
 package kitchenpos.menus.model;
 
 public class MenuGroupView {
+
     private Long id;
     private String name;
 

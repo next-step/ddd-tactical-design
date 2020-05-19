@@ -1,23 +1,18 @@
 package kitchenpos.menus.controller;
 
-import java.util.Arrays;
-import java.util.function.Function;
+import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 import kitchenpos.menus.bo.MenuBo;
 import kitchenpos.menus.model.MenuCreateRequest;
 import kitchenpos.menus.model.MenuView;
 import kitchenpos.menus.model.MenuView.MenuProductView;
 import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
 
 @RestController
 public class MenuRestController {
@@ -54,9 +49,9 @@ public class MenuRestController {
             .stream()
             .map(
                 menuProduct -> MenuProductView.Builder.builder()
-                .withProductId(menuProduct.getProductId())
-                .withQuantity(menuProduct.getQuantity())
-                .build()
+                    .withProductId(menuProduct.getProductId())
+                    .withQuantity(menuProduct.getQuantity())
+                    .build()
             )
             .collect(Collectors.toList());
 
