@@ -1,7 +1,17 @@
 package kitchenpos;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.Id;
+import kitchenpos.products.tobe.domain.Product;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +20,60 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaRepository<T, ID> {
 
+    private final Map<ID, T> entities = new HashMap<>();
+    private final AtomicLong atomicLong = new AtomicLong();
+    private final ParameterizedTypeReference<T> parameterizedTypeReference = new ParameterizedTypeReference<T>() {
+    };
+
+    private Class entityType;
+
+    public AbstractInMemoryJpaRepository() {
+
+        Type superClassType = getClass().getGenericSuperclass();
+        if (!(superClassType instanceof ParameterizedType)) {  // sanity check
+            throw new IllegalArgumentException("TypeReference는 항상 실제 타입 파라미터 정보와 함께 생성되어야 합니다.");
+        }
+        entityType = (Class) ((ParameterizedType) superClassType).getActualTypeArguments()[0];
+    }
+
     @Override
     public List<T> findAll() {
-        return null;
+        return new ArrayList<T>(entities.values());
+    }
+
+    public Optional<T> findById(Long id) {
+        return Optional.ofNullable(entities.get(id));
+    }
+
+    @Override
+    public <S extends T> S save(S entity) {
+        bindId(entity);
+        entities.put(getId(entity), entity);
+        return entity;
+    }
+
+    private ID getId(T entity) {
+        try {
+            Field id = entityType.getDeclaredField("id");
+            id.setAccessible(true);
+            return (ID) id.get(entity);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private void bindId(T entity) {
+        try {
+            Field id = entityType.getDeclaredField("id");
+            id.setAccessible(true);
+
+            if(id.get(entity) != null){
+                return;
+            }
+            id.set(entity, atomicLong.incrementAndGet());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -32,7 +93,6 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
 
     @Override
     public void flush() {
-
     }
 
     @Override
@@ -70,15 +130,6 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
         return null;
     }
 
-    @Override
-    public <S extends T> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public Optional<T> findById(ID id) {
-        return Optional.empty();
-    }
 
     @Override
     public boolean existsById(ID id) {
