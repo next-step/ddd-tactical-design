@@ -49,7 +49,7 @@ public class MenuRestController {
     }
 
 
-    MenuView map(Menu menu) {
+    private MenuView map(Menu menu) {
         List<MenuView.MenuProductView> menuProductViews = menu.getMenuProducts().getMenuProducts()
             .stream()
             .map(
