@@ -8,6 +8,7 @@ import kitchenpos.eatinorders.model.OrderLineItem;
 import kitchenpos.eatinorders.model.OrderStatus;
 import kitchenpos.eatinorders.model.OrderTable;
 import kitchenpos.menus.dao.MenuDao;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -20,18 +21,18 @@ import java.util.stream.Collectors;
 
 @Component
 public class OrderBo {
-    private final MenuDao menuDao;
+    private final MenuRepository menuRepository;
     private final OrderDao orderDao;
     private final OrderLineItemDao orderLineItemDao;
     private final OrderTableDao orderTableDao;
 
     public OrderBo(
-            final MenuDao menuDao,
+            final MenuRepository menuRepository,
             final OrderDao orderDao,
             final OrderLineItemDao orderLineItemDao,
             final OrderTableDao orderTableDao
     ) {
-        this.menuDao = menuDao;
+        this.menuRepository = menuRepository;
         this.orderDao = orderDao;
         this.orderLineItemDao = orderLineItemDao;
         this.orderTableDao = orderTableDao;
@@ -49,7 +50,7 @@ public class OrderBo {
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList());
 
-        if (orderLineItems.size() != menuDao.countByIdIn(menuIds)) {
+        if (orderLineItems.size() != menuRepository.findAllById(menuIds).size()) {
             throw new IllegalArgumentException();
         }
 

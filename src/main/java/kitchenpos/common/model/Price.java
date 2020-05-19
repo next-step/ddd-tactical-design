@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,8 +9,9 @@ import org.springframework.lang.NonNull;
 
 @Embeddable
 @Access(AccessType.FIELD)
-public class Price {
+public class Price implements Comparable<Price> {
 
+    public static final Price ZERO = Price.of(BigDecimal.ZERO);
     private BigDecimal value;
 
     protected Price() {
@@ -36,6 +37,10 @@ public class Price {
     public Price multiply(BigDecimal val) {
         return Price.of(this.value.multiply(val));
     }
+    
+    public Price add(Price price){
+        return Price.of(this.value.add(price.value));
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -52,5 +57,10 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public int compareTo(Price o) {
+        return this.value.compareTo(o.value);
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 import javax.persistence.Id;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.core.ParameterizedTypeReference;
@@ -83,7 +84,15 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
 
     @Override
     public List<T> findAllById(Iterable<ID> ids) {
-        return null;
+        List<T> list = new ArrayList<>();
+
+        ids.forEach(id -> {
+            if(entities.containsKey(id)){
+                list.add(entities.get(id));
+            }
+        });
+
+        return list;
     }
 
     @Override
@@ -133,7 +142,7 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
 
     @Override
     public boolean existsById(ID id) {
-        return false;
+        return entities.containsKey(id);
     }
 
     @Override

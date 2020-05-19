@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuGroupBoTest {
-    private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
+    /*private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
 
     private MenuGroupBo menuGroupBo;
 
@@ -54,5 +54,5 @@ class MenuGroupBoTest {
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
-    }
+    }*/
 }

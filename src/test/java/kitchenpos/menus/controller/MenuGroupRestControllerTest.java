@@ -2,6 +2,7 @@ package kitchenpos.menus.controller;
 
 import kitchenpos.menus.bo.MenuGroupBo;
 import kitchenpos.menus.model.MenuGroup;
+import kitchenpos.menus.model.MenuGroupCreateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
@@ -35,7 +36,7 @@ class MenuGroupRestControllerTest {
     @Test
     void create() throws Exception {
         // given
-        given(menuGroupBo.create(any(MenuGroup.class))).willReturn(twoChickens());
+        given(menuGroupBo.create(any(MenuGroupCreateRequest.class))).willReturn(twoChickens());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/menu-groups")
