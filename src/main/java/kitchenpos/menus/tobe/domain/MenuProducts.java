@@ -26,13 +26,10 @@ public class MenuProducts {
         return new ArrayList<>(menuProducts);
     }
 
-    Price computePriceSum() {
+    Price computeMenuProductsPriceSum() {
         return menuProducts.stream()
-            .map(menuProduct -> menuProduct.priceSum())
+            .map(menuProduct -> menuProduct.computePriceSum())
             .reduce(Price.ZERO, Price::add);
     }
 
-    public void add(MenuProduct menuProduct) {
-        this.menuProducts.add(menuProduct);
-    }
 }

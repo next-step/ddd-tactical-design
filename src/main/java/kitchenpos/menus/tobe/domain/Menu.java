@@ -50,12 +50,8 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public void addMenuProduct(MenuProduct menuProduct) {
-        menuProducts.add(menuProduct);
-    }
-
     public Price computeMenuProductsPriceSum() {
-        return menuProducts.computePriceSum();
+        return menuProducts.computeMenuProductsPriceSum();
     }
 
     public Long getId() {

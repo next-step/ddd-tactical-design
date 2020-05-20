@@ -12,8 +12,6 @@ import kitchenpos.common.model.Price;
 @Access(AccessType.FIELD)
 public class MenuProduct {
 
-    //private Long seq;
-    //private Long menuId;
     private long productId;
     private long quantity;
 
@@ -41,7 +39,7 @@ public class MenuProduct {
         return quantity;
     }
 
-    Price priceSum() {
+    Price computePriceSum() {
         return productPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
