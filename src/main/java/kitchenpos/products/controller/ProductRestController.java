@@ -1,7 +1,7 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.bo.ProductBo;
-import kitchenpos.products.model.Product;
+import kitchenpos.products.tobe.domain.application.ProductService;
+import kitchenpos.products.tobe.domain.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,15 +13,15 @@ import java.util.List;
 
 @RestController
 public class ProductRestController {
-    private final ProductBo productBo;
+    private final ProductService productService;
 
-    public ProductRestController(final ProductBo productBo) {
-        this.productBo = productBo;
+    public ProductRestController(ProductService productService) {
+        this.productService = productService;
     }
 
     @PostMapping("/api/products")
     public ResponseEntity<Product> create(@RequestBody final Product product) {
-        final Product created = productBo.create(product);
+        final Product created = productService.create(product);
         final URI uri = URI.create("/api/products/" + created.getId());
         return ResponseEntity.created(uri)
                 .body(created)
@@ -31,7 +31,7 @@ public class ProductRestController {
     @GetMapping("/api/products")
     public ResponseEntity<List<Product>> list() {
         return ResponseEntity.ok()
-                .body(productBo.list())
+                .body(productService.list())
                 ;
     }
 }
