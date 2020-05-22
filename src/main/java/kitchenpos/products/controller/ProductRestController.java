@@ -3,6 +3,7 @@ package kitchenpos.products.controller;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.controller.request.CreateProductRequest;
 import kitchenpos.products.tobe.controller.response.CreateProductResponse;
+import kitchenpos.products.tobe.controller.response.GetProductResponse;
 import kitchenpos.products.tobe.domain.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductRestController {
@@ -31,9 +33,11 @@ public class ProductRestController {
     }
 
     @GetMapping("/api/products")
-    public ResponseEntity<List<Product>> list() {
+    public ResponseEntity<List<GetProductResponse>> list() {
         return ResponseEntity.ok()
-                .body(productService.list())
+                .body(productService.list().stream().map(p -> {
+                    return GetProductResponse.of(p);
+                }).collect(Collectors.toList()))
                 ;
     }
 }
