@@ -15,8 +15,18 @@ public class Product {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    @Column(name = "price", nullable = false, precision = 19, scale = 2)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
+
+    public Product() {
+        // Needed by Hibernate
+    }
+
+    public Product(final Long id, final String name, final BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = Price.of(price);
+    }
 
     public Long getId() {
         return id;
@@ -26,7 +36,7 @@ public class Product {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 }
