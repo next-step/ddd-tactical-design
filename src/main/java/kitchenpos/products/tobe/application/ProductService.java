@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.products.tobe.controller.request.CreateProductRequest;
 import kitchenpos.products.tobe.domain.model.Price;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -17,7 +18,8 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product product) {
+    public Product create(final CreateProductRequest productRequest) {
+        Product product = productRequest.toProduct();
         final Price price = product.getPrice();
 
         if (Price.isPositiveValue(price.getPrice())) {
