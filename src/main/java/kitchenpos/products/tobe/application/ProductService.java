@@ -22,7 +22,7 @@ public class ProductService {
         Product product = productRequest.toProduct();
         final Price price = product.getPrice();
 
-        if (Price.isPositiveValue(price.getPrice())) {
+        if (!Price.isPositiveValue(price.getPrice())) {
             throw new IllegalArgumentException();
         }
 
