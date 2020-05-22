@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.application;
+package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.tobe.domain.model.Price;
 import kitchenpos.products.tobe.domain.model.Product;

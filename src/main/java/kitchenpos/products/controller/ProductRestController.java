@@ -1,6 +1,6 @@
 package kitchenpos.products.controller;
 
-import kitchenpos.products.tobe.domain.application.ProductService;
+import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
