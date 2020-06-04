@@ -26,19 +26,19 @@ public class Price implements Comparable<Price> {
         this.value = value;
     }
 
-    public BigDecimal getValue() {
-        return this.value;
-    }
-
     public static Price of(BigDecimal price) {
         return new Price(price);
+    }
+
+    public BigDecimal getValue() {
+        return this.value;
     }
 
     public Price multiply(BigDecimal val) {
         return Price.of(this.value.multiply(val));
     }
-    
-    public Price add(Price price){
+
+    public Price add(Price price) {
         return Price.of(this.value.add(price.value));
     }
 

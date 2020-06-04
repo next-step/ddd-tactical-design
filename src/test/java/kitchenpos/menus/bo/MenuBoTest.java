@@ -1,11 +1,21 @@
 package kitchenpos.menus.bo;
 
-import java.util.function.Consumer;
+import static kitchenpos.menus.Fixtures.twoChickens;
+import static kitchenpos.menus.Fixtures.twoFriedChickens;
+import static kitchenpos.menus.Fixtures.twoFriedChickensRequest;
+import static kitchenpos.products.Fixtures.friedChicken;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import kitchenpos.menus.model.MenuCreateRequest;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.infra.MenuProductServiceAdapter;
 import kitchenpos.products.bo.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -15,18 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-
-import static kitchenpos.menus.Fixtures.twoChickens;
-import static kitchenpos.menus.Fixtures.twoFriedChickens;
-import static kitchenpos.menus.Fixtures.twoFriedChickensRequest;
-import static kitchenpos.products.Fixtures.friedChicken;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuBoTest {
 
@@ -69,7 +67,8 @@ class MenuBoTest {
         createRequest.setPrice(price);
 
         // when, then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> menuBo.create(createRequest));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> menuBo.create(createRequest));
 
     }
 
@@ -109,16 +108,17 @@ class MenuBoTest {
 
         );
 
-        int requestProductSize =  request.getMenuProducts().size();
+        int requestProductSize = request.getMenuProducts().size();
         for (int i = 0; i < requestProductSize; i++) {
             MenuCreateRequest.MenuProduct requestMenuProduct = request.getMenuProducts().get(i);
             MenuProduct menuProduct = actual.getMenuProducts().getMenuProducts().get(i);
             assertAll(
-                ()->assertThat(requestMenuProduct.getProductId()).isEqualTo(menuProduct.getProductId()),
-                ()->assertThat(requestMenuProduct.getQuantity()).isEqualTo(menuProduct.getQuantity())
+                () -> assertThat(requestMenuProduct.getProductId())
+                    .isEqualTo(menuProduct.getProductId()),
+                () -> assertThat(requestMenuProduct.getQuantity())
+                    .isEqualTo(menuProduct.getQuantity())
             );
         }
-
 
 
     }

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import java.math.BigDecimal;
 import javax.persistence.AttributeOverride;
@@ -33,21 +33,30 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(String name, BigDecimal price, Long menuGroupId, MenuProducts menuProducts) {
-        this(null, name, Price.of(price), menuGroupId, menuProducts);
-    }
+    private Menu(Long id, String name, Price price, Long menuGroupId, MenuProducts menuProducts) {
+        validatePrice(price, menuProducts);
 
-    public Menu(Long id, String name, BigDecimal price, Long menuGroupId,
-        MenuProducts menuProducts) {
-        this(id, name, Price.of(price), menuGroupId, menuProducts);
-    }
-
-    public Menu(Long id, String name, Price price, Long menuGroupId, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
+    }
+
+    public static Menu of(String name, BigDecimal price, Long menuGroupId,
+        MenuProducts menuProducts) {
+        return Menu.of(null, name, price, menuGroupId, menuProducts);
+    }
+
+    public static Menu of(Long id, String name, BigDecimal price, Long menuGroupId,
+        MenuProducts menuProducts) {
+        return new Menu(id, name, Price.of(price), menuGroupId, menuProducts);
+    }
+
+    private void validatePrice(Price price, MenuProducts menuProducts) {
+        if (price.compareTo(menuProducts.computeMenuProductsPriceSum()) > 0) {
+            throw new IllegalArgumentException("price를 확인해주세요.");
+        }
     }
 
     public Price computeMenuProductsPriceSum() {

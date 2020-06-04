@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import kitchenpos.menus.bo.MenuGroupBo;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
 import kitchenpos.menus.model.MenuGroupView;
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.group.MenuGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -8,13 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.Arrays;
 import java.util.List;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.group.MenuGroup;
+import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MenuGroupBoTest {
+
     private final MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
 
     private MenuGroupBo menuGroupBo;
@@ -55,7 +56,7 @@ class MenuGroupBoTest {
     private void assertMenuGroup(final MenuGroupCreateRequest expected, final MenuGroup actual) {
         assertThat(actual).isNotNull();
         assertAll(
-                () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
 }

@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Consumer;
-import javax.persistence.Id;
-import kitchenpos.products.tobe.domain.Product;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +19,7 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
 
     private final Map<ID, T> entities = new HashMap<>();
     private final AtomicLong atomicLong = new AtomicLong();
-    private Class entityType;
+    private Class<T> entityType;
 
     public AbstractInMemoryJpaRepository() {
 
@@ -60,7 +56,7 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
         List<T> list = new ArrayList<>();
 
         ids.forEach(id -> {
-            if(entities.containsKey(id)){
+            if (entities.containsKey(id)) {
                 list.add(entities.get(id));
             }
         });
@@ -179,7 +175,7 @@ public abstract class AbstractInMemoryJpaRepository<T, ID> implements JpaReposit
             Field id = entityType.getDeclaredField("id");
             id.setAccessible(true);
 
-            if(id.get(entity) != null){
+            if (id.get(entity) != null) {
                 return;
             }
             id.set(entity, atomicLong.incrementAndGet());

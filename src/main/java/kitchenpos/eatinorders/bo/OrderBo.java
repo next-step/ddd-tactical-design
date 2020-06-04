@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.model.Order;
 import kitchenpos.eatinorders.model.OrderLineItem;
 import kitchenpos.eatinorders.model.OrderStatus;
 import kitchenpos.eatinorders.model.OrderTable;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

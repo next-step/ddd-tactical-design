@@ -6,12 +6,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import kitchenpos.common.model.Price;
 import kitchenpos.menus.model.MenuCreateRequest;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProductService;
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProductService;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,6 @@ public class MenuBo {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final MenuProductService menuProductService;
-
 
     public MenuBo(
         MenuRepository menuRepository,
@@ -45,12 +44,6 @@ public class MenuBo {
         }
 
         Menu menu = map(menuCreateRequest);
-
-        Price menuProductsPriceSum = menu.computeMenuProductsPriceSum();
-        if (Price.of(price).compareTo(menuProductsPriceSum) > 0) {
-            throw new IllegalArgumentException();
-        }
-
         menuRepository.save(menu);
         return menu;
     }
@@ -65,7 +58,7 @@ public class MenuBo {
                 .getMenuProduct(product.getProductId(), product.getQuantity()))
             .collect(Collectors.toList());
 
-        return new Menu(
+        return Menu.of(
             menuCreateRequest.getName(),
             menuCreateRequest.getPrice(),
             menuCreateRequest.getMenuGroupId(),

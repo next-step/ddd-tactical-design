@@ -1,23 +1,23 @@
 package kitchenpos.menus;
 
-import kitchenpos.common.model.Price;
-import kitchenpos.menus.model.MenuCreateRequest;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
+import kitchenpos.menus.model.MenuCreateRequest;
 import kitchenpos.menus.model.MenuGroupCreateRequest;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.domain.group.MenuGroup;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 
 public class Fixtures {
+
     public static final Long TWO_FRIED_CHICKENS_ID = 1L;
     public static final Long TWO_CHICKENS_ID = 1L;
     public static final Long FRIED_CHICKEN_ID = 1L;
 
     public static Menu twoFriedChickens() {
-        return new Menu(TWO_FRIED_CHICKENS_ID, "후라이드+후라이드", BigDecimal.valueOf(19_000L),  TWO_CHICKENS_ID,  new MenuProducts(Arrays.asList(menuProduct())));
+        return Menu.of(TWO_FRIED_CHICKENS_ID, "후라이드+후라이드", BigDecimal.valueOf(19_000L),
+            TWO_CHICKENS_ID, new MenuProducts(Arrays.asList(menuProduct())));
     }
 
     public static MenuCreateRequest twoFriedChickensRequest() {

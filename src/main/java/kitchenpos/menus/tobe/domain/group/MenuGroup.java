@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.group;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,8 +18,6 @@ public class MenuGroup {
 
     protected MenuGroup() {
     }
-
-    ;
 
     public MenuGroup(String name) {
         this.name = name;

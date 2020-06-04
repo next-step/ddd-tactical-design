@@ -1,9 +1,9 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.group;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MenuRepository extends JpaRepository<Menu, Long> {
+public interface MenuGroupRepository extends JpaRepository<MenuGroup, Long> {
 
 }
