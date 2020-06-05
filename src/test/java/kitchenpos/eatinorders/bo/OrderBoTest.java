@@ -5,8 +5,8 @@ import kitchenpos.eatinorders.dao.OrderLineItemDao;
 import kitchenpos.eatinorders.dao.OrderTableDao;
 import kitchenpos.eatinorders.model.Order;
 import kitchenpos.eatinorders.model.OrderStatus;
-import kitchenpos.menus.bo.InMemoryMenuDao;
-import kitchenpos.menus.dao.MenuDao;
+import kitchenpos.menus.bo.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderBoTest {
-    private final MenuDao menuDao = new InMemoryMenuDao();
+    private final MenuRepository menuRepository = new InMemoryMenuRepository();
     private final OrderDao orderDao = new InMemoryOrderDao();
     private final OrderLineItemDao orderLineItemDao = new InMemoryOrderLineItemDao();
     private final OrderTableDao orderTableDao = new InMemoryOrderTableDao();
@@ -32,8 +32,8 @@ class OrderBoTest {
 
     @BeforeEach
     void setUp() {
-        orderBo = new OrderBo(menuDao, orderDao, orderLineItemDao, orderTableDao);
-        menuDao.save(twoFriedChickens());
+        orderBo = new OrderBo(menuRepository, orderDao, orderLineItemDao, orderTableDao);
+        menuRepository.save(twoFriedChickens());
         orderTableDao.save(table1());
     }
 

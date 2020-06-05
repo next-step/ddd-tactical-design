@@ -1,9 +1,22 @@
 package kitchenpos.menus.bo;
 
-import kitchenpos.menus.dao.MenuDao;
-import kitchenpos.menus.dao.MenuGroupDao;
-import kitchenpos.menus.dao.MenuProductDao;
-import kitchenpos.menus.model.Menu;
+import static kitchenpos.menus.Fixtures.twoChickens;
+import static kitchenpos.menus.Fixtures.twoFriedChickens;
+import static kitchenpos.menus.Fixtures.twoFriedChickensRequest;
+import static kitchenpos.products.Fixtures.friedChicken;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import kitchenpos.menus.model.MenuCreateRequest;
+import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.infra.MenuProductFactoryAdapter;
 import kitchenpos.products.bo.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,29 +26,21 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-
-import static kitchenpos.menus.Fixtures.twoChickens;
-import static kitchenpos.menus.Fixtures.twoFriedChickens;
-import static kitchenpos.products.Fixtures.friedChicken;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class MenuBoTest {
-    private final MenuDao menuDao = new InMemoryMenuDao();
-    private final MenuGroupDao menuGroupDao = new InMemoryMenuGroupDao();
-    private final MenuProductDao menuProductDao = new InMemoryMenuProductDao();
-    private final ProductRepository productRepository = new InMemoryProductRepository();
 
     private MenuBo menuBo;
+    private MenuGroupRepository menuGroupRepository;
+    private MenuRepository menuRepository;
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        menuBo = new MenuBo(menuDao, menuGroupDao, menuProductDao, productRepository);
-        menuGroupDao.save(twoChickens());
+        menuBo = new MenuBo(
+            menuRepository = new InMemoryMenuRepository(),
+            menuGroupRepository = new InMemoryMenuGroupRepository(),
+            new MenuProductFactoryAdapter(productRepository = new InMemoryProductRepository())
+        );
+        menuGroupRepository.save(twoChickens());
         productRepository.save(friedChicken());
     }
 
@@ -43,13 +48,13 @@ class MenuBoTest {
     @Test
     void create() {
         // given
-        final Menu expected = twoFriedChickens();
+        final MenuCreateRequest createRequest = twoFriedChickensRequest();
 
         // when
-        final Menu actual = menuBo.create(expected);
+        final Menu actual = menuBo.create(createRequest);
 
         // then
-        assertMenu(expected, actual);
+        assertCreatedMenu(createRequest, actual);
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")
@@ -58,12 +63,13 @@ class MenuBoTest {
     @ValueSource(strings = {"-1000", "33000"})
     void create(final BigDecimal price) {
         // given
-        final Menu expected = twoFriedChickens();
-        expected.setPrice(price);
+        final MenuCreateRequest createRequest = twoFriedChickensRequest();
+        createRequest.setPrice(price);
 
-        // when
-        // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> menuBo.create(expected));
+        // when, then
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> menuBo.create(createRequest));
+
     }
 
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
@@ -71,19 +77,20 @@ class MenuBoTest {
     @NullSource
     void create(final Long menuGroupId) {
         // given
-        final Menu expected = twoFriedChickens();
-        expected.setMenuGroupId(menuGroupId);
+        final MenuCreateRequest request = twoFriedChickensRequest();
+        request.setMenuGroupId(menuGroupId);
 
         // when
         // then
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> menuBo.create(expected));
+        assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() -> menuBo.create(request));
     }
 
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
     @Test
     void list() {
         // given
-        final Menu twoFriedChickens = menuDao.save(twoFriedChickens());
+        final Menu twoFriedChickens = menuRepository.save(twoFriedChickens());
 
         // when
         final List<Menu> actual = menuBo.list();
@@ -92,14 +99,27 @@ class MenuBoTest {
         assertThat(actual).containsExactlyInAnyOrderElementsOf(Arrays.asList(twoFriedChickens));
     }
 
-    private void assertMenu(final Menu expected, final Menu actual) {
+    private void assertCreatedMenu(final MenuCreateRequest request, final Menu actual) {
         assertThat(actual).isNotNull();
         assertAll(
-                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-                () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
-                () -> assertThat(actual.getMenuProducts())
-                        .containsExactlyInAnyOrderElementsOf(expected.getMenuProducts())
+            () -> assertThat(actual.getName()).isEqualTo(request.getName()),
+            () -> assertThat(actual.getPrice().getValue()).isEqualTo(request.getPrice()),
+            () -> assertThat(actual.getMenuGroupId()).isEqualTo(request.getMenuGroupId())
+
         );
+
+        int requestProductSize = request.getMenuProducts().size();
+        for (int i = 0; i < requestProductSize; i++) {
+            MenuCreateRequest.MenuProduct requestMenuProduct = request.getMenuProducts().get(i);
+            MenuProduct menuProduct = actual.getMenuProducts().getMenuProducts().get(i);
+            assertAll(
+                () -> assertThat(requestMenuProduct.getProductId())
+                    .isEqualTo(menuProduct.getProductId()),
+                () -> assertThat(requestMenuProduct.getQuantity())
+                    .isEqualTo(menuProduct.getQuantity())
+            );
+        }
+
+
     }
 }

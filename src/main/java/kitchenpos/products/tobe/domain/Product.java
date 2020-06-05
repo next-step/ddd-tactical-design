@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import java.math.BigDecimal;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.common.model.Price;
 
 @Entity
 @Table(name = "product")

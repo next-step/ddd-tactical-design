@@ -1,9 +1,10 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.math.BigDecimal;
+import kitchenpos.common.model.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -19,7 +20,7 @@ class PriceTest {
             .isThrownBy(() -> Price.of(price));
     }
 
-    @DisplayName("가격이 음수일경우 예외가 발생한다.")
+    @DisplayName("price는 곱셉 연산을 지원한다.")
     @ParameterizedTest
     @CsvSource(
         value = {
