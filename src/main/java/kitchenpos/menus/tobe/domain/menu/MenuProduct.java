@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import kitchenpos.common.model.Price;
@@ -12,8 +14,7 @@ import kitchenpos.common.model.Price;
 @Access(AccessType.FIELD)
 public class MenuProduct {
 
-    private long productId;
-    private long quantity;
+    private ProductQuantity productQuantity;
 
     @Transient
     private Price productPrice;
@@ -21,26 +22,25 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(Long productId, long quantity, Price productPrice) {
-        this.productId = productId;
-        this.quantity = quantity;
+    public MenuProduct(Long productId, long quantity, BigDecimal productPrice) {
+        this(ProductQuantity.of(productId, quantity), Price.of(productPrice));
+    }
+
+    public MenuProduct(ProductQuantity productQuantity, Price productPrice) {
+        this.productQuantity = productQuantity;
         this.productPrice = productPrice;
     }
 
-    public MenuProduct(Long productId, long quantity, BigDecimal productPrice) {
-        this(productId, quantity, Price.of(productPrice));
-    }
-
     public Long getProductId() {
-        return productId;
+        return productQuantity.getProductId();
     }
 
     public long getQuantity() {
-        return quantity;
+        return productQuantity.getQuantity();
     }
 
     Price computePriceSum() {
-        return productPrice.multiply(BigDecimal.valueOf(quantity));
+        return productPrice.multiply(BigDecimal.valueOf(productQuantity.getQuantity()));
     }
 
     @Override
@@ -52,12 +52,12 @@ public class MenuProduct {
             return false;
         }
         MenuProduct that = (MenuProduct) o;
-        return quantity == that.quantity &&
-            Objects.equals(productId, that.productId);
+        return Objects.equals(productQuantity, that.productQuantity) &&
+            Objects.equals(productPrice, that.productPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, quantity);
+        return Objects.hash(productQuantity, productPrice);
     }
 }

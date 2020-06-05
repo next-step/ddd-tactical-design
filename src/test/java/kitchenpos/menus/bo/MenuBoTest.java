@@ -16,7 +16,7 @@ import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.menus.tobe.infra.MenuProductServiceAdapter;
+import kitchenpos.menus.tobe.infra.MenuProductFactoryAdapter;
 import kitchenpos.products.bo.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class MenuBoTest {
         menuBo = new MenuBo(
             menuRepository = new InMemoryMenuRepository(),
             menuGroupRepository = new InMemoryMenuGroupRepository(),
-            new MenuProductServiceAdapter(productRepository = new InMemoryProductRepository())
+            new MenuProductFactoryAdapter(productRepository = new InMemoryProductRepository())
         );
         menuGroupRepository.save(twoChickens());
         productRepository.save(friedChicken());

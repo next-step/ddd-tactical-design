@@ -31,5 +31,4 @@ public class MenuProducts {
             .map(menuProduct -> menuProduct.computePriceSum())
             .reduce(Price.ZERO, Price::add);
     }
-
 }

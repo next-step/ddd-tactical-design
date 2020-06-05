@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import kitchenpos.common.model.Price;
 import kitchenpos.menus.model.MenuCreateRequest;
-import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.model.MenuCreateRequest.MenuProduct;
 import kitchenpos.menus.tobe.domain.group.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.MenuProductService;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProductFactory;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.ProductQuantity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +20,15 @@ public class MenuBo {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuProductService menuProductService;
+    private final MenuProductFactory menuProductFactory;
 
     public MenuBo(
         MenuRepository menuRepository,
         MenuGroupRepository menuGroupRepository,
-        MenuProductService menuProductService) {
+        MenuProductFactory menuProductFactory) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.menuProductService = menuProductService;
+        this.menuProductFactory = menuProductFactory;
     }
 
     @Transactional
@@ -53,16 +53,20 @@ public class MenuBo {
     }
 
     private Menu map(MenuCreateRequest menuCreateRequest) {
-        List<MenuProduct> menuProducts = menuCreateRequest.getMenuProducts().stream()
-            .map(product -> menuProductService
-                .getMenuProduct(product.getProductId(), product.getQuantity()))
-            .collect(Collectors.toList());
-
         return Menu.of(
             menuCreateRequest.getName(),
             menuCreateRequest.getPrice(),
             menuCreateRequest.getMenuGroupId(),
-            new MenuProducts((menuProducts))
+            map(menuCreateRequest.getMenuProducts())
         );
+    }
+
+    private MenuProducts map(List<MenuProduct> menuCreateRequest) {
+        List<ProductQuantity> productQuantities = menuCreateRequest.stream()
+            .map(menuProduct -> ProductQuantity
+                .of(menuProduct.getProductId(), menuProduct.getQuantity()))
+            .collect(Collectors.toList());
+
+        return new MenuProducts(menuProductFactory.getMenuProducts(productQuantities));
     }
 }
