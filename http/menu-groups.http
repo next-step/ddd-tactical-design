@@ -8,5 +8,3 @@ Content-Type: application/json
 
 ###
 GET {{host}}/api/menu-groups
-
-###

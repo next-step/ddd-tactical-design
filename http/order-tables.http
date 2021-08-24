@@ -1,0 +1,24 @@
+###
+POST {{host}}/api/order-tables
+Content-Type: application/json
+
+{
+  "name": "9번"
+}
+
+###
+PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/sit
+
+###
+PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/clear
+
+###
+PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/number-of-guests
+Content-Type: application/json
+
+{
+  "numberOfGuests": 4
+}
+
+###
+GET {{host}}/api/order-tables

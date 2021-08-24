@@ -3,32 +3,31 @@ POST {{host}}/api/orders
 Content-Type: application/json
 
 {
-  "orderTableId": 1,
+  "type": "EAT_IN",
+  "orderTableId": "8d710043-29b6-420e-8452-233f5a035520",
   "orderLineItems": [
     {
-      "menuId": 1,
-      "quantity": 1
+      "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
+      "price": 16000,
+      "quantity": 3
     }
   ]
 }
 
 ###
+PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/accept
+
+###
+PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/serve
+
+###
+PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/start-delivery
+
+###
+PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete-delivery
+
+###
+PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete
+
+###
 GET {{host}}/api/orders
-
-###
-PUT {{host}}/api/orders/1/order-status
-Content-Type: application/json
-
-{
-  "orderStatus": "MEAL"
-}
-
-###
-PUT {{host}}/api/orders/1/order-status
-Content-Type: application/json
-
-{
-  "orderStatus": "COMPLETION"
-}
-
-###
