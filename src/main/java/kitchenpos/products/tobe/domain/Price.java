@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Table(name = "price")
 @Entity
-public class Price {
+public class Price implements Comparable {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -33,12 +33,14 @@ public class Price {
         return _price;
     }
 
-    public void add(Price price) {
+    public Price add(Price price) {
         _price = _price.add(price._price);
+        return this;
     }
 
-    public void multiply(Quantity quantity) {
+    public Price multiply(Quantity quantity) {
         _price = _price.multiply(BigDecimal.valueOf(quantity.count()));
+        return this;
     }
 
     @Override
@@ -57,5 +59,11 @@ public class Price {
     @Override
     public int hashCode() {
         return _price.hashCode();
+    }
+
+    @Override
+    public int compareTo(final Object o) {
+        Price price = (Price) o;
+        return _price.compareTo(price._price);
     }
 }

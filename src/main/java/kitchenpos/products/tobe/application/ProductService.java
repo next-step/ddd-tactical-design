@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Menu;
 import kitchenpos.products.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,14 @@ public class ProductService {
 
     @Transactional
     public ProductDTO changePrice(final UUID productId, final ProductDTO request) {
-        return null;
+        Product product = productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new);
+        product.changePrice(request.getPrice());
+
+        List<Menu> menus = menuRepository.findAllByProductId(productId);
+        menus.forEach(Menu::comparePriceToMenuProductsAndHideIfOver);
+
+        return new ProductDTO(product);
     }
 
     @Transactional(readOnly = true)

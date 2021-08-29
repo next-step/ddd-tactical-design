@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,12 @@ public class MenuProducts {
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;
+    }
+
+    public Price calculateTotalPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::calculatePrice)
+                .reduce(new Price(BigDecimal.ZERO), Price::add);
     }
 
     public boolean hasProduct(final UUID productId) {

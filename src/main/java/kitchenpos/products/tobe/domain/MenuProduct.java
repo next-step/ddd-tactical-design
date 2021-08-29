@@ -35,6 +35,11 @@ public class MenuProduct {
         return product;
     }
 
+    public Price calculatePrice() {
+        Price price = new Price(product.offerPrice());
+        return price.multiply(quantity);
+    }
+
     public boolean hasProduct(final UUID productId) {
         return product.equals(productId);
     }

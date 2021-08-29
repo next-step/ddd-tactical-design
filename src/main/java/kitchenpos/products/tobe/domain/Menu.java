@@ -40,7 +40,11 @@ public class Menu {
         return displayed;
     }
 
-    public void comparePriceWithMenuProductsAndHideIfOver() {
+    public void comparePriceToMenuProductsAndHideIfOver() {
+        Price totalPrice = menuProducts.calculateTotalPrice();
+        if (price.compareTo(totalPrice) > 0) {
+            displayed = false;
+        }
     }
 
     public boolean hasProduct(final UUID productId) {
