@@ -2,12 +2,18 @@ package kitchenpos.products.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Price {
 
     private static final int ZERO = 0;
 
     private final BigDecimal value;
+
+    protected Price() {
+        value = BigDecimal.ZERO;
+    }
 
     private Price(final BigDecimal value) {
         this.value = value;

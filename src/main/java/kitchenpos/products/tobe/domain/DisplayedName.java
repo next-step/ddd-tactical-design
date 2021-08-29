@@ -1,10 +1,20 @@
 package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class DisplayedName {
 
+    private static final String EMPTY_NAME = "";
+
+    @Column
     private final String name;
+
+    protected DisplayedName() {
+        name = EMPTY_NAME;
+    }
 
     public DisplayedName(final String name) {
         this.name = name;
