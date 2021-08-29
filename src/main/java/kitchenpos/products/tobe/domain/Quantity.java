@@ -23,7 +23,7 @@ public class Quantity {
     }
 
     private void validate(final long quantity) {
-        if (quantity >= 0L) {
+        if (quantity < 0L) {
             throw new IllegalArgumentException();
         }
     }
