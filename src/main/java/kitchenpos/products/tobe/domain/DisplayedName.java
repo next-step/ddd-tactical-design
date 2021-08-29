@@ -8,16 +8,14 @@ import kitchenpos.products.infra.PurgomalumClient;
 @Embeddable
 public class DisplayedName {
 
-    private static final String EMPTY_NAME = "";
-
     @Column
-    private final String name;
+    private String name;
 
     protected DisplayedName() {
-        name = EMPTY_NAME;
     }
 
     public DisplayedName(final String name) {
+        validateName(name);
         this.name = name;
     }
 
@@ -42,8 +40,14 @@ public class DisplayedName {
         return Objects.hash(name);
     }
 
+    public void validateName(final String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void validateName(final PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(name)){
+        if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
     }
