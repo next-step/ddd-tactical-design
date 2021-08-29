@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.products.infra.PurgomalumClient;
 
 @Embeddable
 public class DisplayedName {
@@ -39,5 +40,11 @@ public class DisplayedName {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public void validateName(final PurgomalumClient purgomalumClient) {
+        if (purgomalumClient.containsProfanity(name)){
+            throw new IllegalArgumentException();
+        }
     }
 }

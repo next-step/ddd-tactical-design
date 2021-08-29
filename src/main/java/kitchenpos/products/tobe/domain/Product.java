@@ -1,11 +1,13 @@
 package kitchenpos.products.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.products.infra.PurgomalumClient;
 
 @Table(name = "product")
 @Entity
@@ -22,4 +24,35 @@ public class Product {
     @Column(name = "price", nullable = false)
     @Embedded
     private Price price;
+
+    protected Product() {
+
+    }
+
+    public Product(final String name, final int price) {
+        this(name, BigDecimal.valueOf(price));
+    }
+
+    public Product(final String name, final Long price) {
+        this(name, BigDecimal.valueOf(price));
+    }
+
+    public Product(final String name, final BigDecimal price) {
+        this.id = UUID.randomUUID();
+        this.name = new DisplayedName(name);
+        this.price = new Price(price);
+    }
+
+    public void validateName(final PurgomalumClient purgomalumClient) {
+        name.validateName(purgomalumClient);
+    }
+
+    public Product changePrice(final Price price) {
+        this.price = price;
+        return this;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
 }
