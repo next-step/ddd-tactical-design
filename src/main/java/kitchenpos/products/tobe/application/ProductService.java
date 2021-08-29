@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,8 @@ public class ProductService {
 
     @Transactional
     public ProductDTO create(final ProductDTO request) {
-        return null;
+        Product product = new Product(request.getName(), request.getPrice(), purgomalumClient::containsProfanity);
+        return new ProductDTO(productRepository.save(product));
     }
 
     @Transactional
