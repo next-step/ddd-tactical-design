@@ -15,24 +15,20 @@ public class Price {
         value = BigDecimal.ZERO;
     }
 
-    private Price(final BigDecimal value) {
+    public Price(final BigDecimal value) {
+        validate(value);
         this.value = value;
     }
 
-    public static Price of(final int value) {
-        return of(BigDecimal.valueOf(value));
+    public Price(final int value) {
+        this(BigDecimal.valueOf(value));
     }
 
-    public static Price of(final Long value) {
-        return of(BigDecimal.valueOf(value));
+    public Price(final Long value) {
+        this(BigDecimal.valueOf(value));
     }
 
-    public static Price of(final BigDecimal value) {
-        validate(value);
-        return new Price(value);
-    }
-
-    private static void validate(final BigDecimal value) {
+    private void validate(final BigDecimal value) {
         if (value.compareTo(BigDecimal.ZERO) < ZERO) {
             throw new IllegalArgumentException();
         }

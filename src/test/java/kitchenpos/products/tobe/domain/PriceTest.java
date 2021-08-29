@@ -14,7 +14,7 @@ class PriceTest {
     @ValueSource(longs = {-1, -1000, Long.MIN_VALUE})
     void exception(final long value) {
         assertThatThrownBy(
-            () -> Price.of(value)
+            () -> new Price(value)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -22,8 +22,8 @@ class PriceTest {
     @ParameterizedTest
     @ValueSource(longs = {0, 1, 1000, Long.MAX_VALUE})
     void equals(final long value) {
-        final Price price1 = Price.of(value);
-        final Price price2 = Price.of(value);
+        final Price price1 = new Price(value);
+        final Price price2 = new Price(value);
 
         assertThat(price1.equals(price2)).isTrue();
     }
