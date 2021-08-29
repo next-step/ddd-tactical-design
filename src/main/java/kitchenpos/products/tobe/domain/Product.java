@@ -14,11 +14,11 @@ public class Product {
     private UUID id;
 
     @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "displayed_name_id", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_displayed_name"))
+    @JoinColumn(name = "displayed_name_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_displayed_name"))
     private DisplayedName displayedName;
 
     @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "price_name_id", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_price"))
+    @JoinColumn(name = "price_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_price"))
     private Price price;
 
     public Product() {
@@ -44,6 +44,14 @@ public class Product {
 
     public void changePrice(final BigDecimal price) {
         this.price = new Price(price);
+    }
+
+    public boolean equals(final UUID id) {
+        if (Objects.isNull(id)) {
+            return false;
+        }
+
+        return this.id.equals(id);
     }
 
     @Override

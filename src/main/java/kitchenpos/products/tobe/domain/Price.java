@@ -13,14 +13,14 @@ public class Price {
     private Long seq;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private BigDecimal _price;
 
     public Price() {
     }
 
     public Price(final BigDecimal price) {
         validate(price);
-        this.price = price;
+        this._price = price;
     }
 
     private void validate(final BigDecimal price) {
@@ -30,7 +30,15 @@ public class Price {
     }
 
     public BigDecimal offer() {
-        return price;
+        return _price;
+    }
+
+    public void add(Price price) {
+        _price = _price.add(price._price);
+    }
+
+    public void multiply(Quantity quantity) {
+        _price = _price.multiply(BigDecimal.valueOf(quantity.count()));
     }
 
     @Override
@@ -42,12 +50,12 @@ public class Price {
             return false;
         }
 
-        final Price price1 = (Price) o;
-        return price.equals(price1.price);
+        final Price price = (Price) o;
+        return _price.equals(price._price);
     }
 
     @Override
     public int hashCode() {
-        return price.hashCode();
+        return _price.hashCode();
     }
 }
