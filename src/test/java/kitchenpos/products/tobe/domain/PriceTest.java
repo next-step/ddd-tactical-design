@@ -3,16 +3,27 @@ package kitchenpos.products.tobe.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class PriceTest {
 
+    @DisplayName("상품의 가격이 null이면 예외가 발생한다")
+    @ParameterizedTest
+    @NullSource
+    void priceNullException(final BigDecimal value) {
+        assertThatThrownBy(
+            () -> new Price(value)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
     @DisplayName("상품의 가격이 0 미만이면 예외가 발생한다")
     @ParameterizedTest
     @ValueSource(longs = {-1, -1000, Long.MIN_VALUE})
-    void exception(final long value) {
+    void priceNegativeException(final long value) {
         assertThatThrownBy(
             () -> new Price(value)
         ).isInstanceOf(IllegalArgumentException.class);

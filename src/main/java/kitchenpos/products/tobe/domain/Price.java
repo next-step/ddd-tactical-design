@@ -19,7 +19,7 @@ public class Price {
         this.value = value;
     }
 
-    public Price(final Long value) {
+    public Price(final long value) {
         this(BigDecimal.valueOf(value));
     }
 
