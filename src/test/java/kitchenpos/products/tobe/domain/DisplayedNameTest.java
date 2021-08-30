@@ -1,9 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
+import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
+import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.tobe.exception.WrongDisplayedNameExeption;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -17,7 +20,8 @@ class DisplayedNameTest {
     void wrongName(final String name) {
         assertThatThrownBy(
             () -> new DisplayedName(name)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(WrongDisplayedNameExeption.class)
+            .hasMessage(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
     }
 
     @DisplayName("올바른 이름으로 DisplayedName을 생성할 수 있다")
@@ -37,7 +41,8 @@ class DisplayedNameTest {
 
         assertThatThrownBy(
             () -> displayedName.validateProfanity(new FakePurgomalumClient())
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(WrongDisplayedNameExeption.class)
+            .hasMessage(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
     }
 
     @DisplayName("name이 같으면 equals의 결과도 같다")

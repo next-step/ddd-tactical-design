@@ -1,9 +1,13 @@
 package kitchenpos.products.tobe.domain;
 
+import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
+import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
+
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.exception.WrongDisplayedNameExeption;
 
 @Embeddable
 public class DisplayedName {
@@ -42,13 +46,13 @@ public class DisplayedName {
 
     public void validateName(final String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
     }
 
     public void validateProfanity(final PurgomalumClient purgomalumClient) {
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
         }
     }
 }
