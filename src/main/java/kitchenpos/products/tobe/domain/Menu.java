@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,11 +42,15 @@ public class Menu {
         return displayed;
     }
 
-    public void comparePriceToMenuProductsAndHideIfOver() {
-        Price totalPrice = menuProducts.calculateTotalPrice();
-        if (price.compareTo(totalPrice) > 0) {
+    public void comparePriceAndHideOrNotByProducts(final Map<UUID, Product> products) {
+        Price total = menuProducts.calculateTotalPrice(products);
+        if (price.compareTo(total) > 0) {
             displayed = false;
         }
+    }
+
+    public List<UUID> getProductIds() {
+        return menuProducts.getProductIds();
     }
 
     public boolean hasProduct(final UUID productId) {

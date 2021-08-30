@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class MenuProducts {
@@ -24,10 +25,16 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public Price calculateTotalPrice() {
+    public List<UUID> getProductIds() {
         return menuProducts.stream()
-                .map(MenuProduct::calculatePrice)
-                .reduce(new Price(BigDecimal.ZERO), Price::add);
+                .map(MenuProduct::getProductId)
+                .collect(Collectors.toList());
+    }
+
+    public Price calculateTotalPrice(final Map<UUID, Product> products) {
+        return menuProducts.stream()
+                .map(menuProduct -> menuProduct.calculatePrice(products))
+                .reduce(Price.getZero(), Price::add);
     }
 
     public boolean hasProduct(final UUID productId) {

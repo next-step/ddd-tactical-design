@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
+import java.util.Map;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -11,36 +12,32 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
 
     @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "quantity_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_menu_product_to_quantity"))
     private Quantity quantity;
 
-    public MenuProduct(final Product product, final Quantity quantity) {
-        this.product = product;
-        this.quantity = quantity;
-    }
-
     public MenuProduct() {
     }
 
-    public Product getProduct() {
-        return product;
+    public MenuProduct(final UUID productId, final Quantity quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
-    public Price calculatePrice() {
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public Price calculatePrice(final Map<UUID, Product> products) {
+        Product product = products.get(productId);
         Price price = new Price(product.offerPrice());
         return price.multiply(quantity);
     }
 
     public boolean hasProduct(final UUID productId) {
-        return product.equals(productId);
+        return this.productId.equals(productId);
     }
 }

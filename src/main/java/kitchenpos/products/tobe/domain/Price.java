@@ -23,6 +23,10 @@ public class Price implements Comparable {
         this._price = price;
     }
 
+    public static Price getZero() {
+        return new Price(BigDecimal.ZERO);
+    }
+
     private void validate(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();

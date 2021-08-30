@@ -1,32 +1,28 @@
 package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Menu;
-import kitchenpos.products.tobe.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ProductPriceChangeService productPriceChangeService;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient,
+            final ProductPriceChangeService productPriceChangeService
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.productPriceChangeService = productPriceChangeService;
     }
 
     @Transactional
@@ -37,13 +33,7 @@ public class ProductService {
 
     @Transactional
     public ProductDTO changePrice(final UUID productId, final ProductDTO request) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
-        product.changePrice(request.getPrice());
-
-        List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(Menu::comparePriceToMenuProductsAndHideIfOver);
-
+        Product product = productPriceChangeService.changePrice(productId, request.getPrice());
         return new ProductDTO(product);
     }
 
