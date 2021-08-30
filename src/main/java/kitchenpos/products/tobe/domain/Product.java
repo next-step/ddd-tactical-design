@@ -43,6 +43,14 @@ public class Product {
         this.price = new Price(price);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
     public void validateName(final PurgomalumClient purgomalumClient) {
         name.validateName(purgomalumClient);
     }
@@ -52,7 +60,4 @@ public class Product {
         return this;
     }
 
-    public Price getPrice() {
-        return price;
-    }
 }
