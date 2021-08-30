@@ -17,8 +17,10 @@ public class Product {
 	@Column(name = "id", columnDefinition = "varbinary(16)")
 	@Id
 	private UUID id;
+
 	@Embedded
 	private DisplayedName name;
+
 	@Embedded
 	private Price price;
 
