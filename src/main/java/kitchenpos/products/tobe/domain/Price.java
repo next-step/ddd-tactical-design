@@ -1,10 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
+import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NEGATIVE;
+import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NULL;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embeddable;
-import kitchenpos.products.tobe.exception.PriceNegativeException;
-import kitchenpos.products.tobe.exception.PriceNullException;
+import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
 public class Price {
@@ -27,10 +29,10 @@ public class Price {
 
     private void validate(final BigDecimal value) {
         if (Objects.isNull(value)) {
-            throw new PriceNullException();
+            throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NULL);
         }
         if (value.compareTo(BigDecimal.ZERO) < ZERO) {
-            throw new PriceNegativeException();
+            throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NEGATIVE);
         }
     }
 

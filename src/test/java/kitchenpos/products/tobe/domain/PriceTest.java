@@ -1,11 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
+import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NEGATIVE;
+import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NULL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
-import kitchenpos.products.tobe.exception.PriceNegativeException;
-import kitchenpos.products.tobe.exception.PriceNullException;
+import kitchenpos.products.tobe.exception.WrongPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -19,7 +20,8 @@ class PriceTest {
     void priceNullException(final BigDecimal value) {
         assertThatThrownBy(
             () -> new Price(value)
-        ).isInstanceOf(PriceNullException.class);
+        ).isInstanceOf(WrongPriceException.class)
+            .hasMessage(PRICE_SHOULD_NOT_BE_NULL);
     }
 
     @DisplayName("상품의 가격이 0 미만이면 예외가 발생한다")
@@ -28,7 +30,8 @@ class PriceTest {
     void priceNegativeException(final long value) {
         assertThatThrownBy(
             () -> new Price(value)
-        ).isInstanceOf(PriceNegativeException.class);
+        ).isInstanceOf(WrongPriceException.class)
+            .hasMessage(PRICE_SHOULD_NOT_BE_NEGATIVE);
     }
 
     @DisplayName("상품의 가격이 같다면 equals의 결과도 같다")
