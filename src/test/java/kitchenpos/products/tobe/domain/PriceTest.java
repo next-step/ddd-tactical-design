@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
+import kitchenpos.products.tobe.exception.PriceNegativeException;
 import kitchenpos.products.tobe.exception.PriceNullException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +28,7 @@ class PriceTest {
     void priceNegativeException(final long value) {
         assertThatThrownBy(
             () -> new Price(value)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(PriceNegativeException.class);
     }
 
     @DisplayName("상품의 가격이 같다면 equals의 결과도 같다")
