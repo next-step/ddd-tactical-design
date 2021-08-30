@@ -22,14 +22,14 @@ class ProductTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 이름에 비속어가 포함되어 있으면 validateName를 실행시 예외가 발생한다")
+    @DisplayName("상품의 이름에 비속어가 포함되어 있으면 validateProfanity를 실행시 예외가 발생한다")
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설 포함"})
     void wrongName(final String wrongName) {
         final Product product = new Product(wrongName, DEFAULT_PRICE);
 
         assertThatThrownBy(
-            () -> product.validateName(new FakePurgomalumClient())
+            () -> product.validateProfanity(new FakePurgomalumClient())
         ).isInstanceOf(IllegalArgumentException.class);
     }
 

@@ -46,7 +46,7 @@ public class DisplayedName {
         }
     }
 
-    public void validateName(final PurgomalumClient purgomalumClient) {
+    public void validateProfanity(final PurgomalumClient purgomalumClient) {
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }

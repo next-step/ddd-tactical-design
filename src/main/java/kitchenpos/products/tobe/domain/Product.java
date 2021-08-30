@@ -51,8 +51,8 @@ public class Product {
         return price;
     }
 
-    public void validateName(final PurgomalumClient purgomalumClient) {
-        name.validateName(purgomalumClient);
+    public void validateProfanity(final PurgomalumClient purgomalumClient) {
+        name.validateProfanity(purgomalumClient);
     }
 
     public Product changePrice(final Price price) {

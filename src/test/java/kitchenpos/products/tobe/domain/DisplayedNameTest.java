@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import kitchenpos.products.application.FakePurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -26,6 +27,17 @@ class DisplayedNameTest {
         final DisplayedName displayedName = new DisplayedName(name);
 
         assertThat(displayedName).isNotNull();
+    }
+
+    @DisplayName("이름에 비속어가 포함되어 있으면 validateProfanity를 실행시 예외가 발생한다")
+    @ParameterizedTest
+    @ValueSource(strings = {"비속어", "욕설 포함"})
+    void profanityName(final String wrongName) {
+        final DisplayedName displayedName = new DisplayedName(wrongName);
+
+        assertThatThrownBy(
+            () -> displayedName.validateProfanity(new FakePurgomalumClient())
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("name이 같으면 equals의 결과도 같다")

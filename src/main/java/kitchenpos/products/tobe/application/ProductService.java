@@ -35,7 +35,7 @@ public class ProductService {
     @Transactional
     public Product create(final ProductRequestDto productRequestDto) {
         final Product product = productRequestDto.toEntity();
-        product.validateName(purgomalumClient);
+        product.validateProfanity(purgomalumClient);
         return productRepository.save(product);
     }
 
