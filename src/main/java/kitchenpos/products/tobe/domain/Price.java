@@ -9,10 +9,9 @@ public class Price {
 
     private static final int ZERO = 0;
 
-    private final BigDecimal value;
+    private BigDecimal value;
 
     protected Price() {
-        value = BigDecimal.ZERO;
     }
 
     public Price(final BigDecimal value) {
@@ -20,16 +19,12 @@ public class Price {
         this.value = value;
     }
 
-    public Price(final int value) {
-        this(BigDecimal.valueOf(value));
-    }
-
     public Price(final Long value) {
         this(BigDecimal.valueOf(value));
     }
 
     private void validate(final BigDecimal value) {
-        if (value.compareTo(BigDecimal.ZERO) < ZERO) {
+        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < ZERO) {
             throw new IllegalArgumentException();
         }
     }
