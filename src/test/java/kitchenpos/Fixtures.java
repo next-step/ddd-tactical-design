@@ -1,5 +1,9 @@
 package kitchenpos;
 
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.PurgomalumClient;
+import kitchenpos.common.infra.FakePurgomalumClient;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -14,6 +18,8 @@ import java.util.UUID;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
+
+    private static final PurgomalumClient PURGOMALUM_CLIENT = new FakePurgomalumClient();
 
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
@@ -118,10 +124,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return new Product(new DisplayedName(name, PURGOMALUM_CLIENT), new Price(price));
     }
 }

@@ -2,8 +2,17 @@ package kitchenpos.common.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class DisplayedName {
-	private final String value;
+	@Column(name = "name")
+	private String value;
+
+	protected DisplayedName() {
+
+	}
 
 	public DisplayedName(String value, PurgomalumClient purgomalumClient) {
 		if (value == null || value.length() == 0) {

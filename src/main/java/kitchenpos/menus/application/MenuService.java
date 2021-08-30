@@ -60,7 +60,7 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
-                product.getPrice()
+                product.getPrice().getValue()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -95,7 +95,7 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             final BigDecimal sum = menuProduct.getProduct()
-                .getPrice()
+                .getPrice().getValue()
                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
             if (price.compareTo(sum) > 0) {
                 throw new IllegalArgumentException();
@@ -111,7 +111,7 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             final BigDecimal sum = menuProduct.getProduct()
-                .getPrice()
+                .getPrice().getValue()
                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
             if (menu.getPrice().compareTo(sum) > 0) {
                 throw new IllegalStateException();

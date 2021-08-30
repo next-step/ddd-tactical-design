@@ -5,12 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository {
-    Product save(Product product);
+	Product save(Product product);
 
-    Optional<Product> findById(UUID id);
+	Optional<Product> findById(UUID id);
 
-    List<Product> findAll();
+	List<Product> findAll();
 
-    List<Product> findAllByIdIn(List<UUID> ids);
+	List<Product> findAllByIdIn(List<UUID> ids);
 }
 

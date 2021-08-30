@@ -1,10 +1,14 @@
-package kitchenpos.products.tobe.ui;
+package kitchenpos.products.ui;
 
 import javax.validation.constraints.NotNull;
 
 public class ProductPriceChangeRequest {
 	@NotNull
 	private Long price;
+
+	public ProductPriceChangeRequest() {
+
+	}
 
 	public ProductPriceChangeRequest(Long price) {
 		this.price = price;

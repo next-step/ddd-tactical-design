@@ -1,6 +1,4 @@
-package kitchenpos.products.tobe.domain;
-
-import java.math.BigDecimal;
+package kitchenpos.products.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

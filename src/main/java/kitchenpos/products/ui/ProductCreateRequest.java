@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.ui;
+package kitchenpos.products.ui;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,6 +8,10 @@ public class ProductCreateRequest {
 	private String name;
 	@NotNull
 	private Long price;
+
+	public ProductCreateRequest() {
+
+	}
 
 	public ProductCreateRequest(String name, Long price) {
 		this.name = name;
