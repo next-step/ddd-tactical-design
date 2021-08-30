@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,7 +34,7 @@ public class ProductPriceChangeService {
                 .distinct()
                 .collect(Collectors.toList()))
                 .stream()
-                .collect(Collectors.toMap(Product::getId, self -> self));
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
         menus.forEach(menu -> menu.comparePriceAndHideOrNotByProducts(products));
 
         return product;
