@@ -1,6 +1,7 @@
 package kitchenpos.common.domain;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -8,7 +9,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import kitchenpos.common.infra.FakePurgomalumClient;
 
 public class DisplayedNameTest {
-	private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+	private PurgomalumClient purgomalumClient;
+
+	@BeforeEach
+	void setUp() {
+		purgomalumClient = new FakePurgomalumClient();
+	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"강정치킨", "닭가슴살 샐러드"})
