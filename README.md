@@ -197,7 +197,9 @@
 - `Price` 는 0원 이상이다.
 - `DisplayedName` 에는 `Profanity`가 포함될 수 없다.
 
-### 궁금한 점
+## 궁금한 점 & TODO
 
 - `DisplayedName` 생성자에 `PurgomalumClient` 가 파라미터로 들어가도 될까?
+- 현재 TC 에는 JPA 를 사용하는 부분까지 검증하지 못하는 것 같은데 괜찮을까?
+- `Menu` 리팩터링 시, `ProductServiceTest` 에 `Menu` 에 관한 TC 추가 필요
 

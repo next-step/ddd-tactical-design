@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import kitchenpos.common.infra.FakePurgomalumClient;
@@ -28,7 +29,8 @@ public class DisplayedNameTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"비속어", "욕설"})
-	void 표시된_이름은_비속어가_포함될_수_없다(String value) {
+	@NullSource
+	void 표시된_이름은_빈값_이거나_비속어가_포함될_수_없다(String value) {
 		// given & when & then
 		Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
 			.isThrownBy(() -> new DisplayedName(value, purgomalumClient));

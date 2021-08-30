@@ -3,17 +3,17 @@ package kitchenpos.common.domain;
 import java.util.Objects;
 
 public class Price {
-	private final long value;
+	private final Long value;
 
-	public Price(long value) {
-		if (!(value >= 0)) {
+	public Price(Long value) {
+		if (value == null || !(value >= 0)) {
 			throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
 		}
 
 		this.value = value;
 	}
 
-	public long getValue() {
+	public Long getValue() {
 		return value;
 	}
 
@@ -24,7 +24,7 @@ public class Price {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Price price = (Price)o;
-		return value == price.value;
+		return Objects.equals(value, price.value);
 	}
 
 	@Override

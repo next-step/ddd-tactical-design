@@ -3,12 +3,13 @@ package kitchenpos.common.domain;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class PriceTest {
 	@ParameterizedTest
 	@ValueSource(longs = {0L, 17_000L})
-	void 가격은_0원_이상이다(long value) {
+	void 가격은_0원_이상이다(Long value) {
 		// given & when
 		Price price = new Price(value);
 
@@ -18,7 +19,8 @@ public class PriceTest {
 
 	@ParameterizedTest
 	@ValueSource(longs = {-10_000L})
-	void 가격은_음수일_수_없다(long value) {
+	@NullSource
+	void 가격은_음수일_수_없다(Long value) {
 		// given & when & then
 		Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
 			.isThrownBy(() -> new Price(value));
@@ -27,7 +29,7 @@ public class PriceTest {
 	@Test
 	void 가격_동등성() {
 		// given
-		long value = 17_000L;
+		Long value = 17_000L;
 
 		// when
 		Price price = new Price(value);
