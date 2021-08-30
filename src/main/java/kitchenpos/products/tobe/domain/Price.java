@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embeddable;
+import kitchenpos.products.tobe.exception.PriceNullException;
 
 @Embeddable
 public class Price {
@@ -24,7 +25,10 @@ public class Price {
     }
 
     private void validate(final BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < ZERO) {
+        if (Objects.isNull(value)) {
+            throw new PriceNullException();
+        }
+        if (value.compareTo(BigDecimal.ZERO) < ZERO){
             throw new IllegalArgumentException();
         }
     }
