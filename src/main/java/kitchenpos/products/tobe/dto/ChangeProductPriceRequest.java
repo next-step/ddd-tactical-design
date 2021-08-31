@@ -2,12 +2,12 @@ package kitchenpos.products.tobe.dto;
 
 import java.math.BigDecimal;
 
-public class ChangePriceRequest {
+public class ChangeProductPriceRequest {
     private BigDecimal price;
 
-    protected ChangePriceRequest() {}
+    protected ChangeProductPriceRequest() {}
 
-    public ChangePriceRequest(final BigDecimal price) {
+    public ChangeProductPriceRequest(final BigDecimal price) {
         this.price = price;
     }
 

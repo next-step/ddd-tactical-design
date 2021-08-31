@@ -6,8 +6,8 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
-import kitchenpos.products.tobe.dto.ChangePriceRequest;
-import kitchenpos.products.tobe.dto.CreateRequest;
+import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
+import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +34,7 @@ public class TobeProductService {
     }
 
     @Transactional
-    public ProductResponse create(final CreateRequest request) {
+    public ProductResponse create(final CreateProductRequest request) {
         final TobeProduct product = request.toProduct();
 
         // FIXME: purgomalumClient 를 ProductName 으로 이동할 수는 없을까?
@@ -45,7 +45,7 @@ public class TobeProductService {
     }
 
     @Transactional
-    public ProductResponse changePrice(final UUID productId, final ChangePriceRequest request) {
+    public ProductResponse changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final BigDecimal price = request.getPrice();
         final TobeProduct product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new)

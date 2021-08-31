@@ -4,13 +4,21 @@ import kitchenpos.products.tobe.domain.TobeProduct;
 
 import java.math.BigDecimal;
 
-public class CreateRequest {
+public class CreateProductRequest {
     private final String name;
     private final BigDecimal price;
 
-    public CreateRequest(final String name, final BigDecimal price) {
+    public CreateProductRequest(final String name, final BigDecimal price) {
         this.name = name;
         this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public TobeProduct toProduct() {
