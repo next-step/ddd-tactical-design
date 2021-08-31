@@ -29,9 +29,10 @@ class ProductServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
 
-        final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         final ProductPriceChangeService productPriceChangeService = new ProductPriceChangeService(productRepository, menuRepository);
-        productService = new ProductService(productRepository, purgomalumClient, productPriceChangeService);
+        final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+        final DisplayedNameFactory displayedNameFactory = new DisplayedNameFactory(purgomalumClient);
+        productService = new ProductService(productRepository, productPriceChangeService, displayedNameFactory);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -127,7 +128,7 @@ class ProductServiceTest {
     }
 
     public Product product(final String name, final long price) {
-        return new Product(name, BigDecimal.valueOf(price), (String _name) -> false);
+        return new Product(new DisplayedName(name), new Price(BigDecimal.valueOf(price)));
     }
 
     public MenuProduct menuProduct(final Product product, final long quantity) {

@@ -12,15 +12,8 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    public DisplayedName(final String name, final Predicate<String> profanityValidator) {
-        validate(name, profanityValidator);
+    public DisplayedName(final String name) {
         this.name = name;
-    }
-
-    private void validate(final String name, final Predicate<String> profanityValidator) {
-        if (Objects.isNull(name) || profanityValidator.test(name)) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public String display() {

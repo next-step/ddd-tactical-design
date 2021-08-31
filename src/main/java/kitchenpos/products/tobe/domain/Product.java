@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 @Table(name = "product")
 @Entity
@@ -22,10 +21,10 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final String displayedName, final BigDecimal price, final Predicate<String> profanityValidator) {
+    public Product(final DisplayedName displayedName, final Price price) {
         this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName(displayedName, profanityValidator);
-        this.price = new Price(price);
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public UUID getId() {
@@ -40,8 +39,12 @@ public class Product {
         return price.offer();
     }
 
+    public void changePrice(final Price price) {
+        this.price = price;
+    }
+
     public void changePrice(final BigDecimal price) {
-        this.price = new Price(price);
+        changePrice(new Price(price));
     }
 
     public boolean equals(final UUID id) {

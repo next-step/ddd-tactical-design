@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,28 +11,30 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
     private final ProductPriceChangeService productPriceChangeService;
+    private final DisplayedNameFactory displayedNameFactory;
 
     public ProductService(
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient,
-            final ProductPriceChangeService productPriceChangeService
+            final ProductPriceChangeService productPriceChangeService,
+            final DisplayedNameFactory displayedNameFactory
     ) {
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
         this.productPriceChangeService = productPriceChangeService;
+        this.displayedNameFactory = displayedNameFactory;
     }
 
     @Transactional
     public ProductDTO create(final ProductDTO request) {
-        Product product = new Product(request.getName(), request.getPrice(), purgomalumClient::containsProfanity);
+        final DisplayedName displayedName = displayedNameFactory.create(request.getName());
+        final Price price = new Price(request.getPrice());
+        final Product product = new Product(displayedName, price);
         return new ProductDTO(productRepository.save(product));
     }
 
     @Transactional
     public ProductDTO changePrice(final UUID productId, final ProductDTO request) {
-        Product product = productPriceChangeService.changePrice(productId, request.getPrice());
+        final Product product = productPriceChangeService.changePrice(productId, request.getPrice());
         return new ProductDTO(product);
     }
 

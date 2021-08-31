@@ -23,12 +23,12 @@ public class ProductPriceChangeService {
 
     @Transactional
     public Product changePrice(final UUID productId, final BigDecimal price) {
-        Product product = productRepository.findById(productId)
+        final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
 
-        List<Menu> menus = menuRepository.findAllByProductId(product.getId());
-        Map<UUID, Product> products = productRepository.findAllById(menus.stream()
+        final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
+        final Map<UUID, Product> products = productRepository.findAllById(menus.stream()
                 .map(Menu::getProductIds)
                 .flatMap(Collection::stream)
                 .distinct()
