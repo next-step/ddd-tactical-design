@@ -4,14 +4,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Table(name = "price")
-@Entity
+@Embeddable
 public class Price implements Comparable {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
-
     @Column(name = "price", nullable = false)
     private BigDecimal _price;
 

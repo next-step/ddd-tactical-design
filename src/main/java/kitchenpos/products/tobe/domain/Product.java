@@ -13,12 +13,10 @@ public class Product {
     @Id
     private UUID id;
 
-    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "displayed_name_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_displayed_name"))
+    @Embedded
     private DisplayedName displayedName;
 
-    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "price_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_price"))
+    @Embedded
     private Price price;
 
     protected Product() {

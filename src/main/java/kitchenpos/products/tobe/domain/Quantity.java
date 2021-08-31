@@ -3,14 +3,8 @@ package kitchenpos.products.tobe.domain;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Table(name = "quantity")
-@Entity
+@Embeddable
 public class Quantity {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
-
     @Column(name = "quantity", nullable = false)
     private long _quantity;
 

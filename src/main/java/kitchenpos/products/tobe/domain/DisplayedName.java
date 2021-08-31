@@ -4,14 +4,8 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-@Table(name = "displayed_name")
-@Entity
+@Embeddable
 public class DisplayedName {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
-
     @Column(name = "name", nullable = false)
     private String name;
 

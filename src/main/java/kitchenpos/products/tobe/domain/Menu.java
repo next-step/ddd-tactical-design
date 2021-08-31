@@ -14,8 +14,7 @@ public class Menu {
     @Id
     private UUID id;
 
-    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "price_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_price"))
+    @Embedded
     private Price price;
 
     @Column(name = "displayed", nullable = false)

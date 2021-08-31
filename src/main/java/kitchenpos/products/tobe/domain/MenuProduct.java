@@ -15,8 +15,7 @@ public class MenuProduct {
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
-    @OneToOne(cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JoinColumn(name = "quantity_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_menu_product_to_quantity"))
+    @Embedded
     private Quantity quantity;
 
     protected MenuProduct() {
