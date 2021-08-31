@@ -15,7 +15,7 @@ public class Price implements Comparable {
     @Column(name = "price", nullable = false)
     private BigDecimal _price;
 
-    public Price() {
+    protected Price() {
     }
 
     public Price(final BigDecimal price) {

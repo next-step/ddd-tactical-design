@@ -21,7 +21,7 @@ public class Product {
     @JoinColumn(name = "price_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_product_to_price"))
     private Price price;
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(final String displayedName, final BigDecimal price, final Predicate<String> profanityValidator) {

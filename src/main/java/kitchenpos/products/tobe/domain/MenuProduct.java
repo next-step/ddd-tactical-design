@@ -19,7 +19,7 @@ public class MenuProduct {
     @JoinColumn(name = "quantity_seq", nullable = false, foreignKey = @ForeignKey(name = "fk_menu_product_to_quantity"))
     private Quantity quantity;
 
-    public MenuProduct() {
+    protected MenuProduct() {
     }
 
     public MenuProduct(final UUID productId, final Quantity quantity) {

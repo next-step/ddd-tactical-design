@@ -14,7 +14,7 @@ public class Quantity {
     @Column(name = "quantity", nullable = false)
     private long _quantity;
 
-    public Quantity() {
+    protected Quantity() {
     }
 
     public Quantity(final long price) {

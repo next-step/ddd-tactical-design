@@ -18,7 +18,7 @@ public class MenuProducts {
     )
     private List<MenuProduct> menuProducts = new ArrayList<>();
 
-    public MenuProducts() {
+    protected MenuProducts() {
     }
 
     public MenuProducts(final List<MenuProduct> menuProducts) {

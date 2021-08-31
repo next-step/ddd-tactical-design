@@ -15,7 +15,7 @@ public class DisplayedName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public DisplayedName() {
+    protected DisplayedName() {
     }
 
     public DisplayedName(final String name, final Predicate<String> profanityValidator) {
