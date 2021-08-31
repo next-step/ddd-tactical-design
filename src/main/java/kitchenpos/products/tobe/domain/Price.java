@@ -23,7 +23,7 @@ public class Price implements Comparable {
 
     private void validate(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격은 필수고, 0 이상이어야 합니다");
         }
     }
 

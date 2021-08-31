@@ -18,7 +18,7 @@ public class Quantity {
 
     private void validate(final long quantity) {
         if (quantity < 0L) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("수량은 0 이상이어야 합니다");
         }
     }
 

@@ -24,7 +24,7 @@ public class ProductPriceChangeService {
     @Transactional
     public Product changePrice(final UUID productId, final BigDecimal price) {
         final Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("일치하는 상품이 없습니다"));
         product.changePrice(price);
 
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());

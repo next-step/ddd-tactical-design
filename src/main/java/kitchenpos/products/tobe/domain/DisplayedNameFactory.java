@@ -20,7 +20,7 @@ public class DisplayedNameFactory {
 
     private void validate(final String name) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이름은 필수고, 비속어가 포함될 수 없습니다");
         }
     }
 }
