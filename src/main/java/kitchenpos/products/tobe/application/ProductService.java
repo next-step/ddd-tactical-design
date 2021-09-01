@@ -4,8 +4,8 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.TobeProduct;
-import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -18,14 +18,14 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TobeProductService {
-    private final TobeProductRepository productRepository;
+@Service("TobeProductService")
+public class ProductService {
+    private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public TobeProductService(
-            final TobeProductRepository productRepository,
+    public ProductService(
+            final ProductRepository productRepository,
             final MenuRepository menuRepository,
             final PurgomalumClient purgomalumClient) {
         this.productRepository = productRepository;
@@ -35,7 +35,7 @@ public class TobeProductService {
 
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
-        final TobeProduct product = request.toProduct();
+        final Product product = request.toProduct();
 
         // FIXME: purgomalumClient 를 ProductName 으로 이동할 수는 없을까?
         if (purgomalumClient.containsProfanity(product.getName())) {
@@ -47,7 +47,7 @@ public class TobeProductService {
     @Transactional
     public ProductResponse changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final BigDecimal price = request.getPrice();
-        final TobeProduct product = productRepository.findById(productId)
+        final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new)
                 .withPrice(price);
 

@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
-public class TobeProduct {
+@Entity(name = "TobeProduct")
+public class Product {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
@@ -17,19 +17,19 @@ public class TobeProduct {
     @Embedded
     private ProductPrice productPrice;
 
-    public TobeProduct() {}
+    public Product() {}
 
-    private TobeProduct(final UUID id, final ProductName productName, final ProductPrice productPrice) {
+    private Product(final UUID id, final ProductName productName, final ProductPrice productPrice) {
         this.id = id;
         this.productName = productName;
         this.productPrice = productPrice;
     }
 
-    private TobeProduct(final UUID id, final String name, final BigDecimal price) {
+    private Product(final UUID id, final String name, final BigDecimal price) {
         this(id, new ProductName(name), new ProductPrice(price));
     }
 
-    public TobeProduct(final String name, final BigDecimal price) {
+    public Product(final String name, final BigDecimal price) {
         this(UUID.randomUUID(), name, price);
     }
 
@@ -45,8 +45,8 @@ public class TobeProduct {
         return productPrice.getPrice();
     }
 
-    public TobeProduct withPrice(final BigDecimal price) {
-        return new TobeProduct(
+    public Product withPrice(final BigDecimal price) {
+        return new Product(
                 id,
                 productName,
                 new ProductPrice(price)

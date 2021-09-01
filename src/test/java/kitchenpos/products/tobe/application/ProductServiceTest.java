@@ -4,8 +4,8 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.TobeProduct;
-import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -24,17 +24,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
-    private TobeProductRepository productRepository;
+    private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
-    private TobeProductService productService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new TobeProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -73,7 +73,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(new TobeProduct("후라이드", BigDecimal.valueOf(16_000L))).getId();
+        final UUID productId = productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L))).getId();
         final ChangeProductPriceRequest expected = new ChangeProductPriceRequest(BigDecimal.valueOf(15_000L));
         final ProductResponse actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -84,7 +84,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(new TobeProduct("후라이드", BigDecimal.valueOf(16_000L))).getId();
+        final UUID productId = productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L))).getId();
         final ChangeProductPriceRequest expected = new ChangeProductPriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -93,8 +93,8 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(new TobeProduct("후라이드", BigDecimal.valueOf(16_000L)));
-        productRepository.save(new TobeProduct("양념치킨", BigDecimal.valueOf(16_000L)));
+        productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L)));
+        productRepository.save(new Product("양념치킨", BigDecimal.valueOf(16_000L)));
         assertThat(productService.findAll()).hasSize(2);
     }
 }

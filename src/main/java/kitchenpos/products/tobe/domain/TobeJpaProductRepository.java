@@ -4,4 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface TobeJpaProductRepository extends TobeProductRepository, JpaRepository<TobeProduct, UUID> {}
+public interface TobeJpaProductRepository extends ProductRepository, JpaRepository<Product, UUID> {}

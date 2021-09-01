@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.ui;
 
-import kitchenpos.products.tobe.application.TobeProductService;
+import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/tobe/products")
-@RestController
-public class TobeProductRestController {
-    private final TobeProductService productService;
+@RestController("TobeProductRestController")
+public class ProductRestController {
+    private final ProductService productService;
 
-    public TobeProductRestController(final TobeProductService productService) {
+    public ProductRestController(final ProductService productService) {
         this.productService = productService;
     }
 
