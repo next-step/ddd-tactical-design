@@ -27,7 +27,7 @@ public class Product {
         this.price = price;
     }
 
-    public UUID getId() {
+    public UUID identify() {
         return id;
     }
 

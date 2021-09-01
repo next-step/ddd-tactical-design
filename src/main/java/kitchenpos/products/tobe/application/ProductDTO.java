@@ -14,7 +14,7 @@ public class ProductDTO {
     }
 
     public ProductDTO(Product product) {
-        this.id = product.getId();
+        this.id = product.identify();
         this.name = product.displayName();
         this.price = product.offerPrice();
     }

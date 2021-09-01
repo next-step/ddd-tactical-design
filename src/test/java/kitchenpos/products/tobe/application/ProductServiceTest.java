@@ -67,7 +67,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productRepository.save(product("후라이드", 16_000L)).identify();
         final ProductDTO expected = changePriceRequest(15_000L);
         final ProductDTO actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -78,7 +78,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productRepository.save(product("후라이드", 16_000L)).identify();
         final ProductDTO expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
