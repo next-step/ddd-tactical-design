@@ -94,8 +94,10 @@
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
 | 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
+| 식별자 | id | 상품을 식별하는 값  |
 | 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
 | 비속어 | profanity | 욕설 등 상품의 이름으로 사용할 수 없는 단어 |
+| 가격 | price | 음식의 금액 가치 |
 
 ### 메뉴
 
@@ -155,8 +157,25 @@
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### 상품
+
+- `Product`은 `id`와 `DisplayedName`, `Price`를 가진다.
+- `Product`는 `id`를 `identify`한다.
+- `Product`는 `DisplayedName`를 `displayName`한다.
+- `Product`는 `Price`를 `offerPrice`한다.
+- `Product`는 `Price`로 `changePrice`한다.
+
+#### 이름
+
+- `DisplayedName`은 `name`을 가진다.
+- `DisplayedName`에는 `name`이 필수고, `profanity`가 포함될 수 없다.
+- `DisplayedName`은 `name`을 `display`한다.
+
+#### 가격
+
+- `Price`는 `price`를 가진다.
+- `Price`에는 `price`가 필수고, 0 미만의 `price`를 가질 수 없다.
+- `Price`는 `price`를 `offer`한다.
 
 ### 메뉴
 
