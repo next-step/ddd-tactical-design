@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,7 +14,7 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private DisplayedName displayedName;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -20,22 +22,30 @@ public class Product {
     public Product() {
     }
 
-    public Product(final String name, final Long price) {
-        this.name = new DisplayedName(name);
-        this.price = BigDecimal.valueOf(price);
+    public Product(final PurgomalumClient purgomalumClient, final DisplayedName displayedName, final BigDecimal price) {
+        DisplayedName.validatePurgomalum(purgomalumClient, displayedName.getName());
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
-    public Product(final DisplayedName name, final BigDecimal price) {
-        this.name = name;
-        this.price = price;
+    public Product(final PurgomalumClient purgomalumClient, final String displayedName, final Long price) {
+        this(purgomalumClient, new DisplayedName(displayedName), BigDecimal.valueOf(price));
+    }
+
+    public Product(final PurgomalumClient purgomalumClient, final String displayedName, final BigDecimal price) {
+        this(purgomalumClient, new DisplayedName(displayedName), price);
+    }
+
+    public Product(final PurgomalumClient purgomalumClient, final DisplayedName displayedName, final Long price) {
+        this(purgomalumClient, displayedName, BigDecimal.valueOf(price));
     }
 
     public UUID getId() {
         return id;
     }
 
-    public DisplayedName getName() {
-        return this.name;
+    public DisplayedName getDisplayedName() {
+        return this.displayedName;
     }
 
     public BigDecimal getPrice() {
