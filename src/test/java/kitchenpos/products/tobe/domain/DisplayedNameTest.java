@@ -54,7 +54,7 @@ class DisplayedNameTest {
     @ParameterizedTest
     void create_fail_empty_or_purgomalum_name(String name) {
         assertThatExceptionOfType(WrongDisplayedNameException.class)
-                .isThrownBy(() -> DisplayedName.validatePurgomalum(purgomalumClient, name))
+                .isThrownBy(() -> DisplayedName.validateName(purgomalumClient, name))
                 .withMessage(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
     }
 }

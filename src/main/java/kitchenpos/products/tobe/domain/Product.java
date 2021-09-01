@@ -22,22 +22,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(final PurgomalumClient purgomalumClient, final DisplayedName displayedName, final BigDecimal price) {
-        DisplayedName.validatePurgomalum(purgomalumClient, displayedName.getName());
-        this.displayedName = displayedName;
+    public Product(final PurgomalumClient purgomalumClient, final String name, final BigDecimal price) {
+        DisplayedName.validateName(purgomalumClient, name);
+        this.displayedName = new DisplayedName(name);
         this.price = new Price(price);
     }
 
-    public Product(final PurgomalumClient purgomalumClient, final String displayedName, final Long price) {
-        this(purgomalumClient, new DisplayedName(displayedName), BigDecimal.valueOf(price));
-    }
-
-    public Product(final PurgomalumClient purgomalumClient, final String displayedName, final BigDecimal price) {
-        this(purgomalumClient, new DisplayedName(displayedName), price);
-    }
-
-    public Product(final PurgomalumClient purgomalumClient, final DisplayedName displayedName, final Long price) {
-        this(purgomalumClient, displayedName, BigDecimal.valueOf(price));
+    public Product(final PurgomalumClient purgomalumClient, final String name, final Long price) {
+        this(purgomalumClient, name, BigDecimal.valueOf(price));
     }
 
     public UUID getId() {

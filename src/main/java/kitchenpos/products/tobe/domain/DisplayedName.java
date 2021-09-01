@@ -19,7 +19,6 @@ public class DisplayedName {
     }
 
     public DisplayedName(final String name) {
-        validateName(name);
         this.name = name;
     }
 
@@ -40,13 +39,10 @@ public class DisplayedName {
         return Objects.hash(getName());
     }
 
-    public void validateName(String name) {
+    public static void validateName(PurgomalumClient purgomalumClient, String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new WrongDisplayedNameException(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
-    }
-
-    public static void validatePurgomalum(PurgomalumClient purgomalumClient, String name) {
         if (purgomalumClient.containsProfanity(name)) {
             throw new WrongDisplayedNameException(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
         }
