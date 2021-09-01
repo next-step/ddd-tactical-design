@@ -17,10 +17,6 @@ public class Price implements Comparable {
         this._price = price;
     }
 
-    public static Price getZero() {
-        return new Price(BigDecimal.ZERO);
-    }
-
     private void validate(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("가격은 필수고, 0 이상이어야 합니다");
@@ -29,16 +25,6 @@ public class Price implements Comparable {
 
     public BigDecimal offer() {
         return _price;
-    }
-
-    public Price add(Price price) {
-        _price = _price.add(price._price);
-        return this;
-    }
-
-    public Price multiply(Quantity quantity) {
-        _price = _price.multiply(BigDecimal.valueOf(quantity.count()));
-        return this;
     }
 
     @Override
@@ -61,7 +47,7 @@ public class Price implements Comparable {
 
     @Override
     public int compareTo(final Object o) {
-        Price price = (Price) o;
+        final Price price = (Price) o;
         return _price.compareTo(price._price);
     }
 }

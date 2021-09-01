@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 @Embeddable
 public class DisplayedName {

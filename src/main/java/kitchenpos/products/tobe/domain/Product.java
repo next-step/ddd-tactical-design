@@ -21,8 +21,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final DisplayedName displayedName, final Price price) {
-        this.id = UUID.randomUUID();
+    public Product(final UUID id, final DisplayedName displayedName, final Price price) {
+        this.id = id;
         this.displayedName = displayedName;
         this.price = price;
     }
@@ -41,18 +41,6 @@ public class Product {
 
     public void changePrice(final Price price) {
         this.price = price;
-    }
-
-    public void changePrice(final BigDecimal price) {
-        changePrice(new Price(price));
-    }
-
-    public boolean equals(final UUID id) {
-        if (Objects.isNull(id)) {
-            return false;
-        }
-
-        return this.id.equals(id);
     }
 
     @Override

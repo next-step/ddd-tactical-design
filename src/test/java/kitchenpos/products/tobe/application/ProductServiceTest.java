@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,18 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
 
-        final ProductPriceChangeService productPriceChangeService = new ProductPriceChangeService(productRepository, menuRepository);
         final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         final DisplayedNameFactory displayedNameFactory = new DisplayedNameFactory(purgomalumClient);
-        productService = new ProductService(productRepository, productPriceChangeService, displayedNameFactory);
+        productService = new ProductService(productRepository, displayedNameFactory);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -88,15 +84,6 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-    @Test
-    void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-    }
-
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
@@ -128,18 +115,6 @@ class ProductServiceTest {
     }
 
     public Product product(final String name, final long price) {
-        return new Product(new DisplayedName(name), new Price(BigDecimal.valueOf(price)));
-    }
-
-    public MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(product.getId(), new Quantity(quantity));
-    }
-
-    public Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        return new Menu(
-                BigDecimal.valueOf(price),
-                displayed,
-                new MenuProducts(Arrays.asList(menuProducts))
-        );
+        return new Product(UUID.randomUUID(), new DisplayedName(name), new Price(BigDecimal.valueOf(price)));
     }
 }
