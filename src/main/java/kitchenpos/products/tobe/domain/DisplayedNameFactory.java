@@ -7,6 +7,7 @@ import java.util.Objects;
 
 @Component
 public class DisplayedNameFactory {
+
     private final PurgomalumClient purgomalumClient;
 
     public DisplayedNameFactory(final PurgomalumClient purgomalumClient) {

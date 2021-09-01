@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository {
+
     private final Map<UUID, Product> products = new HashMap<>();
 
     @Override

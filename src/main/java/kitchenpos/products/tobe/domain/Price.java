@@ -6,6 +6,7 @@ import java.util.Objects;
 
 @Embeddable
 public class Price {
+
     @Column(name = "price", nullable = false)
     private BigDecimal _price;
 
