@@ -50,8 +50,8 @@ class ProductServiceTest {
     @ParameterizedTest
     void create(final BigDecimal price) {
         final ProductDTO expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> productService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> productService.create(expected)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("가격은 필수고, 0 이상이어야 합니다");
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -60,8 +60,8 @@ class ProductServiceTest {
     @ParameterizedTest
     void create(final String name) {
         final ProductDTO expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> productService.create(expected)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이름은 필수고, 비속어가 포함될 수 없습니다");
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
@@ -80,8 +80,8 @@ class ProductServiceTest {
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).identify();
         final ProductDTO expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> productService.changePrice(productId, expected)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("가격은 필수고, 0 이상이어야 합니다");
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
