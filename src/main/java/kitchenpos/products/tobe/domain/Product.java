@@ -16,8 +16,8 @@ public class Product {
     @Embedded
     private DisplayedName displayedName;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
     public Product() {
     }
@@ -25,7 +25,7 @@ public class Product {
     public Product(final PurgomalumClient purgomalumClient, final DisplayedName displayedName, final BigDecimal price) {
         DisplayedName.validatePurgomalum(purgomalumClient, displayedName.getName());
         this.displayedName = displayedName;
-        this.price = price;
+        this.price = new Price(price);
     }
 
     public Product(final PurgomalumClient purgomalumClient, final String displayedName, final Long price) {
@@ -48,8 +48,7 @@ public class Product {
         return this.displayedName;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
-
 }

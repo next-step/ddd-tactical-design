@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
+import kitchenpos.products.tobe.exception.WrongPriceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class ProductTest {
         assertAll(
                 () -> assertThat(product).isNotNull(),
                 () -> assertThat(product.getDisplayedName().getName()).isEqualTo(name),
-                () -> assertThat(product.getPrice()).isEqualTo(price)
+                () -> assertThat(product.getPrice().getPrice()).isEqualTo(price)
         );
     }
 
@@ -52,6 +53,19 @@ class ProductTest {
 
         //when & then
         assertThatExceptionOfType(WrongDisplayedNameException.class)
+                .isThrownBy(() -> new Product(purgomalumClient, name, price));
+    }
+
+    @DisplayName("상품의 가격이 올바르지 않으면 생성할 수 없다.")
+    @ValueSource(strings = "-1000")
+    @NullSource
+    @ParameterizedTest
+    void create_fail_empty_or_negative_price(BigDecimal price) {
+        //given
+        String name = "후라이드";
+
+        //when & then
+        assertThatExceptionOfType(WrongPriceException.class)
                 .isThrownBy(() -> new Product(purgomalumClient, name, price));
     }
 }
