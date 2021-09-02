@@ -36,8 +36,7 @@ public class ProductService {
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
         final Product product = request.toProduct();
-
-        // FIXME: purgomalumClient 를 ProductName 으로 이동할 수는 없을까?
+        
         if (purgomalumClient.containsProfanity(product.getName())) {
             throw new IllegalArgumentException();
         }

@@ -17,7 +17,7 @@ public class Product {
     @Embedded
     private ProductPrice productPrice;
 
-    public Product() {}
+    protected Product() {}
 
     private Product(final UUID id, final ProductName productName, final ProductPrice productPrice) {
         this.id = id;

@@ -21,10 +21,8 @@ public class ProductName {
     }
 
     private void validate(final String name) {
-        if (Objects.isNull(name)) {
+        if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException("상품 이름은 필수값입니다.");
         }
-        // TODO:
-        // throw new IllegalArgumentException("상품 이름은 비속어가 포함될 수 없습니다.");
     }
 }
