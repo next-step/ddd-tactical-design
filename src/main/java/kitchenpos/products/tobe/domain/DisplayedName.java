@@ -7,7 +7,14 @@ public class DisplayedName {
     private final String name;
 
     public DisplayedName(final String name) {
+        validate(name);
         this.name = name;
+    }
+
+    private void validate(final String name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException("이름은 필수입니다");
+        }
     }
 
     public String value() {

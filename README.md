@@ -168,7 +168,8 @@
 #### 이름
 
 - `DisplayedName`은 `name`을 가진다.
-- `DisplayedName`에는 `name`이 필수고, `profanity`가 포함될 수 없다.
+- `DisplayedName`에는 `name`이 필수다.
+- `DisplayedName`에는 `profanity`가 포함될 수 없다.
 - `DisplayedName`은 `name`을 `value`한다.
 
 #### 가격

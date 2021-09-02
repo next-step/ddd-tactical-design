@@ -2,11 +2,21 @@ package kitchenpos.products.tobe.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DisplayedNameTest {
+
+    @DisplayName("`DisplayedName`에는 `name`이 필수다")
+    @NullSource
+    @ParameterizedTest
+    void DisplayedName(final String name) {
+        assertThatThrownBy(() -> new DisplayedName(name)).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이름은 필수입니다");
+    }
 
     @DisplayName("`DisplayedName`은 `name`을 `value`한다.")
     @ValueSource(strings = "후라이드")
