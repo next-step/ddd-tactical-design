@@ -1,17 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Embeddable
 public class Price {
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    protected Price() {
-    }
+    private final BigDecimal price;
 
     public Price(final BigDecimal price) {
         validate(price);

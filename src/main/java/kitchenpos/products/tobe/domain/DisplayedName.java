@@ -1,16 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Embeddable
 public class DisplayedName {
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    protected DisplayedName() {
-    }
+    private final String name;
 
     public DisplayedName(final String name) {
         this.name = name;
