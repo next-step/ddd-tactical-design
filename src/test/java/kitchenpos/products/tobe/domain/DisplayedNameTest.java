@@ -8,11 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DisplayedNameTest {
 
-    @DisplayName("`Price`는 `price`를 `offer`한다.")
+    @DisplayName("`DisplayedName`은 `name`을 `value`한다.")
     @ValueSource(strings = "후라이드")
     @ParameterizedTest
-    void display(final String name) {
+    void value(final String name) {
         final DisplayedName actual = new DisplayedName(name);
-        assertThat(actual.display()).isEqualTo(name);
+        assertThat(actual.value()).isEqualTo(name);
     }
 }

@@ -16,7 +16,7 @@ public class DisplayedName {
         this.name = name;
     }
 
-    public String display() {
+    public String value() {
         return name;
     }
 
@@ -29,8 +29,8 @@ public class DisplayedName {
             return false;
         }
 
-        final DisplayedName that = (DisplayedName) o;
-        return name.equals(that.name);
+        final DisplayedName name = (DisplayedName) o;
+        return this.name.equals(name.name);
     }
 
     @Override

@@ -28,16 +28,16 @@ public class Product {
         this.price = price;
     }
 
-    public UUID identify() {
+    public UUID getId() {
         return id;
     }
 
-    public String displayName() {
-        return displayedName.display();
+    public String getName() {
+        return displayedName.value();
     }
 
-    public BigDecimal offerPrice() {
-        return price.offer();
+    public BigDecimal getPrice() {
+        return price.value();
     }
 
     public void changePrice(final Price price) {

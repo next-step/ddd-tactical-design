@@ -8,14 +8,14 @@ import java.util.Objects;
 public class Price {
 
     @Column(name = "price", nullable = false)
-    private BigDecimal _price;
+    private BigDecimal price;
 
     protected Price() {
     }
 
     public Price(final BigDecimal price) {
         validate(price);
-        this._price = price;
+        this.price = price;
     }
 
     private void validate(final BigDecimal price) {
@@ -24,8 +24,8 @@ public class Price {
         }
     }
 
-    public BigDecimal offer() {
-        return _price;
+    public BigDecimal value() {
+        return price;
     }
 
     @Override
@@ -38,11 +38,11 @@ public class Price {
         }
 
         final Price price = (Price) o;
-        return _price.equals(price._price);
+        return this.price.equals(price.price);
     }
 
     @Override
     public int hashCode() {
-        return _price.hashCode();
+        return price.hashCode();
     }
 }

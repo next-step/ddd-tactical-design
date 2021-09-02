@@ -16,16 +16,16 @@ class PriceTest {
     @NullSource
     @ValueSource(strings = "-1000")
     @ParameterizedTest
-    void constructor(final BigDecimal price) {
+    void Price(final BigDecimal price) {
         assertThatThrownBy(() -> new Price(price)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("가격은 필수고, 0 이상이어야 합니다");
     }
 
-    @DisplayName("`Price`는 `price`를 `offer`한다.")
+    @DisplayName("`Price`는 `price`를 `value`한다.")
     @ValueSource(strings = {"0", "1000"})
     @ParameterizedTest
-    void offer(final BigDecimal price) {
+    void value(final BigDecimal price) {
         final Price actual = new Price(price);
-        assertThat(actual.offer()).isEqualTo(price);
+        assertThat(actual.value()).isEqualTo(price);
     }
 }

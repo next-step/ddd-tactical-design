@@ -12,31 +12,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
 
-    @DisplayName("`Product`는 `id`를 `identify`한다.")
+    @DisplayName("`Product`는 `id`를 `getId`한다.")
     @Test
-    void identify() {
+    void getId() {
         final UUID expected = UUID.randomUUID();
         final Product product = product(expected);
 
-        assertThat(product.identify()).isEqualTo(expected);
+        assertThat(product.getId()).isEqualTo(expected);
     }
 
-    @DisplayName("`Product`는 `DisplayedName`를 `displayName`한다.")
+    @DisplayName("`Product`는 `DisplayedName`의 `name`을 `getName`한다.")
     @ValueSource(strings = "후라이드")
     @ParameterizedTest
-    void displayName(final String name) {
+    void getName(final String name) {
         final Product product = product(name);
 
-        assertThat(product.displayName()).isEqualTo(name);
+        assertThat(product.getName()).isEqualTo(name);
     }
 
-    @DisplayName("`Product`는 `Price`를 `offerPrice`한다.")
+    @DisplayName("`Product`는 `Price`의 `price`를 `getPrice`한다.")
     @ValueSource(strings = "16000")
     @ParameterizedTest
-    void offerPrice(final BigDecimal price) {
+    void getPrice(final BigDecimal price) {
         final Product product = product(price);
 
-        assertThat(product.offerPrice()).isEqualTo(price);
+        assertThat(product.getPrice()).isEqualTo(price);
     }
 
     @DisplayName("`Product`는 `Price`로 `changePrice`한다.")
@@ -48,7 +48,7 @@ class ProductTest {
 
         product.changePrice(price);
 
-        assertThat(product.offerPrice()).isEqualTo(expected);
+        assertThat(product.getPrice()).isEqualTo(expected);
     }
 
     public Product product(final UUID id, final String name, final BigDecimal price) {

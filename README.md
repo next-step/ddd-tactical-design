@@ -160,22 +160,22 @@
 #### 상품
 
 - `Product`은 `id`와 `DisplayedName`, `Price`를 가진다.
-- `Product`는 `id`를 `identify`한다.
-- `Product`는 `DisplayedName`를 `displayName`한다.
-- `Product`는 `Price`를 `offerPrice`한다.
+- `Product`는 `id`를 `getId`한다.
+- `Product`는 `DisplayedName`의 `name`을 `getName`한다.
+- `Product`는 `Price`의 `price`를 `getPrice`한다.
 - `Product`는 `Price`로 `changePrice`한다.
 
 #### 이름
 
 - `DisplayedName`은 `name`을 가진다.
 - `DisplayedName`에는 `name`이 필수고, `profanity`가 포함될 수 없다.
-- `DisplayedName`은 `name`을 `display`한다.
+- `DisplayedName`은 `name`을 `value`한다.
 
 #### 가격
 
 - `Price`는 `price`를 가진다.
 - `Price`에는 `price`가 필수고, 0 미만의 `price`를 가질 수 없다.
-- `Price`는 `price`를 `offer`한다.
+- `Price`는 `price`를 `value`한다.
 
 ### 메뉴
 
