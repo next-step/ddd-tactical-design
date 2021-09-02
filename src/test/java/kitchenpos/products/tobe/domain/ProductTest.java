@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static kitchenpos.products.tobe.domain.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
@@ -49,25 +50,5 @@ class ProductTest {
         product.changePrice(price);
 
         assertThat(product.getPrice()).isEqualTo(expected);
-    }
-
-    public Product product(final UUID id, final String name, final BigDecimal price) {
-        return new Product(id, new DisplayedName(name), new Price(price));
-    }
-
-    public Product product() {
-        return product(UUID.randomUUID(), "후라이드", BigDecimal.valueOf(16_000L));
-    }
-
-    public Product product(final UUID id) {
-        return product(id, "후라이드", BigDecimal.valueOf(16_000L));
-    }
-
-    public Product product(final String name) {
-        return product(UUID.randomUUID(), name, BigDecimal.valueOf(16_000L));
-    }
-
-    public Product product(final BigDecimal price) {
-        return product(UUID.randomUUID(), "후라이드", price);
     }
 }
