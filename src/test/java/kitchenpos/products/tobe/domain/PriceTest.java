@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PriceTest {
 
-    @DisplayName("`Price`는 0 미만의 `price`를 가질 수 없다.")
+    @DisplayName("`Price` 생성 시 `price`가 0 미만이면 IllegalArgumentException을 던진다.")
     @NullSource
     @ValueSource(strings = "-1000")
     @ParameterizedTest
@@ -21,7 +21,7 @@ class PriceTest {
                 .hasMessage("가격은 필수고, 0 이상이어야 합니다");
     }
 
-    @DisplayName("`Price`는 `price`를 `value`한다.")
+    @DisplayName("`Price`는 `price`를 반환한다.")
     @ValueSource(strings = {"0", "1000"})
     @ParameterizedTest
     void value(final BigDecimal price) {

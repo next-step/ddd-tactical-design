@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DisplayedNameTest {
 
-    @DisplayName("`DisplayedName`에는 `name`이 필수다")
+    @DisplayName("`DisplayedName` 생성 시 `name`이 존재하지 않으면 IllegalArgumentException을 던진다")
     @NullSource
     @ParameterizedTest
     void DisplayedName(final String name) {
@@ -18,7 +18,7 @@ class DisplayedNameTest {
                 .hasMessage("이름은 필수입니다");
     }
 
-    @DisplayName("`DisplayedName`은 `name`을 `value`한다.")
+    @DisplayName("`DisplayedName`은 `name`을 반환한다.")
     @ValueSource(strings = "후라이드")
     @ParameterizedTest
     void value(final String name) {
