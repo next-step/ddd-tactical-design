@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.products.tobe.domain.Fixtures.product;
+import static kitchenpos.products.tobe.domain.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
@@ -17,7 +17,7 @@ class ProductTest {
     @Test
     void getId() {
         final UUID expected = UUID.randomUUID();
-        final Product product = product(expected);
+        final Product product = PRODUCT_WITH_ID(expected);
 
         assertThat(product.getId()).isEqualTo(expected);
     }
@@ -26,7 +26,7 @@ class ProductTest {
     @ValueSource(strings = "후라이드")
     @ParameterizedTest
     void getName(final String name) {
-        final Product product = product(name);
+        final Product product = PRODUCT_WITH_NAME(name);
 
         assertThat(product.getName()).isEqualTo(name);
     }
@@ -35,7 +35,7 @@ class ProductTest {
     @ValueSource(strings = "16000")
     @ParameterizedTest
     void getPrice(final BigDecimal price) {
-        final Product product = product(price);
+        final Product product = PRODUCT_WITH_PRICE(price);
 
         assertThat(product.getPrice()).isEqualTo(price);
     }
@@ -45,7 +45,7 @@ class ProductTest {
     @ParameterizedTest
     void changePrice(final BigDecimal expected) {
         final Price price = new Price(expected);
-        final Product product = product();
+        final Product product = DEFAULT_PRODUCT();
 
         product.changePrice(price);
 
