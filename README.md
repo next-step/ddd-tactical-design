@@ -155,38 +155,71 @@
 
 ## 모델링
 
+### 공통
+
+#### 이름(`DisplayedName`)
+
+- 이름은 이름 값(`name`)을 가진다.
+- 이름에는 이름 값이 필수다.
+- 이름의 이름 값은 비워둘 수 없다.
+- 이름의 이름 값에는 비속어(`profanity`)가 포함될 수 없다.
+- 이름은 이름 값을 반환한다.
+
+#### 가격(`Price`)
+
+- 가격은 가격 값(`price`)를 가진다.
+- 가격에는 가격 값이 필수다.
+- 가격은 0 미만의 가격 값을 가질 수 없다.
+- 가격은 가격 값을 반환한다.
+
 ### 상품
 
-#### 상품
+#### 상품(`Product`)
 
-- `Product`은 `id`와 `DisplayedName`, `Price`를 가진다.
-- `Product`는 `id`를 반환한다.
-- `Product`는 `DisplayedName`의 `name`을 반환한다.
-- `Product`는 `Price`의 `price`를 반환한다.
-- `Product`는 `Price`를 바꾼다.
-
-#### 이름
-
-- `DisplayedName`은 `name`을 가진다.
-- `DisplayedName`에는 `name`이 필수다.
-- `DisplayedName`에는 `profanity`가 포함될 수 없다.
-- `DisplayedName`은 `name`을 반환한다.
-
-#### 가격
-
-- `Price`는 `price`를 가진다.
-- `Price`에는 `price`가 필수다.
-- `Price`는 0 미만의 `price`를 가질 수 없다.
-- `Price`는 `price`를 반환한다.
+- 상품은 식별자(`id`)와 이름(`DisplayedName`), 가격(`Price`)을 가진다.
+- 상품은 식별자를 반환한다.
+- 상품은 이름을 반환한다.
+- 상품은 가격을 반환한다.
+- 상품은 가격을 바꾼다.
 
 ### 메뉴
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+#### 메뉴(`Menu`)
+
+- 메뉴는 식별자(`id`)와 이름(`DisplayedName`), 가격(`Price`), 메뉴 상품 목록(`MenuProducts`), 메뉴 그룹 식별자(`menuGroupId`)를 가진다.
+- 메뉴는 특정 메뉴 그룹(`MenuGroup`)에 속한다.
+- 메뉴의 가격은 메뉴 상품 목록의 금액(`amount`)보다 적거나 같아야 한다.
+- 메뉴는 가격을 바꾼다.
+- 메뉴의 가격이 메뉴 상품 목록의 금액보다 크면 숨겨진 메뉴(`NotDisplayedMenu`)가 된다.
+- 메뉴는 숨겨진 메뉴로 바뀐다.
+- 메뉴는 식별자를 반환한다.
+- 메뉴는 이름을 반환한다.
+- 메뉴는 가격을 반환한다.
+
+#### 숨겨진 메뉴(`NotDisplayedMenu`)
+
+- 숨겨진 메뉴는 식별자(`id`)와 이름(`DisplayedName`), 가격(`Price`), 메뉴 상품 목록(`MenuProducts`), 메뉴 그룹 식별자(`menuGroupId`)를 가진다.
+- 메뉴는 가격을 바꾼다.
+- 숨겨진 메뉴는 메뉴로 바뀐다.
+- 숨겨진 메뉴는 식별자를 반환한다.
+- 숨겨진 메뉴는 이름을 반환한다.
+- 숨겨진 메뉴는 가격을 반환한다.
+
+#### 메뉴 그룹(`MenuGroup`)
+
+- 메뉴 그룹은 식별자(`id`)와 이름(`DisplayedName`)을 가진다.
+- 메뉴 그룹은 식별자를 반환한다.
+- 메뉴 그룹은 이름을 반환한다.
+
+#### 메뉴 상품 목록(`MenuProducts`)
+
+- 메뉴 상품 목록은 메뉴 상품(`MenuProduct`) 목록을 가진다.
+- 메뉴 상품 목록은 금액(`amount`)을 반환한다.
+
+#### 메뉴 상품(`MenuProduct`)
+
+- 메뉴 상품은 상품(`Product`)과 수량(`Quantity`)을 가진다.
+- 메뉴 상품은 금액(`amount`)을 반환한다.
 
 ### 매장 주문
 
