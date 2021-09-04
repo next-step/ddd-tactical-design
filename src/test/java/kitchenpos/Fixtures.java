@@ -118,10 +118,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
 }

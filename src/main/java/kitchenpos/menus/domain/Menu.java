@@ -44,6 +44,24 @@ public class Menu {
     public Menu() {
     }
 
+    public void checkDisplay() {
+        checkDisplay(getTotalPrice());
+    }
+
+    private BigDecimal getTotalPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = menuProduct.getTotalPrice();
+        }
+        return sum;
+    }
+
+    private void checkDisplay(final BigDecimal sum) {
+        if (price.compareTo(sum) > 0) {
+            displayed = false;
+        }
+    }
+
     public UUID getId() {
         return id;
     }

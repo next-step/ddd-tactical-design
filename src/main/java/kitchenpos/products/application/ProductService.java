@@ -1,18 +1,17 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.dto.ProductChangePriceRequest;
+import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -32,44 +31,33 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+    public Product create(final ProductCreateRequest request) {
+        final Product product = request.toEntity();
+        checkContainsProfanity(product);
         return productRepository.save(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+    public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        final Product product = findById(productId);
+
+        product.changePrice(request.getPrice());
+        menus.forEach(Menu::checkDisplay);
+        return product;
+    }
+
+    private Product findById(final UUID productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(NoSuchElementException::new);
+    }
+
+
+    // TODO: 리펙토링
+    private void checkContainsProfanity(final Product product) {
+        if (purgomalumClient.containsProfanity(product.getName())) {
             throw new IllegalArgumentException();
         }
-        final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-        return product;
     }
 
     @Transactional(readOnly = true)
