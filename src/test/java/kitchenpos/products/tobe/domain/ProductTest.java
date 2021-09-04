@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
 
-    @DisplayName("`Product`는 `id`를 반환한다.")
+    @DisplayName("상품은 식별자를 반환한다.")
     @Test
     void getId() {
         final UUID expected = UUID.randomUUID();
@@ -23,7 +23,7 @@ class ProductTest {
         assertThat(product.getId()).isEqualTo(expected);
     }
 
-    @DisplayName("`Product`는 `DisplayedName`의 `name`을 반환한다.")
+    @DisplayName("상품은 이름을 반환한다.")
     @ValueSource(strings = "후라이드")
     @ParameterizedTest
     void getName(final String name) {
@@ -32,7 +32,7 @@ class ProductTest {
         assertThat(product.getName()).isEqualTo(name);
     }
 
-    @DisplayName("`Product`는 `Price`의 `price`를 반환한다.")
+    @DisplayName("상품은 가격을 반환한다.")
     @ValueSource(strings = "16000")
     @ParameterizedTest
     void getPrice(final BigDecimal price) {
@@ -41,7 +41,7 @@ class ProductTest {
         assertThat(product.getPrice()).isEqualTo(price);
     }
 
-    @DisplayName("`Product`는 `Price`를 바꾼다.")
+    @DisplayName("상품은 가격을 바꾼다.")
     @ValueSource(strings = "20000")
     @ParameterizedTest
     void changePrice(final BigDecimal expected) {
