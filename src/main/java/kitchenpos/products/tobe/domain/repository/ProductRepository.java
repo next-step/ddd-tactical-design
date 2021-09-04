@@ -1,8 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.model.Product;
 
 public interface ProductRepository {
 
