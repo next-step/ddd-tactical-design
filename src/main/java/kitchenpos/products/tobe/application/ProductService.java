@@ -40,9 +40,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ProductRequestDto productRequestDto) {
-        final Price price = productRequestDto.toPrice();
-
+    public Product changePrice(final UUID productId, final Price price) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
 
