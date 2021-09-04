@@ -45,11 +45,7 @@ public class Product {
         return productPrice.getPrice();
     }
 
-    public Product withPrice(final BigDecimal price) {
-        return new Product(
-                id,
-                productName,
-                new ProductPrice(price)
-        );
+    public void setPrice(final BigDecimal price) {
+        this.productPrice = new ProductPrice(price);
     }
 }

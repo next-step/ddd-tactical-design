@@ -42,9 +42,8 @@ public class ProductService {
     public ProductResponse changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final BigDecimal price = request.getPrice();
         final Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new)
-                .withPrice(price);
-
+                .orElseThrow(NoSuchElementException::new);
+        product.setPrice(price);
         productTranslator.changeMenuStatus(productId);
         return ProductResponse.from(product);
     }
