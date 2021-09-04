@@ -1,8 +1,7 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")

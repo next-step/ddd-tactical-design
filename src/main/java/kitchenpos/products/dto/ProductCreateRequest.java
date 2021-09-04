@@ -1,6 +1,6 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.UUID;
