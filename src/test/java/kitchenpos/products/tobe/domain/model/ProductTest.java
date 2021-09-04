@@ -1,11 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.model.Price;
-import kitchenpos.products.tobe.domain.model.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
