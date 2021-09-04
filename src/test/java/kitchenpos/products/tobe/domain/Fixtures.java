@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.tobe.DisplayedName;
+import kitchenpos.common.tobe.Price;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
