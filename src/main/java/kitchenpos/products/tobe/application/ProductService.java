@@ -1,11 +1,9 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductTranslator;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -21,22 +19,19 @@ import java.util.stream.Collectors;
 @Service("TobeProductService")
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
+    private final ProductTranslator productTranslator;
     private final PurgomalumClient purgomalumClient;
 
-    public ProductService(
-            final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient) {
+    public ProductService(final ProductRepository productRepository, final ProductTranslator productTranslator, final PurgomalumClient purgomalumClient) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
+        this.productTranslator = productTranslator;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
         final Product product = request.toProduct();
-        
+
         if (purgomalumClient.containsProfanity(product.getName())) {
             throw new IllegalArgumentException();
         }
@@ -50,19 +45,7 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new)
                 .withPrice(price);
 
-        // TODO: domain 으로 Menu 관련 로직 옮기기
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        productTranslator.changeMenuStatus(productId);
         return ProductResponse.from(product);
     }
 
