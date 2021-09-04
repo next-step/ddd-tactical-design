@@ -12,8 +12,8 @@ public class DisplayedName {
     }
 
     private void validate(final String name) {
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException("이름은 필수입니다");
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException("이름은 필수고, 비워둘 수 없습니다");
         }
     }
 
