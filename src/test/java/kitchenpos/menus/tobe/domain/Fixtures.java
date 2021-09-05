@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.tobe.DisplayedName;
 import kitchenpos.common.tobe.Price;
+import kitchenpos.common.tobe.Quantity;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -32,5 +33,9 @@ public class Fixtures {
 
     public static Product PRODUCT_WITH_PRICE(final BigDecimal price) {
         return PRODUCT_WITH_ALL(UUID.randomUUID(), price);
+    }
+
+    public static MenuProduct MENU_PRODUCT_WITH_ALL(final Product product, final long quantity) {
+        return new MenuProduct(product, new Quantity(quantity));
     }
 }
