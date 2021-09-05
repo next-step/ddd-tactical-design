@@ -20,7 +20,9 @@ public class Fixtures {
 
     public static MenuGroup MENU_GROUP_WITH_NAME(final String name) {
         return MENU_GROUP_WITH_ALL(UUID.randomUUID(), name);
-    }public static Product PRODUCT_WITH_ALL(final UUID id, final BigDecimal price) {
+    }
+
+    public static Product PRODUCT_WITH_ALL(final UUID id, final BigDecimal price) {
         return new Product(id, new Price(price));
     }
 
@@ -42,5 +44,44 @@ public class Fixtures {
 
     public static MenuProducts MENU_PRODUCTS_WITH_MENU_PRODUCT(final MenuProduct... menuProducts) {
         return new MenuProducts(Arrays.asList(menuProducts));
+    }
+
+    public static Menu MENU_WITH_PRICE_AND_ONLY_ONE_PRODUCT(final BigDecimal price, final Product product) {
+        return new Menu(
+                UUID.randomUUID(),
+                new DisplayedName("단일상품메뉴"),
+                new Price(price),
+                MENU_PRODUCTS_WITH_MENU_PRODUCT(new MenuProduct(product, new Quantity(1L))),
+                UUID.randomUUID(),
+                true
+        );
+    }
+
+    public static Menu DEFAULT_MENU() {
+        final Product product = DEFAULT_PRODUCT();
+        return new Menu(
+                UUID.randomUUID(),
+                new DisplayedName("기본메뉴"),
+                new Price(product.getPrice()),
+                MENU_PRODUCTS_WITH_MENU_PRODUCT(new MenuProduct(product, new Quantity(1L))),
+                UUID.randomUUID(),
+                true
+        );
+    }
+
+    public static Menu HIDED_MENU() {
+        return new Menu(
+                UUID.randomUUID(),
+                new DisplayedName("숨겨진메뉴"),
+                new Price(BigDecimal.valueOf(1_500L)),
+                MENU_PRODUCTS_WITH_MENU_PRODUCT(
+                        new MenuProduct(
+                                PRODUCT_WITH_PRICE(BigDecimal.valueOf(1_000L)),
+                                new Quantity(1L)
+                        )
+                ),
+                UUID.randomUUID(),
+                false
+        );
     }
 }
