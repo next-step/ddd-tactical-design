@@ -1,4 +1,4 @@
-package kitchenpos.menus.tode.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.tobe.DisplayedName;
 

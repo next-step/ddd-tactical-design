@@ -1,4 +1,4 @@
-package kitchenpos.menus.tode.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.tobe.DisplayedName;
 
@@ -7,7 +7,7 @@ import java.util.UUID;
 public class Fixtures {
 
     public static MenuGroup MENU_GROUP_WITH_ALL(final UUID id, final String name) {
-        return  new MenuGroup(id, new DisplayedName(name));
+        return new MenuGroup(id, new DisplayedName(name));
     }
 
     public static MenuGroup MENU_GROUP_WITH_ID(final UUID id) {
