@@ -5,6 +5,7 @@ import kitchenpos.common.tobe.Price;
 import kitchenpos.common.tobe.Quantity;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class Fixtures {
@@ -37,5 +38,9 @@ public class Fixtures {
 
     public static MenuProduct MENU_PRODUCT_WITH_ALL(final Product product, final long quantity) {
         return new MenuProduct(product, new Quantity(quantity));
+    }
+
+    public static MenuProducts MENU_PRODUCTS_WITH_MENU_PRODUCT(final MenuProduct... menuProducts) {
+        return new MenuProducts(Arrays.asList(menuProducts));
     }
 }
