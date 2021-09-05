@@ -2,6 +2,7 @@ package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.dto.ChangeMenuStatusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class MenuRestController {
     public ResponseEntity<Menu> create(@RequestBody final Menu request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{menuId}/price")
@@ -38,6 +39,13 @@ public class MenuRestController {
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
+    }
+
+    @PutMapping("/status")
+    public ResponseEntity<Menu> changeStatus(@RequestBody final ChangeMenuStatusRequest request) {
+        final UUID productId = request.getProductId();
+        menuService.changeStatus(productId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
