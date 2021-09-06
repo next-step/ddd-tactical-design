@@ -7,7 +7,7 @@ public class DisplayedName {
 
     private String name;
 
-    public DisplayedName() {
+    private DisplayedName() {
     }
 
     public DisplayedName(final String name) {

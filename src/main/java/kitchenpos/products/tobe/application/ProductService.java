@@ -33,9 +33,7 @@ public class ProductService {
 
     @Transactional
     public Product create(final ProductRequests.Create request) {
-        productDomainService.validateDisplayedName(request.getDisplayedName());
-
-        return productRepository.save(new Product(request.getDisplayedName(), request.getPrice()));
+        return productRepository.save(new Product(request.getDisplayedName(), request.getPrice(), productDomainService));
     }
 
     @Transactional

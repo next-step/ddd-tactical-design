@@ -7,6 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.products.tobe.domain.service.ProductDomainService;
 
 @Table(name = "product")
 @Entity
@@ -27,7 +28,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String displayedName, BigDecimal price) {
+    public Product(String displayedName, BigDecimal price, ProductDomainService productDomainService) {
+        productDomainService.validateDisplayedName(displayedName);
         this.id = UUID.randomUUID();
         this.displayedName = new DisplayedName(displayedName);
         this.price = new Price(price);

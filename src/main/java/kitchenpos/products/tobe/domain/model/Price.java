@@ -1,12 +1,11 @@
 package kitchenpos.products.tobe.domain.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Price {
-
-    private static final BigDecimal PRICE_TRESHHOLD = BigDecimal.ZERO;
     private BigDecimal price = BigDecimal.ZERO;
 
     public Price() {
@@ -26,11 +25,11 @@ public class Price {
     }
 
     private void validatePrice(BigDecimal price) {
-        if (price == null) {
+        if (Objects.isNull(price)) {
             throw new IllegalArgumentException("Price는 Null이 될 수 없습니다.");
         }
 
-        if (price.compareTo(PRICE_TRESHHOLD) < 0) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price는 반드시 0보다 커야 합니다.");
         }
     }
