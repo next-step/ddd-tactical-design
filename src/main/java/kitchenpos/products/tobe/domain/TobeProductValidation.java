@@ -11,7 +11,7 @@ public class TobeProductValidation {
         this.purgomalumClient = purgomalumClient;
     }
 
-    public void vaildationName(DisplayedName name) {
+    public void vaildationName(ProductName name) {
         if (purgomalumClient.containsProfanity(name.getName())) {
             throw new IllegalArgumentException();
         }

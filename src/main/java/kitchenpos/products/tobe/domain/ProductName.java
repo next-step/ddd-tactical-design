@@ -5,15 +5,15 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class DisplayedName {
+public class ProductName {
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected DisplayedName() {
+    protected ProductName() {
     }
 
-    public DisplayedName(String name) {
+    public ProductName(String name) {
         validationName(name);
         this.name = name;
     }

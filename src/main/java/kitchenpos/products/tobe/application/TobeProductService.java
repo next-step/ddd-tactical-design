@@ -3,10 +3,9 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.TobeProductValidation;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class TobeProductService {
 
     @Transactional
     public TobeProduct create(final ProductForm request) {
-        DisplayedName name = new DisplayedName(request.getName());
+        ProductName name = new ProductName(request.getName());
         productValidation.vaildationName(name);
         return productRepository.save(TobeProduct.of(request));
     }

@@ -16,17 +16,15 @@ public class TobeProduct {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     public TobeProduct() {
     }
 
-    public TobeProduct(UUID id, DisplayedName name, BigDecimal price) {
-        validationPrice(price);
-
+    public TobeProduct(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,8 +33,8 @@ public class TobeProduct {
     public static TobeProduct of(ProductForm productForm) {
         return new TobeProduct(
                 UUID.randomUUID(),
-                new DisplayedName(productForm.getName()),
-                productForm.getPrice()
+                new ProductName(productForm.getName()),
+                new ProductPrice(productForm.getPrice())
         );
     }
 
@@ -49,12 +47,11 @@ public class TobeProduct {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
     public void changePrice(BigDecimal price) {
-        validationPrice(price);
-        this.price = price;
+        this.price.changePrice(price);
     }
 
     private void validationPrice(BigDecimal price) {
@@ -67,7 +64,7 @@ public class TobeProduct {
         final ProductForm productForm = new ProductForm();
         productForm.setId(this.id);
         productForm.setName(this.name.getName());
-        productForm.setPrice(this.price);
+        productForm.setPrice(this.price.getPrice());
         return productForm;
     }
 }
