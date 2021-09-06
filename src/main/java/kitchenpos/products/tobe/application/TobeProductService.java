@@ -3,9 +3,11 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.TobeProductValidation;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +21,22 @@ import java.util.UUID;
 public class TobeProductService {
     private final TobeProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final TobeProductValidation productValidation;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final TobeProductValidation productValidation
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.productValidation = productValidation;
     }
 
     @Transactional
     public TobeProduct create(final ProductForm request) {
+        DisplayedName name = new DisplayedName(request.getName());
+        productValidation.vaildationName(name);
         return productRepository.save(TobeProduct.of(request));
     }
 
@@ -48,7 +52,7 @@ public class TobeProductService {
         return product;
     }
 
-    // TODO : Menu 리팩토링 시 수정예정.
+    // TODO : Menu 리팩토링 시 수정해야함.
     private void beforeChangeMenuDisplay(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
