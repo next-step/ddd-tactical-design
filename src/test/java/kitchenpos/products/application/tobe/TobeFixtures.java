@@ -14,7 +14,7 @@ public class TobeFixtures {
     }
 
     public static TobeProduct product(final String name, final long price) {
-        return TobeProduct.of(productForm(name, price));
+        return new TobeProduct(productForm(name, price));
     }
 
     public static ProductForm productForm(final String name, final long price) {

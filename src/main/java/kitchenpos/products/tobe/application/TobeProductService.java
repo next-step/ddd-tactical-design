@@ -3,10 +3,7 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.TobeProduct;
-import kitchenpos.products.tobe.domain.TobeProductRepository;
-import kitchenpos.products.tobe.domain.TobeProductValidation;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +33,8 @@ public class TobeProductService {
     public TobeProduct create(final ProductForm request) {
         ProductName name = new ProductName(request.getName());
         productValidation.vaildationName(name);
-        return productRepository.save(TobeProduct.of(request));
+        ProductPrice price = new ProductPrice(request.getPrice());
+        return productRepository.save(new TobeProduct(name, price));
     }
 
     @Transactional

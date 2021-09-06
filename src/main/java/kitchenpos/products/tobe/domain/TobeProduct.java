@@ -24,18 +24,22 @@ public class TobeProduct {
     public TobeProduct() {
     }
 
+    public TobeProduct(ProductName name, ProductPrice price) {
+        this(UUID.randomUUID(), name, price);
+    }
+
+    public TobeProduct(ProductForm productForm) {
+        this(
+            UUID.randomUUID(),
+            new ProductName(productForm.getName()),
+            new ProductPrice(productForm.getPrice())
+        );
+    }
+
     public TobeProduct(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    public static TobeProduct of(ProductForm productForm) {
-        return new TobeProduct(
-                UUID.randomUUID(),
-                new ProductName(productForm.getName()),
-                new ProductPrice(productForm.getPrice())
-        );
     }
 
     public UUID getId() {
