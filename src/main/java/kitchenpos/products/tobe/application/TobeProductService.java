@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.tobe.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
@@ -6,14 +6,13 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.ui.ProductForm;
+import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -34,8 +33,7 @@ public class TobeProductService {
 
     @Transactional
     public TobeProduct create(final ProductForm request) {
-        final TobeProduct product = TobeProduct.of(request);
-        return productRepository.save(product);
+        return productRepository.save(TobeProduct.of(request));
     }
 
     @Transactional
@@ -45,11 +43,13 @@ public class TobeProductService {
 
         product.changePrice(request.getPrice());
 
-        afterChangeMenuDisplay(productId);
+        beforeChangeMenuDisplay(productId);
+
         return product;
     }
 
-    private void afterChangeMenuDisplay(UUID productId) {
+    // TODO : Menu 리팩토링 시 수정예정.
+    private void beforeChangeMenuDisplay(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

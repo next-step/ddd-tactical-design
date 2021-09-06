@@ -1,7 +1,7 @@
-package kitchenpos;
+package kitchenpos.products.application.tobe;
 
 import kitchenpos.products.tobe.domain.TobeProduct;
-import kitchenpos.products.ui.ProductForm;
+import kitchenpos.products.tobe.ui.ProductForm;
 
 import java.math.BigDecimal;
 import java.util.UUID;
