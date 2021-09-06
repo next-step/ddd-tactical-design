@@ -31,10 +31,7 @@ public class ProductService {
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
         final Product product = request.toProduct();
-
-        if (purgomalumClient.containsProfanity(product.getName())) {
-            throw new IllegalArgumentException();
-        }
+        product.validateName(purgomalumClient::containsProfanity);
         return ProductResponse.from(productRepository.save(product));
     }
 
