@@ -34,27 +34,22 @@ public class TobeProductService {
 
     @Transactional
     public TobeProduct create(final ProductForm request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
         final TobeProduct product = TobeProduct.of(request);
         return productRepository.save(product);
     }
 
     @Transactional
     public TobeProduct changePrice(final UUID productId, final ProductForm request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final TobeProduct product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+
+        product.changePrice(request.getPrice());
+
+        afterChangeMenuDisplay(productId);
+        return product;
+    }
+
+    private void afterChangeMenuDisplay(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -67,7 +62,6 @@ public class TobeProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
     }
 
     @Transactional(readOnly = true)

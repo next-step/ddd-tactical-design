@@ -2,10 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.ui.ProductForm;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,6 +30,9 @@ public class TobeProduct {
         this.price = price;
     }
 
+    public TobeProduct() {
+    }
+
     public static TobeProduct of(ProductForm productForm) {
         return new TobeProduct(UUID.randomUUID(),
                 productForm.getName(),
@@ -41,6 +41,19 @@ public class TobeProduct {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void changePrice(BigDecimal price) {
+        validationPrice(price);
+        this.price = price;
     }
 
     private void validationName(String name) {
