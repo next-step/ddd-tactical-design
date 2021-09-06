@@ -154,8 +154,8 @@
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+- `Product`는 식별자와 `ProductName`, `ProductPrice` 가진다.
+- `ProductName`에는 `Profanity`가 포함될 수 없다.
 
 ### 메뉴
 
