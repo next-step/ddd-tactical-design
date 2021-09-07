@@ -84,4 +84,20 @@ public class Fixtures {
                 false
         );
     }
+
+    public static Menu MENU_WITHOUT_MENU_GROUP_ID() {
+        return new Menu(
+                UUID.randomUUID(),
+                new DisplayedName("추천메뉴"),
+                new Price(BigDecimal.valueOf(1_500L)),
+                MENU_PRODUCTS_WITH_MENU_PRODUCT(
+                        new MenuProduct(
+                                PRODUCT_WITH_PRICE(BigDecimal.valueOf(1_000L)),
+                                new Quantity(1L)
+                        )
+                ),
+                null,
+                false
+        );
+    }
 }

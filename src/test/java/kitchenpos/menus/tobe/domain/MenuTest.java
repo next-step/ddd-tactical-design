@@ -15,7 +15,7 @@ class MenuTest {
 
     @DisplayName("메뉴 생성 시, 숨겨진 메뉴가 아니라면, 메뉴의 가격이 메뉴 상품 목록의 금액보다 크면 IllegalArgumentException을 던진다.")
     @Test
-    void Menu() {
+    void createMenuWithIllegalPrice() {
         final Product product = PRODUCT_WITH_PRICE(BigDecimal.valueOf(1_000L));
         final BigDecimal price = BigDecimal.valueOf(1_500L);
 
@@ -23,6 +23,15 @@ class MenuTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(PRICE_AMOUNT_EXCEPTION_MESSAGE);
+    }
+
+    @DisplayName("메뉴 생성 시, 메뉴 그룹 식별자가 없으면 IllegalArgumentException을 던진다.")
+    @Test
+    void createMenuWithoutMenuGroupId() {
+        final ThrowableAssert.ThrowingCallable when = Fixtures::MENU_WITHOUT_MENU_GROUP_ID;
+
+        assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("메뉴는 메뉴 그룹에 속해야 합니다");
     }
 
     @DisplayName("메뉴는 노출된다.")
