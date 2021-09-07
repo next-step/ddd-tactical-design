@@ -1,6 +1,6 @@
 package kitchenpos.common.tobe;
 
-import kitchenpos.common.tobe.domain.Quantity;
+import kitchenpos.commons.tobe.domain.Quantity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

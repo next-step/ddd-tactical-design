@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.commons.tobe.domain.DisplayedName;
 
 import java.util.UUID;
 
