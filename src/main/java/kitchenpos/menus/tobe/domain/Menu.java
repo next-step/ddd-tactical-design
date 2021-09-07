@@ -4,6 +4,7 @@ import kitchenpos.commons.tobe.domain.DisplayedName;
 import kitchenpos.commons.tobe.domain.Price;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Menu {
@@ -28,9 +29,7 @@ public class Menu {
                 final MenuProducts menuProducts,
                 final UUID menuGroupId,
                 final boolean displayed) {
-        if (displayed && isPriceGreaterThanAmount(price, menuProducts)) {
-            throw new IllegalArgumentException(PRICE_AMOUNT_EXCEPTION_MESSAGE);
-        }
+        validate(price, menuProducts, menuGroupId, displayed);
 
         this.id = id;
         this.name = name;
@@ -38,6 +37,18 @@ public class Menu {
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
+    }
+
+    private void validate(final Price price,
+                          final MenuProducts menuProducts,
+                          final UUID menuGroupId,
+                          final boolean displayed) {
+        if (displayed && isPriceGreaterThanAmount(price, menuProducts)) {
+            throw new IllegalArgumentException(PRICE_AMOUNT_EXCEPTION_MESSAGE);
+        }
+        if (Objects.isNull(menuGroupId)) {
+            throw new IllegalArgumentException("메뉴는 메뉴 그룹에 속해야 합니다");
+        }
     }
 
     private boolean isPriceGreaterThanAmount(final Price price, final MenuProducts menuProducts) {
