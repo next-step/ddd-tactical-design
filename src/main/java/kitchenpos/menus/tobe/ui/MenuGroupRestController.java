@@ -1,7 +1,8 @@
 package kitchenpos.menus.tobe.ui;
 
 import kitchenpos.menus.tobe.application.MenuGroupService;
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.dto.CreateMenuGroupRequest;
+import kitchenpos.menus.tobe.dto.MenuGroupResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +19,14 @@ public class MenuGroupRestController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroup request) {
-        final MenuGroup response = menuGroupService.create(request);
+    public ResponseEntity<MenuGroupResponse> create(@RequestBody final CreateMenuGroupRequest request) {
+        final MenuGroupResponse response = menuGroupService.create(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
                 .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuGroup>> findAll() {
+    public ResponseEntity<List<MenuGroupResponse>> findAll() {
         return ResponseEntity.ok(menuGroupService.findAll());
     }
 }
