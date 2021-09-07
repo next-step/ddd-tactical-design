@@ -1,6 +1,10 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
+import kitchenpos.menus.tobe.dto.CreateMenuRequest;
+import kitchenpos.menus.tobe.dto.MenuProductRequest;
+import kitchenpos.menus.tobe.dto.MenuResponse;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -31,20 +35,20 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final Menu request) {
+    public MenuResponse create(final CreateMenuRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<MenuProductRequest> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
         final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.stream()
-                        .map(MenuProduct::getProductId)
+                        .map(MenuProductRequest::getProductId)
                         .collect(Collectors.toList())
         );
         if (products.size() != menuProductRequests.size()) {
@@ -52,7 +56,7 @@ public class MenuService {
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
+        for (final MenuProductRequest menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
@@ -82,11 +86,11 @@ public class MenuService {
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(request.isDisplayed());
         menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+        return MenuResponse.from(menuRepository.save(menu));
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
+    public MenuResponse changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -102,7 +106,7 @@ public class MenuService {
             }
         }
         menu.setPrice(price);
-        return menu;
+        return MenuResponse.from(menu);
     }
 
     @Transactional
@@ -122,7 +126,7 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public MenuResponse display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -134,19 +138,21 @@ public class MenuService {
             }
         }
         menu.setDisplayed(true);
-        return menu;
+        return MenuResponse.from(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public MenuResponse hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
-        return menu;
+        return MenuResponse.from(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        return menuRepository.findAll().stream()
+                .map(MenuResponse::from)
+                .collect(Collectors.toList());
     }
 }

@@ -1,8 +1,10 @@
 package kitchenpos.menus.tobe.ui;
 
 import kitchenpos.menus.tobe.application.MenuService;
-import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.ChangeMenuStatusRequest;
+import kitchenpos.menus.tobe.dto.CreateMenuRequest;
+import kitchenpos.menus.tobe.dto.MenuResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,36 +22,36 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Menu> create(@RequestBody final Menu request) {
-        final Menu response = menuService.create(request);
+    public ResponseEntity<MenuResponse> create(@RequestBody final CreateMenuRequest request) {
+        final MenuResponse response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
                 .body(response);
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<MenuResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final ChangeMenuPriceRequest request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuResponse> display(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuResponse> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
     }
 
     @PutMapping("/status")
-    public ResponseEntity<Menu> changeStatus(@RequestBody final ChangeMenuStatusRequest request) {
+    public ResponseEntity<MenuResponse> changeStatus(@RequestBody final ChangeMenuStatusRequest request) {
         final UUID productId = request.getProductId();
         menuService.changeStatus(productId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Menu>> findAll() {
+    public ResponseEntity<List<MenuResponse>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
     }
 }
