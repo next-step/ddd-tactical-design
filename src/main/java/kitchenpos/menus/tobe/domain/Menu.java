@@ -14,7 +14,7 @@ public class Menu {
 
     private final DisplayedName name;
 
-    private Price price;
+    private final Price price;
 
     private final MenuProducts menuProducts;
 
@@ -44,14 +44,6 @@ public class Menu {
         final BigDecimal menuPrice = price.value();
         final BigDecimal amount = menuProducts.getAmount();
         return menuPrice.compareTo(amount) > 0;
-    }
-
-    public void changePrice(final Price price) {
-        if (displayed && isPriceGreaterThanAmount(price, menuProducts)) {
-            throw new IllegalArgumentException(PRICE_AMOUNT_EXCEPTION_MESSAGE);
-        }
-
-        this.price = price;
     }
 
     public void display() {
