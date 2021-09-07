@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Table(name = "menu")
 @Entity(name = "TobeMenu")
@@ -12,11 +13,11 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName menuName;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice menuPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,8 +42,7 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
-    }
+    public Menu() {}
 
     public UUID getId() {
         return id;
@@ -53,19 +53,19 @@ public class Menu {
     }
 
     public String getName() {
-        return name;
+        return menuName.getName();
     }
 
     public void setName(final String name) {
-        this.name = name;
+        this.menuName = new MenuName(name);
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return menuPrice.getPrice();
     }
 
     public void setPrice(final BigDecimal price) {
-        this.price = price;
+        this.menuPrice = new MenuPrice(price);
     }
 
     public MenuGroup getMenuGroup() {
@@ -98,5 +98,9 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    public void validateName(final Function<String, Boolean> validator) {
+        menuName.validate(validator);
     }
 }
