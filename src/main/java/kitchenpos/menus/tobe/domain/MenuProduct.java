@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.tobe.Quantity;
+import kitchenpos.common.tobe.domain.Quantity;
 
 import java.math.BigDecimal;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package kitchenpos.common.tobe;
+package kitchenpos.common.tobe.domain;
 
 public class Quantity {
 

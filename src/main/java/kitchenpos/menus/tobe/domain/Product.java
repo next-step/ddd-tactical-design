@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.tobe.Price;
+import kitchenpos.common.tobe.domain.Price;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.tobe.DisplayedName;
-import kitchenpos.common.tobe.Price;
-import kitchenpos.common.tobe.Quantity;
+import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.common.tobe.domain.Quantity;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
