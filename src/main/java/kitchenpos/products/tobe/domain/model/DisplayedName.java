@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain.model;
 
 import javax.persistence.Embeddable;
+import kitchenpos.products.tobe.domain.service.ProductDomainService;
 
 @Embeddable
 public class DisplayedName {
@@ -10,7 +11,8 @@ public class DisplayedName {
     private DisplayedName() {
     }
 
-    public DisplayedName(final String name) {
+    public DisplayedName(final String name, ProductDomainService productDomainService) {
+        productDomainService.validateDisplayedName(name);
         this.name = name;
     }
 

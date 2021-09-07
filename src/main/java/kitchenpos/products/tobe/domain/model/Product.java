@@ -29,9 +29,8 @@ public class Product {
     }
 
     public Product(String displayedName, BigDecimal price, ProductDomainService productDomainService) {
-        productDomainService.validateDisplayedName(displayedName);
         this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName(displayedName);
+        this.displayedName = new DisplayedName(displayedName, productDomainService);
         this.price = new Price(price);
     }
 
