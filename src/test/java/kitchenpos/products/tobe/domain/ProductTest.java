@@ -21,14 +21,4 @@ public class ProductTest {
         BigDecimal actual = product.multiply(quantity);
         assertThat(actual).isEqualTo(new BigDecimal(32_000L));
     }
-
-    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void changePrice(final BigDecimal price) {
-        Product product = product();
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> product.changePrice(price));
-    }
 }
