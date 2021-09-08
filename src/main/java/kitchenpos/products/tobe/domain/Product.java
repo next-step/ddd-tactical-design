@@ -26,6 +26,12 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
+    public Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
     }
