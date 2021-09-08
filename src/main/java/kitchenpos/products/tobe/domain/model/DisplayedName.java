@@ -8,7 +8,7 @@ public class DisplayedName {
 
     private String name;
 
-    private DisplayedName() {
+    protected DisplayedName() {
     }
 
     public DisplayedName(final String name, ProductDomainService productDomainService) {
@@ -16,11 +16,7 @@ public class DisplayedName {
         this.name = name;
     }
 
-    public String getName() {
+    protected String getName() {
         return name;
-    }
-
-    private void setName(String name) {
-        this.name = name;
     }
 }
