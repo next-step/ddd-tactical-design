@@ -151,10 +151,24 @@
 
 ## 모델링
 
-### 상품
+### 상품(Product)
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### 속성
+
+- 손님에게 노출되는 `displayedName`을 가진다.
+- 상품의 가격인 `price`를 가진다.
+
+#### 기능/조건
+
+- 상품을 등록할 수 있다(`create`).
+  - `price`는 0원 이상이어야 한다.
+  - `displayedName`은 비워 둘 수 없다.
+  - `displayedName`은 `PurgoMalumClient`를 통해 비속어(`profanity`)를 필터링 한다.
+- 상품의 가격을 변경할 수 있다(`changePrice`).
+  - 변경되는 `price`는 0원 이상이어야 한다.
+  - 변경 후 메뉴에 속한 상품(`menuProduct`)금액의 합보다 메뉴(`menu`)의 가격이 크면 메뉴가 숨겨진다(`hide`).
+- 상품의 목록을 조회할 수 있다.(`findAll`)
+
 
 ### 메뉴
 
