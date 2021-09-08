@@ -20,10 +20,15 @@ public class ProductName {
     }
 
     public ProductName(String name, PurgomalumClient purgomalumClient) {
+        checkName(name);
+        checkProfanity(name, purgomalumClient);
+        this.name = name;
+    }
+
+    private void checkProfanity(String name, PurgomalumClient purgomalumClient) {
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        this.name = name;
     }
 
     public String getName() {
