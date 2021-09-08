@@ -9,6 +9,7 @@ public class MenuProducts {
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
         validate(menuProducts);
+
         this.menuProducts = menuProducts;
     }
 
