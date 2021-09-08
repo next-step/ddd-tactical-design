@@ -3,6 +3,8 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
@@ -32,8 +34,7 @@ public class ProductService {
 
     @Transactional
     public Product create(final ProductCreateRequest request) {
-        final Product product = request.toEntity();
-        checkContainsProfanity(product);
+        final Product product = request.toEntity(purgomalumClient);
         return productRepository.save(product);
     }
 
@@ -50,14 +51,6 @@ public class ProductService {
     private Product findById(final UUID productId) {
         return productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-    }
-
-
-    // TODO: 리펙토링
-    private void checkContainsProfanity(final Product product) {
-        if (purgomalumClient.containsProfanity(product.getName())) {
-            throw new IllegalArgumentException();
-        }
     }
 
     @Transactional(readOnly = true)
