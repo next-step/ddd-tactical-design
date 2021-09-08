@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -14,6 +16,13 @@ public class ProductName {
 
     public ProductName(final String name) {
         checkName(name);
+        this.name = name;
+    }
+
+    public ProductName(String name, PurgomalumClient purgomalumClient) {
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
