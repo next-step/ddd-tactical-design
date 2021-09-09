@@ -6,6 +6,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.common.tobe.domain.Price;
 
 @Table(name = "product")
 @Entity

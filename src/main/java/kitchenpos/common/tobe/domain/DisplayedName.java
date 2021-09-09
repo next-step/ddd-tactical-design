@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.model;
+package kitchenpos.common.tobe.domain;
 
 import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
 import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;

@@ -2,8 +2,8 @@ package kitchenpos.products.tobe.dto;
 
 import java.math.BigDecimal;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.model.DisplayedName;
-import kitchenpos.products.tobe.domain.model.Price;
+import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.model.Product;
 
 public class ProductRequestDto {

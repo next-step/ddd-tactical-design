@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.model;
+package kitchenpos.common.tobe.domain;
 
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NEGATIVE;
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NULL;

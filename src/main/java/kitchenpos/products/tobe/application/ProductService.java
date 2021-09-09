@@ -8,7 +8,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.model.Price;
+import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductRequestDto;
