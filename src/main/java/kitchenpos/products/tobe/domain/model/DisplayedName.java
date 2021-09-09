@@ -18,8 +18,8 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    public DisplayedName(final String name) {
-        validateName(name);
+    public DisplayedName(final String name, final PurgomalumClient purgomalumClient) {
+        validateName(name, purgomalumClient);
         this.name = name;
     }
 
@@ -44,15 +44,13 @@ public class DisplayedName {
         return Objects.hash(name);
     }
 
-    public void validateName(final String name) {
+    public void validateName(final String name, final PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
-    }
-
-    public void validateProfanity(final PurgomalumClient purgomalumClient) {
         if (purgomalumClient.containsProfanity(name)) {
             throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
         }
     }
+
 }
