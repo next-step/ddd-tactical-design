@@ -1,9 +1,7 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.ProductTranslator;
+import kitchenpos.common.infra.Profanities;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -20,19 +18,19 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductTranslator productTranslator;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities profanities;
 
-    public ProductService(final ProductRepository productRepository, final ProductTranslator productTranslator, final PurgomalumClient purgomalumClient) {
+    public ProductService(final ProductRepository productRepository, final ProductTranslator productTranslator, final Profanities profanities) {
         this.productRepository = productRepository;
         this.productTranslator = productTranslator;
-        this.purgomalumClient = purgomalumClient;
+        this.profanities = profanities;
     }
 
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
-        final Product product = request.toProduct();
-        product.validateName(purgomalumClient::containsProfanity);
-        return ProductResponse.from(productRepository.save(product));
+        final ProductName productName = new ProductName(request.getName(), profanities);
+        final ProductPrice productPrice = new ProductPrice(request.getPrice());
+        return ProductResponse.from(productRepository.save(new Product(productName, productPrice)));
     }
 
     @Transactional

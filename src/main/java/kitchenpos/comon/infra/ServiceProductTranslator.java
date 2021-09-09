@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.comon.infra;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.products.tobe.domain.ProductTranslator;

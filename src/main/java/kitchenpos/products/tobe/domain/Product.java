@@ -3,13 +3,13 @@ package kitchenpos.products.tobe.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.function.Function;
 
 @Table(name = "product")
 @Entity(name = "TobeProduct")
 public class Product {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
+    @Column(name = "id", columnDefinition = "varbinary(16)")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Embedded
@@ -26,12 +26,8 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    private Product(final UUID id, final String name, final BigDecimal price) {
-        this(id, new ProductName(name), new ProductPrice(price));
-    }
-
-    public Product(final String name, final BigDecimal price) {
-        this(UUID.randomUUID(), name, price);
+    public Product(final ProductName productName, final ProductPrice productPrice) {
+        this(UUID.randomUUID(), productName, productPrice);
     }
 
     public UUID getId() {
@@ -48,9 +44,5 @@ public class Product {
 
     public void setPrice(final BigDecimal price) {
         this.productPrice = new ProductPrice(price);
-    }
-
-    public void validateName(final Function<String, Boolean> validator) {
-        productName.validate(validator);
     }
 }

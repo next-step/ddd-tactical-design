@@ -1,35 +1,30 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.domain.Value;
+import kitchenpos.common.infra.Profanities;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
-import java.util.function.Function;
 
 @Embeddable
-public class ProductName {
+public class ProductName extends Value<ProductName> {
     @Column(name = "name", nullable = false)
     private String name;
 
     protected ProductName() {}
 
-    ProductName(final String name) {
-        validate(name);
+    public ProductName(final String name, final Profanities profanities) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException("상품 이름은 필수값입니다.");
+        }
+        if (profanities.contains(name)) {
+            throw new IllegalArgumentException("적절하지 않은 상품 이름입니다.");
+        }
         this.name = name;
     }
 
     public String getName() {
         return name;
-    }
-
-    private void validate(final String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException("상품 이름은 필수값입니다.");
-        }
-    }
-
-    void validate(final Function<String, Boolean> validator) {
-        if (validator.apply(name)) {
-            throw new IllegalArgumentException("적절하지 않은 상품 이름입니다.");
-        }
     }
 }
