@@ -41,4 +41,10 @@ public class ProductRestController {
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
+
+    @PostMapping("/by-ids")
+    public ResponseEntity<List<Product>> findAllByIdIn(@RequestBody final ProductRequests.FindAll request) {
+        return ResponseEntity.ok(productService.findAllByIdIn(request));
+    }
+
 }
