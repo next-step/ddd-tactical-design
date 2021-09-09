@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/products")
-@RestController
+// @RestController
 public class ProductRestController {
     private final ProductService productService;
 

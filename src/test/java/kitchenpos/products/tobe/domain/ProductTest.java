@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ public class ProductTest {
 		Price price = new Price(new BigDecimal(17_000L));
 
 		// when
-		Product product = new Product(UUID.randomUUID(), displayedName, price);
+		Product product = new Product(displayedName, price);
 
 		// & then
 		assertAll(
@@ -35,7 +34,7 @@ public class ProductTest {
 		// given
 		DisplayedName displayedName = new DisplayedName("강정치킨", name -> false);
 		Price price = new Price(new BigDecimal(17_000L));
-		Product product = new Product(UUID.randomUUID(), displayedName, price);
+		Product product = new Product(displayedName, price);
 
 		// when
 		product.changePrice(new Price(value));
