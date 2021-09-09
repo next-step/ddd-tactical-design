@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.infra.event;
 
 import kitchenpos.products.tobe.domain.interfaces.event.EventPublishClient;
-import kitchenpos.products.tobe.ui.dto.ProductChangePriceEvent;
+import kitchenpos.products.tobe.domain.model.ProductChangePriceEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
