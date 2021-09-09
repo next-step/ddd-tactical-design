@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,9 +14,11 @@ public class Product {
     @Id
     private UUID id;
 
+    @Embedded
     @Column(name = "displayed_name", nullable = false)
     private DisplayedName displayedName;
 
+    @Embedded
     @Column(name = "price", nullable = false)
     private Price price;
 
