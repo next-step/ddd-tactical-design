@@ -154,11 +154,12 @@
 ### 상품
 
 - `Product`는 식별자와 `DisplayedName`, `Price`을 가진다.
+- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 
 ### 메뉴
 
 - `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `DisplayedName`, `Price`, `MenuProducts`를 가진다.
+- `Menu`는 식별자와 `Displayed Name`, `Price`, `MenuProducts`를 가진다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
 - `Menu`의 `Price`은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
 - `Menu`의 `Price`이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
@@ -195,9 +196,3 @@
 ### 공통
 
 - `Price` 는 0원 이상이다.
-- `DisplayedName` 에는 `Profanity`가 포함될 수 없다.
-
-### 궁금한 점
-
-- `DisplayedName` 생성자에 `PurgomalumClient` 가 파라미터로 들어가도 될까?
-

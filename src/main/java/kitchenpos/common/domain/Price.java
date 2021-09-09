@@ -3,7 +3,7 @@ package kitchenpos.common.domain;
 import java.util.Objects;
 
 public class Price {
-	private final long value;
+	private long value;
 
 	public Price(long value) {
 		if (!(value >= 0)) {
