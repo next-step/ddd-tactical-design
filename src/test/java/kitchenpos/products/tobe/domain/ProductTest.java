@@ -10,27 +10,21 @@ import org.junit.jupiter.api.Test;
 
 class ProductTest {
 
+    private static final Profanities profanities = new FakeProfanities();
+
     @DisplayName("상품을 생성할 수 있다.")
     @Test
     void 생성() {
-        final UUID id = UUID.randomUUID();
-        final DisplayedName displayedName = new DisplayedName("치킨", new FakeProfanities());
-        final Price price = new Price(BigDecimal.valueOf(18000L));
-
         assertDoesNotThrow(
-            () -> new Product(id, displayedName, price)
+            () -> createProduct("치킨", 16_000L)
         );
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void 가격변경() {
-        final Product product = new Product(
-            UUID.randomUUID(),
-            new DisplayedName("치킨", new FakeProfanities()),
-            new Price(BigDecimal.valueOf(18000L))
-        );
-        final Price newPrice = new Price(BigDecimal.valueOf(20000L));
+        final Product product = createProduct("치킨", 16_000L);
+        final Price newPrice = new Price(BigDecimal.valueOf(20_000L));
 
         product.changePrice(newPrice);
 
@@ -41,12 +35,22 @@ class ProductTest {
     @Test
     void 동등성() {
         final UUID id = UUID.randomUUID();
-        final DisplayedName displayedName = new DisplayedName("치킨", new FakeProfanities());
-        final Price price = new Price(BigDecimal.valueOf(18000L));
 
-        final Product product1 = new Product(id, displayedName, price);
-        final Product product2 = new Product(id, displayedName, price);
+        final Product product1 = createProduct(id, "치킨", 16_000L);
+        final Product product2 = createProduct(id, "치킨", 16_000L);
 
         assertThat(product1).isEqualTo(product2);
+    }
+
+    private Product createProduct(UUID id, final String displayedName, final Long price) {
+        return new Product(
+            id,
+            new DisplayedName(displayedName, profanities),
+            new Price(BigDecimal.valueOf(price))
+        );
+    }
+
+    private Product createProduct(final String displayedName, final Long price) {
+        return createProduct(UUID.randomUUID(), displayedName, price);
     }
 }
