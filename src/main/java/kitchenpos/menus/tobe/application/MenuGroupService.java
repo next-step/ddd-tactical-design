@@ -1,10 +1,11 @@
 package kitchenpos.menus.tobe.application;
 
+import kitchenpos.common.infra.Profanities;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupName;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.dto.CreateMenuGroupRequest;
 import kitchenpos.menus.tobe.dto.MenuGroupResponse;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,18 +15,17 @@ import java.util.stream.Collectors;
 @Service("TobeMenuGroupService")
 public class MenuGroupService {
     private final MenuGroupRepository menuGroupRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities profanities;
 
-    public MenuGroupService(final MenuGroupRepository menuGroupRepository, final PurgomalumClient purgomalumClient) {
+    public MenuGroupService(final MenuGroupRepository menuGroupRepository, final Profanities profanities) {
         this.menuGroupRepository = menuGroupRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanities = profanities;
     }
 
     @Transactional
     public MenuGroupResponse create(final CreateMenuGroupRequest request) {
-        final MenuGroup menuGroup = request.toMenuGroup();
-        menuGroup.validateName(purgomalumClient::containsProfanity);
-        return MenuGroupResponse.from(menuGroupRepository.save(menuGroup));
+        final MenuGroupName menuGroupName = new MenuGroupName(request.getName(), profanities);
+        return MenuGroupResponse.from(menuGroupRepository.save(new MenuGroup(menuGroupName)));
     }
 
     @Transactional(readOnly = true)

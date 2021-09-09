@@ -37,7 +37,7 @@ class ProductNameTest {
 
     @DisplayName("상품 이름이 같으면, 같아야 한다.")
     @ParameterizedTest
-    @ValueSource(strings = {"치킨", "피자"})
+    @ValueSource(strings = {"치킨 상품", "피자 상품"})
     void equalPrice(final String name) {
         assertThat(new ProductName(name, profanities))
                 .isEqualTo(new ProductName(name, profanities));

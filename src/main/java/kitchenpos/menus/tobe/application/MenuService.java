@@ -1,11 +1,11 @@
 package kitchenpos.menus.tobe.application;
 
+import kitchenpos.common.infra.Profanities;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.dto.MenuResponse;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -20,18 +20,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities profanities;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient
+            final Profanities profanities
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanities = profanities;
     }
 
     @Transactional
@@ -75,12 +75,11 @@ public class MenuService {
         final String name = request.getName();
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
-        menu.setName(name);
+        menu.setMenuName(new MenuName(name, profanities));
         menu.setPrice(price);
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(request.isDisplayed());
         menu.setMenuProducts(menuProducts);
-        menu.validateName(purgomalumClient::containsProfanity);
         return MenuResponse.from(menuRepository.save(menu));
     }
 

@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
 import java.util.UUID;
-import java.util.function.Function;
 
 @Table(name = "menu_group")
 @Entity(name = "TobeMenuGroup")
@@ -21,8 +20,8 @@ public class MenuGroup {
         this.menuGroupName = menuGroupName;
     }
 
-    public MenuGroup(final UUID id, final String name) {
-        this(id, new MenuGroupName(name));
+    public MenuGroup(final MenuGroupName menuGroupName) {
+        this(UUID.randomUUID(), menuGroupName);
     }
 
     public UUID getId() {
@@ -31,9 +30,5 @@ public class MenuGroup {
 
     public String getName() {
         return menuGroupName.getName();
-    }
-
-    public void validateName(final Function<String, Boolean> validator) {
-        menuGroupName.validate(validator);
     }
 }

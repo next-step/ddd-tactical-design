@@ -1,9 +1,5 @@
 package kitchenpos.menus.tobe.dto;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-
-import java.util.UUID;
-
 public class CreateMenuGroupRequest {
     private String name;
 
@@ -15,9 +11,5 @@ public class CreateMenuGroupRequest {
 
     public String getName() {
         return name;
-    }
-
-    public MenuGroup toMenuGroup() {
-        return new MenuGroup(UUID.randomUUID(), name);
     }
 }
