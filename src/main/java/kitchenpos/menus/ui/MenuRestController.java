@@ -2,7 +2,7 @@ package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.dto.ChangeMenuStatusRequest;
+import kitchenpos.menus.dto.UpdateMenuStatusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,9 +42,9 @@ public class MenuRestController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<Menu> changeStatus(@RequestBody final ChangeMenuStatusRequest request) {
+    public ResponseEntity<Menu> updateStatus(@RequestBody final UpdateMenuStatusRequest request) {
         final UUID productId = request.getProductId();
-        menuService.changeStatus(productId);
+        menuService.updateStatus(productId);
         return ResponseEntity.ok().build();
     }
 

@@ -106,7 +106,7 @@ public class MenuService {
     }
 
     @Transactional
-    public void changeStatus(final UUID productId) {
+    public void updateStatus(final UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

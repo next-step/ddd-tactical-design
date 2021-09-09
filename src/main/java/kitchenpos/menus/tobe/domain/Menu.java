@@ -63,8 +63,8 @@ public class Menu {
         return menuPrice.getPrice();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.menuPrice = new MenuPrice(price);
+    public void setMenuPrice(final MenuPrice menuPrice) {
+        this.menuPrice = menuPrice;
     }
 
     public MenuGroup getMenuGroup() {
@@ -97,5 +97,45 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    public void display() {
+        if (!isValidPrice()) {
+            throw new IllegalStateException("Menu의 가격은 MenuProducts의 금액의 합보다 적거나 같아야 보일 수 있습니다.");
+        }
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public void updateStatus() {
+        if (!isValidPrice()) {
+            this.displayed = false;
+        }
+    }
+
+    public void changePrice(final MenuPrice menuPrice) {
+        if (isValidPrice(menuPrice)) {
+            throw new IllegalArgumentException("Menu의 가격은 MenuProducts의 금액의 합보다 적거나 같아야 합니다.");
+        }
+        this.menuPrice = menuPrice;
+    }
+
+    private BigDecimal sumMenuProductPrice() {
+        return menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr));
+    }
+
+    private boolean isValidPrice(final MenuPrice menuPrice) {
+        return menuPrice.getPrice()
+                .compareTo(sumMenuProductPrice()) <= 0;
+    }
+
+    private boolean isValidPrice() {
+        return isValidPrice(menuPrice);
     }
 }

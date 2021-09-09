@@ -2,9 +2,9 @@ package kitchenpos.menus.tobe.ui;
 
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
-import kitchenpos.menus.tobe.dto.ChangeMenuStatusRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.MenuResponse;
+import kitchenpos.menus.tobe.dto.UpdateMenuStatusRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +44,9 @@ public class MenuRestController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<MenuResponse> changeStatus(@RequestBody final ChangeMenuStatusRequest request) {
+    public ResponseEntity<MenuResponse> updateStatus(@RequestBody final UpdateMenuStatusRequest request) {
         final UUID productId = request.getProductId();
-        menuService.changeStatus(productId);
+        menuService.updateStatus(productId);
         return ResponseEntity.ok().build();
     }
 

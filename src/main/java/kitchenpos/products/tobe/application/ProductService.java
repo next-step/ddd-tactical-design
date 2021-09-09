@@ -39,7 +39,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
-        productTranslator.changeMenuStatus(productId);
+        productTranslator.updateMenuStatus(productId);
         return ProductResponse.from(product);
     }
 

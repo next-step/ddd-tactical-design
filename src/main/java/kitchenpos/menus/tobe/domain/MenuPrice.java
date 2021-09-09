@@ -14,22 +14,17 @@ public class MenuPrice extends Value<MenuPrice> {
 
     protected MenuPrice() {}
 
-    MenuPrice(final BigDecimal price) {
-        validate(price);
+    public MenuPrice(final BigDecimal price) {
+        if (Objects.isNull(price)) {
+            throw new IllegalArgumentException("메뉴 가격은 필수값입니다.");
+        }
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("메뉴 가격은 음수가 될 수 없습니다.");
+        }
         this.price = price;
     }
 
     public BigDecimal getPrice() {
         return price;
-    }
-
-    private void validate(final BigDecimal price) {
-        if (Objects.isNull(price)) {
-            throw new IllegalArgumentException("메뉴 가격은 필수값입니다.");
-        }
-
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("메뉴 가격은 음수가 될 수 없습니다.");
-        }
     }
 }

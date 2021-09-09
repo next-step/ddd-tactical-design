@@ -14,7 +14,7 @@ public class InMemoryProductTranslator implements ProductTranslator {
     private final MenuRepository menuRepository = new InMemoryMenuRepository();
 
     @Override
-    public void changeMenuStatus(final UUID productId) {
+    public void updateMenuStatus(final UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

@@ -1,13 +1,12 @@
-package kitchenpos.comon.infra;
+package kitchenpos.common.infra;
 
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.products.tobe.domain.ProductTranslator;
 
 import java.util.UUID;
 
 // @Component
 public class ServiceProductTranslator implements ProductTranslator {
-    // FIXME: Repository 를 RestTemplate 으로 분리하기
     private final MenuService menuService;
 
     public ServiceProductTranslator(final MenuService menuService) {
@@ -15,7 +14,7 @@ public class ServiceProductTranslator implements ProductTranslator {
     }
 
     @Override
-    public void changeMenuStatus(final UUID productId) {
-        menuService.changeStatus(productId);
+    public void updateMenuStatus(final UUID productId) {
+        menuService.updateStatus(productId);
     }
 }
