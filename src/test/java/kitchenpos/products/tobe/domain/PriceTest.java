@@ -37,6 +37,7 @@ public class PriceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("상품 가격 간 동등성을 확인할 수 있다.")
     @Test
     void equals() {
         final Price price1 = new Price(BigDecimal.valueOf(1000L));

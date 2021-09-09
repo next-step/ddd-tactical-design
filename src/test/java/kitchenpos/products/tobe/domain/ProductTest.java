@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ProductTest {
 
+    @DisplayName("상품을 생성할 수 있다.")
     @Test
     void 생성() {
         final UUID id = UUID.randomUUID();
@@ -20,6 +22,7 @@ class ProductTest {
         );
     }
 
+    @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void 가격변경() {
         final Product product = new Product(
@@ -34,6 +37,7 @@ class ProductTest {
         assertThat(product.getPrice()).isEqualTo(newPrice);
     }
 
+    @DisplayName("상품 간 동등성을 확인할 수 있다.")
     @Test
     void 동등성() {
         final UUID id = UUID.randomUUID();

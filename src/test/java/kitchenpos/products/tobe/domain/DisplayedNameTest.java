@@ -20,6 +20,7 @@ class DisplayedNameTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("상품 이름을 생성할 수 있다.")
     @Test
     void 생성() {
         assertDoesNotThrow(
@@ -27,6 +28,7 @@ class DisplayedNameTest {
         );
     }
 
+    @DisplayName("상품 이름 간 동등성을 확인할 수 있다.")
     @Test
     void 동등성() {
         final DisplayedName displayedName1 = new DisplayedName("치킨", new FakeProfanities());
