@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import java.math.BigDecimal;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

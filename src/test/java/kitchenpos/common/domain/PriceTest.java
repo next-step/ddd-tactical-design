@@ -1,7 +1,5 @@
 package kitchenpos.common.domain;
 
-import java.math.BigDecimal;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +14,7 @@ public class PriceTest {
 		Price price = new Price(value);
 
 		// then
-		Assertions.assertThat(price.getValue()).isEqualTo(new BigDecimal(value));
+		Assertions.assertThat(price.getValue()).isEqualTo(value);
 	}
 
 	@ParameterizedTest

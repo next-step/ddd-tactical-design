@@ -1,20 +1,19 @@
 package kitchenpos.common.domain;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Price {
-	private final BigDecimal value;
+	private final Long value;
 
 	public Price(Long value) {
 		if (value == null || !(value >= 0)) {
 			throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
 		}
 
-		this.value = new BigDecimal(value);
+		this.value = value;
 	}
 
-	public BigDecimal getValue() {
+	public Long getValue() {
 		return value;
 	}
 
