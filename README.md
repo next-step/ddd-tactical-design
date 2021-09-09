@@ -153,17 +153,17 @@
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
+- `Product`는 식별자와 `DisplayedName`, `Price`을 가진다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 
 ### 메뉴
 
 - `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
+- `Menu`는 식별자와 `DisplayedName`, `Price`, `MenuProducts`를 가진다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `Menu`의 `Price`은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
+- `Menu`의 `Price`이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
+- `MenuProduct`는 `Price`과 수량을 가진다.
 
 ### 매장 주문
 
@@ -171,24 +171,24 @@
 - `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
 - `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
 - `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
+- 메뉴가 노출되고 있으며 판매되는 메뉴 `Price`과 일치하면 `Order`가 생성된다.
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
+- `OrderLineItem`는 `Price`과 수량을 가진다.
 - `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
 
 ### 배달 주문
 
 - `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
+- 메뉴가 노출되고 있으며 판매되는 메뉴 `Price`과 일치하면 `Order`가 생성된다.
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
 - `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
+- `OrderLineItem`는 `Price`과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.
 
 ### 포장 주문
 
 - `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
+- 메뉴가 노출되고 있으며 판매되는 메뉴 `Price`과 일치하면 `Order`가 생성된다.
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
+- `OrderLineItem`는 `Price`과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.
