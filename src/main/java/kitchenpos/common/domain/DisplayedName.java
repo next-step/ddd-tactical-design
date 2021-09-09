@@ -6,10 +6,6 @@ public class DisplayedName {
 	private final String value;
 
 	public DisplayedName(String value, PurgomalumClient purgomalumClient) {
-		if (value == null || value.length() == 0) {
-			throw new IllegalArgumentException("이름은 빈 값일 수 없습니다.");
-		}
-
 		if (purgomalumClient.containsProfanity(value)) {
 			throw new IllegalArgumentException("표시된 이름에는 비속어를 포함하지 않아야 합니다.");
 		}
