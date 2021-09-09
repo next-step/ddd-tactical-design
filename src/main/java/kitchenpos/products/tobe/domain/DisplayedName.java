@@ -7,7 +7,7 @@ import kitchenpos.common.Value;
 
 @Embeddable
 public class DisplayedName extends Value<DisplayedName> {
-	@Column
+	@Column(name = "name")
 	private String value;
 
 	protected DisplayedName() {
@@ -27,6 +27,6 @@ public class DisplayedName extends Value<DisplayedName> {
 	}
 
 	public String getValue() {
-		return this.value;
+		return value;
 	}
 }
