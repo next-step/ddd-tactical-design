@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -41,62 +42,55 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {}
+    protected Menu() {}
+
+    private Menu(final UUID id, final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
+        this.id = id;
+        this.menuName = menuName;
+        this.menuPrice = menuPrice;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
+    }
+
+    public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
+        validateMenu(menuName, menuPrice, menuGroup, displayed, menuProducts, menuGroupId);
+        this.id = UUID.randomUUID();
+        this.menuName = menuName;
+        this.menuPrice = menuPrice;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
+    }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public String getName() {
         return menuName.getName();
     }
 
-    public void setMenuName(final MenuName menuName) {
-        this.menuName = menuName;
-    }
-
     public BigDecimal getPrice() {
         return menuPrice.getPrice();
-    }
-
-    public void setMenuPrice(final MenuPrice menuPrice) {
-        this.menuPrice = menuPrice;
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
     }
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 
     public void display() {
@@ -118,24 +112,37 @@ public class Menu {
 
     public void changePrice(final MenuPrice menuPrice) {
         if (isValidPrice(menuPrice)) {
-            throw new IllegalArgumentException("Menu의 가격은 MenuProducts의 금액의 합보다 적거나 같아야 합니다.");
+            throw new IllegalArgumentException("변경할 메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
         this.menuPrice = menuPrice;
     }
 
-    private BigDecimal sumMenuProductPrice() {
+    private boolean isValidPrice() {
+        return isValidPrice(menuPrice);
+    }
+
+    private boolean isValidPrice(final MenuPrice menuPrice) {
+        return isValidPrice(menuPrice, menuProducts);
+    }
+
+    private boolean isValidPrice(final MenuPrice menuPrice, final List<MenuProduct> menuProducts) {
+        return menuPrice.getPrice()
+                .compareTo(sumMenuProductPrice(menuProducts)) <= 0;
+    }
+
+    private BigDecimal sumMenuProductPrice(final List<MenuProduct> menuProducts) {
         return menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
                         .getPrice()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr));
     }
 
-    private boolean isValidPrice(final MenuPrice menuPrice) {
-        return menuPrice.getPrice()
-                .compareTo(sumMenuProductPrice()) <= 0;
-    }
-
-    private boolean isValidPrice() {
-        return isValidPrice(menuPrice);
+    private void validateMenu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("메뉴는 반드시 한개 이상의 상품으로 구성되어야 합니다.");
+        }
+        if (!isValidPrice(menuPrice, menuProducts)) {
+            throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
+        }
     }
 }
