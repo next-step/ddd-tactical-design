@@ -4,10 +4,8 @@ import kitchenpos.common.infra.Profanities;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
-import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.dto.MenuResponse;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.menus.tobe.infra.MenuProductTranslator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +18,18 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
+    private final MenuProductTranslator menuProductTranslator;
     private final Profanities profanities;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final ProductRepository productRepository,
+            final MenuProductTranslator menuProductTranslator,
             final Profanities profanities
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
+        this.menuProductTranslator = menuProductTranslator;
         this.profanities = profanities;
     }
 
@@ -39,26 +37,16 @@ public class MenuService {
     public MenuResponse create(final CreateMenuRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
-        final List<MenuProductRequest> menuProductRequests = request.getMenuProducts();
-        final MenuProducts menuProducts = new MenuProducts(
-                productRepository.findAllByIdIn(menuProductRequests.stream()
-                        .map(MenuProductRequest::getProductId)
-                        .collect(Collectors.toList()))
-                , menuProductRequests.stream()
-                .map(menuProductRequest -> {
-                    final Product product = productRepository.findById(menuProductRequest.getProductId())
-                            .orElseThrow(NoSuchElementException::new);
-                    final ProductQuantity productQuantity = new ProductQuantity(menuProductRequest.getQuantity());
-                    return new MenuProduct(product, productQuantity);
-                }).collect(Collectors.toList()));
-        return MenuResponse.from(menuRepository.save(new Menu(
+        final MenuProducts menuProducts = menuProductTranslator.translateMenuProducts(request.getMenuProducts());
+        final Menu menu = new Menu(
                 new MenuName(request.getName(), profanities),
                 new MenuPrice(request.getPrice()),
                 menuGroup,
                 request.isDisplayed(),
                 menuProducts,
-                menuGroup.getId()
-        )));
+                menuGroup.getId());
+        menuRepository.save(menu);
+        return MenuResponse.from(menu);
     }
 
     @Transactional

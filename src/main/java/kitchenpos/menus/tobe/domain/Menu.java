@@ -104,7 +104,7 @@ public class Menu {
     }
 
     public void changePrice(final MenuPrice menuPrice) {
-        if (isValidPrice(menuPrice)) {
+        if (!isValidPrice(menuPrice)) {
             throw new IllegalArgumentException("변경할 메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
         this.menuPrice = menuPrice;

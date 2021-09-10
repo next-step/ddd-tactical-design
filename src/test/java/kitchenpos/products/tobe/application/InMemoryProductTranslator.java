@@ -4,7 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.ProductTranslator;
+import kitchenpos.products.tobe.infra.ProductTranslator;
 
 import java.math.BigDecimal;
 import java.util.List;
