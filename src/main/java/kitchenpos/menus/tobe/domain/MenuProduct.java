@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -30,6 +31,9 @@ public class MenuProduct {
     protected MenuProduct() {}
 
     public MenuProduct(final Product product, final ProductQuantity productQuantity) {
+        if (Objects.isNull(product) || Objects.isNull(productQuantity)) {
+            throw new IllegalArgumentException("상품과 상품 수량은 주문 목록의 필수값입니다.");
+        }
         this.product = product;
         this.productQuantity = productQuantity;
         this.productId = product.getId();

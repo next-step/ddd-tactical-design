@@ -1,10 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.domain.Value;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class ProductQuantity {
+public class ProductQuantity extends Value<ProductQuantity> {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 

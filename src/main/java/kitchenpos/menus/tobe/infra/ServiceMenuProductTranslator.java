@@ -6,13 +6,12 @@ import kitchenpos.menus.tobe.domain.ProductQuantity;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@Component
+// @Component
 public class ServiceMenuProductTranslator implements MenuProductTranslator {
     private final ProductRepository productRepository;
 

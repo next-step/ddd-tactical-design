@@ -53,4 +53,17 @@ public class ProductService {
                 .stream().map(ProductResponse::from)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findAllByIdIn(final List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds)
+                .stream().map(ProductResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ProductResponse findById(final UUID productId) {
+        return ProductResponse.from(productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new));
+    }
 }
