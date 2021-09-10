@@ -13,7 +13,7 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    DisplayedName(final String value, final Profanities profanities) {
+    public DisplayedName(final String value, final Profanities profanities) {
         validate(value, profanities);
         this.value = value;
     }

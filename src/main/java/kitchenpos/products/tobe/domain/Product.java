@@ -25,7 +25,7 @@ public class Product {
     protected Product() {
     }
 
-    Product(final UUID id, final DisplayedName displayedName, final Price price) {
+    public Product(final UUID id, final DisplayedName displayedName, final Price price) {
         this.id = id;
         this.displayedName = displayedName;
         this.price = price;
