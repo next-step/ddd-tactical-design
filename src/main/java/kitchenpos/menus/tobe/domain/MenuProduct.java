@@ -21,44 +21,33 @@ public class MenuProduct {
     )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private ProductQuantity productQuantity;
 
     @Transient
     private UUID productId;
 
-    public MenuProduct() {
+    protected MenuProduct() {}
+
+    public MenuProduct(final Product product, final ProductQuantity productQuantity) {
+        this.product = product;
+        this.productQuantity = productQuantity;
+        this.productId = product.getId();
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return productQuantity.getQuantity();
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

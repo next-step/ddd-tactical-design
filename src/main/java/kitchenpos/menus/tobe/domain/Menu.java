@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -30,21 +29,15 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
 
     protected Menu() {}
 
-    private Menu(final UUID id, final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
+    private Menu(final UUID id, final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
         this.id = id;
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -54,7 +47,7 @@ public class Menu {
         this.menuGroupId = menuGroupId;
     }
 
-    public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
+    public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
         validateMenu(menuName, menuPrice, menuGroup, displayed, menuProducts, menuGroupId);
         this.id = UUID.randomUUID();
         this.menuName = menuName;
@@ -86,7 +79,7 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.getMenuProducts();
     }
 
     public UUID getMenuGroupId() {
@@ -125,22 +118,12 @@ public class Menu {
         return isValidPrice(menuPrice, menuProducts);
     }
 
-    private boolean isValidPrice(final MenuPrice menuPrice, final List<MenuProduct> menuProducts) {
+    private boolean isValidPrice(final MenuPrice menuPrice, final MenuProducts menuProducts) {
         return menuPrice.getPrice()
-                .compareTo(sumMenuProductPrice(menuProducts)) <= 0;
+                .compareTo(menuProducts.sumProductPrice()) <= 0;
     }
 
-    private BigDecimal sumMenuProductPrice(final List<MenuProduct> menuProducts) {
-        return menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
-                .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr));
-    }
-
-    private void validateMenu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts, final UUID menuGroupId) {
-        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException("메뉴는 반드시 한개 이상의 상품으로 구성되어야 합니다.");
-        }
+    private void validateMenu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
         if (!isValidPrice(menuPrice, menuProducts)) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }

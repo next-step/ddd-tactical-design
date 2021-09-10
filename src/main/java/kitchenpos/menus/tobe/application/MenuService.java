@@ -11,7 +11,6 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -41,25 +40,17 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final List<MenuProductRequest> menuProductRequests = request.getMenuProducts();
-        final List<Product> products = productRepository.findAllByIdIn(menuProductRequests.stream()
-                .map(MenuProductRequest::getProductId)
-                .collect(Collectors.toList()));
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        for (final MenuProductRequest menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                    .orElseThrow(NoSuchElementException::new);
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
-        }
+        final MenuProducts menuProducts = new MenuProducts(
+                productRepository.findAllByIdIn(menuProductRequests.stream()
+                        .map(MenuProductRequest::getProductId)
+                        .collect(Collectors.toList()))
+                , menuProductRequests.stream()
+                .map(menuProductRequest -> {
+                    final Product product = productRepository.findById(menuProductRequest.getProductId())
+                            .orElseThrow(NoSuchElementException::new);
+                    final ProductQuantity productQuantity = new ProductQuantity(menuProductRequest.getQuantity());
+                    return new MenuProduct(product, productQuantity);
+                }).collect(Collectors.toList()));
         return MenuResponse.from(menuRepository.save(new Menu(
                 new MenuName(request.getName(), profanities),
                 new MenuPrice(request.getPrice()),
