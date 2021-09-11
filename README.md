@@ -194,6 +194,7 @@
 - 자신에게 속한 상품들인 `menuProducts`를 가진다.
   - `menuProduct`는 상품을 식별하기 위한 `productId`를 가진다.
   - `menuProduct`는 상품의 갯수(`quantity`)를 가진다.
+  - `MenuProduct`는 상품 가격과 갯수를 곱한 가격을 계산할 수 있다.
 
 #### 기능/조건
 
@@ -201,7 +202,6 @@
   - 메뉴를 등록하려면 등록된 `product`가 1개 이상이어야 한다.
   - `menuProduct`의 `quantity`는 0 이상이어야 한다.
   - 메뉴의 `price`는 0원 이상이어야 한다.
-  - `menuProduct`금액의 총합은 메뉴의 `price`보다 크거나 같아야 한다.
   - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
   - 메뉴는 특정 `menuGroup`에 속해야 한다.
   - 메뉴의 `name`은 비워둘 수 없다.
