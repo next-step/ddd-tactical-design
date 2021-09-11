@@ -1,15 +1,14 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.commons.tobe.domain.DisplayedName;
-import kitchenpos.commons.tobe.domain.Price;
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.service.Validator;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 public class Menu {
-
-    private static final String PRICE_AMOUNT_EXCEPTION_MESSAGE = "가격은 금액보다 적거나 같아야 합니다";
 
     private final UUID id;
 
@@ -28,38 +27,27 @@ public class Menu {
                 final Price price,
                 final MenuProducts menuProducts,
                 final UUID menuGroupId,
-                final boolean displayed) {
-        validate(price, menuProducts, menuGroupId, displayed);
-
+                final boolean displayed,
+                final Validator<Menu> validator) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
+
+        validator.validate(this);
     }
 
-    private void validate(final Price price,
-                          final MenuProducts menuProducts,
-                          final UUID menuGroupId,
-                          final boolean displayed) {
-        if (displayed && isPriceGreaterThanAmount(price, menuProducts)) {
-            throw new IllegalArgumentException(PRICE_AMOUNT_EXCEPTION_MESSAGE);
-        }
-        if (Objects.isNull(menuGroupId)) {
-            throw new IllegalArgumentException("메뉴는 메뉴 그룹에 속해야 합니다");
-        }
-    }
-
-    private boolean isPriceGreaterThanAmount(final Price price, final MenuProducts menuProducts) {
+    public boolean isPriceGreaterThanAmount() {
         final BigDecimal menuPrice = price.value();
         final BigDecimal amount = menuProducts.getAmount();
         return menuPrice.compareTo(amount) > 0;
     }
 
     public void display() {
-        if (isPriceGreaterThanAmount(price, menuProducts)) {
-            throw new IllegalStateException(PRICE_AMOUNT_EXCEPTION_MESSAGE);
+        if (isPriceGreaterThanAmount()) {
+            throw new IllegalStateException("가격은 금액보다 적거나 같아야 합니다");
         }
 
         displayed = true;
@@ -81,11 +69,15 @@ public class Menu {
         return price.value();
     }
 
-    public boolean isDisplayed() {
-        return displayed;
+    public List<UUID> getProductIds() {
+        return menuProducts.getProductIds();
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
     }
 }
