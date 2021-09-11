@@ -21,7 +21,7 @@ public class ServiceMenuProductTranslator implements MenuProductTranslator {
     }
 
     @Override
-    public MenuProducts translateMenuProducts(final List<MenuProductRequest> menuProductRequests) {
+    public MenuProducts getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
         final List<Product> products = productRepository.findAllByIdIn(menuProductRequests.stream()
                 .map(MenuProductRequest::getProductId)
                 .collect(Collectors.toList()));

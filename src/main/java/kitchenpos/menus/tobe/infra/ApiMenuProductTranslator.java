@@ -25,7 +25,7 @@ public class ApiMenuProductTranslator implements MenuProductTranslator {
     }
 
     @Override
-    public MenuProducts translateMenuProducts(final List<MenuProductRequest> menuProductRequests) {
+    public MenuProducts getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
         final List<Product> products = requestProducts(menuProductRequests.stream()
                 .map(MenuProductRequest::getProductId)
                 .collect(Collectors.toList()));
