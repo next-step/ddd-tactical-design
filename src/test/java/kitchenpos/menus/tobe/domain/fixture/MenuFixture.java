@@ -4,7 +4,6 @@ import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
 
 import java.math.BigDecimal;
@@ -32,20 +31,6 @@ public class MenuFixture {
                 menuProducts,
                 menuGroupId,
                 displayed,
-                validator
-        );
-    }
-
-    public static Menu MENU_WITH_PRICE_AND_MENU_PRODUCTS(final BigDecimal price,
-                                                         Validator<Menu> validator,
-                                                         final MenuProduct... menuProducts) {
-        return MENU_WITH_ALL_FIELDS(
-                UUID.randomUUID(),
-                "후라이드치킨",
-                price,
-                MENU_PRODUCTS_WITH_MENU_PRODUCT(menuProducts),
-                UUID.randomUUID(),
-                true,
                 validator
         );
     }
