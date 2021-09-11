@@ -48,7 +48,6 @@ public class Menu {
     }
 
     public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
-        validateMenu(menuName, menuPrice, menuGroup, displayed, menuProducts, menuGroupId);
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -56,6 +55,7 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
+        validateMenu();
     }
 
     public UUID getId() {
@@ -87,7 +87,7 @@ public class Menu {
     }
 
     public void display() {
-        if (!isValidPrice()) {
+        if (!isValidPrice(menuPrice)) {
             throw new IllegalStateException("Menu의 가격은 MenuProducts의 금액의 합보다 적거나 같아야 보일 수 있습니다.");
         }
         this.displayed = true;
@@ -98,7 +98,7 @@ public class Menu {
     }
 
     public void updateStatus() {
-        if (!isValidPrice()) {
+        if (!isValidPrice(menuPrice)) {
             this.displayed = false;
         }
     }
@@ -110,21 +110,13 @@ public class Menu {
         this.menuPrice = menuPrice;
     }
 
-    private boolean isValidPrice() {
-        return isValidPrice(menuPrice);
-    }
-
     private boolean isValidPrice(final MenuPrice menuPrice) {
-        return isValidPrice(menuPrice, menuProducts);
-    }
-
-    private boolean isValidPrice(final MenuPrice menuPrice, final MenuProducts menuProducts) {
         return menuPrice.getPrice()
                 .compareTo(menuProducts.sumProductPrice()) <= 0;
     }
 
-    private void validateMenu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
-        if (!isValidPrice(menuPrice, menuProducts)) {
+    private void validateMenu() {
+        if (!isValidPrice(menuPrice)) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
     }
