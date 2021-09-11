@@ -10,6 +10,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuTest {
 
+    @DisplayName("가격이 금액 보다 큰지 비교한다.")
+    @Test
+    void isPriceGreaterThanAmount() {
+        final Menu menu = NOT_DISPLAYED_MENU();
+
+        assertThat(menu.isPriceGreaterThanAmount()).isTrue();
+    }
+
+
     @DisplayName("메뉴는 노출된다.")
     @Test
     void display() {
