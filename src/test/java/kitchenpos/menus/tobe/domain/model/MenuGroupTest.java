@@ -1,12 +1,12 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static kitchenpos.menus.tobe.domain.fixtures.MenuGroupFixture.DEFAULT_MENU_GROUP;
-import static kitchenpos.menus.tobe.domain.fixtures.MenuGroupFixture.MENU_GROUP_WITH_NAME;
+import static kitchenpos.menus.tobe.domain.fixture.MenuGroupFixture.DEFAULT_MENU_GROUP;
+import static kitchenpos.menus.tobe.domain.fixture.MenuGroupFixture.MENU_GROUP_WITH_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MenuGroupTest {

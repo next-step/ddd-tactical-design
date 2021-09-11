@@ -1,7 +1,7 @@
-package kitchenpos.menus.tobe.domain.fixtures;
+package kitchenpos.menus.tobe.domain.fixture;
 
-import kitchenpos.commons.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.menus.tobe.domain.model.MenuGroup;
 
 import java.util.UUID;
 

@@ -1,40 +1,56 @@
-package kitchenpos.menus.tobe.domain.fixtures;
+package kitchenpos.menus.tobe.domain.fixture;
 
-import kitchenpos.commons.tobe.domain.DisplayedName;
-import kitchenpos.commons.tobe.domain.Price;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.service.Validator;
+import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.menus.tobe.domain.fixtures.MenuProductFixture.MENU_PRODUCT_WITH_PRICE_AND_QUANTITY;
-import static kitchenpos.menus.tobe.domain.fixtures.MenuProductsFixture.MENU_PRODUCTS_WITH_MENU_PRODUCT;
+import static kitchenpos.menus.tobe.domain.fixture.MenuProductFixture.MENU_PRODUCT_WITH_PRICE_AND_QUANTITY;
+import static kitchenpos.menus.tobe.domain.fixture.MenuProductsFixture.MENU_PRODUCTS_WITH_MENU_PRODUCT;
 
 public class MenuFixture {
+
+    private static final Validator<Menu> fakeMenuCreateValidator = menu -> {
+    };
 
     public static Menu MENU_WITH_ALL_FIELDS(final UUID id,
                                             final String name,
                                             final BigDecimal price,
                                             final MenuProducts menuProducts,
                                             final UUID menuGroupId,
-                                            final boolean displayed) {
-        return new Menu(id, new DisplayedName(name), new Price(price), menuProducts, menuGroupId, displayed);
+                                            final boolean displayed,
+                                            final Validator<Menu> validator) {
+        return new Menu(
+                id,
+                new DisplayedName(name),
+                new Price(price),
+                menuProducts,
+                menuGroupId,
+                displayed,
+                validator
+        );
     }
 
-    public static Menu MENU_WITH_PRICE_AND_MENU_PRODUCTS(final BigDecimal price, final MenuProduct... menuProducts) {
+    public static Menu MENU_WITH_PRICE_AND_MENU_PRODUCTS(final BigDecimal price,
+                                                         Validator<Menu> validator,
+                                                         final MenuProduct... menuProducts) {
         return MENU_WITH_ALL_FIELDS(
                 UUID.randomUUID(),
                 "후라이드치킨",
                 price,
                 MENU_PRODUCTS_WITH_MENU_PRODUCT(menuProducts),
                 UUID.randomUUID(),
-                true
+                true,
+                validator
         );
     }
 
-    public static Menu MENU_WITH_MENU_GROUP_ID(final UUID menuGroupId) {
+    public static Menu MENU_WITH_MENU_GROUP_ID(final UUID menuGroupId, Validator<Menu> validator) {
         final BigDecimal price = BigDecimal.valueOf(16_000L);
 
         return MENU_WITH_ALL_FIELDS(
@@ -43,7 +59,8 @@ public class MenuFixture {
                 price,
                 MENU_PRODUCTS_WITH_MENU_PRODUCT(MENU_PRODUCT_WITH_PRICE_AND_QUANTITY(price, 1L)),
                 menuGroupId,
-                true
+                true,
+                validator
         );
     }
 
@@ -57,7 +74,8 @@ public class MenuFixture {
                 price,
                 MENU_PRODUCTS_WITH_MENU_PRODUCT(MENU_PRODUCT_WITH_PRICE_AND_QUANTITY(price, quantity)),
                 UUID.randomUUID(),
-                displayed
+                displayed,
+                fakeMenuCreateValidator
         );
     }
 
@@ -73,7 +91,8 @@ public class MenuFixture {
                 menuPrice,
                 MENU_PRODUCTS_WITH_MENU_PRODUCT(MENU_PRODUCT_WITH_PRICE_AND_QUANTITY(menuProductPrice, quantity)),
                 UUID.randomUUID(),
-                displayed
+                displayed,
+                fakeMenuCreateValidator
         );
     }
 }

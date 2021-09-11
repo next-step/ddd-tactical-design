@@ -1,7 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
-import kitchenpos.commons.tobe.domain.DisplayedName;
-import kitchenpos.commons.tobe.domain.Price;
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.commons.tobe.domain.model.Price;
 
 import java.math.BigDecimal;
 import java.util.Objects;

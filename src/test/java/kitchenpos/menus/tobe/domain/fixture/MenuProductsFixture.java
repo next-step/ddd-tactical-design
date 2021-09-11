@@ -1,7 +1,7 @@
-package kitchenpos.menus.tobe.domain.fixtures;
+package kitchenpos.menus.tobe.domain.fixture;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
 
 import java.util.Arrays;
 import java.util.List;

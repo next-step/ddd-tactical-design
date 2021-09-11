@@ -1,4 +1,4 @@
-package kitchenpos.commons.tobe.domain;
+package kitchenpos.commons.tobe.domain.model;
 
 import java.util.Objects;
 

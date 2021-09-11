@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
-import kitchenpos.commons.tobe.domain.Price;
+import kitchenpos.commons.tobe.domain.model.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.products.tobe.domain.Fixtures.*;
+import static kitchenpos.products.tobe.domain.fixture.ProductFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
