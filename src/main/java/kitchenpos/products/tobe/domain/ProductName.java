@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.domain.Value;
 import kitchenpos.common.infra.Profanities;
 
 import javax.persistence.Column;
@@ -8,7 +7,7 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName extends Value<ProductName> {
+public class ProductName {
     @Column(name = "name", nullable = false)
     private String name;
 

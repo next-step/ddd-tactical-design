@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class MenuPriceTest {
@@ -26,13 +25,5 @@ class MenuPriceTest {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> new MenuPrice(BigDecimal.valueOf(price)))
                 .withMessage("메뉴 가격은 음수가 될 수 없습니다.");
-    }
-
-    @DisplayName("메뉴 가격이 같으면, 같아야 한다.")
-    @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3})
-    void equalPrice(final int price) {
-        assertThat(new MenuPrice(BigDecimal.valueOf(price)))
-                .isEqualTo(new MenuPrice(BigDecimal.valueOf(price)));
     }
 }

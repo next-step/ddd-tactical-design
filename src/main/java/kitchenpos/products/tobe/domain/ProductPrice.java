@@ -1,14 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.domain.Value;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice extends Value<ProductPrice> {
+public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 

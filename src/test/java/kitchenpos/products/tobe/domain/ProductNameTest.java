@@ -5,10 +5,7 @@ import kitchenpos.common.infra.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class ProductNameTest {
@@ -33,13 +30,5 @@ class ProductNameTest {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> new ProductName("욕설", profanities))
                 .withMessage("적절하지 않은 상품 이름입니다.");
-    }
-
-    @DisplayName("상품 이름이 같으면, 같아야 한다.")
-    @ParameterizedTest
-    @ValueSource(strings = {"치킨 상품", "피자 상품"})
-    void equalPrice(final String name) {
-        assertThat(new ProductName(name, profanities))
-                .isEqualTo(new ProductName(name, profanities));
     }
 }
