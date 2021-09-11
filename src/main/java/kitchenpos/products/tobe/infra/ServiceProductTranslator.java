@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.infra;
 
 import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.products.tobe.domain.ProductTranslator;
 
 import java.util.UUID;
 

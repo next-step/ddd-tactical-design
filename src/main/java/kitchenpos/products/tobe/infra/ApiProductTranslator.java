@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.infra;
 
+import kitchenpos.products.tobe.domain.ProductTranslator;
 import kitchenpos.products.tobe.dto.UpdateMenuStatusRequest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;

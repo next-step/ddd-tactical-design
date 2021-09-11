@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.infra;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProductTranslator;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.ProductQuantity;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;

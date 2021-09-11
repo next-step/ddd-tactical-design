@@ -5,7 +5,6 @@ import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.MenuResponse;
-import kitchenpos.menus.tobe.infra.MenuProductTranslator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
