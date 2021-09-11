@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class MenuProduct {
 
-    private final UUID menuId;
+    private final UUID id;
 
     private final UUID productId;
 
@@ -17,19 +17,16 @@ public class MenuProduct {
 
     private final Quantity quantity;
 
-    public MenuProduct(final UUID menuId, final UUID productId, final Price price, final Quantity quantity) {
-        validate(menuId, productId);
+    public MenuProduct(final UUID id, final UUID productId, final Price price, final Quantity quantity) {
+        validate(productId);
 
-        this.menuId = menuId;
+        this.id = id;
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
     }
 
-    private void validate(final UUID menuId, final UUID productId) {
-        if (Objects.isNull(menuId)) {
-            throw new IllegalArgumentException("메뉴 식별자는 필수입니다");
-        }
+    private void validate(final UUID productId) {
         if (Objects.isNull(productId)) {
             throw new IllegalArgumentException("상품 식별자는 필수입니다");
         }

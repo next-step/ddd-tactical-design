@@ -14,15 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuProductTest {
 
-    @DisplayName("메뉴 상품에는 메뉴 식별자가 필수다.")
-    @Test
-    void createMenuProductWithoutMenuId() {
-        final ThrowableAssert.ThrowingCallable when = () -> MENU_PRODUCT_WITH_MENU_ID(null);
-
-        assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("메뉴 식별자는 필수입니다");
-    }
-
     @DisplayName("메뉴 상품에는 상품 식별자가 필수다.")
     @Test
     void createMenuProductWithoutProductId() {

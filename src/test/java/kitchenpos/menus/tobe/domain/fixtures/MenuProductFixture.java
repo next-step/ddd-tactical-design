@@ -10,15 +10,11 @@ import java.util.UUID;
 public class MenuProductFixture {
 
     public static MenuProduct MENU_PRODUCT_WITH_ALL_FIELDS(
-            final UUID menuId,
+            final UUID id,
             final UUID productId,
             final BigDecimal price,
             final long quantity) {
-        return new MenuProduct(menuId, productId, new Price(price), new Quantity(quantity));
-    }
-
-    public static MenuProduct MENU_PRODUCT_WITH_MENU_ID(final UUID menuId) {
-        return MENU_PRODUCT_WITH_ALL_FIELDS(menuId, UUID.randomUUID(), BigDecimal.valueOf(16_000L), 1L);
+        return new MenuProduct(id, productId, new Price(price), new Quantity(quantity));
     }
 
     public static MenuProduct MENU_PRODUCT_WITH_PRODUCT_ID(final UUID productId) {
