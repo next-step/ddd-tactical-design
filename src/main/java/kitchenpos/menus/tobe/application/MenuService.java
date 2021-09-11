@@ -37,13 +37,14 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final MenuProducts menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
-        final Menu menu = new Menu(
-                new MenuName(request.getName(), profanities),
-                new MenuPrice(request.getPrice()),
-                menuGroup,
-                request.isDisplayed(),
-                menuProducts,
-                menuGroup.getId());
+        final Menu menu = Menu.builder()
+                .menuName(new MenuName(request.getName(), profanities))
+                .menuPrice(new MenuPrice(request.getPrice()))
+                .menuGroup(menuGroup)
+                .displayed(request.isDisplayed())
+                .menuProducts(menuProducts)
+                .menuGroupId(menuGroup.getId())
+                .build();
         menuRepository.save(menu);
         return MenuResponse.from(menu);
     }

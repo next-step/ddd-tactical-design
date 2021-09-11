@@ -37,25 +37,62 @@ public class Menu {
 
     protected Menu() {}
 
-    private Menu(final UUID id, final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
-        this.id = id;
-        this.menuName = menuName;
-        this.menuPrice = menuPrice;
-        this.menuGroup = menuGroup;
-        this.displayed = displayed;
-        this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
+    public Menu(final Builder builder) {
+        this.id = UUID.randomUUID();
+        this.menuName = builder.menuName;
+        this.menuPrice = builder.menuPrice;
+        this.menuGroup = builder.menuGroup;
+        this.displayed = builder.displayed;
+        this.menuProducts = builder.menuProducts;
+        this.menuGroupId = builder.menuGroupId;
+        validateMenu();
     }
 
-    public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts, final UUID menuGroupId) {
-        this.id = UUID.randomUUID();
-        this.menuName = menuName;
-        this.menuPrice = menuPrice;
-        this.menuGroup = menuGroup;
-        this.displayed = displayed;
-        this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
-        validateMenu();
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private MenuName menuName;
+        private MenuPrice menuPrice;
+        private MenuGroup menuGroup;
+        private boolean displayed;
+        private MenuProducts menuProducts;
+        private UUID menuGroupId;
+
+        public Menu build() {
+            return new Menu(this);
+        }
+
+        public Builder menuName(final MenuName menuName) {
+            this.menuName = menuName;
+            return this;
+        }
+
+        public Builder menuPrice(final MenuPrice menuPrice) {
+            this.menuPrice = menuPrice;
+            return this;
+        }
+
+        public Builder menuGroup(final MenuGroup menuGroup) {
+            this.menuGroup = menuGroup;
+            return this;
+        }
+
+        public Builder displayed(final boolean displayed) {
+            this.displayed = displayed;
+            return this;
+        }
+
+        public Builder menuProducts(final MenuProducts menuProducts) {
+            this.menuProducts = menuProducts;
+            return this;
+        }
+
+        public Builder menuGroupId(final UUID menuGroupId) {
+            this.menuGroupId = menuGroupId;
+            return this;
+        }
     }
 
     public UUID getId() {
