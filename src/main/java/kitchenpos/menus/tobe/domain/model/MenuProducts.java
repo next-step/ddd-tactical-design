@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import kitchenpos.common.tobe.domain.Price;
 
 @Embeddable
 public class MenuProducts {
@@ -29,6 +30,12 @@ public class MenuProducts {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
+    }
+
+    public Price getTotalPrice() {
+        return menuProducts.stream()
+            .map(MenuProduct::getMenuProductPrice)
+            .reduce(Price.ZERO, Price::add);
     }
 
 }
