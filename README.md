@@ -210,6 +210,7 @@
 - 메뉴의 가격을 변경할 수 있다(`changePrice`).
   - 변경 후 메뉴의 `price`는 0원 이상이어야 한다.
   - 변경 후 `menuProduct`금액의 총합은 메뉴의 `price`보다 크거나 같아야 한다.
+  - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
   
 - 메뉴를 노출할 수 있다(`display`).
   - 메뉴의 `price`가 `menuProduct`금액의 총합 보다 높을 경우 노출할 수 없다.

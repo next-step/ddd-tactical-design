@@ -53,4 +53,32 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
+    public Menu changePrice(final Price price) {
+        this.price = price;
+        return this;
+    }
+
+    public Menu display() {
+        this.displayed = true;
+        return this;
+    }
+
+    public Menu hide() {
+        this.displayed = false;
+        return this;
+    }
+
+    public DisplayedName getName() {
+        return name;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+
 }
