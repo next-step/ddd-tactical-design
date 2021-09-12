@@ -6,6 +6,7 @@ import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOUL
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
@@ -51,6 +52,10 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public Price multiply(final Quantity quantity) {
+        return new Price(value.multiply(BigDecimal.valueOf(quantity.getValue())));
     }
 
 }

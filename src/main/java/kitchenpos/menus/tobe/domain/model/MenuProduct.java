@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import kitchenpos.common.tobe.domain.Price;
 
 @Table(name = "menu_product")
@@ -29,21 +30,21 @@ public class MenuProduct {
         columnDefinition = "varbinary(16)"
     )
     private UUID productId;
-    // TODO 존재하는 product id에 대한 validation 처리
+
+    @Transient
+    private Price productPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(final UUID productId, final Quantity quantity) {
-        this.productId = productId;
+    public MenuProduct(final Quantity quantity, final UUID productId, final Price productPrice) {
         this.quantity = quantity;
+        this.productId = productId;
+        this.productPrice = productPrice;
     }
 
-    // TODO 해당 product의 가격을 어떻게 처리할지 결정
     public Price getMenuProductPrice() {
-        // 해당 productId의 가격 get
-        // quantity와 곱해서 리턴
-        return new Price(0L);
+        return productPrice.multiply(quantity);
     }
 
 }
