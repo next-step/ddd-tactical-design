@@ -6,9 +6,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
+import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -42,6 +44,24 @@ class PriceTest {
         final Price price2 = new Price(value);
 
         assertThat(price1.equals(price2)).isTrue();
+    }
+
+    @DisplayName("Quantity와 곱할 수 있다")
+    @ParameterizedTest
+    @CsvSource({"2,3,6", "5,5,25", "9,9,81"})
+    void multiply(final long price, final long quantity, final long result) {
+        final Price expect = new Price(price).multiply(new Quantity(quantity));
+
+        assertThat(expect).isEqualTo(new Price(result));
+    }
+
+    @DisplayName("Price끼리 더할 수 있다")
+    @ParameterizedTest
+    @CsvSource({"2,3,5", "5,5,10", "9,9,18"})
+    void add(final long price1, final long price2, final long result) {
+        final Price expect = new Price(price1).add(new Price(price2));
+
+        assertThat(expect).isEqualTo(new Price(result));
     }
 
 }

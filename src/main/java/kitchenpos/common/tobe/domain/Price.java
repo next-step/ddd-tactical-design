@@ -5,14 +5,17 @@ import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOUL
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class Price {
 
-    private static final int ZERO = 0;
+    public static final Price ZERO = new Price(0);
 
     private BigDecimal value;
 
@@ -32,9 +35,13 @@ public class Price {
         if (Objects.isNull(value)) {
             throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NULL);
         }
-        if (value.compareTo(BigDecimal.ZERO) < ZERO) {
+        if (value.compareTo(BigDecimal.ZERO) < 0) {
             throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NEGATIVE);
         }
+    }
+
+    public BigDecimal getValue() {
+        return value;
     }
 
     @Override
@@ -58,4 +65,7 @@ public class Price {
         return new Price(value.multiply(BigDecimal.valueOf(quantity.getValue())));
     }
 
+    public Price add(final Price price) {
+        return new Price(value.add(price.getValue()));
+    }
 }
