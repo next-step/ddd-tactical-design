@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroupId;
+import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.FakeProfanities;
 import kitchenpos.products.tobe.domain.Price;
@@ -24,7 +25,7 @@ public class ToBeFixtures {
     public static MenuGroup menuGroup(final UUID id, final String name) {
         return new MenuGroup(
             new MenuGroupId(id),
-            name
+            new Name(name)
         );
     }
 
