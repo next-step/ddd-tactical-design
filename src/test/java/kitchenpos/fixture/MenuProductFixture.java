@@ -31,20 +31,4 @@ public class MenuProductFixture {
         return new MenuProduct(cheapProduct.getId(), TWO);
     }
 
-//    public static List<MenuProduct> MENU_PRODUCTS() {
-//        return Arrays.asList(MENU_PRODUCT1(), MENU_PRODUCT2());
-//    }
-//
-//    public static List<MenuProduct> WRONG_PRODUCTS() {
-//        return Arrays.asList(MENU_PRODUCT1(), WRONG_PRODUCT());
-//    }
-//
-//    public static List<MenuProduct> CHEAP_MENU_PRODUCTS() {
-//        return Arrays.asList(CHEAP_MENU_PRODUCT(), CHEAP_MENU_PRODUCT());
-//    }
-//
-//    public static List<MenuProduct> QUANTITY_NAGATIVE_MENU_PRODUCTS() {
-//        return Arrays.asList(MENU_PRODUCT1(), NEGATIVE_QUANTITY_MENU_PRODUCT());
-//    }
-
 }

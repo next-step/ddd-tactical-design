@@ -6,21 +6,20 @@ import static kitchenpos.fixture.MenuProductFixture.MENU_PRODUCT2;
 import static kitchenpos.fixture.MenuProductFixture.WRONG_PRODUCT;
 
 import java.util.Arrays;
-import java.util.List;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
 
 public class MenuProductsFixture {
 
-    public static List<MenuProduct> MENU_PRODUCTS() {
-        return Arrays.asList(MENU_PRODUCT1(), MENU_PRODUCT2());
+    public static MenuProducts MENU_PRODUCTS() {
+        return new MenuProducts(Arrays.asList(MENU_PRODUCT1(), MENU_PRODUCT2()));
     }
 
-    public static List<MenuProduct> WRONG_PRODUCTS() {
-        return Arrays.asList(MENU_PRODUCT1(), WRONG_PRODUCT());
+    public static MenuProducts WRONG_PRODUCTS() {
+        return new MenuProducts(Arrays.asList(MENU_PRODUCT1(), WRONG_PRODUCT()));
     }
 
-    public static List<MenuProduct> CHEAP_MENU_PRODUCTS() {
-        return Arrays.asList(CHEAP_MENU_PRODUCT(), CHEAP_MENU_PRODUCT());
+    public static MenuProducts CHEAP_MENU_PRODUCTS() {
+        return new MenuProducts(Arrays.asList(CHEAP_MENU_PRODUCT(), CHEAP_MENU_PRODUCT()));
     }
 
 }
