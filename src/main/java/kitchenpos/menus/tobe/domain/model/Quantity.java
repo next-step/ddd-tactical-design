@@ -3,10 +3,13 @@ package kitchenpos.menus.tobe.domain.model;
 import static kitchenpos.menus.tobe.exception.WrongQuantityException.QUANTITY_SHOULD_NOT_BE_NEGATIVE_VALUE;
 
 import java.util.Objects;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import kitchenpos.menus.tobe.exception.WrongQuantityException;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class Quantity {
     private long value;
 
@@ -22,6 +25,10 @@ public class Quantity {
         if (value < 0) {
             throw new WrongQuantityException(QUANTITY_SHOULD_NOT_BE_NEGATIVE_VALUE);
         }
+    }
+
+    public long getValue() {
+        return value;
     }
 
     @Override
