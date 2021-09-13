@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.FakeProfanities;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.Price;
@@ -15,8 +17,6 @@ import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
-import kitchenpos.products.domain.tobe.domain.DisplayedName;
 import kitchenpos.products.domain.tobe.domain.Product;
 
 public class ToBeFixtures {
@@ -36,7 +36,7 @@ public class ToBeFixtures {
     public static MenuGroup menuGroup(final UUID id, final String name) {
         return new MenuGroup(
             new MenuGroupId(id),
-            new Name(name)
+            new DisplayedName(name, new FakeProfanities())
         );
     }
 
@@ -45,7 +45,7 @@ public class ToBeFixtures {
     public static Menu menu() {
         return new Menu(
             new MenuId(UUID.randomUUID()),
-            new kitchenpos.menus.domain.tobe.domain.menu.DisplayedName(
+            new DisplayedName(
                 "후라이드+간장치킨",
                 new FakeProfanities()
             ),

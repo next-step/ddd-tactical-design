@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.MenuGroupId;
 
 @Table(name = "menu_group")
@@ -17,13 +18,13 @@ public class MenuGroup {
     private MenuGroupId id;
 
     @Embedded
-    @Column(name = "name", nullable = false)
-    private Name name;
+    @Column(name = "displayed_name", nullable = false)
+    private DisplayedName name;
 
     protected MenuGroup() {
     }
 
-    public MenuGroup(final MenuGroupId id, final Name name) {
+    public MenuGroup(final MenuGroupId id, final DisplayedName name) {
         this.id = id;
         this.name = name;
     }
