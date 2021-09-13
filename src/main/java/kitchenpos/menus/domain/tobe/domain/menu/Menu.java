@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain.tobe.domain.menu;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -27,8 +26,9 @@ public class Menu {
     @Column(name = "displayed_name", nullable = false)
     private DisplayedName displayedName;
 
+    @Embedded
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Price price;
 
     @Embedded
     @Column(name = "menu_group_id", columnDefinition = "varbinary(16)")
@@ -52,7 +52,7 @@ public class Menu {
     public Menu(
         final MenuId id,
         final DisplayedName name,
-        final BigDecimal price,
+        final Price price,
         final MenuGroupId menuGroupId,
         final boolean displayed,
         final List<MenuProduct> menuProducts

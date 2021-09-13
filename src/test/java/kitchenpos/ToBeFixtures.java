@@ -57,7 +57,7 @@ public class ToBeFixtures {
                 "후라이드+간장치킨",
                 new FakeProfanities()
             ),
-            BigDecimal.valueOf(33_000L),
+            new kitchenpos.menus.domain.tobe.domain.menu.Price(BigDecimal.valueOf(33_000L)),
             new MenuGroupId(UUID.randomUUID()),
             true,
             Collections.unmodifiableList(Arrays.asList(menuProduct1, menuProduct2))
