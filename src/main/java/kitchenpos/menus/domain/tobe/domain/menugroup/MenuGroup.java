@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import kitchenpos.common.domain.MenuGroupId;
 
 @Table(name = "menu_group")
 @Entity

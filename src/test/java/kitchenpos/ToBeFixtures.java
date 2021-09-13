@@ -3,14 +3,15 @@ package kitchenpos;
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.common.domain.MenuGroupId;
+import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
-import kitchenpos.products.tobe.domain.DisplayedName;
-import kitchenpos.products.tobe.domain.FakeProfanities;
-import kitchenpos.products.tobe.domain.Price;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.tobe.domain.DisplayedName;
+import kitchenpos.products.domain.tobe.domain.FakeProfanities;
+import kitchenpos.products.domain.tobe.domain.Price;
+import kitchenpos.products.domain.tobe.domain.Product;
 
 public class ToBeFixtures {
 
@@ -36,13 +37,13 @@ public class ToBeFixtures {
         return menuProduct(product.getId(), 2);
     }
 
-    public static MenuProduct menuProduct(final UUID productId, final long quantity) {
+    public static MenuProduct menuProduct(final ProductId productId, final long quantity) {
         return menuProduct(new Random().nextLong(), productId, quantity);
     }
 
     public static MenuProduct menuProduct(
         final Long seq,
-        final UUID productId,
+        final ProductId productId,
         final long quantity
     ) {
         return new MenuProduct(seq, productId, quantity);
@@ -53,10 +54,10 @@ public class ToBeFixtures {
     }
 
     public static Product product(final String displayedName, final long price) {
-        return product(UUID.randomUUID(), displayedName, price);
+        return product(new ProductId(UUID.randomUUID()), displayedName, price);
     }
 
-    public static Product product(final UUID id, final String displayedName, final long price) {
+    public static Product product(ProductId id, final String displayedName, final long price) {
         return new Product(
             id,
             new DisplayedName(displayedName, new FakeProfanities()),

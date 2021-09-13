@@ -1,18 +1,18 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain.tobe.domain;
 
 import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import kitchenpos.common.domain.ProductId;
 
 @Entity
 public class Product {
 
+    @EmbeddedId
     @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+    private ProductId id;
 
     @Embedded
     @Column(name = "displayed_name", nullable = false)
@@ -25,13 +25,13 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final UUID id, final DisplayedName displayedName, final Price price) {
+    public Product(final ProductId id, final DisplayedName displayedName, final Price price) {
         this.id = id;
         this.displayedName = displayedName;
         this.price = price;
     }
 
-    public UUID getId() {
+    public ProductId getId() {
         return this.id;
     }
 

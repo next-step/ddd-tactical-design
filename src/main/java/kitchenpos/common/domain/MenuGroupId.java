@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain.tobe.domain.menugroup;
+package kitchenpos.common.domain;
 
 import java.io.Serializable;
 import java.util.Objects;
