@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Service;
@@ -17,22 +18,21 @@ import java.util.UUID;
 public class TobeProductService {
     private final TobeProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final TobeProductValidation productValidation;
+    private final PurgomalumClient purgomalumClient;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
         final MenuRepository menuRepository,
-        final TobeProductValidation productValidation
+        final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.productValidation = productValidation;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public TobeProduct create(final ProductForm request) {
-        ProductName name = new ProductName(request.getName());
-        productValidation.vaildationName(name);
+        ProductName name = new ProductName(request.getName(), this.purgomalumClient);
         ProductPrice price = new ProductPrice(request.getPrice());
         return productRepository.save(new TobeProduct(name, price));
     }

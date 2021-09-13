@@ -32,5 +32,4 @@ public class ProductPrice {
             throw new IllegalArgumentException();
         }
     }
-
 }

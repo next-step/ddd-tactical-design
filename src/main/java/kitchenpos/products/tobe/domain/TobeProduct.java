@@ -1,10 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.ui.ProductForm;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -28,14 +25,6 @@ public class TobeProduct {
         this(UUID.randomUUID(), name, price);
     }
 
-    public TobeProduct(ProductForm productForm) {
-        this(
-            UUID.randomUUID(),
-            new ProductName(productForm.getName()),
-            new ProductPrice(productForm.getPrice())
-        );
-    }
-
     public TobeProduct(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
@@ -56,19 +45,5 @@ public class TobeProduct {
 
     public void changePrice(BigDecimal price) {
         this.price.changePrice(price);
-    }
-
-    private void validationPrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public ProductForm toProductForm() {
-        final ProductForm productForm = new ProductForm();
-        productForm.setId(this.id);
-        productForm.setName(this.name.getName());
-        productForm.setPrice(this.price.getPrice());
-        return productForm;
     }
 }

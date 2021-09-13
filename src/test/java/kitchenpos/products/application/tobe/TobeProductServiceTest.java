@@ -7,7 +7,6 @@ import kitchenpos.products.tobe.application.TobeProductService;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
-import kitchenpos.products.tobe.domain.TobeProductValidation;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,15 +29,13 @@ class TobeProductServiceTest {
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private TobeProductService productService;
-    private TobeProductValidation productValidation;
 
     @BeforeEach
     void setUp() {
         productRepository = new TobeInMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productValidation = new TobeProductValidation(purgomalumClient);
-        productService = new TobeProductService(productRepository, menuRepository, productValidation);
+        productService = new TobeProductService(productRepository, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -94,6 +91,7 @@ class TobeProductServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+    // TODO : 메뉴 리팩토링 할 때 변경 예정
 //    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
 //    @Test
 //    void changePriceInMenu() {
@@ -106,8 +104,8 @@ class TobeProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(product("후라이드", 16_000L));
-        productRepository.save(product("양념치킨", 16_000L));
+        productRepository.save(product());
+        productRepository.save(product());
         final List<TobeProduct> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
