@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
+import kitchenpos.common.domain.Price;
 
 @Table(name = "menu")
 @Entity

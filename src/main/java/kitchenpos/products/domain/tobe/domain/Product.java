@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
 
 @Entity

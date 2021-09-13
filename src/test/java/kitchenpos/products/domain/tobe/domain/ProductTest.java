@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.ToBeFixtures;
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

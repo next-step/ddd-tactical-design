@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe.domain;
+package kitchenpos.common.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -21,16 +21,12 @@ public class Price {
 
     private void validate(final BigDecimal value) {
         if (Objects.isNull(value)) {
-            throw new IllegalArgumentException("상품의 가격이 올바르지 않으면 등록할 수 없습니다.");
+            throw new IllegalArgumentException("가격은 null이 될 수 없습니다.");
         }
 
         if (value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품의 가격은 0원 이상이어야 합니다.");
+            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
         }
-    }
-
-    public BigDecimal getValue() {
-        return this.value;
     }
 
     @Override
