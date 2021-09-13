@@ -5,13 +5,11 @@ import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 
 @Embeddable
 public class MenuGroupId implements Serializable {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
     private UUID value;
 
     protected MenuGroupId() {
