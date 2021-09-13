@@ -91,7 +91,7 @@ class MenuCreateValidatorTest {
                 .hasMessage("메뉴 상품은 대응하는 상품이 있어야 합니다");
     }
 
-    @DisplayName("메뉴 생성 시, 숨겨진 메뉴가 아니라면, 메뉴의 가격이 메뉴 상품 목록의 금액보다 크면 IllegalArgumentException을 던진다.")
+    @DisplayName("메뉴 생성 시, 숨겨진 메뉴가 아니라면, 메뉴의 가격이 메뉴 상품들의 총 금액 보다 크면 IllegalArgumentException을 던진다.")
     @Test
     void createMenuWithIllegalPrice() {
         final MenuGroup menuGroup = menuGroupRepository.save(new MenuGroup(UUID.randomUUID(), new DisplayedName("추천메뉴")));
@@ -110,6 +110,6 @@ class MenuCreateValidatorTest {
         );
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("가격은 금액보다 적거나 같아야 합니다");
+                .hasMessage("가격은 메뉴 상품들의 총 금액 보다 적거나 같아야 합니다");
     }
 }

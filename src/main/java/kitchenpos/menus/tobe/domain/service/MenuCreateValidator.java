@@ -37,7 +37,7 @@ public class MenuCreateValidator implements Validator<Menu> {
         }
 
         if (menu.isDisplayed() && menu.isPriceGreaterThanAmount()) {
-            throw new IllegalArgumentException("가격은 금액보다 적거나 같아야 합니다");
+            throw new IllegalArgumentException("가격은 메뉴 상품들의 총 금액 보다 적거나 같아야 합니다");
         }
     }
 }

@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MenuProductsTest {
 
-    @DisplayName("메뉴 상품 목록은 금액을 반환한다.")
+    @DisplayName("메뉴 상품 목록은 메뉴 상품들의 총 금액을 반환한다.")
     @Test
     void getAmount() {
         final BigDecimal price1 = BigDecimal.valueOf(7_000L);

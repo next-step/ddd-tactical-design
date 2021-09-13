@@ -47,7 +47,7 @@ public class Menu {
 
     public void display() {
         if (isPriceGreaterThanAmount()) {
-            throw new IllegalStateException("가격은 금액보다 적거나 같아야 합니다");
+            throw new IllegalStateException("가격은 메뉴 상품들의 총 금액 보다 적거나 같아야 합니다");
         }
 
         displayed = true;

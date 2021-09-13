@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuTest {
 
-    @DisplayName("가격이 금액 보다 큰지 비교한다.")
+    @DisplayName("가격이 메뉴 상품들의 총 금액 보다 큰지 비교한다.")
     @Test
     void isPriceGreaterThanAmount() {
         final Menu menu = NOT_DISPLAYED_MENU();
@@ -29,7 +29,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isTrue();
     }
 
-    @DisplayName("메뉴를 노출할 때, 메뉴의 가격이 메뉴 상품 목록의 금액보다 크면 IllegalStateException을 던진다.")
+    @DisplayName("메뉴를 노출할 때, 메뉴의 가격이 메뉴 상품들의 총 금액 보다 크면 IllegalStateException을 던진다.")
     @Test
     void throwExceptionWhenDisplay() {
         final Menu menu = NOT_DISPLAYED_MENU();
@@ -37,7 +37,7 @@ class MenuTest {
         final ThrowableAssert.ThrowingCallable when = menu::display;
 
         assertThatThrownBy(when).isInstanceOf(IllegalStateException.class)
-                .hasMessage("가격은 금액보다 적거나 같아야 합니다");
+                .hasMessage("가격은 메뉴 상품들의 총 금액 보다 적거나 같아야 합니다");
     }
 
     @DisplayName("메뉴는 숨겨진다.")
