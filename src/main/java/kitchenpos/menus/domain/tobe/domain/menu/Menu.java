@@ -34,8 +34,9 @@ public class Menu {
     @Column(name = "menu_group_id", columnDefinition = "varbinary(16)")
     private MenuGroupId menuGroupId;
 
+    @Embedded
     @Column(name = "displayed", nullable = false)
-    private boolean displayed;
+    private Displayed displayed;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -54,7 +55,7 @@ public class Menu {
         final DisplayedName name,
         final Price price,
         final MenuGroupId menuGroupId,
-        final boolean displayed,
+        final Displayed displayed,
         final List<MenuProduct> menuProducts
     ) {
         this.id = id;

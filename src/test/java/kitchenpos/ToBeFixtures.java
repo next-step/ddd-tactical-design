@@ -8,6 +8,7 @@ import java.util.UUID;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.ProductId;
+import kitchenpos.menus.domain.tobe.domain.menu.Displayed;
 import kitchenpos.menus.domain.tobe.domain.menu.Menu;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
@@ -59,7 +60,7 @@ public class ToBeFixtures {
             ),
             new kitchenpos.menus.domain.tobe.domain.menu.Price(BigDecimal.valueOf(33_000L)),
             new MenuGroupId(UUID.randomUUID()),
-            true,
+            new Displayed(true),
             Collections.unmodifiableList(Arrays.asList(menuProduct1, menuProduct2))
         );
     }
