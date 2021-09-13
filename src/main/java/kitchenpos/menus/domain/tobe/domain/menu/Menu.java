@@ -3,25 +3,25 @@ package kitchenpos.menus.domain.tobe.domain.menu;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import kitchenpos.common.domain.MenuGroupId;
+import kitchenpos.common.domain.MenuId;
 
 @Table(name = "menu")
 @Entity
 public class Menu {
 
+    @EmbeddedId
     @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+    private MenuId id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -49,7 +49,7 @@ public class Menu {
     }
 
     public Menu(
-        final UUID id,
+        final MenuId id,
         final String name,
         final BigDecimal price,
         final MenuGroupId menuGroupId,

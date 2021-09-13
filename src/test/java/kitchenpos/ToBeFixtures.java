@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.common.domain.MenuGroupId;
+import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.domain.tobe.domain.menu.Menu;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
@@ -52,7 +53,7 @@ public class ToBeFixtures {
         );
 
         return new Menu(
-            UUID.randomUUID(),
+            new MenuId(UUID.randomUUID()),
             "후라이드+간장치킨",
             BigDecimal.valueOf(33_000L),
             new MenuGroupId(UUID.randomUUID()),
