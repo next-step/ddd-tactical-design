@@ -1,30 +1,26 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static kitchenpos.menus.tobe.domain.fixture.MenuGroupFixture.DEFAULT_MENU_GROUP;
-import static kitchenpos.menus.tobe.domain.fixture.MenuGroupFixture.MENU_GROUP_WITH_NAME;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuGroupTest {
 
-    @DisplayName("메뉴 그룹은 식별자을 반환한다.")
+    @DisplayName("메뉴 그룹을 생성한다.")
     @Test
-    void getId() {
-        final MenuGroup menuGroup = DEFAULT_MENU_GROUP();
+    void createMenuGroup() {
+        final DisplayedName displayName = new DisplayedName("추천메뉴");
 
-        assertThat(menuGroup.getId()).isNotNull();
-    }
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), displayName);
 
-    @DisplayName("메뉴 그룹은 이름을 반환한다.")
-    @ValueSource(strings = "추천메뉴")
-    @ParameterizedTest
-    void getName(final String name) {
-        final MenuGroup menuGroup = MENU_GROUP_WITH_NAME(name);
-
-        assertThat(menuGroup.getName()).isEqualTo(name);
+        assertAll(
+                () -> assertThat(menuGroup.getId()).isNotNull(),
+                () -> assertThat(menuGroup.getName()).isEqualTo(displayName.value())
+        );
     }
 }
