@@ -3,6 +3,7 @@ package kitchenpos.menus.domain.tobe.domain.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.ToBeFixtures;
 import kitchenpos.common.domain.ProductId;
@@ -17,7 +18,7 @@ class MenuProductTest {
     void 생성() {
         final Product product = ToBeFixtures.product();
         assertDoesNotThrow(
-            () -> ToBeFixtures.menuProduct(product.getId(), 2L)
+            () -> ToBeFixtures.menuProduct(product.getId(), product.getPrice().getValue(), 2L)
         );
     }
 
@@ -29,11 +30,13 @@ class MenuProductTest {
         final MenuProduct menuProduct1 = ToBeFixtures.menuProduct(
             seq,
             new ProductId(UUID.randomUUID()),
+            BigDecimal.valueOf(16_000L),
             1L
         );
         final MenuProduct menuProduct2 = ToBeFixtures.menuProduct(
             seq,
             new ProductId(UUID.randomUUID()),
+            BigDecimal.valueOf(16_000L),
             1L
         );
 

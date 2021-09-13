@@ -10,6 +10,7 @@ import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.domain.tobe.domain.menu.Displayed;
 import kitchenpos.menus.domain.tobe.domain.menu.Menu;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.tobe.domain.menu.MenuProductPrice;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProducts;
@@ -60,11 +61,11 @@ public class ToBeFixtures {
 
     public static MenuProducts menuProducts() {
         final MenuProduct menuProduct1 = menuProduct(
-            product("후라이드", 16_000L).getId(),
+            product("후라이드", 16_000L),
             1L
         );
         final MenuProduct menuProduct2 = menuProduct(
-            product("간장치킨", 17_000L).getId(),
+            product("간장치킨", 17_000L),
             1L
         );
         return new MenuProducts(Arrays.asList(menuProduct1, menuProduct2));
@@ -72,21 +73,39 @@ public class ToBeFixtures {
 
     public static MenuProduct menuProduct() {
         final Product product = product();
-        return menuProduct(product.getId(), 2L);
+        return menuProduct(product.getId(), product.getPrice().getValue(), 2L);
     }
 
-    public static MenuProduct menuProduct(final ProductId productId, final Long quantity) {
-        return menuProduct(new Random().nextLong(), productId, quantity);
+    public static MenuProduct menuProduct(
+        final Product product,
+        final Long quantity
+    ) {
+        return menuProduct(
+            new Random().nextLong(),
+            product.getId(),
+            product.getPrice().getValue(),
+            quantity
+        );
+    }
+
+    public static MenuProduct menuProduct(
+        final ProductId productId,
+        final BigDecimal price,
+        final Long quantity
+    ) {
+        return menuProduct(new Random().nextLong(), productId, price, quantity);
     }
 
     public static MenuProduct menuProduct(
         final Long seq,
         final ProductId productId,
+        final BigDecimal price,
         final Long quantity
     ) {
         return new MenuProduct(
             new MenuProductSeq(seq),
             productId,
+            new MenuProductPrice(price),
             new MenuProductQuantity(quantity)
         );
     }

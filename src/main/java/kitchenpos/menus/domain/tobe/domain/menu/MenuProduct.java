@@ -24,6 +24,10 @@ public class MenuProduct {
     private ProductId productId;
 
     @Embedded
+    @Column(name = "price", nullable = false)
+    private MenuProductPrice price;
+
+    @Embedded
     @Column(name = "quantity", nullable = false)
     private MenuProductQuantity quantity;
 
@@ -33,10 +37,12 @@ public class MenuProduct {
     public MenuProduct(
         final MenuProductSeq seq,
         final ProductId productId,
+        final MenuProductPrice price,
         final MenuProductQuantity quantity
     ) {
         this.seq = seq;
         this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
     }
 
