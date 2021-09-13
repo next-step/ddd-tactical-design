@@ -19,6 +19,7 @@ public class MenuProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private MenuProductSeq seq;
 
+    @Embedded
     @Column(name = "product_id", nullable = false, columnDefinition = "varbinary(16)")
     private ProductId productId;
 
