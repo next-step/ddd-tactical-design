@@ -15,7 +15,7 @@ import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("TobeProductService")
 public class ProductService {
 
     private final ProductRepository productRepository;
