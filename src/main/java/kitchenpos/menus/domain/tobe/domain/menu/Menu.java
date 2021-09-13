@@ -1,15 +1,10 @@
 package kitchenpos.menus.domain.tobe.domain.menu;
 
-import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
@@ -38,14 +33,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private Displayed displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
@@ -56,7 +45,7 @@ public class Menu {
         final Price price,
         final MenuGroupId menuGroupId,
         final Displayed displayed,
-        final List<MenuProduct> menuProducts
+        final MenuProducts menuProducts
     ) {
         this.id = id;
         this.displayedName = name;

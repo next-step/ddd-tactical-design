@@ -2,7 +2,6 @@ package kitchenpos;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.common.domain.MenuGroupId;
@@ -13,6 +12,7 @@ import kitchenpos.menus.domain.tobe.domain.menu.Menu;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
+import kitchenpos.menus.domain.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
 import kitchenpos.products.domain.tobe.domain.DisplayedName;
@@ -43,15 +43,6 @@ public class ToBeFixtures {
     //
 
     public static Menu menu() {
-        final MenuProduct menuProduct1 = menuProduct(
-            product("후라이드", 16_000L).getId(),
-            1L
-        );
-        final MenuProduct menuProduct2 = menuProduct(
-            product("간장치킨", 17_000L).getId(),
-            1L
-        );
-
         return new Menu(
             new MenuId(UUID.randomUUID()),
             new kitchenpos.menus.domain.tobe.domain.menu.DisplayedName(
@@ -61,11 +52,23 @@ public class ToBeFixtures {
             new kitchenpos.menus.domain.tobe.domain.menu.Price(BigDecimal.valueOf(33_000L)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(true),
-            Collections.unmodifiableList(Arrays.asList(menuProduct1, menuProduct2))
+            menuProducts()
         );
     }
 
     //
+
+    public static MenuProducts menuProducts() {
+        final MenuProduct menuProduct1 = menuProduct(
+            product("후라이드", 16_000L).getId(),
+            1L
+        );
+        final MenuProduct menuProduct2 = menuProduct(
+            product("간장치킨", 17_000L).getId(),
+            1L
+        );
+        return new MenuProducts(Arrays.asList(menuProduct1, menuProduct2));
+    }
 
     public static MenuProduct menuProduct() {
         final Product product = product();
