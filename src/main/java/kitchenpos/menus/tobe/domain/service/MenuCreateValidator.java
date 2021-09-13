@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class MenuCreateValidator implements Validator<Menu> {
 
-    final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupRepository menuGroupRepository;
 
-    final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public MenuCreateValidator(final MenuGroupRepository menuGroupRepository, final ProductRepository productRepository) {
         this.menuGroupRepository = menuGroupRepository;
