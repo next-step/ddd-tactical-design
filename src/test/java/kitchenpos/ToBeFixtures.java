@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
 import kitchenpos.products.domain.tobe.domain.DisplayedName;
@@ -46,7 +47,7 @@ public class ToBeFixtures {
         final ProductId productId,
         final long quantity
     ) {
-        return new MenuProduct(seq, productId, quantity);
+        return new MenuProduct(new MenuProductSeq(seq), productId, quantity);
     }
 
     public static Product product() {
