@@ -2,6 +2,7 @@ package kitchenpos.menus.domain.tobe.domain.menu;
 
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,13 +22,18 @@ public class MenuProduct {
     @Column(name = "product_id", nullable = false, columnDefinition = "varbinary(16)")
     private ProductId productId;
 
+    @Embedded
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private MenuProductQuantity quantity;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(final MenuProductSeq seq, final ProductId productId, final long quantity) {
+    public MenuProduct(
+        final MenuProductSeq seq,
+        final ProductId productId,
+        final MenuProductQuantity quantity
+    ) {
         this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;

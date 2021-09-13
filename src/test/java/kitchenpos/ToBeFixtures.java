@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
@@ -35,19 +36,23 @@ public class ToBeFixtures {
 
     public static MenuProduct menuProduct() {
         final Product product = product();
-        return menuProduct(product.getId(), 2);
+        return menuProduct(product.getId(), 2L);
     }
 
-    public static MenuProduct menuProduct(final ProductId productId, final long quantity) {
+    public static MenuProduct menuProduct(final ProductId productId, final Long quantity) {
         return menuProduct(new Random().nextLong(), productId, quantity);
     }
 
     public static MenuProduct menuProduct(
         final Long seq,
         final ProductId productId,
-        final long quantity
+        final Long quantity
     ) {
-        return new MenuProduct(new MenuProductSeq(seq), productId, quantity);
+        return new MenuProduct(
+            new MenuProductSeq(seq),
+            productId,
+            new MenuProductQuantity(quantity)
+        );
     }
 
     public static Product product() {
