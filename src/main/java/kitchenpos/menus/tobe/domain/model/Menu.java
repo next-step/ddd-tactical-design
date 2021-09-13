@@ -49,21 +49,30 @@ public class Menu {
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
+        isValidPrice(menuProducts.getTotalPrice());
     }
 
     public Menu changePrice(final Price price) {
         this.price = price;
+        isValidPrice(price);
         return this;
     }
 
     public Menu display() {
         this.displayed = true;
+        isValidPrice(price);
         return this;
     }
 
     public Menu hide() {
         this.displayed = false;
         return this;
+    }
+
+    private void isValidPrice(final Price productTotalPrice) {
+        if (price.compareTo(productTotalPrice) > 0) {
+            hide();
+        }
     }
 
     public DisplayedName getName() {
@@ -77,6 +86,5 @@ public class Menu {
     public boolean isDisplayed() {
         return displayed;
     }
-
 
 }

@@ -11,7 +11,7 @@ import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
-public class Price {
+public class Price implements Comparable<Price> {
 
     public static final Price ZERO = new Price(0);
 
@@ -66,5 +66,10 @@ public class Price {
 
     public Price add(final Price price) {
         return new Price(value.add(price.getValue()));
+    }
+
+    @Override
+    public int compareTo(final Price p) {
+        return value.compareTo(p.getValue());
     }
 }
