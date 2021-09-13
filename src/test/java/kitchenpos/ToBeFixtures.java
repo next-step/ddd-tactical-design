@@ -10,10 +10,10 @@ import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
+import kitchenpos.common.domain.Quantity;
 import kitchenpos.menus.domain.tobe.domain.menu.Displayed;
 import kitchenpos.menus.domain.tobe.domain.menu.Menu;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.domain.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
@@ -82,7 +82,7 @@ public class ToBeFixtures {
     public static MenuProduct menuProduct(
         final ProductId productId,
         final Price price,
-        final Long quantity
+        final long quantity
     ) {
         return menuProduct(
             new Random().nextLong(),
@@ -96,13 +96,13 @@ public class ToBeFixtures {
         final Long seq,
         final ProductId productId,
         final Price price,
-        final Long quantity
+        final long quantity
     ) {
         return new MenuProduct(
             new MenuProductSeq(seq),
             productId,
             price,
-            new MenuProductQuantity(quantity)
+            new Quantity(quantity)
         );
     }
 

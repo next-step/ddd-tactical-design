@@ -1,30 +1,26 @@
-package kitchenpos.menus.domain.tobe.domain.menu;
+package kitchenpos.common.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class MenuProductQuantity {
+public class Quantity {
 
     @Column(name = "quantity", nullable = false)
-    private Long value;
+    private long value;
 
-    protected MenuProductQuantity() {
+    protected Quantity() {
     }
 
-    public MenuProductQuantity(final Long value) {
+    public Quantity(final long value) {
         validate(value);
         this.value = value;
     }
 
-    private void validate(final Long value) {
-        if (Objects.isNull(value)) {
-            throw new IllegalArgumentException("메뉴에 속한 상품의 수량이 올바르지 않으면 등록할 수 없습니다.");
-        }
-
+    private void validate(final long value) {
         if (value < 0) {
-            throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0 이상이어야 합니다.");
+            throw new IllegalArgumentException("수량은 0 이상이어야 합니다.");
         }
     }
 
@@ -36,7 +32,7 @@ public class MenuProductQuantity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MenuProductQuantity that = (MenuProductQuantity) o;
+        final Quantity that = (Quantity) o;
         return Objects.equals(value, that.value);
     }
 

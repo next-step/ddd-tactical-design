@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
+import kitchenpos.common.domain.Quantity;
 
 @Table(name = "menu_product")
 @Entity
@@ -30,7 +31,7 @@ public class MenuProduct {
 
     @Embedded
     @Column(name = "quantity", nullable = false)
-    private MenuProductQuantity quantity;
+    private Quantity quantity;
 
     protected MenuProduct() {
     }
@@ -39,7 +40,7 @@ public class MenuProduct {
         final MenuProductSeq seq,
         final ProductId productId,
         final Price price,
-        final MenuProductQuantity quantity
+        final Quantity quantity
     ) {
         this.seq = seq;
         this.productId = productId;
