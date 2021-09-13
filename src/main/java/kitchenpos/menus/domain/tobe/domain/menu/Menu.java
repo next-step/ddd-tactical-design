@@ -23,8 +23,9 @@ public class Menu {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     private MenuId id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    @Column(name = "displayed_name", nullable = false)
+    private DisplayedName displayedName;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -50,14 +51,14 @@ public class Menu {
 
     public Menu(
         final MenuId id,
-        final String name,
+        final DisplayedName name,
         final BigDecimal price,
         final MenuGroupId menuGroupId,
         final boolean displayed,
         final List<MenuProduct> menuProducts
     ) {
         this.id = id;
-        this.name = name;
+        this.displayedName = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;

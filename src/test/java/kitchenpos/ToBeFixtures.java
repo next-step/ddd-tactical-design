@@ -15,7 +15,6 @@ import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
 import kitchenpos.products.domain.tobe.domain.DisplayedName;
-import kitchenpos.products.domain.tobe.domain.FakeProfanities;
 import kitchenpos.products.domain.tobe.domain.Price;
 import kitchenpos.products.domain.tobe.domain.Product;
 
@@ -54,7 +53,10 @@ public class ToBeFixtures {
 
         return new Menu(
             new MenuId(UUID.randomUUID()),
-            "후라이드+간장치킨",
+            new kitchenpos.menus.domain.tobe.domain.menu.DisplayedName(
+                "후라이드+간장치킨",
+                new FakeProfanities()
+            ),
             BigDecimal.valueOf(33_000L),
             new MenuGroupId(UUID.randomUUID()),
             true,

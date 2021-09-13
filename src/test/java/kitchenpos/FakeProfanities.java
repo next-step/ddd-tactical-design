@@ -1,7 +1,8 @@
-package kitchenpos.products.domain.tobe.domain;
+package kitchenpos;
 
 import java.util.Arrays;
 import java.util.List;
+import kitchenpos.common.domain.Profanities;
 
 public class FakeProfanities implements Profanities {
 
