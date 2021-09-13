@@ -13,7 +13,7 @@ import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
 
 @Table(name = "menu")
-@Entity
+@Entity(name = "tobeMenu")
 public class Menu {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")
@@ -21,11 +21,9 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    @Column(name = "name", nullable = false)
     private DisplayedName name;
 
     @Embedded
-    @Column(name = "price", nullable = false)
     private Price price;
 
     @ManyToOne(optional = false)

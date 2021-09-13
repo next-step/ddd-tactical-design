@@ -5,18 +5,17 @@ import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOUL
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
-@Access(AccessType.FIELD)
 public class Price {
 
     public static final Price ZERO = new Price(0);
 
+    @Column(name = "price", nullable = false)
     private BigDecimal value;
 
     protected Price() {

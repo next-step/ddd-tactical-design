@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 
 @Table(name = "menu_group")
-@Entity
+@Entity(name = "tobeMenuGroup")
 public class MenuGroup {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")

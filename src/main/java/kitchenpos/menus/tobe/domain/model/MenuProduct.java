@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 import kitchenpos.common.tobe.domain.Price;
 
 @Table(name = "menu_product")
-@Entity
+@Entity(name = "tobeMenuProduct")
 public class MenuProduct {
 
     @Column(name = "seq")
@@ -21,7 +21,6 @@ public class MenuProduct {
     private Long seq;
 
     @Embedded
-    @Column(name = "quantity", nullable = false)
     private Quantity quantity;
 
     @Column(

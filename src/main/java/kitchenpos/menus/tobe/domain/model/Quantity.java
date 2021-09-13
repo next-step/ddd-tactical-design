@@ -3,14 +3,14 @@ package kitchenpos.menus.tobe.domain.model;
 import static kitchenpos.menus.tobe.exception.WrongQuantityException.QUANTITY_SHOULD_NOT_BE_NEGATIVE_VALUE;
 
 import java.util.Objects;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.menus.tobe.exception.WrongQuantityException;
 
 @Embeddable
-@Access(AccessType.FIELD)
 public class Quantity {
+
+    @Column(name = "quantity", nullable = false)
     private long value;
 
     public Quantity(final long value) {
