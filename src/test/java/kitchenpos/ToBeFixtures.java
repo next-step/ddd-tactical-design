@@ -1,7 +1,9 @@
 package kitchenpos;
 
 import java.math.BigDecimal;
+import java.util.Random;
 import java.util.UUID;
+import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.menugroup.Name;
@@ -27,6 +29,23 @@ public class ToBeFixtures {
             new MenuGroupId(id),
             new Name(name)
         );
+    }
+
+    public static MenuProduct menuProduct() {
+        final Product product = product();
+        return menuProduct(product.getId(), 2);
+    }
+
+    public static MenuProduct menuProduct(final UUID productId, final long quantity) {
+        return menuProduct(new Random().nextLong(), productId, quantity);
+    }
+
+    public static MenuProduct menuProduct(
+        final Long seq,
+        final UUID productId,
+        final long quantity
+    ) {
+        return new MenuProduct(seq, productId, quantity);
     }
 
     public static Product product() {

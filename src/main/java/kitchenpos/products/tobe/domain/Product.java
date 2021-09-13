@@ -31,6 +31,10 @@ public class Product {
         this.price = price;
     }
 
+    public UUID getId() {
+        return this.id;
+    }
+
     public DisplayedName getDisplayedName() {
         return this.displayedName;
     }
