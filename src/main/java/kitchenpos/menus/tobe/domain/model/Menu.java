@@ -69,7 +69,7 @@ public class Menu {
         return this;
     }
 
-    private void isValidPrice(final Price productTotalPrice) {
+    public void isValidPrice(final Price productTotalPrice) {
         if (price.compareTo(productTotalPrice) > 0) {
             hide();
         }
