@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.dto;
 
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
 
 public class MenuProductRequest {
     private UUID productId;
@@ -23,7 +22,4 @@ public class MenuProductRequest {
         return quantity;
     }
 
-    public MenuProduct toEntity() {
-        return null;
-    }
 }
