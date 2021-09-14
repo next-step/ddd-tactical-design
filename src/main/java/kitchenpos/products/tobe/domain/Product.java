@@ -1,9 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.domain.Profanities;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -19,17 +16,12 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product() {
+    protected Product() {
     }
 
-    public Product(final Profanities profanities, final String name, final BigDecimal price) {
-        DisplayedName.validateName(profanities, name);
-        this.displayedName = new DisplayedName(name);
-        this.price = new Price(price);
-    }
-
-    public Product(final Profanities profanities, final String name, final Long price) {
-        this(profanities, name, BigDecimal.valueOf(price));
+    public Product(final DisplayedName displayedName, final Price price) {
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public UUID getId() {

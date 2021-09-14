@@ -18,7 +18,8 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    public DisplayedName(final String name) {
+    public DisplayedName(final String name, final Profanities profanities) {
+        validateName(name, profanities);
         this.name = name;
     }
 
@@ -39,7 +40,7 @@ public class DisplayedName {
         return Objects.hash(getName());
     }
 
-    public static void validateName(Profanities profanities, String name) {
+    public void validateName(final String name, final Profanities profanities) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new WrongDisplayedNameException(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
