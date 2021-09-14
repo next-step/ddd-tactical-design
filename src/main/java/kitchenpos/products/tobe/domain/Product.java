@@ -35,4 +35,8 @@ public class Product {
     public Price getPrice() {
         return price;
     }
+
+    public void change(final Price price) {
+        this.price = price;
+    }
 }
