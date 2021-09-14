@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import java.util.Arrays;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.model.Product;
 
 @Table(name = "menu")
 @Entity(name = "tobeMenu")
@@ -41,6 +43,10 @@ public class Menu {
     private MenuProducts menuProducts;
 
     protected Menu() {
+    }
+
+    public Menu(final DisplayedName name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProduct ... menuProductArr) {
+        this(name, price, menuGroup, displayed, new MenuProducts(Arrays.asList(menuProductArr)));
     }
 
     public Menu(final DisplayedName name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
@@ -75,6 +81,10 @@ public class Menu {
         }
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public DisplayedName getName() {
         return name;
     }
@@ -87,4 +97,11 @@ public class Menu {
         return displayed;
     }
 
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
+
+    public Product getMenuGroup() {
+        return null;
+    }
 }

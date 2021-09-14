@@ -46,4 +46,7 @@ public class MenuProduct {
         return productPrice.multiply(quantity);
     }
 
+    public UUID getProductId() {
+        return productId;
+    }
 }
