@@ -95,7 +95,7 @@ public class Menu {
         this.displayed = new Displayed(true);
     }
 
-    private void hide() {
+    public void hide() {
         this.displayed = new Displayed(false);
     }
 

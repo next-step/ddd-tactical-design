@@ -79,4 +79,13 @@ public class MenuTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("메뉴를 숨길 수 있다.")
+    @Test
+    void 메뉴숨김() {
+        final Menu menu = ToBeFixtures.menu();
+
+        menu.hide();
+
+        assertThat(menu.isHidden()).isTrue();
+    }
 }
