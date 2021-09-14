@@ -40,4 +40,10 @@ class PriceTest {
                 .withMessage(PRICE_SHOULD_NOT_BE_NEGATIVE);
     }
 
+    @Test
+    void 동등성() {
+        Price price1 = new Price(BigDecimal.valueOf(16_000L));
+        Price price2 = new Price(BigDecimal.valueOf(16_000L));
+        assertThat(price1).isEqualTo(price2);
+    }
 }

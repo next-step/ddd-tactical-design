@@ -56,4 +56,11 @@ class DisplayedNameTest {
                 .isThrownBy(() -> new DisplayedName(name, profanities))
                 .withMessage(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
     }
+
+    @Test
+    void 동등성() {
+        DisplayedName name1 = new DisplayedName("치킨", profanities);
+        DisplayedName name2 = new DisplayedName("치킨", profanities);
+        assertThat(name1).isEqualTo(name2);
+    }
 }
