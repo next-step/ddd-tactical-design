@@ -36,7 +36,7 @@ public class MenuService {
     public MenuResponse create(final CreateMenuRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
-        final MenuProducts menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
+        final List<MenuProduct> menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
         final Menu menu = Menu.builder()
                 .menuName(new MenuName(request.getName(), profanities))
                 .menuPrice(new MenuPrice(request.getPrice()))

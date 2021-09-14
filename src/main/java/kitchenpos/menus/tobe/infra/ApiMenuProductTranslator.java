@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.infra;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProductService;
 import kitchenpos.menus.tobe.domain.MenuProductTranslator;
-import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.ProductQuantity;
 import kitchenpos.menus.tobe.dto.FilteredProductRequest;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
@@ -19,13 +19,15 @@ import java.util.stream.Collectors;
 @Component
 public class ApiMenuProductTranslator implements MenuProductTranslator {
     private final RestTemplate restTemplate;
+    private final MenuProductService menuProductService;
 
-    public ApiMenuProductTranslator(final RestTemplateBuilder restTemplateBuilder) {
+    public ApiMenuProductTranslator(final RestTemplateBuilder restTemplateBuilder, final MenuProductService menuProductService) {
         this.restTemplate = restTemplateBuilder.build();
+        this.menuProductService = menuProductService;
     }
 
     @Override
-    public MenuProducts getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
+    public List<MenuProduct> getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
         final List<Product> products = requestProducts(menuProductRequests.stream()
                 .map(MenuProductRequest::getProductId)
                 .collect(Collectors.toList()));
@@ -35,7 +37,8 @@ public class ApiMenuProductTranslator implements MenuProductTranslator {
                     final ProductQuantity productQuantity = new ProductQuantity(menuProductRequest.getQuantity());
                     return new MenuProduct(product, productQuantity);
                 }).collect(Collectors.toList());
-        return new MenuProducts(products, menuProducts);
+        menuProductService.validateMenuProducts(products, menuProducts);
+        return menuProducts;
     }
 
     private List<Product> requestProducts(final List<UUID> productIds) {

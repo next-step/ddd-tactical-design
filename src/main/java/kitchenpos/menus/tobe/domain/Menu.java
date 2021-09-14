@@ -29,8 +29,14 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @Embedded
-    private MenuProducts menuProducts;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
+    private List<MenuProduct> menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -57,7 +63,7 @@ public class Menu {
         private MenuPrice menuPrice;
         private MenuGroup menuGroup;
         private boolean displayed;
-        private MenuProducts menuProducts;
+        private List<MenuProduct> menuProducts;
         private UUID menuGroupId;
 
         public Menu build() {
@@ -84,7 +90,7 @@ public class Menu {
             return this;
         }
 
-        public Builder menuProducts(final MenuProducts menuProducts) {
+        public Builder menuProducts(final List<MenuProduct> menuProducts) {
             this.menuProducts = menuProducts;
             return this;
         }
@@ -116,7 +122,7 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts.getMenuProducts();
+        return menuProducts;
     }
 
     public UUID getMenuGroupId() {
@@ -148,8 +154,12 @@ public class Menu {
     }
 
     private boolean isValidPrice(final MenuPrice menuPrice) {
+        final BigDecimal productPriceSum = menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr));
         return menuPrice.getPrice()
-                .compareTo(menuProducts.sumProductPrice()) <= 0;
+                .compareTo(productPriceSum) <= 0;
     }
 
     private void validateMenu() {
