@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +30,7 @@ class DisplayedNameTest {
         String name = "후라이드";
 
         //when
-        final DisplayedName displayedName = new DisplayedName(name);
+        final DisplayedName displayedName = new DisplayedName(name, profanities);
 
         //then
         assertAll(
@@ -45,7 +44,7 @@ class DisplayedNameTest {
     @ParameterizedTest
     void create_fail_empty__name(String name) {
         assertThatExceptionOfType(WrongDisplayedNameException.class)
-                .isThrownBy(() -> new DisplayedName(name))
+                .isThrownBy(() -> new DisplayedName(name, profanities))
                 .withMessage(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
     }
 
@@ -54,7 +53,7 @@ class DisplayedNameTest {
     @ParameterizedTest
     void create_fail_empty_or_purgomalum_name(String name) {
         assertThatExceptionOfType(WrongDisplayedNameException.class)
-                .isThrownBy(() -> DisplayedName.validateName(profanities, name))
+                .isThrownBy(() -> new DisplayedName(name, profanities))
                 .withMessage(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
     }
 }

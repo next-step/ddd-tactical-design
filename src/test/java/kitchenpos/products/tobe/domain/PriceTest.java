@@ -28,7 +28,7 @@ class PriceTest {
         );
     }
 
-    @DisplayName("가격이 음수일 경우 에러가 발생한다.")
+    @DisplayName("가격은 음수일 수 없다.")
     @Test
     void create_fail_negative_price() {
         //given
