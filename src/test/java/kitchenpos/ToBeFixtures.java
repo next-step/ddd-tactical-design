@@ -42,6 +42,40 @@ public class ToBeFixtures {
 
     //
 
+    public static Menu menu(
+        final long price,
+        final MenuProduct... menuProducts
+    ) {
+        return new Menu(
+            new MenuId(UUID.randomUUID()),
+            new DisplayedName(
+                "랜덤메뉴",
+                new FakeProfanities()
+            ),
+            new Price(BigDecimal.valueOf(price)),
+            new MenuGroupId(UUID.randomUUID()),
+            new Displayed(true),
+            new MenuProducts(Arrays.asList(menuProducts))
+        );
+    }
+
+    public static Menu menu(
+        final long price,
+        final MenuProducts menuProducts
+    ) {
+        return new Menu(
+            new MenuId(UUID.randomUUID()),
+            new DisplayedName(
+                "랜덤메뉴",
+                new FakeProfanities()
+            ),
+            new Price(BigDecimal.valueOf(price)),
+            new MenuGroupId(UUID.randomUUID()),
+            new Displayed(true),
+            menuProducts
+        );
+    }
+
     public static Menu menu() {
         return new Menu(
             new MenuId(UUID.randomUUID()),
@@ -49,7 +83,7 @@ public class ToBeFixtures {
                 "후라이드+간장치킨",
                 new FakeProfanities()
             ),
-            new Price(BigDecimal.valueOf(33_000L)),
+            new Price(BigDecimal.valueOf(32_000L)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(true),
             menuProducts()

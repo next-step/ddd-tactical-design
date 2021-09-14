@@ -65,6 +65,33 @@ public class Menu {
         }
     }
 
+    public Price getPrice() {
+        return this.price;
+    }
+
+    public void changePrice(final Price price) {
+        if (priceExceedsAmount(price)) {
+            hide();
+        }
+        this.price = price;
+    }
+
+    private boolean priceExceedsAmount(final Price price) {
+        return price.compareTo(menuProducts.getAmount()) > 0;
+    }
+
+    private void hide() {
+        this.displayed = new Displayed(false);
+    }
+
+    public boolean isDisplayed() {
+        return displayed.isDisplayed();
+    }
+
+    public boolean isHidden() {
+        return displayed.isHidden();
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

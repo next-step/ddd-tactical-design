@@ -17,6 +17,14 @@ public class Displayed {
         this.value = value;
     }
 
+    public boolean isDisplayed() {
+        return value;
+    }
+
+    public boolean isHidden() {
+        return !value;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
