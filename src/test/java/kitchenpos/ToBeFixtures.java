@@ -76,6 +76,20 @@ public class ToBeFixtures {
         );
     }
 
+    public static Menu menu(final boolean displayed) {
+        return new Menu(
+            new MenuId(UUID.randomUUID()),
+            new DisplayedName(
+                "후라이드+간장치킨",
+                new FakeProfanities()
+            ),
+            new Price(BigDecimal.valueOf(32_000L)),
+            new MenuGroupId(UUID.randomUUID()),
+            new Displayed(displayed),
+            menuProducts()
+        );
+    }
+
     public static Menu menu() {
         return new Menu(
             new MenuId(UUID.randomUUID()),

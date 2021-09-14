@@ -76,8 +76,23 @@ public class Menu {
         this.price = price;
     }
 
-    private boolean priceExceedsAmount(final Price price) {
+    private boolean priceExceedsAmount(final Price price, MenuProducts menuProducts) {
         return price.compareTo(menuProducts.getAmount()) > 0;
+    }
+
+    private boolean priceExceedsAmount(final Price price) {
+        return priceExceedsAmount(price, menuProducts);
+    }
+
+    private boolean priceExceedsAmount() {
+        return priceExceedsAmount(price);
+    }
+
+    public void display() {
+        if (priceExceedsAmount()) {
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
+        }
+        this.displayed = new Displayed(true);
     }
 
     private void hide() {

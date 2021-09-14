@@ -56,4 +56,27 @@ public class MenuTest {
             () -> assertThat(menu.getPrice()).isEqualTo(newPrice)
         );
     }
+
+    @DisplayName("메뉴를 노출할 수 있다.")
+    @Test
+    void 메뉴노출() {
+        final Menu menu = ToBeFixtures.menu(false);
+
+        menu.display();
+
+        assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    void 메뉴노출2() {
+        final Menu menu = ToBeFixtures.menu();
+        menu.changePrice(new Price(BigDecimal.valueOf(1_000_000L)));
+        assertThat(menu.isHidden()).isTrue();
+
+        assertThatThrownBy(
+            () -> menu.display()
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
 }
