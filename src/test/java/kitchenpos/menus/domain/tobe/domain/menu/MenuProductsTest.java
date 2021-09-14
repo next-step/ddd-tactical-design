@@ -1,8 +1,14 @@
 package kitchenpos.menus.domain.tobe.domain.menu;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.UUID;
 import kitchenpos.ToBeFixtures;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,5 +20,27 @@ class MenuProductsTest {
         assertDoesNotThrow(
             () -> ToBeFixtures.menuProducts()
         );
+    }
+
+    @DisplayName("메뉴 상품 금액의 합을 계산할 수 있다.")
+    @Test
+    void 금액의합() {
+        final MenuProduct menuProduct1 = ToBeFixtures.menuProduct(
+            new ProductId(UUID.randomUUID()),
+            new Price(BigDecimal.valueOf(16_000L)),
+            2
+        );
+        final MenuProduct menuProduct2 = ToBeFixtures.menuProduct(
+            new ProductId(UUID.randomUUID()),
+            new Price(BigDecimal.valueOf(18_000L)),
+            1
+        );
+
+        final MenuProducts menuProducts = new MenuProducts(
+            Arrays.asList(menuProduct1, menuProduct2)
+        );
+        final Price actualAmount = menuProducts.getAmount();
+
+        assertThat(actualAmount).isEqualTo(new Price(BigDecimal.valueOf(50_000L)));
     }
 }

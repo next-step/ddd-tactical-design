@@ -1,5 +1,6 @@
 package kitchenpos.common.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -22,6 +23,10 @@ public class Quantity {
         if (value < 0) {
             throw new IllegalArgumentException("수량은 0 이상이어야 합니다.");
         }
+    }
+
+    public BigDecimal toBigDecimal() {
+        return BigDecimal.valueOf(value);
     }
 
     @Override

@@ -49,12 +49,20 @@ public class Menu {
         final Displayed displayed,
         final MenuProducts menuProducts
     ) {
+        validatePrice(price, menuProducts);
+
         this.id = id;
         this.displayedName = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
+    }
+
+    private void validatePrice(final Price price, final MenuProducts menuProducts) {
+        if (price.compareTo(menuProducts.getAmount()) > 0) {
+            throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 금액의 합보다 적거나 같아야 합니다.");
+        }
     }
 
     @Override

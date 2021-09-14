@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Price {
+public class Price implements Comparable<Price> {
+
+    public static final Price ZERO = new Price(BigDecimal.ZERO);
 
     @Column(name = "price", nullable = false)
     private BigDecimal value;
@@ -29,6 +31,18 @@ public class Price {
         }
     }
 
+    public Price add(Price o) {
+        final BigDecimal augend = o.value;
+        final BigDecimal addedValue = value.add(augend);
+        return new Price(addedValue);
+    }
+
+    public Price multiply(Quantity quantity) {
+        BigDecimal qty = quantity.toBigDecimal();
+        final BigDecimal multipliedValue = value.multiply(qty);
+        return new Price(multipliedValue);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -44,5 +58,11 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    @Override
+    public int compareTo(final Price o) {
+        final BigDecimal val = o.value;
+        return value.compareTo(val);
     }
 }

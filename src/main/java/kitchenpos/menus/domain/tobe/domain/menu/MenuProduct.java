@@ -48,6 +48,10 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
+    public Price getAmount() {
+        return price.multiply(quantity);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
