@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.infra.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,11 +17,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class DisplayedNameTest {
-    private PurgomalumClient purgomalumClient;
+    private Profanities profanities;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        profanities = new FakePurgomalumClient();
     }
 
     @DisplayName("상품 이름을 만들 수 있다.")
@@ -54,7 +54,7 @@ class DisplayedNameTest {
     @ParameterizedTest
     void create_fail_empty_or_purgomalum_name(String name) {
         assertThatExceptionOfType(WrongDisplayedNameException.class)
-                .isThrownBy(() -> DisplayedName.validateName(purgomalumClient, name))
+                .isThrownBy(() -> DisplayedName.validateName(profanities, name))
                 .withMessage(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
     }
 }

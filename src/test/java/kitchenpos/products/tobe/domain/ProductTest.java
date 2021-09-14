@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.infra.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
-    private PurgomalumClient purgomalumClient;
+    private Profanities profanities;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        profanities = new FakePurgomalumClient();
     }
 
     @DisplayName("상품을 생성할 수 있다.")
@@ -33,7 +33,7 @@ class ProductTest {
         BigDecimal price = BigDecimal.valueOf(16_000L);
 
         //when
-        Product product = new Product(purgomalumClient, name, price);
+        Product product = new Product(profanities, name, price);
 
         //then
         assertAll(
@@ -53,7 +53,7 @@ class ProductTest {
 
         //when & then
         assertThatExceptionOfType(WrongDisplayedNameException.class)
-                .isThrownBy(() -> new Product(purgomalumClient, name, price));
+                .isThrownBy(() -> new Product(profanities, name, price));
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 생성할 수 없다.")
@@ -66,6 +66,6 @@ class ProductTest {
 
         //when & then
         assertThatExceptionOfType(WrongPriceException.class)
-                .isThrownBy(() -> new Product(purgomalumClient, name, price));
+                .isThrownBy(() -> new Product(profanities, name, price));
     }
 }

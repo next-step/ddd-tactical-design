@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.infra.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 
 import javax.persistence.Column;
@@ -39,11 +39,11 @@ public class DisplayedName {
         return Objects.hash(getName());
     }
 
-    public static void validateName(PurgomalumClient purgomalumClient, String name) {
+    public static void validateName(Profanities profanities, String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new WrongDisplayedNameException(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
-        if (purgomalumClient.containsProfanity(name)) {
+        if (profanities.containsProfanity(name)) {
             throw new WrongDisplayedNameException(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
         }
     }
