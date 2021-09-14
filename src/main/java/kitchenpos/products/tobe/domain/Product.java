@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -38,5 +39,18 @@ public class Product {
 
     public void change(final Price price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        final Product product = (Product) o;
+        return getId().equals(product.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
