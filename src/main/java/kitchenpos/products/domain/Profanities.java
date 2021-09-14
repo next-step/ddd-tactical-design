@@ -1,4 +1,4 @@
-package kitchenpos.products.infra;
+package kitchenpos.products.domain;
 
 public interface Profanities {
     boolean containsProfanity(String text);

@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.Profanities;
+import kitchenpos.products.domain.Profanities;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

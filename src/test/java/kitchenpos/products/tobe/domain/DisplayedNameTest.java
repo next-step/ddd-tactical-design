@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.Profanities;
+import kitchenpos.products.domain.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
