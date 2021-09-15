@@ -1,4 +1,4 @@
-package kitchenpos.common.tobe;
+package kitchenpos.common.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import org.junit.jupiter.api.DisplayName;
