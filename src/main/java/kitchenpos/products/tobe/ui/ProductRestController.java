@@ -38,7 +38,7 @@ public class ProductRestController {
         return ResponseEntity.ok(productService.findAll());
     }
 
-    @GetMapping("filtered")
+    @PostMapping("/filtered")
     public ResponseEntity<List<ProductResponse>> findAll(@RequestBody final FilteredProductRequest request) {
         return ResponseEntity.ok(productService.findAllByIdIn(request.getProductIds()));
     }

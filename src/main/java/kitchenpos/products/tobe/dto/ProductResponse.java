@@ -6,9 +6,11 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ProductResponse {
-    private final UUID id;
-    private final String name;
-    private final BigDecimal price;
+    private UUID id;
+    private String name;
+    private BigDecimal price;
+
+    protected ProductResponse() {}
 
     private ProductResponse(final UUID id, final String name, final BigDecimal price) {
         this.id = id;

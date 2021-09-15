@@ -15,7 +15,7 @@ public class MenuGroup {
 
     protected MenuGroup() {}
 
-    private MenuGroup(final UUID id, final MenuGroupName menuGroupName) {
+    public MenuGroup(final UUID id, final MenuGroupName menuGroupName) {
         this.id = id;
         this.menuGroupName = menuGroupName;
     }
