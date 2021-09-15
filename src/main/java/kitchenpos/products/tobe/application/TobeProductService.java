@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TobeProductService {
@@ -31,14 +32,15 @@ public class TobeProductService {
     }
 
     @Transactional
-    public TobeProduct create(final ProductForm request) {
+    public ProductForm create(final ProductForm request) {
         ProductName name = new ProductName(request.getName(), this.purgomalumClient);
         ProductPrice price = new ProductPrice(request.getPrice());
-        return productRepository.save(new TobeProduct(name, price));
+        TobeProduct saveProduct = productRepository.save(new TobeProduct(name, price));
+        return ProductForm.of(saveProduct);
     }
 
     @Transactional
-    public TobeProduct changePrice(final UUID productId, final ProductForm request) {
+    public ProductForm changePrice(final UUID productId, final ProductForm request) {
         final TobeProduct product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
 
@@ -46,7 +48,7 @@ public class TobeProductService {
 
         beforeChangeMenuDisplay(productId);
 
-        return product;
+        return ProductForm.of(product);
     }
 
     // TODO : Menu 리팩토링 시 수정해야함.
@@ -66,7 +68,10 @@ public class TobeProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<TobeProduct> findAll() {
-        return productRepository.findAll();
+    public List<ProductForm> findAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(product -> ProductForm.of(product))
+                .collect(Collectors.toList());
     }
 }

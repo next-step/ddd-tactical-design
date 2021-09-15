@@ -32,4 +32,17 @@ public class ProductPrice {
             throw new IllegalArgumentException();
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductPrice that = (ProductPrice) o;
+        return Objects.equals(getPrice(), that.getPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPrice());
+    }
 }

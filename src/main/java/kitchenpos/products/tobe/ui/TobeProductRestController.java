@@ -21,26 +21,22 @@ public class TobeProductRestController {
 
     @PostMapping
     public ResponseEntity<ProductForm> create(@RequestBody final ProductForm request) {
-        final TobeProduct response = productService.create(request);
+        final ProductForm response = productService.create(request);
 
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(ProductForm.of(response));
+            .body(response);
     }
 
     @PutMapping("/{productId}/price")
     public ResponseEntity<ProductForm> changePrice(@PathVariable final UUID productId, @RequestBody final ProductForm request) {
-        TobeProduct response = productService.changePrice(productId, request);
+        ProductForm response = productService.changePrice(productId, request);
 
-        return ResponseEntity.ok(ProductForm.of(response));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ProductForm>> findAll() {
-        List<TobeProduct> products = productService.findAll();
-
-        List<ProductForm> response = products.stream()
-                .map(product -> ProductForm.of(product))
-                .collect(Collectors.toList());
+        List<ProductForm> response = productService.findAll();
 
         return ResponseEntity.ok(response);
     }

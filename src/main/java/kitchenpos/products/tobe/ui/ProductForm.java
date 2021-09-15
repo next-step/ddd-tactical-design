@@ -35,7 +35,7 @@ public class ProductForm {
     }
 
     public static ProductForm of(TobeProduct tobeProduct) {
-        final ProductForm productForm = new ProductForm();
+        ProductForm productForm = new ProductForm();
         productForm.setId(tobeProduct.getId());
         productForm.setName(tobeProduct.getName());
         productForm.setPrice(tobeProduct.getPrice());

@@ -42,7 +42,7 @@ class TobeProductServiceTest {
     @Test
     void create() {
         final ProductForm expected = createProductRequest("후라이드", 16_000L);
-        final TobeProduct actual = productService.create(expected);
+        final ProductForm actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -76,7 +76,7 @@ class TobeProductServiceTest {
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductForm expected = changePriceRequest(15_000L);
-        final TobeProduct actual = productService.changePrice(productId, expected);
+        final ProductForm actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -106,7 +106,7 @@ class TobeProductServiceTest {
     void findAll() {
         productRepository.save(product());
         productRepository.save(product());
-        final List<TobeProduct> actual = productService.findAll();
+        final List<ProductForm> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 
