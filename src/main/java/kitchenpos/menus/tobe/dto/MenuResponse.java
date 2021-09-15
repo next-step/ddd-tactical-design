@@ -54,17 +54,17 @@ public class MenuResponse {
         return menuGroupId;
     }
 
-    public static MenuResponse from(final Menu menu) {
+    public static MenuResponse from(final Menu menu, final MenuGroupResponse menuGroup) {
         return new MenuResponse(
                 menu.getId(),
                 menu.getName(),
                 menu.getPrice(),
-                MenuGroupResponse.from(menu.getMenuGroup()),
+                menuGroup,
                 menu.isDisplayed(),
                 menu.getMenuProducts().stream()
                         .map(MenuProductResponse::from)
                         .collect(Collectors.toList()),
-                menu.getMenuGroupId()
+                menuGroup.getId()
         );
     }
 }

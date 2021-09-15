@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menugroups.domain.MenuGroup;
-import kitchenpos.menugroups.domain.MenuGroupInfo;
 import kitchenpos.menus.tobe.domain.menuproducts.MenuProduct;
 import kitchenpos.menus.tobe.domain.menuproducts.MenuProducts;
 
@@ -22,17 +20,13 @@ public class Menu {
     private MenuInfo menuInfo;
 
     @Embedded
-    private MenuGroupInfo menuGroupInfo;
-
-    @Embedded
     private MenuProducts menuProducts;
 
     protected Menu() {}
 
-    public Menu(final MenuInfo menuInfo, final MenuGroupInfo menuGroupInfo, final MenuProducts menuProducts) {
+    public Menu(final MenuInfo menuInfo, final MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.menuInfo = menuInfo;
-        this.menuGroupInfo = menuGroupInfo;
         this.menuProducts = menuProducts;
         validateMenu();
     }
@@ -49,20 +43,16 @@ public class Menu {
         return menuInfo.getMenuPrice().getPrice();
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroupInfo.getMenuGroup();
-    }
-
     public boolean isDisplayed() {
         return menuInfo.isDisplayed();
     }
 
-    public List<MenuProduct> getMenuProducts() {
-        return new ArrayList<>(menuProducts.getMenuProducts());
+    public UUID getMenuGroupId() {
+        return menuInfo.getMenuGroupId();
     }
 
-    public UUID getMenuGroupId() {
-        return menuGroupInfo.getMenuGroupId();
+    public List<MenuProduct> getMenuProducts() {
+        return new ArrayList<>(menuProducts.getMenuProducts());
     }
 
     public void display() {

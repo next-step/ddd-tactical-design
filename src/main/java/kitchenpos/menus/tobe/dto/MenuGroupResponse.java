@@ -5,8 +5,10 @@ import kitchenpos.menugroups.domain.MenuGroup;
 import java.util.UUID;
 
 public class MenuGroupResponse {
-    private final UUID id;
-    private final String name;
+    private UUID id;
+    private String name;
+
+    protected MenuGroupResponse() {}
 
     private MenuGroupResponse(final UUID id, final String name) {
         this.id = id;

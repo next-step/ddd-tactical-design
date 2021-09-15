@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menugroups.domain.MenuGroup;
+import kitchenpos.menus.tobe.dto.MenuGroupResponse;
 
 import java.util.UUID;
 
 public interface MenuGroupTranslator {
-    MenuGroup getMenuGroup(UUID menuGroupId);
+    MenuGroupResponse getMenuGroup(UUID menuGroupId);
 }

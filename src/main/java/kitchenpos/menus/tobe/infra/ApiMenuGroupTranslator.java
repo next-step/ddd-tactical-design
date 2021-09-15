@@ -1,10 +1,8 @@
 package kitchenpos.menus.tobe.infra;
 
 import kitchenpos.common.infra.Profanities;
-import kitchenpos.menugroups.domain.MenuGroup;
-import kitchenpos.menugroups.domain.MenuGroupName;
-import kitchenpos.menugroups.dto.MenuGroupResponse;
 import kitchenpos.menus.tobe.domain.MenuGroupTranslator;
+import kitchenpos.menus.tobe.dto.MenuGroupResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +20,7 @@ public class ApiMenuGroupTranslator implements MenuGroupTranslator {
     }
 
     @Override
-    public MenuGroup getMenuGroup(final UUID menuGroupId) {
-        final MenuGroupResponse response = restTemplate.getForObject("http://localhost:8080/api/tobe/menu-groups/" + menuGroupId, MenuGroupResponse.class);
-        return new MenuGroup(response.getId(), new MenuGroupName(response.getName(), profanities));
+    public MenuGroupResponse getMenuGroup(final UUID menuGroupId) {
+        return restTemplate.getForObject("http://localhost:8080/api/tobe/menu-groups/" + menuGroupId, MenuGroupResponse.class);
     }
 }

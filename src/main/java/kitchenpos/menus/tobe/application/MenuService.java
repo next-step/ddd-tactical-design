@@ -1,13 +1,12 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.common.infra.Profanities;
-import kitchenpos.menugroups.domain.MenuGroup;
-import kitchenpos.menugroups.domain.MenuGroupInfo;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.menuproducts.MenuProductTranslator;
 import kitchenpos.menus.tobe.domain.menuproducts.MenuProducts;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
+import kitchenpos.menus.tobe.dto.MenuGroupResponse;
 import kitchenpos.menus.tobe.dto.MenuResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,13 +40,13 @@ public class MenuService {
         final MenuInfo menuInfo = new MenuInfo(
                 new MenuName(request.getName(), profanities),
                 new MenuPrice(request.getPrice()),
-                request.isDisplayed());
-        final MenuGroup menuGroup = menuGroupTranslator.getMenuGroup(request.getMenuGroupId());
-        final MenuGroupInfo menuGroupInfo = new MenuGroupInfo(menuGroup, menuGroup.getId());
+                request.isDisplayed(),
+                request.getMenuGroupId());
+        final MenuGroupResponse menuGroup = menuGroupTranslator.getMenuGroup(request.getMenuGroupId());
         final MenuProducts menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
-        final Menu menu = new Menu(menuInfo, menuGroupInfo, menuProducts);
+        final Menu menu = new Menu(menuInfo, menuProducts);
         menuRepository.save(menu);
-        return MenuResponse.from(menu);
+        return MenuResponse.from(menu, menuGroup);
     }
 
     @Transactional
@@ -56,7 +55,8 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.changePrice(menuPrice);
-        return MenuResponse.from(menu);
+        final MenuGroupResponse menuGroup = menuGroupTranslator.getMenuGroup(menu.getMenuGroupId());
+        return MenuResponse.from(menu, menuGroup);
     }
 
     @Transactional
@@ -70,7 +70,8 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.display();
-        return MenuResponse.from(menu);
+        final MenuGroupResponse menuGroup = menuGroupTranslator.getMenuGroup(menu.getMenuGroupId());
+        return MenuResponse.from(menu, menuGroup);
     }
 
     @Transactional
@@ -78,13 +79,16 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.hide();
-        return MenuResponse.from(menu);
+        final MenuGroupResponse menuGroup = menuGroupTranslator.getMenuGroup(menu.getMenuGroupId());
+        return MenuResponse.from(menu, menuGroup);
     }
 
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
         return menuRepository.findAll().stream()
-                .map(MenuResponse::from)
-                .collect(Collectors.toList());
+                .map(menu -> {
+                    final MenuGroupResponse menuGroup = menuGroupTranslator.getMenuGroup(menu.getMenuGroupId());
+                    return MenuResponse.from(menu, menuGroup);
+                }).collect(Collectors.toList());
     }
 }
