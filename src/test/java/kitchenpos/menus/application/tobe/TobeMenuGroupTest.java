@@ -11,10 +11,8 @@ class TobeMenuGroupTest {
     @DisplayName("메뉴 그룹 생성")
     @Test
     void create() {
-        //given
         TobeMenuGroup tobeMenuGroup = new TobeMenuGroup("메뉴그룹");
 
-        //then
         assertThat(tobeMenuGroup).isNotNull();
     }
 }
