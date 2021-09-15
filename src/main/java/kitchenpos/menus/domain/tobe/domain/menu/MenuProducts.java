@@ -24,7 +24,14 @@ public class MenuProducts {
     }
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
+        menuProductsShouldNotBeEmpty(menuProducts);
         this.menuProducts = menuProducts;
+    }
+
+    private void menuProductsShouldNotBeEmpty(final List<MenuProduct> menuProducts) {
+        if (menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있습니다.");
+        }
     }
 
     public Price getAmount() {

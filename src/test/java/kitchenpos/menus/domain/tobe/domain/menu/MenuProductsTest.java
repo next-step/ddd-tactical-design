@@ -1,10 +1,12 @@
 package kitchenpos.menus.domain.tobe.domain.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 import kitchenpos.ToBeFixtures;
 import kitchenpos.common.domain.Price;
@@ -20,6 +22,14 @@ class MenuProductsTest {
         assertDoesNotThrow(
             () -> ToBeFixtures.menuProducts()
         );
+    }
+
+    @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
+    @Test
+    void 생성2() {
+        assertThatThrownBy(
+            () -> new MenuProducts(Collections.emptyList())
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 상품 금액의 합을 계산할 수 있다.")
