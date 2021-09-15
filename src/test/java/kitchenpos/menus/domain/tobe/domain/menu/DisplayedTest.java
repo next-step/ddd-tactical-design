@@ -21,9 +21,9 @@ class DisplayedTest {
     @DisplayName("메뉴 노출/숨김 간 동등성을 확인할 수 있다.")
     @ValueSource(booleans = {true, false})
     @ParameterizedTest
-    void 동등성() {
-        final Displayed displayed1 = new Displayed(true);
-        final Displayed displayed2 = new Displayed(true);
+    void 동등성(final boolean displayed) {
+        final Displayed displayed1 = new Displayed(displayed);
+        final Displayed displayed2 = new Displayed(displayed);
 
         assertThat(displayed1).isEqualTo(displayed2);
     }
