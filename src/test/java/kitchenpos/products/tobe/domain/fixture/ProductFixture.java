@@ -1,9 +1,13 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.fixture;
+
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.products.tobe.domain.model.Product;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Fixtures {
+public class ProductFixture {
 
     public static Product PRODUCT_WITH_ALL(final UUID id, final String name, final BigDecimal price) {
         return new Product(id, new DisplayedName(name), new Price(price));

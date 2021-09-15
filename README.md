@@ -103,13 +103,15 @@
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
 | 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
+| 이름 | displayed name | 메뉴를 상상하게 만드는 중요한 요소 |
+| 가격 | price | 메뉴의 금액 가치 |
+| 금액 | amount | 가격 * 수량 |
 | 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
 | 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
 | 수량 | quantity | 메뉴에 속하는 각 상품의 수량 |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 노출 여부 | displayed | 메뉴가 숨겨진 메뉴인지 아닌지 여부 |
 
 ### 매장 주문
 
@@ -155,37 +157,70 @@
 
 ## 모델링
 
+### 공통
+
+#### 이름(`DisplayedName`)
+
+- 이름은 이름 값(`name`)을 가진다.
+- 이름에는 이름 값이 필수고, 비워둘 수 없다.
+- 이름의 이름 값에는 비속어(`profanity`)가 포함될 수 없다.
+- 이름은 이름 값을 반환한다.
+
+#### 가격(`Price`)
+
+- 가격은 가격 값(`price`)를 가진다.
+- 가격에는 가격 값이 필수고, 0 미만의 가격 값을 가질 수 없다.
+- 가격은 가격 값을 반환한다.
+
+#### 수량(`Quantity`)
+
+- 수량은 수량 값(`quantity`)를 가진다.
+- 수량에는 수량 값이 필수고, 수량은 0 미만의 수량 값을 가질 수 없다.
+- 수량은 수량 값을 반환한다.
+
 ### 상품
 
-#### 상품
+#### 상품(`Product`)
 
-- `Product`은 `id`와 `DisplayedName`, `Price`를 가진다.
-- `Product`는 `id`를 `getId`한다.
-- `Product`는 `DisplayedName`의 `name`을 `getName`한다.
-- `Product`는 `Price`의 `price`를 `getPrice`한다.
-- `Product`는 `Price`로 `changePrice`한다.
-
-#### 이름
-
-- `DisplayedName`은 `name`을 가진다.
-- `DisplayedName`에는 `name`이 필수다.
-- `DisplayedName`에는 `profanity`가 포함될 수 없다.
-- `DisplayedName`은 `name`을 `value`한다.
-
-#### 가격
-
-- `Price`는 `price`를 가진다.
-- `Price`에는 `price`가 필수고, 0 미만의 `price`를 가질 수 없다.
-- `Price`는 `price`를 `value`한다.
+- 상품은 식별자(`id`)와 이름(`DisplayedName`), 가격(`Price`)을 가진다.
+- 상품은 식별자를 반환한다.
+- 상품은 이름을 반환한다.
+- 상품은 가격을 반환한다.
+- 상품은 가격을 바꾼다.
 
 ### 메뉴
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+#### 메뉴(`Menu`)
+
+- 메뉴는 식별자(`id`)와 이름(`DisplayedName`), 가격(`Price`), 메뉴 상품 목록(`MenuProducts`), 메뉴 그룹 식별자(`menuGroupId`), 노출 여부(`displayed`)를 가진다.
+- 메뉴는 특정 메뉴 그룹(`MenuGroup`)에 속한다.
+- 숨겨진 메뉴가 아니라면, 메뉴의 가격은 메뉴 상품 목록의 금액(`amount`)보다 적거나 같아야 한다.
+- 메뉴는 가격을 바꾼다.
+- 메뉴는 노출된다.
+- 메뉴는 숨겨진다.
+- 메뉴는 식별자를 반환한다.
+- 메뉴는 이름을 반환한다.
+- 메뉴는 가격을 반환한다.
+- 메뉴는 노출 여부를 반환한다.
+
+#### 메뉴 그룹(`MenuGroup`)
+
+- 메뉴 그룹은 식별자(`id`)와 이름(`DisplayedName`)을 가진다.
+- 메뉴 그룹은 식별자를 반환한다.
+- 메뉴 그룹은 이름을 반환한다.
+
+#### 메뉴 상품 목록(`MenuProducts`)
+
+- 메뉴 상품 목록은 메뉴 상품(`MenuProduct`) 목록을 가진다.
+- 메뉴 상품 목록은 1 개 이상의 메뉴 상품을 가져야 한다.
+- 메뉴 상품 목록은 금액(`amount`)을 반환한다.
+
+#### 메뉴 상품(`MenuProduct`)
+
+- 메뉴 상품은 메뉴 식별자(`menuId`)와 상품 식별자(`productId`), 가격(`Price`), 수량(`Quantity`)을 가진다.
+- 메뉴 상품에는 메뉴 식별자가 필수다.
+- 메뉴 상품에는 상품 식별자가 필수다.
+- 메뉴 상품은 금액(`amount`)을 반환한다.
 
 ### 매장 주문
 
