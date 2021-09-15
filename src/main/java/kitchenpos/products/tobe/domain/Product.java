@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.tobe.domain.DisplayedName;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;

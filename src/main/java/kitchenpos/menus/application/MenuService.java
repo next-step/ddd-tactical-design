@@ -3,7 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.Profanities;
+import kitchenpos.common.tobe.domain.Profanities;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

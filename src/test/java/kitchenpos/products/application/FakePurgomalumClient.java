@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.Profanities;
+import kitchenpos.common.tobe.domain.Profanities;
 
 import java.util.Arrays;
 import java.util.List;

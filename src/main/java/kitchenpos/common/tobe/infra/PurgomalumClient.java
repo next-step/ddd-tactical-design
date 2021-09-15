@@ -1,6 +1,6 @@
-package kitchenpos.products.infra;
+package kitchenpos.common.tobe.infra;
 
-import kitchenpos.products.domain.Profanities;
+import kitchenpos.common.tobe.domain.Profanities;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

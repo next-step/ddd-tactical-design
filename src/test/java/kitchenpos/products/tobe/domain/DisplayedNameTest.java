@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.domain.Profanities;
+import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.common.tobe.domain.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

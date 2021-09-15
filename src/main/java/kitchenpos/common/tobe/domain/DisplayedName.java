@@ -1,14 +1,13 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.tobe.domain;
 
-import kitchenpos.products.domain.Profanities;
-import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
+import kitchenpos.common.tobe.exception.WrongDisplayedNameException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
-import static kitchenpos.products.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
-import static kitchenpos.products.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
+import static kitchenpos.common.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
+import static kitchenpos.common.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
 
 @Embeddable
 public class DisplayedName {
