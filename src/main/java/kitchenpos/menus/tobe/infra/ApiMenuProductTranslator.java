@@ -1,12 +1,8 @@
-package kitchenpos.menuproducts.infra;
+package kitchenpos.menus.tobe.infra;
 
-import kitchenpos.menuproducts.application.MenuProductService;
-import kitchenpos.menuproducts.domain.MenuProduct;
-import kitchenpos.menuproducts.domain.MenuProductTranslator;
-import kitchenpos.menuproducts.domain.MenuProducts;
-import kitchenpos.menuproducts.domain.ProductQuantity;
-import kitchenpos.menuproducts.dto.MenuProductRequest;
+import kitchenpos.menus.tobe.domain.menuproducts.*;
 import kitchenpos.menus.tobe.dto.FilteredProductRequest;
+import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
