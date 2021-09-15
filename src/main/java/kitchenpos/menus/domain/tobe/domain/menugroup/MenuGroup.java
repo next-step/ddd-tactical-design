@@ -29,6 +29,10 @@ public class MenuGroup {
         this.name = name;
     }
 
+    public MenuGroupId getId() {
+        return this.id;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
