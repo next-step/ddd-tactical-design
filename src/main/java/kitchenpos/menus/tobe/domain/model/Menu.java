@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.products.tobe.domain.model.Product;
 
 @Table(name = "menu")
 @Entity(name = "tobeMenu")
@@ -50,23 +49,24 @@ public class Menu {
     }
 
     public Menu(final DisplayedName name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        isValidPrice(menuProducts.getTotalPrice());
+        isValidPrice(price);
     }
 
     public Menu changePrice(final Price price) {
-        this.price = price;
         isValidPrice(price);
+        this.price = price;
         return this;
     }
 
     public Menu display() {
-        this.displayed = true;
         isValidPrice(price);
+        this.displayed = true;
         return this;
     }
 
@@ -75,9 +75,9 @@ public class Menu {
         return this;
     }
 
-    public void isValidPrice(final Price productTotalPrice) {
-        if (price.compareTo(productTotalPrice) > 0) {
-            hide();
+    public void isValidPrice(final Price price) {
+        if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+            throw new IllegalArgumentException();
         }
     }
 
@@ -101,7 +101,7 @@ public class Menu {
         return menuProducts;
     }
 
-    public Product getMenuGroup() {
-        return null;
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
     }
 }

@@ -22,6 +22,7 @@ public class MenuGroup {
     }
 
     public MenuGroup(final DisplayedName name) {
+        this.id = UUID.randomUUID();
         this.name = name;
     }
 

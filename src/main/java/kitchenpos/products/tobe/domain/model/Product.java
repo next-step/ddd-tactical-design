@@ -29,6 +29,7 @@ public class Product {
     }
 
     public Product(final DisplayedName name, final Price price) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
