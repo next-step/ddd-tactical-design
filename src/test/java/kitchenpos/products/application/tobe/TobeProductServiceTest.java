@@ -2,12 +2,11 @@ package kitchenpos.products.application.tobe;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.application.TobeProductService;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import kitchenpos.products.tobe.ui.ProductForm;
+import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
+import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,14 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TobeProductServiceTest {
     private TobeProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private TobePurgomalumClient purgomalumClient;
     private TobeProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new TobeInMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        purgomalumClient = new TobeFakePurgomalumClient();
         productService = new TobeProductService(productRepository, menuRepository, purgomalumClient);
     }
 

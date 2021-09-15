@@ -3,9 +3,9 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductForm;
+import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 public class TobeProductService {
     private final TobeProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final TobePurgomalumClient purgomalumClient;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final TobePurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;

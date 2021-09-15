@@ -1,9 +1,9 @@
 package kitchenpos.products.application.tobe;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductName;
 
+import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
+import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,11 +13,11 @@ import org.junit.jupiter.params.provider.NullSource;
 import static org.assertj.core.api.Assertions.*;
 
 public class TobeProductNameTest {
-    private PurgomalumClient purgomalumClient;
+    private TobePurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        purgomalumClient = new TobeFakePurgomalumClient();
     }
 
     @DisplayName("비속어 확인")

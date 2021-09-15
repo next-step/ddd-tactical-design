@@ -1,9 +1,9 @@
 package kitchenpos.products.application.tobe;
 
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
+import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -16,7 +16,7 @@ public class TobeFixtures {
     }
 
     public static TobeProduct product(final String name, final Long price) {
-        ProductName productName = new ProductName(name, new FakePurgomalumClient());
+        ProductName productName = new ProductName(name, new TobeFakePurgomalumClient());
         ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
         return new TobeProduct(productName, productPrice);
     }
