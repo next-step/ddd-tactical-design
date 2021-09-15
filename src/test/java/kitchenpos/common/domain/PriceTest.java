@@ -38,6 +38,46 @@ public class PriceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("가격 간 덧셈이 가능하다.")
+    @Test
+    void 가격덧셈() {
+        final Price price1 = new Price(BigDecimal.valueOf(1_000L));
+        final Price price2 = new Price(BigDecimal.valueOf(2_000L));
+
+        final Price expected = new Price(BigDecimal.valueOf(3_000L));
+        assertThat(price1.add(price2)).isEqualTo(expected);
+    }
+
+    @DisplayName("가격 간 덧셈이 가능하다.")
+    @Test
+    void 가격덧셈2() {
+        final Price price1 = new Price(BigDecimal.valueOf(1_000L));
+        final Price price2 = new Price(BigDecimal.valueOf(0L));
+
+        final Price expected = new Price(BigDecimal.valueOf(1_000L));
+        assertThat(price1.add(price2)).isEqualTo(expected);
+    }
+
+    @DisplayName("가격과 수량 간 곱셈이 가능하다.")
+    @Test
+    void 가격곱셈() {
+        final Price price = new Price(BigDecimal.valueOf(1_000L));
+        final Quantity quantity = new Quantity(2);
+
+        final Price expected = new Price(BigDecimal.valueOf(2_000L));
+        assertThat(price.multiply(quantity)).isEqualTo(expected);
+    }
+
+    @DisplayName("가격과 수량 간 곱셈이 가능하다.")
+    @Test
+    void 가격곱셈2() {
+        final Price price = new Price(BigDecimal.valueOf(1_000L));
+        final Quantity quantity = new Quantity(0);
+
+        final Price expected = Price.ZERO;
+        assertThat(price.multiply(quantity)).isEqualTo(expected);
+    }
+
     @DisplayName("가격 간 동등성을 확인할 수 있다.")
     @Test
     void equals() {
@@ -45,5 +85,32 @@ public class PriceTest {
         final Price price2 = new Price(BigDecimal.valueOf(1000L));
 
         assertThat(price1).isEqualTo(price2);
+    }
+
+    @DisplayName("두 가격을 비교할 수 있다.")
+    @Test
+    void 가격비교() {
+        final Price price1 = new Price(BigDecimal.valueOf(1_000L));
+        final Price price2 = new Price(BigDecimal.valueOf(2_000L));
+
+        assertThat(price1.compareTo(price2)).isEqualTo(-1);
+    }
+
+    @DisplayName("두 가격을 비교할 수 있다.")
+    @Test
+    void 가격비교2() {
+        final Price price1 = new Price(BigDecimal.valueOf(1_000L));
+        final Price price2 = new Price(BigDecimal.valueOf(1_000L));
+
+        assertThat(price1.compareTo(price2)).isEqualTo(0);
+    }
+
+    @DisplayName("두 가격을 비교할 수 있다.")
+    @Test
+    void 가격비교3() {
+        final Price price1 = new Price(BigDecimal.valueOf(2_000L));
+        final Price price2 = new Price(BigDecimal.valueOf(1_000L));
+
+        assertThat(price1.compareTo(price2)).isEqualTo(1);
     }
 }
