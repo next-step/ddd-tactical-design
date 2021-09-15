@@ -34,17 +34,15 @@ public class MenuService {
 
     @Transactional
     public MenuResponse create(final CreateMenuRequest request) {
+        final MenuInfo menuInfo = new MenuInfo(
+                new MenuName(request.getName(), profanities),
+                new MenuPrice(request.getPrice()),
+                request.isDisplayed());
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
+        final MenuGroupInfo menuGroupInfo = new MenuGroupInfo(menuGroup, menuGroup.getId());
         final MenuProducts menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
-        final Menu menu = Menu.builder()
-                .menuName(new MenuName(request.getName(), profanities))
-                .menuPrice(new MenuPrice(request.getPrice()))
-                .menuGroup(menuGroup)
-                .displayed(request.isDisplayed())
-                .menuProducts(menuProducts)
-                .menuGroupId(menuGroup.getId())
-                .build();
+        final Menu menu = new Menu(menuInfo, menuGroupInfo, menuProducts);
         menuRepository.save(menu);
         return MenuResponse.from(menu);
     }

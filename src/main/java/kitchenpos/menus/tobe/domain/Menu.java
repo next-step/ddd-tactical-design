@@ -14,86 +14,22 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName menuName;
+    private MenuInfo menuInfo;
 
     @Embedded
-    private MenuPrice menuPrice;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
-
-    @Column(name = "displayed", nullable = false)
-    private boolean displayed;
+    private MenuGroupInfo menuGroupInfo;
 
     @Embedded
     private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     protected Menu() {}
 
-    public Menu(final Builder builder) {
+    public Menu(final MenuInfo menuInfo, final MenuGroupInfo menuGroupInfo, final MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
-        this.menuName = builder.menuName;
-        this.menuPrice = builder.menuPrice;
-        this.menuGroup = builder.menuGroup;
-        this.displayed = builder.displayed;
-        this.menuProducts = builder.menuProducts;
-        this.menuGroupId = builder.menuGroupId;
+        this.menuInfo = menuInfo;
+        this.menuGroupInfo = menuGroupInfo;
+        this.menuProducts = menuProducts;
         validateMenu();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private MenuName menuName;
-        private MenuPrice menuPrice;
-        private MenuGroup menuGroup;
-        private boolean displayed;
-        private MenuProducts menuProducts;
-        private UUID menuGroupId;
-
-        public Menu build() {
-            return new Menu(this);
-        }
-
-        public Builder menuName(final MenuName menuName) {
-            this.menuName = menuName;
-            return this;
-        }
-
-        public Builder menuPrice(final MenuPrice menuPrice) {
-            this.menuPrice = menuPrice;
-            return this;
-        }
-
-        public Builder menuGroup(final MenuGroup menuGroup) {
-            this.menuGroup = menuGroup;
-            return this;
-        }
-
-        public Builder displayed(final boolean displayed) {
-            this.displayed = displayed;
-            return this;
-        }
-
-        public Builder menuProducts(final MenuProducts menuProducts) {
-            this.menuProducts = menuProducts;
-            return this;
-        }
-
-        public Builder menuGroupId(final UUID menuGroupId) {
-            this.menuGroupId = menuGroupId;
-            return this;
-        }
     }
 
     public UUID getId() {
@@ -101,19 +37,19 @@ public class Menu {
     }
 
     public String getName() {
-        return menuName.getName();
+        return menuInfo.getName();
     }
 
     public BigDecimal getPrice() {
-        return menuPrice.getPrice();
+        return menuInfo.getMenuPrice().getPrice();
     }
 
     public MenuGroup getMenuGroup() {
-        return menuGroup;
+        return menuGroupInfo.getMenuGroup();
     }
 
     public boolean isDisplayed() {
-        return displayed;
+        return menuInfo.isDisplayed();
     }
 
     public List<MenuProduct> getMenuProducts() {
@@ -121,23 +57,23 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
-        return menuGroupId;
+        return menuGroupInfo.getMenuGroupId();
     }
 
     public void display() {
-        if (!isValidPrice(menuPrice)) {
+        if (!isValidPrice(menuInfo.getMenuPrice())) {
             throw new IllegalStateException("Menu의 가격은 MenuProducts의 금액의 합보다 적거나 같아야 보일 수 있습니다.");
         }
-        this.displayed = true;
+        menuInfo.display();
     }
 
     public void hide() {
-        this.displayed = false;
+        menuInfo.hide();
     }
 
     public void updateStatus() {
-        if (!isValidPrice(menuPrice)) {
-            this.displayed = false;
+        if (!isValidPrice(menuInfo.getMenuPrice())) {
+            menuInfo.hide();
         }
     }
 
@@ -145,7 +81,7 @@ public class Menu {
         if (!isValidPrice(menuPrice)) {
             throw new IllegalArgumentException("변경할 메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
-        this.menuPrice = menuPrice;
+        menuInfo.changePrice(menuPrice);
     }
 
     private boolean isValidPrice(final MenuPrice menuPrice) {
@@ -154,7 +90,7 @@ public class Menu {
     }
 
     private void validateMenu() {
-        if (!isValidPrice(menuPrice)) {
+        if (!isValidPrice(menuInfo.getMenuPrice())) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
     }
