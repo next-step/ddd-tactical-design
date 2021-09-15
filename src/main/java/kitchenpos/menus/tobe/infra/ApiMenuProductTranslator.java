@@ -1,9 +1,6 @@
 package kitchenpos.menus.tobe.infra;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProductService;
-import kitchenpos.menus.tobe.domain.MenuProductTranslator;
-import kitchenpos.menus.tobe.domain.ProductQuantity;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.dto.FilteredProductRequest;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.products.tobe.domain.Product;
@@ -27,7 +24,7 @@ public class ApiMenuProductTranslator implements MenuProductTranslator {
     }
 
     @Override
-    public List<MenuProduct> getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
+    public MenuProducts getMenuProducts(final List<MenuProductRequest> menuProductRequests) {
         final List<Product> products = requestProducts(menuProductRequests.stream()
                 .map(MenuProductRequest::getProductId)
                 .collect(Collectors.toList()));
@@ -38,7 +35,7 @@ public class ApiMenuProductTranslator implements MenuProductTranslator {
                     return new MenuProduct(product, productQuantity);
                 }).collect(Collectors.toList());
         menuProductService.validateMenuProducts(products, menuProducts);
-        return menuProducts;
+        return new MenuProducts(menuProducts);
     }
 
     private List<Product> requestProducts(final List<UUID> productIds) {

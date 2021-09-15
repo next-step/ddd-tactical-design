@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,14 +30,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -63,7 +58,7 @@ public class Menu {
         private MenuPrice menuPrice;
         private MenuGroup menuGroup;
         private boolean displayed;
-        private List<MenuProduct> menuProducts;
+        private MenuProducts menuProducts;
         private UUID menuGroupId;
 
         public Menu build() {
@@ -90,7 +85,7 @@ public class Menu {
             return this;
         }
 
-        public Builder menuProducts(final List<MenuProduct> menuProducts) {
+        public Builder menuProducts(final MenuProducts menuProducts) {
             this.menuProducts = menuProducts;
             return this;
         }
@@ -122,7 +117,7 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return new ArrayList<>(menuProducts.getMenuProducts());
     }
 
     public UUID getMenuGroupId() {
@@ -154,12 +149,8 @@ public class Menu {
     }
 
     private boolean isValidPrice(final MenuPrice menuPrice) {
-        final BigDecimal productPriceSum = menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
-                .reduce(BigDecimal.ZERO, (acc, curr) -> acc.add(curr));
         return menuPrice.getPrice()
-                .compareTo(productPriceSum) <= 0;
+                .compareTo(menuProducts.sumProductPrice()) <= 0;
     }
 
     private void validateMenu() {
