@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menuproducts.application;
 
+import kitchenpos.menuproducts.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
 

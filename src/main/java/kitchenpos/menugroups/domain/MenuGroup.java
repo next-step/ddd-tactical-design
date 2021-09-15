@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menugroups.domain;
 
 import javax.persistence.*;
 import java.util.UUID;

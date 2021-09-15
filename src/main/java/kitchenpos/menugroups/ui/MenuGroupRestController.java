@@ -1,13 +1,14 @@
-package kitchenpos.menus.tobe.ui;
+package kitchenpos.menugroups.ui;
 
-import kitchenpos.menus.tobe.application.MenuGroupService;
-import kitchenpos.menus.tobe.dto.CreateMenuGroupRequest;
-import kitchenpos.menus.tobe.dto.MenuGroupResponse;
+import kitchenpos.menugroups.application.MenuGroupService;
+import kitchenpos.menugroups.dto.CreateMenuGroupRequest;
+import kitchenpos.menugroups.dto.MenuGroupResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/tobe/menu-groups")
 @RestController("TobeMenuGroupRestController")
@@ -28,5 +29,10 @@ public class MenuGroupRestController {
     @GetMapping
     public ResponseEntity<List<MenuGroupResponse>> findAll() {
         return ResponseEntity.ok(menuGroupService.findAll());
+    }
+
+    @GetMapping("/{menuGroupId}")
+    public ResponseEntity<MenuGroupResponse> findById(@PathVariable final UUID menuGroupId) {
+        return ResponseEntity.ok(menuGroupService.findById(menuGroupId));
     }
 }

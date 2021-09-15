@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.common.infra.Profanities;
+import kitchenpos.menugroups.domain.MenuGroupName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,10 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.common.infra.Profanities;
+import kitchenpos.menugroups.domain.MenuGroup;
+import kitchenpos.menugroups.domain.MenuGroupInfo;
+import kitchenpos.menuproducts.domain.MenuProductTranslator;
+import kitchenpos.menuproducts.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.CreateMenuRequest;
@@ -16,18 +20,18 @@ import java.util.stream.Collectors;
 @Service("TobeMenuService")
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupTranslator menuGroupTranslator;
     private final MenuProductTranslator menuProductTranslator;
     private final Profanities profanities;
 
     public MenuService(
             final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
+            final MenuGroupTranslator menuGroupTranslator,
             final MenuProductTranslator menuProductTranslator,
             final Profanities profanities
     ) {
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupTranslator = menuGroupTranslator;
         this.menuProductTranslator = menuProductTranslator;
         this.profanities = profanities;
     }
@@ -38,8 +42,7 @@ public class MenuService {
                 new MenuName(request.getName(), profanities),
                 new MenuPrice(request.getPrice()),
                 request.isDisplayed());
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-                .orElseThrow(NoSuchElementException::new);
+        final MenuGroup menuGroup = menuGroupTranslator.getMenuGroup(request.getMenuGroupId());
         final MenuGroupInfo menuGroupInfo = new MenuGroupInfo(menuGroup, menuGroup.getId());
         final MenuProducts menuProducts = menuProductTranslator.getMenuProducts(request.getMenuProducts());
         final Menu menu = new Menu(menuInfo, menuGroupInfo, menuProducts);

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menuproducts.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ public class MenuProducts {
         return new ArrayList<>(menuProducts);
     }
 
-    BigDecimal sumProductPrice() {
+    public BigDecimal sumProductPrice() {
         return menuProducts.stream().map(menuProduct -> menuProduct.getProduct()
                         .getPrice()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))

@@ -1,5 +1,10 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menugroups.domain.MenuGroup;
+import kitchenpos.menugroups.domain.MenuGroupInfo;
+import kitchenpos.menuproducts.domain.MenuProduct;
+import kitchenpos.menuproducts.domain.MenuProducts;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
