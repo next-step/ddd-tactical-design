@@ -45,6 +45,15 @@ class MenuGroupNameTest {
                 new MenuGroupName(name, purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("동등성 확인")
+    @Test
+    void equalsMenuGroupName() {
+        MenuGroupName name1 = new MenuGroupName("양식", purgomalumClient);
+        MenuGroupName name2 = new MenuGroupName("양식", purgomalumClient);
+
+        assertThat(name1).isEqualTo(name2);
+    }
 }
 
 
