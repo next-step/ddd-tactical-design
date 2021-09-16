@@ -55,14 +55,20 @@ public class MenuDomainService {
 
     public void validateMenuPrice(final BigDecimal price, List<MenuProduct> menuProducts) {
         final List<Product> products = productRepository.findAllByIdIn(parseProductIds(menuProducts));
-        BigDecimal sumProductPrice = BigDecimal.ZERO;
-        for(final Product product : products) {
-            final long quantity = parseQuantityById(menuProducts, product.getId());
-            sumProductPrice = sumProductPrice.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
-        }
-        if (price.compareTo(sumProductPrice) > 0) {
+        final BigDecimal totalPrice = sumProductsPrice(products, menuProducts);
+        if (price.compareTo(totalPrice) > 0) {
             throw new IllegalStateException();
         }
+    }
+
+    private BigDecimal sumProductsPrice(List<Product> products, List<MenuProduct> menuProducts) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for(final Product product : products) {
+            final long quantity = parseQuantityById(menuProducts, product.getId());
+            totalPrice = totalPrice.add(product.calculatePriceWithQuantity(quantity));
+        }
+
+        return totalPrice;
     }
 
     private List<UUID> parseProductIds(List<MenuProduct> menuProducts) {
@@ -76,4 +82,5 @@ public class MenuDomainService {
                 .orElseThrow(IllegalAccessError::new)
                 .getQuantity();
     }
+
 }

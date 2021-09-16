@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.domain.service.MenuDomainService;
 import kitchenpos.menus.tobe.ui.dto.MenuRequest;
