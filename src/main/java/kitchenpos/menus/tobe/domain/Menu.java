@@ -12,7 +12,7 @@ public class Menu {
 
     private final Price price;
 
-    private final boolean displayed;
+    private boolean displayed;
 
     private final MenuGroup menuGroup;
 
@@ -25,5 +25,13 @@ public class Menu {
         this.displayed = displayed;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
+    }
+
+    public void display() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 }
