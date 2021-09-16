@@ -2,12 +2,12 @@ package kitchenpos.menus.dto;
 
 import java.util.UUID;
 
-public class ChangeMenuStatusRequest {
+public class UpdateMenuStatusRequest {
     private UUID productId;
 
-    protected ChangeMenuStatusRequest() {}
+    protected UpdateMenuStatusRequest() {}
 
-    public ChangeMenuStatusRequest(final UUID productId) {
+    public UpdateMenuStatusRequest(final UUID productId) {
         this.productId = productId;
     }
 

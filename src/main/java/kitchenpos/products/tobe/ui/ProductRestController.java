@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.ui;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
+import kitchenpos.products.tobe.dto.FilteredProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +36,15 @@ public class ProductRestController {
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @PostMapping("/filtered")
+    public ResponseEntity<List<ProductResponse>> findAll(@RequestBody final FilteredProductRequest request) {
+        return ResponseEntity.ok(productService.findAllByIdIn(request.getProductIds()));
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> findById(@PathVariable final UUID productId) {
+        return ResponseEntity.ok(productService.findById(productId));
     }
 }

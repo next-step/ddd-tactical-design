@@ -7,8 +7,9 @@ import java.util.UUID;
 @Table(name = "product")
 @Entity(name = "TobeProduct")
 public class Product {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
+    @Column(name = "id", columnDefinition = "varbinary(16)")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Embedded
@@ -19,18 +20,14 @@ public class Product {
 
     protected Product() {}
 
-    private Product(final UUID id, final ProductName productName, final ProductPrice productPrice) {
+    public Product(final UUID id, final ProductName productName, final ProductPrice productPrice) {
         this.id = id;
         this.productName = productName;
         this.productPrice = productPrice;
     }
 
-    private Product(final UUID id, final String name, final BigDecimal price) {
-        this(id, new ProductName(name), new ProductPrice(price));
-    }
-
-    public Product(final String name, final BigDecimal price) {
-        this(UUID.randomUUID(), name, price);
+    public Product(final ProductName productName, final ProductPrice productPrice) {
+        this(UUID.randomUUID(), productName, productPrice);
     }
 
     public UUID getId() {

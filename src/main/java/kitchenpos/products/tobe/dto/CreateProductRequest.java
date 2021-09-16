@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.dto;
 
-import kitchenpos.products.tobe.domain.Product;
-
 import java.math.BigDecimal;
 
 public class CreateProductRequest {
@@ -21,9 +19,5 @@ public class CreateProductRequest {
 
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public Product toProduct() {
-        return new Product(name, price);
     }
 }

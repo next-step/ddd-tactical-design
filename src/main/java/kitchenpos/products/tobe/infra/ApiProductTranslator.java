@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.infra;
 
 import kitchenpos.products.tobe.domain.ProductTranslator;
-import kitchenpos.products.tobe.dto.ChangeMenuStatusRequest;
+import kitchenpos.products.tobe.dto.UpdateMenuStatusRequest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +17,7 @@ public class ApiProductTranslator implements ProductTranslator {
     }
 
     @Override
-    public void changeMenuStatus(final UUID productId) {
-        restTemplate.put("http://localhost:8080/api/menus/status", new ChangeMenuStatusRequest(productId));
+    public void updateMenuStatus(final UUID productId) {
+        restTemplate.put("http://localhost:8080/api/menus/status", new UpdateMenuStatusRequest(productId));
     }
 }

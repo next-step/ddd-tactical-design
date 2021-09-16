@@ -1,9 +1,7 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.ProductTranslator;
+import kitchenpos.common.infra.Profanities;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.dto.ChangeProductPriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
@@ -20,22 +18,19 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductTranslator productTranslator;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities profanities;
 
-    public ProductService(final ProductRepository productRepository, final ProductTranslator productTranslator, final PurgomalumClient purgomalumClient) {
+    public ProductService(final ProductRepository productRepository, final ProductTranslator productTranslator, final Profanities profanities) {
         this.productRepository = productRepository;
         this.productTranslator = productTranslator;
-        this.purgomalumClient = purgomalumClient;
+        this.profanities = profanities;
     }
 
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
-        final Product product = request.toProduct();
-
-        if (purgomalumClient.containsProfanity(product.getName())) {
-            throw new IllegalArgumentException();
-        }
-        return ProductResponse.from(productRepository.save(product));
+        final ProductName productName = new ProductName(request.getName(), profanities);
+        final ProductPrice productPrice = new ProductPrice(request.getPrice());
+        return ProductResponse.from(productRepository.save(new Product(productName, productPrice)));
     }
 
     @Transactional
@@ -44,7 +39,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
-        productTranslator.changeMenuStatus(productId);
+        productTranslator.updateMenuStatus(productId);
         return ProductResponse.from(product);
     }
 
@@ -53,5 +48,18 @@ public class ProductService {
         return productRepository.findAll()
                 .stream().map(ProductResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findAllByIdIn(final List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds)
+                .stream().map(ProductResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ProductResponse findById(final UUID productId) {
+        return ProductResponse.from(productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new));
     }
 }

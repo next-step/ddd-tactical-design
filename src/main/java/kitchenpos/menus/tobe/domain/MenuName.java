@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.infra.Profanities;
 
@@ -7,18 +7,18 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class MenuName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected ProductName() {}
+    protected MenuName() {}
 
-    public ProductName(final String name, final Profanities profanities) {
+    public MenuName(final String name, final Profanities profanities) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException("상품 이름은 필수값입니다.");
+            throw new IllegalArgumentException("메뉴 이름은 필수값입니다.");
         }
         if (profanities.contains(name)) {
-            throw new IllegalArgumentException("적절하지 않은 상품 이름입니다.");
+            throw new IllegalArgumentException("적절하지 않은 메뉴 이름입니다.");
         }
         this.name = name;
     }
