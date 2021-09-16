@@ -26,4 +26,20 @@ public class MenuProduct {
             throw new WrongPriceException();
         }
     }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public BigDecimal getProductId() {
+        return productId;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
 }
