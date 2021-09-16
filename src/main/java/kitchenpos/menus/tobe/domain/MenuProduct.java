@@ -9,9 +9,12 @@ public class MenuProduct {
 
     private final long quantity;
 
-    public MenuProduct(final Long seq, final BigDecimal productId, final long quantity) {
+    private final Price price;
+
+    public MenuProduct(final Long seq, final BigDecimal productId, final long quantity, final Price price) {
         this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;
+        this.price = price;
     }
 }
