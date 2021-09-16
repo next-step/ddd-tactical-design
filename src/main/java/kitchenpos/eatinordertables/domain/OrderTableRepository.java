@@ -1,12 +1,9 @@
-package kitchenpos.eatinorders.tobe.domain;
-
-import org.springframework.stereotype.Repository;
+package kitchenpos.eatinordertables.domain;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("TobeOrderTableRepository")
 public interface OrderTableRepository {
     OrderTable save(OrderTable orderTable);
 
