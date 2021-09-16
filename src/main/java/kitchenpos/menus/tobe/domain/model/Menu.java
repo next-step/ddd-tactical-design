@@ -3,14 +3,10 @@ package kitchenpos.menus.tobe.domain.model;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import kitchenpos.menus.tobe.domain.service.MenuDomainService;
 
@@ -35,14 +31,8 @@ public class Menu {
     @Column(name = "menu_group_id", nullable = false)
     private UUID menuGroupId;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     public Menu() {
     }
@@ -61,17 +51,17 @@ public class Menu {
         this.price = newPrice;
         this.displayed = displayed;
         this.menuGroupId = menuGroupId;
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     public void changePrice(BigDecimal price, MenuDomainService menuDomainService) {
         Price changePrice = new Price(price);
-        menuDomainService.validateMenuPrice(price, menuProducts);
+        menuDomainService.validateMenuPrice(price, menuProducts.getMenuProducts());
         this.price = changePrice;
     }
 
     public void display(MenuDomainService menuDomainService) {
-        menuDomainService.validateMenuPrice(price.getPrice(), menuProducts);
+        menuDomainService.validateMenuPrice(price.getPrice(), menuProducts.getMenuProducts());
         this.displayed = true;
     }
 
@@ -100,7 +90,7 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.getMenuProducts();
     }
 }
 
