@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class MenuGroupNameTest {
+class TobeMenuGroupNameTest {
 
     private TobePurgomalumClient purgomalumClient;
 
