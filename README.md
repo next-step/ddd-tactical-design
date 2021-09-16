@@ -104,6 +104,7 @@
 | 금액 | amount | 가격 * 수량 |
 | 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
 | 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
+| 메뉴 그룹 이름| menu group name| 메뉴의 종류를 상상하게 만드는 중요한 요소 |
 | 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
 | 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
@@ -159,7 +160,9 @@
 
 ### 메뉴
 - `MenuGroup`은 식별자(id) `MenuGroup Name`을 가진다.
+- `MenuGroup`의 `MenuGroup Name`에는 `Profanity`가 포함될 수 없다.
 - `Menu`는 식별자와 `Displayed Name`, `MenuPrice`, `MenuProducts`를 가진다.
+- `Menu`의 `Displayed Name`에는 `Profanity`가 포함될 수 없다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
 - `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
 - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
