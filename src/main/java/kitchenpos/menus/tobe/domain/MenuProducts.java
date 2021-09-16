@@ -14,7 +14,7 @@ public class MenuProducts {
 
     private void validate(final List<MenuProduct> menuProducts) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("1 개 이상의 메뉴 상품을 가져야 합니다");
         }
     }
 }
