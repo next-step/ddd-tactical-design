@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.infra;
 
-import kitchenpos.common.infra.Profanities;
 import kitchenpos.menus.tobe.domain.MenuGroupTranslator;
 import kitchenpos.menus.tobe.dto.MenuGroupResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -11,11 +10,9 @@ import java.util.UUID;
 
 @Component
 public class ApiMenuGroupTranslator implements MenuGroupTranslator {
-    private final Profanities profanities;
     private final RestTemplate restTemplate;
 
-    public ApiMenuGroupTranslator(final Profanities profanities, final RestTemplateBuilder restTemplateBuilder) {
-        this.profanities = profanities;
+    public ApiMenuGroupTranslator(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

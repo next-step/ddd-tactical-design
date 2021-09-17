@@ -1,9 +1,7 @@
 package kitchenpos.eatinordertables.application;
 
-import kitchenpos.eatinorders.tobe.domain.OrderRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderStatus;
-import kitchenpos.eatinordertables.domain.OrderTable;
-import kitchenpos.eatinordertables.domain.OrderTableRepository;
+import kitchenpos.common.infra.Profanities;
+import kitchenpos.eatinordertables.domain.*;
 import kitchenpos.eatinordertables.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinordertables.dto.CreateOrderTableRequest;
 import kitchenpos.eatinordertables.dto.OrderTableResponse;
@@ -12,31 +10,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service("TobeOrderTableService")
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final OrderTranslator orderTranslator;
+    private final Profanities profanities;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderTranslator orderTranslator, final Profanities profanities) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.orderTranslator = orderTranslator;
+        this.profanities = profanities;
     }
 
     @Transactional
     public OrderTableResponse create(final CreateOrderTableRequest request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setEmpty(true);
+        final OrderTable orderTable = new OrderTable(new OrderTableName(request.getName(), profanities));
         orderTableRepository.save(orderTable);
         return createResponse(orderTable);
     }
@@ -45,7 +36,7 @@ public class OrderTableService {
     public OrderTableResponse sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        orderTable.setEmpty(false);
+        orderTable.sit();
         return createResponse(orderTable);
     }
 
@@ -53,26 +44,15 @@ public class OrderTableService {
     public OrderTableResponse clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setEmpty(true);
+        orderTable.clear(orderTranslator.isOrderCompleted(orderTableId));
         return createResponse(orderTable);
     }
 
     @Transactional
     public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestsRequest request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
+        orderTable.changeNumberOfGuests(new NumberOfGuests(request.getNumberOfGuests()));
         return createResponse(orderTable);
     }
 

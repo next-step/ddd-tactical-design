@@ -1,9 +1,6 @@
 package kitchenpos.eatinordertables.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -13,47 +10,56 @@ public class OrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private OrderTableName name;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private NumberOfGuests numberOfGuests;
 
     @Column(name = "empty", nullable = false)
     private boolean empty;
 
-    public OrderTable() {
+    protected OrderTable() {}
+
+    public OrderTable(final OrderTableName name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.empty = true;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.getName();
     }
 
     public int getNumberOfGuests() {
-        return numberOfGuests;
-    }
-
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
+        return numberOfGuests.getNumberOfGuests();
     }
 
     public boolean isEmpty() {
         return empty;
     }
 
-    public void setEmpty(final boolean empty) {
-        this.empty = empty;
+    public void sit() {
+        this.empty = false;
+    }
+
+    public void clear(final boolean isOrderCompleted) {
+        if (!isOrderCompleted) {
+            throw new IllegalStateException("주문이 완료된 테이블만 치울 수 있습니다.");
+        }
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.empty = true;
+    }
+
+    public void changeNumberOfGuests(final NumberOfGuests numberOfGuests) {
+        if (isEmpty()) {
+            throw new IllegalStateException("비어있는 테이블은 손님 수를 변경할 수 없습니다.");
+        }
+        this.numberOfGuests = numberOfGuests;
     }
 }

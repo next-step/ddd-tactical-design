@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static kitchenpos.eatinorders.tobe.domain.OrderStatus.COMPLETED;
+
 @Service("TobeOrderService")
 public class OrderService {
     private final OrderRepository orderRepository;
@@ -170,15 +172,17 @@ public class OrderService {
                 throw new IllegalStateException();
             }
         }
-        order.setStatus(OrderStatus.COMPLETED);
+        order.setStatus(COMPLETED);
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
-            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setEmpty(true);
-            }
+            orderTable.clear(isCompleted(orderTable.getId()));
         }
         return order;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isCompleted(final UUID orderTableId) {
+        return !orderRepository.existsByOrderTableIdAndNotCompleted(orderTableId);
     }
 
     @Transactional(readOnly = true)

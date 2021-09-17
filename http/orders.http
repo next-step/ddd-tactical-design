@@ -33,3 +33,6 @@ PUT {{host}}/api/tobe/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete
 
 ###
 GET {{host}}/api/tobe/orders
+
+###
+GET {{host}}/api/tobe/orders/orderTable/8d710043-29b6-420e-8452-233f5a035520/completed
