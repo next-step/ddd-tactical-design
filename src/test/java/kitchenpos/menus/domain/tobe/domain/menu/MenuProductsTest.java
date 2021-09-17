@@ -49,7 +49,7 @@ class MenuProductsTest {
         final MenuProducts menuProducts = new MenuProducts(
             Arrays.asList(menuProduct1, menuProduct2)
         );
-        final Price actualAmount = menuProducts.getAmount();
+        final Price actualAmount = menuProducts.calculateAmount();
 
         assertThat(actualAmount).isEqualTo(new Price(BigDecimal.valueOf(50_000L)));
     }

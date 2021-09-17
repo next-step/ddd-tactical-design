@@ -34,9 +34,9 @@ public class MenuProducts {
         }
     }
 
-    public Price getAmount() {
+    public Price calculateAmount() {
         return menuProducts.stream()
-            .map(MenuProduct::getAmount)
+            .map(MenuProduct::calculateAmount)
             .reduce(Price.ZERO, Price::add);
     }
 }

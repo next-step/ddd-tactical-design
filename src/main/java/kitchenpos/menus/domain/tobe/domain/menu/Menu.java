@@ -60,7 +60,7 @@ public class Menu {
     }
 
     private void validatePrice(final Price price, final MenuProducts menuProducts) {
-        if (price.compareTo(menuProducts.getAmount()) > 0) {
+        if (price.compareTo(menuProducts.calculateAmount()) > 0) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 금액의 합보다 적거나 같아야 합니다.");
         }
     }
@@ -77,7 +77,7 @@ public class Menu {
     }
 
     private boolean priceExceedsAmount(final Price price, MenuProducts menuProducts) {
-        return price.compareTo(menuProducts.getAmount()) > 0;
+        return price.compareTo(menuProducts.calculateAmount()) > 0;
     }
 
     private boolean priceExceedsAmount(final Price price) {
