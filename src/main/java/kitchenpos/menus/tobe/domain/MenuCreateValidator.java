@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.exception.WrongPriceException;
+import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 
