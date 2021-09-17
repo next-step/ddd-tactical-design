@@ -1,5 +1,6 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.tobe.application.FakePurgomalumClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;

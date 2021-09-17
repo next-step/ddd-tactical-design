@@ -1,8 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.tobe.domain;
 
-import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.common.tobe.domain.Profanities;
-import kitchenpos.products.tobe.exception.WrongDisplayedNameException;
+import kitchenpos.common.tobe.application.FakePurgomalumClient;
+import kitchenpos.common.tobe.exception.WrongDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +9,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static kitchenpos.products.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
-import static kitchenpos.products.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
+import static kitchenpos.common.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY;
+import static kitchenpos.common.tobe.exception.WrongDisplayedNameException.DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;

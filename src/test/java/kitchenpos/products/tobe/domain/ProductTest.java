@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.tobe.application.FakePurgomalumClient;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Profanities;
 import org.junit.jupiter.api.BeforeEach;
