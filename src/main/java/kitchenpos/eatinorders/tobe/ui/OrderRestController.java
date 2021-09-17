@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.ui;
 
 import kitchenpos.eatinorders.tobe.application.OrderService;
 import kitchenpos.eatinorders.tobe.domain.Order;
+import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class OrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@RequestBody final Order request) {
+    public ResponseEntity<Order> create(@RequestBody final CreateOrderRequest request) {
         final Order response = orderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
                 .body(response);

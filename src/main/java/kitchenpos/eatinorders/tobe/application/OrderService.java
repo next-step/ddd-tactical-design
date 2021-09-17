@@ -2,6 +2,8 @@ package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.*;
+import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
+import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
 import kitchenpos.eatinordertables.domain.OrderTable;
 import kitchenpos.eatinordertables.domain.OrderTableRepository;
 import kitchenpos.menus.domain.Menu;
@@ -34,25 +36,25 @@ public class OrderService {
     }
 
     @Transactional
-    public Order create(final Order request) {
+    public Order create(final CreateOrderRequest request) {
         final OrderType type = request.getType();
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException();
         }
-        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
+        final List<OrderLineItemRequest> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
         final List<Menu> menus = menuRepository.findAllByIdIn(
                 orderLineItemRequests.stream()
-                        .map(OrderLineItem::getMenuId)
+                        .map(OrderLineItemRequest::getMenuId)
                         .collect(Collectors.toList())
         );
         if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
         }
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
+        for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
             if (type != OrderType.EAT_IN) {
                 if (quantity < 0) {
