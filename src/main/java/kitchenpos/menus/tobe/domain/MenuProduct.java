@@ -2,18 +2,18 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.tobe.domain.exception.WrongPriceException;
 
-import java.math.BigDecimal;
+import java.util.UUID;
 
 public class MenuProduct {
     private final Long seq;
 
-    private final BigDecimal productId;
+    private final UUID productId;
 
     private final long quantity;
 
     private final Price price;
 
-    public MenuProduct(final Long seq, final BigDecimal productId, final long quantity, final Price price) {
+    public MenuProduct(final Long seq, final UUID productId, final long quantity, final Price price) {
         validateQuantity(quantity);
         this.seq = seq;
         this.productId = productId;
@@ -31,7 +31,7 @@ public class MenuProduct {
         return seq;
     }
 
-    public BigDecimal getProductId() {
+    public UUID getProductId() {
         return productId;
     }
 

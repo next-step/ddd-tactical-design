@@ -13,4 +13,12 @@ public class MenuGroup {
         this.id = id;
         this.name = name;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public DisplayedName getName() {
+        return name;
+    }
 }

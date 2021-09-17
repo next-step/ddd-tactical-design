@@ -24,6 +24,7 @@ public class Menu {
         this.displayed = displayed;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
+        validator.validate(this);
     }
 
     public void display() {

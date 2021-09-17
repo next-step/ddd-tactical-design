@@ -17,4 +17,8 @@ public class MenuProducts {
             throw new IllegalArgumentException("1 개 이상의 메뉴 상품을 가져야 합니다");
         }
     }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
+    }
 }
