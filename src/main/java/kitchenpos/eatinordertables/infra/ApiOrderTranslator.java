@@ -17,6 +17,6 @@ public class ApiOrderTranslator implements OrderTranslator {
 
     @Override
     public boolean isOrderCompleted(final UUID orderTableId) {
-        return restTemplate.getForObject(String.format("http://localhost:8080/api/tobe/orders/orderTable/%s/completed", orderTableId), Boolean.class);
+        return restTemplate.getForObject(String.format("http://localhost:8080/api/tobe/orders/order-tables/%s/completed", orderTableId), Boolean.class);
     }
 }

@@ -51,7 +51,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderService.complete(orderId));
     }
 
-    @GetMapping("/orderTable/{orderTableId}/completed")
+    @GetMapping("/order-tables/{orderTableId}/completed")
     public ResponseEntity<Boolean> isCompleted(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderService.isCompleted(orderTableId));
     }

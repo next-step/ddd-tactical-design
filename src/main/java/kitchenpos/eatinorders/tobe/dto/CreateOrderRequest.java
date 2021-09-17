@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CreateOrderRequest {
@@ -33,5 +34,11 @@ public class CreateOrderRequest {
 
     public UUID getOrderTableId() {
         return orderTableId;
+    }
+
+    public void validate() {
+        if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
+            throw new IllegalArgumentException("한개 이상의 메뉴를  주문해야합니다.");
+        }
     }
 }

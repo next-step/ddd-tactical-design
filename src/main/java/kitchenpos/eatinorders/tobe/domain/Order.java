@@ -5,7 +5,12 @@ import kitchenpos.eatinordertables.domain.OrderTable;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import static kitchenpos.eatinorders.tobe.domain.OrderStatus.WAITING;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Table(name = "orders")
 @Entity(name = "TobeOrder")
@@ -37,81 +42,69 @@ public class Order {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
-    @ManyToOne
-    @JoinColumn(
+    @Column(
             name = "order_table_id",
             columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+            nullable = false
     )
-    private OrderTable orderTable;
-
-    @Transient
     private UUID orderTableId;
 
-    public Order() {
+    protected Order() {}
+
+    public Order(final OrderType type, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final UUID orderTableId, final OrderTableTranslator orderTableTranslator) {
+        if (Objects.isNull(type)) {
+            throw new IllegalArgumentException("type 은 필수값입니다.");
+        }
+
+        if (type == DELIVERY) {
+            if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
+                throw new IllegalArgumentException("배달 주문은 deliveryAddress 가 필수값이어야 합니다.");
+            }
+        }
+        if (type == EAT_IN) {
+            final OrderTable orderTable = orderTableTranslator.getOrderTable(orderTableId);
+            if (orderTable.isEmpty()) {
+                throw new IllegalStateException("비어있는 테이블에는 주문을 추가할 수 없습니다.");
+            }
+        }
+        this.id = UUID.randomUUID();
+        this.type = type;
+        this.status = WAITING;
+        this.orderDateTime = LocalDateTime.now();
+        this.orderLineItems = orderLineItems;
+        this.deliveryAddress = deliveryAddress;
+        this.orderTableId = orderTableId;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public OrderType getType() {
         return type;
-    }
-
-    public void setType(final OrderType type) {
-        this.type = type;
     }
 
     public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
-        this.status = status;
-    }
-
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
-    }
-
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
     }
 
     public List<OrderLineItem> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
-
     public String getDeliveryAddress() {
         return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
     }
 
     public UUID getOrderTableId() {
         return orderTableId;
     }
 
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+    public void changeStatus(final OrderStatus status) {
+        this.status = status;
     }
 }

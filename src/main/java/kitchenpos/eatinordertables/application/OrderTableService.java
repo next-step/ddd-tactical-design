@@ -29,7 +29,7 @@ public class OrderTableService {
     public OrderTableResponse create(final CreateOrderTableRequest request) {
         final OrderTable orderTable = new OrderTable(new OrderTableName(request.getName(), profanities));
         orderTableRepository.save(orderTable);
-        return createResponse(orderTable);
+        return createOrderTableResponse(orderTable);
     }
 
     @Transactional
@@ -37,7 +37,7 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.sit();
-        return createResponse(orderTable);
+        return createOrderTableResponse(orderTable);
     }
 
     @Transactional
@@ -45,7 +45,7 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.clear(orderTranslator.isOrderCompleted(orderTableId));
-        return createResponse(orderTable);
+        return createOrderTableResponse(orderTable);
     }
 
     @Transactional
@@ -53,17 +53,24 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.changeNumberOfGuests(new NumberOfGuests(request.getNumberOfGuests()));
-        return createResponse(orderTable);
+        return createOrderTableResponse(orderTable);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderTableResponse findById(final UUID orderTableId) {
+        return createOrderTableResponse(orderTableRepository
+                .findById(orderTableId)
+                .orElseThrow(NoSuchElementException::new));
     }
 
     @Transactional(readOnly = true)
     public List<OrderTableResponse> findAll() {
         return orderTableRepository.findAll()
-                .stream().map(this::createResponse)
+                .stream().map(this::createOrderTableResponse)
                 .collect(Collectors.toList());
     }
 
-    private OrderTableResponse createResponse(final OrderTable orderTable) {
+    private OrderTableResponse createOrderTableResponse(final OrderTable orderTable) {
         return new OrderTableResponse(
                 orderTable.getId(),
                 orderTable.getName(),

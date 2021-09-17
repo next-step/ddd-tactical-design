@@ -45,6 +45,11 @@ public class OrderTableRestController {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
 
+    @GetMapping("/{orderTableId}")
+    public ResponseEntity<OrderTableResponse> findById(@PathVariable final UUID orderTableId) {
+        return ResponseEntity.ok(orderTableService.findById(orderTableId));
+    }
+
     @GetMapping
     public ResponseEntity<List<OrderTableResponse>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());

@@ -1,10 +1,7 @@
 package kitchenpos.menus.tobe.ui;
 
 import kitchenpos.menus.tobe.application.MenuService;
-import kitchenpos.menus.tobe.dto.ChangeMenuPriceRequest;
-import kitchenpos.menus.tobe.dto.CreateMenuRequest;
-import kitchenpos.menus.tobe.dto.MenuResponse;
-import kitchenpos.menus.tobe.dto.UpdateMenuStatusRequest;
+import kitchenpos.menus.tobe.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +50,10 @@ public class MenuRestController {
     @GetMapping
     public ResponseEntity<List<MenuResponse>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
+    }
+
+    @PostMapping("/filtered")
+    public ResponseEntity<List<MenuResponse>> findAllByIdIn(@RequestBody final FilteredMenuRequest request) {
+        return ResponseEntity.ok(menuService.findAllByIdIn(request.getMenuIds()));
     }
 }

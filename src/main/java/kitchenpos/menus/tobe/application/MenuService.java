@@ -81,7 +81,15 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
         return menuRepository.findAll().stream()
-                .map(this::menu2Response).collect(Collectors.toList());
+                .map(this::menu2Response)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MenuResponse> findAllByIdIn(final List<UUID> menuIds) {
+        return menuRepository.findAllByIdIn(menuIds).stream()
+                .map(this::menu2Response)
+                .collect(Collectors.toList());
     }
 
     private MenuResponse menu2Response(final Menu menu) {
