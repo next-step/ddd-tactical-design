@@ -16,6 +16,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Service("TobeOrderService")
 public class OrderService {
@@ -47,27 +49,24 @@ public class OrderService {
                         .map(OrderLineItemRequest::getMenuId)
                         .collect(Collectors.toList())
         );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
+            if (type != EAT_IN) {
                 if (quantity < 0) {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuTranslator.getMenu(orderLineItemRequest.getMenuId());
+            final UUID menuId = orderLineItemRequest.getMenuId();
+            final BigDecimal orderLineItemPrice = orderLineItemRequest.getPrice();
+            final Menu menu = menuTranslator.getMenu(menuId, orderLineItemPrice);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
             if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
-            final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
+            final OrderLineItem orderLineItem = new OrderLineItem(menuId, quantity);
             orderLineItems.add(orderLineItem);
         }
         final Order order = new Order(
@@ -87,10 +86,12 @@ public class OrderService {
         if (order.getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
         }
-        if (order.getType() == OrderType.DELIVERY) {
+        if (order.getType() == DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
+                final UUID menuId = orderLineItem.getMenuId();
+                final BigDecimal orderLineItemPrice = orderLineItem.getPrice();
+                sum = menuTranslator.getMenu(menuId, orderLineItemPrice)
                         .getPrice()
                         .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
             }
@@ -115,7 +116,7 @@ public class OrderService {
     public Order startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (order.getType() != OrderType.DELIVERY) {
+        if (order.getType() != DELIVERY) {
             throw new IllegalStateException();
         }
         if (order.getStatus() != SERVED) {
@@ -142,18 +143,18 @@ public class OrderService {
                 .orElseThrow(NoSuchElementException::new);
         final OrderType type = order.getType();
         final OrderStatus status = order.getStatus();
-        if (type == OrderType.DELIVERY) {
+        if (type == DELIVERY) {
             if (status != OrderStatus.DELIVERED) {
                 throw new IllegalStateException();
             }
         }
-        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
+        if (type == OrderType.TAKEOUT || type == EAT_IN) {
             if (status != SERVED) {
                 throw new IllegalStateException();
             }
         }
         order.changeStatus(COMPLETED);
-        if (type == OrderType.EAT_IN) {
+        if (type == EAT_IN) {
             orderTableTranslator.clearOrderTable(order.getOrderTableId());
         }
         return order;

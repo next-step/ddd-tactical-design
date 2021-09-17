@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,63 +12,39 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
+    @Column(
             name = "menu_id",
             columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
+            nullable = false
     )
-    private Menu menu;
+    private UUID menuId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
     @Transient
-    private UUID menuId;
-
-    @Transient
     private BigDecimal price;
 
-    public OrderLineItem() {
+    protected OrderLineItem() {}
+
+    public OrderLineItem(final UUID menuId, final long quantity) {
+        this.menuId = menuId;
+        this.quantity = quantity;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
+    public UUID getMenuId() {
+        return menuId;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
