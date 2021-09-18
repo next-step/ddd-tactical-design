@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinordertables.domain.OrderTable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -59,8 +58,8 @@ public class Order {
             }
         }
         if (type == EAT_IN) {
-            final OrderTable orderTable = orderTableTranslator.getOrderTable(orderTableId);
-            if (orderTable.isEmpty()) {
+            final boolean isTableEmpty = orderTableTranslator.getOrderTable(orderTableId).isEmpty();
+            if (isTableEmpty) {
                 throw new IllegalStateException("비어있는 테이블에는 주문을 추가할 수 없습니다.");
             }
         }
@@ -89,7 +88,7 @@ public class Order {
         return orderDateTime;
     }
 
-    private List<OrderLineItem> getOrderLineItems() {
+    public List<OrderLineItem> getOrderLineItems() {
         return new ArrayList<>(orderLineItems.getOrderLineItems());
     }
 
@@ -106,11 +105,11 @@ public class Order {
             throw new IllegalStateException("접수 대기 중인 주문은 접수 할 수 없습니다.");
         }
         if (type == DELIVERY) {
-            final BigDecimal sum = getOrderLineItems().stream().map(item -> menuTranslator.getMenu(
-                                    item.getMenuId(), item.getPrice()
-                            ).getPrice()
+            final BigDecimal sum = getOrderLineItems().stream()
+                    .map(item -> menuTranslator.getMenu(item)
+                            .getPrice()
                             .multiply(BigDecimal.valueOf(item.getQuantity()))
-            ).reduce(BigDecimal.ZERO, BigDecimal::add);
+                    ).reduce(BigDecimal.ZERO, BigDecimal::add);
             kitchenridersClient.requestDelivery(id, sum, deliveryAddress);
         }
         this.status = ACCEPTED;

@@ -1,11 +1,11 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinordertables.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.dto.OrderTableResponse;
 
 import java.util.UUID;
 
 public interface OrderTableTranslator {
-    OrderTable getOrderTable(final UUID orderTableId);
+    OrderTableResponse getOrderTable(final UUID orderTableId);
 
     void clearOrderTable(final UUID orderTableId);
 }

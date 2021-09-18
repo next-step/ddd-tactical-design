@@ -1,13 +1,14 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.eatinorders.tobe.dto.MenuResponse;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 public interface MenuTranslator {
-    Menu getMenu(UUID menuId, final BigDecimal orderLineItemPrice);
+    MenuResponse getMenu(final OrderLineItem orderLineItem);
 
-    List<Menu> getMenus(final List<UUID> menuIds);
+    List<MenuResponse> getMenus(final List<UUID> menuIds);
+
+    void validateOrderLineItem(OrderLineItem orderLineItem);
 }

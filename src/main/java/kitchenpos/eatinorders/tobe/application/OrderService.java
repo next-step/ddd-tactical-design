@@ -3,6 +3,9 @@ package kitchenpos.eatinorders.tobe.application;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
+import kitchenpos.eatinorders.tobe.dto.OrderCompletedResponse;
+import kitchenpos.eatinorders.tobe.dto.OrderLineItemResponse;
+import kitchenpos.eatinorders.tobe.dto.OrderResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +34,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order create(final CreateOrderRequest request) {
+    public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
         final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
                 .map(item -> new OrderLineItem(item.getMenuId(), item.getQuantity(), item.getPrice()))
@@ -43,56 +46,78 @@ public class OrderService {
                 request.getOrderTableId(),
                 orderTableTranslator
         );
-        return orderRepository.save(order);
+        orderRepository.save(order);
+        return createOrderResponse(order);
     }
 
     @Transactional
-    public Order accept(final UUID orderId) {
+    public OrderResponse accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         order.accept(menuTranslator, kitchenridersClient);
-        return order;
+        return createOrderResponse(order);
     }
 
     @Transactional
-    public Order serve(final UUID orderId) {
+    public OrderResponse serve(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         order.serve();
-        return order;
+        return createOrderResponse(order);
     }
 
     @Transactional
-    public Order startDelivery(final UUID orderId) {
+    public OrderResponse startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         order.startDelivery();
-        return order;
+        return createOrderResponse(order);
     }
 
     @Transactional
-    public Order completeDelivery(final UUID orderId) {
+    public OrderResponse completeDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         order.completeDelivery();
-        return order;
+        return createOrderResponse(order);
     }
 
     @Transactional
-    public Order complete(final UUID orderId) {
+    public OrderResponse complete(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         order.complete(orderTableTranslator);
-        return order;
+        return createOrderResponse(order);
     }
 
     @Transactional(readOnly = true)
-    public boolean isCompleted(final UUID orderTableId) {
-        return !orderRepository.existsByOrderTableIdAndNotCompleted(orderTableId);
+    public OrderCompletedResponse isCompleted(final UUID orderTableId) {
+        return new OrderCompletedResponse(!orderRepository.existsByOrderTableIdAndNotCompleted(orderTableId));
     }
 
     @Transactional(readOnly = true)
     public List<Order> findAll() {
         return orderRepository.findAll();
+    }
+
+    private OrderResponse createOrderResponse(final Order order) {
+        final List<OrderLineItemResponse> orderLineItems = order.getOrderLineItems().stream()
+                .map(item -> new OrderLineItemResponse(
+                        item.getSeq(),
+                        item.getQuantity(),
+                        item.getPrice(),
+                        item.getMenuId(),
+                        menuTranslator.getMenu(item))
+                ).collect(Collectors.toList());
+        return new OrderResponse(
+                order.getId(),
+                order.getType(),
+                order.getStatus(),
+                order.getOrderDateTime(),
+                orderLineItems,
+                order.getDeliveryAddress(),
+                orderTableTranslator.getOrderTable(order.getOrderTableId()),
+                order.getOrderTableId()
+        );
     }
 }

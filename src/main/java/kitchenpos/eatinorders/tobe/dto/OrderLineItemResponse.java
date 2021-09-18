@@ -12,6 +12,14 @@ public class OrderLineItemResponse {
 
     protected OrderLineItemResponse() {}
 
+    public OrderLineItemResponse(final Long seq, final long quantity, final BigDecimal price, final UUID menuId, final MenuResponse menu) {
+        this.seq = seq;
+        this.quantity = quantity;
+        this.price = price;
+        this.menuId = menuId;
+        this.menu = menu;
+    }
+
     public Long getSeq() {
         return seq;
     }

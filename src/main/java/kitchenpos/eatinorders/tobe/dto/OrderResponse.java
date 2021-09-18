@@ -19,6 +19,17 @@ public class OrderResponse {
 
     protected OrderResponse() {}
 
+    public OrderResponse(final UUID id, final OrderType type, final OrderStatus status, final LocalDateTime orderDateTime, final List<OrderLineItemResponse> orderLineItems, final String deliveryAddress, final OrderTableResponse orderTable, final UUID orderTableId) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.deliveryAddress = deliveryAddress;
+        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
+    }
+
     public UUID getId() {
         return id;
     }
