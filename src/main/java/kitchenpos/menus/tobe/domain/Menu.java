@@ -17,7 +17,8 @@ public class Menu {
 
     private final MenuProducts menuProducts;
 
-    public Menu(final UUID id, final DisplayedName name, final Price price, final boolean displayed, final MenuGroup menuGroup, final MenuProducts menuProducts, final MenuCreateValidator validator) {
+    public Menu(final UUID id, final DisplayedName name, final Price price, final boolean displayed,
+                final MenuGroup menuGroup, final MenuProducts menuProducts, final MenuCreateValidator validator) {
         this.id = id;
         this.name = name;
         this.price = price;

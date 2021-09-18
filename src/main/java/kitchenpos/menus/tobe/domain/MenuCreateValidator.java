@@ -22,12 +22,12 @@ public class MenuCreateValidator {
     }
 
     public void validate(Menu menu) {
-        isExistMenuGroup(menu.getMenuGroup());
-        isExistProduct(menu.getMenuProducts());
+        validateExistentMenuGroup(menu.getMenuGroup());
+        validateExistentProduct(menu.getMenuProducts());
         validatePrice(menu.getPrice(), menu.getMenuProducts());
     }
 
-    private void isExistProduct(final MenuProducts menuProducts) {
+    private void validateExistentProduct(final MenuProducts menuProducts) {
         List<Product> products = productRepository.findAllByIdIn(
                 menuProducts.getMenuProducts()
                         .stream()
@@ -39,7 +39,7 @@ public class MenuCreateValidator {
         }
     }
 
-    private void isExistMenuGroup(final MenuGroup menuGroup) {
+    private void validateExistentMenuGroup(final MenuGroup menuGroup) {
         menuGroupRepository.findById(menuGroup.getId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 MenuGroup에 메뉴를 등록할 수 없습니다."));
     }

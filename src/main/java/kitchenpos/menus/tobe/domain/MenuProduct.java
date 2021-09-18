@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.domain.exception.WrongPriceException;
-
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuProduct {
@@ -23,8 +22,12 @@ public class MenuProduct {
 
     private void validateQuantity(final long quantity) {
         if (quantity < 0) {
-            throw new WrongPriceException();
+            throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0 이상이어야 합니다.");
         }
+    }
+
+    public BigDecimal getAmount() {
+        return this.price.getValue().multiply(BigDecimal.valueOf(quantity));
     }
 
     public Long getSeq() {
