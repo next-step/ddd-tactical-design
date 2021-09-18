@@ -6,15 +6,10 @@ import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
-import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
-import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Service("TobeOrderService")
 public class OrderService {
@@ -55,21 +50,7 @@ public class OrderService {
     public Order accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        if (order.getType() == DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                final UUID menuId = orderLineItem.getMenuId();
-                final BigDecimal orderLineItemPrice = orderLineItem.getPrice();
-                sum = menuTranslator.getMenu(menuId, orderLineItemPrice)
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
-            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
-        }
-        order.changeStatus(ACCEPTED);
+        order.accept(menuTranslator, kitchenridersClient);
         return order;
     }
 
@@ -77,10 +58,7 @@ public class OrderService {
     public Order serve(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        order.changeStatus(SERVED);
+        order.serve();
         return order;
     }
 
@@ -88,13 +66,7 @@ public class OrderService {
     public Order startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (order.getType() != DELIVERY) {
-            throw new IllegalStateException();
-        }
-        if (order.getStatus() != SERVED) {
-            throw new IllegalStateException();
-        }
-        order.changeStatus(DELIVERING);
+        order.startDelivery();
         return order;
     }
 
@@ -102,10 +74,7 @@ public class OrderService {
     public Order completeDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.DELIVERING) {
-            throw new IllegalStateException();
-        }
-        order.changeStatus(DELIVERED);
+        order.completeDelivery();
         return order;
     }
 
@@ -113,22 +82,7 @@ public class OrderService {
     public Order complete(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
-        final OrderStatus status = order.getStatus();
-        if (type == DELIVERY) {
-            if (status != OrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
-        }
-        if (type == OrderType.TAKEOUT || type == EAT_IN) {
-            if (status != SERVED) {
-                throw new IllegalStateException();
-            }
-        }
-        order.changeStatus(COMPLETED);
-        if (type == EAT_IN) {
-            orderTableTranslator.clearOrderTable(order.getOrderTableId());
-        }
+        order.complete(orderTableTranslator);
         return order;
     }
 
