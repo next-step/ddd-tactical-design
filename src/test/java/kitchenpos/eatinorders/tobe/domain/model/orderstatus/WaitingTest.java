@@ -34,7 +34,8 @@ class WaitingTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderLineItems);
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummy -> {
+        });
         final OrderStatus orderStatus = new Waiting();
 
         assertThat(orderStatus.proceed(order)).isInstanceOf(Accepted.class);
