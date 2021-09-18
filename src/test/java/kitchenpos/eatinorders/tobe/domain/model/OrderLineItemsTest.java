@@ -29,7 +29,7 @@ class OrderLineItemsTest {
 
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
 
-        assertThat(orderLineItems.getMenuIds()).contains(orderLineItem.getId());
+        assertThat(orderLineItems.getMenuIds()).contains(orderLineItem.getMenuId());
     }
 
     @DisplayName("주문 항목 목록은 1개 이상의 주문 항목이 필수다.")
