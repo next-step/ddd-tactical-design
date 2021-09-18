@@ -43,6 +43,7 @@ public class Menu {
     }
 
     public void display() {
+        validatePrice(this.price, this.menuProducts);
         this.displayed = true;
     }
 

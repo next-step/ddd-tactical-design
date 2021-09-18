@@ -182,4 +182,85 @@ class MenuTest {
                 .isThrownBy(() -> menu.changePrice(newPrice))
                 .withMessage(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
     }
+
+    @DisplayName("메뉴를 숨긴다.")
+    @Test
+    void hide() {
+        //given
+        MenuRequest menuRequest = MenuFixture.menu();
+        menuGroupRepository.save(menuRequest.getMenuGroup());
+        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
+
+        Menu menu = new Menu(
+                menuRequest.getId(),
+                menuRequest.getName(),
+                menuRequest.getPrice(),
+                menuRequest.isDisplayed(),
+                menuRequest.getMenuGroup(),
+                menuRequest.getMenuProducts(),
+                validator
+        );
+
+        //when
+        menu.hide();
+
+        //then
+        assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴를 노출한다.")
+    @Test
+    void dislay() {
+        //given
+        MenuRequest menuRequest = MenuFixture.menu();
+        menuGroupRepository.save(menuRequest.getMenuGroup());
+        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
+
+        Menu menu = new Menu(
+                menuRequest.getId(),
+                menuRequest.getName(),
+                menuRequest.getPrice(),
+                false,
+                menuRequest.getMenuGroup(),
+                menuRequest.getMenuProducts(),
+                validator
+        );
+
+        //when
+        menu.display();
+
+        //then
+        assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴를 노출 실패 - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    void dislay_fail_cause_invalid_price() {
+        //given
+        MenuRequest menuRequest = MenuFixture.menu();
+        menuGroupRepository.save(menuRequest.getMenuGroup());
+        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
+
+        Menu menu = new Menu(
+                menuRequest.getId(),
+                menuRequest.getName(),
+                menuRequest.getPrice(),
+                false,
+                menuRequest.getMenuGroup(),
+                menuRequest.getMenuProducts(),
+                validator
+        );
+
+        // 메뉴 가격 인하
+        menu.getMenuProducts().getMenuProducts()
+                .forEach(menuProduct -> menuProduct.changePrice(new Price(0)));
+
+        //when then
+        assertAll(
+                () -> assertThatExceptionOfType(WrongPriceException.class)
+                        .isThrownBy(() -> menu.display())
+                        .withMessage(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE),
+                () -> assertThat(menu.isDisplayed()).isFalse()
+        );
+    }
 }
