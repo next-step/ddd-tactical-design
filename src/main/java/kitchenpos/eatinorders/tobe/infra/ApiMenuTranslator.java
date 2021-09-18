@@ -34,10 +34,6 @@ public class ApiMenuTranslator implements MenuTranslator {
 
     @Override
     public List<Menu> getMenus(final List<UUID> menuIds) {
-        final List<Menu> menus = Arrays.asList(restTemplate.postForObject("http://localhost:8080/api/tobe/menus/filtered", new FilteredMenuRequest(menuIds), Menu[].class));
-        if (menus.size() != menuIds.size()) {
-            throw new IllegalArgumentException("적절하지 않는 menuId 가 배열에 포함되어 있습니다.");
-        }
-        return menus;
+        return Arrays.asList(restTemplate.postForObject("http://localhost:8080/api/tobe/menus/filtered", new FilteredMenuRequest(menuIds), Menu[].class));
     }
 }

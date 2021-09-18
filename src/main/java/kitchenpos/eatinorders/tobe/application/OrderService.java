@@ -3,13 +3,10 @@ package kitchenpos.eatinorders.tobe.application;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
-import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
-import kitchenpos.menus.domain.Menu;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -41,37 +38,12 @@ public class OrderService {
     @Transactional
     public Order create(final CreateOrderRequest request) {
         request.validate();
-        final OrderType type = request.getType();
-
-        final List<OrderLineItemRequest> orderLineItemRequests = request.getOrderLineItems();
-        final List<Menu> menus = menuTranslator.getMenus(
-                orderLineItemRequests.stream()
-                        .map(OrderLineItemRequest::getMenuId)
-                        .collect(Collectors.toList())
-        );
-        final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-            if (type != EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-            }
-            final UUID menuId = orderLineItemRequest.getMenuId();
-            final BigDecimal orderLineItemPrice = orderLineItemRequest.getPrice();
-            final Menu menu = menuTranslator.getMenu(menuId, orderLineItemPrice);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final OrderLineItem orderLineItem = new OrderLineItem(menuId, quantity);
-            orderLineItems.add(orderLineItem);
-        }
+        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
+                .map(item -> new OrderLineItem(item.getMenuId(), item.getQuantity(), item.getPrice()))
+                .collect(Collectors.toList());
         final Order order = new Order(
-                type,
-                orderLineItems,
+                request.getType(),
+                new OrderLineItems(orderLineItems, request.getType(), menuTranslator),
                 request.getDeliveryAddress(),
                 request.getOrderTableId(),
                 orderTableTranslator

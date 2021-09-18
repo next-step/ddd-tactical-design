@@ -27,9 +27,10 @@ public class OrderLineItem {
 
     protected OrderLineItem() {}
 
-    public OrderLineItem(final UUID menuId, final long quantity) {
+    public OrderLineItem(final UUID menuId, final long quantity, final BigDecimal price) {
         this.menuId = menuId;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public Long getSeq() {
