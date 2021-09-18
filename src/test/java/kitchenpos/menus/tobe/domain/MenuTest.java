@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -114,8 +113,8 @@ class MenuTest {
         MenuRequest menuRequest = MenuFixture.menu();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-        BigDecimal totalMenuProductsPrice = menuRequest.getMenuProducts().getTotalMenuProductsPrice();
-        menuRequest.setPrice(new Price(totalMenuProductsPrice.add(BigDecimal.valueOf(1000L))));
+        Price totalMenuProductsPrice = menuRequest.getMenuProducts().getTotalMenuProductsPrice();
+        menuRequest.setPrice(totalMenuProductsPrice.add(new Price(1000)));
 
         //when then
         assertThatExceptionOfType(WrongPriceException.class)

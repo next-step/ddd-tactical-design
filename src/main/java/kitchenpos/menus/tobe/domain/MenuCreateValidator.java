@@ -5,7 +5,6 @@ import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -45,13 +44,7 @@ public class MenuCreateValidator {
     }
 
     private void validatePrice(final Price price, final MenuProducts menuProducts) {
-        BigDecimal sum = menuProducts.getMenuProducts().stream()
-                .map(menuProduct -> menuProduct.getPrice().getValue()
-                        .multiply(
-                                BigDecimal.valueOf(menuProduct.getQuantity())
-                        ))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        if (price.getValue().compareTo(sum) > 0) {
+        if (price.compareTo(menuProducts.getTotalMenuProductsPrice()) > 0 ) {
             throw new WrongPriceException(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
         }
     }

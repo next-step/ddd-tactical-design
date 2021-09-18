@@ -5,20 +5,36 @@ import kitchenpos.menus.tobe.domain.exception.WrongPriceException;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Price {
-    private BigDecimal value;
+public class Price implements Comparable<Price> {
+    public static final Price ZERO = new Price(0);
 
-    static final int ZERO = 0;
+    private BigDecimal value;
 
     public Price(final BigDecimal value) {
         validate(value);
         this.value = value;
     }
 
+    public Price(final long value) {
+        this(BigDecimal.valueOf(value));
+    }
+
     private void validate(final BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < ZERO) {
+        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
             throw new WrongPriceException();
         }
+    }
+    
+    public Price multiply(final long number) {
+        return new Price(this.value.multiply(BigDecimal.valueOf(number)));
+    }
+
+    public Price multiply(final BigDecimal number) {
+        return new Price(this.value.multiply(number));
+    }
+
+    public Price add(final Price price) {
+        return new Price(this.value.add(price.getValue()));
     }
 
     public BigDecimal getValue() {
@@ -36,5 +52,10 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(getValue());
+    }
+
+    @Override
+    public int compareTo(final Price o) {
+        return value.compareTo(o.getValue());
     }
 }
