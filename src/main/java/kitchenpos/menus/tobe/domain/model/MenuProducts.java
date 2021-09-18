@@ -1,13 +1,12 @@
 package kitchenpos.menus.tobe.domain.model;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import kitchenpos.menus.tobe.domain.service.MenuDomainService;
 
 @Embeddable
 public class MenuProducts {
@@ -24,7 +23,8 @@ public class MenuProducts {
     public MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
+    public MenuProducts(List<MenuProduct> menuProducts, MenuDomainService menuDomainService) {
+        menuDomainService.validateMenuProducts(menuProducts);
         this.menuProducts = menuProducts;
     }
 

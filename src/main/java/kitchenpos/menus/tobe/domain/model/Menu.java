@@ -41,9 +41,8 @@ public class Menu {
 
         final DisplayedName newDisplayedName = new DisplayedName(displayedName, menuDomainService);
         final Price newPrice = new Price(price);
-
         menuDomainService.validateMenuGroup(menuGroupId);
-        menuDomainService.validateMenuProducts(menuProducts);
+        final MenuProducts newMenuProducts = new MenuProducts(menuProducts, menuDomainService);
         menuDomainService.validateMenuPrice(price, menuProducts);
 
         this.id = UUID.randomUUID();
@@ -51,7 +50,7 @@ public class Menu {
         this.price = newPrice;
         this.displayed = displayed;
         this.menuGroupId = menuGroupId;
-        this.menuProducts = new MenuProducts(menuProducts);
+        this.menuProducts = newMenuProducts;
     }
 
     public void changePrice(BigDecimal price, MenuDomainService menuDomainService) {
