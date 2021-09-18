@@ -130,4 +130,56 @@ class MenuTest {
                         ))
                 .withMessage(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
     }
+
+    @DisplayName("메뉴 가격 변경")
+    @Test
+    void change_price() {
+        //given
+        MenuRequest menuRequest = MenuFixture.menu();
+        menuGroupRepository.save(menuRequest.getMenuGroup());
+        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
+
+        Menu menu = new Menu(
+                menuRequest.getId(),
+                menuRequest.getName(),
+                menuRequest.getPrice(),
+                menuRequest.isDisplayed(),
+                menuRequest.getMenuGroup(),
+                menuRequest.getMenuProducts(),
+                validator
+        );
+        Price newPrice = menu.getPrice().subtract(new Price(1000L));
+
+        //when
+        menu.changePrice(newPrice);
+
+        //then
+        assertThat(menu.getPrice()).isEqualTo(newPrice);
+    }
+
+    @DisplayName("메뉴 가격 변경 실패 - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우")
+    @Test
+    void change_price_fail() {
+        //given
+        MenuRequest menuRequest = MenuFixture.menu();
+        menuGroupRepository.save(menuRequest.getMenuGroup());
+        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
+
+        Menu menu = new Menu(
+                menuRequest.getId(),
+                menuRequest.getName(),
+                menuRequest.getPrice(),
+                menuRequest.isDisplayed(),
+                menuRequest.getMenuGroup(),
+                menuRequest.getMenuProducts(),
+                validator
+        );
+        Price totalMenuProductsPrice = menu.getMenuProducts().getTotalMenuProductsPrice();
+        Price newPrice = totalMenuProductsPrice.add(new Price(1000L));
+
+        //when then
+        assertThatExceptionOfType(WrongPriceException.class)
+                .isThrownBy(() -> menu.changePrice(newPrice))
+                .withMessage(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
+    }
 }
