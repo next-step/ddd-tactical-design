@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -42,7 +43,8 @@ class OrderTest {
         assertAll(
                 () -> assertThat(order.getId()).isNotNull(),
                 () -> assertThat(order.getTableId()).isNotNull(),
-                () -> assertThat(order.getStatus()).isEqualTo(orderStatus.getStatus())
+                () -> assertThat(order.getStatus()).isEqualTo(orderStatus.getStatus()),
+                () -> assertThat(order.getOrderDateTime()).isBefore(LocalDateTime.now())
         );
     }
 
