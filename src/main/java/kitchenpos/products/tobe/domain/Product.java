@@ -27,5 +27,7 @@ public class Product {
         this.price = product.price;
     }
 
-
+    public Price getPrice() {
+        return price;
+    }
 }

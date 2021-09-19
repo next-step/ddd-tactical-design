@@ -9,7 +9,11 @@ import java.math.BigDecimal;
 
 public class ProductFixture {
     public static Product 상품() {
+        return 상품(BigDecimal.valueOf(1000));
+    }
+
+    public static Product 상품(BigDecimal price) {
         return new Product(
-                new Name("올바른 이름", new FakeProfanities()), new Price(BigDecimal.valueOf(1000)));
+                new Name("올바른 이름", new FakeProfanities()), new Price(price));
     }
 }
