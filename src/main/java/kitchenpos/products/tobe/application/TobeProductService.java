@@ -71,7 +71,21 @@ public class TobeProductService {
     public List<ProductForm> findAll() {
         return productRepository.findAll()
                 .stream()
-                .map(product -> ProductForm.of(product))
+                .map(ProductForm::of)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ProductForm findById(UUID id) {
+        return ProductForm.of(productRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductForm> findAllByIdIn(List<UUID> ids) {
+        return productRepository.findAllByIdIn(ids)
+                .stream()
+                .map(ProductForm::of)
                 .collect(Collectors.toList());
     }
 }

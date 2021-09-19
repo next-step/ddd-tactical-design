@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.menus.application.MenuGroupService;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.tobe.application.TobeMenuGroupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-@RequestMapping("/api/menu-groups")
+@RequestMapping("/tobe/api/menu-groups")
 @RestController
 public class TobeMenuGroupRestController {
     private final TobeMenuGroupService menuGroupService;
