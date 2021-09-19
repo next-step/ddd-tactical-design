@@ -14,7 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.TobeFixtures;
+import kitchenpos.products.tobe.domain.fixture.ProductFixture;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
@@ -79,7 +79,7 @@ public class ProductServiceTest {
 	@Test
 	void 상품의_가격을_변경할_수_있다() {
 		// given
-		Product given = TobeFixtures.product("후라이드", 16_000L);
+		Product given = ProductFixture.상품("후라이드", 16_000L);
 		UUID givenId = productRepository.save(given).getId();
 		ProductPriceChangeRequest request = new ProductPriceChangeRequest(15_000L);
 
@@ -94,7 +94,7 @@ public class ProductServiceTest {
 	@ValueSource(strings = "-1000")
 	void 상품의_가격이_올바르지_않으면_변경할_수_없다(long price) {
 		// given
-		Product given = TobeFixtures.product("후라이드", 16_000L);
+		Product given = ProductFixture.상품("후라이드", 16_000L);
 		UUID givenId = productRepository.save(given).getId();
 		ProductPriceChangeRequest request = new ProductPriceChangeRequest(price);
 
@@ -108,8 +108,8 @@ public class ProductServiceTest {
 	@Test
 	void 상품의_목록을_조회할_수_있다() {
 		// given
-		productRepository.save(TobeFixtures.product("후라이드", 16_000L));
-		productRepository.save(TobeFixtures.product("양념치킨", 16_000L));
+		productRepository.save(ProductFixture.상품("후라이드", 16_000L));
+		productRepository.save(ProductFixture.상품("양념치킨", 16_000L));
 
 		// when
 		List<Product> actual = productService.findAll();
