@@ -15,7 +15,7 @@ public class TobeMenu {
     private MenuName name;
 
     @Embedded
-    private MenuPrice price;
+    private MenuPrice menuPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -37,21 +37,22 @@ public class TobeMenu {
     protected TobeMenu() {
     }
 
-    public TobeMenu(MenuName name, MenuPrice price, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public TobeMenu(MenuName name, MenuPrice menuPrice, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         this(
             UUID.randomUUID(),
             name,
-            price,
+            menuPrice,
             menuGroup,
             displayed,
             menuProducts
         );
     }
 
-    public TobeMenu(UUID id, MenuName name, MenuPrice price, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public TobeMenu(UUID id, MenuName name, MenuPrice menuPrice, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        validationMenuPriceOverSumPrice(menuPrice, menuProducts);
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
@@ -65,8 +66,8 @@ public class TobeMenu {
         return name.getName();
     }
 
-    public BigDecimal getPrice() {
-        return price.getPrice();
+    public BigDecimal getMenuPrice() {
+        return menuPrice.getPrice();
     }
 
     public TobeMenuGroup getMenuGroup() {
@@ -77,19 +78,31 @@ public class TobeMenu {
         return displayed;
     }
 
-    public void changeDisplayed(final boolean displayed) {
-        this.displayed = displayed;
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public void display() {
+        this.displayed = true;
     }
 
     public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
-    public UUID getMenuGroupId() {
-        return menuGroupId;
+    public void changePrice(MenuPrice menuPrice) {
+        validationMenuPriceOverSumPrice(menuPrice, this.menuProducts);
+        menuPrice.changePrice(menuPrice.getPrice());
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    public boolean isMenuPriceOverSumPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
+        return menuPrice.getPrice().compareTo(menuProducts.sumMenuProductPrice()) > 0;
     }
+
+    private void validationMenuPriceOverSumPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
+        if (isMenuPriceOverSumPrice(menuPrice, menuProducts)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
 }

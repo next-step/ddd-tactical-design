@@ -75,8 +75,9 @@ public class MenuForm {
 
     public static MenuForm of(TobeMenu menu) {
         MenuForm menuForm = new MenuForm();
+        menuForm.setId(menu.getId());
         menuForm.setName(menu.getName());
-        menuForm.setPrice(menu.getPrice());
+        menuForm.setPrice(menu.getMenuPrice());
         menuForm.setDisplayed(menu.isDisplayed());
         menuForm.setMenuGroup(MenuGroupForm.of(menu.getMenuGroup()));
         menuForm.setMenuProducts(menuProductToMenuProductForm(menu.getMenuProducts()));

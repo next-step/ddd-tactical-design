@@ -20,13 +20,12 @@ public class MenuProducts {
 
     protected MenuProducts() { }
 
-    public MenuProducts(List<TobeMenuProduct> menuProducts, MenuPrice menuPrice) {
+    public MenuProducts(List<TobeMenuProduct> menuProducts) {
         validationMenuProductSize(menuProducts);
-        validationMenuPrice(menuProducts, menuPrice);
         this.menuProducts = menuProducts;
     }
 
-    public BigDecimal totalMenuProductPrice() {
+    public BigDecimal sumMenuProductPrice() {
         return menuProducts.stream()
                 .map(TobeMenuProduct::menuProductPrice)
                 .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
@@ -36,21 +35,9 @@ public class MenuProducts {
         return Collections.unmodifiableList(menuProducts);
     }
 
-    private void validationMenuPrice(List<TobeMenuProduct> menuProducts, MenuPrice menuPrice) {
-        if (menuPrice.getPrice().compareTo(totalMenuProductPrice(menuProducts)) > 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     private void validationMenuProductSize(List<TobeMenuProduct> menuProducts) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
-    }
-
-    private BigDecimal totalMenuProductPrice(List<TobeMenuProduct> menuProducts) {
-        return menuProducts.stream()
-                .map(TobeMenuProduct::menuProductPrice)
-                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
     }
 }
