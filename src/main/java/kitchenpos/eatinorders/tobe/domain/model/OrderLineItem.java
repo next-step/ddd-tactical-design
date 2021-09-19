@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public class OrderLineItem {
 
-    final UUID id;
+    private final UUID id;
 
-    final UUID menuId;
+    private final UUID menuId;
 
-    final Price price;
+    private final Price price;
 
-    final long quantity;
+    private final long quantity;
 
     public OrderLineItem(final UUID id, final UUID menuId, final Price price, final long quantity) {
         this.id = id;
