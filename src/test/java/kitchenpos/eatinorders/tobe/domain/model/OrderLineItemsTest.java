@@ -59,7 +59,7 @@ class OrderLineItemsTest {
 
         final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
 
-        assertThat(orderLineItems.getMenuIds()).contains(orderLineItem1.getId(), orderLineItem2.getId());
+        assertThat(orderLineItems.getMenuIds()).contains(orderLineItem1.getMenuId(), orderLineItem2.getMenuId());
     }
 
     @DisplayName("주문 항목 목록은 메뉴 별 금액(가격 * 수량)의 합이 0보다 작은 주문 항목 있는지 확인하여 계산 완료 가능 여부를 반환한다.")
@@ -72,19 +72,25 @@ class OrderLineItemsTest {
     }
 
     private static Stream<Arguments> provideArguments() {
+        final UUID menuId1 = UUID.randomUUID();
+        final UUID menuId2 = UUID.randomUUID();
+
         return Stream.of(
-                Arguments.of(Collections.singletonList(new OrderLineItem(
-                        UUID.randomUUID(),
-                        UUID.randomUUID(),
-                        new Price(BigDecimal.valueOf(16_000L)),
-                        1L
-                )), true),
-                Arguments.of(Collections.singletonList(new OrderLineItem(
-                        UUID.randomUUID(),
-                        UUID.randomUUID(),
-                        new Price(BigDecimal.valueOf(16_000L)),
-                        -1L
-                )), false)
+                Arguments.of(
+                        Arrays.asList(
+                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), -1L)
+                        ),
+                        true
+                ),
+                Arguments.of(
+                        Arrays.asList(
+                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId2, new Price(BigDecimal.valueOf(16_000L)), 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId2, new Price(BigDecimal.valueOf(16_000L)), -2L)
+                        ),
+                        false
+                )
         );
     }
 }
