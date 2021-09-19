@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.common.infra;
 
 import java.net.URI;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 
 @Component
 public class DefaultProfanities implements Profanities {

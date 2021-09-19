@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -16,11 +15,11 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import kitchenpos.TobeFixtures;
-import kitchenpos.products.tobe.domain.DisplayedName;
-import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.ProductCreateRequest;
 import kitchenpos.products.tobe.ui.ProductPriceChangeRequest;

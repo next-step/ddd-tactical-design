@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+
 public class ProductTest {
 	@Test
 	void 상품을_생성할_수_있다() {

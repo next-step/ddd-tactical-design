@@ -2,8 +2,8 @@ package kitchenpos;
 
 import java.math.BigDecimal;
 
-import kitchenpos.products.tobe.domain.DisplayedName;
-import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 
 public class TobeFixtures {

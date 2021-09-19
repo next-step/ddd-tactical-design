@@ -8,11 +8,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kitchenpos.products.tobe.domain.DisplayedName;
-import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.ui.ProductCreateRequest;
 import kitchenpos.products.tobe.ui.ProductPriceChangeRequest;
 
