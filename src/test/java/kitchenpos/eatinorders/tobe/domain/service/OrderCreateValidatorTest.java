@@ -5,6 +5,7 @@ import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.model.Quantity;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.*;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
@@ -52,7 +53,7 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> orderCreateValidator.validate(order);
 
@@ -74,7 +75,7 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.clear();
@@ -99,7 +100,7 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -140,7 +141,7 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -182,7 +183,7 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();

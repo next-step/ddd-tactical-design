@@ -34,7 +34,7 @@ class WaitingTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummy -> {
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummy -> {
         });
         final OrderStatus orderStatus = new Waiting();
 
