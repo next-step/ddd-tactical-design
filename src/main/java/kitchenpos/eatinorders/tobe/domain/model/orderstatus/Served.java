@@ -1,17 +1,18 @@
 package kitchenpos.eatinorders.tobe.domain.model.orderstatus;
 
-import kitchenpos.eatinorders.tobe.domain.model.Order;
 import kitchenpos.eatinorders.tobe.domain.model.OrderStatus;
 
 public class Served implements OrderStatus {
 
+    private final String status = "Served";
+
     @Override
-    public OrderStatus proceed(final Order order) {
-        return null;
+    public OrderStatus proceed() {
+        return new Completed();
     }
 
     @Override
     public String getStatus() {
-        return null;
+        return status;
     }
 }
