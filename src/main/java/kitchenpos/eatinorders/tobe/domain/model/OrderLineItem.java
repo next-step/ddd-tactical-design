@@ -7,26 +7,38 @@ import java.util.UUID;
 
 public class OrderLineItem {
 
+    final UUID id;
+
+    final UUID menuId;
+
+    final Price price;
+
+    final long quantity;
+
     public OrderLineItem(final UUID id, final UUID menuId, final Price price, final long quantity) {
+        this.id = id;
+        this.menuId = menuId;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     public BigDecimal getAmount() {
-        return BigDecimal.ZERO;
+        return BigDecimal.valueOf(quantity).multiply(price.value());
     }
 
     public UUID getId() {
-        return null;
+        return id;
     }
 
     public UUID getMenuId() {
-        return null;
+        return menuId;
     }
 
     public BigDecimal getPrice() {
-        return null;
+        return price.value();
     }
 
     public long getQuantity() {
-        return 0;
+        return quantity;
     }
 }
