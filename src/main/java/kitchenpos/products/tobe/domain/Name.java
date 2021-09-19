@@ -2,10 +2,15 @@ package kitchenpos.products.tobe.domain;
 
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class Name {
-    private final String name;
+    private String name;
+
+    protected Name() {
+    }
 
     public Name(final String name, Profanities profanities) {
         verify(name, profanities);

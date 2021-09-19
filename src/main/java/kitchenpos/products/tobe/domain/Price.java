@@ -1,12 +1,17 @@
 package kitchenpos.products.tobe.domain;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Embeddable
 public class Price {
     private static final BigDecimal BOUND_PRICE = BigDecimal.ZERO;
 
-    private final BigDecimal price;
+    private BigDecimal price;
+
+    protected Price() {
+    }
 
     public Price(BigDecimal price) {
         verify(price);
