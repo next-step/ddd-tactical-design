@@ -64,9 +64,7 @@ class OrderCreateValidatorTest {
     @DisplayName("주문 생성 시, 주문 테이블의 식별자가 빈 테이블의 것이면 IllegalStateException을 던진다.")
     @Test
     void 빈_테이블_실패() {
-        final OrderTable orderTable = orderTableRepository.save(
-                new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"))
-        );
+        final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
 
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
@@ -89,9 +87,7 @@ class OrderCreateValidatorTest {
     @DisplayName("주문 생성 시, 등록된 메뉴의 식별자가 아니면 IllegalArgumentException을 던진다.")
     @Test
     void 메뉴_누락_실패() {
-        final OrderTable orderTable = orderTableRepository.save(
-                new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"))
-        );
+        final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
 
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
@@ -114,9 +110,7 @@ class OrderCreateValidatorTest {
     @DisplayName("주문 생성 시, 노출되지 않은 메뉴의 식별자가 포함되면 IllegalStateException을 던진다.")
     @Test
     void 비노출_메뉴_포함_실패() {
-        final OrderTable orderTable = orderTableRepository.save(
-                new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"))
-        );
+        final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
 
         final DisplayedName displayedName = new DisplayedName("후라이드치킨");
         final Price price = new Price(BigDecimal.valueOf(16_000L));
@@ -156,9 +150,7 @@ class OrderCreateValidatorTest {
     @DisplayName("주문 생성 시, 주문 항목의 가격과 메뉴 가격이 일치하지 않으면 IllegalArgumentException을 던진다.")
     @Test
     void 가격_불일치_실패() {
-        final OrderTable orderTable = orderTableRepository.save(
-                new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"))
-        );
+        final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
 
         final DisplayedName displayedName = new DisplayedName("후라이드치킨");
         final Price price = new Price(BigDecimal.valueOf(16_000L));
@@ -193,5 +185,9 @@ class OrderCreateValidatorTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
+    }
+
+    private static OrderTable DEFAULT_ORDER_TABLE() {
+        return new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"), new NumberOfGuests(0L));
     }
 }
