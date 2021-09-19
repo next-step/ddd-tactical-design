@@ -26,6 +26,10 @@ public class MenuProducts {
 	}
 
 	public MenuProducts(List<MenuProduct> values) {
+		if (values == null || values.isEmpty()) {
+			throw new IllegalArgumentException("메뉴상품은 한개 이상이어야 합니다.");
+		}
+
 		this.values = values;
 	}
 

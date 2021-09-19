@@ -196,3 +196,5 @@
 ## TODO
 
 - [ ] MenuProduct 는 ID 생성을 DB 에게 위임하고 있는데, 테스트를 작성할 때 어떻게 값을 생성하는게 좋을까?
+- [ ] Menu 생성시 전달되는 productId, quantity 로 MenuProducts 만들 때 API 를 호출하는 식으로 분리하는게 좋을까?
+- [ ] 일급 컬렉션 MenuProducts 를 사용하려다보니, 조회시 데이터가 채워지지 않음. 

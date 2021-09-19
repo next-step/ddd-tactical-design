@@ -5,11 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
+import kitchenpos.menus.tobe.domain.menu.fixture.MenuFixture;
 import kitchenpos.menus.tobe.domain.menu.fixture.MenuProductFixture;
 import kitchenpos.menus.tobe.domain.menu.fixture.MenuProductsFixture;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -62,6 +64,57 @@ public class MenuTest {
 		// when & then
 		assertThatThrownBy(
 			() -> new Menu(name, price, displayed, menuProducts, menuGroup)
+		).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	void 메뉴를_공개할_수_있다() {
+		// given
+		Menu menu = MenuFixture.숨김_메뉴();
+
+		// when
+		menu.display();
+
+		// then
+		assertThat(menu.isDisplayed()).isTrue();
+	}
+
+	@Test
+	void 메뉴를_숨길_수_있다() {
+		// given
+		Menu menu = MenuFixture.전시_메뉴();
+
+		// when
+		menu.hide();
+
+		// then
+		assertThat(menu.isDisplayed()).isFalse();
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"10000", "53000"})
+	void 메뉴_가격을_변경할_수_있다(long value) {
+		// given
+		Price price = new Price(new BigDecimal(value));
+		Menu menu = MenuFixture.전시_메뉴();
+
+		// when
+		menu.changePrice(price);
+
+		// then
+		assertThat(menu.getPrice()).isEqualTo(price);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"54000", "100000"})
+	void 변경할_메뉴_가격이_메뉴상품들의_전체_가격보다_크다면_메뉴_가격을_변경할_수_없다(long value) {
+		// given
+		Price price = new Price(new BigDecimal(value));
+		Menu menu = MenuFixture.전시_메뉴();
+
+		// when & then
+		assertThatThrownBy(
+			() -> menu.changePrice(price)
 		).isInstanceOf(IllegalArgumentException.class);
 	}
 }

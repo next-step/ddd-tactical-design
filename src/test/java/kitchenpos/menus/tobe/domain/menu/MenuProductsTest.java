@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,17 @@ public class MenuProductsTest {
 
 		// when
 		new MenuProducts(Arrays.asList(menuProduct1, menuProduct2));
+	}
+
+	@Test
+	void 메뉴상품들은_한개_이상이어야만_생성할_수_있다() {
+		// given
+		List<MenuProduct> empty = Collections.emptyList();
+
+		// when & then
+		assertThatThrownBy(
+			() -> new MenuProducts(empty)
+		).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
