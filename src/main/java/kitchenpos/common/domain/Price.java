@@ -28,7 +28,15 @@ public class Price extends Value<Price> {
 		return new Price(a.value.add(b.value));
 	}
 
+	public static Price multiply(Price a, long b) {
+		return new Price(a.value.multiply(new BigDecimal(b)));
+	}
+
 	public BigDecimal getValue() {
 		return value;
+	}
+
+	public int compareTo(Price price) {
+		return value.compareTo(price.value);
 	}
 }

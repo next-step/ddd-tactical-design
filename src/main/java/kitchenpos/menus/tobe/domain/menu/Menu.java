@@ -28,6 +28,12 @@ public class Menu {
 	@Embedded
 	private Price price;
 
+	@Column(name = "displayed", nullable = false)
+	private boolean displayed;
+
+	@Embedded
+	private MenuProducts menuProducts;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(
 		name = "menu_group_id",
@@ -36,16 +42,20 @@ public class Menu {
 	)
 	private MenuGroup menuGroup;
 
-	// TODO : menuProducts
-
 	protected Menu() {
 
 	}
 
-	public Menu(DisplayedName name, Price price, MenuGroup menuGroup) {
+	public Menu(DisplayedName name, Price price, boolean displayed, MenuProducts menuProducts, MenuGroup menuGroup) {
+		if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+			throw new IllegalArgumentException("메뉴의 가격은 메뉴상품들의 전체 가격보다 적거나 같아야 합니다.");
+		}
+
 		this.id = UUID.randomUUID();
 		this.name = name;
 		this.price = price;
+		this.displayed = displayed;
+		this.menuProducts = menuProducts;
 		this.menuGroup = menuGroup;
 	}
 
@@ -59,6 +69,14 @@ public class Menu {
 
 	public Price getPrice() {
 		return price;
+	}
+
+	public boolean isDisplayed() {
+		return displayed;
+	}
+
+	public MenuProducts getMenuProducts() {
+		return menuProducts;
 	}
 
 	public MenuGroup getMenuGroup() {

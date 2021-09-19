@@ -43,6 +43,19 @@ class PriceTest {
 		assertThat(c).isEqualTo(new Price(new BigDecimal(cValue)));
 	}
 
+	@ParameterizedTest
+	@CsvSource({"10000, 2, 20000", "15000, 3, 45000"})
+	void 곱셈(long aValue, long bValue, long cValue) {
+		// given
+		Price a = new Price(new BigDecimal(aValue));
+
+		// when
+		Price c = Price.multiply(a, bValue);
+
+		// then
+		assertThat(c).isEqualTo(new Price(new BigDecimal(cValue)));
+	}
+
 	@Test
 	void 동등성() {
 		// given
