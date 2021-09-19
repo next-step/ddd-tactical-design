@@ -1,9 +1,18 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 import kitchenpos.common.Value;
 
+@Embeddable
 public class Quantity extends Value<Quantity> {
-	private final long value;
+	@Column(name = "quantity", nullable = false)
+	private long value;
+
+	protected Quantity() {
+
+	}
 
 	public Quantity(long value) {
 		if (value < 0) {

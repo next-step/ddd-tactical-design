@@ -9,7 +9,7 @@ import kitchenpos.common.Value;
 
 @Embeddable
 public class Price extends Value<Price> {
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	private BigDecimal value;
 
 	protected Price() {
