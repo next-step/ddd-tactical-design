@@ -2,11 +2,8 @@ package kitchenpos.eatinorders.tobe.domain.model;
 
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import javax.validation.constraints.PositiveOrZero;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class NumberOfGuestsTest {
 
     @DisplayName("방문한 손님 수를 생성한다.")
-    @Test
-    @PositiveOrZero
+    @ParameterizedTest
+    @ValueSource(longs = {0L, 1L})
     void 생성_성공(final long value) {
         final NumberOfGuests numberOfGuests = new NumberOfGuests(value);
 
