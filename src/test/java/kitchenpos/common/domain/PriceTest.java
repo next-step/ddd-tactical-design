@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -26,6 +27,20 @@ class PriceTest {
 	void 빈_값이거나_음수일_경우_가격을_생성할_수_없다(BigDecimal value) {
 		// given & when & then
 		assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> new Price(value));
+	}
+
+	@ParameterizedTest
+	@CsvSource({"10000, 15000, 25000", "18000, 2000, 20000"})
+	void 덧셈(long aValue, long bValue, long cValue) {
+		// given
+		Price a = new Price(new BigDecimal(aValue));
+		Price b = new Price(new BigDecimal(bValue));
+
+		// when
+		Price c = Price.add(a, b);
+
+		// then
+		assertThat(c).isEqualTo(new Price(new BigDecimal(cValue)));
 	}
 
 	@Test

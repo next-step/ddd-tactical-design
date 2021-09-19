@@ -24,6 +24,10 @@ public class Price extends Value<Price> {
 		this.value = value;
 	}
 
+	public static Price add(Price a, Price b) {
+		return new Price(a.value.add(b.value));
+	}
+
 	public BigDecimal getValue() {
 		return value;
 	}
