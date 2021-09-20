@@ -11,12 +11,12 @@ import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.common.domain.Quantity;
-import kitchenpos.menus.domain.tobe.domain.menu.Displayed;
-import kitchenpos.menus.domain.tobe.domain.menu.Menu;
-import kitchenpos.menus.domain.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.domain.tobe.domain.menu.MenuProductSeq;
-import kitchenpos.menus.domain.tobe.domain.menu.MenuProducts;
-import kitchenpos.menus.domain.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menu.Displayed;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProductSeq;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.domain.tobe.domain.Product;
 
 public class ToBeFixtures {
