@@ -21,6 +21,6 @@ class ServedTest {
     void 상태_진행_성공() {
         final OrderStatus orderStatus = new Served();
 
-        assertThat(orderStatus.proceed()).isInstanceOf(Completed.class);
+        assertThat(orderStatus.proceed()).isEqualTo(new Completed());
     }
 }

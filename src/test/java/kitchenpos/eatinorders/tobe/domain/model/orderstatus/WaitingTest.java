@@ -21,6 +21,6 @@ class WaitingTest {
     void 상태_진행_성공() {
         final OrderStatus orderStatus = new Waiting();
 
-        assertThat(orderStatus.proceed()).isInstanceOf(Accepted.class);
+        assertThat(orderStatus.proceed()).isEqualTo(new Accepted());
     }
 }

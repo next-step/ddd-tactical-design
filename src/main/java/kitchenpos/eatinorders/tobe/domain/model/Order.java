@@ -39,7 +39,7 @@ public class Order {
     }
 
     public boolean isCompleted() {
-        return orderStatus instanceof Completed;
+        return orderStatus.equals(new Completed());
     }
 
     public UUID getId() {
