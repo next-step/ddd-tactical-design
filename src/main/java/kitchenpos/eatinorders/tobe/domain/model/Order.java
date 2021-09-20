@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.service.Validator;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class Order {
@@ -38,8 +38,8 @@ public class Order {
         orderStatus = orderStatus.proceed();
     }
 
-    public boolean isCompleted() {
-        return orderStatus.equals(new Completed());
+    public List<UUID> getMenuIds() {
+        return orderLineItems.getMenuIds();
     }
 
     public UUID getId() {

@@ -3,7 +3,6 @@ package kitchenpos.eatinorders.tobe.domain.model;
 import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -50,7 +50,7 @@ class OrderTest {
 
     @DisplayName("주문은 다음 상태로 진행된다.")
     @ParameterizedTest
-    @MethodSource("provideArguments1")
+    @MethodSource("provideArguments")
     void 상태_진행_성공(final OrderStatus orderStatus, final String orderStatusValue) {
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
@@ -66,36 +66,32 @@ class OrderTest {
         assertThat(order.getStatus()).isEqualTo(orderStatusValue);
     }
 
-    private static Stream<Arguments> provideArguments1() {
-        return Stream.of(
-                Arguments.of(new Waiting(), "Accepted"),
-                Arguments.of(new Accepted(), "Served"),
-                Arguments.of(new Served(), "Completed")
-        );
-    }
-
-    @DisplayName("주문은 계산 완료 여부를 반환한다.")
-    @ParameterizedTest
-    @MethodSource("provideArguments2")
-    void 계산_완료_여부_반환_성공(final OrderStatus orderStatus, final boolean isCompleted) {
-        final OrderLineItem orderLineItem = new OrderLineItem(
+    @DisplayName("주문은 메뉴 식별자 목록을 반환한다.")
+    @Test
+    void 메뉴_식별자_목록_반환_성공() {
+        final OrderLineItem orderLineItem1 = new OrderLineItem(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 new Price(BigDecimal.valueOf(20_000L)),
                 1L
         );
-        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderStatus, orderLineItems, dummyValidator);
+        final OrderLineItem orderLineItem2 = new OrderLineItem(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new Price(BigDecimal.valueOf(20_000L)),
+                1L
+        );
+        final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
 
-        assertThat(order.isCompleted()).isEqualTo(isCompleted);
+        assertThat(order.getMenuIds()).contains(orderLineItem1.getMenuId(), orderLineItem2.getMenuId());
     }
 
-    private static Stream<Arguments> provideArguments2() {
+    private static Stream<Arguments> provideArguments() {
         return Stream.of(
-                Arguments.of(new Waiting(), false),
-                Arguments.of(new Accepted(), false),
-                Arguments.of(new Served(), false),
-                Arguments.of(new Completed(), true)
+                Arguments.of(new Waiting(), "Accepted"),
+                Arguments.of(new Accepted(), "Served"),
+                Arguments.of(new Served(), "Completed")
         );
     }
 }
