@@ -92,10 +92,16 @@ public class TobeMenu {
 
     public void changePrice(MenuPrice menuPrice) {
         validationMenuPriceOverSumPrice(menuPrice, this.menuProducts);
-        menuPrice.changePrice(menuPrice.getPrice());
+        this.menuPrice = menuPrice;
     }
 
-    public boolean isMenuPriceOverSumPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
+    public void updateStatus() {
+        if (isMenuPriceOverSumPrice(menuPrice, menuProducts)) {
+            hide();
+        }
+    }
+
+    private boolean isMenuPriceOverSumPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
         return menuPrice.getPrice().compareTo(menuProducts.sumMenuProductPrice()) > 0;
     }
 

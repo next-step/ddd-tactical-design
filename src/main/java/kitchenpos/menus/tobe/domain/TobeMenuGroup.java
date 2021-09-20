@@ -34,4 +34,12 @@ public class TobeMenuGroup {
     public String getName() {
         return name.getName();
     }
+
+    @Override
+    public String toString() {
+        return "TobeMenuGroup{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
+    }
 }

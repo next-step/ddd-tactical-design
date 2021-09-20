@@ -1,6 +1,10 @@
 package kitchenpos.menus.application.tobe;
 
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.ui.MenuForm;
+import kitchenpos.menus.tobe.ui.MenuProductForm;
+import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
+import kitchenpos.tobeinfra.TobePurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TobeMenusFixtures {
+    public static final TobePurgomalumClient purgomalumClient = new TobeFakePurgomalumClient();
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static TobeProduct product() {
@@ -17,7 +22,7 @@ public class TobeMenusFixtures {
     public static TobeProduct product(final String name, final Long price) {
         ProductName productName = new ProductName(name);
         ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
-        return new TobeProduct(UUID.randomUUID(), productName, productPrice);
+        return new TobeProduct(INVALID_ID, productName, productPrice);
     }
 
     public static TobeMenuProduct menuProduct() {
@@ -43,13 +48,27 @@ public class TobeMenusFixtures {
         return new MenuProducts(menuProducts);
     }
 
-//    public static TobeMenu menu() {
-////        TobeMenu(UUID id,
-////                MenuName name,
-////                MenuPrice menuPrice,
-////                TobeMenuGroup menuGroup,
-////                boolean displayed,
-////                MenuProducts menuProducts) {
-//
-//    }
+    public static TobeMenu menu() {
+        MenuName menuName = new MenuName("두마리 세트", purgomalumClient);
+        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(33_000L));
+        TobeMenuGroup menuGroup = tobeMenuGroup();
+        return new TobeMenu(
+                    UUID.randomUUID(),
+                    menuName,
+                    menuPrice,
+                    menuGroup,
+                    true,
+                    menuProducts()
+                );
+    }
+
+    public static MenuForm menuForm() {
+        return MenuForm.of(menu());
+    }
+
+    public static TobeMenuGroup tobeMenuGroup() {
+        MenuGroupName menuGroupName = new MenuGroupName("세트 메뉴", purgomalumClient);
+        TobeMenuGroup menuGroup = new TobeMenuGroup(menuGroupName);
+        return menuGroup;
+    }
 }
