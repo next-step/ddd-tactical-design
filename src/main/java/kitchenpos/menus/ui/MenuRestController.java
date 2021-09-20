@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/menus")
-@RestController
+// @RestController
 public class MenuRestController {
     private final MenuService menuService;
 

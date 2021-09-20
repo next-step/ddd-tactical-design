@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RequestMapping("/api/menu-groups")
-@RestController
+// @RestController
 public class MenuGroupRestController {
     private final MenuGroupService menuGroupService;
 

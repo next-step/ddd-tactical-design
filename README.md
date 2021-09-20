@@ -158,12 +158,12 @@
 
 ### 메뉴
 
-- `MenuGroup`은 식별자와 이름을 가진다.
+- `MenuGroup`은 식별자와 `Name`을 가진다.
 - `Menu`는 식별자와 `DisplayedName`, `Price`, `MenuProducts`를 가진다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 `Price`은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 `Price`이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 `Price`과 수량을 가진다.
+- `Menu`의 `Price`은 `MenuProducts`의 전체 `Price`보다 적거나 같아야 한다.
+- `Menu`의 `Price`이 `MenuProducts`의 전체 `Price`보다 크면 숨겨진다.
+- `MenuProduct`는 `Product`와 연관되어있고 `Quantity`을 가진다.
 
 ### 매장 주문
 
@@ -192,3 +192,9 @@
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
 - `OrderLineItem`는 `Price`과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.
+
+## TODO
+
+- [ ] MenuProduct 는 ID 생성을 DB 에게 위임하고 있는데, 테스트를 작성할 때 어떻게 값을 생성하는게 좋을까?
+- [ ] Menu 생성시 전달되는 productId, quantity 로 MenuProducts 만들 때 API 를 호출하는 식으로 분리하는게 좋을까?
+- [ ] 일급 컬렉션 MenuProducts 를 사용하려다보니, 조회시 데이터가 채워지지 않음. 

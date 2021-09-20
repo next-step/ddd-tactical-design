@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -7,7 +7,7 @@ import kitchenpos.common.Value;
 
 @Embeddable
 public class DisplayedName extends Value<DisplayedName> {
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String value;
 
 	protected DisplayedName() {

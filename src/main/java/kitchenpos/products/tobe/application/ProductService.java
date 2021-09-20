@@ -8,11 +8,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kitchenpos.products.tobe.domain.DisplayedName;
-import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.ui.ProductCreateRequest;
 import kitchenpos.products.tobe.ui.ProductPriceChangeRequest;
 
@@ -20,10 +22,16 @@ import kitchenpos.products.tobe.ui.ProductPriceChangeRequest;
 public class ProductService {
 	private final ProductRepository productRepository;
 	private final Profanities profanities;
+	private final MenuRepository menuRepository;
 
-	public ProductService(ProductRepository productRepository, Profanities profanities) {
+	public ProductService(
+		ProductRepository productRepository,
+		Profanities profanities,
+		MenuRepository menuRepository
+	) {
 		this.productRepository = productRepository;
 		this.profanities = profanities;
+		this.menuRepository = menuRepository;
 	}
 
 	@Transactional
@@ -34,11 +42,12 @@ public class ProductService {
 	}
 
 	@Transactional
-	// TODO : 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
 	public Product changePrice(UUID id, ProductPriceChangeRequest request) {
 		Product product = productRepository.findById(id).orElseThrow(NoSuchElementException::new);
 		Price price = new Price(new BigDecimal(request.getPrice()));
 		product.changePrice(price);
+		List<Menu> menus = menuRepository.findAllByProductId(product.getId());
+		menus.forEach(Menu::updateDisplayed);
 		return product;
 	}
 

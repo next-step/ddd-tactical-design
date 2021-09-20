@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 import java.math.BigDecimal;
 
@@ -9,7 +9,7 @@ import kitchenpos.common.Value;
 
 @Embeddable
 public class Price extends Value<Price> {
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	private BigDecimal value;
 
 	protected Price() {
@@ -24,7 +24,19 @@ public class Price extends Value<Price> {
 		this.value = value;
 	}
 
+	public static Price add(Price a, Price b) {
+		return new Price(a.value.add(b.value));
+	}
+
+	public static Price multiply(Price a, long b) {
+		return new Price(a.value.multiply(new BigDecimal(b)));
+	}
+
 	public BigDecimal getValue() {
 		return value;
+	}
+
+	public int compareTo(Price price) {
+		return value.compareTo(price.value);
 	}
 }
