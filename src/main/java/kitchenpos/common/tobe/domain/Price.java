@@ -1,18 +1,21 @@
-package kitchenpos.products.tobe.domain.model;
+package kitchenpos.common.tobe.domain;
 
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NEGATIVE;
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NULL;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
-public class Price {
+public class Price implements Comparable<Price> {
 
-    private static final int ZERO = 0;
+    public static final Price ZERO = new Price(0);
 
+    @Column(name = "price", nullable = false)
     private BigDecimal value;
 
     protected Price() {
@@ -31,9 +34,13 @@ public class Price {
         if (Objects.isNull(value)) {
             throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NULL);
         }
-        if (value.compareTo(BigDecimal.ZERO) < ZERO) {
+        if (value.compareTo(BigDecimal.ZERO) < 0) {
             throw new WrongPriceException(PRICE_SHOULD_NOT_BE_NEGATIVE);
         }
+    }
+
+    public BigDecimal getValue() {
+        return value;
     }
 
     @Override
@@ -53,4 +60,16 @@ public class Price {
         return Objects.hash(value);
     }
 
+    public Price multiply(final Quantity quantity) {
+        return new Price(value.multiply(BigDecimal.valueOf(quantity.getValue())));
+    }
+
+    public Price add(final Price price) {
+        return new Price(value.add(price.getValue()));
+    }
+
+    @Override
+    public int compareTo(final Price p) {
+        return value.compareTo(p.getValue());
+    }
 }

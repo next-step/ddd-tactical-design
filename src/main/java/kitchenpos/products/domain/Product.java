@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "TobeProduct")
 public class Product {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
@@ -47,3 +47,4 @@ public class Product {
         this.price = price;
     }
 }
+

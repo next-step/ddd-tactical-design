@@ -1,7 +1,9 @@
 package kitchenpos.products.tobe.dto;
 
 import java.math.BigDecimal;
-import kitchenpos.products.tobe.domain.model.Price;
+import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.tobe.domain.DisplayedName;
+import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.model.Product;
 
 public class ProductRequestDto {
@@ -9,16 +11,16 @@ public class ProductRequestDto {
     private String name;
     private BigDecimal price;
 
-    protected ProductRequestDto() {
+    private final PurgomalumClient purgomalumClient;
+
+    protected ProductRequestDto(final PurgomalumClient purgomalumClient) {
+        this.purgomalumClient = purgomalumClient;
     }
 
-    public ProductRequestDto(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public ProductRequestDto(final String name, final BigDecimal price) {
+    public ProductRequestDto(final String name, final BigDecimal price, final PurgomalumClient purgomalumClient) {
         this.name = name;
         this.price = price;
+        this.purgomalumClient = purgomalumClient;
     }
 
     public String getName() {
@@ -30,11 +32,7 @@ public class ProductRequestDto {
     }
 
     public Product toEntity() {
-        return new Product(name, price);
-    }
-
-    public Price toPrice() {
-        return new Price(price);
+        return new Product(new DisplayedName(this.name, purgomalumClient), new Price(price));
     }
 
 }

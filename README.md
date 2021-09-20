@@ -169,15 +169,55 @@
   - 변경 후 메뉴에 속한 상품(`menuProduct`)금액의 합보다 메뉴(`menu`)의 가격이 크면 메뉴가 숨겨진다(`hide`).
 - 상품의 목록을 조회할 수 있다.(`findAll`)
 
+### 메뉴 그룹(MenuGroup)
 
-### 메뉴
+#### 속성
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- 식별자를 가진다.
+- 손님에게 노출되는 `name`을 가진다.
+
+#### 기능/조건
+
+- 메뉴 그룹을 등록할 수 있다(`create`).
+  - `name`은 비워 둘 수 없다.
+  - `name`은 `PurgoMalumClient`를 통해 비속어(`profanity`)를 필터링 한다.
+- 메뉴 그룹의 목록을 조회할 수 있다(`findAll`).
+
+### 메뉴(Menu)
+
+#### 속성
+
+- 손님에게 노출되는 `name`을 가진다.
+- 손님이 지불해야하는 `price`를 가진다.
+- 특정 `MenuGroup`에 속한다.
+- 자신의 노출 여부를 나타내는 `displayed`를 가진다.
+- 자신에게 속한 상품들인 `menuProducts`를 가진다.
+  - `menuProduct`는 상품을 식별하기 위한 `productId`를 가진다.
+  - `menuProduct`는 상품의 갯수(`quantity`)를 가진다.
+  - `MenuProduct`는 상품 가격과 갯수를 곱한 가격을 계산할 수 있다.
+
+#### 기능/조건
+
+- 메뉴를 등록할 수 있다(`create`).
+  - 메뉴를 등록하려면 등록된 `product`가 1개 이상이어야 한다.
+  - `menuProduct`의 `quantity`는 0 이상이어야 한다.
+  - 메뉴의 `price`는 0원 이상이어야 한다.
+  - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
+  - 메뉴는 특정 `menuGroup`에 속해야 한다.
+  - 메뉴의 `name`은 비워둘 수 없다.
+  - 메뉴의 `name`은 `PurgoMalumClient`를 통해 비속어(`profanity`)를 필터링 한다.
+  
+- 메뉴의 가격을 변경할 수 있다(`changePrice`).
+  - 변경 후 메뉴의 `price`는 0원 이상이어야 한다.
+  - 변경 후 `menuProduct`금액의 총합은 메뉴의 `price`보다 크거나 같아야 한다.
+  - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
+  
+- 메뉴를 노출할 수 있다(`display`).
+  - 메뉴의 `price`가 `menuProduct`금액의 총합 보다 높을 경우 노출할 수 없다.
+  
+- 메뉴를 숨길 수 있다(`hide`).
+  
+- 메뉴의 목록을 조회할 수 있다(`findAll`).
 
 ### 매장 주문
 
