@@ -1,0 +1,86 @@
+package kitchenpos.eatinorders.tobe.domain.service;
+
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
+import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.service.Validator;
+import kitchenpos.eatinorders.tobe.domain.model.*;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
+import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.repository.OrderRepository;
+import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.*;
+
+class OrderTableClearValidatorTest {
+
+    private OrderRepository orderRepository;
+
+    private Validator<OrderTable> orderTableClearValidator;
+
+    @BeforeEach
+    void setUp() {
+        orderRepository = new InMemoryOrderRepository();
+        orderTableClearValidator = new OrderTableClearValidator(orderRepository);
+    }
+
+    @DisplayName("주문 테이블에 계산 완료되지 않은 주문이 있으면 IllegalStateException을 던진다.")
+    @Test
+    void 빈_테이블_설정_실패() {
+        final OrderTable orderTable = DEFAULT_ORDER_TABLE();
+        orderRepository.save(ORDER_WITH_TABLE_AND_STATUS(orderTable, new Waiting()));
+
+        final ThrowableAssert.ThrowingCallable when = () -> orderTable.clear(orderTableClearValidator);
+
+        assertThatIllegalStateException().isThrownBy(when)
+                .withMessage("계산 완료되지 않은 주문이 있습니다.");
+    }
+
+    @DisplayName("주문 테이블에 계산 완료되지 않은 주문이 없으면 IllegalStateException을 던지지 않는다.")
+    @Test
+    void 빈_테이블_설정_성공() {
+        final OrderTable orderTable = DEFAULT_ORDER_TABLE();
+        orderRepository.save(ORDER_WITH_TABLE_AND_STATUS(orderTable, new Completed()));
+
+        try {
+            orderTable.clear(orderTableClearValidator);
+        } catch (IllegalStateException e) {
+            fail("IllegalStateException을 던지지 않아야 한다.");
+        }
+    }
+
+    static OrderTable DEFAULT_ORDER_TABLE() {
+        return new OrderTable(
+                UUID.randomUUID(),
+                new DisplayedName("1번 테이블"),
+                new NumberOfGuests(0L)
+        );
+    }
+
+    static Order ORDER_WITH_TABLE_AND_STATUS(final OrderTable ordertable, final OrderStatus orderStatus) {
+        return new Order(
+                UUID.randomUUID(),
+                ordertable.getId(),
+                orderStatus,
+                new OrderLineItems(
+                        Collections.singletonList(
+                                new OrderLineItem(
+                                        UUID.randomUUID(),
+                                        UUID.randomUUID(),
+                                        new Price(BigDecimal.valueOf(16_000L)),
+                                        1L
+                                )
+                        )
+                ),
+                order -> {
+                }
+        );
+    }
+}
