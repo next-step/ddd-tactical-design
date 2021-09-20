@@ -162,7 +162,7 @@
 - `Menu`는 식별자와 `DisplayedName`, `Price`, `MenuProducts`를 가진다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
 - `Menu`의 `Price`은 `MenuProducts`의 전체 `Price`보다 적거나 같아야 한다.
-- `Menu`의 `Price`이 `MenuProducts`의 전체 `Price`보다 크면 `NotDisplayedMenu`가 된다.
+- `Menu`의 `Price`이 `MenuProducts`의 전체 `Price`보다 크면 숨겨진다.
 - `MenuProduct`는 `Product`와 연관되어있고 `Quantity`을 가진다.
 
 ### 매장 주문
