@@ -32,6 +32,12 @@ public class MenuFixture {
 		return new Menu(name, price, true, menuProducts, menuGroup);
 	}
 
+	public static Menu 전시_메뉴(Price price, MenuProducts menuProducts) {
+		DisplayedName name = DisplayedNameFixture.이름("강정+양념");
+		MenuGroup menuGroup = MenuGroupFixture.메뉴그룹("추천메뉴");
+		return new Menu(name, price, true, menuProducts, menuGroup);
+	}
+
 	public static Menu 숨김_메뉴() {
 		DisplayedName name = DisplayedNameFixture.이름("강정+양념");
 		Price price = PriceFixture.가격(19_000L);

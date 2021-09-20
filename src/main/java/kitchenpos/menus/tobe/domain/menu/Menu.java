@@ -70,6 +70,12 @@ public class Menu {
 		this.price = price;
 	}
 
+	public void updateDisplayed() {
+		if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+			this.displayed = false;
+		}
+	}
+
 	private void validate(Price price, MenuProducts menuProducts) {
 		if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
 			throw new IllegalArgumentException("메뉴의 가격은 메뉴상품들의 전체 가격보다 적거나 같아야 합니다.");

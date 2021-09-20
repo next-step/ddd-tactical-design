@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -14,6 +16,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Quantity;
+import kitchenpos.menus.tobe.domain.menu.fixture.MenuFixture;
+import kitchenpos.menus.tobe.infra.menu.InMemoryMenuRepository;
 import kitchenpos.products.tobe.domain.fixture.ProductFixture;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
@@ -28,12 +37,14 @@ public class ProductServiceTest {
 	private ProductRepository productRepository;
 	private Profanities profanities;
 	private ProductService productService;
+	private MenuRepository menuRepository;
 
 	@BeforeEach
 	void setUp() {
 		productRepository = new InMemoryProductRepository();
 		profanities = text -> Stream.of("비속어", "욕설").anyMatch(text::contains);
-		productService = new ProductService(productRepository, profanities);
+		menuRepository = new InMemoryMenuRepository();
+		productService = new ProductService(productRepository, profanities, menuRepository);
 	}
 
 	@Test
@@ -103,7 +114,27 @@ public class ProductServiceTest {
 			.isInstanceOf(IllegalArgumentException.class);
 	}
 
-	// TODO : 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
+	@Test
+	void 상품의_가격이_변경될_때_메뉴의_가격이_메뉴에_속한_상품_금액의_합보다_크면_메뉴가_숨겨진다() {
+		// given
+		Product givenProduct = ProductFixture.상품("후라이드", 16_000L);
+		productRepository.save(givenProduct);
+
+		Menu givenMenu = MenuFixture.전시_메뉴(
+			new Price(new BigDecimal(15_000L)),
+			new MenuProducts(Collections.singletonList(new MenuProduct(givenProduct, new Quantity(2L)))));
+		menuRepository.save(givenMenu);
+
+		ProductPriceChangeRequest request = new ProductPriceChangeRequest(100L);
+
+		// when
+		Product product = productService.changePrice(givenProduct.getId(), request);
+		Menu menu = menuRepository.findById(givenMenu.getId()).get();
+
+		// then
+		assertThat(product.getPrice()).isEqualTo(new Price(new BigDecimal(100L)));
+		assertThat(menu.isDisplayed()).isFalse();
+	}
 
 	@Test
 	void 상품의_목록을_조회할_수_있다() {
