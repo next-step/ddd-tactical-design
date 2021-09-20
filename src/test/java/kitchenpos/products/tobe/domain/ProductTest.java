@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe.domain;
+package kitchenpos.products.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

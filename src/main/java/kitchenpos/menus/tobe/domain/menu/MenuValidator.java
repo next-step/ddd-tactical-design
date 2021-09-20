@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.products.domain.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 
 @Service

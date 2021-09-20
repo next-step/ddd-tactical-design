@@ -17,7 +17,7 @@ import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProductSeq;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.products.domain.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 
 public class ToBeFixtures {
 

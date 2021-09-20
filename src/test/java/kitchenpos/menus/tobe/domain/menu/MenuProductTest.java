@@ -8,7 +8,7 @@ import java.util.UUID;
 import kitchenpos.ToBeFixtures;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
-import kitchenpos.products.domain.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
