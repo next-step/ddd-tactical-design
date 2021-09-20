@@ -10,7 +10,7 @@ import kitchenpos.common.domain.ProductId;
 import kitchenpos.menus.tobe.domain.menu.Displayed;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 
-public class MenuCreateRequest {
+public class MenuRegisterRequest {
 
     private final String displayedName;
     private final BigDecimal price;
@@ -18,7 +18,7 @@ public class MenuCreateRequest {
     private final UUID menuGroupId;
     private final List<MenuProductRequest> menuProductRequests;
 
-    public MenuCreateRequest(
+    public MenuRegisterRequest(
         final String displayedName,
         final BigDecimal menuPrice,
         final boolean menuDisplayed,

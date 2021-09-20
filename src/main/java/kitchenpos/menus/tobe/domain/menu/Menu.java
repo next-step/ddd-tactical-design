@@ -65,6 +65,14 @@ public class Menu {
         }
     }
 
+    public MenuId getId() {
+        return this.id;
+    }
+
+    public DisplayedName getDisplayedName() {
+        return this.displayedName;
+    }
+
     public Price getPrice() {
         return this.price;
     }
@@ -105,6 +113,10 @@ public class Menu {
 
     public boolean isHidden() {
         return displayed.isHidden();
+    }
+
+    public MenuGroupId getMenuGroupId() {
+        return this.menuGroupId;
     }
 
     @Override

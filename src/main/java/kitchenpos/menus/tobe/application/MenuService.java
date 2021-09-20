@@ -8,7 +8,7 @@ import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuValidator;
-import kitchenpos.menus.tobe.ui.MenuCreateRequest;
+import kitchenpos.menus.tobe.ui.MenuRegisterRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ public class MenuService {
     }
 
     @Transactional
-    public void register(final MenuCreateRequest request) {
+    public Menu register(final MenuRegisterRequest request) {
         menuValidator.validateMenuGroup(request.getMenuGroupId());
         menuValidator.validateProducts(request.getProductIds());
 
@@ -43,7 +43,7 @@ public class MenuService {
             new MenuProducts(request.getMenuProducts())
         );
 
-        menuRepository.save(newMenu);
+        return menuRepository.save(newMenu);
     }
 
     @Transactional
