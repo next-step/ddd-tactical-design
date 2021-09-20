@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.ui.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 public class ProductRequests {
 
@@ -20,6 +22,18 @@ public class ProductRequests {
 
         public BigDecimal getPrice() {
             return price;
+        }
+    }
+
+    public static class FindAll {
+        private List<UUID> productIds;
+
+        public FindAll(List<UUID> productIds) {
+            this.productIds = productIds;
+        }
+
+        public List<UUID> getProductIds() {
+            return productIds;
         }
     }
 

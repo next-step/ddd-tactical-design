@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.ui.dto;
+package kitchenpos.products.tobe.domain.model;
 
 import java.util.UUID;
 
