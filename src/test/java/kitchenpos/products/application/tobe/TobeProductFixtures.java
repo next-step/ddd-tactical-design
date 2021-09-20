@@ -8,7 +8,7 @@ import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class TobeFixtures {
+public class TobeProductFixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static TobeProduct product() {
