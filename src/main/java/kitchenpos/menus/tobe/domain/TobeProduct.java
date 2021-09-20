@@ -18,11 +18,7 @@ public class TobeProduct {
     @Embedded
     private ProductPrice price;
 
-    public TobeProduct() {
-    }
-
-    public TobeProduct(ProductName name, ProductPrice price) {
-        this(UUID.randomUUID(), name, price);
+    protected TobeProduct() {
     }
 
     public TobeProduct(UUID id, ProductName name, ProductPrice price) {
@@ -41,9 +37,5 @@ public class TobeProduct {
 
     public BigDecimal getPrice() {
         return price.getPrice();
-    }
-
-    public void changePrice(BigDecimal price) {
-        this.price.changePrice(price);
     }
 }

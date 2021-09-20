@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.tobeinfra.TobePurgomalumClient;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
