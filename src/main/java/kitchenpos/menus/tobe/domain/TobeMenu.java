@@ -95,7 +95,7 @@ public class TobeMenu {
         this.menuPrice = menuPrice;
     }
 
-    public void updateStatus() {
+    public void updateDisplayedStatus() {
         if (isMenuPriceOverSumPrice(menuPrice, menuProducts)) {
             hide();
         }

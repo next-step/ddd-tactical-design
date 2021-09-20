@@ -4,6 +4,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
+import kitchenpos.products.tobe.infra.ProductTranslator;
 import kitchenpos.products.tobe.ui.ProductForm;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,18 @@ public class TobeProductService {
     private final TobeProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final TobePurgomalumClient purgomalumClient;
+    private final ProductTranslator productTranslator;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
         final MenuRepository menuRepository,
-        final TobePurgomalumClient purgomalumClient
+        final TobePurgomalumClient purgomalumClient,
+        final ProductTranslator productTranslator
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.productTranslator = productTranslator;
     }
 
     @Transactional
@@ -46,25 +50,9 @@ public class TobeProductService {
 
         product.changePrice(request.getPrice());
 
-        beforeChangeMenuDisplay(productId);
+        productTranslator.menuUpdateDisplayedStatus(product.getId());
 
         return ProductForm.of(product);
-    }
-
-    // TODO : Menu 리팩토링 시 수정해야함.
-    private void beforeChangeMenuDisplay(UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
     }
 
     @Transactional(readOnly = true)

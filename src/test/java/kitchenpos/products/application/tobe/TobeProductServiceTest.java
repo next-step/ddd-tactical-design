@@ -4,6 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.TobeProductService;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.infra.ProductTranslator;
 import kitchenpos.products.tobe.ui.ProductForm;
 import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
@@ -27,6 +28,7 @@ class TobeProductServiceTest {
     private TobeProductRepository productRepository;
     private MenuRepository menuRepository;
     private TobePurgomalumClient purgomalumClient;
+    private ProductTranslator productTranslator;
     private TobeProductService productService;
 
     @BeforeEach
@@ -34,7 +36,8 @@ class TobeProductServiceTest {
         productRepository = new TobeInMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new TobeFakePurgomalumClient();
-        productService = new TobeProductService(productRepository, menuRepository, purgomalumClient);
+        productTranslator = new FakeProductTranslator();
+        productService = new TobeProductService(productRepository, menuRepository, purgomalumClient, productTranslator);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -89,16 +92,6 @@ class TobeProductServiceTest {
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
-
-    // TODO : 메뉴 리팩토링 할 때 변경 예정
-//    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-//    @Test
-//    void changePriceInMenu() {
-//        final Product product = productRepository.save(product("후라이드", 16_000L));
-//        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-//        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-//        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-//    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test

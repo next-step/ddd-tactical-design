@@ -75,6 +75,14 @@ public class TobeMenuService {
         return MenuForm.of(menu);
     }
 
+    @Transactional
+    public void updateDisplayedStutus(final UUID menuId) {
+        final TobeMenu menu = menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
+
+        menu.updateDisplayedStatus();
+    }
+
     @Transactional(readOnly = true)
     public List<MenuForm> findAll() {
         return menuRepository.findAll()
