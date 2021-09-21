@@ -24,7 +24,7 @@ public class Order {
             final UUID orderTableId,
             final OrderStatus orderStatus,
             final OrderLineItems orderLineItems,
-            final Validator<Order> validator
+            final Validator<Order> orderCreateValidator
     ) {
         this.id = id;
         this.orderTableId = orderTableId;
@@ -32,7 +32,7 @@ public class Order {
         this.orderLineItems = orderLineItems;
         this.orderDateTime = LocalDateTime.now();
 
-        validator.validate(this);
+        orderCreateValidator.validate(this);
     }
 
     public void proceed() {

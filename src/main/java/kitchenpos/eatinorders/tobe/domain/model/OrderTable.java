@@ -26,8 +26,8 @@ public class OrderTable {
         isEmpty = false;
     }
 
-    public void clear(final Validator<OrderTable> validator) {
-        validator.validate(this);
+    public void clear(final Validator<OrderTable> orderTableClearValidator) {
+        orderTableClearValidator.validate(this);
 
         isEmpty = true;
     }
