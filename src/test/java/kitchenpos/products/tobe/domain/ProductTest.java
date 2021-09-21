@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,10 +25,10 @@ class ProductTest {
     @Test
     void changeProductPrice() {
         Product product = product("후라이드", BigDecimal.valueOf(16000L), purgomalumClient);
-        ProductPrice changePrice = new ProductPrice(BigDecimal.valueOf(15000L));
+        Price changePrice = new Price(BigDecimal.valueOf(15000L));
 
         product.changePrice(changePrice);
 
-        assertThat(product.getPrice()).isEqualTo(changePrice.getPrice());
+        assertThat(product.getPrice()).isEqualTo(changePrice.getValue());
     }
 }

@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
@@ -11,9 +13,9 @@ public class ProductFixtures {
     }
 
     public static Product product(final String name, final BigDecimal price, final PurgomalumClient profanities) {
-        final ProductName productName = new ProductName(name, profanities);
-        final ProductPrice productprice = new ProductPrice(price);
-        final Product product = new Product(productName, productprice);
+        final Name productName = new Name(name, profanities);
+        final Price productPrice = new Price(price);
+        final Product product = new Product(productName, productPrice);
 
         return product;
     }
