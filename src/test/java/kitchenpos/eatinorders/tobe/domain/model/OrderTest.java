@@ -1,10 +1,16 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.model.Quantity;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
+import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,6 +25,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTest {
@@ -92,6 +99,42 @@ class OrderTest {
                 Arguments.of(new Waiting(), "Accepted"),
                 Arguments.of(new Accepted(), "Served"),
                 Arguments.of(new Served(), "Completed")
+        );
+    }
+
+    @DisplayName("주문은 주문 항목 목록 내 주문 가격과 메뉴 가격이 같지 않은 주문 항목이 있으면, IllegalArgumentException을 던진다.")
+    @Test
+    void validateOrderPrice() {
+        final UUID menuId = UUID.randomUUID();
+        final Menu menu = MENU_WITH_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
+        final OrderLineItem orderLineItem = new OrderLineItem(
+                UUID.randomUUID(),
+                menuId,
+                new Price(BigDecimal.valueOf(20_000L)),
+                1L
+        );
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
+
+        ThrowableAssert.ThrowingCallable when = () -> order.validateOrderPrice(Collections.singletonList(menu));
+
+        assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
+    }
+
+    private static Menu MENU_WITH_ID_AND_PRICE(final UUID id, final Price price) {
+        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
+        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
+
+        return new Menu(
+                id,
+                new DisplayedName("후라이드치킨"),
+                price,
+                menuProducts,
+                UUID.randomUUID(),
+                true,
+                menu -> {
+                }
         );
     }
 }

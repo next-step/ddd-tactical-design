@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.service.Validator;
+import kitchenpos.menus.tobe.domain.model.Menu;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,10 @@ public class Order {
 
     public List<UUID> getMenuIds() {
         return orderLineItems.getMenuIds();
+    }
+
+    public void validateOrderPrice(final List<Menu> menus) {
+        orderLineItems.validateOrderPrice(menus);
     }
 
     public UUID getId() {
