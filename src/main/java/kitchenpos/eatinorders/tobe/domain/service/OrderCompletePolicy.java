@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 public class OrderCompletePolicy implements Policy<Order> {
 
     private final OrderTableRepository orderTableRepository;
+
     private final Validator<OrderTable> orderTableClearValidator;
 
     public OrderCompletePolicy(
