@@ -12,9 +12,9 @@ import java.util.function.Predicate;
 
 public class OrderCreateValidator implements Validator<Order> {
 
-    final OrderTableRepository orderTableRepository;
+    private final OrderTableRepository orderTableRepository;
 
-    final MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
 
     public OrderCreateValidator(final OrderTableRepository orderTableRepository, final MenuRepository menuRepository) {
         this.orderTableRepository = orderTableRepository;
