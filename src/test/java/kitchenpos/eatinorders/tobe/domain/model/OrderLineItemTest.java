@@ -1,14 +1,23 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.model.Quantity;
+import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderLineItemTest {
@@ -38,5 +47,39 @@ class OrderLineItemTest {
         final OrderLineItem orderLineItem = new OrderLineItem(UUID.randomUUID(), UUID.randomUUID(), price, quantity);
 
         assertThat(orderLineItem.getAmount()).isEqualTo(price.value().multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    @DisplayName("주문 항목 목록은 주문 가격과 메뉴 가격이 같지 않은 주문 항목이 있으면, IllegalArgumentException을 던진다.")
+    @Test
+    void validateOrderPrice() {
+        final UUID menuId = UUID.randomUUID();
+        final Menu menu = MENU_WITH_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
+        final OrderLineItem orderLineItem = new OrderLineItem(
+                UUID.randomUUID(),
+                menuId,
+                new Price(BigDecimal.valueOf(20_000L)),
+                1L
+        );
+
+        ThrowableAssert.ThrowingCallable when = () -> orderLineItem.validateOrderPrice(menu);
+
+        assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
+    }
+
+    private static Menu MENU_WITH_ID_AND_PRICE(final UUID id, final Price price) {
+        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
+        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
+
+        return new Menu(
+                id,
+                new DisplayedName("후라이드치킨"),
+                price,
+                menuProducts,
+                UUID.randomUUID(),
+                true,
+                menu -> {
+                }
+        );
     }
 }
