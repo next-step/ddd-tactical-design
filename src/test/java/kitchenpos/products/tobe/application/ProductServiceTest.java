@@ -1,11 +1,11 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static kitchenpos.products.tobe.domain.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ProductServiceTest {
@@ -51,7 +50,7 @@ public class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient)).getId();
-        final Product expected = new Product(new ProductPrice(BigDecimal.valueOf(15_000L)));
+        final Product expected = new Product(new Price(BigDecimal.valueOf(15_000L)));
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
