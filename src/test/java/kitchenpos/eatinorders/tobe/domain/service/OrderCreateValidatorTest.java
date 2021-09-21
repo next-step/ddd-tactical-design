@@ -33,7 +33,7 @@ class OrderCreateValidatorTest {
 
     private Validator<Order> orderCreateValidator;
 
-    private final Validator<Order> dummyValidator = order -> {
+    private final Validator<Order> dummyOrderCreateValidator = order -> {
     };
 
     @BeforeEach
@@ -53,7 +53,13 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = new Order(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new Waiting(),
+                orderLineItems,
+                dummyOrderCreateValidator
+        );
 
         ThrowableAssert.ThrowingCallable when = () -> orderCreateValidator.validate(order);
 
@@ -73,10 +79,17 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = new Order(
+                UUID.randomUUID(),
+                orderTable.getId(),
+                new Waiting(),
+                orderLineItems,
+                dummyOrderCreateValidator
+        );
 
         ThrowableAssert.ThrowingCallable when = () -> {
-            orderTable.clear();
+            orderTable.clear(dummy -> {
+            });
             orderCreateValidator.validate(order);
         };
 
@@ -96,7 +109,13 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = new Order(
+                UUID.randomUUID(),
+                orderTable.getId(),
+                new Waiting(),
+                orderLineItems,
+                dummyOrderCreateValidator
+        );
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -111,22 +130,7 @@ class OrderCreateValidatorTest {
     @Test
     void 비노출_메뉴_포함_실패() {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
-
-        final DisplayedName displayedName = new DisplayedName("후라이드치킨");
-        final Price price = new Price(BigDecimal.valueOf(16_000L));
-        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
-        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
-        final Validator<Menu> validator = menu -> {
-        };
-        final Menu menu = menuRepository.save(new Menu(
-                UUID.randomUUID(),
-                displayedName,
-                price,
-                menuProducts,
-                UUID.randomUUID(),
-                true,
-                validator
-        ));
+        final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
 
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
@@ -135,7 +139,13 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = new Order(
+                UUID.randomUUID(),
+                orderTable.getId(),
+                new Waiting(),
+                orderLineItems,
+                dummyOrderCreateValidator
+        );
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -151,22 +161,7 @@ class OrderCreateValidatorTest {
     @Test
     void 가격_불일치_실패() {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
-
-        final DisplayedName displayedName = new DisplayedName("후라이드치킨");
-        final Price price = new Price(BigDecimal.valueOf(16_000L));
-        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
-        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
-        final Validator<Menu> validator = menu -> {
-        };
-        final Menu menu = menuRepository.save(new Menu(
-                UUID.randomUUID(),
-                displayedName,
-                price,
-                menuProducts,
-                UUID.randomUUID(),
-                true,
-                validator
-        ));
+        final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
 
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
@@ -175,7 +170,13 @@ class OrderCreateValidatorTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = new Order(
+                UUID.randomUUID(),
+                orderTable.getId(),
+                new Waiting(),
+                orderLineItems,
+                dummyOrderCreateValidator
+        );
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -185,6 +186,23 @@ class OrderCreateValidatorTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
+    }
+
+    private static Menu MENU_WITH_PRICE(final Price price) {
+        final DisplayedName displayedName = new DisplayedName("후라이드치킨");
+        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
+        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
+
+        return new Menu(
+                UUID.randomUUID(),
+                displayedName,
+                price,
+                menuProducts,
+                UUID.randomUUID(),
+                true,
+                menu -> {
+                }
+        );
     }
 
     private static OrderTable DEFAULT_ORDER_TABLE() {
