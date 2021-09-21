@@ -68,7 +68,7 @@ class OrderTest {
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
         final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderStatus, orderLineItems, dummyValidator);
 
-        order.proceed();
+        order.proceed(dummy -> {});
 
         assertThat(order.getStatus()).isEqualTo(orderStatusValue);
     }

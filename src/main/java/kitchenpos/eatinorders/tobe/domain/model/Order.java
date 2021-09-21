@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.menus.tobe.domain.model.Menu;
 
@@ -35,12 +36,10 @@ public class Order {
         orderCreateValidator.validate(this);
     }
 
-    public void proceed() {
+    public void proceed(final Policy<Order> orderCompletePolicy) {
         orderStatus = orderStatus.proceed();
-    }
 
-    public List<UUID> getMenuIds() {
-        return orderLineItems.getMenuIds();
+        orderCompletePolicy.enforce(this);
     }
 
     public void validateOrderPrice(final List<Menu> menus) {
@@ -57,6 +56,10 @@ public class Order {
 
     public String getStatus() {
         return orderStatus.getStatus();
+    }
+
+    public List<UUID> getMenuIds() {
+        return orderLineItems.getMenuIds();
     }
 
     public LocalDateTime getOrderDateTime() {
