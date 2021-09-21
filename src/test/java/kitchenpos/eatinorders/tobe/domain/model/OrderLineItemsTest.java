@@ -1,11 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
-import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
-import kitchenpos.commons.tobe.domain.model.Quantity;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
-import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static kitchenpos.eatinorders.tobe.domain.fixture.MenuFixture.MENU_WITH_ID_AND_PRICE;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -25,12 +23,7 @@ class OrderLineItemsTest {
     @DisplayName("주문 항목 목록을 생성한다.")
     @Test
     void 생성_성공() {
-        final OrderLineItem orderLineItem = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(16_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
 
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
 
@@ -49,18 +42,8 @@ class OrderLineItemsTest {
     @DisplayName("주문 항목 목록은 주문 항목의 금액의 합을 반환한다.")
     @Test
     void 메뉴_식별자_목록_반환_성공() {
-        final OrderLineItem orderLineItem1 = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(16_000L)),
-                1L
-        );
-        final OrderLineItem orderLineItem2 = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(16_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem1 = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItem orderLineItem2 = DEFAULT_ORDER_LINE_ITEM();
 
         final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
 
@@ -77,22 +60,23 @@ class OrderLineItemsTest {
     }
 
     private static Stream<Arguments> provideArguments() {
+        final Price price = new Price(BigDecimal.valueOf(16_000L));
         final UUID menuId1 = UUID.randomUUID();
         final UUID menuId2 = UUID.randomUUID();
 
         return Stream.of(
                 Arguments.of(
                         Arrays.asList(
-                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), 1L),
-                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), -1L)
+                                new OrderLineItem(UUID.randomUUID(), menuId1, price, 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId1, price, -1L)
                         ),
                         true
                 ),
                 Arguments.of(
                         Arrays.asList(
-                                new OrderLineItem(UUID.randomUUID(), menuId1, new Price(BigDecimal.valueOf(16_000L)), 1L),
-                                new OrderLineItem(UUID.randomUUID(), menuId2, new Price(BigDecimal.valueOf(16_000L)), 1L),
-                                new OrderLineItem(UUID.randomUUID(), menuId2, new Price(BigDecimal.valueOf(16_000L)), -2L)
+                                new OrderLineItem(UUID.randomUUID(), menuId1, price, 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId2, price, 1L),
+                                new OrderLineItem(UUID.randomUUID(), menuId2, price, -2L)
                         ),
                         false
                 )
@@ -116,21 +100,5 @@ class OrderLineItemsTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
-    }
-
-    private static Menu MENU_WITH_ID_AND_PRICE(final UUID id, final Price price) {
-        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
-        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
-
-        return new Menu(
-                id,
-                new DisplayedName("후라이드치킨"),
-                price,
-                menuProducts,
-                UUID.randomUUID(),
-                true,
-                menu -> {
-                }
-        );
     }
 }

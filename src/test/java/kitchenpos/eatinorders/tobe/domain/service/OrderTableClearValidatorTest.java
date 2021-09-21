@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain.service;
 
-import kitchenpos.commons.tobe.domain.model.DisplayedName;
-import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.*;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
@@ -13,10 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.UUID;
-
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderFixture.ORDER_WITH_TABLE_AND_STATUS;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderTableFixture.DEFAULT_ORDER_TABLE;
 import static org.assertj.core.api.Assertions.*;
 
 class OrderTableClearValidatorTest {
@@ -54,33 +50,5 @@ class OrderTableClearValidatorTest {
         } catch (IllegalStateException e) {
             fail("IllegalStateException을 던지지 않아야 한다.");
         }
-    }
-
-    static OrderTable DEFAULT_ORDER_TABLE() {
-        return new OrderTable(
-                UUID.randomUUID(),
-                new DisplayedName("1번 테이블"),
-                new NumberOfGuests(0L)
-        );
-    }
-
-    static Order ORDER_WITH_TABLE_AND_STATUS(final OrderTable ordertable, final OrderStatus orderStatus) {
-        return new Order(
-                UUID.randomUUID(),
-                ordertable.getId(),
-                orderStatus,
-                new OrderLineItems(
-                        Collections.singletonList(
-                                new OrderLineItem(
-                                        UUID.randomUUID(),
-                                        UUID.randomUUID(),
-                                        new Price(BigDecimal.valueOf(16_000L)),
-                                        1L
-                                )
-                        )
-                ),
-                order -> {
-                }
-        );
     }
 }

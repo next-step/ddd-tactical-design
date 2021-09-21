@@ -1,15 +1,11 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
-import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
-import kitchenpos.commons.tobe.domain.model.Quantity;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
-import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +20,8 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static kitchenpos.eatinorders.tobe.domain.fixture.MenuFixture.MENU_WITH_ID_AND_PRICE;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -36,12 +34,7 @@ class OrderTest {
     @DisplayName("주문을 생성한다.")
     @Test
     void 생성_성공() {
-        final OrderLineItem orderLineItem = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
         final OrderStatus orderStatus = new Waiting();
 
@@ -59,16 +52,12 @@ class OrderTest {
     @ParameterizedTest
     @MethodSource("provideArguments")
     void 상태_진행_성공(final OrderStatus orderStatus, final String orderStatusValue) {
-        final OrderLineItem orderLineItem = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
         final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderStatus, orderLineItems, dummyValidator);
 
-        order.proceed(dummy -> {});
+        order.proceed(dummy -> {
+        });
 
         assertThat(order.getStatus()).isEqualTo(orderStatusValue);
     }
@@ -76,18 +65,8 @@ class OrderTest {
     @DisplayName("주문은 메뉴 식별자 목록을 반환한다.")
     @Test
     void 메뉴_식별자_목록_반환_성공() {
-        final OrderLineItem orderLineItem1 = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
-        final OrderLineItem orderLineItem2 = new OrderLineItem(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem1 = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItem orderLineItem2 = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
         final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
 
@@ -120,21 +99,5 @@ class OrderTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
-    }
-
-    private static Menu MENU_WITH_ID_AND_PRICE(final UUID id, final Price price) {
-        final MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), price, new Quantity(1L));
-        final MenuProducts menuProducts = new MenuProducts(Collections.singletonList(menuProduct));
-
-        return new Menu(
-                id,
-                new DisplayedName("후라이드치킨"),
-                price,
-                menuProducts,
-                UUID.randomUUID(),
-                true,
-                menu -> {
-                }
-        );
     }
 }

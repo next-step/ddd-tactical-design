@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderTableFixture.DEFAULT_ORDER_TABLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -46,7 +47,8 @@ class OrderTableTest {
     void 빈_테이블_설정_성공() {
         final OrderTable orderTable = DEFAULT_ORDER_TABLE();
 
-        orderTable.clear(dummy -> {});
+        orderTable.clear(dummy -> {
+        });
 
         assertThat(orderTable.isEmpty()).isTrue();
     }
@@ -75,9 +77,5 @@ class OrderTableTest {
 
         assertThatThrownBy(when).isInstanceOf(IllegalStateException.class)
                 .hasMessage("빈 테이블의 방문한 손님 수는 0에서 변경할 수 없습니다.");
-    }
-
-    private OrderTable DEFAULT_ORDER_TABLE() {
-        return new OrderTable(UUID.randomUUID(), new DisplayedName("1번 테이블"), new NumberOfGuests(0L));
     }
 }
