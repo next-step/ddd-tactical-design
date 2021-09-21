@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 import kitchenpos.menus.tobe.domain.model.Menu;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,10 @@ public class Order {
 
     public void validateOrderPrice(final List<Menu> menus) {
         orderLineItems.validateOrderPrice(menus);
+    }
+
+    public boolean isCompleted() {
+        return orderStatus.equals(new Completed());
     }
 
     public UUID getId() {

@@ -27,7 +27,8 @@ class OrderCompletePolicyTest {
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderCompletePolicy = new OrderCompletePolicy(orderTableRepository);
+        orderCompletePolicy = new OrderCompletePolicy(orderTableRepository, dummy -> {
+        });
     }
 
     @DisplayName("주문이 계산 완료되면, 주문 테이블의 방문한 손님 수를 0으로 변경하고, 빈 테이블로 설정한다")
