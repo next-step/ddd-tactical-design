@@ -1,13 +1,13 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service(value = "TobeProductService")
@@ -36,8 +35,8 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
-        final ProductPrice price = new ProductPrice(request.getPrice());
-        final ProductName name = new ProductName(request.getName(), purgomalumClient);
+        final Price price = new Price(request.getPrice());
+        final Name name = new Name(request.getName(), purgomalumClient);
 
         final Product product = new Product(UUID.randomUUID(), name, price);
         return productRepository.save(product);
@@ -45,7 +44,7 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final ProductPrice price = new ProductPrice(request.getPrice());
+        final Price price = new Price(request.getPrice());
 
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
