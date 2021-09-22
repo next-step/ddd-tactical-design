@@ -32,17 +32,4 @@ public class TobeInMemoryMenuRepository implements TobeMenuRepository {
             .filter(menu -> ids.contains(menu.getId()))
             .collect(Collectors.toList());
     }
-
-    @Override
-    public List<TobeMenu> findAllByProductId(final UUID productId) {
-        return menus.values()
-            .stream()
-            .filter(
-                    menu -> menu.getMenuProducts()
-                            .getMenuProducts()
-                            .stream()
-                            .anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId))
-            )
-            .collect(Collectors.toList());
-    }
 }

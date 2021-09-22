@@ -1,16 +1,12 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.tobe.infra.ProductTranslator;
 import kitchenpos.products.tobe.ui.ProductForm;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -19,20 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class TobeProductService {
     private final TobeProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final TobePurgomalumClient purgomalumClient;
-    private final ProductTranslator productTranslator;
 
     public TobeProductService(
         final TobeProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final TobePurgomalumClient purgomalumClient,
-        final ProductTranslator productTranslator
+        final TobePurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
-        this.productTranslator = productTranslator;
     }
 
     @Transactional
@@ -49,8 +39,6 @@ public class TobeProductService {
             .orElseThrow(NoSuchElementException::new);
 
         product.changePrice(request.getPrice());
-
-        productTranslator.menuUpdateDisplayedStatus(product.getId());
 
         return ProductForm.of(product);
     }

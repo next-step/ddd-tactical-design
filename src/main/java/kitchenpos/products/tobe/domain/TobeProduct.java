@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "TobeProductsProduct")
 public class TobeProduct {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")

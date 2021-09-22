@@ -5,7 +5,6 @@ import kitchenpos.menus.tobe.domain.ProductPrice;
 import kitchenpos.menus.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.tobe.domain.TobeProduct;
 import kitchenpos.menus.tobe.ui.MenuProductForm;
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.tobe.application.TobeProductService;
 import kitchenpos.products.tobe.ui.ProductForm;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,6 @@ public class InfraMenuTranslator implements MenuTranslator {
         List<UUID> productIds = menuProductForms.stream()
                 .map(MenuProductForm::getProductId)
                 .collect(Collectors.toList());
-
 
         List<TobeMenuProduct> menuProducts = menuProductForms.stream()
                 .map(form -> {
