@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * ### 모델링
@@ -25,7 +26,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Embedded
     private ProductName name;
