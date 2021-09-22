@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.model.MenuGroup;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
@@ -41,14 +41,14 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final DisplayedName displayedName = new DisplayedName(request.getName(), profanities);
-        final Price price = new Price(request.getPrice());
+        final MenuPrice price = new MenuPrice(request.getPrice());
         final MenuProducts menuProducts = menuProductsTranslator.getMenuProducts(request.getMenuProducts());
         final Menu menu = new Menu(displayedName, price, menuGroup, true, menuProducts);
         return menuRepository.save(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Price price) {
+    public Menu changePrice(final UUID menuId, final MenuPrice price) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         return menu.changePrice(price);

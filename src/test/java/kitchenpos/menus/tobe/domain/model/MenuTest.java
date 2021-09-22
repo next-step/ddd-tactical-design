@@ -6,7 +6,6 @@ import static kitchenpos.fixture.MenuFixture.NOT_DISPLAYED_MENU;
 import static kitchenpos.fixture.MenuFixture.NOT_DISPLAYED_MENU_WITH_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import kitchenpos.common.tobe.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +31,8 @@ class MenuTest {
     @Test
     void changePrice() {
         final Menu menu = MENU1();
-        final Menu priceChangedMenu = menu.changePrice(new Price(20000L));
-        assertThat(priceChangedMenu.getPrice()).isEqualTo(new Price(20000L));
+        final Menu priceChangedMenu = menu.changePrice(new MenuPrice(20000L));
+        assertThat(priceChangedMenu.getMenuPrice()).isEqualTo(new MenuPrice(20000L));
     }
 
     @DisplayName("changePrice - Menu의 가격이 MenuProducts의 금액의 합보다 크면 NotDisplayedMenu가 된다.")
@@ -41,7 +40,7 @@ class MenuTest {
     void hideMenuWhenChangingPrice() {
         final Menu menu = MENU1();
 
-        final Menu priceChangedMenu = menu.changePrice(new Price(EXPENSIVE_PRICE));
+        final Menu priceChangedMenu = menu.changePrice(new MenuPrice(EXPENSIVE_PRICE));
         assertThat(priceChangedMenu.isDisplayed()).isFalse();
     }
 

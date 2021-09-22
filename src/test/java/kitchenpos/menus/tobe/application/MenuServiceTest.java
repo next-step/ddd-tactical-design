@@ -15,7 +15,7 @@ import java.util.UUID;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
@@ -70,7 +70,7 @@ class MenuServiceTest {
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(new DisplayedName(expected.getName(), profanities)),
-            () -> assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice())),
+            () -> assertThat(actual.getMenuPrice()).isEqualTo(new MenuPrice(expected.getPrice())),
             () -> assertThat(actual.getMenuGroup()
                 .getId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
@@ -143,9 +143,9 @@ class MenuServiceTest {
     void changePrice() {
         final Menu menu = MENU1();
         menuRepository.save(menu);
-        final Price price = new Price(16_000L);
+        final MenuPrice price = new MenuPrice(16_000L);
         final Menu actual = menuService.changePrice(menu.getId(), price);
-        assertThat(actual.getPrice()).isEqualTo(price);
+        assertThat(actual.getMenuPrice()).isEqualTo(price);
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -153,7 +153,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        assertThatThrownBy(() -> new Price(price))
+        assertThatThrownBy(() -> new MenuPrice(price))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -162,7 +162,7 @@ class MenuServiceTest {
     void changePriceExpensive() {
         final Menu menu = MENU1();
         menuRepository.save(menu);
-        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), new Price(100_000L)))
+        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), new MenuPrice(100_000L)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 

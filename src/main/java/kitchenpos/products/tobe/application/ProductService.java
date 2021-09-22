@@ -3,10 +3,10 @@ package kitchenpos.products.tobe.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.model.ProductPrice;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductRequestDto;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Price price) {
+    public Product changePrice(final UUID productId, final ProductPrice price) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
 

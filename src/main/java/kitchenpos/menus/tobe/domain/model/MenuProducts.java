@@ -1,15 +1,13 @@
 package kitchenpos.menus.tobe.domain.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.model.ProductPrice;
 
 @Embeddable
 public class MenuProducts {
@@ -34,10 +32,10 @@ public class MenuProducts {
         return menuProducts;
     }
 
-    public Price getTotalPrice() {
+    public ProductPrice getTotalPrice() {
         return menuProducts.stream()
             .map(MenuProduct::getMenuProductPrice)
-            .reduce(Price.ZERO, Price::add);
+            .reduce(ProductPrice.ZERO, ProductPrice::add);
     }
 
 }

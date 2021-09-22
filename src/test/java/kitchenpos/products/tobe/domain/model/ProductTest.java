@@ -6,7 +6,6 @@ import static kitchenpos.fixture.ProductFixture.PRODUCT_WITH_PRICE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import kitchenpos.common.tobe.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,7 +17,7 @@ class ProductTest {
     @ValueSource(longs = {-1, -1000L, Long.MIN_VALUE})
     void wrongPrice(final long price) {
         assertThatThrownBy(
-            () -> PRODUCT_WITH_PRICE(new Price(price))
+            () -> PRODUCT_WITH_PRICE(new ProductPrice(price))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -36,7 +35,7 @@ class ProductTest {
     @ValueSource(longs = {0, 1, 1000, Long.MAX_VALUE})
     void changePrice(final long price) {
         final Product product = PRODUCT1();
-        final Price anotherPrice = new Price(price);
+        final ProductPrice anotherPrice = new ProductPrice(price);
 
         final Product changedProduct = product.changePrice(anotherPrice);
 

@@ -5,9 +5,9 @@ import static kitchenpos.fixture.ProductFixture.PRODUCT1;
 import static kitchenpos.fixture.ProductFixture.PRODUCT2;
 
 import java.util.UUID;
-import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.domain.model.Quantity;
+import kitchenpos.products.tobe.domain.model.ProductPrice;
 
 public class MenuProductFixture {
 
@@ -23,7 +23,7 @@ public class MenuProductFixture {
     }
 
     public static MenuProduct WRONG_PRODUCT() {
-        return new MenuProduct(THREE, UUID.randomUUID(), new Price(0L));
+        return new MenuProduct(THREE, UUID.randomUUID(), new ProductPrice(0L));
     }
 
     public static MenuProduct CHEAP_MENU_PRODUCT() {

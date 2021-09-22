@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.model.ProductPrice;
 
 @Table(name = "menu_product")
 @Entity(name = "tobeMenuProduct")
@@ -31,18 +31,18 @@ public class MenuProduct {
     private UUID productId;
 
     @Transient
-    private Price productPrice;
+    private ProductPrice productPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(final Quantity quantity, final UUID productId, final Price productPrice) {
+    public MenuProduct(final Quantity quantity, final UUID productId, final ProductPrice productPrice) {
         this.quantity = quantity;
         this.productId = productId;
         this.productPrice = productPrice;
     }
 
-    public Price getMenuProductPrice() {
+    public ProductPrice getMenuProductPrice() {
         return productPrice.multiply(quantity);
     }
 

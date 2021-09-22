@@ -3,8 +3,8 @@ package kitchenpos.products.tobe.dto;
 import java.math.BigDecimal;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.model.ProductPrice;
 
 public class ProductRequestDto {
 
@@ -31,7 +31,7 @@ public class ProductRequestDto {
     }
 
     public Product toEntity() {
-        return new Product(new DisplayedName(this.name, profanities), new Price(price));
+        return new Product(new DisplayedName(this.name, profanities), new ProductPrice(price));
     }
 
 }

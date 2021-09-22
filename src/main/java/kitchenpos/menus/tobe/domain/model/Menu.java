@@ -25,7 +25,7 @@ public class Menu {
     private DisplayedName name;
 
     @Embedded
-    private Price price;
+    private MenuPrice menuPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -44,28 +44,28 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final DisplayedName name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProduct ... menuProductArr) {
-        this(name, price, menuGroup, displayed, new MenuProducts(Arrays.asList(menuProductArr)));
+    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProduct ... menuProductArr) {
+        this(name, menuPrice, menuGroup, displayed, new MenuProducts(Arrays.asList(menuProductArr)));
     }
 
-    public Menu(final DisplayedName name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.name = name;
-        this.price = price;
+        this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        isValidPrice(price);
+        isValidPrice(menuPrice);
     }
 
-    public Menu changePrice(final Price price) {
-        isValidPrice(price);
-        this.price = price;
+    public Menu changePrice(final MenuPrice menuPrice) {
+        isValidPrice(menuPrice);
+        this.menuPrice = menuPrice;
         return this;
     }
 
     public Menu display() {
-        isValidPrice(price);
+        isValidPrice(menuPrice);
         this.displayed = true;
         return this;
     }
@@ -89,8 +89,8 @@ public class Menu {
         return name;
     }
 
-    public Price getPrice() {
-        return price;
+    public MenuPrice getMenuPrice() {
+        return menuPrice;
     }
 
     public boolean isDisplayed() {
