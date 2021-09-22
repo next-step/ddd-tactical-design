@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import kitchenpos.common.infra.Profanities;
+import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.model.Menu;
@@ -20,8 +22,6 @@ import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.dto.MenuRequestDto;
 import kitchenpos.menus.tobe.infra.MenuProductsTranslator;
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.application.TobeInMemoryProductRepository;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -33,12 +33,13 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class MenuServiceTest {
+
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private Profanities profanities;
     private MenuProductsTranslator menuProductsTranslator;
     private MenuService menuService;
     private UUID menuGroupId;
@@ -49,10 +50,10 @@ class MenuServiceTest {
         menuRepository = new TobeInMemoryMenuRepository();
         menuGroupRepository = new TobeInMemoryMenuGroupRepository();
         productRepository = new TobeInMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        profanities = new FakeProfanities();
         menuProductsTranslator = new MenuProductsTranslator(productRepository);
 
-        menuService = new MenuService(menuRepository, menuGroupRepository, purgomalumClient, menuProductsTranslator);
+        menuService = new MenuService(menuRepository, menuGroupRepository, profanities, menuProductsTranslator);
         menuGroupId = menuGroupRepository.save(MENU_GROUP1())
             .getId();
         product = productRepository.save(PRODUCT1());
@@ -68,11 +69,13 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(new DisplayedName(expected.getName(), purgomalumClient)),
+            () -> assertThat(actual.getName()).isEqualTo(new DisplayedName(expected.getName(), profanities)),
             () -> assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice())),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroup()
+                .getId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts().getMenuProducts()).hasSize(1)
+            () -> assertThat(actual.getMenuProducts()
+                .getMenuProducts()).hasSize(1)
         );
     }
 
