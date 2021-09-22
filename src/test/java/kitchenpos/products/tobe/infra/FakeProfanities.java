@@ -1,4 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.infra;
+
+import kitchenpos.products.tobe.domain.Profanities;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,7 @@ public class FakeProfanities implements Profanities {
 
     @Override
     public boolean contains(final String text) {
-        return profanities.contains(text);
+        return profanities.stream()
+                .anyMatch(profanity -> text.contains(profanity));
     }
 }
