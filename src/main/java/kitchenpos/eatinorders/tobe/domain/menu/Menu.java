@@ -1,16 +1,16 @@
-package kitchenpos.eatinorders.tobe.dto;
+package kitchenpos.eatinorders.tobe.domain.menu;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class MenuResponse {
+public class Menu {
     private UUID id;
     private String name;
     private BigDecimal price;
-    private MenuGroupResponse menuGroup;
+    private MenuGroup menuGroup;
     private boolean displayed;
 
-    protected MenuResponse() {}
+    protected Menu() {}
 
     public UUID getId() {
         return id;
@@ -24,7 +24,7 @@ public class MenuResponse {
         return price;
     }
 
-    public MenuGroupResponse getMenuGroup() {
+    public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 

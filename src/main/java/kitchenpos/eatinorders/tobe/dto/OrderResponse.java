@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.dto;
 
+import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
 
@@ -14,14 +15,14 @@ public class OrderResponse {
     private OrderType type;
     private OrderStatus status;
     private LocalDateTime orderDateTime;
-    private List<OrderLineItemResponse> orderLineItems;
+    private List<OrderLineItem> orderLineItems;
     private String deliveryAddress;
     private OrderTableResponse orderTable;
     private UUID orderTableId;
 
     protected OrderResponse() {}
 
-    public OrderResponse(final UUID id, final OrderType type, final OrderStatus status, final LocalDateTime orderDateTime, final List<OrderLineItemResponse> orderLineItems, final String deliveryAddress, final OrderTableResponse orderTable, final UUID orderTableId) {
+    public OrderResponse(final UUID id, final OrderType type, final OrderStatus status, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final OrderTableResponse orderTable, final UUID orderTableId) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -48,7 +49,7 @@ public class OrderResponse {
         return orderDateTime;
     }
 
-    public List<OrderLineItemResponse> getOrderLineItems() {
+    public List<OrderLineItem> getOrderLineItems() {
         return new ArrayList<>(orderLineItems);
     }
 

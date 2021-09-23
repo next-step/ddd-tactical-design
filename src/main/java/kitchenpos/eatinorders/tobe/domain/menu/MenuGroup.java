@@ -1,12 +1,12 @@
-package kitchenpos.eatinorders.tobe.dto;
+package kitchenpos.eatinorders.tobe.domain.menu;
 
 import java.util.UUID;
 
-public class MenuGroupResponse {
+public class MenuGroup {
     private UUID id;
     private String name;
 
-    protected MenuGroupResponse() {}
+    protected MenuGroup() {}
 
     public UUID getId() {
         return id;

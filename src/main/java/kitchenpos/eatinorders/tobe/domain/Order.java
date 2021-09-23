@@ -2,10 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
 import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
@@ -29,8 +26,14 @@ public class Order {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @Embedded
-    private OrderLineItems orderLineItems;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "order_id",
+            nullable = false,
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+    )
+    private List<OrderLineItem> orderLineItems;
 
     @Column(name = "delivery_address")
     private String deliveryAddress;
@@ -44,7 +47,7 @@ public class Order {
 
     protected Order() {}
 
-    public Order(final OrderType type, final OrderLineItems orderLineItems, final String deliveryAddress, final UUID orderTableId, final OrderTableTranslator orderTableTranslator) {
+    public Order(final OrderType type, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final UUID orderTableId, final OrderTableTranslator orderTableTranslator) {
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException("type 은 필수값입니다.");
         }
@@ -64,7 +67,7 @@ public class Order {
         this.type = type;
         this.status = WAITING;
         this.orderDateTime = LocalDateTime.now();
-        this.orderLineItems = orderLineItems;
+        this.orderLineItems = Collections.unmodifiableList(orderLineItems);
         this.deliveryAddress = deliveryAddress;
         this.orderTableId = orderTableId;
     }
@@ -86,7 +89,7 @@ public class Order {
     }
 
     public List<OrderLineItem> getOrderLineItems() {
-        return new ArrayList<>(orderLineItems.getOrderLineItems());
+        return new ArrayList<>(orderLineItems);
     }
 
     public String getDeliveryAddress() {

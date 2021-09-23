@@ -31,9 +31,9 @@ public class OrderService {
     @Transactional
     public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
-        final OrderLineItems orderLineItems = new OrderLineItems(request.getOrderLineItems().stream()
+        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
                 .map(item -> new OrderLineItem(item.getMenuId(), item.getQuantity(), item.getPrice()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
         final Order order = new Order(
                 request.getType(),
                 orderLineItems,
@@ -102,7 +102,7 @@ public class OrderService {
                 order.getType(),
                 order.getStatus(),
                 order.getOrderDateTime(),
-                orderDomainService.getOrderLineItems(order),
+                order.getOrderLineItems(),
                 order.getDeliveryAddress(),
                 orderTableTranslator.getOrderTable(order.getOrderTableId()),
                 order.getOrderTableId()
