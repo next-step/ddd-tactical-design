@@ -4,7 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.model.OrderStatus;
 
 public class Waiting implements OrderStatus {
 
-    private final String status = "Waiting";
+    private static final String status = "Waiting";
 
     @Override
     public OrderStatus proceed() {

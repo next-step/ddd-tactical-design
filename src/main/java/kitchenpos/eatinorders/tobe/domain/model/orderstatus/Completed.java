@@ -4,7 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.model.OrderStatus;
 
 public class Completed implements OrderStatus {
 
-    private final String status = "Completed";
+    private static final String status = "Completed";
 
     @Override
     public OrderStatus proceed() throws IllegalStateException {

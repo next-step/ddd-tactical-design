@@ -4,7 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.model.OrderStatus;
 
 public class Served implements OrderStatus {
 
-    private final String status = "Served";
+    private static final String status = "Served";
 
     @Override
     public OrderStatus proceed() {
