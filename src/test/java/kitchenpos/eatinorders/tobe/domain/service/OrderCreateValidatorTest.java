@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static kitchenpos.eatinorders.tobe.domain.fixture.MenuFixture.MENU_WITH_PRICE;
-import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.*;
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderTableFixture.DEFAULT_ORDER_TABLE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -95,7 +95,7 @@ class OrderCreateValidatorTest {
     void 비노출_메뉴_포함_실패() {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
         final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
-        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItem orderLineItem = ORDER_LINE_ITEM_WITH_MENU_ID(menu.getId());
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
         final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
@@ -114,7 +114,7 @@ class OrderCreateValidatorTest {
     void 가격_불일치_실패() {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
         final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
-        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItem orderLineItem = ORDER_LINE_ITEM_WITH_MENU_ID_AND_PRICE(menu.getId(), 20_000L);
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
         final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
