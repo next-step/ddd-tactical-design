@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.tobe.infra;
 
 import kitchenpos.eatinorders.tobe.domain.MenuTranslator;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
-import kitchenpos.eatinorders.tobe.dto.FilteredMenuRequest;
 import kitchenpos.eatinorders.tobe.dto.MenuResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,7 @@ public class ApiMenuTranslator implements MenuTranslator {
 
     @Override
     public List<MenuResponse> getMenus(final List<UUID> menuIds) {
-        return Arrays.asList(restTemplate.postForObject("http://localhost:8080/api/tobe/menus/filtered", new FilteredMenuRequest(menuIds), MenuResponse[].class));
+        return Arrays.asList(restTemplate.postForObject("http://localhost:8080/api/tobe/menus/filtered", menuIds, MenuResponse[].class));
     }
 
     @Override

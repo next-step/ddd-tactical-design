@@ -3,6 +3,8 @@ package kitchenpos.menus.tobe.dto;
 import kitchenpos.menus.tobe.domain.Menu;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,7 +24,7 @@ public class MenuResponse {
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = Collections.unmodifiableList(menuProducts);
         this.menuGroupId = menuGroupId;
     }
 
@@ -47,7 +49,7 @@ public class MenuResponse {
     }
 
     public List<MenuProductResponse> getMenuProducts() {
-        return menuProducts;
+        return new ArrayList<>(menuProducts);
     }
 
     public UUID getMenuGroupId() {
