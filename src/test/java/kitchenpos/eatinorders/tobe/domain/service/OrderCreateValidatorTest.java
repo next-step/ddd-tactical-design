@@ -3,7 +3,6 @@ package kitchenpos.eatinorders.tobe.domain.service;
 import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.*;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryMenuRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
@@ -47,13 +46,7 @@ class OrderCreateValidatorTest {
     void 주문_테이블_누락_실패() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Waiting(),
-                orderLineItems,
-                dummyOrderCreateValidator
-        );
+        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyOrderCreateValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> orderCreateValidator.validate(order);
 
@@ -67,13 +60,7 @@ class OrderCreateValidatorTest {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(
-                UUID.randomUUID(),
-                orderTable.getId(),
-                new Waiting(),
-                orderLineItems,
-                dummyOrderCreateValidator
-        );
+        final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.clear(dummy -> {
@@ -92,13 +79,7 @@ class OrderCreateValidatorTest {
 
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(
-                UUID.randomUUID(),
-                orderTable.getId(),
-                new Waiting(),
-                orderLineItems,
-                dummyOrderCreateValidator
-        );
+        final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -116,13 +97,7 @@ class OrderCreateValidatorTest {
         final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(
-                UUID.randomUUID(),
-                orderTable.getId(),
-                new Waiting(),
-                orderLineItems,
-                dummyOrderCreateValidator
-        );
+        final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();
@@ -141,13 +116,7 @@ class OrderCreateValidatorTest {
         final Menu menu = menuRepository.save(MENU_WITH_PRICE(new Price(BigDecimal.valueOf(16_000L))));
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(
-                UUID.randomUUID(),
-                orderTable.getId(),
-                new Waiting(),
-                orderLineItems,
-                dummyOrderCreateValidator
-        );
+        final Order order = Order.of(UUID.randomUUID(), orderTable.getId(), orderLineItems, dummyOrderCreateValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> {
             orderTable.sit();

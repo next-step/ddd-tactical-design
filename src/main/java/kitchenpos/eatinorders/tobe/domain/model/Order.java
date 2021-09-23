@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.domain.model;
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.menus.tobe.domain.model.Menu;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,15 @@ public class Order {
         this.orderDateTime = LocalDateTime.now();
 
         orderCreateValidator.validate(this);
+    }
+
+    public static Order of(
+            final UUID id,
+            final UUID orderTableId,
+            final OrderLineItems orderLineItems,
+            final Validator<Order> orderCreateValidator
+    ) {
+        return new Order(id, orderTableId, new Waiting(), orderLineItems, orderCreateValidator);
     }
 
     public void proceed(final Policy<Order> orderCompletePolicy) {

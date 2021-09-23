@@ -48,6 +48,17 @@ class OrderTest {
         );
     }
 
+    @DisplayName("정적 생성자 메소드로 주문을 생성한다.")
+    @Test
+    void 정적_생성자_메소드로_객체_생성_성공() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+
+        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
+
+        assertThat(order.getStatus()).isEqualTo("Waiting");
+    }
+
     @DisplayName("주문은 다음 상태로 진행된다.")
     @ParameterizedTest
     @MethodSource("provideArguments")
@@ -68,7 +79,7 @@ class OrderTest {
         final OrderLineItem orderLineItem1 = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItem orderLineItem2 = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         assertThat(order.getMenuIds()).contains(orderLineItem1.getMenuId(), orderLineItem2.getMenuId());
     }
@@ -93,7 +104,7 @@ class OrderTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> order.validateOrderPrice(Collections.singletonList(menu));
 
