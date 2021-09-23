@@ -28,7 +28,7 @@ public class OrderCompletePolicy implements Policy<Order> {
             return;
         }
 
-        final OrderTable orderTable = orderTableRepository.findById(order.getTableId())
+        final OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())
                 .orElseThrow(() -> new NoSuchElementException("등록된 주문 테이블이 없습니다."));
         orderTable.changeNumberOfGuests(new NumberOfGuests(0L));
         orderTable.clear(orderTableClearValidator);

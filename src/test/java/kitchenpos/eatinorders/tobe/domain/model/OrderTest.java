@@ -42,7 +42,7 @@ class OrderTest {
 
         assertAll(
                 () -> assertThat(order.getId()).isNotNull(),
-                () -> assertThat(order.getTableId()).isNotNull(),
+                () -> assertThat(order.getOrderTableId()).isNotNull(),
                 () -> assertThat(order.getStatus()).isEqualTo(orderStatus.getStatus()),
                 () -> assertThat(order.getOrderDateTime()).isBefore(LocalDateTime.now())
         );

@@ -23,7 +23,7 @@ public class InMemoryOrderRepository implements OrderRepository {
     public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final OrderStatus orderStatus) {
         return orderMap.values()
                 .stream()
-                .filter(order -> order.getTableId().equals(orderTable.getId()))
+                .filter(order -> order.getOrderTableId().equals(orderTable.getId()))
                 .anyMatch(Predicate.not(order -> order.getStatus().equals(orderStatus.getStatus())));
     }
 }

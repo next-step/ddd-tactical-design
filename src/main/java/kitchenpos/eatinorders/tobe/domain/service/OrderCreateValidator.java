@@ -23,7 +23,7 @@ public class OrderCreateValidator implements Validator<Order> {
 
     @Override
     public void validate(final Order order) {
-        final OrderTable orderTable = orderTableRepository.findById(order.getTableId())
+        final OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())
                 .orElseThrow(() -> new NoSuchElementException("등록된 주문 테이블이 없습니다."));
         if (orderTable.isEmpty()) {
             throw new IllegalStateException("빈 테이블에는 주문을 등록할 수 없습니다.");

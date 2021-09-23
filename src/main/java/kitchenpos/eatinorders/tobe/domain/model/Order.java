@@ -55,7 +55,7 @@ public class Order {
         return id;
     }
 
-    public UUID getTableId() {
+    public UUID getOrderTableId() {
         return orderTableId;
     }
 
