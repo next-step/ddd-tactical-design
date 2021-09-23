@@ -1,15 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.tobe.domain.menu.MenuDomainService;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
-import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
-import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
-import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
+import static kitchenpos.eatinorders.tobe.domain.OrderStatus.WAITING;
 
 @Table(name = "orders")
 @Entity(name = "TobeOrder")
@@ -50,19 +48,7 @@ public class Order {
 
     protected Order() {}
 
-    public Order(final OrderType type, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final UUID orderTableId, final OrderTableTranslator orderTableTranslator) {
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException("type 은 필수값입니다.");
-        }
-        if (type == DELIVERY && (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty())) {
-            throw new IllegalArgumentException("배달 주문은 deliveryAddress 가 필수값이어야 합니다.");
-        }
-        if (type == EAT_IN) {
-            final boolean isTableEmpty = orderTableTranslator.getOrderTable(orderTableId).isEmpty();
-            if (isTableEmpty) {
-                throw new IllegalStateException("비어있는 테이블에는 주문을 추가할 수 없습니다.");
-            }
-        }
+    public Order(final OrderType type, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final UUID orderTableId) {
         this.id = UUID.randomUUID();
         this.type = type;
         this.status = WAITING;
@@ -100,45 +86,7 @@ public class Order {
         return orderTableId;
     }
 
-    public void accept(final MenuDomainService orderDomainService) {
-        orderDomainService.deliver(this);
-        this.status = ACCEPTED;
-    }
-
-    public void serve() {
-        if (status != ACCEPTED) {
-            throw new IllegalStateException("접수되지 않은 주문은 서빙할 수 없습니다.");
-        }
-        this.status = SERVED;
-    }
-
-    public void startDelivery() {
-        if (type != DELIVERY) {
-            throw new IllegalStateException("배달 타입이 아닌 주문은 배달할 수 없습니다.");
-        }
-        if (status != SERVED) {
-            throw new IllegalStateException("서빙되지 않은 주문은 배달할 수 없습니다.");
-        }
-        this.status = DELIVERING;
-    }
-
-    public void completeDelivery() {
-        if (status != OrderStatus.DELIVERING) {
-            throw new IllegalStateException("배달 중이지 않은 주문은 배달 완료할 수 없습니다.");
-        }
-        this.status = DELIVERED;
-    }
-
-    public void complete(final OrderTableTranslator orderTableTranslator) {
-        if (type == DELIVERY && status != OrderStatus.DELIVERED) {
-            throw new IllegalStateException("배달 완료된 주문은 다시 완료할 수 없습니다.");
-        }
-        if ((type == OrderType.TAKEOUT || type == EAT_IN) && status != SERVED) {
-            throw new IllegalStateException("서빙되지 않은 주문은 완료할 수 없습니다.");
-        }
-        this.status = COMPLETED;
-        if (type == EAT_IN) {
-            orderTableTranslator.clearOrderTable(orderTableId);
-        }
+    public void changeStatus(final OrderStatus status) {
+        this.status = status;
     }
 }

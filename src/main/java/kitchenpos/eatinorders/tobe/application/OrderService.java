@@ -1,11 +1,6 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.tobe.domain.Order;
-import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.OrderQuantity;
-import kitchenpos.eatinorders.tobe.domain.OrderRepository;
-import kitchenpos.eatinorders.tobe.domain.menu.MenuDomainService;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
+import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderCompletedResponse;
 import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
@@ -21,16 +16,10 @@ import java.util.stream.Collectors;
 @Service("TobeOrderService")
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final OrderTableTranslator orderTableTranslator;
-    private final MenuDomainService orderDomainService;
+    private final OrderDomainService orderDomainService;
 
-    public OrderService(
-            final OrderRepository orderRepository,
-            final OrderTableTranslator orderTableTranslator,
-            final MenuDomainService orderDomainService
-    ) {
+    public OrderService(final OrderRepository orderRepository, final OrderDomainService orderDomainService) {
         this.orderRepository = orderRepository;
-        this.orderTableTranslator = orderTableTranslator;
         this.orderDomainService = orderDomainService;
     }
 
@@ -44,8 +33,7 @@ public class OrderService {
                 request.getType(),
                 orderLineItems,
                 request.getDeliveryAddress(),
-                request.getOrderTableId(),
-                orderTableTranslator
+                request.getOrderTableId()
         );
         orderDomainService.validateOrder(order);
         orderRepository.save(order);
@@ -56,7 +44,7 @@ public class OrderService {
     public OrderResponse accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.accept(orderDomainService);
+        orderDomainService.acceptOrder(order);
         return createOrderResponse(order);
     }
 
@@ -64,7 +52,7 @@ public class OrderService {
     public OrderResponse serve(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.serve();
+        orderDomainService.serveOrder(order);
         return createOrderResponse(order);
     }
 
@@ -72,7 +60,7 @@ public class OrderService {
     public OrderResponse startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.startDelivery();
+        orderDomainService.startDelivery(order);
         return createOrderResponse(order);
     }
 
@@ -80,7 +68,7 @@ public class OrderService {
     public OrderResponse completeDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.completeDelivery();
+        orderDomainService.completeDelivery(order);
         return createOrderResponse(order);
     }
 
@@ -88,7 +76,7 @@ public class OrderService {
     public OrderResponse complete(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.complete(orderTableTranslator);
+        orderDomainService.completeOrder(order);
         return createOrderResponse(order);
     }
 
@@ -110,7 +98,7 @@ public class OrderService {
                 order.getOrderDateTime(),
                 order.getOrderLineItems(),
                 order.getDeliveryAddress(),
-                orderTableTranslator.getOrderTable(order.getOrderTableId()),
+                orderDomainService.getOrderTable(order),
                 order.getOrderTableId()
         );
     }
