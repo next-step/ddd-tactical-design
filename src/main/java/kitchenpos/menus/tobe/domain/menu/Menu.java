@@ -60,7 +60,7 @@ public class Menu {
     }
 
     private void validatePrice(final Price price, final MenuProducts menuProducts) {
-        if (price.compareTo(menuProducts.calculateAmount()) > 0) {
+        if (price.compareTo(menuProducts.calculatePrice()) > 0) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 금액의 합보다 적거나 같아야 합니다.");
         }
     }
@@ -78,26 +78,26 @@ public class Menu {
     }
 
     public void changePrice(final Price price) {
-        if (priceExceedsAmount(price)) {
+        if (priceExceedsMenuProductsPrice(price)) {
             hide();
         }
         this.price = price;
     }
 
-    private boolean priceExceedsAmount(final Price price, MenuProducts menuProducts) {
-        return price.compareTo(menuProducts.calculateAmount()) > 0;
+    private boolean priceExceedsMenuProductsPrice(final Price price, MenuProducts menuProducts) {
+        return price.compareTo(menuProducts.calculatePrice()) > 0;
     }
 
-    private boolean priceExceedsAmount(final Price price) {
-        return priceExceedsAmount(price, menuProducts);
+    private boolean priceExceedsMenuProductsPrice(final Price price) {
+        return priceExceedsMenuProductsPrice(price, menuProducts);
     }
 
-    private boolean priceExceedsAmount() {
-        return priceExceedsAmount(price);
+    private boolean priceExceedsMenuProductsPrice() {
+        return priceExceedsMenuProductsPrice(price);
     }
 
     public void display() {
-        if (priceExceedsAmount()) {
+        if (priceExceedsMenuProductsPrice()) {
             throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
         }
         this.displayed = new Displayed(true);

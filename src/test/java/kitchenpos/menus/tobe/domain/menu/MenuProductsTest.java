@@ -49,8 +49,8 @@ class MenuProductsTest {
         final MenuProducts menuProducts = new MenuProducts(
             Arrays.asList(menuProduct1, menuProduct2)
         );
-        final Price actualAmount = menuProducts.calculateAmount();
+        final Price actualPrice = menuProducts.calculatePrice();
 
-        assertThat(actualAmount).isEqualTo(new Price(BigDecimal.valueOf(50_000L)));
+        assertThat(actualPrice).isEqualTo(new Price(BigDecimal.valueOf(50_000L)));
     }
 }

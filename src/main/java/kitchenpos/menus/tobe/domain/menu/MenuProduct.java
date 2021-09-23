@@ -48,7 +48,7 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public Price calculateAmount() {
+    public Price calculateTotalPrice() {
         return price.multiply(quantity);
     }
 
