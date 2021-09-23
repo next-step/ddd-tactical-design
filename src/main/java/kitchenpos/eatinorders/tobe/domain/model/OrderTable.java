@@ -29,6 +29,7 @@ public class OrderTable {
     public void clear(final Validator<OrderTable> orderTableClearValidator) {
         orderTableClearValidator.validate(this);
 
+        numberOfGuests = new NumberOfGuests(0L);
         isEmpty = true;
     }
 

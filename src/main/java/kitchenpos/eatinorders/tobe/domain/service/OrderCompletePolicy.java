@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.tobe.domain.service;
 
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
-import kitchenpos.eatinorders.tobe.domain.model.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.model.Order;
 import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
@@ -30,7 +29,6 @@ public class OrderCompletePolicy implements Policy<Order> {
 
         final OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())
                 .orElseThrow(() -> new NoSuchElementException("등록된 주문 테이블이 없습니다."));
-        orderTable.changeNumberOfGuests(new NumberOfGuests(0L));
         orderTable.clear(orderTableClearValidator);
     }
 }
