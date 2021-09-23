@@ -1,9 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,18 +97,8 @@ public class Order {
         return orderTableId;
     }
 
-    public void accept(final MenuTranslator menuTranslator, final KitchenridersClient kitchenridersClient) {
-        if (status != WAITING) {
-            throw new IllegalStateException("접수 대기 중인 주문은 접수 할 수 없습니다.");
-        }
-        if (type == DELIVERY) {
-            final BigDecimal sum = getOrderLineItems().stream()
-                    .map(item -> menuTranslator.getMenu(item)
-                            .getPrice()
-                            .multiply(BigDecimal.valueOf(item.getQuantity()))
-                    ).reduce(BigDecimal.ZERO, BigDecimal::add);
-            kitchenridersClient.requestDelivery(id, sum, deliveryAddress);
-        }
+    public void accept(final OrderDomainService orderDomainService) {
+        orderDomainService.deliver(this);
         this.status = ACCEPTED;
     }
 

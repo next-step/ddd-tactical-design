@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MenuTranslator {
-    MenuResponse getMenu(final OrderLineItem orderLineItem);
+    MenuResponse getMenu(final UUID menuId);
 
     List<MenuResponse> getMenus(final List<UUID> menuIds);
-
-    void validateOrderLineItem(OrderLineItem orderLineItem);
 }

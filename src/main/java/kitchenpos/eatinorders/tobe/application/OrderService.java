@@ -1,10 +1,8 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderCompletedResponse;
-import kitchenpos.eatinorders.tobe.dto.OrderLineItemResponse;
 import kitchenpos.eatinorders.tobe.dto.OrderResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,35 +15,33 @@ import java.util.stream.Collectors;
 @Service("TobeOrderService")
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final MenuTranslator menuTranslator;
     private final OrderTableTranslator orderTableTranslator;
-    private final KitchenridersClient kitchenridersClient;
+    private final OrderDomainService orderDomainService;
 
     public OrderService(
             final OrderRepository orderRepository,
-            final MenuTranslator menuTranslator,
             final OrderTableTranslator orderTableTranslator,
-            final KitchenridersClient kitchenridersClient
+            final OrderDomainService orderDomainService
     ) {
         this.orderRepository = orderRepository;
-        this.menuTranslator = menuTranslator;
         this.orderTableTranslator = orderTableTranslator;
-        this.kitchenridersClient = kitchenridersClient;
+        this.orderDomainService = orderDomainService;
     }
 
     @Transactional
     public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
+        final OrderLineItems orderLineItems = new OrderLineItems(request.getOrderLineItems().stream()
                 .map(item -> new OrderLineItem(item.getMenuId(), item.getQuantity(), item.getPrice()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         final Order order = new Order(
                 request.getType(),
-                new OrderLineItems(orderLineItems, request.getType(), menuTranslator),
+                orderLineItems,
                 request.getDeliveryAddress(),
                 request.getOrderTableId(),
                 orderTableTranslator
         );
+        orderDomainService.validateOrder(order);
         orderRepository.save(order);
         return createOrderResponse(order);
     }
@@ -54,7 +50,7 @@ public class OrderService {
     public OrderResponse accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        order.accept(menuTranslator, kitchenridersClient);
+        order.accept(orderDomainService);
         return createOrderResponse(order);
     }
 
@@ -101,20 +97,12 @@ public class OrderService {
     }
 
     private OrderResponse createOrderResponse(final Order order) {
-        final List<OrderLineItemResponse> orderLineItems = order.getOrderLineItems().stream()
-                .map(item -> new OrderLineItemResponse(
-                        item.getSeq(),
-                        item.getQuantity(),
-                        item.getPrice(),
-                        item.getMenuId(),
-                        menuTranslator.getMenu(item))
-                ).collect(Collectors.toList());
         return new OrderResponse(
                 order.getId(),
                 order.getType(),
                 order.getStatus(),
                 order.getOrderDateTime(),
-                orderLineItems,
+                orderDomainService.getOrderLineItems(order),
                 order.getDeliveryAddress(),
                 orderTableTranslator.getOrderTable(order.getOrderTableId()),
                 order.getOrderTableId()
