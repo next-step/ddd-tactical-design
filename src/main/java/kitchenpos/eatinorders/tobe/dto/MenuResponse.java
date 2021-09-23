@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.dto;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class MenuResponse {
@@ -11,8 +9,6 @@ public class MenuResponse {
     private BigDecimal price;
     private MenuGroupResponse menuGroup;
     private boolean displayed;
-    private List<MenuProductResponse> menuProducts;
-    private UUID menuGroupId;
 
     protected MenuResponse() {}
 
@@ -34,13 +30,5 @@ public class MenuResponse {
 
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public List<MenuProductResponse> getMenuProducts() {
-        return new ArrayList<>(menuProducts);
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
     }
 }
