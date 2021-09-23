@@ -1,14 +1,14 @@
-package kitchenpos.eatinorders.tobe.dto;
+package kitchenpos.eatinorders.tobe.domain.ordertable;
 
 import java.util.UUID;
 
-public class OrderTableResponse {
+public class OrderTable {
     private UUID id;
     private String name;
     private int numberOfGuests;
     private boolean empty;
 
-    protected OrderTableResponse() {}
+    protected OrderTable() {}
 
     public UUID getId() {
         return id;

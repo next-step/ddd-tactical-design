@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.domain.menu.MenuDomainService;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -51,11 +54,8 @@ public class Order {
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException("type 은 필수값입니다.");
         }
-
-        if (type == DELIVERY) {
-            if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
-                throw new IllegalArgumentException("배달 주문은 deliveryAddress 가 필수값이어야 합니다.");
-            }
+        if (type == DELIVERY && (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty())) {
+            throw new IllegalArgumentException("배달 주문은 deliveryAddress 가 필수값이어야 합니다.");
         }
         if (type == EAT_IN) {
             final boolean isTableEmpty = orderTableTranslator.getOrderTable(orderTableId).isEmpty();
@@ -100,7 +100,7 @@ public class Order {
         return orderTableId;
     }
 
-    public void accept(final OrderDomainService orderDomainService) {
+    public void accept(final MenuDomainService orderDomainService) {
         orderDomainService.deliver(this);
         this.status = ACCEPTED;
     }

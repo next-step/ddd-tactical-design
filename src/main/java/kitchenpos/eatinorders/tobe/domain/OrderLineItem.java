@@ -19,17 +19,17 @@ public class OrderLineItem {
     )
     private UUID menuId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private OrderQuantity orderQuantity;
 
     @Transient
     private BigDecimal price;
 
     protected OrderLineItem() {}
 
-    public OrderLineItem(final UUID menuId, final long quantity, final BigDecimal price) {
+    public OrderLineItem(final UUID menuId, final OrderQuantity orderQuantity, final BigDecimal price) {
         this.menuId = menuId;
-        this.quantity = quantity;
+        this.orderQuantity = orderQuantity;
         this.price = price;
     }
 
@@ -42,7 +42,7 @@ public class OrderLineItem {
     }
 
     public long getQuantity() {
-        return quantity;
+        return orderQuantity.getQuantity();
     }
 
     public BigDecimal getPrice() {

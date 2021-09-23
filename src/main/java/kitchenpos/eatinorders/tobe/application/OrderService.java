@@ -1,8 +1,14 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.tobe.domain.*;
+import kitchenpos.eatinorders.tobe.domain.Order;
+import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.OrderQuantity;
+import kitchenpos.eatinorders.tobe.domain.OrderRepository;
+import kitchenpos.eatinorders.tobe.domain.menu.MenuDomainService;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderCompletedResponse;
+import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +22,12 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderTableTranslator orderTableTranslator;
-    private final OrderDomainService orderDomainService;
+    private final MenuDomainService orderDomainService;
 
     public OrderService(
             final OrderRepository orderRepository,
             final OrderTableTranslator orderTableTranslator,
-            final OrderDomainService orderDomainService
+            final MenuDomainService orderDomainService
     ) {
         this.orderRepository = orderRepository;
         this.orderTableTranslator = orderTableTranslator;
@@ -32,7 +38,7 @@ public class OrderService {
     public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
         final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
-                .map(item -> new OrderLineItem(item.getMenuId(), item.getQuantity(), item.getPrice()))
+                .map(this::createOrderLineItem)
                 .collect(Collectors.toList());
         final Order order = new Order(
                 request.getType(),
@@ -107,5 +113,11 @@ public class OrderService {
                 orderTableTranslator.getOrderTable(order.getOrderTableId()),
                 order.getOrderTableId()
         );
+    }
+
+    private OrderLineItem createOrderLineItem(final OrderLineItemRequest orderLineItemRequest) {
+        return new OrderLineItem(orderLineItemRequest.getMenuId(),
+                new OrderQuantity(orderLineItemRequest.getQuantity()),
+                orderLineItemRequest.getPrice());
     }
 }

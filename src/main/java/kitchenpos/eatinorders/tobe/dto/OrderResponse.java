@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.dto;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ public class OrderResponse {
     private LocalDateTime orderDateTime;
     private List<OrderLineItem> orderLineItems;
     private String deliveryAddress;
-    private OrderTableResponse orderTable;
+    private OrderTable orderTable;
     private UUID orderTableId;
 
     protected OrderResponse() {}
 
-    public OrderResponse(final UUID id, final OrderType type, final OrderStatus status, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final OrderTableResponse orderTable, final UUID orderTableId) {
+    public OrderResponse(final UUID id, final OrderType type, final OrderStatus status, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final OrderTable orderTable, final UUID orderTableId) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -57,7 +58,7 @@ public class OrderResponse {
         return deliveryAddress;
     }
 
-    public OrderTableResponse getOrderTable() {
+    public OrderTable getOrderTable() {
         return orderTable;
     }
 

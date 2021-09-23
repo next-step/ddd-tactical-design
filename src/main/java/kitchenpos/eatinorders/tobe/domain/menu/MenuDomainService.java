@@ -1,8 +1,8 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.menu;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.tobe.domain.menu.Menu;
-import kitchenpos.eatinorders.tobe.domain.menu.MenuTranslator;
+import kitchenpos.eatinorders.tobe.domain.Order;
+import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -11,19 +11,18 @@ import java.util.stream.Collectors;
 
 import static kitchenpos.eatinorders.tobe.domain.OrderStatus.WAITING;
 import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
-import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Component
-public class OrderDomainService {
+public class MenuDomainService {
     private final MenuTranslator menuTranslator;
     private final KitchenridersClient kitchenridersClient;
 
-    public OrderDomainService(final MenuTranslator menuTranslator, final KitchenridersClient kitchenridersClient) {
+    public MenuDomainService(final MenuTranslator menuTranslator, final KitchenridersClient kitchenridersClient) {
         this.menuTranslator = menuTranslator;
         this.kitchenridersClient = kitchenridersClient;
     }
 
-    void deliver(final Order order) {
+    public void deliver(final Order order) {
         if (order.getStatus() != WAITING) {
             throw new IllegalStateException("접수 대기 중인 주문은 접수 할 수 없습니다.");
         }
@@ -45,22 +44,11 @@ public class OrderDomainService {
         if (menus.size() != orderLineItems.size()) {
             throw new IllegalArgumentException("부적절한 메뉴는 주문하할 수 없습니다.");
         }
-        if (order.getType() != EAT_IN) {
-            orderLineItems.stream()
-                    .map(OrderLineItem::getQuantity)
-                    .forEach(this::validateQuantity);
-        }
     }
 
     private void validateMenu(final Menu menu) {
         if (!menu.isDisplayed()) {
             throw new IllegalStateException("숨겨진 메뉴입니다.");
-        }
-    }
-
-    private void validateQuantity(final long quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("매장 식사 주문은 수량이 1개 이상이어야 합니다.");
         }
     }
 

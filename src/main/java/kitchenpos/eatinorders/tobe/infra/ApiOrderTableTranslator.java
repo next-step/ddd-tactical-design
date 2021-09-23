@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.tobe.infra;
 
-import kitchenpos.eatinorders.tobe.domain.OrderTableTranslator;
-import kitchenpos.eatinorders.tobe.dto.OrderTableResponse;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +17,8 @@ public class ApiOrderTableTranslator implements OrderTableTranslator {
     }
 
     @Override
-    public OrderTableResponse getOrderTable(final UUID orderTableId) {
-        return restTemplate.getForObject("http://localhost:8080/api/tobe/order-tables/" + orderTableId, OrderTableResponse.class);
+    public OrderTable getOrderTable(final UUID orderTableId) {
+        return restTemplate.getForObject("http://localhost:8080/api/tobe/order-tables/" + orderTableId, OrderTable.class);
     }
 
     @Override
