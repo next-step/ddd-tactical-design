@@ -4,6 +4,8 @@ import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class OrderResponse {
         this.type = type;
         this.status = status;
         this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
+        this.orderLineItems = Collections.unmodifiableList(orderLineItems);
         this.deliveryAddress = deliveryAddress;
         this.orderTable = orderTable;
         this.orderTableId = orderTableId;
@@ -47,7 +49,7 @@ public class OrderResponse {
     }
 
     public List<OrderLineItemResponse> getOrderLineItems() {
-        return orderLineItems;
+        return new ArrayList<>(orderLineItems);
     }
 
     public String getDeliveryAddress() {
