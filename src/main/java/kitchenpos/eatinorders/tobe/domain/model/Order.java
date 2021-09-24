@@ -38,7 +38,7 @@ public class Order {
         orderCreateValidator.validate(this);
     }
 
-    public static Order of(
+    public static Order create(
             final UUID id,
             final UUID orderTableId,
             final OrderLineItems orderLineItems,

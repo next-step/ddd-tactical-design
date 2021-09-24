@@ -54,7 +54,7 @@ class OrderTest {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
 
-        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         assertThat(order.getStatus()).isEqualTo("Waiting");
     }
@@ -79,7 +79,7 @@ class OrderTest {
         final OrderLineItem orderLineItem1 = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItem orderLineItem2 = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(orderLineItem1, orderLineItem2));
-        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         assertThat(order.getMenuIds()).contains(orderLineItem1.getMenuId(), orderLineItem2.getMenuId());
     }
@@ -104,7 +104,7 @@ class OrderTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = Order.of(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> order.validateOrderPrice(Collections.singletonList(menu));
 
