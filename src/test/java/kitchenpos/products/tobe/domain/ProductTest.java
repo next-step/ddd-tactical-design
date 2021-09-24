@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.ToBeFixtures;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +35,7 @@ class ProductTest {
     @DisplayName("상품 간 동등성을 확인할 수 있다.")
     @Test
     void 동등성() {
-        final UUID id = UUID.randomUUID();
+        final ProductId id = new ProductId(UUID.randomUUID());
 
         final Product product1 = ToBeFixtures.product(id, "치킨", 16_000L);
         final Product product2 = ToBeFixtures.product(id, "치킨", 16_000L);

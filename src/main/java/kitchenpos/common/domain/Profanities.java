@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 public interface Profanities {
 

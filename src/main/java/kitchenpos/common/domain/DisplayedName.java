@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
@@ -20,16 +20,12 @@ public class DisplayedName {
 
     private void validate(final String value, final Profanities profanities) {
         if (Objects.isNull(value) || value.isEmpty()) {
-            throw new IllegalArgumentException("상품의 이름이 올바르지 않으면 등록할 수 없습니다.");
+            throw new IllegalArgumentException("이름이 null 또는 비어있을 수 없습니다.");
         }
 
         if (profanities.contains(value)) {
-            throw new IllegalArgumentException("상품의 이름에는 비속어가 포함될 수 없습니다.");
+            throw new IllegalArgumentException("이름에는 비속어가 포함될 수 없습니다.");
         }
-    }
-
-    public String getDisplayedName() {
-        return this.value;
     }
 
     @Override
