@@ -1,5 +1,7 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.infra;
 
+import kitchenpos.eatinorders.tobe.domain.Order;
+import kitchenpos.eatinorders.tobe.domain.OrderRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

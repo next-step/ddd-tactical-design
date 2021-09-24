@@ -1,5 +1,7 @@
-package kitchenpos.eatinordertables.domain;
+package kitchenpos.eatinordertables.infra;
 
+import kitchenpos.eatinordertables.domain.OrderTable;
+import kitchenpos.eatinordertables.domain.OrderTableRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

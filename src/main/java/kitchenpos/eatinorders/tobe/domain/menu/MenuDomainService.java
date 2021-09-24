@@ -42,7 +42,7 @@ public class MenuDomainService {
                 .collect(Collectors.toList()));
         menus.forEach(this::validateMenu);
         if (menus.size() != orderLineItems.size()) {
-            throw new IllegalArgumentException("부적절한 메뉴는 주문하할 수 없습니다.");
+            throw new IllegalArgumentException("부적절한 메뉴는 주문할 수 없습니다.");
         }
     }
 
