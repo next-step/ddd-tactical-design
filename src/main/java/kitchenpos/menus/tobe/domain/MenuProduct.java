@@ -1,8 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -13,52 +17,47 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+    @AttributeOverrides(
+            @AttributeOverride(name = "id", column = @Column(name = "product_id"))
     )
-    private Product product;
+    private ProductId productId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private Quantity quantity;
 
     @Transient
-    private UUID productId;
+    private Price price;
 
-    public MenuProduct() {
+    protected MenuProduct() {
     }
 
-    public Long getSeq() {
-        return seq;
+    public MenuProduct(final UUID productId, final Quantity quantity) {
+        this(new ProductId(productId), quantity);
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
+    public MenuProduct(final ProductId productId, final Quantity quantity) {
+        this.productId = productId;
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
-        return productId;
+    public void loadPrice(final Product product) {
+        this.price = product.getPrice();
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public BigDecimal calculate() {
+        return price.calculate(quantity);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MenuProduct that = (MenuProduct) o;
+        return Objects.equals(seq, that.seq) || (Objects.equals(productId, that.productId) && Objects.equals(quantity, that.quantity));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, quantity);
     }
 }

@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.Quantity;
+
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -22,6 +24,10 @@ public class Price {
         if(Objects.isNull(price) || price.compareTo(BOUND_PRICE) < 0) {
             throw new IllegalArgumentException("가격의 값이 올바르지 않습니다.");
         }
+    }
+
+    public BigDecimal calculate(final Quantity quantity) {
+        return price.multiply(quantity.value());
     }
 
     @Override
