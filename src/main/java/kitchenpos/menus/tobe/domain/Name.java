@@ -8,31 +8,32 @@ import java.util.Objects;
 @Embeddable
 public class Name {
 
-    private String name;
+    private String value;
 
     protected Name() {
 
     }
 
-    public Name(String name, Profanities profanities) {
-        if (name == null || profanities.contains(name)) {
-            throw new IllegalArgumentException();
+    public Name(String value, Profanities profanities) {
+        if (Objects.isNull(value) || profanities.contains(value)) {
+            throw new IllegalArgumentException("올바르지 않은 이름으로 등록할 수 없습니다.");
         }
 
-        this.name = name;
+        this.value = value;
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Name)) return false;
-        Name name1 = (Name) o;
-        return name.equals(name1.name);
+        Name name = (Name) o;
+        return value.equals(name.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(value);
     }
 
 }

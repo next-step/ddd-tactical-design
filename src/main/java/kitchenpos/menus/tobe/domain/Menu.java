@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -37,22 +38,26 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    @ManyToOne
-    private MenuGroup menuGroup;
+    @Embedded
+    private Name displayedName;
 
     @Embedded
     private MenuProducts menuProducts;
 
-    @Embedded
-    private Price price;
+    @ManyToOne
+    private MenuGroup menuGroup;
 
     @Embedded
-    private Name displayedName;
+    private Price price;
 
     @Column
     private boolean isDisplayed;
 
     public void display() {
+        if(menuProducts.getPriceSum().compareTo(price.getPrice()) < 0){
+            throw new IllegalStateException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
+        }
+
         this.isDisplayed = true;
     }
 
@@ -72,5 +77,9 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
+    public void changePrice(BigDecimal newPriceValue){
+        this.price = this.price.changePrice(newPriceValue);
+        this.isDisplayed = menuProducts.getPriceSum().compareTo(this.price.getPrice()) >= 0;
+    }
 
 }

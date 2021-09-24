@@ -17,7 +17,7 @@ public class MenuProducts {
 
     public MenuProducts(MenuProduct... menuProducts) {
         if (menuProducts.length <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0 이상이어야 합니다.");
         }
 
         this.menuProducts = Arrays.stream(menuProducts)
