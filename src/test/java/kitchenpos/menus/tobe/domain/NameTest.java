@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.infra.FakeProfanities;
 import org.assertj.core.api.ThrowableAssert;
@@ -10,11 +10,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@DisplayName("메뉴 이름(Name)은")
 class NameTest {
     private static final FakeProfanities fakeprofanities = new FakeProfanities();
 
     @ParameterizedTest
-    @ValueSource(strings = "상품이름")
+    @ValueSource(strings = "메뉴이름")
     @DisplayName("이름을 생성할 수 있다.")
     void create(final String value) {
         final Name name = new Name(value, fakeprofanities);

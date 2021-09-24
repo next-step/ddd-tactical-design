@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.ui.dto;
 import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 
 import java.math.BigDecimal;
 

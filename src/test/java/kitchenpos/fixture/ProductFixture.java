@@ -1,6 +1,6 @@
 package kitchenpos.fixture;
 
-import kitchenpos.products.tobe.infra.FakeProfanities;
+import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;

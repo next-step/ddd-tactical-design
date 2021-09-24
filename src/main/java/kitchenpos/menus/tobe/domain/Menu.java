@@ -1,23 +1,24 @@
 package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.UUID.randomUUID;
 
 @Table(name = "menu")
 @Entity
 public class Menu {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Amount amount;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -39,65 +40,43 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
+    protected Menu() {
+    }
 
-    public Menu() {
+    public Menu(final Name name, final Amount amount, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
+        this(randomUUID(), name, amount, menuGroup, false, menuProducts);
+    }
+
+    public Menu(final UUID id, final Name name, final Amount amount, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts) {
+        verify(menuProducts);
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    private void verify(final List<MenuProduct> menuProducts) {
+        if(Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("메뉴는 1개 이상의 상품이 필요합니다.");
+        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id) || (displayed == menu.displayed && Objects.equals(name, menu.name) && Objects.equals(amount, menu.amount) && Objects.equals(menuGroup, menu.menuGroup) && Objects.equals(menuProducts, menu.menuProducts));
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, amount, menuGroup, displayed, menuProducts);
     }
 }

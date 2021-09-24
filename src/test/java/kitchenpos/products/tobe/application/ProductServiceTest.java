@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.common.domain.Profanities;
 import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.tobe.infra.FakeProfanities;
+import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
