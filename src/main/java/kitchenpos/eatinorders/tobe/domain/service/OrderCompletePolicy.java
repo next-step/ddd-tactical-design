@@ -23,10 +23,6 @@ public class OrderCompletePolicy implements Policy<Order> {
 
     @Override
     public void enforce(final Order order) {
-        if (!order.isCompleted()) {
-            return;
-        }
-
         final OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())
                 .orElseThrow(() -> new NoSuchElementException("등록된 주문 테이블이 없습니다."));
         orderTable.clear(orderTableClearValidator);

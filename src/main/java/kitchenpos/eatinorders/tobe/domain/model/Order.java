@@ -2,7 +2,9 @@ package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.menus.tobe.domain.model.Menu;
 
@@ -47,9 +49,36 @@ public class Order {
         return new Order(id, orderTableId, new Waiting(), orderLineItems, orderCreateValidator);
     }
 
-    public void proceed(final Policy<Order> orderCompletePolicy) {
+    private void proceed() {
         orderStatus = orderStatus.proceed();
+    }
 
+    public void accept() {
+        if (!new Waiting().equals(orderStatus)) {
+            throw new IllegalStateException("주문이 접수 대기 상태가 아닙니다.");
+        }
+
+        proceed();
+    }
+
+    public void serve() {
+        if (!new Accepted().equals(orderStatus)) {
+            throw new IllegalStateException("주문이 접수 상태가 아닙니다.");
+        }
+
+        proceed();
+    }
+
+    public void complete(final Policy<Order> orderCompletePolicy) {
+        if (!new Served().equals(orderStatus)) {
+            throw new IllegalStateException("주문이 서빙 상태가 아닙니다.");
+        }
+
+        if (!orderLineItems.canBeCompleted()) {
+            throw new IllegalStateException("계산 가능하지 않은 주문 항목이 있습니다.");
+        }
+
+        proceed();
         orderCompletePolicy.enforce(this);
     }
 

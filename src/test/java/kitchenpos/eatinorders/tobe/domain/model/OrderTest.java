@@ -3,27 +3,23 @@ package kitchenpos.eatinorders.tobe.domain.model;
 import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static kitchenpos.eatinorders.tobe.domain.fixture.MenuFixture.MENU_WITH_ID_AND_PRICE;
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTest {
@@ -59,18 +55,100 @@ class OrderTest {
         assertThat(order.getStatus()).isEqualTo("Waiting");
     }
 
-    @DisplayName("주문은 다음 상태로 진행된다.")
-    @ParameterizedTest
-    @MethodSource("provideArguments")
-    void 상태_진행_성공(final OrderStatus orderStatus, final String orderStatusValue) {
+    @DisplayName("주문을 접수한다.")
+    @Test
+    void 접수_진행_성공() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderStatus, orderLineItems, dummyValidator);
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
 
-        order.proceed(dummy -> {
+        order.accept();
+
+        assertThat(order.getStatus()).isEqualTo(new Accepted().getStatus());
+    }
+
+    @DisplayName("주문 접수 시 주문 상태가 접수 대기가 아니면 IllegalStateException을 던진다.")
+    @Test
+    void 접수_진행_실패() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Accepted(), orderLineItems, dummyValidator);
+
+        ThrowableAssert.ThrowingCallable when = order::accept;
+
+        assertThatIllegalStateException().isThrownBy(when)
+                .withMessage("주문이 접수 대기 상태가 아닙니다.");
+    }
+
+    @DisplayName("주문을 서빙한다.")
+    @Test
+    void 서빙_진행_성공() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Accepted(), orderLineItems, dummyValidator);
+
+        order.serve();
+
+        assertThat(order.getStatus()).isEqualTo(new Served().getStatus());
+    }
+
+    @DisplayName("주문 서빙 시 주문 상태가 접수가 아니면 IllegalStateException을 던진다.")
+    @Test
+    void 서빙_진행_실패() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+
+        ThrowableAssert.ThrowingCallable when = order::serve;
+
+        assertThatIllegalStateException().isThrownBy(when)
+                .withMessage("주문이 접수 상태가 아닙니다.");
+    }
+
+    @DisplayName("주문을 계산 완료한다.")
+    @Test
+    void 계산_완료_진행_성공() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+
+        order.complete(dummy -> {
         });
 
-        assertThat(order.getStatus()).isEqualTo(orderStatusValue);
+        assertThat(order.getStatus()).isEqualTo(new Completed().getStatus());
+    }
+
+    @DisplayName("주문 계산 완료 시 주문 상태가 서빙이 아니면 IllegalStateException을 던진다.")
+    @Test
+    void 계산_완료_진행_실패() {
+        final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Completed(), orderLineItems, dummyValidator);
+
+        ThrowableAssert.ThrowingCallable when = () -> order.complete(dummy -> {
+        });
+
+        assertThatIllegalStateException().isThrownBy(when)
+                .withMessage("주문이 서빙 상태가 아닙니다.");
+    }
+
+    @DisplayName("주문 계산 완료 시 주문 항목이 계산 가능하지 않으면 IllegalStateException을 던진다.")
+    @Test
+    void 계산_완료_시_주문_항목_계산_실패() {
+        final OrderLineItem orderLineItem = new OrderLineItem(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new Price(BigDecimal.valueOf(16_000L)),
+                -1L
+        );
+        final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+
+        ThrowableAssert.ThrowingCallable when = () -> order.complete(dummy -> {
+        });
+
+        assertThatIllegalStateException().isThrownBy(when)
+                .withMessage("계산 가능하지 않은 주문 항목이 있습니다.");
     }
 
     @DisplayName("주문은 메뉴 식별자 목록을 반환한다.")
@@ -82,14 +160,6 @@ class OrderTest {
         final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         assertThat(order.getMenuIds()).contains(orderLineItem1.getMenuId(), orderLineItem2.getMenuId());
-    }
-
-    private static Stream<Arguments> provideArguments() {
-        return Stream.of(
-                Arguments.of(new Waiting(), "Accepted"),
-                Arguments.of(new Accepted(), "Served"),
-                Arguments.of(new Served(), "Completed")
-        );
     }
 
     @DisplayName("주문은 주문 항목 목록 내 주문 가격과 메뉴 가격이 같지 않은 주문 항목이 있으면, IllegalArgumentException을 던진다.")

@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.service;
 
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.eatinorders.tobe.domain.model.*;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
+import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,12 +36,12 @@ class OrderCompletePolicyTest {
         final OrderTable orderTable = orderTableRepository.save(DEFAULT_ORDER_TABLE());
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Served(), orderLineItems, dummy -> {
+        final Order order = new Order(UUID.randomUUID(), orderTable.getId(), new Completed(), orderLineItems, dummy -> {
         });
 
         orderTable.sit();
         orderTable.changeNumberOfGuests(new NumberOfGuests(1L));
-        order.proceed(orderCompletePolicy);
+        orderCompletePolicy.enforce(order);
 
         assertAll(
                 () -> assertThat(orderTable.getNumberOfGuests()).isZero(),
