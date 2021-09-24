@@ -37,4 +37,12 @@ public class PriceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("가격 변경시 값객체로서 재할당 작동 검증")
+    @Test
+    void changePrice() {
+        Price price = new Price(BigDecimal.valueOf(10000L));
+        Price newPrice = price.changePrice(BigDecimal.valueOf(9000L));
+        Assertions.assertThat(newPrice).isNotNull();
+    }
+
 }

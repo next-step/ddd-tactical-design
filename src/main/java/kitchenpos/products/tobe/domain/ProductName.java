@@ -11,8 +11,8 @@ public class ProductName {
     }
 
     public ProductName(String name, Profanities profanities) {
-        if (name == null || profanities.contains(name)) {
-            throw new IllegalArgumentException();
+        if (Objects.isNull(name) || profanities.contains(name)) {
+            throw new IllegalArgumentException("상품의 이름이 올바르지 않으면 등록할 수 없습니다.");
         }
         this.name = name;
     }

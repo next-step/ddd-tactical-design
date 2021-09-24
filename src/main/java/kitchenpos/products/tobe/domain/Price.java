@@ -13,19 +13,19 @@ public class Price {
     }
 
     public Price(BigDecimal price) {
-        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("상품의 가격이 올바르지 않으면 등록할 수 없습니다.");
         }
 
         this.price = price;
     }
 
-    public void changePrice(BigDecimal price) {
-        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+    public Price changePrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("상품의 가격이 올바르지 않으면 변경할 수 없습니다.");
         }
 
-        this.price = price;
+        return new Price(price);
     }
 
     @Override

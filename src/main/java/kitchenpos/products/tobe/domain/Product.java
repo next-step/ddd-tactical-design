@@ -44,7 +44,7 @@ public class Product {
     }
 
     public void changePrice(BigDecimal price) {
-        this.price.changePrice(price);
+        this.price = this.price.changePrice(price);
     }
 
     public Price getPrice() {
