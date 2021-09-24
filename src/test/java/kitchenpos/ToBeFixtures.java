@@ -12,6 +12,7 @@ import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProductId;
 import kitchenpos.common.domain.Quantity;
 import kitchenpos.menus.tobe.domain.menu.Displayed;
+import kitchenpos.menus.tobe.domain.menu.FakeMenuValidator;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProductSeq;
@@ -55,7 +56,8 @@ public class ToBeFixtures {
             new Price(BigDecimal.valueOf(price)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(true),
-            new MenuProducts(Arrays.asList(menuProducts))
+            new MenuProducts(Arrays.asList(menuProducts)),
+            new FakeMenuValidator()
         );
     }
 
@@ -72,7 +74,8 @@ public class ToBeFixtures {
             new Price(BigDecimal.valueOf(price)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(true),
-            menuProducts
+            menuProducts,
+            new FakeMenuValidator()
         );
     }
 
@@ -86,7 +89,8 @@ public class ToBeFixtures {
             new Price(BigDecimal.valueOf(32_000L)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(displayed),
-            menuProducts()
+            menuProducts(),
+            new FakeMenuValidator()
         );
     }
 
@@ -100,7 +104,8 @@ public class ToBeFixtures {
             new Price(BigDecimal.valueOf(32_000L)),
             new MenuGroupId(UUID.randomUUID()),
             new Displayed(true),
-            menuProducts()
+            menuProducts(),
+            new FakeMenuValidator()
         );
     }
 

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -10,6 +11,7 @@ import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.MenuGroupId;
 import kitchenpos.common.domain.MenuId;
 import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductId;
 
 @Table(name = "menu")
 @Entity
@@ -47,22 +49,17 @@ public class Menu {
         final Price price,
         final MenuGroupId menuGroupId,
         final Displayed displayed,
-        final MenuProducts menuProducts
+        final MenuProducts menuProducts,
+        final MenuValidator menuValidator
     ) {
-        validatePrice(price, menuProducts);
-
         this.id = id;
         this.displayedName = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-    }
 
-    private void validatePrice(final Price price, final MenuProducts menuProducts) {
-        if (price.compareTo(menuProducts.calculatePrice()) > 0) {
-            throw new IllegalArgumentException("메뉴의 가격은 메뉴 상품 금액의 합보다 적거나 같아야 합니다.");
-        }
+        menuValidator.validate(this);
     }
 
     public MenuId getId() {
@@ -92,7 +89,7 @@ public class Menu {
         return priceExceedsMenuProductsPrice(price, menuProducts);
     }
 
-    private boolean priceExceedsMenuProductsPrice() {
+    public boolean priceExceedsMenuProductsPrice() {
         return priceExceedsMenuProductsPrice(price);
     }
 
@@ -117,6 +114,10 @@ public class Menu {
 
     public MenuGroupId getMenuGroupId() {
         return this.menuGroupId;
+    }
+
+    public List<ProductId> getProductIds() {
+        return this.menuProducts.getProductIds();
     }
 
     @Override

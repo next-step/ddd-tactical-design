@@ -21,14 +21,6 @@ public class MenuTest {
         );
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-    @Test
-    void 생성2() {
-        assertThatThrownBy(
-            () -> ToBeFixtures.menu(1_000_000L, ToBeFixtures.menuProducts())
-        ).isInstanceOf(IllegalArgumentException.class);
-    }
-
     @DisplayName("메뉴 가격 변경 - 메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 적거나 같아야 한다.")
     @Test
     void 가격변경() {

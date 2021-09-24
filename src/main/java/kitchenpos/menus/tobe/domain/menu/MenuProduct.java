@@ -48,6 +48,10 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
+    public ProductId getProductId() {
+        return this.productId;
+    }
+
     public Price calculateTotalPrice() {
         return price.multiply(quantity);
     }

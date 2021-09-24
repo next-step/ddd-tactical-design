@@ -1,12 +1,15 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductId;
 
 @Embeddable
 public class MenuProducts {
@@ -26,6 +29,14 @@ public class MenuProducts {
     public MenuProducts(final List<MenuProduct> menuProducts) {
         menuProductsShouldNotBeEmpty(menuProducts);
         this.menuProducts = menuProducts;
+    }
+
+    public List<ProductId> getProductIds() {
+        final List<ProductId> productIds = this.menuProducts
+            .stream()
+            .map(MenuProduct::getProductId)
+            .collect(Collectors.toList());
+        return Collections.unmodifiableList(productIds);
     }
 
     private void menuProductsShouldNotBeEmpty(final List<MenuProduct> menuProducts) {
