@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.tobe.infra;
 
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,10 +9,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 @Component
-public class ApiOrderTableTranslator implements OrderTableTranslator {
+public class ApiOrderTableManager implements OrderTableManager {
     private final RestTemplate restTemplate;
 
-    public ApiOrderTableTranslator(final RestTemplateBuilder restTemplateBuilder) {
+    public ApiOrderTableManager(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

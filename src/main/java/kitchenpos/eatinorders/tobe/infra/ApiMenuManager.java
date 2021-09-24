@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.tobe.infra;
 
 import kitchenpos.eatinorders.tobe.domain.menu.Menu;
-import kitchenpos.eatinorders.tobe.domain.menu.MenuTranslator;
+import kitchenpos.eatinorders.tobe.domain.menu.MenuManager;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class ApiMenuTranslator implements MenuTranslator {
+public class ApiMenuManager implements MenuManager {
     private final RestTemplate restTemplate;
 
-    public ApiMenuTranslator(final RestTemplateBuilder restTemplateBuilder) {
+    public ApiMenuManager(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

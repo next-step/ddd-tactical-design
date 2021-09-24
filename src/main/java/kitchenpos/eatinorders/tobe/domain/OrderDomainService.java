@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.menu.MenuDomainService;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableTranslator;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -14,16 +14,16 @@ import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Component
 public class OrderDomainService {
-    private final OrderTableTranslator orderTableTranslator;
+    private final OrderTableManager orderTableManager;
     private final MenuDomainService menuDomainService;
 
-    public OrderDomainService(final OrderTableTranslator orderTableTranslator, final MenuDomainService menuDomainService) {
-        this.orderTableTranslator = orderTableTranslator;
+    public OrderDomainService(final OrderTableManager orderTableManager, final MenuDomainService menuDomainService) {
+        this.orderTableManager = orderTableManager;
         this.menuDomainService = menuDomainService;
     }
 
     public OrderTable getOrderTable(final Order order) {
-        return orderTableTranslator.getOrderTable(order.getOrderTableId());
+        return orderTableManager.getOrderTable(order.getOrderTableId());
     }
 
     public void validateOrder(final Order order) {
@@ -42,7 +42,7 @@ public class OrderDomainService {
     }
 
     private void validateOrderTable(final UUID orderTableId) {
-        final boolean isTableEmpty = orderTableTranslator.getOrderTable(orderTableId).isEmpty();
+        final boolean isTableEmpty = orderTableManager.getOrderTable(orderTableId).isEmpty();
         if (isTableEmpty) {
             throw new IllegalStateException("비어있는 테이블에는 주문을 추가할 수 없습니다.");
         }
@@ -88,7 +88,7 @@ public class OrderDomainService {
         }
         order.changeStatus(COMPLETED);
         if (type == EAT_IN) {
-            orderTableTranslator.clearOrderTable(order.getOrderTableId());
+            orderTableManager.clearOrderTable(order.getOrderTableId());
         }
     }
 }

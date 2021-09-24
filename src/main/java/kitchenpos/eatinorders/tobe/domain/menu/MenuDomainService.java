@@ -14,11 +14,11 @@ import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
 
 @Component
 public class MenuDomainService {
-    private final MenuTranslator menuTranslator;
+    private final MenuManager menuManager;
     private final KitchenridersClient kitchenridersClient;
 
-    public MenuDomainService(final MenuTranslator menuTranslator, final KitchenridersClient kitchenridersClient) {
-        this.menuTranslator = menuTranslator;
+    public MenuDomainService(final MenuManager menuManager, final KitchenridersClient kitchenridersClient) {
+        this.menuManager = menuManager;
         this.kitchenridersClient = kitchenridersClient;
     }
 
@@ -37,7 +37,7 @@ public class MenuDomainService {
 
     public void validateOrder(final Order order) {
         final List<OrderLineItem> orderLineItems = order.getOrderLineItems();
-        final List<Menu> menus = menuTranslator.getMenus(orderLineItems.stream()
+        final List<Menu> menus = menuManager.getMenus(orderLineItems.stream()
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList()));
         menus.forEach(this::validateMenu);
@@ -53,7 +53,7 @@ public class MenuDomainService {
     }
 
     private Menu getMenu(final OrderLineItem orderLineItem) {
-        final Menu menu = menuTranslator.getMenu(orderLineItem.getMenuId());
+        final Menu menu = menuManager.getMenu(orderLineItem.getMenuId());
         validateMenu(menu);
         if (menu.getPrice().compareTo(orderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException("메뉴의 가격과 주문 항목의 가격은 같아야 합니다.");
