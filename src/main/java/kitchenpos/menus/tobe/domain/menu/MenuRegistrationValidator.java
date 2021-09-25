@@ -34,12 +34,12 @@ public class MenuRegistrationValidator implements MenuValidator {
         }
     }
 
-    public void menuShouldBelongToRegisteredMenuGroup(final MenuGroupId menuGroupId) {
+    private void menuShouldBelongToRegisteredMenuGroup(final MenuGroupId menuGroupId) {
         menuGroupRepository.findById(menuGroupId)
             .orElseThrow(() -> new NoSuchElementException("메뉴는 특정 메뉴 그룹에 속해야 합니다."));
     }
 
-    public void menuShouldConsistOfRegisteredProducts(final List<ProductId> productIds) {
+    private void menuShouldConsistOfRegisteredProducts(final List<ProductId> productIds) {
         final int sizeOfExpectedProducts = productIds.size();
         final int sizeOfActualProducts = productRepository.findAllByIdIn(productIds).size();
         if (sizeOfExpectedProducts != sizeOfActualProducts) {
