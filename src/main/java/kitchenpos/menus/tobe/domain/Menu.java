@@ -55,17 +55,28 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    private void verify(Price amount, MenuProducts menuProducts) {
-        if(!menuProducts.isValidPrice(amount)) {
-            throw new IllegalArgumentException("메뉴를 등록할 땐 상품 가격 합보다 가격이 적거나 같아야합니다.");
+    private void verify(Price price, MenuProducts menuProducts) {
+        if(!menuProducts.isValidPrice(price)) {
+            throw new IllegalArgumentException("메뉴를 등록할 땐 가격(price)이 상품 가격 합(amount)보다 적거나 같아야합니다.");
         }
     }
 
     public void changePrice(final Price price) {
         if(!menuProducts.isValidPrice(price)) {
-            this.displayed = false;
+            hide();
         }
         this.price = price;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public void display() {
+        if(!menuProducts.isValidPrice(price)) {
+            throw new IllegalStateException("메뉴를 노출할땐 가격(price)이 상품 가격 합(amount)보다 적거나 같아야합니다.");
+        }
+        this.displayed = true;
     }
 
     public UUID getId() {

@@ -44,30 +44,20 @@ public class MenuService {
         menu.changePrice(request.price());
         return menu;
     }
-//
-//    @Transactional
-//    public Menu display(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//            final BigDecimal sum = menuProduct.getProduct()
-//                .getPrice()
-//                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-//            if (menu.getPrice().compareTo(sum) > 0) {
-//                throw new IllegalStateException();
-//            }
-//        }
-//        menu.setDisplayed(true);
-//        return menu;
-//    }
-//
-//    @Transactional
-//    public Menu hide(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        menu.setDisplayed(false);
-//        return menu;
-//    }
+
+    @Transactional
+    public Menu display(final UUID menuId) {
+        final Menu menu = findById(menuId);
+        menu.display();
+        return menu;
+    }
+
+    @Transactional
+    public Menu hide(final UUID menuId) {
+        final Menu menu = findById(menuId);
+        menu.hide();
+        return menu;
+    }
 
     @Transactional(readOnly = true)
     public List<Menu> findAll() {

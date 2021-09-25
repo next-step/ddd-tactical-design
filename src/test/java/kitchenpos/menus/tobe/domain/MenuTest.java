@@ -12,8 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("메뉴(Menu)는")
 class MenuTest {
@@ -74,4 +73,37 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
+    @Test
+    @DisplayName("숨길 수 있다.")
+    void hide() {
+        final Menu menu = new Menu(name, price, menuGroup, true, menuProducts);
+        assertThat(menu.isDisplayed()).isTrue();
+
+        menu.hide();
+        assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @Test
+    @DisplayName("노출할 수 있다.")
+    void display() {
+        final Menu menu = new Menu(name, price, menuGroup, false, menuProducts);
+        assertThat(menu.isDisplayed()).isFalse();
+
+        menu.display();
+        assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "100000")
+    @DisplayName("노출할 때 가격(price)이 MenuProducts의 금액의 합(amount)보다 크면 IllegalStateException이 발생한다.")
+    void display(final BigDecimal value) {
+        final Menu menu = new Menu(name, price, menuGroup, true, menuProducts);
+        final Price newPrice = new Price(value);
+        menu.changePrice(newPrice);
+
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> menu.display();
+
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(throwingCallable);
+    }
 }

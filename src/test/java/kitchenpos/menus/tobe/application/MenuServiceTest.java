@@ -174,31 +174,34 @@ class MenuServiceTest {
         final Menu actual = menuService.changePrice(menuId, expected);
         assertThat(actual.isDisplayed()).isFalse();
     }
-//
-//    @DisplayName("메뉴를 노출할 수 있다.")
-//    @Test
-//    void display() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-//        final Menu actual = menuService.display(menuId);
-//        assertThat(actual.isDisplayed()).isTrue();
-//    }
-//
-//    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-//    @Test
-//    void displayExpensiveMenu() {
-//        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
-//        assertThatThrownBy(() -> menuService.display(menuId))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
-//
-//    @DisplayName("메뉴를 숨길 수 있다.")
-//    @Test
-//    void hide() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-//        final Menu actual = menuService.hide(menuId);
-//        assertThat(actual.isDisplayed()).isFalse();
-//    }
-//
+
+    @DisplayName("메뉴를 노출할 수 있다.")
+    @Test
+    void display() {
+        final UUID menuId = 메뉴저장하기().getId();
+        final Menu actual = menuService.display(menuId);
+        assertThat(actual.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    void displayExpensiveMenu() {
+        final UUID menuId = 메뉴저장하기().getId();
+        final MenuChangePriceRequest expected = changePriceRequest(33_000L);
+        메뉴저장하기(menuService.changePrice(menuId, expected));
+
+        assertThatThrownBy(() -> menuService.display(menuId))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("메뉴를 숨길 수 있다.")
+    @Test
+    void hide() {
+        final UUID menuId = 메뉴저장하기().getId();
+        final Menu actual = menuService.hide(menuId);
+        assertThat(actual.isDisplayed()).isFalse();
+    }
+
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
@@ -259,7 +262,15 @@ class MenuServiceTest {
         return new MenuChangePriceRequest(price);
     }
 
+    private Menu 간단메뉴() {
+        return MenuFixture.메뉴(19_000L, MenuFixture.금액이불러와진_메뉴상품목록(product));
+    }
+
     private Menu 메뉴저장하기() {
-        return menuRepository.save(MenuFixture.메뉴(19_000L, MenuFixture.금액이불러와진_메뉴상품목록(product)));
+        return menuRepository.save(간단메뉴());
+    }
+
+    private Menu 메뉴저장하기(Menu menu) {
+        return menuRepository.save(menu);
     }
 }
