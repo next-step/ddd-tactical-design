@@ -54,4 +54,9 @@ public class MenuRestController {
     public ResponseEntity<List<MenuResponse>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
     }
+
+    @PostMapping("/filtered")
+    public ResponseEntity<List<MenuResponse>> findAllByIdIn(@RequestBody final List<UUID> menuIds) {
+        return ResponseEntity.ok(menuService.findAllByIdIn(menuIds));
+    }
 }
