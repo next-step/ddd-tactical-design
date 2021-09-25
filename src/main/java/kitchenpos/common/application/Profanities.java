@@ -1,4 +1,4 @@
-package kitchenpos.common;
+package kitchenpos.common.application;
 
 @FunctionalInterface
 public interface Profanities {

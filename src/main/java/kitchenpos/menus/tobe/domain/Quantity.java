@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Quantity {
-    private final BigDecimal quantity;
+    private final BigDecimal value;
 
-    public Quantity(BigDecimal quantity) {
-        if (Objects.isNull(quantity) || quantity.compareTo(BigDecimal.ZERO) < 0) {
+    public Quantity(BigDecimal value) {
+        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("올바르지 않은 수량으로 등록할 수 없습니다.");
         }
-        this.quantity = quantity;
+        this.value = value;
     }
 
     public BigDecimal getQuantity() {
-        return this.quantity;
+        return this.value;
     }
 
 }
