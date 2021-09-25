@@ -6,7 +6,6 @@ import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Served;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
-import kitchenpos.menus.tobe.domain.model.Menu;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -82,8 +81,8 @@ public class Order {
         orderCompletePolicy.enforce(this);
     }
 
-    public void validateOrderPrice(final List<Menu> menus) {
-        orderLineItems.validateOrderPrice(menus);
+    public void validateOrderPrice(final OrderMenus orderMenus) {
+        orderLineItems.validateOrderPrice(orderMenus);
     }
 
     public boolean isCompleted() {

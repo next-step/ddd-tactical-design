@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.model.Price;
-import kitchenpos.menus.tobe.domain.model.Menu;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -27,8 +26,8 @@ public class OrderLineItem {
         return BigDecimal.valueOf(quantity).multiply(price.value());
     }
 
-    public void validateOrderPrice(final Menu menu) {
-        if (getPrice().compareTo(menu.getPrice()) != 0) {
+    public void validateOrderPrice(final OrderMenu orderMenu) {
+        if (getPrice().compareTo(orderMenu.getPrice()) != 0) {
             throw new IllegalArgumentException("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
         }
     }

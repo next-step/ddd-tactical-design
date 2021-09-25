@@ -1,11 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
-import kitchenpos.menus.tobe.domain.model.Menu;
-
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class OrderLineItems {
@@ -41,9 +37,9 @@ public class OrderLineItems {
                 .allMatch(quantity -> quantity >= 0L);
     }
 
-    public void validateOrderPrice(final List<Menu> menus) {
-        final Map<UUID, Menu> menuMap = menus.stream()
-                .collect(Collectors.toMap(Menu::getId, Function.identity()));
-        orderLineItems.forEach(orderLineItem -> orderLineItem.validateOrderPrice(menuMap.get(orderLineItem.getMenuId())));
+    public void validateOrderPrice(final OrderMenus orderMenus) {
+        orderLineItems.forEach(orderLineItem -> orderLineItem.validateOrderPrice(
+                orderMenus.getOrderMenuByMenuId(orderLineItem.getMenuId())
+        ));
     }
 }

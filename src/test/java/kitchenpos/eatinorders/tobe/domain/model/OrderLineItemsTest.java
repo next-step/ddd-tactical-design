@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.commons.tobe.domain.model.Price;
-import kitchenpos.menus.tobe.domain.model.Menu;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static kitchenpos.eatinorders.tobe.domain.fixture.MenuFixture.MENU_WITH_ID_AND_PRICE;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderMenuFixture.ORDER_MENU_WITH_MENU_ID_AND_PRICE;
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -87,7 +86,7 @@ class OrderLineItemsTest {
     @Test
     void validateOrderPrice() {
         final UUID menuId = UUID.randomUUID();
-        final Menu menu = MENU_WITH_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
+        final OrderMenu orderMenu = ORDER_MENU_WITH_MENU_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
         final OrderLineItem orderLineItem = new OrderLineItem(
                 UUID.randomUUID(),
                 menuId,
@@ -95,8 +94,9 @@ class OrderLineItemsTest {
                 1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
+        final OrderMenus orderMenus = new OrderMenus(Collections.singletonList(orderMenu));
 
-        ThrowableAssert.ThrowingCallable when = () -> orderLineItems.validateOrderPrice(Collections.singletonList(menu));
+        ThrowableAssert.ThrowingCallable when = () -> orderLineItems.validateOrderPrice(orderMenus);
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
