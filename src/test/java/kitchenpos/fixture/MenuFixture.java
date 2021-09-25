@@ -35,6 +35,9 @@ public class MenuFixture {
     public static Menu 메뉴() {
         return 메뉴("메뉴이름", 1000L, 메뉴그룹(), Arrays.asList(메뉴상품(), 메뉴상품()));
     }
+    public static Menu 메뉴(final long amount, final boolean displayed, MenuProduct... menuProducts) {
+        return 메뉴("메뉴이름", amount, 메뉴그룹(), Arrays.asList(menuProducts));
+    }
 
     public static Menu 메뉴(final String name, final long amount, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
         return new Menu(new Name(name, new FakeProfanities()), new Amount(amount), menuGroup, menuProducts);

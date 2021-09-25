@@ -196,13 +196,13 @@ class MenuServiceTest {
 //        assertThat(actual.isDisplayed()).isFalse();
 //    }
 //
-//    @DisplayName("메뉴의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-//        final List<Menu> actual = menuService.findAll();
-//        assertThat(actual).hasSize(1);
-//    }
+    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        menuRepository.save(MenuFixture.메뉴(19_000L, true, MenuFixture.메뉴상품(product.getId(), 2L)));
+        final List<Menu> actual = menuService.findAll();
+        assertThat(actual).hasSize(1);
+    }
 
     private MenuCreateRequest createMenuRequest(
         final String name,
