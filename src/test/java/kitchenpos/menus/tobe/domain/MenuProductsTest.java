@@ -7,18 +7,14 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
-import static kitchenpos.Fixtures.INVALID_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -61,25 +57,25 @@ class MenuProductsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"0", "-1000"})
-    @DisplayName("Menu의 가격 (Amount)이 MenuProducts의 금액 정책에 부합한지(적거나 같은지) 확인할 수 있다.")
+    @DisplayName("Menu의 가격 (price)이 MenuProducts의 금액 합(amount) 정책에 부합한지(적거나 같은지) 확인할 수 있다.")
     void isValidAmount_bigger(final long value) {
         final MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록(product1, product2);
-        final Amount amount = new Amount(price1 + price2 + value);
+        final Price price = new Price(price1 + price2 + value);
 
-        boolean expected = menuProducts.isValidAmount(amount);
+        boolean expected = menuProducts.isValidPrice(price);
 
         assertThat(expected).isTrue();
     }
 
 
     @ParameterizedTest
-    @ValueSource(strings = {"1000"})
-    @DisplayName("Menu의 가격 (Amount)이 MenuProducts의 금액 정책에 부합하지 않는지(큰지) 확인할 수 있다.")
+    @ValueSource(strings = {"1000000"})
+    @DisplayName("Menu의 가격 (price)이 MenuProducts의 금액 합(amount) 정책에 부합하지 않는지(큰지) 확인할 수 있다.")
     void isValidAmount_sameAndLower(final long value) {
         final MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록(product1, product2);
-        final Amount amount = new Amount(price1 + price2 + value);
+        final Price price = new Price(price1 + price2 + value);
 
-        boolean expected = menuProducts.isValidAmount(amount);
+        boolean expected = menuProducts.isValidPrice(price);
 
         assertThat(expected).isFalse();
     }

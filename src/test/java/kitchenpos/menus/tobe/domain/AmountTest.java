@@ -17,16 +17,16 @@ class AmountTest {
     @DisplayName("생성할 수 있다.")
     void create() {
         final BigDecimal value = BigDecimal.valueOf(1000);
-        final Amount amount = new Amount(value);
+        final Price amount = new Price(value);
 
-        assertThat(amount).isEqualTo(new Amount(value));
+        assertThat(amount).isEqualTo(new Price(value));
     }
 
     @ParameterizedTest
     @ValueSource(strings = "-1000")
     @DisplayName("0원 미만이면 IllegalArgumentException이 발생한다.")
     void create(BigDecimal value) {
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> new Amount(value);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> new Price(value);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(throwingCallable);

@@ -10,6 +10,7 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuProductRequest;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
@@ -32,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("메뉴 응용 서비스(MenuService)는")
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
@@ -62,11 +64,11 @@ class MenuServiceTest {
         final Menu actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull()
+            () -> assertThat(actual.getId()).isNotNull(),
 //            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
 //            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
 //            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
-//            () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
+            () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed())
 //            () -> assertThat(actual.getMenuProducts()).hasSize(1)
         );
     }
@@ -88,7 +90,7 @@ class MenuServiceTest {
         );
     }
 
-    @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
+    @DisplayName("메뉴에 속한 상품의 수량(quantity)은 0개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
         final MenuCreateRequest expected = createMenuRequest(
@@ -98,7 +100,7 @@ class MenuServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("메뉴의 가격(price)이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -110,7 +112,7 @@ class MenuServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @DisplayName("메뉴의 가격(price)은 메뉴에 속한 상품 금액의 합(amount)보다 적거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
         final MenuCreateRequest expected = createMenuRequest(
@@ -143,34 +145,35 @@ class MenuServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-//    @DisplayName("메뉴의 가격을 변경할 수 있다.")
-//    @Test
-//    void changePrice() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(16_000L);
-//        final Menu actual = menuService.changePrice(menuId, expected);
-//        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-//    }
-//
-//    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
-//    @ValueSource(strings = "-1000")
-//    @NullSource
-//    @ParameterizedTest
-//    void changePrice(final BigDecimal price) {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(price);
-//        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-//            .isInstanceOf(IllegalArgumentException.class);
-//    }
-//
-//    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-//    @Test
-//    void changePriceToExpensive() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(33_000L);
-//        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-//            .isInstanceOf(IllegalArgumentException.class);
-//    }
+    @DisplayName("메뉴의 가격을 변경할 수 있다.")
+    @Test
+    void changePrice() {
+        final UUID menuId = 메뉴저장하기().getId();
+        final MenuChangePriceRequest expected = changePriceRequest(16_000L);
+        final Menu actual = menuService.changePrice(menuId, expected);
+
+        // TODO: 2021/09/25 질문1. 가격을 얻는 getter 없이 테스트할 수 있는지? 
+    }
+
+    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
+    @ValueSource(strings = "-1000")
+    @NullSource
+    @ParameterizedTest
+    void changePrice(final BigDecimal price) {
+        final UUID menuId = 메뉴저장하기().getId();
+        final MenuChangePriceRequest expected = changePriceRequest(price);
+        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("변경하려는 가격(price)이 메뉴 상품 금액의 합(amount)보다 크면 메뉴가 숨겨진다.")
+    @Test
+    void changePriceToExpensive() {
+        final UUID menuId = 메뉴저장하기().getId();
+        final MenuChangePriceRequest expected = changePriceRequest(33_000L);
+        final Menu actual = menuService.changePrice(menuId, expected);
+        assertThat(actual.isDisplayed()).isFalse();
+    }
 //
 //    @DisplayName("메뉴를 노출할 수 있다.")
 //    @Test
@@ -199,7 +202,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        menuRepository.save(MenuFixture.메뉴(16_000L, true, MenuFixture.금액이불러와진_메뉴상품목록(product)));
+        메뉴저장하기();
         final List<Menu> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
@@ -248,13 +251,15 @@ class MenuServiceTest {
         return new MenuProductRequest(productId, quantity);
     }
 
-//    private Menu changePriceRequest(final long price) {
-//        return changePriceRequest(BigDecimal.valueOf(price));
-//    }
-//
-//    private Menu changePriceRequest(final BigDecimal price) {
-//        final Menu menu = new Menu();
-//        menu.setPrice(price);
-//        return menu;
-//    }
+    private MenuChangePriceRequest changePriceRequest(final long price) {
+        return changePriceRequest(BigDecimal.valueOf(price));
+    }
+
+    private MenuChangePriceRequest changePriceRequest(final BigDecimal price) {
+        return new MenuChangePriceRequest(price);
+    }
+
+    private Menu 메뉴저장하기() {
+        return menuRepository.save(MenuFixture.메뉴(19_000L, MenuFixture.금액이불러와진_메뉴상품목록(product)));
+    }
 }

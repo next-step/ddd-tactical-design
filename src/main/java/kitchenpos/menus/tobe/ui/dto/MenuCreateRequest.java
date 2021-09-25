@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.ui.dto;
 
 import kitchenpos.common.domain.Profanities;
-import kitchenpos.menus.tobe.domain.Amount;
+import kitchenpos.menus.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.Name;
 
@@ -32,8 +32,8 @@ public class MenuCreateRequest {
         return new Name(name, profanities);
     }
 
-    public Amount getAmount() {
-        return new Amount(price);
+    public Price getAmount() {
+        return new Price(price);
     }
 
     public boolean isDisplayed() {

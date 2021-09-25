@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
@@ -53,11 +52,11 @@ public class MenuProducts {
                 .forEach(menuProduct -> menuProduct.loadProduct(product));
     }
 
-    public boolean isValidAmount(final Amount amount) {
-        return amount.isBelowPrice(calculatePrice());
+    public boolean isValidPrice(final Price price) {
+        return price.isBelowAmount(calculateAmount());
     }
 
-    private BigDecimal calculatePrice() {
+    private BigDecimal calculateAmount() {
         return menuProducts.stream()
                 .map(MenuProduct::calculate)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

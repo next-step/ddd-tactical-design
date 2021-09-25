@@ -18,7 +18,7 @@ public class Menu {
     private Name name;
 
     @Embedded
-    private Amount amount;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -37,32 +37,43 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final Name name, final Amount amount, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
+    public Menu(final Name name, final Price amount, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
         this(randomUUID(), name, amount, menuGroup, false, new MenuProducts(menuProducts));
     }
 
-    public Menu(final Name name, final Amount amount, final MenuGroup menuGroup, boolean displayed, final MenuProducts menuProducts) {
+    public Menu(final Name name, final Price amount, final MenuGroup menuGroup, boolean displayed, final MenuProducts menuProducts) {
         this(randomUUID(), name, amount, menuGroup, displayed, menuProducts);
     }
 
-    public Menu(final UUID id, final Name name, final Amount amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+    public Menu(final UUID id, final Name name, final Price amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
         verify(amount, menuProducts);
         this.id = id;
         this.name = name;
-        this.amount = amount;
+        this.price = amount;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
-    private void verify(Amount amount, MenuProducts menuProducts) {
-        if(!menuProducts.isValidAmount(amount)) {
+    private void verify(Price amount, MenuProducts menuProducts) {
+        if(!menuProducts.isValidPrice(amount)) {
             throw new IllegalArgumentException("메뉴를 등록할 땐 상품 가격 합보다 가격이 적거나 같아야합니다.");
         }
     }
 
+    public void changePrice(final Price price) {
+        if(!menuProducts.isValidPrice(price)) {
+            this.displayed = false;
+        }
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
     }
 
     @Override
@@ -70,11 +81,11 @@ public class Menu {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Menu menu = (Menu) o;
-        return Objects.equals(id, menu.id) || (displayed == menu.displayed && Objects.equals(name, menu.name) && Objects.equals(amount, menu.amount) && Objects.equals(menuGroup, menu.menuGroup) && Objects.equals(menuProducts, menu.menuProducts));
+        return Objects.equals(id, menu.id) || (displayed == menu.displayed && Objects.equals(name, menu.name) && Objects.equals(price, menu.price) && Objects.equals(menuGroup, menu.menuGroup) && Objects.equals(menuProducts, menu.menuProducts));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, amount, menuGroup, displayed, menuProducts);
+        return Objects.hash(name, price, menuGroup, displayed, menuProducts);
     }
 }

@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.common.domain.Profanities;
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -36,26 +37,13 @@ public class MenuService {
         final Menu menu = menuCreateValidator.validate(request, menuGroupRepository, productRepository, profanities);
         return menuRepository.save(menu);
     }
-//
-//    @Transactional
-//    public Menu changePrice(final UUID menuId, final Menu request) {
-//        final BigDecimal price = request.getPrice();
-//        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//            final BigDecimal sum = menuProduct.getProduct()
-//                .getPrice()
-//                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-//            if (price.compareTo(sum) > 0) {
-//                throw new IllegalArgumentException();
-//            }
-//        }
-//        menu.setPrice(price);
-//        return menu;
-//    }
+
+    @Transactional
+    public Menu changePrice(final UUID menuId, final MenuChangePriceRequest request) {
+        final Menu menu = findById(menuId);
+        menu.changePrice(request.price());
+        return menu;
+    }
 //
 //    @Transactional
 //    public Menu display(final UUID menuId) {
@@ -84,5 +72,11 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Menu findById(final UUID menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
