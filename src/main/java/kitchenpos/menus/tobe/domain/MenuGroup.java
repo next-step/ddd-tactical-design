@@ -15,4 +15,13 @@ public class MenuGroup {
 
     private String name;
 
+    public MenuGroup() {
+
+    }
+
+    public MenuGroup(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
 }

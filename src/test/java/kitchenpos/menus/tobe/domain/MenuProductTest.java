@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class MenuProductTest {
 
@@ -14,7 +15,7 @@ public class MenuProductTest {
     void create() {
 
         Assertions.assertDoesNotThrow(
-                () -> new MenuProduct(new Price(BigDecimal.valueOf(10000L)), new Quantity(BigDecimal.valueOf(2L)))
+                () -> new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new Quantity(BigDecimal.valueOf(2L)))
         );
     }
 
@@ -23,12 +24,12 @@ public class MenuProductTest {
     void invalidCreate() {
         // wrong price
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                        new MenuProduct(new Price(null), new Quantity(BigDecimal.valueOf(2L))))
+                        new MenuProduct(UUID.randomUUID(), new Price(null), new Quantity(BigDecimal.valueOf(2L))))
                 .isInstanceOf(IllegalArgumentException.class);
 
         // wrong quantity
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                        new MenuProduct(new Price(BigDecimal.valueOf(10000L)), new Quantity(null)))
+                        new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new Quantity(null)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

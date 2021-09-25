@@ -1,6 +1,6 @@
 package kitchenpos.common.domain;
 
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.application.Profanities;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;

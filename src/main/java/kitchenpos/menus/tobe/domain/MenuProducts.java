@@ -4,6 +4,7 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -16,7 +17,8 @@ public class MenuProducts {
     }
 
     public MenuProducts(MenuProduct... menuProducts) {
-        if (menuProducts.length <= 0) {
+
+        if (Arrays.stream(menuProducts).noneMatch(Objects::nonNull)) {
             throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0 이상이어야 합니다.");
         }
 

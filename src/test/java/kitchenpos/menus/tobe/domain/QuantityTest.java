@@ -26,4 +26,13 @@ public class QuantityTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("동등성 검증")
+    @Test
+    void equals(){
+        Quantity quantity1 = new Quantity(BigDecimal.valueOf(2L));
+        Quantity quantity2 = new Quantity(BigDecimal.valueOf(1L));
+        org.assertj.core.api.Assertions.assertThat(quantity1.equals(quantity2))
+                .isFalse();
+    }
+
 }

@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.FakeProfanities;
-import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
