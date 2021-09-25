@@ -25,7 +25,6 @@ class MenuTest {
     @DisplayName("생성할 수 있다.")
     void create() {
         final Menu menu = new Menu(name, amount, menuGroup, menuProducts);
-
         assertThat(menu.getId()).isNotNull();
         assertThat(menu).isEqualTo(new Menu(name, amount, menuGroup, menuProducts));
     }

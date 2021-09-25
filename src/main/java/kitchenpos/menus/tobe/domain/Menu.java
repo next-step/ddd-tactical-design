@@ -31,36 +31,27 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
 
     public Menu(final Name name, final Amount amount, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
-        this(randomUUID(), name, amount, menuGroup, false, menuProducts);
+        this(randomUUID(), name, amount, menuGroup, false, new MenuProducts(menuProducts));
     }
 
-    public Menu(final UUID id, final Name name, final Amount amount, final MenuGroup menuGroup, final boolean displayed, final List<MenuProduct> menuProducts) {
-        verify(menuProducts);
+    public Menu(final Name name, final Amount amount, final MenuGroup menuGroup, boolean displayed, final MenuProducts menuProducts) {
+        this(randomUUID(), name, amount, menuGroup, displayed, menuProducts);
+    }
+
+    public Menu(final UUID id, final Name name, final Amount amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.amount = amount;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-    }
-
-    private void verify(final List<MenuProduct> menuProducts) {
-        if(Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException("메뉴는 1개 이상의 상품이 필요합니다.");
-        }
     }
 
     public UUID getId() {

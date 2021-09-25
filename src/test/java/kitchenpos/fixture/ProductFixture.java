@@ -12,6 +12,10 @@ public class ProductFixture {
         return 상품(BigDecimal.valueOf(1000));
     }
 
+    public static Product 상품(final long price) {
+        return 상품(BigDecimal.valueOf(price));
+    }
+
     public static Product 상품(BigDecimal price) {
         return 상품("올바른 이름", price);
     }

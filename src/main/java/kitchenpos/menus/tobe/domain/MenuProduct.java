@@ -40,6 +40,10 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
+    public UUID getProductId() {
+        return productId.getId();
+    }
+
     public void loadProduct(final Product product) {
         this.price = product.getPrice();
     }
