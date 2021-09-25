@@ -38,9 +38,9 @@ public class MenuCreateValidator {
         for(final UUID productId: productIds) {
             final Product product = productRepository.findById(productId)
                     .orElseThrow(NoSuchElementException::new);
-            menuProducts.loadProduct(productId, product);
+            menuProducts.loadProduct(product);
         }
-        menuProducts.validateAmount(request.getAmount());
         return menuProducts;
     }
+
 }

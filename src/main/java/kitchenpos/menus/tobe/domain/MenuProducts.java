@@ -47,14 +47,14 @@ public class MenuProducts {
         }
     }
 
-    public void loadProduct(UUID productId, Product product) {
+    public void loadProduct(Product product) {
         menuProducts.stream()
-                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .filter(menuProduct -> Objects.equals(menuProduct.getProductId(), product.getId()))
                 .forEach(menuProduct -> menuProduct.loadProduct(product));
     }
 
-    public void validateAmount(final Amount amount) {
-        amount.validateBelowPrice(calculatePrice());
+    public boolean isValidAmount(final Amount amount) {
+        return amount.isBelowPrice(calculatePrice());
     }
 
     private BigDecimal calculatePrice() {

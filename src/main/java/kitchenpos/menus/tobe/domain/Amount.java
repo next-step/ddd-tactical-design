@@ -30,16 +30,8 @@ public class Amount {
         }
     }
 
-    public void validateUnderPrice(final BigDecimal price) {
-        if(amount.compareTo(price) >= 0) {
-            throw new IllegalArgumentException("메뉴 가격이 상품 가격보다 크거나 같습니다.");
-        }
-    }
-
-    public void validateBelowPrice(final BigDecimal price) {
-        if(amount.compareTo(price) > 0) {
-            throw new IllegalArgumentException("메뉴 가격이 상품 가격보다 큽니다.");
-        }
+    public boolean isBelowPrice(final BigDecimal price) {
+        return amount.compareTo(price) <= 0;
     }
 
     @Override

@@ -46,12 +46,19 @@ public class Menu {
     }
 
     public Menu(final UUID id, final Name name, final Amount amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+        verify(amount, menuProducts);
         this.id = id;
         this.name = name;
         this.amount = amount;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
+    }
+
+    private void verify(Amount amount, MenuProducts menuProducts) {
+        if(!menuProducts.isValidAmount(amount)) {
+            throw new IllegalArgumentException("메뉴를 등록할 땐 상품 가격 합보다 가격이 적거나 같아야합니다.");
+        }
     }
 
     public UUID getId() {

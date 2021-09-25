@@ -199,7 +199,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        menuRepository.save(MenuFixture.메뉴(19_000L, true, MenuFixture.메뉴상품(product.getId(), 2L)));
+        menuRepository.save(MenuFixture.메뉴(16_000L, true, MenuFixture.금액이불러와진_메뉴상품목록(product)));
         final List<Menu> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
