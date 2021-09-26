@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.Price;
@@ -27,6 +27,15 @@ import java.util.UUID;
 @Entity
 public class Product {
 
+    protected Product() {
+
+    }
+
+    public Product(Name name, Price price) {
+        this.name = name;
+        this.price = price;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
@@ -37,17 +46,12 @@ public class Product {
     @Embedded
     private Price price;
 
-    protected Product() {
-
-    }
-
-    public Product(Name name, Price price) {
-        this.name = name;
-        this.price = price;
-    }
-
     public void changePrice(BigDecimal price) {
         this.price = this.price.changePrice(price);
+    }
+
+    public UUID getId() {
+        return this.id;
     }
 
     public Price getPrice() {

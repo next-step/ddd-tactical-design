@@ -1,10 +1,10 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
+
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -16,17 +16,14 @@ public class MenuProducts {
 
     }
 
-    public MenuProducts(MenuProduct... menuProducts) {
+    public MenuProducts(List<MenuProduct> menuProducts, ProductRepository productRepository) {
+        menuProducts
+                .forEach(menuProduct -> productRepository.findById(menuProduct.getProductId()).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 상품이 포함되어 있습니다.")));
 
-        if (Arrays.stream(menuProducts).noneMatch(Objects::nonNull)) {
-            throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0 이상이어야 합니다.");
-        }
-
-        this.menuProducts = Arrays.stream(menuProducts)
-                .collect(Collectors.toList());
+        this.menuProducts = menuProducts;
     }
 
-    public BigDecimal getPriceSum() {
+    public BigDecimal calculateSum() {
         List<BigDecimal> amounts = this.menuProducts.stream()
                 .map(MenuProduct::getAmount)
                 .collect(Collectors.toList());

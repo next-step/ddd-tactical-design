@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.menus.tobe.domain.Quantity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +15,17 @@ public class QuantityTest {
         Assertions.assertDoesNotThrow(() -> new Quantity(BigDecimal.valueOf(2L)));
     }
 
-    @DisplayName("올바르지 않은 생성시 에러 검증")
+    @DisplayName("올바르지 않은 생성시 에러 검증 - 음수값")
     @Test
-    void invalidCreate() {
+    void minusValueCreate() {
         // minus value
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> new Quantity(BigDecimal.valueOf(-1L)))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
 
+    @DisplayName("올바르지 않은 생성시 에러 검증 - null")
+    @Test
+    void nullValueCreate() {
         // null value
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> new Quantity(null))
                 .isInstanceOf(IllegalArgumentException.class);

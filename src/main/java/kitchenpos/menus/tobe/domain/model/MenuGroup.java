@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,19 +9,22 @@ import java.util.UUID;
 @Entity
 public class MenuGroup {
 
+    public MenuGroup() {
+
+    }
+
+    public MenuGroup(String name) {
+        this.name = name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     private String name;
 
-    public MenuGroup() {
-
-    }
-
-    public MenuGroup(UUID id, String name) {
-        this.id = id;
-        this.name = name;
+    public UUID getId() {
+        return this.id;
     }
 
 }

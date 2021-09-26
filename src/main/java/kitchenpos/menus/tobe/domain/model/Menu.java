@@ -1,7 +1,8 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.Price;
+import kitchenpos.menus.tobe.domain.service.MenuService;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,14 +22,14 @@ import java.util.UUID;
  * - 상품이 없으면 등록할 수 없다.
  * - 메뉴에 속한 상품의 수량은 1 이상이어야 한다.
  * - 메뉴의 가격이 올바르지 않으면 등록할 수 없다.
- *   - 메뉴의 가격은 0원 이상이어야 한다.
+ * - 메뉴의 가격은 0원 이상이어야 한다.
  * - 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
  * - 메뉴는 특정 메뉴 그룹에 속해야 한다.
  * - 메뉴의 이름이 올바르지 않으면 등록할 수 없다.
- *   - 메뉴의 이름에는 비속어가 포함될 수 없다.
+ * - 메뉴의 이름에는 비속어가 포함될 수 없다.
  * - 메뉴의 가격을 변경할 수 있다.
  * - 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
- *   - 메뉴의 가격은 0원 이상이어야 한다.
+ * - 메뉴의 가격은 0원 이상이어야 한다.
  * - 메뉴를 노출할 수 있다.
  * - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
  * - 메뉴를 숨길 수 있다.
@@ -36,6 +37,19 @@ import java.util.UUID;
  */
 @Entity
 public class Menu {
+
+    protected Menu() {
+
+    }
+
+    public Menu(UUID menuGroupId, Price price, Name displayedName, MenuProducts menuProducts, MenuService menuService) {
+        this.menuGroupId = menuGroupId;
+        this.price = price;
+        this.displayedName = displayedName;
+        this.isDisplayed = menuProducts.calculateSum().compareTo(price.getPrice()) >= 0;
+        this.menuProducts = menuProducts;
+        menuService.validateMenu(this);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +61,7 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    @ManyToOne
-    private MenuGroup menuGroup;
+    private UUID menuGroupId;
 
     @Embedded
     private Price price;
@@ -57,7 +70,7 @@ public class Menu {
     private boolean isDisplayed;
 
     public void display() {
-        if(menuProducts.getPriceSum().compareTo(price.getPrice()) < 0){
+        if (menuProducts.calculateSum().compareTo(price.getPrice()) < 0) {
             throw new IllegalStateException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
         }
 
@@ -68,7 +81,7 @@ public class Menu {
         this.isDisplayed = false;
     }
 
-    public Boolean isDisplayed(){
+    public Boolean isDisplayed() {
         return this.isDisplayed;
     }
 
@@ -76,21 +89,13 @@ public class Menu {
         return this.price;
     }
 
-    public Menu() {
-
-    }
-
-    public Menu(MenuGroup menuGroup, Price price, Name displayedName, MenuProducts menuProducts) {
-        this.menuGroup = menuGroup;
-        this.price = price;
-        this.displayedName = displayedName;
-        this.isDisplayed = menuProducts.getPriceSum().compareTo(price.getPrice()) >= 0;
-        this.menuProducts = menuProducts;
-    }
-
-    public void changePrice(BigDecimal newPriceValue){
+    public void changePrice(BigDecimal newPriceValue) {
         this.price = this.price.changePrice(newPriceValue);
-        this.isDisplayed = menuProducts.getPriceSum().compareTo(this.price.getPrice()) >= 0;
+        this.isDisplayed = menuProducts.calculateSum().compareTo(this.price.getPrice()) >= 0;
+    }
+
+    public UUID getMenuGroupId() {
+        return this.menuGroupId;
     }
 
 }
