@@ -8,6 +8,7 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +22,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final Profanities profanities;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final Profanities profanities) {
+            final Profanities profanities, final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.profanities = profanities;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -40,7 +43,7 @@ public class ProductService {
     @Transactional
     public Product changePrice(UUID productId, ProductChangePriceRequest request) {
         final Product product = findById(productId);
-        product.setPrice(request.price());
+        product.changePrice(request.price());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
@@ -56,6 +59,7 @@ public class ProductService {
         }
         return product;
     }
+
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {

@@ -35,8 +35,8 @@ public class Product {
         this.price = price;
     }
 
-    public void changePrice(final Product product) {
-        this.price = product.price;
+    public void changePrice(final Price price) {
+        this.price = price;
     }
 
     public UUID getId() {

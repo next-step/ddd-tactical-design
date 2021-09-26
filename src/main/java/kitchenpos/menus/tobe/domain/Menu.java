@@ -22,9 +22,9 @@ public class Menu {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
@@ -56,16 +56,20 @@ public class Menu {
     }
 
     private void verify(Price price, MenuProducts menuProducts) {
-        if(!menuProducts.isValidPrice(price)) {
+        if (!DisplayPolicy.canDisplay(menuProducts, price)) {
             throw new IllegalArgumentException("메뉴를 등록할 땐 가격(price)이 상품 가격 합(amount)보다 적거나 같아야합니다.");
         }
     }
 
     public void changePrice(final Price price) {
-        if(!menuProducts.isValidPrice(price)) {
+        this.price = price;
+        checkHide();
+    }
+
+    public void checkHide() {
+        if (!DisplayPolicy.canDisplay(menuProducts, price)) {
             hide();
         }
-        this.price = price;
     }
 
     public void hide() {
@@ -73,7 +77,7 @@ public class Menu {
     }
 
     public void display() {
-        if(!menuProducts.isValidPrice(price)) {
+        if (!DisplayPolicy.canDisplay(menuProducts, price)) {
             throw new IllegalStateException("메뉴를 노출할땐 가격(price)이 상품 가격 합(amount)보다 적거나 같아야합니다.");
         }
         this.displayed = true;

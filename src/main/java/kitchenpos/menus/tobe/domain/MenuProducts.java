@@ -52,11 +52,7 @@ public class MenuProducts {
                 .forEach(menuProduct -> menuProduct.loadProduct(product));
     }
 
-    public boolean isValidPrice(final Price price) {
-        return price.isBelowAmount(calculateAmount());
-    }
-
-    private BigDecimal calculateAmount() {
+    public BigDecimal calculateAmount() {
         return menuProducts.stream()
                 .map(MenuProduct::calculate)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
