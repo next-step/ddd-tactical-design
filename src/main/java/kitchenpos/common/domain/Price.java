@@ -21,10 +21,6 @@ public class Price {
     }
 
     public Price changePrice(BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("가격이 올바르지 않으면 변경할 수 없습니다.");
-        }
-
         return new Price(value);
     }
 
