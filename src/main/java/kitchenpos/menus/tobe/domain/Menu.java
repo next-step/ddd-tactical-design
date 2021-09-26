@@ -91,6 +91,10 @@ public class Menu {
         return displayed;
     }
 
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

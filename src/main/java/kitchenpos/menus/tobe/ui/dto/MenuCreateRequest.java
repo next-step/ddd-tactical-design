@@ -32,7 +32,7 @@ public class MenuCreateRequest {
         return new Name(name, profanities);
     }
 
-    public Price getAmount() {
+    public Price getPrice() {
         return new Price(price);
     }
 

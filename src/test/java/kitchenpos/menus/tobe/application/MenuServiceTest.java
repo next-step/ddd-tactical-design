@@ -39,7 +39,6 @@ class MenuServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private Profanities profanities = new FakeProfanities();
-    private MenuCreateValidator menuCreateValidator;
     private FakeEventPublisher eventPublisher = new FakeEventPublisher();
     private MenuService menuService;
     private MenuGroup menuGroup;
@@ -54,8 +53,7 @@ class MenuServiceTest {
         MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
         ProductService productService = new ProductService(productRepository, profanities, eventPublisher);
         RestMenuProductClient menuProductClient = new RestMenuProductClient(productService);
-        menuCreateValidator = new MenuCreateValidator(menuGroupService, menuProductClient, profanities);
-        menuService = new MenuService(menuRepository, menuCreateValidator);
+        menuService = new MenuService(menuRepository, menuProductClient, menuGroupService, profanities);
         menuGroup = menuGroupRepository.save(MenuFixture.메뉴그룹());
         menuGroupId = menuGroup.getId();
         product = productRepository.save(ProductFixture.상품(16_000L));
@@ -150,7 +148,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록();
+        final MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록(product);
         final UUID menuId = 메뉴저장하기(MenuFixture.메뉴(900L, menuGroup, menuProducts)).getId();
         final MenuChangePriceRequest expected = changePriceRequest(1_000L);
         final Menu actual = menuService.changePrice(menuId, expected);

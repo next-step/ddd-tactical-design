@@ -42,11 +42,15 @@ public class MenuProducts {
 
     public void validateRegistered(List<Product> products) {
         if (products.size() != menuProducts.size()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("상품이 등록되어있지 않습니다.");
         }
     }
 
-    public void loadProduct(Product product) {
+    public void loadProducts(List<Product> products) {
+        products.forEach(this::loadProduct);
+    }
+
+    private void loadProduct(Product product) {
         menuProducts.stream()
                 .filter(menuProduct -> Objects.equals(menuProduct.getProductId(), product.getId()))
                 .forEach(menuProduct -> menuProduct.loadProduct(product));

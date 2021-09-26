@@ -51,11 +51,14 @@ public class MenuFixture {
         return 금액이불러와진_메뉴상품목록(ProductFixture.상품(), ProductFixture.상품());
     }
 
-    public static MenuProducts 금액이불러와진_메뉴상품목록(final Product... products) {
-        final MenuProducts menuProducts = 메뉴상품목록(Arrays.stream(products).map(Product::getId).toArray(UUID[]::new));
-        Arrays.stream(products)
-                .forEach(product -> menuProducts.loadProduct(product));
+    public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
+        final MenuProducts menuProducts = 메뉴상품목록(products.stream().map(Product::getId).toArray(UUID[]::new));
+        menuProducts.loadProducts(products);
         return menuProducts;
+    }
+
+    public static MenuProducts 금액이불러와진_메뉴상품목록(final Product... products) {
+        return 금액이불러와진_메뉴상품목록(Arrays.asList(products));
     }
 
     public static Menu 메뉴() {
