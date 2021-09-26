@@ -65,7 +65,7 @@ class OrderTableTest {
         final OrderTable orderTable = new OrderTable(DEFAULT_NAME, 0);
 
         assertThatThrownBy(() -> orderTable.clear(orderStatus))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
@@ -96,7 +96,7 @@ class OrderTableTest {
         final OrderTable orderTable = new OrderTable(DEFAULT_NAME, 0);
 
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(1))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
 }
