@@ -34,8 +34,4 @@ public class EatInOrder extends Order {
         this.orderTable = orderTable;
     }
 
-    @Override
-    public Order complete() {
-        return super.complete();
-    }
 }

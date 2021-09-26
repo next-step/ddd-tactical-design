@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "order_table")
-@Entity
+@Entity(name = "tobeOrderTable")
 public class OrderTable {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
