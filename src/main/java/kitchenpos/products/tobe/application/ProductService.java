@@ -4,6 +4,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
@@ -44,19 +45,7 @@ public class ProductService {
     public Product changePrice(UUID productId, ProductChangePriceRequest request) {
         final Product product = findById(productId);
         product.changePrice(request.price());
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId));
         return product;
     }
 

@@ -33,7 +33,7 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
     private ProductService productService;
     private Profanities profanities = new FakeProfanities();
-    private ApplicationEventPublisher eventPublisher = new FakeEventPublisher();
+    private FakeEventPublisher eventPublisher = new FakeEventPublisher();
 
     @BeforeEach
     void setUp() {
@@ -75,12 +75,21 @@ class ProductServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @DisplayName("상품의 가격을 변경하면 가격이 변경되고 ProductPriceChangedEvent가 발생한다.")
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(ProductFixture.상품("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
+        assertAll(
+                () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(0),
+                () -> assertThat(eventPublisher.getEventType()).isNull()
+        );
+
         final Product actual = productService.changePrice(productId, expected);
+        assertAll(
+                () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(1),
+                () -> assertThat(eventPublisher.getEventType()).isInstanceOf(ProductPriceChangedEvent.class)
+        );
         assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()));
     }
 

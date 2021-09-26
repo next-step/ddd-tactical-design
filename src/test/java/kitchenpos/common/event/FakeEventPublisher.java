@@ -4,6 +4,10 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
 public class FakeEventPublisher implements ApplicationEventPublisher {
+
+    private int callCounter = 0;
+    private Class eventType;
+
     @Override
     public void publishEvent(ApplicationEvent event) {
         ApplicationEventPublisher.super.publishEvent(event);
@@ -11,6 +15,15 @@ public class FakeEventPublisher implements ApplicationEventPublisher {
 
     @Override
     public void publishEvent(Object event) {
+        callCounter++;
+        eventType = event.getClass();
+    }
 
+    public int getCallCounter() {
+        return callCounter;
+    }
+
+    public Class getEventType() {
+        return eventType;
     }
 }

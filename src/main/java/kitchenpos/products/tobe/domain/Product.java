@@ -51,10 +51,6 @@ public class Product {
         return price;
     }
 
-    public void setPrice(final Price price) {
-        this.price = price;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

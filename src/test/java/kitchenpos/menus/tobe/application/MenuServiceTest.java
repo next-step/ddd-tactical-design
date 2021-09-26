@@ -4,12 +4,9 @@ import kitchenpos.common.domain.Profanities;
 import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.ProductFixture;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuProductRequest;
@@ -41,6 +38,7 @@ class MenuServiceTest {
     private Profanities profanities;
     private MenuCreateValidator menuCreateValidator = new MenuCreateValidator();
     private MenuService menuService;
+    private MenuGroup menuGroup;
     private UUID menuGroupId;
     private Product product;
 
@@ -51,7 +49,8 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         profanities = new FakeProfanities();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanities, menuCreateValidator);
-        menuGroupId = menuGroupRepository.save(MenuFixture.메뉴그룹()).getId();
+        menuGroup = menuGroupRepository.save(MenuFixture.메뉴그룹());
+        menuGroupId = menuGroup.getId();
         product = productRepository.save(ProductFixture.상품(16_000L));
     }
 
@@ -65,11 +64,7 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-//            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-//            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-//            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed())
-//            () -> assertThat(actual.getMenuProducts()).hasSize(1)
         );
     }
 
@@ -148,11 +143,11 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID menuId = 메뉴저장하기().getId();
-        final MenuChangePriceRequest expected = changePriceRequest(16_000L);
+        final MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록();
+        final UUID menuId = 메뉴저장하기(MenuFixture.메뉴(900L, menuGroup, menuProducts)).getId();
+        final MenuChangePriceRequest expected = changePriceRequest(1_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
-
-        // TODO: 2021/09/25 질문1. 가격을 얻는 getter 없이 테스트할 수 있는지? 
+        assertThat(actual).isEqualTo(MenuFixture.메뉴(1_000L, menuGroup, menuProducts));
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")

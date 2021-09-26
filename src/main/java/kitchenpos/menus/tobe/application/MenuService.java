@@ -46,6 +46,12 @@ public class MenuService {
     }
 
     @Transactional
+    public void checkAllHideByProductId(final UUID productId) {
+        final List<Menu> menu = findAllByProductId(productId);
+        menu.forEach(Menu::checkHide);
+    }
+
+    @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = findById(menuId);
         menu.display();
@@ -68,5 +74,10 @@ public class MenuService {
     public Menu findById(final UUID menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Menu> findAllByProductId(final UUID productId) {
+        return menuRepository.findAllByProductId(productId);
     }
 }
