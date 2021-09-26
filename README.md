@@ -219,6 +219,26 @@
   
 - 메뉴의 목록을 조회할 수 있다(`findAll`).
 
+### 주문 테이블(OrderTable)
+
+#### 속성
+
+- 주문 테이블의 이름인 `name`을 가진다.
+- 주문 테이블의 앉은 손님 수를 뜻하는 `numberOfGuests`를 가진다.
+- 주문 테이블은 테이블이 비워져있는지를 나타내는 상태인 `empty`를 가진다.
+
+#### 기능/조건
+
+- 주문 테이블을 등록할 수 있다(`create`).
+  - `name`은 비워 둘 수 없다.
+- 빈 테이블을 해지할 수 있다(`sit`).
+- 빈 테이블로 설정할 수 있다(`clear`).
+  - 주문 테이블의 `orderStatus`가 `COMPLETED`가 아니라면 설정할 수 없다.
+- 방문한 손님 수를 변경할 수 있다(`changeNumberOfGuests`).
+  - `numberOfGuests`는 0 이상이어야 한다.
+  - `empty`상태의 주문 테이블은 `numberOfGuests`를 변경할 수 없다.
+- 주문 테이블의 목록을 조회할 수 있다(`findAll`).
+
 ### 매장 주문
 
 - `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
