@@ -1,15 +1,18 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.common.domain.Profanities;
+import kitchenpos.common.event.FakeEventPublisher;
 import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.infra.RestMenuProductClient;
 import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuProductRequest;
+import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -35,8 +38,9 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private Profanities profanities;
-    private MenuCreateValidator menuCreateValidator = new MenuCreateValidator();
+    private Profanities profanities = new FakeProfanities();
+    private MenuCreateValidator menuCreateValidator;
+    private FakeEventPublisher eventPublisher = new FakeEventPublisher();
     private MenuService menuService;
     private MenuGroup menuGroup;
     private UUID menuGroupId;
@@ -47,8 +51,11 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        profanities = new FakeProfanities();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanities, menuCreateValidator);
+        MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
+        ProductService productService = new ProductService(productRepository, profanities, eventPublisher);
+        RestMenuProductClient menuProductClient = new RestMenuProductClient(productService);
+        menuCreateValidator = new MenuCreateValidator(menuGroupService, menuProductClient, profanities);
+        menuService = new MenuService(menuRepository, menuCreateValidator);
         menuGroup = menuGroupRepository.save(MenuFixture.메뉴그룹());
         menuGroupId = menuGroup.getId();
         product = productRepository.save(ProductFixture.상품(16_000L));

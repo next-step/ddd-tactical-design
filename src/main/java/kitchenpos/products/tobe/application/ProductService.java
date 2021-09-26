@@ -1,19 +1,15 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.common.domain.Profanities;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -21,16 +17,11 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final Profanities profanities;
     private final ApplicationEventPublisher eventPublisher;
 
-    public ProductService(
-            final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final Profanities profanities, final ApplicationEventPublisher eventPublisher) {
+    public ProductService(final ProductRepository productRepository, final Profanities profanities, final ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.profanities = profanities;
         this.eventPublisher = eventPublisher;
     }
@@ -59,5 +50,10 @@ public class ProductService {
     public Product findById(final UUID productId) {
         return productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findAllByIdIn(List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds);
     }
 }

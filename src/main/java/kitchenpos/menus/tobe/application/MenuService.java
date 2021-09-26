@@ -1,40 +1,29 @@
 package kitchenpos.menus.tobe.application;
 
-import kitchenpos.common.domain.Profanities;
-import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
 import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
-    private final Profanities profanities;
     private final MenuCreateValidator menuCreateValidator;
 
-    public MenuService(
-            final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
-            final ProductRepository productRepository,
-            final Profanities profanities,
-            final MenuCreateValidator menuCreateValidator) {
+    public MenuService(final MenuRepository menuRepository, final MenuCreateValidator menuCreateValidator) {
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
-        this.profanities = profanities;
         this.menuCreateValidator = menuCreateValidator;
     }
 
     @Transactional
     public Menu create(final MenuCreateRequest request) {
-        final Menu menu = menuCreateValidator.validate(request, menuGroupRepository, productRepository, profanities);
+        final Menu menu = menuCreateValidator.validate(request);
         return menuRepository.save(menu);
     }
 

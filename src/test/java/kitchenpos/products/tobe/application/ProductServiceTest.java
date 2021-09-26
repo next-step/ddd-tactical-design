@@ -2,11 +2,9 @@ package kitchenpos.products.tobe.application;
 
 import kitchenpos.common.domain.Profanities;
 import kitchenpos.common.event.FakeEventPublisher;
-import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.*;
 import kitchenpos.common.infra.FakeProfanities;
+import kitchenpos.fixture.ProductFixture;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
@@ -16,21 +14,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
     private Profanities profanities = new FakeProfanities();
     private FakeEventPublisher eventPublisher = new FakeEventPublisher();
@@ -38,8 +32,7 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository, profanities, eventPublisher);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -82,13 +75,13 @@ class ProductServiceTest {
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
         assertAll(
                 () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(0),
-                () -> assertThat(eventPublisher.getEventType()).isNull()
+                () -> assertThat(eventPublisher.getEvent()).isNull()
         );
 
         final Product actual = productService.changePrice(productId, expected);
         assertAll(
                 () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(1),
-                () -> assertThat(eventPublisher.getEventType()).isInstanceOf(ProductPriceChangedEvent.class)
+                () -> assertThat(eventPublisher.getEvent()).isInstanceOf(ProductPriceChangedEvent.class)
         );
         assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()));
     }
