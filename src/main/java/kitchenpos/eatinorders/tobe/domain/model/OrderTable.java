@@ -27,6 +27,7 @@ public class OrderTable {
     }
 
     public OrderTable(final String name, final int numberOfGuests) {
+        this.id = UUID.randomUUID();
         this.name = new OrderTableName(name);
         this.numberOfGuests = new NumberOfGuests(numberOfGuests);
         this.empty = true;
