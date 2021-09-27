@@ -2,6 +2,8 @@ package kitchenpos.eatinorders.tobe.domain.service;
 
 import kitchenpos.eatinorders.tobe.domain.Order;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
+import kitchenpos.eatinorders.tobe.domain.menu.MenuManager;
+import kitchenpos.eatinorders.tobe.domain.menu.Menus;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +16,11 @@ import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 @Component
 public class OrderValidateService {
     private final OrderTableManager orderTableManager;
-    private final MenuValidateService menuValidateService;
+    private final MenuManager menuManager;
 
-    public OrderValidateService(final OrderTableManager orderTableManager, final MenuValidateService menuValidateService) {
+    public OrderValidateService(final OrderTableManager orderTableManager, final MenuManager menuManager) {
         this.orderTableManager = orderTableManager;
-        this.menuValidateService = menuValidateService;
+        this.menuManager = menuManager;
     }
 
     public void validateOrder(final Order order) {
@@ -33,7 +35,7 @@ public class OrderValidateService {
         if (type == EAT_IN) {
             validateOrderTable(order.getOrderTableId());
         }
-        menuValidateService.validateOrder(order);
+        Menus.from(menuManager, order);
     }
 
     private void validateOrderTable(final UUID orderTableId) {
