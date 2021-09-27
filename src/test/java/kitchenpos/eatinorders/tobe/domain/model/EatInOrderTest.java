@@ -5,6 +5,7 @@ import static kitchenpos.fixture.OrderTableFixture.ORDER_TABLE1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 /*
  * - 매장 주문은 주문 항목의 수량이 0 미만일 수 있다.
- * - TODO 숨겨진 메뉴는 주문할 수 없다. (도메인 서비스)
+ * - TODO 하나라도 숨겨진 메뉴가 있으면 주문되지 않는다. (도메인 서비스)
  * - TODO 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다. (도메인 서비스)
  * - 주문을 접수한다.
  *  - 접수 대기 중인 주문만 접수할 수 있다.
@@ -26,10 +27,12 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 class EatInOrderTest {
 
+    private static final UUID ORDER_TABLE_ID = ORDER_TABLE1().getId();
+
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 생성할 수 있다.")
     @Test
     void createEatInOrder() {
-        final EatInOrder actual = new EatInOrder(ORDER_TABLE1(), ORDER_LINE_ITEM1());
+        final EatInOrder actual = new EatInOrder(ORDER_TABLE_ID, ORDER_LINE_ITEM1());
         assertThat(actual).isNotNull();
     }
 
@@ -37,7 +40,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, -2, Long.MIN_VALUE})
     void negativeQuantityOk(final long quantity) {
-        final EatInOrder actual = new EatInOrder(ORDER_TABLE1(), ORDER_LINE_ITEM1());
+        final EatInOrder actual = new EatInOrder(ORDER_TABLE_ID, ORDER_LINE_ITEM1());
         assertThat(actual).isNotNull();
     }
 
@@ -45,7 +48,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.INCLUDE)
     void accept(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         final Order acceptedOrder = order.accept();
 
         assertThat(acceptedOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
@@ -55,7 +58,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
     void canNotAccept(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         assertThatThrownBy(() -> order.accept())
             .isInstanceOf(IllegalStateException.class);
     }
@@ -64,7 +67,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.INCLUDE)
     void serve(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         final Order servedOrder = order.serve();
         assertThat(servedOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
@@ -73,7 +76,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
     void canNotServe(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         assertThatThrownBy(() -> order.serve())
             .isInstanceOf(IllegalStateException.class);
     }
@@ -82,7 +85,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.INCLUDE)
     void complete(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         final Order completedOrder = order.complete();
         assertThat(completedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
@@ -91,7 +94,7 @@ class EatInOrderTest {
     @ParameterizedTest
     @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
     void canNotComplete(final OrderStatus orderStatus) {
-        final Order order = new EatInOrder(ORDER_TABLE1(), orderStatus, ORDER_LINE_ITEM1());
+        final Order order = new EatInOrder(ORDER_TABLE_ID, orderStatus, ORDER_LINE_ITEM1());
         assertThatThrownBy(() -> order.complete())
             .isInstanceOf(IllegalStateException.class);
     }

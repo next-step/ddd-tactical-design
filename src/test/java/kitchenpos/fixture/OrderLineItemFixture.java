@@ -9,7 +9,7 @@ import kitchenpos.menus.tobe.domain.model.MenuPrice;
 public class OrderLineItemFixture {
 
     public static OrderLineItem ORDER_LINE_ITEM1() {
-        return new OrderLineItem(MENU1(), new MenuPrice(16000L), new OrderQuantity(3));
+        return new OrderLineItem(MENU1().getId(), new MenuPrice(16000L), new OrderQuantity(3));
     }
 
 }

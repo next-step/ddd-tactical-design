@@ -60,8 +60,20 @@ public abstract class Order {
         this.orderLineItems = new OrderLineItems(orderLineItems);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
     }
 
     // TODO 상태패턴으로 개선?
@@ -88,4 +100,8 @@ public abstract class Order {
         status = OrderStatus.COMPLETED;
         return this;
     }
+
+    public abstract UUID getOrderTableId();
+
+    public abstract OrderType getType();
 }

@@ -1,37 +1,48 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("EAT_IN")
 public class EatInOrder extends Order {
 
-    @ManyToOne
-    @JoinColumn(
+    @Column(
         name = "order_table_id",
         columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+        nullable = false
     )
-    private OrderTable orderTable;
-
-//    @Column(name = "order_table_id", columnDefinition = "varbinary(16)")
-//    private UUID orderTableId;
+    private UUID orderTableId;
 
     protected EatInOrder() {
     }
 
-    public EatInOrder(final OrderTable orderTable, final OrderLineItem... orderLineItems) {
-        super(orderLineItems);
-        this.orderTable = orderTable;
+    @Override
+    public UUID getOrderTableId() {
+        return orderTableId;
     }
 
-    EatInOrder(final OrderTable orderTable, final OrderStatus orderStatus, final OrderLineItem... orderLineItems) {
+    @Override
+    public OrderType getType() {
+        return OrderType.EAT_IN;
+    }
+
+    public EatInOrder(final UUID orderTableId, final OrderLineItem... orderLineItems) {
+        this(orderTableId, Arrays.asList(orderLineItems));
+    }
+
+    public EatInOrder(final UUID orderTableId, final List<OrderLineItem> orderLineItems) {
+        super(orderLineItems);
+        this.orderTableId = orderTableId;
+    }
+
+    EatInOrder(final UUID orderTableId, final OrderStatus orderStatus, final OrderLineItem... orderLineItems) {
         super(orderStatus, orderLineItems);
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
 }

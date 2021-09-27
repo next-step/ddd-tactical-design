@@ -23,11 +23,15 @@ public class OrderLineItems {
     protected OrderLineItems() {
     }
 
-    public OrderLineItems(final OrderLineItem ... orderLineItems) {
+    public OrderLineItems(final OrderLineItem... orderLineItems) {
         this(Arrays.asList(orderLineItems));
     }
 
     public OrderLineItems(final List<OrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
+    }
+
+    public List<OrderLineItem> getOrderLineItems() {
+        return orderLineItems;
     }
 }

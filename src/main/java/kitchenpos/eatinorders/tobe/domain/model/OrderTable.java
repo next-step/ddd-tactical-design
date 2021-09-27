@@ -33,6 +33,10 @@ public class OrderTable {
         this.empty = true;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public boolean isEmpty() {
         return empty;
     }
