@@ -5,8 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.service.OrderDeliverService;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,14 +30,8 @@ public class Order {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "order_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
     @Column(name = "delivery_address")
     private String deliveryAddress;
@@ -53,12 +45,12 @@ public class Order {
 
     protected Order() {}
 
-    public Order(final OrderType type, final List<OrderLineItem> orderLineItems, final String deliveryAddress, final UUID orderTableId) {
+    public Order(final OrderType type, final OrderLineItems orderLineItems, final String deliveryAddress, final UUID orderTableId) {
         this.id = UUID.randomUUID();
         this.type = type;
         this.status = WAITING;
         this.orderDateTime = LocalDateTime.now();
-        this.orderLineItems = Collections.unmodifiableList(orderLineItems);
+        this.orderLineItems = orderLineItems;
         this.deliveryAddress = deliveryAddress;
         this.orderTableId = orderTableId;
     }
@@ -80,7 +72,7 @@ public class Order {
     }
 
     public List<OrderLineItem> getOrderLineItems() {
-        return new ArrayList<>(orderLineItems);
+        return orderLineItems.getOrderLineItems();
     }
 
     public String getDeliveryAddress() {

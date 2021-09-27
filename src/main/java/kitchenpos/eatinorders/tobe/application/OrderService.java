@@ -1,9 +1,6 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.tobe.domain.Order;
-import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
-import kitchenpos.eatinorders.tobe.domain.OrderQuantity;
-import kitchenpos.eatinorders.tobe.domain.OrderRepository;
+import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
 import kitchenpos.eatinorders.tobe.domain.service.OrderDeliverService;
 import kitchenpos.eatinorders.tobe.domain.service.OrderValidateService;
@@ -36,9 +33,9 @@ public class OrderService {
     @Transactional
     public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
+        final OrderLineItems orderLineItems = new OrderLineItems(request.getOrderLineItems().stream()
                 .map(this::createOrderLineItem)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         final Order order = new Order(
                 request.getType(),
                 orderLineItems,
