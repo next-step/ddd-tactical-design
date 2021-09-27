@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.dto;
 
 import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderType;
+import kitchenpos.eatinorders.tobe.exception.IllegalOrderException;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class CreateOrderRequest {
 
     public void validate() {
         if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
-            throw new IllegalArgumentException("한개 이상의 메뉴를  주문해야합니다.");
+            throw new IllegalOrderException("한개 이상의 메뉴를  주문해야합니다.");
         }
     }
 }

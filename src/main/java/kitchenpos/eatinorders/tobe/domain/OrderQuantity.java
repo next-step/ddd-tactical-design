@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.exception.IllegalOrderException;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -12,7 +14,7 @@ public class OrderQuantity {
 
     public OrderQuantity(final long quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException("주문은 수량이 1개 이상이어야 합니다.");
+            throw new IllegalOrderException("주문은 수량이 1개 이상이어야 합니다.");
         }
         this.quantity = quantity;
     }

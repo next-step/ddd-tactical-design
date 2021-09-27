@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
 import kitchenpos.eatinorders.tobe.domain.service.OrderDeliverService;
+import kitchenpos.eatinorders.tobe.exception.IllegalStatusChangeException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -90,34 +91,34 @@ public class Order {
 
     public void serve() {
         if (status != ACCEPTED) {
-            throw new IllegalStateException("접수되지 않은 주문은 서빙할 수 없습니다.");
+            throw new IllegalStatusChangeException("접수되지 않은 주문은 서빙할 수 없습니다.");
         }
         this.status = SERVED;
     }
 
     public void startDelivery() {
         if (type != DELIVERY) {
-            throw new IllegalStateException("배달 타입이 아닌 주문은 배달할 수 없습니다.");
+            throw new IllegalStatusChangeException("배달 타입이 아닌 주문은 배달할 수 없습니다.");
         }
         if (status != SERVED) {
-            throw new IllegalStateException("서빙되지 않은 주문은 배달할 수 없습니다.");
+            throw new IllegalStatusChangeException("서빙되지 않은 주문은 배달할 수 없습니다.");
         }
         this.status = DELIVERING;
     }
 
     public void completeDelivery() {
         if (status != DELIVERING) {
-            throw new IllegalStateException("배달 중이지 않은 주문은 배달 완료할 수 없습니다.");
+            throw new IllegalStatusChangeException("배달 중이지 않은 주문은 배달 완료할 수 없습니다.");
         }
         this.status = DELIVERED;
     }
 
     public void complete(final OrderTableManager orderTableManager) {
         if (type == DELIVERY && status != OrderStatus.DELIVERED) {
-            throw new IllegalStateException("배달 완료된 주문은 다시 완료할 수 없습니다.");
+            throw new IllegalStatusChangeException("배달 완료된 주문은 다시 완료할 수 없습니다.");
         }
         if ((type == OrderType.TAKEOUT || type == EAT_IN) && status != SERVED) {
-            throw new IllegalStateException("서빙되지 않은 주문은 완료할 수 없습니다.");
+            throw new IllegalStatusChangeException("서빙되지 않은 주문은 완료할 수 없습니다.");
         }
         this.status = COMPLETED;
         if (type == EAT_IN) {

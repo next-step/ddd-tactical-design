@@ -4,6 +4,7 @@ import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.Order;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.menu.MenuManager;
+import kitchenpos.eatinorders.tobe.exception.IllegalDeliverException;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -23,7 +24,7 @@ public class OrderDeliverService {
 
     public void deliver(final Order order) {
         if (order.getStatus() != WAITING) {
-            throw new IllegalStateException("접수 대기 중인 주문은 접수 할 수 없습니다.");
+            throw new IllegalDeliverException("접수 대기 중인 주문은 접수 할 수 없습니다.");
         }
         if (order.getType() == DELIVERY) {
             final BigDecimal sum = order.getOrderLineItems().stream()
