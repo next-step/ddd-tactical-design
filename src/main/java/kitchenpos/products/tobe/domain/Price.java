@@ -1,11 +1,13 @@
 package kitchenpos.products.tobe.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
 public class Price {
+    @Column(name = "price")
     private BigDecimal price;
 
     public Price() {
@@ -34,5 +36,9 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(price);
+    }
+
+    public BigDecimal getValue() {
+        return price;
     }
 }

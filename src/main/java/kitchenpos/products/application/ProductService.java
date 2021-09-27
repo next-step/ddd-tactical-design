@@ -3,16 +3,19 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.application.dto.ProductCreateDto;
+import kitchenpos.products.application.dto.ProductPriceChangeDto;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -32,31 +35,22 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public Product create(final ProductCreateDto productCreateDto) {
+        DisplayedName displayedName = DisplayedName.of(productCreateDto.getName(), purgomalumClient);
+        Price price = new Price(productCreateDto.getPrice());
+        return productRepository.save(new Product(UUID.randomUUID(), displayedName, price));
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Product changePrice(final UUID productId, final ProductPriceChangeDto productPriceChangeDto) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(productPriceChangeDto.getPrice());
+        hideMenu(productId); // TODO : Menu context 수정할때 수정하는 건가요?
+        return product;
+    }
+
+    private void hideMenu(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -69,7 +63,6 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
     }
 
     @Transactional(readOnly = true)

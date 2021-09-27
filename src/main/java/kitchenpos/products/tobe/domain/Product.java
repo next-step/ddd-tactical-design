@@ -18,16 +18,29 @@ public class Product {
     public Product() {
     }
 
-    public Product(DisplayedName displayedName, Price price) {
+    public Product(UUID id, DisplayedName displayedName, Price price) {
+        this.id = id;
         this.displayedName = displayedName;
         this.price = price;
+    }
+
+    public Product(DisplayedName displayedName, Price price) {
+        this(null, displayedName, price);
     }
 
     public void changePrice(BigDecimal price) {
         this.price = new Price(price);
     }
 
-    public Price getPrice() {
-        return price;
+    public UUID getId() {
+        return id;
+    }
+
+    public BigDecimal getPrice() {
+        return price.getValue();
+    }
+
+    public String getName() {
+        return displayedName.getValue();
     }
 }

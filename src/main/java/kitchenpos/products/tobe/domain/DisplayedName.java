@@ -1,10 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class DisplayedName {
+    @Column(name = "name")
     private String name;
 
     public DisplayedName() {
@@ -15,10 +19,14 @@ public class DisplayedName {
     }
 
     public static DisplayedName of(String name, PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException("상품 명에는 비속어가 포함 될 수 없습니다.");
         }
         return new DisplayedName(name);
+    }
+
+    public String getValue() {
+        return name;
     }
 
     @Override
