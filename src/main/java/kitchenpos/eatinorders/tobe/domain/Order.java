@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
+import kitchenpos.eatinorders.tobe.domain.service.OrderDeliverService;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,7 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.eatinorders.tobe.domain.OrderStatus.WAITING;
+import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.DELIVERY;
+import static kitchenpos.eatinorders.tobe.domain.OrderType.EAT_IN;
 
 @Table(name = "orders")
 @Entity(name = "TobeOrder")
@@ -86,7 +91,45 @@ public class Order {
         return orderTableId;
     }
 
-    public void changeStatus(final OrderStatus status) {
-        this.status = status;
+    public void accept(final OrderDeliverService orderDeliverService) {
+        orderDeliverService.deliver(this);
+        this.status = ACCEPTED;
+    }
+
+    public void serve() {
+        if (status != ACCEPTED) {
+            throw new IllegalStateException("접수되지 않은 주문은 서빙할 수 없습니다.");
+        }
+        this.status = SERVED;
+    }
+
+    public void startDelivery() {
+        if (type != DELIVERY) {
+            throw new IllegalStateException("배달 타입이 아닌 주문은 배달할 수 없습니다.");
+        }
+        if (status != SERVED) {
+            throw new IllegalStateException("서빙되지 않은 주문은 배달할 수 없습니다.");
+        }
+        this.status = DELIVERING;
+    }
+
+    public void completeDelivery() {
+        if (status != DELIVERING) {
+            throw new IllegalStateException("배달 중이지 않은 주문은 배달 완료할 수 없습니다.");
+        }
+        this.status = DELIVERED;
+    }
+
+    public void complete(final OrderTableManager orderTableManager) {
+        if (type == DELIVERY && status != OrderStatus.DELIVERED) {
+            throw new IllegalStateException("배달 완료된 주문은 다시 완료할 수 없습니다.");
+        }
+        if ((type == OrderType.TAKEOUT || type == EAT_IN) && status != SERVED) {
+            throw new IllegalStateException("서빙되지 않은 주문은 완료할 수 없습니다.");
+        }
+        this.status = COMPLETED;
+        if (type == EAT_IN) {
+            orderTableManager.clearOrderTable(orderTableId);
+        }
     }
 }
