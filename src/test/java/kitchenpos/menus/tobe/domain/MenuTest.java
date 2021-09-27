@@ -34,7 +34,7 @@ class MenuTest {
     @Test
     void create() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
@@ -64,7 +64,7 @@ class MenuTest {
     @Test
     void create_fail_non_existent_Product() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuProduct menuProduct = MenuProductFixture.menuProduct_with_non_existent_product();
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProduct));
@@ -89,7 +89,7 @@ class MenuTest {
     @Test
     void create_fail_non_existent_MenuGroup() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
         //when then
@@ -110,7 +110,7 @@ class MenuTest {
     @Test
     void create_fail_invalid_price() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
         Price totalMenuProductsPrice = menuRequest.getMenuProducts().getTotalMenuProductsPrice();
@@ -135,7 +135,7 @@ class MenuTest {
     @Test
     void change_price() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
@@ -161,7 +161,7 @@ class MenuTest {
     @Test
     void change_price_fail() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
@@ -187,7 +187,7 @@ class MenuTest {
     @Test
     void hide() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
@@ -212,7 +212,7 @@ class MenuTest {
     @Test
     void dislay() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
@@ -237,7 +237,7 @@ class MenuTest {
     @Test
     void dislay_fail_cause_invalid_price() {
         //given
-        MenuRequest menuRequest = MenuFixture.menu();
+        MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
         MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 

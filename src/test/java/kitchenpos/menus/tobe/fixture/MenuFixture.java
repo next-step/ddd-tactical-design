@@ -15,7 +15,7 @@ import java.util.UUID;
 public class MenuFixture {
     private static final Profanities profanities = new FakePurgomalumClient();
 
-    public static MenuRequest menu() {
+    public static MenuRequest menuRequest() {
         UUID id = UUID.randomUUID();
         DisplayedName name = new DisplayedName("양념반후라이드반", profanities);
         Price price = new Price(BigDecimal.valueOf(16_000L));
