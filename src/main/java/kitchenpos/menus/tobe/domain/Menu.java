@@ -28,6 +28,7 @@ public class Menu {
         this.displayed = displayed;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
+        validatePrice(price, menuProducts);
         validator.validate(this);
     }
 

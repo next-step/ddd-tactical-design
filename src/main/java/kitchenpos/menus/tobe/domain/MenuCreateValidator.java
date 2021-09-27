@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.domain.exception.WrongPriceException;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -8,8 +7,6 @@ import kitchenpos.products.domain.ProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
-import static kitchenpos.menus.tobe.domain.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE;
 
 public class MenuCreateValidator {
     private final MenuGroupRepository menuGroupRepository;
@@ -23,7 +20,6 @@ public class MenuCreateValidator {
     public void validate(Menu menu) {
         validateExistentMenuGroup(menu.getMenuGroup());
         validateExistentProduct(menu.getMenuProducts());
-        validatePrice(menu.getPrice(), menu.getMenuProducts());
     }
 
     private void validateExistentProduct(final MenuProducts menuProducts) {
@@ -38,14 +34,8 @@ public class MenuCreateValidator {
         }
     }
 
-    private void validateExistentMenuGroup(final MenuGroup menuGroup) {
-        menuGroupRepository.findById(menuGroup.getId())
+    private MenuGroup validateExistentMenuGroup(final MenuGroup menuGroup) {
+        return menuGroupRepository.findById(menuGroup.getId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 MenuGroup에 메뉴를 등록할 수 없습니다."));
-    }
-
-    private void validatePrice(final Price price, final MenuProducts menuProducts) {
-        if (price.compareTo(menuProducts.getTotalMenuProductsPrice()) > 0 ) {
-            throw new WrongPriceException(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
-        }
     }
 }
