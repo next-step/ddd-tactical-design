@@ -2,8 +2,6 @@ package kitchenpos.eatinorders.tobe.domain.service;
 
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.*;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Completed;
-import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderRepository;
 import org.assertj.core.api.ThrowableAssert;
@@ -11,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kitchenpos.eatinorders.tobe.domain.fixture.OrderFixture.ORDER_WITH_TABLE_AND_STATUS;
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderFixture.ORDER_WITH_TABLE;
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderTableFixture.DEFAULT_ORDER_TABLE;
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,7 +29,7 @@ class OrderTableClearValidatorTest {
     @Test
     void 빈_테이블_설정_실패() {
         final OrderTable orderTable = DEFAULT_ORDER_TABLE();
-        orderRepository.save(ORDER_WITH_TABLE_AND_STATUS(orderTable, new Waiting()));
+        orderRepository.save(ORDER_WITH_TABLE(orderTable));
 
         final ThrowableAssert.ThrowingCallable when = () -> orderTable.clear(orderTableClearValidator);
 
@@ -43,7 +41,10 @@ class OrderTableClearValidatorTest {
     @Test
     void 빈_테이블_설정_성공() {
         final OrderTable orderTable = DEFAULT_ORDER_TABLE();
-        orderRepository.save(ORDER_WITH_TABLE_AND_STATUS(orderTable, new Completed()));
+        final Order order = orderRepository.save(ORDER_WITH_TABLE(orderTable));
+        order.accept();
+        order.serve();
+        order.complete(dummy -> {});
 
         try {
             orderTable.clear(orderTableClearValidator);

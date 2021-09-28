@@ -31,14 +31,13 @@ class OrderTest {
     void 생성_성공() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final OrderStatus orderStatus = new Waiting();
 
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), orderStatus, orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         assertAll(
                 () -> assertThat(order.getId()).isNotNull(),
                 () -> assertThat(order.getOrderTableId()).isNotNull(),
-                () -> assertThat(order.getStatus()).isEqualTo(orderStatus.getStatus()),
+                () -> assertThat(order.getStatus()).isEqualTo(new Waiting().getStatus()),
                 () -> assertThat(order.getOrderDateTime()).isBefore(LocalDateTime.now())
         );
     }
@@ -59,7 +58,7 @@ class OrderTest {
     void 접수_진행_성공() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Waiting(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         order.accept();
 
@@ -71,9 +70,12 @@ class OrderTest {
     void 접수_진행_실패() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Accepted(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
-        ThrowableAssert.ThrowingCallable when = order::accept;
+        ThrowableAssert.ThrowingCallable when = () -> {
+            order.accept();
+            order.accept();
+        };
 
         assertThatIllegalStateException().isThrownBy(when)
                 .withMessage("주문이 접수 대기 상태가 아닙니다.");
@@ -84,8 +86,9 @@ class OrderTest {
     void 서빙_진행_성공() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Accepted(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
+        order.accept();
         order.serve();
 
         assertThat(order.getStatus()).isEqualTo(new Served().getStatus());
@@ -96,7 +99,7 @@ class OrderTest {
     void 서빙_진행_실패() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = order::serve;
 
@@ -109,8 +112,10 @@ class OrderTest {
     void 계산_완료_진행_성공() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
+        order.accept();
+        order.serve();
         order.complete(dummy -> {
         });
 
@@ -122,7 +127,7 @@ class OrderTest {
     void 계산_완료_진행_실패() {
         final OrderLineItem orderLineItem = DEFAULT_ORDER_LINE_ITEM();
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Completed(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
         ThrowableAssert.ThrowingCallable when = () -> order.complete(dummy -> {
         });
@@ -141,10 +146,14 @@ class OrderTest {
                 -1L
         );
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final Order order = new Order(UUID.randomUUID(), UUID.randomUUID(), new Served(), orderLineItems, dummyValidator);
+        final Order order = Order.create(UUID.randomUUID(), UUID.randomUUID(), orderLineItems, dummyValidator);
 
-        ThrowableAssert.ThrowingCallable when = () -> order.complete(dummy -> {
-        });
+        ThrowableAssert.ThrowingCallable when = () -> {
+            order.accept();
+            order.serve();
+            order.complete(dummy -> {
+            });
+        };
 
         assertThatIllegalStateException().isThrownBy(when)
                 .withMessage("계산 가능하지 않은 주문 항목이 있습니다.");

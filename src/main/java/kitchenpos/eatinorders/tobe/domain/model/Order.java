@@ -23,7 +23,7 @@ public class Order {
 
     private final LocalDateTime orderDateTime;
 
-    public Order(
+    private Order(
             final UUID id,
             final UUID orderTableId,
             final OrderStatus orderStatus,

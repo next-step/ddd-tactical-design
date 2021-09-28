@@ -9,11 +9,10 @@ import java.util.UUID;
 
 public class OrderFixture {
 
-    public static Order ORDER_WITH_TABLE_AND_STATUS(final OrderTable ordertable, final OrderStatus orderStatus) {
-        return new Order(
+    public static Order ORDER_WITH_TABLE(final OrderTable ordertable) {
+        return Order.create(
                 UUID.randomUUID(),
                 ordertable.getId(),
-                orderStatus,
                 new OrderLineItems(
                         Collections.singletonList(
                                 new OrderLineItem(
