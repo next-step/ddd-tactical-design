@@ -2,6 +2,9 @@ package kitchenpos.menus.tobe.domain.fixture;
 
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
+import kitchenpos.menus.tobe.domain.repository.InMemoryMenuGroupRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.validator.MenuValidator;
 import kitchenpos.products.tobe.domain.fixture.ProductFixture;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.repository.InMemoryProductRepository;
@@ -14,7 +17,9 @@ import java.util.List;
 public class MenuProductsFixture {
 
     public static MenuProducts MENU_PRODUCTS_FIXTURE() {
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         ProductRepository productRepository = new InMemoryProductRepository();
+        MenuValidator menuValidator = new MenuValidator(menuGroupRepository, productRepository);
         Product product1 = ProductFixture.PRODUCT_FIXTURE("후라이드", 10000L);
         Product product2 = ProductFixture.PRODUCT_FIXTURE("양념치킨", 10000L);
         productRepository.save(product1);
@@ -23,28 +28,32 @@ public class MenuProductsFixture {
         MenuProduct menuProduct1 = MenuProductFixture.MENU_PRODUCT_FIXTURE(product1, 10000L, 2L);
         MenuProduct menuProduct2 = MenuProductFixture.MENU_PRODUCT_FIXTURE(product2, 10000L, 2L);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
-        return new MenuProducts(menuProducts, productRepository);
+        return new MenuProducts(menuProducts, menuValidator);
     }
 
     public static MenuProducts MENU_PRODUCTS_FIXTURE_WITH_NOT_REGISTERED_PRODUCT() {
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         ProductRepository productRepository = new InMemoryProductRepository();
+        MenuValidator menuValidator = new MenuValidator(menuGroupRepository, productRepository);
         Product product1 = ProductFixture.PRODUCT_FIXTURE("후라이드", 10000L);
         Product product2 = ProductFixture.PRODUCT_FIXTURE("양념치킨", 10000L);
 
         MenuProduct menuProduct1 = MenuProductFixture.MENU_PRODUCT_FIXTURE(product1, 10000L, 2L);
         MenuProduct menuProduct2 = MenuProductFixture.MENU_PRODUCT_FIXTURE(product2, 10000L, 2L);
         List<MenuProduct> menuProducts = Arrays.asList(menuProduct1, menuProduct2);
-        return new MenuProducts(menuProducts, productRepository);
+        return new MenuProducts(menuProducts, menuValidator);
     }
 
     public static MenuProducts MENU_PRODUCTS_FIXTURE_WITH_PRICE_AND_QUANTITY(Long priceValue, Long quantityValue) {
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         ProductRepository productRepository = new InMemoryProductRepository();
+        MenuValidator menuValidator = new MenuValidator(menuGroupRepository, productRepository);
         Product product = ProductFixture.PRODUCT_FIXTURE("후라이드", priceValue);
         productRepository.save(product);
 
         MenuProduct menuProduct = MenuProductFixture.MENU_PRODUCT_FIXTURE(product, priceValue, quantityValue);
         List<MenuProduct> menuProducts = Collections.singletonList(menuProduct);
-        return new MenuProducts(menuProducts, productRepository);
+        return new MenuProducts(menuProducts, menuValidator);
     }
 
 }

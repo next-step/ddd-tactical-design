@@ -3,10 +3,24 @@ package kitchenpos.menus.tobe.domain.model;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.tobe.domain.Quantity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Entity
 public class MenuProduct {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private UUID productId;
+
+    @Embedded
+    private Price price;
+
+    @Embedded
+    private Quantity quantity;
 
     public MenuProduct(UUID productId, Price price, Quantity quantity) {
         this.productId = productId;
@@ -14,9 +28,9 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    private final UUID productId;
-    private final Price price;
-    private final Quantity quantity;
+    public MenuProduct() {
+
+    }
 
     public UUID getProductId() {
         return this.productId;
@@ -26,4 +40,12 @@ public class MenuProduct {
         return price.getPrice().multiply(quantity.getQuantity());
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Id
+    public Long getId() {
+        return id;
+    }
 }

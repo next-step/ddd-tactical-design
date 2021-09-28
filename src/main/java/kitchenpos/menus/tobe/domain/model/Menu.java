@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.service.MenuService;
+import kitchenpos.menus.tobe.domain.validator.MenuValidator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -38,19 +38,6 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
-    protected Menu() {
-
-    }
-
-    public Menu(UUID menuGroupId, Price price, Name displayedName, MenuProducts menuProducts, MenuService menuService) {
-        this.menuGroupId = menuGroupId;
-        this.price = price;
-        this.displayedName = displayedName;
-        this.isDisplayed = menuProducts.calculateSum().compareTo(price.getPrice()) >= 0;
-        this.menuProducts = menuProducts;
-        menuService.validateMenu(this);
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
@@ -68,6 +55,19 @@ public class Menu {
 
     @Column
     private boolean isDisplayed;
+
+    protected Menu() {
+
+    }
+
+    public Menu(UUID menuGroupId, Price price, Name displayedName, MenuProducts menuProducts, MenuValidator menuValidator) {
+        this.menuGroupId = menuGroupId;
+        this.price = price;
+        this.displayedName = displayedName;
+        this.isDisplayed = menuProducts.calculateSum().compareTo(price.getPrice()) >= 0;
+        this.menuProducts = menuProducts;
+        menuValidator.validateMenu(this);
+    }
 
     public void display() {
         if (menuProducts.calculateSum().compareTo(price.getPrice()) < 0) {

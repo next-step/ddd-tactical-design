@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.products.tobe.domain.repository.ProductRepository;
+import kitchenpos.menus.tobe.domain.validator.MenuValidator;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -16,10 +16,8 @@ public class MenuProducts {
 
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts, ProductRepository productRepository) {
-        menuProducts
-                .forEach(menuProduct -> productRepository.findById(menuProduct.getProductId()).orElseThrow(() -> new IllegalArgumentException("등록되지 않은 상품이 포함되어 있습니다.")));
-
+    public MenuProducts(List<MenuProduct> menuProducts, MenuValidator menuValidator) {
+        menuValidator.validateMenuProducts(menuProducts);
         this.menuProducts = menuProducts;
     }
 
