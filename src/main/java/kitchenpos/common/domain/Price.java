@@ -43,6 +43,12 @@ public class Price implements Comparable<Price> {
         return new Price(multipliedValue);
     }
 
+    public Price multiply(kitchenpos.eatinorders.tobe.domain.order.Quantity quantity) {
+        BigDecimal qty = quantity.toBigDecimal();
+        final BigDecimal multipliedValue = value.multiply(qty);
+        return new Price(multipliedValue);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
