@@ -75,4 +75,5 @@ public class MenuPrice implements Price {
     public int compareTo(final Price p) {
         return value.compareTo(p.getValue());
     }
+
 }

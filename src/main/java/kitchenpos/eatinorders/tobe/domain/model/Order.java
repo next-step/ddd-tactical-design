@@ -25,6 +25,12 @@ public abstract class Order {
     @Id
     private UUID id;
 
+    @Column(
+        name = "order_table_id",
+        columnDefinition = "varbinary(16)"
+    )
+    private UUID orderTableId;
+
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
@@ -76,7 +82,6 @@ public abstract class Order {
         return orderLineItems;
     }
 
-    // TODO 상태패턴으로 개선?
     public Order accept() {
         if (status != OrderStatus.WAITING) {
             throw new IllegalStateException("대기 상태에서만 주문을 승인할 수 있습니다.");

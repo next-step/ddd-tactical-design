@@ -44,4 +44,7 @@ public class OrderLineItem {
         return menuId;
     }
 
+    public MenuPrice getPrice() {
+        return price;
+    }
 }

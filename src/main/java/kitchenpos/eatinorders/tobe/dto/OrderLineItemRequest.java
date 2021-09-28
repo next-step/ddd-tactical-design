@@ -8,7 +8,13 @@ public class OrderLineItemRequest {
     private BigDecimal price;
     private Long quantity;
 
-    public OrderLineItemRequest() {
+    protected OrderLineItemRequest() {
+    }
+
+    public OrderLineItemRequest(final UUID menuId, final BigDecimal price, final Long quantity) {
+        this.menuId = menuId;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     public UUID getMenuId() {

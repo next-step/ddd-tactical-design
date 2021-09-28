@@ -11,4 +11,7 @@ public interface Price extends Comparable<Price> {
 
     Price add(final Price price);
 
+    default boolean isNotEqualTo(final Price price) {
+        return getValue().compareTo(price.getValue()) != 0;
+    }
 }

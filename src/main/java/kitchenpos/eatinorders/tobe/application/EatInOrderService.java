@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.model.Order;
@@ -12,8 +13,9 @@ import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderResponse;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.model.MenuPrice;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +35,33 @@ public class EatInOrderService {
 
     @Transactional
     public OrderResponse create(final OrderRequest request) {
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
+        request.validate();
+
+        final List<OrderLineItemRequest> orderLineItemRequests = request.getOrderLineItems();
+
+        final List<OrderLineItem> orderLineItems = orderLineItemRequests.stream()
             .map(this::createOrderLineItem)
             .collect(Collectors.toList());
 
+        final List<Menu> menus = menuRepository.findAllByIdIn(
+            orderLineItemRequests.stream()
+                .map(OrderLineItemRequest::getMenuId)
+                .collect(Collectors.toList())
+        );
+        if (menus.size() != orderLineItemRequests.size()) {
+            throw new IllegalArgumentException("메뉴가 없으면 등록할 수 없습니다.");
+        }
+
+        for (final OrderLineItemRequest orderLineItemRequest : orderLineItemRequests) {
+            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+                .orElseThrow(NoSuchElementException::new);
+            if (!menu.isDisplayed()) {
+                throw new IllegalStateException("하나라도 숨겨진 메뉴가 있으면 주문할 수 없습니다.");
+            }
+        }
+
         final Order order = new EatInOrder(request.getOrderTableId(), orderLineItems);
+        orderDomainService.validateOrder(order);
         return createOrderResponse(orderRepository.save(order));
     }
 
