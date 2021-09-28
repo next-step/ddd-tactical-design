@@ -74,20 +74,25 @@ public class Order {
         this.status = OrderStatus.SERVED;
     }
 
-    public void complete() {
+    public void complete(final OrderTableManager orderTableManager) {
         if (this.status != OrderStatus.SERVED) {
             throw new IllegalStateException("서빙된 매장 주문만 완료할 수 있습니다.");
         }
         this.status = OrderStatus.COMPLETED;
-    }
 
-    public Price calculateTotalPrice() {
-        return this.orderLineItems.calculateTotalPrice();
+        orderTableManager.clear(this.orderTableId);
     }
-
 
     public List<MenuId> getMenuIds() {
         return this.orderLineItems.getMenuIds();
+    }
+
+    public boolean isPriceValid(MenuId menuId, Price menuPrice) {
+        return this.orderLineItems.isPriceValid(menuId, menuPrice);
+    }
+
+    public OrderTableId getOrderTableId() {
+        return this.orderTableId;
     }
 
     @Override

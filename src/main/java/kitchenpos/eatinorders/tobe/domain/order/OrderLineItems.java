@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.domain.order;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -29,6 +30,15 @@ public class OrderLineItems {
 
     public OrderLineItems(final List<OrderLineItem> orderLineItems) {
         this.orderLineItems = new ArrayList<>(orderLineItems);
+    }
+
+    public boolean isPriceValid(final MenuId menuId, final Price menuPrice) {
+        final OrderLineItem targetOrderLineItem = this.orderLineItems
+            .stream()
+            .filter(item -> item.getMenuId().equals(menuId))
+            .findFirst()
+            .orElseThrow(NoSuchElementException::new);
+        return targetOrderLineItem.calculateTotalPrice().equals(menuPrice);
     }
 
     public List<MenuId> getMenuIds() {

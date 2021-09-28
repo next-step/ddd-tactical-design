@@ -44,17 +44,25 @@ public class OrderTable {
         this.numberOfGuests = numberOfGuests;
     }
 
+    public boolean isTaken() {
+        return this.empty.isTaken();
+    }
+
     public void take() {
-        if (this.empty.isTaken()) {
+        if (isTaken()) {
             throw new IllegalStateException();
         }
         this.empty = new Empty(false);
     }
 
+    public boolean isEmpty() {
+        return this.empty.isEmpty();
+    }
+
     public void clear(final OrderTableValidator orderTableValidator) {
         orderTableValidator.validate(this);
 
-        if (this.empty.isEmpty()) {
+        if (isEmpty()) {
             throw new IllegalStateException();
         }
 
