@@ -1,9 +1,9 @@
 package kitchenpos.tobe.menus.application;
 
-import static kitchenpos.tobe.Fixtures.INVALID_ID;
-import static kitchenpos.tobe.Fixtures.menu;
-import static kitchenpos.tobe.Fixtures.menuGroup;
-import static kitchenpos.tobe.Fixtures.menuProduct;
+import static kitchenpos.tobe.menus.application.Fixtures.INVALID_ID;
+import static kitchenpos.tobe.menus.application.Fixtures.menu;
+import static kitchenpos.tobe.menus.application.Fixtures.menuGroup;
+import static kitchenpos.tobe.menus.application.Fixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
