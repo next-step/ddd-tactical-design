@@ -1,6 +1,9 @@
 package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.tobe.domain.*;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableManager;
+import kitchenpos.eatinorders.tobe.domain.service.OrderDeliverService;
+import kitchenpos.eatinorders.tobe.domain.service.OrderValidateService;
 import kitchenpos.eatinorders.tobe.dto.CreateOrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderCompletedResponse;
 import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
@@ -16,26 +19,30 @@ import java.util.stream.Collectors;
 @Service("TobeOrderService")
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final OrderDomainService orderDomainService;
+    private final OrderValidateService orderValidateService;
+    private final OrderDeliverService orderDeliverService;
+    private final OrderTableManager orderTableManager;
 
-    public OrderService(final OrderRepository orderRepository, final OrderDomainService orderDomainService) {
+    public OrderService(final OrderRepository orderRepository, final OrderValidateService orderValidateService, final OrderDeliverService orderDeliverService, final OrderTableManager orderTableManager) {
         this.orderRepository = orderRepository;
-        this.orderDomainService = orderDomainService;
+        this.orderValidateService = orderValidateService;
+        this.orderDeliverService = orderDeliverService;
+        this.orderTableManager = orderTableManager;
     }
 
     @Transactional
     public OrderResponse create(final CreateOrderRequest request) {
         request.validate();
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems().stream()
+        final OrderLineItems orderLineItems = new OrderLineItems(request.getOrderLineItems().stream()
                 .map(this::createOrderLineItem)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         final Order order = new Order(
                 request.getType(),
                 orderLineItems,
                 request.getDeliveryAddress(),
                 request.getOrderTableId()
         );
-        orderDomainService.validateOrder(order);
+        orderValidateService.validateOrder(order);
         orderRepository.save(order);
         return createOrderResponse(order);
     }
@@ -44,7 +51,7 @@ public class OrderService {
     public OrderResponse accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        orderDomainService.acceptOrder(order);
+        order.accept(orderDeliverService);
         return createOrderResponse(order);
     }
 
@@ -52,7 +59,7 @@ public class OrderService {
     public OrderResponse serve(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        orderDomainService.serveOrder(order);
+        order.serve();
         return createOrderResponse(order);
     }
 
@@ -60,7 +67,7 @@ public class OrderService {
     public OrderResponse startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        orderDomainService.startDelivery(order);
+        order.startDelivery();
         return createOrderResponse(order);
     }
 
@@ -68,7 +75,7 @@ public class OrderService {
     public OrderResponse completeDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        orderDomainService.completeDelivery(order);
+        order.completeDelivery();
         return createOrderResponse(order);
     }
 
@@ -76,7 +83,7 @@ public class OrderService {
     public OrderResponse complete(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        orderDomainService.completeOrder(order);
+        order.complete(orderTableManager);
         return createOrderResponse(order);
     }
 
@@ -98,7 +105,7 @@ public class OrderService {
                 order.getOrderDateTime(),
                 order.getOrderLineItems(),
                 order.getDeliveryAddress(),
-                orderDomainService.getOrderTable(order),
+                orderTableManager.getOrderTable(order.getOrderTableId()),
                 order.getOrderTableId()
         );
     }
