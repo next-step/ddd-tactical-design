@@ -17,11 +17,10 @@ class OrderMenuTest {
     void 주문_메뉴_생성_성공() {
         final Price price = new Price(BigDecimal.valueOf(16_000L));
 
-        final OrderMenu orderMenu = new OrderMenu(UUID.randomUUID(), UUID.randomUUID(), price, true);
+        final OrderMenu orderMenu = new OrderMenu(UUID.randomUUID(), price, true);
 
         assertAll(
                 () -> assertThat(orderMenu.getId()).isNotNull(),
-                () -> assertThat(orderMenu.getMenuId()).isNotNull(),
                 () -> assertThat(orderMenu.getPrice()).isEqualTo(price.value()),
                 () -> assertThat(orderMenu.isDisplayed()).isTrue()
         );

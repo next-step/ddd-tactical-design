@@ -14,7 +14,7 @@ public class OrderMenus {
 
     public OrderMenus(final List<OrderMenu> orderMenus) {
         this.orderMenus = orderMenus.stream()
-                .collect(Collectors.toMap(OrderMenu::getMenuId, Function.identity()));
+                .collect(Collectors.toMap(OrderMenu::getId, Function.identity()));
     }
 
     public void validate(final List<UUID> menuIds) {

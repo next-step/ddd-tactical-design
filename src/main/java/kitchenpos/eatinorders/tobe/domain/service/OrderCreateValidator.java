@@ -4,7 +4,7 @@ import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.Order;
 import kitchenpos.eatinorders.tobe.domain.model.OrderMenus;
 import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.repository.OrderMenuRepository;
+import kitchenpos.eatinorders.tobe.domain.translator.OrderMenuTranslator;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 
 import java.util.*;
@@ -13,14 +13,14 @@ public class OrderCreateValidator implements Validator<Order> {
 
     private final OrderTableRepository orderTableRepository;
 
-    private final OrderMenuRepository orderMenuRepository;
+    private final OrderMenuTranslator orderMenuTranslator;
 
     public OrderCreateValidator(
             final OrderTableRepository orderTableRepository,
-            final OrderMenuRepository orderMenuRepository
+            final OrderMenuTranslator orderMenuTranslator
     ) {
         this.orderTableRepository = orderTableRepository;
-        this.orderMenuRepository = orderMenuRepository;
+        this.orderMenuTranslator = orderMenuTranslator;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class OrderCreateValidator implements Validator<Order> {
         }
 
         final List<UUID> menuIds = order.getMenuIds();
-        final OrderMenus orderMenus = new OrderMenus(orderMenuRepository.findAllByIdIn(menuIds));
+        final OrderMenus orderMenus = new OrderMenus(orderMenuTranslator.findAllByIdIn(menuIds));
         orderMenus.validate(menuIds);
 
         order.validateOrderPrice(orderMenus);

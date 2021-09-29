@@ -9,25 +9,18 @@ public class OrderMenu {
 
     private final UUID id;
 
-    private final UUID menuId;
-
     private final Price price;
 
     private final boolean displayed;
 
-    public OrderMenu(final UUID id, final UUID menuId, final Price price, final boolean displayed) {
+    public OrderMenu(final UUID id, final Price price, final boolean displayed) {
         this.id = id;
-        this.menuId = menuId;
         this.price = price;
         this.displayed = displayed;
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public UUID getMenuId() {
-        return menuId;
     }
 
     public BigDecimal getPrice() {

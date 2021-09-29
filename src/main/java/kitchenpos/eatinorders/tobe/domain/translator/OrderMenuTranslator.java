@@ -1,13 +1,11 @@
-package kitchenpos.eatinorders.tobe.domain.repository;
+package kitchenpos.eatinorders.tobe.domain.translator;
 
 import kitchenpos.eatinorders.tobe.domain.model.OrderMenu;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface OrderMenuRepository {
-
-    OrderMenu save(final OrderMenu orderMenu);
+public interface OrderMenuTranslator {
 
     List<OrderMenu> findAllByIdIn(final List<UUID> ids);
 }
