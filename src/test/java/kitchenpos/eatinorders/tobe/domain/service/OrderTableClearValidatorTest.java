@@ -44,7 +44,8 @@ class OrderTableClearValidatorTest {
         final Order order = orderRepository.save(ORDER_WITH_TABLE(orderTable));
         order.accept();
         order.serve();
-        order.complete(dummy -> {});
+        order.complete(dummy -> {
+        });
 
         try {
             orderTable.clear(orderTableClearValidator);

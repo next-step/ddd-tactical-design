@@ -42,7 +42,8 @@ class OrderCompletePolicyTest {
         orderTable.changeNumberOfGuests(new NumberOfGuests(1L));
         order.accept();
         order.serve();
-        order.complete(dummy -> {});
+        order.complete(dummy -> {
+        });
         orderCompletePolicy.enforce(order);
 
         assertAll(
