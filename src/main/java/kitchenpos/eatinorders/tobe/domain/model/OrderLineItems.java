@@ -1,10 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class OrderLineItems {
+
+    private static final BigDecimal COMPLETABLE_AMOUNT_STANDARD = BigDecimal.ZERO;
 
     private final List<OrderLineItem> orderLineItems;
 
@@ -32,9 +35,9 @@ public class OrderLineItems {
                 .values()
                 .stream()
                 .map(orderLineItems -> orderLineItems.stream()
-                        .mapToLong(OrderLineItem::getQuantity)
-                        .reduce(0L, Long::sum))
-                .allMatch(quantity -> quantity >= 0L);
+                        .map(OrderLineItem::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add))
+                .allMatch(amount -> amount.compareTo(COMPLETABLE_AMOUNT_STANDARD) >= 0);
     }
 
     public void validateOrderPrice(final OrderMenus orderMenus) {
