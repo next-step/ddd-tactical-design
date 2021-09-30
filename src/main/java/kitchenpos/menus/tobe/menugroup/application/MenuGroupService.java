@@ -1,8 +1,8 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menus.tobe.menugroup.application;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.ui.dto.MenuGroupRequest;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.menugroup.ui.dto.MenuGroupRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

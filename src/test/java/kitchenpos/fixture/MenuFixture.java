@@ -1,7 +1,9 @@
 package kitchenpos.fixture;
 
 import kitchenpos.common.infra.FakeProfanities;
-import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.util.Arrays;
@@ -45,7 +47,7 @@ public class MenuFixture {
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
         final List<MenuProduct> menuProducts = 메뉴상품목록1(products.stream().map(Product::getId).toArray(UUID[]::new));
-        final List<ProductVO> productList = products.stream().map(product -> new ProductVO(product.getId(), product.getPrice())).collect(toList());
+        final List<ProductResponse> productList = products.stream().map(product -> new ProductResponse(product.getId(), product.getPrice())).collect(toList());
 
         return loader.loadMenuProducts(menuProducts, productList);
     }

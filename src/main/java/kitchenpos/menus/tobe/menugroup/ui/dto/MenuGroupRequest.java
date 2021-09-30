@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.ui.dto;
+package kitchenpos.menus.tobe.menugroup.ui.dto;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 
 public class MenuGroupRequest {
     private final String name;

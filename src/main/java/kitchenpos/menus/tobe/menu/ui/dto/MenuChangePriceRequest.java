@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.ui.dto;
+package kitchenpos.menus.tobe.menu.ui.dto;
 
-import kitchenpos.menus.tobe.domain.Price;
+import kitchenpos.menus.tobe.menu.domain.Price;
 
 import java.math.BigDecimal;
 

@@ -1,9 +1,12 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menus.tobe.menu.application;
 
 import kitchenpos.common.domain.Profanities;
-import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.ui.dto.MenuChangePriceRequest;
-import kitchenpos.menus.tobe.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
+import kitchenpos.menus.tobe.menugroup.application.MenuGroupService;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
+import kitchenpos.menus.tobe.menu.ui.dto.MenuChangePriceRequest;
+import kitchenpos.menus.tobe.menu.ui.dto.MenuCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,7 +99,7 @@ public class MenuService {
 
     private MenuProducts loadMenuProducts(final List<MenuProduct> menuProducts) {
         final List<UUID> productIds = menuProducts.stream().map(MenuProduct::getProductId).collect(toList());
-        final List<ProductVO> products = menuProductClient.findAllByIdn(productIds);
+        final List<ProductResponse> products = menuProductClient.findAllByIdn(productIds);
         return menuProductLoader.loadMenuProducts(menuProducts, products);
     }
 }

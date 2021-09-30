@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.menugroup.domain;
 
 import org.springframework.util.StringUtils;
 

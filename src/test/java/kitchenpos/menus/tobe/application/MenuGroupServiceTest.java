@@ -1,10 +1,11 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.fixture.MenuFixture;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.tobe.ui.dto.MenuGroupRequest;
+import kitchenpos.menus.tobe.menugroup.application.MenuGroupService;
+import kitchenpos.menus.tobe.menugroup.ui.dto.MenuGroupRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import static kitchenpos.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("메뉴 그룹 응용 서비스(MenuGroupService)는")
 class MenuGroupServiceTest {

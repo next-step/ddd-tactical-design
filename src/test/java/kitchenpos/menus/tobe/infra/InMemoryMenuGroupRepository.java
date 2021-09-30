@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.infra;
 
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroupRepository;
 
 import java.util.*;
 

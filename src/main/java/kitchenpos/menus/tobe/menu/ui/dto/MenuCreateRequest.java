@@ -1,10 +1,10 @@
-package kitchenpos.menus.tobe.ui.dto;
+package kitchenpos.menus.tobe.menu.ui.dto;
 
 import kitchenpos.common.domain.Profanities;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.Price;
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.Name;
+import kitchenpos.menus.tobe.menu.domain.MenuProduct;
+import kitchenpos.menus.tobe.menu.domain.Price;
+import kitchenpos.menus.tobe.menu.domain.MenuProducts;
+import kitchenpos.menus.tobe.menu.domain.Name;
 
 import java.math.BigDecimal;
 import java.util.Collection;

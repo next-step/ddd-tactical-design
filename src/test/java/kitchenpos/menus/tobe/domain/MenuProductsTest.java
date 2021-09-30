@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.fixture.MenuFixture;
+import kitchenpos.menus.tobe.menu.domain.MenuProduct;
+import kitchenpos.menus.tobe.menu.domain.MenuProducts;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

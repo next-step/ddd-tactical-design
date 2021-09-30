@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain;
 
 import kitchenpos.common.domain.Profanities;
 import org.springframework.util.StringUtils;

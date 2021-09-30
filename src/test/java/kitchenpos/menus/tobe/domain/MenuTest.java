@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.fixture.MenuFixture;
+import kitchenpos.menus.tobe.menu.domain.*;
+import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.menu.application.MenuService;
 import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

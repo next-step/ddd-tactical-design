@@ -1,24 +1,23 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.menu.ui.dto;
 
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.ProductId;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ProductVO {
+public class ProductResponse {
     private ProductId productId;
     private Price price;
 
-    protected ProductVO() {
+    protected ProductResponse() {
     }
 
-    public ProductVO(final UUID productId, final Price price) {
+    public ProductResponse(final UUID productId, final Price price) {
         this(new ProductId(productId), price);
     }
 
-    public ProductVO(final ProductId productId, final Price price) {
+    public ProductResponse(final ProductId productId, final Price price) {
         this.productId = productId;
         this.price = price;
     }
@@ -35,7 +34,7 @@ public class ProductVO {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final ProductVO productVO = (ProductVO) o;
+        final ProductResponse productVO = (ProductResponse) o;
         return Objects.equals(productId, productVO.productId) && Objects.equals(price, productVO.price);
     }
 

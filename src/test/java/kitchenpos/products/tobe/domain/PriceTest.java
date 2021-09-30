@@ -1,11 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.tobe.domain.Quantity;
+import kitchenpos.menus.tobe.menu.domain.Quantity;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 

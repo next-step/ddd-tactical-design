@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain;
 
+import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -44,7 +45,7 @@ public class MenuProduct {
         return productId.getId();
     }
 
-    public void loadPrice(final ProductVO product) {
+    public void loadPrice(final ProductResponse product) {
         this.price = product.getPrice();
     }
 
