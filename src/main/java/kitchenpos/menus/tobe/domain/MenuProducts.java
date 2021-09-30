@@ -40,26 +40,14 @@ public class MenuProducts {
                 .collect(Collectors.toList());
     }
 
-    public void validateRegistered(List<Product> products) {
-        if (products.size() != menuProducts.size()) {
-            throw new IllegalArgumentException("상품이 등록되어있지 않습니다.");
-        }
-    }
-
-    public void loadProducts(List<Product> products) {
-        products.forEach(this::loadProduct);
-    }
-
-    private void loadProduct(Product product) {
-        menuProducts.stream()
-                .filter(menuProduct -> Objects.equals(menuProduct.getProductId(), product.getId()))
-                .forEach(menuProduct -> menuProduct.loadProduct(product));
-    }
-
     public BigDecimal calculateAmount() {
         return menuProducts.stream()
                 .map(MenuProduct::calculate)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     @Override

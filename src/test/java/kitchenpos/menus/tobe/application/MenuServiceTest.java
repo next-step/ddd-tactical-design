@@ -53,7 +53,7 @@ class MenuServiceTest {
         MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
         ProductService productService = new ProductService(productRepository, profanities, eventPublisher);
         RestMenuProductClient menuProductClient = new RestMenuProductClient(productService);
-        menuService = new MenuService(menuRepository, menuProductClient, menuGroupService, profanities);
+        menuService = new MenuService(menuRepository, new MenuProductLoader(), menuProductClient, menuGroupService, profanities);
         menuGroup = menuGroupRepository.save(MenuFixture.메뉴그룹());
         menuGroupId = menuGroup.getId();
         product = productRepository.save(ProductFixture.상품(16_000L));

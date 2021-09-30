@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.ui.dto;
 
 import kitchenpos.common.domain.Profanities;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.Name;
@@ -50,5 +51,13 @@ public class MenuCreateRequest {
                 .orElseGet(Stream::empty)
                 .map(MenuProductRequest::toEntity)
                 .collect(Collectors.toList()));
+    }
+
+    public List<MenuProduct> getMenuProducts1() {
+        return Optional.ofNullable(menuProducts)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty)
+                .map(MenuProductRequest::toEntity)
+                .collect(Collectors.toList());
     }
 }

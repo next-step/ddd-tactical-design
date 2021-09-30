@@ -44,6 +44,10 @@ public class MenuProduct {
         return productId.getId();
     }
 
+    public void loadPrice(final ProductVO product) {
+        this.price = product.getPrice();
+    }
+
     public void loadProduct(final Product product) {
         this.price = product.getPrice();
     }

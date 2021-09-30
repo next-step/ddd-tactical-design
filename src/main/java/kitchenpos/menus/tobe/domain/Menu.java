@@ -91,8 +91,8 @@ public class Menu {
         return displayed;
     }
 
-    public MenuProducts getMenuProducts() {
-        return menuProducts;
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts.getMenuProducts();
     }
 
     @Override

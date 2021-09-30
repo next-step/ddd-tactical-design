@@ -11,16 +11,14 @@ import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 
 public class MenuFixture {
+    private static final MenuProductLoader loader = new MenuProductLoader();
+
     public static MenuGroup 메뉴그룹() {
         return 메뉴그룹("메뉴그룹");
     }
 
     public static MenuGroup 메뉴그룹(final String name) {
         return new MenuGroup(name);
-    }
-
-    public static MenuGroup 메뉴그룹(final UUID id, final String name) {
-        return new MenuGroup(id, name);
     }
 
     public static MenuProduct 메뉴상품() {
@@ -35,16 +33,10 @@ public class MenuFixture {
         return new MenuProduct(productId, new Quantity(quantity));
     }
 
-    public static MenuProducts 메뉴상품목록(final UUID... productIds) {
-        return new MenuProducts(
-                Arrays.stream(productIds)
+    public static List<MenuProduct> 메뉴상품목록1(final UUID... productIds) {
+        return Arrays.stream(productIds)
                         .map(MenuFixture::메뉴상품)
-                        .collect(toList())
-        );
-    }
-
-    public static MenuProducts 메뉴상품목록() {
-        return new MenuProducts(Arrays.asList(메뉴상품(), 메뉴상품()));
+                        .collect(toList());
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록() {
@@ -52,9 +44,10 @@ public class MenuFixture {
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
-        final MenuProducts menuProducts = 메뉴상품목록(products.stream().map(Product::getId).toArray(UUID[]::new));
-        menuProducts.loadProducts(products);
-        return menuProducts;
+        final List<MenuProduct> menuProducts = 메뉴상품목록1(products.stream().map(Product::getId).toArray(UUID[]::new));
+        final List<ProductVO> productList = products.stream().map(product -> new ProductVO(product.getId(), product.getPrice())).collect(toList());
+
+        return loader.loadMenuProducts(menuProducts, productList);
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final Product... products) {
