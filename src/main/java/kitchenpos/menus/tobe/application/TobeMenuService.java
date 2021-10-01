@@ -76,11 +76,10 @@ public class TobeMenuService {
     }
 
     @Transactional
-    public void updateDisplayedStutus(final UUID menuId) {
-        final TobeMenu menu = menuRepository.findById(menuId)
-                .orElseThrow(NoSuchElementException::new);
+    public void updateDisplayedStutus(final UUID productId) {
+        final List<TobeMenu> menus = menuRepository.findAllByProductId(productId);
 
-        menu.updateDisplayedStatus();
+        menus.forEach(TobeMenu::updateDisplayedStatus);
     }
 
     @Transactional(readOnly = true)

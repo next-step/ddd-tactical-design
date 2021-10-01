@@ -12,5 +12,7 @@ public interface TobeMenuRepository {
     List<TobeMenu> findAll();
 
     List<TobeMenu> findAllByIdIn(List<UUID> ids);
+
+    List<TobeMenu> findAllByProductId(UUID id);
 }
 

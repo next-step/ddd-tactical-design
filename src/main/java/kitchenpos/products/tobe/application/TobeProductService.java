@@ -40,7 +40,7 @@ public class TobeProductService {
 
         product.changePrice(request.getPrice());
 
-        return ProductForm.of(product);
+        return ProductForm.of(productRepository.save(product));
     }
 
     @Transactional(readOnly = true)

@@ -1,5 +1,6 @@
 package kitchenpos.menus.application.tobe;
 
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.TobeMenu;
 import kitchenpos.menus.tobe.domain.TobeMenuRepository;
 
@@ -32,4 +33,20 @@ public class TobeInMemoryMenuRepository implements TobeMenuRepository {
             .filter(menu -> ids.contains(menu.getId()))
             .collect(Collectors.toList());
     }
+
+    @Override
+    public List<TobeMenu> findAllByProductId(UUID productId) {
+
+        return menus.values()
+                .stream()
+                .filter(menu -> isContainProduct(menu.getMenuProducts(), productId))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isContainProduct(MenuProducts menuProducts, UUID productId) {
+        return menuProducts.getMenuProducts()
+                .stream()
+                .anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId));
+    }
+
 }
