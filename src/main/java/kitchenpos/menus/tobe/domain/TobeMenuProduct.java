@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 @Table(name = "menu_product")
 @Entity
 public class TobeMenuProduct {
+    private static final Long ZERO = 0L;
+
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -48,7 +50,7 @@ public class TobeMenuProduct {
     }
 
     private void validationQuantity(long quantity) {
-        if (quantity < 0) {
+        if (quantity < ZERO) {
             throw new IllegalArgumentException();
         }
     }
