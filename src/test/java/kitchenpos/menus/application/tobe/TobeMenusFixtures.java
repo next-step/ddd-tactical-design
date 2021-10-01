@@ -53,7 +53,6 @@ public class TobeMenusFixtures {
         MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(33_000L));
         TobeMenuGroup menuGroup = tobeMenuGroup();
         return new TobeMenu(
-                    UUID.randomUUID(),
                     menuName,
                     menuPrice,
                     menuGroup,

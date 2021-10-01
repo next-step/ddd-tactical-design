@@ -14,10 +14,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class AdapterMenuTranslator implements MenuTranslator {
+public class ApiMenuAdaptor implements MenuAdaptor {
     private final TobeProductService productService;
 
-    public AdapterMenuTranslator(final TobeProductService productService) {
+    public ApiMenuAdaptor(final TobeProductService productService) {
         this.productService = productService;
     }
 

@@ -2,7 +2,7 @@ package kitchenpos.menus.application.tobe;
 
 import kitchenpos.menus.tobe.application.TobeMenuService;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.infra.MenuTranslator;
+import kitchenpos.menus.tobe.infra.MenuAdaptor;
 import kitchenpos.menus.tobe.ui.MenuForm;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ public class TobeMenuServiceTest {
     private TobePurgomalumClient purgomalumClient;
 
     @Mock
-    private MenuTranslator menuTranslator;
+    private MenuAdaptor menuTranslator;
 
     @Mock
     private TobeMenuRepository menuRepository;

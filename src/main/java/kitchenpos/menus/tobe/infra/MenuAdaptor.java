@@ -5,6 +5,6 @@ import kitchenpos.menus.tobe.ui.MenuProductForm;
 
 import java.util.List;
 
-public interface MenuTranslator {
+public interface MenuAdaptor {
     List<TobeMenuProduct> productFindAllByIdIn(List<MenuProductForm> menuProductForms);
 }

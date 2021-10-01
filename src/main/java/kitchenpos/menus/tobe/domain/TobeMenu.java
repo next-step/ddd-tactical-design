@@ -38,19 +38,8 @@ public class TobeMenu {
     }
 
     public TobeMenu(MenuName name, MenuPrice menuPrice, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
-        this(
-            UUID.randomUUID(),
-            name,
-            menuPrice,
-            menuGroup,
-            displayed,
-            menuProducts
-        );
-    }
-
-    public TobeMenu(UUID id, MenuName name, MenuPrice menuPrice, TobeMenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         validationMenuPriceOverSumPrice(menuPrice, menuProducts);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;

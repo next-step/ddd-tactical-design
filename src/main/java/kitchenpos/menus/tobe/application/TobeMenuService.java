@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.infra.MenuTranslator;
+import kitchenpos.menus.tobe.infra.MenuAdaptor;
 import kitchenpos.menus.tobe.ui.MenuForm;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 public class TobeMenuService {
     private final TobeMenuRepository menuRepository;
     private final TobeMenuGroupRepository menuGroupRepository;
-    private final MenuTranslator menuTranslator;
+    private final MenuAdaptor menuTranslator;
     private final TobePurgomalumClient purgomalumClient;
 
     public TobeMenuService(
         final TobeMenuRepository menuRepository,
         final TobeMenuGroupRepository menuGroupRepository,
-        final MenuTranslator menuTranslator,
+        final MenuAdaptor menuTranslator,
         final TobePurgomalumClient purgomalumClient
     ) {
         this.menuRepository = menuRepository;
