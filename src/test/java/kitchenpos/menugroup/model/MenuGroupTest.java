@@ -1,4 +1,6 @@
-package kitchenpos.menus.tobe.domain.model;
+package kitchenpos.menugroup.model;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.FakeProfanities;
@@ -14,5 +16,6 @@ class MenuGroupTest {
     @Test
     void menuGroup() {
         final MenuGroup menuGroup = new MenuGroup(new DisplayedName("그룹1", profanities));
+        assertThat(menuGroup).isNotNull();
     }
 }

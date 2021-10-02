@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 
 public class TobeInMemoryMenuGroupRepository implements MenuGroupRepository {

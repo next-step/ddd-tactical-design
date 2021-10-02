@@ -7,7 +7,7 @@ import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroup;
 
 public class MenuFixture {
 

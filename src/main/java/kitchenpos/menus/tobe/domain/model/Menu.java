@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
+import kitchenpos.menugroup.model.MenuGroup;
 
 @Table(name = "menu")
 @Entity(name = "tobeMenu")

@@ -3,7 +3,7 @@ package kitchenpos.fixture;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.domain.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroup;
 
 public class MenuGroupFixture {
 

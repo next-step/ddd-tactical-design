@@ -7,7 +7,7 @@ import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroup;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
