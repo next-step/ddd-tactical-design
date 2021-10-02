@@ -32,7 +32,7 @@ public class MenuProducts {
         return menuProducts;
     }
 
-    public ProductPrice getTotalPrice() {
+    public ProductPrice calculateTotalPrice() {
         return menuProducts.stream()
             .map(MenuProduct::getMenuProductPrice)
             .reduce(ProductPrice.ZERO, ProductPrice::add);

@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import static kitchenpos.fixture.MenuProductFixture.MENU_PRODUCT1;
+import static kitchenpos.fixture.MenuProductFixture.MENU_PRODUCT2;
 import static kitchenpos.fixture.MenuProductsFixture.MENU_PRODUCTS;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,5 +14,14 @@ class MenuProductsTest {
     @Test
     void test() {
         assertThat(MENU_PRODUCTS()).isNotNull();
+    }
+
+    @DisplayName("MenuProducts를 생성할 수 있다")
+    @Test
+    void calculateTotalPrice() {
+        final MenuProducts menuProducts = MENU_PRODUCTS();
+
+        assertThat(menuProducts.calculateTotalPrice()).isEqualTo(MENU_PRODUCT1().getMenuProductPrice()
+            .add(MENU_PRODUCT2().getMenuProductPrice()));
     }
 }

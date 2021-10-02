@@ -1,5 +1,5 @@
 ###
-POST {{host}}/api/menus
+POST {{host}}/api/v2/menus
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/price
+PUT {{host}}/api/v2/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/price
 Content-Type: application/json
 
 {
@@ -24,10 +24,10 @@ Content-Type: application/json
 }
 
 ###
-PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/display
+PUT {{host}}/api/v2/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/display
 
 ###
-PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/hide
+PUT {{host}}/api/v2/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/hide
 
 ###
-GET {{host}}/api/menus
+GET {{host}}/api/v2/menus

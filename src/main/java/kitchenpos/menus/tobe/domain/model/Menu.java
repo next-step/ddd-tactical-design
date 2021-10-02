@@ -77,7 +77,7 @@ public class Menu {
     }
 
     public void isValidPrice(final Price price) {
-        if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+        if (price.compareTo(menuProducts.calculateTotalPrice()) > 0) {
             throw new IllegalArgumentException();
         }
     }

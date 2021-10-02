@@ -5,44 +5,44 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.domain.model.MenuPrice;
-import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menugroup.model.MenuGroupV2;
-import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import kitchenpos.menugroup.repository.MenuGroupRepositoryV2;
+import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.model.MenuPrice;
+import kitchenpos.menus.tobe.domain.model.MenuProducts;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.menus.tobe.dto.MenuRequestDto;
-import kitchenpos.menus.tobe.infra.MenuProductsTranslator;
+import kitchenpos.menus.tobe.dto.MenuRequest;
+import kitchenpos.menus.tobe.infra.MenuProductsMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("tobeMenuService")
-public class MenuService {
+@Service
+public class MenuServiceV2 {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepositoryV2 menuGroupRepository;
     private final Profanities profanities;
-    private final MenuProductsTranslator menuProductsTranslator;
+    private final MenuProductsMapper menuProductsMapper;
 
-    public MenuService(
+    public MenuServiceV2(
         final MenuRepository menuRepository,
         final MenuGroupRepositoryV2 menuGroupRepository,
         final Profanities profanities,
-        final MenuProductsTranslator menuProductsTranslator
+        final MenuProductsMapper menuProductsMapper
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.profanities = profanities;
-        this.menuProductsTranslator = menuProductsTranslator;
+        this.menuProductsMapper = menuProductsMapper;
     }
 
     @Transactional
-    public Menu create(final MenuRequestDto request) {
+    public Menu create(final MenuRequest request) {
         final MenuGroupV2 menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final DisplayedName displayedName = new DisplayedName(request.getName(), profanities);
         final MenuPrice price = new MenuPrice(request.getPrice());
-        final MenuProducts menuProducts = menuProductsTranslator.getMenuProducts(request.getMenuProducts());
+        final MenuProducts menuProducts = menuProductsMapper.toMenuProducts(request.getMenuProducts());
         final Menu menu = new Menu(displayedName, price, menuGroup, true, menuProducts);
         return menuRepository.save(menu);
     }

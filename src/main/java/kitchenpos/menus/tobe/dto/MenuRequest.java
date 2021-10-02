@@ -5,17 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class MenuRequestDto {
+public class MenuRequest {
+
     private String name;
     private BigDecimal price;
     private UUID menuGroupId;
     private boolean displayed;
     private List<MenuProductRequest> menuProducts;
 
-    protected MenuRequestDto() {
+    protected MenuRequest() {
     }
 
-    public MenuRequestDto(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final MenuProductRequest ... menuProducts) {
+    public MenuRequest(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final MenuProductRequest... menuProducts) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -42,4 +43,5 @@ public class MenuRequestDto {
     public List<MenuProductRequest> getMenuProducts() {
         return menuProducts;
     }
+
 }
