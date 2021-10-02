@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.menugroup.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroupV2;
 
 @Table(name = "menu")
 @Entity(name = "tobeMenu")
@@ -34,7 +34,7 @@ public class Menu {
         columnDefinition = "varbinary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private MenuGroup menuGroup;
+    private MenuGroupV2 menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -45,11 +45,11 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProduct ... menuProductArr) {
+    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroupV2 menuGroup, final boolean displayed, final MenuProduct ... menuProductArr) {
         this(name, menuPrice, menuGroup, displayed, new MenuProducts(Arrays.asList(menuProductArr)));
     }
 
-    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+    public Menu(final DisplayedName name, final MenuPrice menuPrice, final MenuGroupV2 menuGroup, final boolean displayed, final MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.menuPrice = menuPrice;
@@ -102,7 +102,7 @@ public class Menu {
         return menuProducts;
     }
 
-    public MenuGroup getMenuGroup() {
+    public MenuGroupV2 getMenuGroup() {
         return menuGroup;
     }
 }

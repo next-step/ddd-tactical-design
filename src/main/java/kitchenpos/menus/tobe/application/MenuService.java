@@ -7,9 +7,9 @@ import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menugroup.model.MenuGroup;
+import kitchenpos.menugroup.model.MenuGroupV2;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menugroup.repository.MenuGroupRepositoryV2;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.dto.MenuRequestDto;
 import kitchenpos.menus.tobe.infra.MenuProductsTranslator;
@@ -20,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupRepositoryV2 menuGroupRepository;
     private final Profanities profanities;
     private final MenuProductsTranslator menuProductsTranslator;
 
     public MenuService(
         final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
+        final MenuGroupRepositoryV2 menuGroupRepository,
         final Profanities profanities,
         final MenuProductsTranslator menuProductsTranslator
     ) {
@@ -38,7 +38,7 @@ public class MenuService {
 
     @Transactional
     public Menu create(final MenuRequestDto request) {
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+        final MenuGroupV2 menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final DisplayedName displayedName = new DisplayedName(request.getName(), profanities);
         final MenuPrice price = new MenuPrice(request.getPrice());

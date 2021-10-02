@@ -8,14 +8,14 @@ import kitchenpos.common.tobe.domain.DisplayedName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class MenuGroupTest {
+class MenuGroupV2Test {
 
     private final Profanities profanities = new FakeProfanities();
 
     @DisplayName("메뉴그룹을 생성할 수 있다")
     @Test
     void menuGroup() {
-        final MenuGroup menuGroup = new MenuGroup(new DisplayedName("그룹1", profanities));
+        final MenuGroupV2 menuGroup = new MenuGroupV2(new DisplayedName("그룹1", profanities));
         assertThat(menuGroup).isNotNull();
     }
 }

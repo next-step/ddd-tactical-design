@@ -17,7 +17,7 @@ import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
 import kitchenpos.menus.tobe.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menugroup.repository.MenuGroupRepositoryV2;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.dto.MenuRequestDto;
@@ -37,7 +37,7 @@ class MenuServiceTest {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
+    private MenuGroupRepositoryV2 menuGroupRepository;
     private ProductRepository productRepository;
     private Profanities profanities;
     private MenuProductsTranslator menuProductsTranslator;

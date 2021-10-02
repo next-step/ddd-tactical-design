@@ -2,31 +2,36 @@ package kitchenpos.menugroup.model;
 
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import kitchenpos.common.tobe.domain.DisplayedName;
 
 @Table(name = "menu_group")
-@Entity(name = "tobeMenuGroup")
-public class MenuGroup {
+@Entity
+public class MenuGroupV2 {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private DisplayedName name;
 
-    protected MenuGroup() {
+    protected MenuGroupV2() {
     }
 
-    public MenuGroup(final DisplayedName name) {
+    public MenuGroupV2(final DisplayedName name) {
         this.id = UUID.randomUUID();
         this.name = name;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name.getName();
     }
 }
