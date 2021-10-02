@@ -31,7 +31,7 @@ public class MenuGroupV2 {
         return id;
     }
 
-    public String getName() {
-        return name.getName();
+    public DisplayedName getName() {
+        return name;
     }
 }

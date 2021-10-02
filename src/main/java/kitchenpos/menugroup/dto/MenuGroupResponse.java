@@ -15,7 +15,7 @@ public class MenuGroupResponse {
 
     private MenuGroupResponse(final MenuGroupV2 menuGroupV2) {
         this.id = menuGroupV2.getId();
-        this.name = menuGroupV2.getName();
+        this.name = menuGroupV2.getName().getName();
     }
 
     public static MenuGroupResponse from(final MenuGroupV2 menuGroupV2) {
