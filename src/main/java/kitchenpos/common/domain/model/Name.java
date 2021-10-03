@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.common.domain.model;
 
 import kitchenpos.common.application.Profanities;
 

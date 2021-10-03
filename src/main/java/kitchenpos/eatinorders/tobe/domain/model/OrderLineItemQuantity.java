@@ -1,21 +1,22 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.model;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Quantity {
+public class OrderLineItemQuantity {
+
     private BigDecimal value;
 
-    public Quantity(BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) <= 0) {
+    public OrderLineItemQuantity(BigDecimal value) {
+        if (Objects.isNull(value)) {
             throw new IllegalArgumentException("올바르지 않은 수량으로 등록할 수 없습니다.");
         }
         this.value = value;
     }
 
-    protected Quantity() {
+    protected OrderLineItemQuantity() {
 
     }
 
@@ -23,17 +24,17 @@ public class Quantity {
         return this.value;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Quantity)) return false;
-        Quantity quantity = (Quantity) o;
-        return value.equals(quantity.value);
+        if (!(o instanceof OrderLineItemQuantity)) return false;
+        OrderLineItemQuantity that = (OrderLineItemQuantity) o;
+        return value.equals(that.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(value);
     }
-
 }

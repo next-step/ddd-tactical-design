@@ -1,6 +1,6 @@
 package kitchenpos.common;
 
-import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.model.Name;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.Quantity;
+import kitchenpos.common.domain.model.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,12 +19,12 @@ public class MenuProduct {
     private Price price;
 
     @Embedded
-    private Quantity quantity;
+    private MenuQuantity menuQuantity;
 
-    public MenuProduct(UUID productId, Price price, Quantity quantity) {
+    public MenuProduct(UUID productId, Price price, MenuQuantity menuQuantity) {
         this.productId = productId;
         this.price = price;
-        this.quantity = quantity;
+        this.menuQuantity = menuQuantity;
     }
 
     public MenuProduct() {
@@ -37,7 +36,7 @@ public class MenuProduct {
     }
 
     public BigDecimal getAmount() {
-        return price.getPrice().multiply(quantity.getQuantity());
+        return price.getValue().multiply(menuQuantity.getQuantity());
     }
 
     public void setId(Long id) {

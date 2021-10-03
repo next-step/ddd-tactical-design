@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain.fixture;
 
 import kitchenpos.common.FakeProfanities;
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.model.Name;
+import kitchenpos.common.domain.model.Price;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.model.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.InMemoryMenuGroupRepository;

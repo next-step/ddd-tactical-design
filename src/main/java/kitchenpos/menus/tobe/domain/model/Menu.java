@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.model.Name;
+import kitchenpos.common.domain.model.Price;
 import kitchenpos.menus.tobe.domain.validator.MenuValidator;
 
 import javax.persistence.*;
@@ -64,13 +64,13 @@ public class Menu {
         this.menuGroupId = menuGroupId;
         this.price = price;
         this.displayedName = displayedName;
-        this.isDisplayed = menuProducts.calculateSum().compareTo(price.getPrice()) >= 0;
+        this.isDisplayed = menuProducts.calculateSum().compareTo(price.getValue()) >= 0;
         this.menuProducts = menuProducts;
         menuValidator.validateMenu(this);
     }
 
     public void display() {
-        if (menuProducts.calculateSum().compareTo(price.getPrice()) < 0) {
+        if (menuProducts.calculateSum().compareTo(price.getValue()) < 0) {
             throw new IllegalStateException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
         }
 
@@ -91,11 +91,15 @@ public class Menu {
 
     public void changePrice(BigDecimal newPriceValue) {
         this.price = this.price.changePrice(newPriceValue);
-        this.isDisplayed = menuProducts.calculateSum().compareTo(this.price.getPrice()) >= 0;
+        this.isDisplayed = menuProducts.calculateSum().compareTo(this.price.getValue()) >= 0;
     }
 
     public UUID getMenuGroupId() {
         return this.menuGroupId;
+    }
+
+    public UUID getId() {
+        return this.id;
     }
 
 }
