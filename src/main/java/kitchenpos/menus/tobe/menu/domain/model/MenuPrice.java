@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.model;
+package kitchenpos.menus.tobe.menu.domain.model;
 
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NEGATIVE;
 import static kitchenpos.products.tobe.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_NULL;
@@ -8,25 +8,24 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.common.tobe.domain.Price;
-import kitchenpos.menus.tobe.menu.domain.model.Quantity;
 import kitchenpos.products.tobe.exception.WrongPriceException;
 
 @Embeddable
-public class ProductPrice implements Price {
+public class MenuPrice implements Price {
 
-    public static final ProductPrice ZERO = new ProductPrice(0);
+    public static final MenuPrice ZERO = new MenuPrice(0);
 
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    protected ProductPrice() {
+    protected MenuPrice() {
     }
 
-    public ProductPrice(final long value) {
+    public MenuPrice(final long value) {
         this(BigDecimal.valueOf(value));
     }
 
-    public ProductPrice(final BigDecimal value) {
+    public MenuPrice(final BigDecimal value) {
         validate(value);
         this.value = value;
     }
@@ -46,13 +45,13 @@ public class ProductPrice implements Price {
     }
 
     @Override
-    public ProductPrice multiply(final Quantity quantity) {
-        return new ProductPrice(value.multiply(BigDecimal.valueOf(quantity.getValue())));
+    public MenuPrice multiply(final Quantity quantity) {
+        return new MenuPrice(value.multiply(BigDecimal.valueOf(quantity.getValue())));
     }
 
     @Override
-    public ProductPrice add(final Price price) {
-        return new ProductPrice(value.add(price.getValue()));
+    public MenuPrice add(final Price price) {
+        return new MenuPrice(value.add(price.getValue()));
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ProductPrice implements Price {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final ProductPrice price = (ProductPrice) o;
+        final MenuPrice price = (MenuPrice) o;
         return Objects.equals(value, price.value);
     }
 
@@ -76,4 +75,5 @@ public class ProductPrice implements Price {
     public int compareTo(final Price p) {
         return value.compareTo(p.getValue());
     }
+
 }

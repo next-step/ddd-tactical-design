@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.menus.tobe.domain.model.MenuPrice;
+import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
 
 @Table(name = "order_line_item")
 @Entity(name = "tobeOrderLineItem")

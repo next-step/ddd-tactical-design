@@ -13,9 +13,9 @@ import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderRequest;
 import kitchenpos.eatinorders.tobe.dto.OrderResponse;
-import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuPrice;
-import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.menus.tobe.menu.domain.model.Menu;
+import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
+import kitchenpos.menus.tobe.menu.domain.repository.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

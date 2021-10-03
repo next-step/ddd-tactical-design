@@ -6,7 +6,7 @@ import static kitchenpos.fixture.MenuProductFixture.MENU_PRODUCT2;
 import static kitchenpos.fixture.MenuProductFixture.WRONG_PRODUCT;
 
 import java.util.Arrays;
-import kitchenpos.menus.tobe.domain.model.MenuProducts;
+import kitchenpos.menus.tobe.menu.domain.model.MenuProducts;
 
 public class MenuProductsFixture {
 

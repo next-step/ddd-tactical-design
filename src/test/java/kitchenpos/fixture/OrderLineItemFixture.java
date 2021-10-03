@@ -4,7 +4,7 @@ import static kitchenpos.fixture.MenuFixture.MENU1;
 
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.model.OrderQuantity;
-import kitchenpos.menus.tobe.domain.model.MenuPrice;
+import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
 
 public class OrderLineItemFixture {
 

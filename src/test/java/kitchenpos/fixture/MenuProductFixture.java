@@ -5,8 +5,8 @@ import static kitchenpos.fixture.ProductFixture.PRODUCT1;
 import static kitchenpos.fixture.ProductFixture.PRODUCT2;
 
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.model.MenuProduct;
-import kitchenpos.menus.tobe.domain.model.Quantity;
+import kitchenpos.menus.tobe.menu.domain.model.MenuProduct;
+import kitchenpos.menus.tobe.menu.domain.model.Quantity;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
 
 public class MenuProductFixture {
