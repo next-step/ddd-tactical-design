@@ -5,14 +5,13 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.menugroup.domain.model.MenuGroupV2;
-import kitchenpos.menus.tobe.menugroup.domain.repository.MenuGroupRepositoryV2;
 import kitchenpos.menus.tobe.menu.domain.model.Menu;
 import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.menu.domain.model.MenuProducts;
 import kitchenpos.menus.tobe.menu.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.menu.dto.MenuRequest;
 import kitchenpos.menus.tobe.menu.infra.MenuProductsMapper;
+import kitchenpos.menus.tobe.menugroup.domain.repository.MenuGroupRepositoryV2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,7 @@ public class MenuServiceV2 {
 
     @Transactional
     public Menu create(final MenuRequest request) {
-        final MenuGroupV2 menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+        menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(() -> new NoSuchElementException("메뉴그룹을 찾을 수 없습니다."));
         final DisplayedName displayedName = new DisplayedName(request.getName(), profanities);
         final MenuPrice price = new MenuPrice(request.getPrice());

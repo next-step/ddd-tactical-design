@@ -15,13 +15,13 @@ import java.util.UUID;
 import kitchenpos.common.infra.Profanities;
 import kitchenpos.common.tobe.FakeProfanities;
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.menu.domain.model.Menu;
-import kitchenpos.menus.tobe.menugroup.domain.repository.MenuGroupRepositoryV2;
+import kitchenpos.menus.tobe.menu.domain.model.MenuPrice;
 import kitchenpos.menus.tobe.menu.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.menu.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.menu.dto.MenuRequest;
 import kitchenpos.menus.tobe.menu.infra.MenuProductsMapper;
+import kitchenpos.menus.tobe.menugroup.domain.repository.MenuGroupRepositoryV2;
 import kitchenpos.products.tobe.application.TobeInMemoryProductRepository;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -71,8 +71,7 @@ class MenuServiceV2Test {
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(new DisplayedName(expected.getName(), profanities)),
             () -> assertThat(actual.getMenuPrice()).isEqualTo(new MenuPrice(expected.getPrice())),
-            () -> assertThat(actual.getMenuGroup()
-                .getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
             () -> assertThat(actual.getMenuProducts()
                 .getMenuProducts()).hasSize(1)
@@ -118,9 +117,8 @@ class MenuServiceV2Test {
     }
 
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
-    @NullSource
-    @ParameterizedTest
-    void create(final UUID menuGroupId) {
+    @Test
+    void invalidMenuGroupId() {
         final MenuRequest expected = new MenuRequest("후라이드+후라이드", BigDecimal.valueOf(19_000L), INVALID_ID, true, new MenuProductRequest(product.getId(), 2L));
 
         assertThatThrownBy(() -> menuServiceV2.create(expected))
@@ -173,16 +171,6 @@ class MenuServiceV2Test {
         menuRepository.save(menu);
         final Menu actual = menuServiceV2.display(menu.getId());
         assertThat(actual.isDisplayed()).isTrue();
-    }
-
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-    @Test
-    void displayExpensiveMenu() {
-//        final Menu menu = MENU_WITH_PRICE(200_000L);
-//        menuRepository.save(menu);
-//
-//        assertThatThrownBy(() -> menuService.display(menu.getId()))
-//            .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")

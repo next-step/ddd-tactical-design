@@ -92,4 +92,7 @@ public class Menu {
         return menuProducts;
     }
 
+    public UUID getMenuGroupId() {
+        return menuGroupId;
+    }
 }
