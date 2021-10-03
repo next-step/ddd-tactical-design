@@ -1,13 +1,15 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain;
 
 import kitchenpos.common.domain.Profanities;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class Name {
+    @Column(name = "name", nullable = false)
     private String name;
 
     protected Name() {
@@ -20,7 +22,7 @@ public class Name {
 
     private void verify(final String name, Profanities profanities) {
         if(!StringUtils.hasText(name)) {
-           throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
+            throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
         }
         if(profanities.contains(name)) {
             throw new IllegalArgumentException("이름에 비속어는 포함될 수 없습니다.");

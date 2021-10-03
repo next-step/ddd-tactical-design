@@ -9,10 +9,8 @@ import static java.util.UUID.randomUUID;
 @Entity
 public class Product {
 
-    @Id
-    @Column(name = "id", columnDefinition = "varbinary(16)")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @EmbeddedId
+    private ProductId id;
 
     @Embedded
     private Name name;
@@ -28,17 +26,21 @@ public class Product {
     }
 
     public Product(final UUID id, final Name name, final Price price) {
+        this(new ProductId(id), name, price);
+    }
+
+    public Product(final ProductId id, final Name name, final Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public void changePrice(final Product product) {
-        this.price = product.price;
+    public void changePrice(final Price price) {
+        this.price = price;
     }
 
     public UUID getId() {
-        return id;
+        return id.getId();
     }
 
     public Name getName() {
@@ -47,10 +49,6 @@ public class Product {
 
     public Price getPrice() {
         return price;
-    }
-
-    public void setPrice(final Price price) {
-        this.price = price;
     }
 
     @Override

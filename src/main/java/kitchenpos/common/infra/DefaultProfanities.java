@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.common.infra;
 
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.common.domain.Profanities;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.common.domain.Profanities;
+import kitchenpos.common.event.FakeEventPublisher;
+import kitchenpos.common.infra.FakeProfanities;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.tobe.infra.FakeProfanities;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
@@ -19,23 +19,20 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
     private Profanities profanities = new FakeProfanities();
+    private FakeEventPublisher eventPublisher = new FakeEventPublisher();
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository, profanities);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -71,12 +68,21 @@ class ProductServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @DisplayName("상품의 가격을 변경하면 가격이 변경되고 ProductPriceChangedEvent가 발생한다.")
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(ProductFixture.상품("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
+        assertAll(
+                () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(0),
+                () -> assertThat(eventPublisher.getEvent()).isNull()
+        );
+
         final Product actual = productService.changePrice(productId, expected);
+        assertAll(
+                () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(1),
+                () -> assertThat(eventPublisher.getEvent()).isInstanceOf(ProductPriceChangedEvent.class)
+        );
         assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()));
     }
 
@@ -90,16 +96,6 @@ class ProductServiceTest {
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
-
-    // TODO: 2021/09/23 메뉴 리팩터링시 작성할 요소
-//    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-//    @Test
-//    void changePriceInMenu() {
-//        final Product product = productRepository.save(ProductFixture.상품("후라이드", 16_000L));
-//        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-//        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-//        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-//    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test

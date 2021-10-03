@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.menus.tobe.menu.domain.Quantity;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -42,5 +42,18 @@ class PriceTest {
 
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(throwingCallable);
+    }
+
+    @Test
+    @DisplayName("가격에 수량을 곱하여 계산할 수 있다.")
+    void calculate() {
+        final BigDecimal priceValue = BigDecimal.valueOf(1000L);
+        final long quantityValue = 2L;
+        final Price price = new Price(priceValue);
+        final Quantity quantity = new Quantity(quantityValue);
+
+        final BigDecimal expected = price.calculate(quantity);
+
+        assertThat(expected).isEqualTo(priceValue.multiply(BigDecimal.valueOf(quantityValue)));
     }
 }
