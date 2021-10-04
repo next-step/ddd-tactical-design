@@ -26,8 +26,8 @@ public class OrderLineItem {
         return BigDecimal.valueOf(quantity).multiply(price.value());
     }
 
-    public void validateOrderPrice(final OrderMenu orderMenu) {
-        if (getPrice().compareTo(orderMenu.getPrice()) != 0) {
+    public void validateOrderPrice(final Price menuPrice) {
+        if (!price.equals(menuPrice)) {
             throw new IllegalArgumentException("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");
         }
     }

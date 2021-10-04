@@ -1,7 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.model.Price;
+
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,9 +43,7 @@ public class OrderLineItems {
                 .allMatch(amount -> amount.compareTo(COMPLETABLE_AMOUNT_STANDARD) >= 0);
     }
 
-    public void validateOrderPrice(final OrderMenus orderMenus) {
-        orderLineItems.forEach(orderLineItem -> orderLineItem.validateOrderPrice(
-                orderMenus.getOrderMenuByMenuId(orderLineItem.getMenuId())
-        ));
+    public void validateOrderPrice(final Map<UUID, Price> menuPriceMap) {
+        orderLineItems.forEach(orderLineItem -> orderLineItem.validateOrderPrice(menuPriceMap.get(orderLineItem.getMenuId())));
     }
 }

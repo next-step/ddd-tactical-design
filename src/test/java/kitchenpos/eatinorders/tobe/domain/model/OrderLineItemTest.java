@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.eatinorders.tobe.domain.fixture.OrderMenuFixture.ORDER_MENU_WITH_MENU_ID_AND_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -47,15 +46,10 @@ class OrderLineItemTest {
     @Test
     void validateOrderPrice() {
         final UUID menuId = UUID.randomUUID();
-        final OrderMenu orderMenu = ORDER_MENU_WITH_MENU_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
-        final OrderLineItem orderLineItem = new OrderLineItem(
-                UUID.randomUUID(),
-                menuId,
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
+        final Price menuPrice = new Price(16_000L);
+        final OrderLineItem orderLineItem = new OrderLineItem(UUID.randomUUID(), menuId, new Price(20_000L), 1L);
 
-        ThrowableAssert.ThrowingCallable when = () -> orderLineItem.validateOrderPrice(orderMenu);
+        ThrowableAssert.ThrowingCallable when = () -> orderLineItem.validateOrderPrice(menuPrice);
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");

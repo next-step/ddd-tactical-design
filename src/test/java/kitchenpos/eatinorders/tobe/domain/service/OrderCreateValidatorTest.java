@@ -4,9 +4,7 @@ import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.*;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryMenuRepository;
-import kitchenpos.eatinorders.tobe.domain.translator.MockOrderMenuTranslator;
 import kitchenpos.eatinorders.tobe.domain.repository.InMemoryOrderTableRepository;
-import kitchenpos.eatinorders.tobe.domain.translator.OrderMenuTranslator;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
@@ -31,8 +29,6 @@ class OrderCreateValidatorTest {
 
     private MenuRepository menuRepository;
 
-    private OrderMenuTranslator orderMenuTranslator;
-
     private Validator<Order> orderCreateValidator;
 
     private final Validator<Order> dummyOrderCreateValidator = order -> {
@@ -42,8 +38,7 @@ class OrderCreateValidatorTest {
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         menuRepository = new InMemoryMenuRepository();
-        orderMenuTranslator = new MockOrderMenuTranslator(menuRepository);
-        orderCreateValidator = new OrderCreateValidator(orderTableRepository, orderMenuTranslator);
+        orderCreateValidator = new OrderCreateValidator(orderTableRepository, menuRepository);
     }
 
     @DisplayName("주문 생성 시, 등록된 주문 테이블의 식별자가 아니면 NoSuchElementException을 던진다.")

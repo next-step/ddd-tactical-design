@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Policy;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Accepted;
@@ -9,6 +10,7 @@ import kitchenpos.eatinorders.tobe.domain.model.orderstatus.Waiting;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Order {
@@ -81,8 +83,8 @@ public class Order {
         orderCompletePolicy.enforce(this);
     }
 
-    public void validateOrderPrice(final OrderMenus orderMenus) {
-        orderLineItems.validateOrderPrice(orderMenus);
+    public void validateOrderPrice(final Map<UUID, Price> menuPriceMap) {
+        orderLineItems.validateOrderPrice(menuPriceMap);
     }
 
     public boolean isCompleted() {

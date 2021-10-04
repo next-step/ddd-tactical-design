@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static kitchenpos.eatinorders.tobe.domain.fixture.OrderMenuFixture.ORDER_MENU_WITH_MENU_ID_AND_PRICE;
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderLineItemFixture.DEFAULT_ORDER_LINE_ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -86,17 +85,12 @@ class OrderLineItemsTest {
     @Test
     void validateOrderPrice() {
         final UUID menuId = UUID.randomUUID();
-        final OrderMenu orderMenu = ORDER_MENU_WITH_MENU_ID_AND_PRICE(menuId, new Price(BigDecimal.valueOf(16_000L)));
-        final OrderLineItem orderLineItem = new OrderLineItem(
-                UUID.randomUUID(),
-                menuId,
-                new Price(BigDecimal.valueOf(20_000L)),
-                1L
-        );
+        final OrderLineItem orderLineItem = new OrderLineItem(UUID.randomUUID(), menuId, new Price(20_000L), 1L);
         final OrderLineItems orderLineItems = new OrderLineItems(Collections.singletonList(orderLineItem));
-        final OrderMenus orderMenus = new OrderMenus(Collections.singletonList(orderMenu));
+        final Map<UUID, Price> menuPriceMap = new HashMap<>();
+        menuPriceMap.put(menuId, new Price(16_000L));
 
-        ThrowableAssert.ThrowingCallable when = () -> orderLineItems.validateOrderPrice(orderMenus);
+        ThrowableAssert.ThrowingCallable when = () -> orderLineItems.validateOrderPrice(menuPriceMap);
 
         assertThatThrownBy(when).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 항목의 가격과 메뉴 가격이 일치하지 않습니다.");

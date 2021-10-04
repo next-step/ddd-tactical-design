@@ -1,26 +1,29 @@
 package kitchenpos.eatinorders.tobe.domain.service;
 
+import kitchenpos.commons.tobe.domain.model.Price;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.eatinorders.tobe.domain.model.Order;
-import kitchenpos.eatinorders.tobe.domain.model.OrderMenus;
 import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.translator.OrderMenuTranslator;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
+import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class OrderCreateValidator implements Validator<Order> {
 
     private final OrderTableRepository orderTableRepository;
 
-    private final OrderMenuTranslator orderMenuTranslator;
+    private final MenuRepository menuRepository;
 
     public OrderCreateValidator(
             final OrderTableRepository orderTableRepository,
-            final OrderMenuTranslator orderMenuTranslator
+            final MenuRepository menuRepository
     ) {
         this.orderTableRepository = orderTableRepository;
-        this.orderMenuTranslator = orderMenuTranslator;
+        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -32,9 +35,19 @@ public class OrderCreateValidator implements Validator<Order> {
         }
 
         final List<UUID> menuIds = order.getMenuIds();
-        final OrderMenus orderMenus = new OrderMenus(orderMenuTranslator.findAllByIdIn(menuIds));
-        orderMenus.validate(menuIds);
+        final List<Menu> menus = menuRepository.findAllByIdIn(menuIds);
+        if (menuIds.size() != menus.size()) {
+            throw new IllegalArgumentException("등록된 메뉴가 없습니다.");
+        }
 
-        order.validateOrderPrice(orderMenus);
+        final boolean existsMenuNotDisplay = menus.stream()
+                .anyMatch(Predicate.not(Menu::isDisplayed));
+        if (existsMenuNotDisplay) {
+            throw new IllegalStateException("노출되지 않은 메뉴는 주문할 수 없습니다.");
+        }
+
+        final Map<UUID, Price> menuPriceMap = menus.stream()
+                .collect(Collectors.toMap(Menu::getId, menu -> new Price(menu.getPrice())));
+        order.validateOrderPrice(menuPriceMap);
     }
 }
