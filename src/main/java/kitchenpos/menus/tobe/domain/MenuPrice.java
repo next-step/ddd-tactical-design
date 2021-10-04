@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -6,14 +6,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class MenuPrice {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected ProductPrice() {};
+    protected MenuPrice() {};
 
-    public ProductPrice(BigDecimal price) {
+    public MenuPrice(BigDecimal price) {
         validationPrice(price);
         this.price = price;
     }
@@ -37,7 +37,7 @@ public class ProductPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        MenuPrice that = (MenuPrice) o;
         return Objects.equals(getPrice(), that.getPrice());
     }
 

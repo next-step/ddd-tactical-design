@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.ui;
+package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.products.tobe.domain.TobeProduct;
+import kitchenpos.menus.tobe.domain.TobeProduct;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -34,11 +34,11 @@ public class ProductForm {
         this.price = price;
     }
 
-    public static ProductForm of(TobeProduct tobeProduct) {
+    public static ProductForm of(TobeProduct product) {
         ProductForm productForm = new ProductForm();
-        productForm.setId(tobeProduct.getId());
-        productForm.setName(tobeProduct.getName());
-        productForm.setPrice(tobeProduct.getPrice());
+        productForm.setId(product.getId());
+        productForm.setName(product.getName());
+        productForm.setPrice(product.getPrice());
         return productForm;
     }
 }

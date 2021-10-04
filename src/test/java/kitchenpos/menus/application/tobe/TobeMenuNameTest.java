@@ -1,7 +1,6 @@
-package kitchenpos.products.application.tobe;
+package kitchenpos.menus.application.tobe;
 
-import kitchenpos.products.tobe.domain.ProductName;
-
+import kitchenpos.menus.tobe.domain.MenuName;
 import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,9 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class TobeProductNameTest {
+public class TobeMenuNameTest {
     private TobePurgomalumClient purgomalumClient;
 
     @BeforeEach
@@ -24,7 +24,7 @@ public class TobeProductNameTest {
     @Test
     void purgomalum() {
         assertThatThrownBy(
-            () -> new ProductName("욕설", purgomalumClient)
+            () -> new MenuName("욕설", purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -33,24 +33,24 @@ public class TobeProductNameTest {
     @ParameterizedTest
     void nullOfEmpty(final String name) {
         assertThatThrownBy(
-                () -> new ProductName(name, purgomalumClient)
+                () -> new MenuName(name, purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("생성")
     @Test
     void create() {
-        ProductName productName = new ProductName("치킨", purgomalumClient);
+        MenuName menuName = new MenuName("한식", purgomalumClient);
 
-        assertThat(productName).isNotNull();
+        assertThat(menuName).isNotNull();
     }
 
     @DisplayName("동등성 확인")
     @Test
     void equalName() {
-        ProductName productName1 = new ProductName("치킨", purgomalumClient);
-        ProductName productName2 = new ProductName("치킨", purgomalumClient);
+        MenuName menuName1 = new MenuName("한식", purgomalumClient);
+        MenuName menuName2 = new MenuName("한식", purgomalumClient);
 
-        assertThat(productName1).isEqualTo(productName2);
+        assertThat(menuName1).isEqualTo(menuName2);
     }
 }

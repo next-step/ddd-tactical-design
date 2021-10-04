@@ -1,13 +1,10 @@
 package kitchenpos.products.application.tobe;
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.application.TobeProductService;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import kitchenpos.products.tobe.ui.ProductForm;
+import kitchenpos.tobeinfra.TobeFakePurgomalumClient;
+import kitchenpos.tobeinfra.TobePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,30 +16,28 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.products.application.tobe.TobeFixtures.*;
+import static kitchenpos.products.application.tobe.TobeProductFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TobeProductServiceTest {
     private TobeProductRepository productRepository;
-    private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private TobePurgomalumClient purgomalumClient;
     private TobeProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new TobeInMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new TobeProductService(productRepository, menuRepository, purgomalumClient);
+        purgomalumClient = new TobeFakePurgomalumClient();
+        productService = new TobeProductService(productRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
         final ProductForm expected = createProductRequest("후라이드", 16_000L);
-        final TobeProduct actual = productService.create(expected);
+        final ProductForm actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -76,7 +71,7 @@ class TobeProductServiceTest {
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductForm expected = changePriceRequest(15_000L);
-        final TobeProduct actual = productService.changePrice(productId, expected);
+        final ProductForm actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -91,22 +86,12 @@ class TobeProductServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    // TODO : 메뉴 리팩토링 할 때 변경 예정
-//    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-//    @Test
-//    void changePriceInMenu() {
-//        final Product product = productRepository.save(product("후라이드", 16_000L));
-//        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-//        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-//        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-//    }
-
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         productRepository.save(product());
         productRepository.save(product());
-        final List<TobeProduct> actual = productService.findAll();
+        final List<ProductForm> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 

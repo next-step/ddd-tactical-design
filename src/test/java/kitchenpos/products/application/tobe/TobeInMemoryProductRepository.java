@@ -1,7 +1,5 @@
 package kitchenpos.products.application.tobe;
 
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 

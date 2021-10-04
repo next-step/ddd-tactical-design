@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.tobeinfra.TobePurgomalumClient;
 
@@ -7,15 +7,14 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class MenuGroupName {
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected ProductName() {
-    }
+    protected MenuGroupName() { }
 
-    public ProductName(String name, TobePurgomalumClient purgomalumClient) {
+    public MenuGroupName(String name, TobePurgomalumClient purgomalumClient) {
         validationName(name);
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
@@ -37,7 +36,7 @@ public class ProductName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
+        MenuGroupName that = (MenuGroupName) o;
         return Objects.equals(getName(), that.getName());
     }
 
