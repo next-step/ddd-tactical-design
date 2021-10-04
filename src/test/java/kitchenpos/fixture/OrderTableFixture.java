@@ -12,4 +12,11 @@ public class OrderTableFixture {
         orderTable.sit();
         return orderTable;
     }
+
+    public static OrderTable 앉은테이블(final int numberOfGuests) {
+        final OrderTable orderTable = 주문테이블();
+        orderTable.sit();
+        orderTable.changeNumberOfGuests(numberOfGuests);
+        return orderTable;
+    }
 }
