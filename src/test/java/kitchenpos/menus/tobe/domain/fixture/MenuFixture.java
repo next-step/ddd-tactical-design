@@ -2,11 +2,14 @@ package kitchenpos.menus.tobe.domain.fixture;
 
 import kitchenpos.commons.tobe.domain.model.DisplayedName;
 import kitchenpos.commons.tobe.domain.model.Price;
+import kitchenpos.commons.tobe.domain.model.Quantity;
 import kitchenpos.commons.tobe.domain.service.Validator;
 import kitchenpos.menus.tobe.domain.model.Menu;
+import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.domain.model.MenuProducts;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.UUID;
 
 import static kitchenpos.menus.tobe.domain.fixture.MenuProductFixture.MENU_PRODUCT_WITH_PRICE_AND_QUANTITY;
@@ -77,6 +80,34 @@ public class MenuFixture {
                 MENU_PRODUCTS_WITH_MENU_PRODUCT(MENU_PRODUCT_WITH_PRICE_AND_QUANTITY(menuProductPrice, quantity)),
                 UUID.randomUUID(),
                 displayed,
+                fakeMenuCreateValidator
+        );
+    }
+
+    public static Menu MENU_WITH_ID(final UUID id) {
+        return new Menu(
+                id,
+                new DisplayedName("후라이드"),
+                new Price(16_000L),
+                new MenuProducts(Collections.singletonList(
+                        new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), new Price(16_000L), new Quantity(1L))
+                )),
+                UUID.randomUUID(),
+                true,
+                fakeMenuCreateValidator
+        );
+    }
+
+    public static Menu MENU_WITH_PRICE(final long price) {
+        return new Menu(
+                UUID.randomUUID(),
+                new DisplayedName("후라이드"),
+                new Price(price),
+                new MenuProducts(Collections.singletonList(
+                        new MenuProduct(UUID.randomUUID(), UUID.randomUUID(), new Price(price), new Quantity(1L))
+                )),
+                UUID.randomUUID(),
+                true,
                 fakeMenuCreateValidator
         );
     }
