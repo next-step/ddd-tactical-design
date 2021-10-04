@@ -45,15 +45,7 @@ public class MenuCreateRequest {
         return menuGroupId;
     }
 
-    public MenuProducts getMenuProducts() {
-        return new MenuProducts(Optional.ofNullable(menuProducts)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty)
-                .map(MenuProductRequest::toEntity)
-                .collect(Collectors.toList()));
-    }
-
-    public List<MenuProduct> getMenuProducts1() {
+    public List<MenuProduct> getMenuProducts() {
         return Optional.ofNullable(menuProducts)
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)

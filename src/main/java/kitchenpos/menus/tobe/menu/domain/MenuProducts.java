@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.menu.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,7 +46,7 @@ public class MenuProducts {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return Collections.unmodifiableList(menuProducts);
     }
 
     @Override

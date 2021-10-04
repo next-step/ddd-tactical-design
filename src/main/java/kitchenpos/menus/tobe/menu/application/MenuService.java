@@ -35,7 +35,7 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         final MenuGroup menuGroup = loadMenuGroup(request.getMenuGroupId());
-        final MenuProducts menuProducts = loadMenuProducts(request.getMenuProducts1());
+        final MenuProducts menuProducts = loadMenuProducts(request.getMenuProducts());
         return menuRepository.save(new Menu(
                 request.getName(profanities),
                 request.getPrice(),
