@@ -12,9 +12,9 @@ import static java.util.UUID.randomUUID;
 @Table(name = "menu")
 @Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+
+    @EmbeddedId
+    private MenuId id;
 
     @Embedded
     private Name name;
@@ -47,11 +47,15 @@ public class Menu {
         this(randomUUID(), name, amount, menuGroup, displayed, menuProducts);
     }
 
-    private Menu(final UUID id, final Name name, final Price amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
-        verify(amount, menuProducts);
+    private Menu(final UUID id, final Name name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+        this(new MenuId(id), name, price, menuGroup, displayed, menuProducts);
+    }
+
+    private Menu(final MenuId id, final Name name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+        verify(price, menuProducts);
         this.id = id;
         this.name = name;
-        this.price = amount;
+        this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
@@ -90,7 +94,7 @@ public class Menu {
     }
 
     public UUID getId() {
-        return id;
+        return id.getId();
     }
 
     public boolean isDisplayed() {
