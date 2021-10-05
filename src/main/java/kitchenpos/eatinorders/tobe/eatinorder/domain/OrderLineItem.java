@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.tobe.eatinorder.domain;
 
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.tobe.menu.domain.MenuId;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_line_item")
@@ -14,63 +14,40 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
+    @AttributeOverrides(
+            @AttributeOverride(name = "id", column = @Column(name = "menu_id"))
     )
-    private Menu menu;
+    private MenuId menuId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private Quantity quantity;
 
-    @Transient
-    private UUID menuId;
+    @Embedded
+    private Price price;
 
-    @Transient
-    private BigDecimal price;
-
-    public OrderLineItem() {
+    protected OrderLineItem() {
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
+    public OrderLineItem(final MenuId menuId, final Quantity quantity, final Price price) {
+        this.menuId = menuId;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public UUID getMenuId() {
-        return menuId;
+        return menuId.getId();
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final OrderLineItem that = (OrderLineItem) o;
+        return Objects.equals(seq, that.seq) || (Objects.equals(menuId, that.menuId) && Objects.equals(quantity, that.quantity) && Objects.equals(price, that.price));
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    @Override
+    public int hashCode() {
+        return Objects.hash(menuId, quantity, price);
     }
 }
