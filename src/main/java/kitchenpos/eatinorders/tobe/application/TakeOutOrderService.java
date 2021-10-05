@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import kitchenpos.eatinorders.tobe.domain.handler.DomainExceptionHandler;
 import kitchenpos.eatinorders.tobe.domain.model.Menu;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.model.OrderType;
@@ -21,13 +22,12 @@ public class TakeOutOrderService {
 
     private final TakeOutOrderRepository takeOutOrderRepository;
     private final MenuRepository menuRepository;
+    private final DomainExceptionHandler domainExceptionHandler;
 
-    public TakeOutOrderService(
-            final TakeOutOrderRepository takeOutOrderRepository,
-            final MenuRepository menuRepository
-    ) {
+    public TakeOutOrderService(TakeOutOrderRepository takeOutOrderRepository, MenuRepository menuRepository, DomainExceptionHandler domainExceptionHandler) {
         this.takeOutOrderRepository = takeOutOrderRepository;
         this.menuRepository = menuRepository;
+        this.domainExceptionHandler = domainExceptionHandler;
     }
 
     @Transactional
@@ -44,7 +44,7 @@ public class TakeOutOrderService {
         final TakeOutOrder takeOutOrder = takeOutOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        takeOutOrder.accept();
+        takeOutOrder.accept(domainExceptionHandler);
 
         return takeOutOrder;
     }
@@ -54,7 +54,7 @@ public class TakeOutOrderService {
         final TakeOutOrder takeOutOrder = takeOutOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        takeOutOrder.serve();
+        takeOutOrder.serve(domainExceptionHandler);
 
         return takeOutOrder;
     }
@@ -64,7 +64,7 @@ public class TakeOutOrderService {
         final TakeOutOrder takeOutOrder = takeOutOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        takeOutOrder.complete();
+        takeOutOrder.complete(domainExceptionHandler);
 
         return takeOutOrder;
     }

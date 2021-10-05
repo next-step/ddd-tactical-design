@@ -15,11 +15,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.tobe.application.TakeOutOrderService;
+import kitchenpos.eatinorders.tobe.application.exceptions.OrderStatusException;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.model.TakeOutOrder;
 import kitchenpos.eatinorders.tobe.domain.model.TakeOutOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.repository.MenuRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.TakeOutOrderRepository;
+import kitchenpos.eatinorders.tobe.infra.exception.CustomDomainExceptionHandler;
 import kitchenpos.tobe.eatinorders.application.InMemoryMenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +42,7 @@ public class TakeOutOrderServiceTest {
     void setUp() {
         takeOutOrderRepository = new InMemoryTakeOutOrderRepository();
         menuRepository = new InMemoryMenuRepository();
-        takeOutOrderService = new TakeOutOrderService(takeOutOrderRepository, menuRepository);
+        takeOutOrderService = new TakeOutOrderService(takeOutOrderRepository, menuRepository, new CustomDomainExceptionHandler());
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -107,7 +109,7 @@ public class TakeOutOrderServiceTest {
     void accept(final TakeOutOrderStatus status) {
         final UUID orderId = takeOutOrderRepository.save(takeOutOrder(status)).getId();
         assertThatThrownBy(() -> takeOutOrderService.accept(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 서빙한다.")
@@ -124,7 +126,7 @@ public class TakeOutOrderServiceTest {
     void serve(final TakeOutOrderStatus status) {
         final UUID orderId = takeOutOrderRepository.save(takeOutOrder(status)).getId();
         assertThatThrownBy(() -> takeOutOrderService.serve(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 완료한다.")
@@ -141,7 +143,7 @@ public class TakeOutOrderServiceTest {
     void completeTakeoutAndTakeOutOrder(final TakeOutOrderStatus status) {
         final UUID orderId = takeOutOrderRepository.save(takeOutOrder(status)).getId();
         assertThatThrownBy(() -> takeOutOrderService.complete(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문의 목록을 조회할 수 있다.")

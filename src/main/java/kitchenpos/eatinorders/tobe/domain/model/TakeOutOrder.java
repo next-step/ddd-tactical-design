@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import kitchenpos.eatinorders.tobe.domain.handler.DomainExceptionHandler;
 
 @Entity
 @DiscriminatorValue("TakeOut")
@@ -21,25 +22,25 @@ public class TakeOutOrder extends Order {
         this.status = TakeOutOrderStatus.WAITING;
     }
 
-    public void accept() {
+    public void accept(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != TakeOutOrderStatus.WAITING) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = TakeOutOrderStatus.ACCEPTED;
     }
 
-    public void serve() {
+    public void serve(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != TakeOutOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);throw new IllegalStateException();
         }
 
         this.status = TakeOutOrderStatus.SERVED;
     }
 
-    public void complete() {
+    public void complete(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != TakeOutOrderStatus.SERVED) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = TakeOutOrderStatus.COMPLETED;

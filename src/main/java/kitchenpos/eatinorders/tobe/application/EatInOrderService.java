@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import kitchenpos.eatinorders.tobe.domain.handler.DomainExceptionHandler;
 import kitchenpos.eatinorders.tobe.domain.interfaces.event.EventPublisher;
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.model.Menu;
@@ -24,17 +25,14 @@ public class EatInOrderService {
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final EventPublisher eventPublishClient;
+    private final DomainExceptionHandler domainExceptionHandler;
 
-    public EatInOrderService(
-            final EatInOrderRepository eatInOrderRepository,
-            final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository,
-            final EventPublisher eventPublishClient
-    ) {
+    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuRepository menuRepository, OrderTableRepository orderTableRepository, EventPublisher eventPublishClient, DomainExceptionHandler domainExceptionHandler) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
         this.eventPublishClient = eventPublishClient;
+        this.domainExceptionHandler = domainExceptionHandler;
     }
 
     @Transactional
@@ -52,7 +50,7 @@ public class EatInOrderService {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        eatInOrder.accept();
+        eatInOrder.accept(domainExceptionHandler);
 
         return eatInOrder;
     }
@@ -62,7 +60,7 @@ public class EatInOrderService {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        eatInOrder.serve();
+        eatInOrder.serve(domainExceptionHandler);
 
         return eatInOrder;
     }
@@ -72,7 +70,7 @@ public class EatInOrderService {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        eatInOrder.complete(eventPublishClient);
+        eatInOrder.complete(eventPublishClient, domainExceptionHandler);
 
         return eatInOrder;
     }

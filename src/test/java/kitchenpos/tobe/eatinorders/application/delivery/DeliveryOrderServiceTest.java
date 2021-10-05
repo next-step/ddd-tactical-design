@@ -14,11 +14,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.tobe.application.DeliveryOrderService;
+import kitchenpos.eatinorders.tobe.application.exceptions.OrderStatusException;
 import kitchenpos.eatinorders.tobe.domain.model.DeliveryOrder;
 import kitchenpos.eatinorders.tobe.domain.model.DeliveryOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.repository.DeliveryOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.MenuRepository;
+import kitchenpos.eatinorders.tobe.infra.exception.CustomDomainExceptionHandler;
 import kitchenpos.tobe.eatinorders.application.Fixtures;
 import kitchenpos.tobe.eatinorders.application.InMemoryMenuRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +45,7 @@ public class DeliveryOrderServiceTest {
         deliveryOrderRepository = new InMemoryDeliveryOrderRepository();
         kitchenridersClient = new FakeKitchenridersClient();
         menuRepository = new InMemoryMenuRepository();
-        deliveryOrderService = new DeliveryOrderService(deliveryOrderRepository, menuRepository, kitchenridersClient);
+        deliveryOrderService = new DeliveryOrderService(deliveryOrderRepository, menuRepository, kitchenridersClient, new CustomDomainExceptionHandler());
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
@@ -132,7 +134,7 @@ public class DeliveryOrderServiceTest {
     void accept(final DeliveryOrderStatus status) {
         final UUID deliveryOrderId = deliveryOrderRepository.save(deliveryOrder(status,"서울시 송파구 위례성대로 2")).getId();
         assertThatThrownBy(() -> deliveryOrderService.accept(deliveryOrderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("배달 주문을 접수되면 배달 대행사를 호출한다.")
@@ -161,7 +163,7 @@ public class DeliveryOrderServiceTest {
     void serve(final DeliveryOrderStatus status) {
         final UUID deliveryOrderId = deliveryOrderRepository.save(deliveryOrder(status,"서울시 송파구 위례성대로 2")).getId();
         assertThatThrownBy(() -> deliveryOrderService.serve(deliveryOrderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 배달한다.")
@@ -178,7 +180,7 @@ public class DeliveryOrderServiceTest {
     void startDelivery(final DeliveryOrderStatus status) {
         final UUID deliveryOrderId = deliveryOrderRepository.save(deliveryOrder(status,"서울시 송파구 위례성대로 2")).getId();
         assertThatThrownBy(() -> deliveryOrderService.startDelivery(deliveryOrderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 배달 완료한다.")
@@ -195,7 +197,7 @@ public class DeliveryOrderServiceTest {
     void completeDelivery(final DeliveryOrderStatus status) {
         final UUID deliveryOrderId = deliveryOrderRepository.save(deliveryOrder(status,"서울시 송파구 위례성대로 2")).getId();
         assertThatThrownBy(() -> deliveryOrderService.completeDelivery(deliveryOrderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 완료한다.")
@@ -212,7 +214,7 @@ public class DeliveryOrderServiceTest {
     void completeDeliveryOrder(final DeliveryOrderStatus status) {
         final UUID deliveryOrderId = deliveryOrderRepository.save(deliveryOrder(status,"서울시 송파구 위례성대로 2")).getId();
         assertThatThrownBy(() -> deliveryOrderService.complete(deliveryOrderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     private static List<Arguments> orderLineItems() {

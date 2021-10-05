@@ -6,10 +6,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import kitchenpos.eatinorders.tobe.domain.handler.DomainExceptionHandler;
 import kitchenpos.eatinorders.tobe.domain.interfaces.KitchenridersClient;
 import kitchenpos.eatinorders.tobe.domain.model.DeliveryOrder;
 import kitchenpos.eatinorders.tobe.domain.model.Menu;
-import kitchenpos.eatinorders.tobe.domain.model.Order;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.repository.DeliveryOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.MenuRepository;
@@ -22,15 +22,13 @@ public class DeliveryOrderService {
     private final DeliveryOrderRepository deliveryOrderRepository;
     private final MenuRepository menuRepository;
     private final KitchenridersClient kitchenridersClient;
+    private final DomainExceptionHandler domainExceptionHandler;
 
-    public DeliveryOrderService(
-        final DeliveryOrderRepository deliveryOrderRepository,
-        final MenuRepository menuRepository,
-        final KitchenridersClient kitchenridersClient
-    ) {
+    public DeliveryOrderService(DeliveryOrderRepository deliveryOrderRepository, MenuRepository menuRepository, KitchenridersClient kitchenridersClient, DomainExceptionHandler domainExceptionHandler) {
         this.deliveryOrderRepository = deliveryOrderRepository;
         this.menuRepository = menuRepository;
         this.kitchenridersClient = kitchenridersClient;
+        this.domainExceptionHandler = domainExceptionHandler;
     }
 
     @Transactional
@@ -46,7 +44,7 @@ public class DeliveryOrderService {
         final DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        deliveryOrder.accept(kitchenridersClient);
+        deliveryOrder.accept(kitchenridersClient, domainExceptionHandler);
 
         return deliveryOrder;
     }
@@ -56,7 +54,7 @@ public class DeliveryOrderService {
         final DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        deliveryOrder.serve();
+        deliveryOrder.serve(domainExceptionHandler);
         return deliveryOrder;
     }
 
@@ -65,7 +63,7 @@ public class DeliveryOrderService {
         final DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        deliveryOrder.startDelivery();
+        deliveryOrder.startDelivery(domainExceptionHandler);
 
         return deliveryOrder;
     }
@@ -75,7 +73,7 @@ public class DeliveryOrderService {
         final DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        deliveryOrder.completeDelivery();
+        deliveryOrder.completeDelivery(domainExceptionHandler);
 
         return deliveryOrder;
     }
@@ -85,7 +83,7 @@ public class DeliveryOrderService {
         final DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        deliveryOrder.complete();
+        deliveryOrder.complete(domainExceptionHandler);
 
         return deliveryOrder;
     }

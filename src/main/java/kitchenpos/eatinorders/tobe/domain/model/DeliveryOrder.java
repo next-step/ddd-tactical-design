@@ -8,6 +8,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import kitchenpos.eatinorders.tobe.domain.handler.DomainExceptionHandler;
 import kitchenpos.eatinorders.tobe.domain.interfaces.KitchenridersClient;
 
 @Entity
@@ -31,42 +32,42 @@ public class DeliveryOrder extends Order {
         this.deliveryAddress = new DeliveryAddress(deliveryAddress);
     }
 
-    public void accept(KitchenridersClient kitchenridersClient) {
+    public void accept(KitchenridersClient kitchenridersClient, DomainExceptionHandler domainExceptionHandler) {
         if (this.status != DeliveryOrderStatus.WAITING) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = DeliveryOrderStatus.ACCEPTED;
         kitchenridersClient.requestDelivery(this.getId(), getTotalAmount(), deliveryAddress.getAddress());
     }
 
-    public void serve() {
+    public void serve(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != DeliveryOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = DeliveryOrderStatus.SERVED;
     }
 
-    public void startDelivery() {
+    public void startDelivery(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != DeliveryOrderStatus.SERVED) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = DeliveryOrderStatus.DELIVERING;
     }
 
-    public void completeDelivery() {
+    public void completeDelivery(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != DeliveryOrderStatus.DELIVERING) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = DeliveryOrderStatus.DELIVERED;
     }
 
-    public void complete() {
+    public void complete(DomainExceptionHandler domainExceptionHandler) {
         if (this.status != DeliveryOrderStatus.DELIVERED) {
-            throw new IllegalStateException();
+            domainExceptionHandler.handle(ExceptionType.ILLEGAL_ORDER_STATUS);
         }
 
         this.status = DeliveryOrderStatus.COMPLETED;

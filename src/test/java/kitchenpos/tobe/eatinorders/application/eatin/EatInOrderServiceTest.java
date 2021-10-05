@@ -16,12 +16,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.tobe.application.EatInOrderService;
+import kitchenpos.eatinorders.tobe.application.exceptions.OrderStatusException;
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.MenuRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.infra.exception.CustomDomainExceptionHandler;
 import kitchenpos.tobe.eatinorders.application.InMemoryMenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +46,7 @@ public class EatInOrderServiceTest {
         eatInOrderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new FakeOrderTableRepository();
-        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, orderTableRepository, fakeEventPublisher);
+        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, orderTableRepository, fakeEventPublisher, new CustomDomainExceptionHandler());
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -135,7 +137,7 @@ public class EatInOrderServiceTest {
     void accept(final EatInOrderStatus status) {
         final UUID orderId = eatInOrderRepository.save(eatInOrder(status, UUID.randomUUID())).getId();
         assertThatThrownBy(() -> eatInOrderService.accept(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 서빙한다.")
@@ -152,7 +154,7 @@ public class EatInOrderServiceTest {
     void serve(final EatInOrderStatus status) {
         final UUID orderId = eatInOrderRepository.save(eatInOrder(status, UUID.randomUUID())).getId();
         assertThatThrownBy(() -> eatInOrderService.serve(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문을 완료한다.")
@@ -169,7 +171,7 @@ public class EatInOrderServiceTest {
     void completeTakeoutAndEatInOrder(final EatInOrderStatus status) {
         final UUID orderId = eatInOrderRepository.save(eatInOrder(status, UUID.randomUUID())).getId();
         assertThatThrownBy(() -> eatInOrderService.complete(orderId))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(OrderStatusException.class);
     }
 
     @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 테이블 클린 이벤트를 발행한다.")
