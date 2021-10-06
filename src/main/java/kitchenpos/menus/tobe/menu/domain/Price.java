@@ -30,6 +30,10 @@ public class Price {
         }
     }
 
+    public BigDecimal value() {
+        return price;
+    }
+
     public boolean isBelowAmount(final BigDecimal amount) {
         return this.price.compareTo(amount) <= 0;
     }

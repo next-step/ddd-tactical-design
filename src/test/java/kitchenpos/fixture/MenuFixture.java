@@ -41,6 +41,10 @@ public class MenuFixture {
                         .collect(toList());
     }
 
+    public static MenuProducts 금액이불러와진_메뉴상품목록(final long... price) {
+        return 금액이불러와진_메뉴상품목록(Arrays.stream(price).mapToObj(p -> ProductFixture.상품(p)).collect(toList()));
+    }
+
     public static MenuProducts 금액이불러와진_메뉴상품목록() {
         return 금액이불러와진_메뉴상품목록(ProductFixture.상품(), ProductFixture.상품());
     }
@@ -57,15 +61,15 @@ public class MenuFixture {
     }
 
     public static Menu 메뉴(final long price) {
-        return 메뉴("메뉴이름", price, 메뉴그룹(), Arrays.asList(메뉴상품(), 메뉴상품()));
+        return 메뉴("메뉴이름", price, 메뉴그룹(), 메뉴상품(), 메뉴상품());
     }
 
     public static Menu 메뉴() {
-        return 메뉴("메뉴이름", 1000L, 메뉴그룹(), Arrays.asList(메뉴상품(), 메뉴상품()));
+        return 메뉴("메뉴이름", 1000L, 메뉴그룹(), 메뉴상품(), 메뉴상품());
     }
 
-    public static Menu 메뉴(final String name, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
-        return new Menu(new Name(name, new FakeProfanities()), new Price(price), menuGroup, menuProducts);
+    public static Menu 메뉴(final String name, final long price, final MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        return new Menu(new Name(name, new FakeProfanities()), new Price(price), menuGroup, Arrays.asList(menuProducts));
     }
 
     public static Menu 메뉴(final long price, final MenuGroup menuGroup, final MenuProducts menuProducts) {

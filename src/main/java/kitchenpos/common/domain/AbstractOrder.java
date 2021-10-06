@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public abstract class AbstractOrder {
 
     @Column(name = "order_date_time", nullable = false)
-    private LocalDateTime orderDateTime;
+    protected LocalDateTime orderDateTime;
 
     protected AbstractOrder() {
         this.orderDateTime = LocalDateTime.now();
@@ -17,4 +17,6 @@ public abstract class AbstractOrder {
     protected AbstractOrder(final LocalDateTime orderDateTime) {
         this.orderDateTime = orderDateTime;
     }
+
+    public abstract LocalDateTime getOrderDateTime();
 }

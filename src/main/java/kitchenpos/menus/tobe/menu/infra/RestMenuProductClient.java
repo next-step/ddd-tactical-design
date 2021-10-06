@@ -21,16 +21,6 @@ public class RestMenuProductClient implements MenuProductClient {
     }
 
     @Override
-    public List<Product> findAllByIdIn(List<UUID> productIds) {
-        return productService.findAllByIdIn(productIds);
-    }
-
-    @Override
-    public Product findById(UUID productId) {
-        return productService.findById(productId);
-    }
-
-    @Override
     public List<ProductResponse> findAllByIdn(List<UUID> productIds) {
         return productService.findAllByIdIn(productIds)
                 .stream()

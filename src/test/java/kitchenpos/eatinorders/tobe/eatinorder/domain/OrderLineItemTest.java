@@ -11,16 +11,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("주문 상품(OrderLineItem)은")
 class OrderLineItemTest {
     private static final MenuId MENU_ID = new MenuId(UUID.randomUUID());
-    private static final Price PRICE = new Price(1000L);
     private static final Quantity QUANTITY = new Quantity(1L);
 
 
     @DisplayName("생성할 수 있다.")
     @Test
     void create() {
-        final OrderLineItem orderLineItem = new OrderLineItem(MENU_ID, QUANTITY, PRICE);
+        final OrderLineItem orderLineItem = new OrderLineItem(MENU_ID, QUANTITY);
         assertThat(orderLineItem.getMenuId()).isNotNull();
-        assertThat(orderLineItem).isEqualTo(new OrderLineItem(MENU_ID, QUANTITY, PRICE));
+        assertThat(orderLineItem).isEqualTo(new OrderLineItem(MENU_ID, QUANTITY));
     }
 
 }

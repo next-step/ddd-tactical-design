@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.menu.domain;
 import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -99,6 +100,10 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public BigDecimal getPrice() {
+        return price.value();
     }
 
     public List<MenuProduct> getMenuProducts() {

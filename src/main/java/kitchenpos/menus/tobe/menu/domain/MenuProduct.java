@@ -49,10 +49,6 @@ public class MenuProduct {
         this.price = product.getPrice();
     }
 
-    public void loadProduct(final Product product) {
-        this.price = product.getPrice();
-    }
-
     public BigDecimal calculate() {
         if(Objects.isNull(price)) {
             throw new IllegalStateException("등록된 상품인지 확인해야합니다.");

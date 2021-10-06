@@ -22,16 +22,12 @@ public class OrderLineItem {
     @Embedded
     private Quantity quantity;
 
-    @Embedded
-    private Price price;
-
     protected OrderLineItem() {
     }
 
-    public OrderLineItem(final MenuId menuId, final Quantity quantity, final Price price) {
+    public OrderLineItem(final MenuId menuId, final Quantity quantity) {
         this.menuId = menuId;
         this.quantity = quantity;
-        this.price = price;
     }
 
     public UUID getMenuId() {
@@ -43,11 +39,11 @@ public class OrderLineItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final OrderLineItem that = (OrderLineItem) o;
-        return Objects.equals(seq, that.seq) || (Objects.equals(menuId, that.menuId) && Objects.equals(quantity, that.quantity) && Objects.equals(price, that.price));
+        return Objects.equals(seq, that.seq) || (Objects.equals(menuId, that.menuId) && Objects.equals(quantity, that.quantity));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(menuId, quantity, price);
+        return Objects.hash(menuId, quantity);
     }
 }
