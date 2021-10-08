@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "order")
+@Table(name = "orders")
 @Entity
 public class EatInOrder extends AbstractOrder {
     private static final OrderStatus DEFAULT_STATUS = OrderStatus.WAITING;
@@ -51,10 +51,6 @@ public class EatInOrder extends AbstractOrder {
         this(UUID.randomUUID(), DEFAULT_STATUS, orderLineItems, orderTable);
     }
 
-    public EatInOrder(final List<OrderLineItem> orderLineItems, final OrderStatus status, final OrderTable orderTable) {
-        this(UUID.randomUUID(), status, orderLineItems, orderTable);
-    }
-
     private EatInOrder(final UUID id, final OrderStatus status, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
         this.id = id;
         this.status = status;
@@ -64,6 +60,14 @@ public class EatInOrder extends AbstractOrder {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getOrderTableId() {
+        return orderTable.getId();
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 
     public void accept() {
@@ -78,6 +82,13 @@ public class EatInOrder extends AbstractOrder {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.SERVED;
+    }
+
+    public void complete() {
+        if (status != OrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.COMPLETED;
     }
 
     @Override

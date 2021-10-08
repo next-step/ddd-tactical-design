@@ -9,6 +9,7 @@ import kitchenpos.menus.tobe.menu.domain.Menu;
 import kitchenpos.menus.tobe.menu.domain.MenuId;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class EatInOrderFixture {
@@ -25,8 +26,47 @@ public class EatInOrderFixture {
         return new OrderLineItem(new MenuId(menu.getId()), new Quantity(1L));
     }
 
-    public static EatInOrder 매장주문(final OrderStatus status, final OrderTable orderTable) {
-        return new EatInOrder(Arrays.asList(주문상품()), status, orderTable);
+    public static EatInOrder 매장주문(final OrderTable orderTable) {
+        return new EatInOrder(Arrays.asList(주문상품()), orderTable);
     }
 
+    public static EatInOrder 수락된_매장주문(final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 매장주문(orderTable);
+        eatInOrder.accept();
+        return eatInOrder;
+    }
+
+    public static EatInOrder 서빙된_매장주문(final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 수락된_매장주문(orderTable);
+        eatInOrder.serve();
+        return eatInOrder;
+    }
+
+    public static EatInOrder 완료된_매장주문(final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 서빙된_매장주문(orderTable);
+        eatInOrder.complete();
+        return eatInOrder;
+    }
+
+    public static EatInOrder 매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+        return new EatInOrder(orderLineItems, orderTable);
+    }
+
+    public static EatInOrder 수락된_매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 매장주문(orderLineItems, orderTable);
+        eatInOrder.accept();
+        return eatInOrder;
+    }
+
+    public static EatInOrder 서빙된_매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 수락된_매장주문(orderLineItems, orderTable);
+        eatInOrder.serve();
+        return eatInOrder;
+    }
+
+    public static EatInOrder 완료된_매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+        final EatInOrder eatInOrder = 서빙된_매장주문(orderLineItems, orderTable);
+        eatInOrder.complete();
+        return eatInOrder;
+    }
 }

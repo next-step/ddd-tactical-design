@@ -1,21 +1,18 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
+import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
-import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.MenuResponse;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
-import kitchenpos.eatinorders.tobe.ordertable.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
-import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
@@ -23,13 +20,13 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class EatInOrderService {
     private final OrderRepository orderRepository;
-    private final OrderTableService orderTableService;
+    private final EatInOrderTableService eatInOrderTableService;
     private final MenuLoader menuLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final OrderTableService orderTableService, final MenuLoader menuLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final MenuLoader menuLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
-        this.orderTableService = orderTableService;
+        this.eatInOrderTableService = eatInOrderTableService;
         this.menuLoader = menuLoader;
         this.menuClient = menuClient;
     }
@@ -52,7 +49,7 @@ public class EatInOrderService {
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableService.findById(orderTableId);
+        final OrderTable orderTable = eatInOrderTableService.findById(orderTableId);
         verifyOrderTable(orderTable);
         return orderTable;
     }
@@ -77,33 +74,14 @@ public class EatInOrderService {
         return order;
     }
 
-//    @Transactional
-//    public EatInOrder complete(final UUID orderId) {
-//        final EatInOrder order = orderRepository.findById(orderId)
-//            .orElseThrow(NoSuchElementException::new);
-//        final OrderType type = order.getType();
-//        final OrderStatus status = order.getStatus();
-//        if (type == OrderType.DELIVERY) {
-//            if (status != OrderStatus.DELIVERED) {
-//                throw new IllegalStateException();
-//            }
-//        }
-//        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-//            if (status != OrderStatus.SERVED) {
-//                throw new IllegalStateException();
-//            }
-//        }
-//        order.setStatus(OrderStatus.COMPLETED);
-//        if (type == OrderType.EAT_IN) {
-//            final OrderTable orderTable = order.getOrderTable();
-//            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-//                orderTable.setNumberOfGuests(0);
-//                orderTable.setEmpty(true);
-//            }
-//        }
-//        return order;
-//    }
-//
+    @Transactional
+    public EatInOrder complete(final UUID orderId) {
+        final EatInOrder order = findById(orderId);
+        order.complete();
+        eatInOrderTableService.clearTable(order.getOrderTableId());
+        return order;
+    }
+
     @Transactional(readOnly = true)
     public List<EatInOrder> findAll() {
         return orderRepository.findAll();

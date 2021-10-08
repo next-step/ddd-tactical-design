@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
+import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
@@ -46,13 +47,19 @@ class EatInOrderServiceTest {
     private long price = 19_000L;
     private MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록(price);
     private Menu menu = MenuFixture.메뉴(price, menuProducts);;
+    private static final OrderTable ORDER_TABLE = OrderTableFixture.앉은테이블( 4);
+    public static final EatInOrder 대기중주문 = EatInOrderFixture.매장주문(ORDER_TABLE);
+    public static final EatInOrder 수락된주문 = EatInOrderFixture.수락된_매장주문(ORDER_TABLE);
+    public static final EatInOrder 서빙된주문 = EatInOrderFixture.서빙된_매장주문(ORDER_TABLE);
+    public static final EatInOrder 완료주문 = EatInOrderFixture.완료된_매장주문(ORDER_TABLE);
 
     @BeforeEach
     void setUp() {
         orderRepository = new InMemoryOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new FakeMenuClient();
-        orderService = new EatInOrderService(orderRepository, new OrderTableService(orderTableRepository), menuLoader, menuClient);
+        final EatInOrderTableService eatInOrderTableService = new EatInOrderTableService(orderRepository, orderTableRepository);
+        orderService = new EatInOrderService(orderRepository, eatInOrderTableService, menuLoader, menuClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -131,93 +138,116 @@ class EatInOrderServiceTest {
     @DisplayName("주문을 접수한다.")
     @Test
     void accept() {
-        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(OrderStatus.WAITING, orderTable)).getId();
+        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(orderTable)).getId();
         final EatInOrder actual = orderService.accept(orderId);
-        assertThat(actual).isEqualTo(EatInOrderFixture.매장주문(OrderStatus.ACCEPTED, orderTable));
+        assertThat(actual).isEqualTo(EatInOrderFixture.수락된_매장주문(orderTable));
     }
 
     @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
-    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
+    @MethodSource("orders_without_waiting")
     @ParameterizedTest
-    void accept(final OrderStatus status) {
-        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(status, orderTable)).getId();
+    void accept(final EatInOrder order) {
+        final UUID orderId = orderRepository.save(order).getId();
         assertThatThrownBy(() -> orderService.accept(orderId))
             .isInstanceOf(IllegalStateException.class);
     }
 
+    private static List<Arguments> orders_without_waiting() {
+        return Arrays.asList(
+                Arguments.of(수락된주문),
+                Arguments.of(서빙된주문),
+                Arguments.of(완료주문)
+        );
+    }
 
     @DisplayName("주문을 서빙한다.")
     @Test
     void serve() {
-        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(OrderStatus.ACCEPTED, orderTable)).getId();
+        final UUID orderId = orderRepository.save(EatInOrderFixture.수락된_매장주문(orderTable)).getId();
         final EatInOrder actual = orderService.serve(orderId);
-        assertThat(actual).isEqualTo(EatInOrderFixture.매장주문(OrderStatus.SERVED, orderTable));
+        assertThat(actual).isEqualTo(EatInOrderFixture.서빙된_매장주문(orderTable));
     }
 
     @DisplayName("접수된 주문만 서빙할 수 있다.")
-    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+    @MethodSource("orders_without_accepted")
     @ParameterizedTest
-    void serve(final OrderStatus status) {
-        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(status, orderTable)).getId();
+    void serve(final EatInOrder order) {
+        final UUID orderId = orderRepository.save(order).getId();
         assertThatThrownBy(() -> orderService.serve(orderId))
             .isInstanceOf(IllegalStateException.class);
     }
 
-//
-//    @DisplayName("주문을 완료한다.")
-//    @Test
-//    void complete() {
-//        final Order expected = orderRepository.save(order(OrderStatus.DELIVERED, "서울시 송파구 위례성대로 2"));
-//        final Order actual = orderService.complete(expected.getId());
-//        assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
-//    }
-//
-//
-//    @DisplayName("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.")
-//    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
-//    @ParameterizedTest
-//    void completeTakeoutAndEatInOrder(final OrderStatus status) {
-//        final UUID orderId = orderRepository.save(order(status)).getId();
-//        assertThatThrownBy(() -> orderService.complete(orderId))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
-//
-//    @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
-//    @Test
-//    void completeEatInOrder() {
-//        final OrderTable orderTable = orderTableRepository.save(orderTable(false, 4));
-//        final Order expected = orderRepository.save(order(OrderStatus.SERVED, orderTable));
-//        final Order actual = orderService.complete(expected.getId());
-//        assertAll(
-//            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-//            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isEmpty()).isTrue(),
-//            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
-//        );
-//    }
-//
-//    @DisplayName("완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.")
-//    @Test
-//    void completeNotTable() {
-//        final OrderTable orderTable = orderTableRepository.save(orderTable(false, 4));
-//        orderRepository.save(order(OrderStatus.ACCEPTED, orderTable));
-//        final Order expected = orderRepository.save(order(OrderStatus.SERVED, orderTable));
-//        final Order actual = orderService.complete(expected.getId());
-//        assertAll(
-//            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-//            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isEmpty()).isFalse(),
-//            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
-//        );
-//    }
-//
-//    @DisplayName("주문의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        final OrderTable orderTable = orderTableRepository.save(orderTable(false, 4));
-//        orderRepository.save(order(OrderStatus.SERVED, orderTable));
-//        orderRepository.save(order(OrderStatus.DELIVERED, "서울시 송파구 위례성대로 2"));
-//        final List<Order> actual = orderService.findAll();
-//        assertThat(actual).hasSize(2);
-//    }
+    private static List<Arguments> orders_without_accepted() {
+        return Arrays.asList(
+                Arguments.of(서빙된주문),
+                Arguments.of(대기중주문),
+                Arguments.of(완료주문)
+        );
+    }
+
+    @DisplayName("주문을 완료한다.")
+    @Test
+    void complete() {
+
+        final UUID orderId = orderRepository.save(EatInOrderFixture.서빙된_매장주문(orderTableRepository.save(orderTable))).getId();
+        final EatInOrder actual = orderService.complete(orderId);
+        assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+    }
+
+
+    @DisplayName("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.")
+    @MethodSource("orders_without_served")
+    @ParameterizedTest
+    void completeTakeoutAndEatInOrder(final EatInOrder order) {
+        final UUID orderId = orderRepository.save(order).getId();
+        assertThatThrownBy(() -> orderService.complete(orderId))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    private static List<Arguments> orders_without_served() {
+        return Arrays.asList(
+                Arguments.of(수락된주문),
+                Arguments.of(대기중주문),
+                Arguments.of(완료주문)
+        );
+    }
+
+    @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
+    @Test
+    void completeEatInOrder() {
+        final OrderTable orderTable = orderTableRepository.save(OrderTableFixture.앉은테이블(4));
+        final UUID orderId = orderRepository.save(EatInOrderFixture.서빙된_매장주문(orderTable)).getId();
+        final EatInOrder actual = orderService.complete(orderId);
+        assertAll(
+            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isEmpty()).isTrue(),
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+        );
+    }
+
+    @DisplayName("완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.")
+    @Test
+    void completeNotTable() {
+        final OrderTable orderTable = orderTableRepository.save(OrderTableFixture.앉은테이블(4));
+        orderRepository.save(EatInOrderFixture.수락된_매장주문(orderTable));
+        final UUID orderId = orderRepository.save(EatInOrderFixture.서빙된_매장주문(orderTable)).getId();
+        final EatInOrder actual = orderService.complete(orderId);
+        assertAll(
+            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isEmpty()).isFalse(),
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
+        );
+    }
+
+    @DisplayName("주문의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        final OrderTable orderTable = orderTableRepository.save(OrderTableFixture.앉은테이블(4));
+        orderRepository.save(EatInOrderFixture.수락된_매장주문(orderTable));
+        orderRepository.save(EatInOrderFixture.서빙된_매장주문(orderTable));
+        final List<EatInOrder> actual = orderService.findAll();
+        assertThat(actual).hasSize(2);
+    }
 
     private CreateRequest createOrderRequest(final UUID orderTableId, final OrderLineItemCreateRequest... orderLineItems) {
         return createOrderRequest(orderTableId, Arrays.asList(orderLineItems));

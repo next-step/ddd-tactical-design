@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.ordertable.application;
 
+import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.ordertable.ui.dto.ChangeNumberOfGuestsRequest;
@@ -14,9 +15,11 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
+    private final EatInOrderTableService eatInOrderTableService;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderTableService eatInOrderTableService) {
         this.orderTableRepository = orderTableRepository;
+        this.eatInOrderTableService = eatInOrderTableService;
     }
 
     @Transactional
@@ -34,12 +37,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = findById(orderTableId);
-//        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-//            throw new IllegalStateException();
-//        }
-        orderTable.clear();
-        return orderTable;
+        return eatInOrderTableService.clearTableWithException(orderTableId);
     }
 
     @Transactional
