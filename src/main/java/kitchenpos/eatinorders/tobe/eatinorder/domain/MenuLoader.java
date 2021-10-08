@@ -23,7 +23,7 @@ public class MenuLoader {
 
     private void verifyMenuSize(final List<OrderLineItemCreateRequest> requests, final List<MenuResponse> menus) {
         if (menus.size() != requests.size()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("등록되지 않은 메뉴가 있습니다.");
         }
     }
 

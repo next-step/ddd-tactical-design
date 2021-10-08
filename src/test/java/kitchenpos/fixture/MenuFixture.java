@@ -76,6 +76,10 @@ public class MenuFixture {
         return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), menuGroup, true, menuProducts);
     }
 
+    public static Menu 메뉴(final long price, final boolean displayed, final MenuProducts menuProducts) {
+        return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), 메뉴그룹(), displayed, menuProducts);
+    }
+
     public static Menu 메뉴(final long price, final MenuProducts menuProducts) {
         return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), 메뉴그룹(), true, menuProducts);
     }

@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.MenuResponse;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
+import kitchenpos.eatinorders.tobe.ordertable.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,13 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class EatInOrderService {
     private final OrderRepository orderRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final OrderTableService orderTableService;
     private final MenuLoader menuLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final OrderTableRepository orderTableRepository, final MenuLoader menuLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final OrderTableService orderTableService, final MenuLoader menuLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
-        this.orderTableRepository = orderTableRepository;
+        this.orderTableService = orderTableService;
         this.menuLoader = menuLoader;
         this.menuClient = menuClient;
     }
@@ -51,12 +52,15 @@ public class EatInOrderService {
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException();
-        }
+        final OrderTable orderTable = orderTableService.findById(orderTableId);
+        verifyOrderTable(orderTable);
         return orderTable;
+    }
+
+    private void verifyOrderTable(final OrderTable orderTable) {
+        if (orderTable.isEmpty()) {
+            throw new IllegalStateException("주문 테이블은 비어있을 수 없습니다.");
+        }
     }
 
 //    @Transactional

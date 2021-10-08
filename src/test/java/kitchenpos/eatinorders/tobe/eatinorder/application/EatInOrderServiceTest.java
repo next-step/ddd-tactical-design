@@ -7,14 +7,21 @@ import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuClient;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
+import kitchenpos.eatinorders.tobe.ordertable.application.OrderTableService;
+import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.ordertable.infra.InMemoryOrderTableRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.OrderTableFixture;
 import kitchenpos.menus.tobe.menu.domain.Menu;
+import kitchenpos.menus.tobe.menu.domain.MenuProducts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -31,24 +38,25 @@ class EatInOrderServiceTest {
     private OrderTableRepository orderTableRepository;
     private EatInOrderService orderService;
     private MenuLoader menuLoader = new MenuLoader();
-    private Menu menu;
-    private long price;
+
+    private OrderTable orderTable = OrderTableFixture.앉은테이블( 4);
+    private long price = 19_000L;
+    private MenuProducts menuProducts = MenuFixture.금액이불러와진_메뉴상품목록(price);
+    private Menu menu = MenuFixture.메뉴(price, menuProducts);;
 
     @BeforeEach
     void setUp() {
         orderRepository = new InMemoryOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new FakeMenuClient();
-        orderService = new EatInOrderService(orderRepository, orderTableRepository, menuLoader, menuClient);
-        price = 19_000L;
-        menu = MenuFixture.메뉴(price, MenuFixture.금액이불러와진_메뉴상품목록(price));
+        orderService = new EatInOrderService(orderRepository, new OrderTableService(orderTableRepository), menuLoader, menuClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
     @Test
     void createEatInOrder() {
         final UUID menuId = menuClient.save(menu).getId();
-        final UUID orderTableId = orderTableRepository.save(OrderTableFixture.앉은테이블( 4)).getId();
+        final UUID orderTableId = orderTableRepository.save(orderTable).getId();
         final CreateRequest expected = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
         final EatInOrder actual = orderService.create(expected);
         assertThat(actual).isNotNull();
@@ -57,75 +65,65 @@ class EatInOrderServiceTest {
             () -> assertThat(actual.getOrderDateTime()).isNotNull()
         );
     }
-//
-//    @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
-//    @NullSource
-//    @ParameterizedTest
-//    void create(final OrderType type) {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-//        final Order expected = createOrderRequest(type, createOrderLineItemRequest(menuId, 19_000L, 3L));
-//        assertThatThrownBy(() -> orderService.create(expected))
-//            .isInstanceOf(IllegalArgumentException.class);
-//    }
-//
-//    @DisplayName("메뉴가 없으면 등록할 수 없다.")
-//    @MethodSource("orderLineItems")
-//    @ParameterizedTest
-//    void create(final List<OrderLineItem> orderLineItems) {
-//        final Order expected = createOrderRequest(OrderType.TAKEOUT, orderLineItems);
-//        assertThatThrownBy(() -> orderService.create(expected))
-//            .isInstanceOf(IllegalArgumentException.class);
-//    }
-//
-//    private static List<Arguments> orderLineItems() {
-//        return Arrays.asList(
-//            null,
-//            Arguments.of(Collections.emptyList()),
-//            Arguments.of(Arrays.asList(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
-//        );
-//    }
-//
-//    @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
-//    @ValueSource(longs = -1L)
-//    @ParameterizedTest
-//    void createEatInOrder(final long quantity) {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-//        final UUID orderTableId = orderTableRepository.save(orderTable(false, 4)).getId();
-//        final Order expected = createOrderRequest(
-//            OrderType.EAT_IN, orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity)
-//        );
-//        assertDoesNotThrow(() -> orderService.create(expected));
-//    }
-//
-//    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
-//    @Test
-//    void createEmptyTableEatInOrder() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-//        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-//        final Order expected = createOrderRequest(
-//            OrderType.EAT_IN, orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
-//        );
-//        assertThatThrownBy(() -> orderService.create(expected))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
-//
-//    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
-//    @Test
-//    void createNotDisplayedMenuOrder() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
-//        final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, 3L));
-//        assertThatThrownBy(() -> orderService.create(expected))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
-//
-//    @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
-//    @Test
-//    void createNotMatchedMenuPriceOrder() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-//        final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 16_000L, 3L));
-//        assertThatThrownBy(() -> orderService.create(expected))
-//            .isInstanceOf(IllegalArgumentException.class);
-//    }
+
+    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @MethodSource("orderLineItems")
+    @ParameterizedTest
+    void create(final List<OrderLineItemCreateRequest> orderLineItems) {
+        final CreateRequest expected = createOrderRequest(orderTableRepository.save(orderTable).getId(), orderLineItems);
+        assertThatThrownBy(() -> orderService.create(expected))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static List<Arguments> orderLineItems() {
+        return Arrays.asList(
+            null,
+            Arguments.of(Collections.emptyList()),
+            Arguments.of(Arrays.asList(createOrderLineItemRequest(UUID.randomUUID(), 19_000L, 3L)))
+        );
+    }
+
+    @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
+    @ValueSource(longs = -1L)
+    @ParameterizedTest
+    void createEatInOrder(final long quantity) {
+        final UUID menuId = menuClient.save(menu).getId();
+        final UUID orderTableId = orderTableRepository.save(orderTable).getId();
+        final CreateRequest expected = createOrderRequest(
+            orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity)
+        );
+        assertDoesNotThrow(() -> orderService.create(expected));
+    }
+
+    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
+    @Test
+    void createEmptyTableEatInOrder() {
+        final UUID menuId = menuClient.save(menu).getId();
+        final UUID orderTableId = orderTableRepository.save(OrderTableFixture.주문테이블()).getId();
+        final CreateRequest expected = createOrderRequest(
+            orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
+        );
+        assertThatThrownBy(() -> orderService.create(expected))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    @Test
+    void createNotDisplayedMenuOrder() {
+        final UUID menuId = menuClient.save(MenuFixture.메뉴(19_000L, false, menuProducts)).getId();
+        final CreateRequest expected = createOrderRequest(menuId, createOrderLineItemRequest(menuId, 19_000L, 3L));
+        assertThatThrownBy(() -> orderService.create(expected))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
+    @Test
+    void createNotMatchedMenuPriceOrder() {
+        final UUID menuId = menuClient.save(menu).getId();
+        final CreateRequest expected = createOrderRequest(menuId, createOrderLineItemRequest(menuId, 16_000L, 3L));
+        assertThatThrownBy(() -> orderService.create(expected))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
 //
 //    @DisplayName("주문을 접수한다.")
 //    @Test
