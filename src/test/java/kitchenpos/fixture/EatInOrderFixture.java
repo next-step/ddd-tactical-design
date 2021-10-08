@@ -22,10 +22,6 @@ public class EatInOrderFixture {
         return new OrderLineItem(new MenuId(menuId), new Quantity(1L));
     }
 
-    public static OrderLineItem 주문상품(final Menu menu) {
-        return new OrderLineItem(new MenuId(menu.getId()), new Quantity(1L));
-    }
-
     public static EatInOrder 매장주문(final OrderTable orderTable) {
         return new EatInOrder(Arrays.asList(주문상품()), orderTable.getId());
     }

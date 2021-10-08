@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.eatinorder.domain;
 
 import kitchenpos.common.domain.AbstractOrder;
-import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableId;
 
 import javax.persistence.*;

@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.menu.infra;
 import kitchenpos.menus.tobe.menu.application.MenuProductClient;
 import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

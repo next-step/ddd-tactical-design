@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.menu.domain;
 
 import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Price;
-import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
 
 import javax.persistence.*;
