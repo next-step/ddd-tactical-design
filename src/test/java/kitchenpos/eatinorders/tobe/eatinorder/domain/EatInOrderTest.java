@@ -29,7 +29,7 @@ class EatInOrderTest {
     @DisplayName("생성할 수 있다.")
     @Test
     void create() {
-        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, ORDER_TABLE);
+        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, ORDER_TABLE.getId());
         assertThat(order.getId()).isNotNull();
         assertThat(order).isEqualTo(EatInOrderFixture.매장주문(ORDER_LINE_ITEMS, ORDER_TABLE));
     }
@@ -37,7 +37,7 @@ class EatInOrderTest {
     @DisplayName("수락할 수 있다.")
     @Test
     void accept() {
-        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, ORDER_TABLE);
+        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, ORDER_TABLE.getId());
         order.accept();
         assertThat(order).isEqualTo(EatInOrderFixture.수락된_매장주문(ORDER_LINE_ITEMS, ORDER_TABLE));
     }

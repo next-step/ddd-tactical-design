@@ -2,10 +2,7 @@ package kitchenpos.eatinorders.tobe.ordertable.domain;
 
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,9 +12,8 @@ public class OrderTable {
     private static final int DEFAULT_GUEST_NUMBER = 0;
     private static final boolean DEFAULT_EMPTY = true;
 
-    @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private OrderTableId id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -36,10 +32,10 @@ public class OrderTable {
     }
 
     public OrderTable(final UUID id, final String name) {
-        this(id, name, DEFAULT_GUEST_NUMBER, DEFAULT_EMPTY);
+        this(new OrderTableId(id), name, DEFAULT_GUEST_NUMBER, DEFAULT_EMPTY);
     }
 
-    private OrderTable(final UUID id, final String name, final int numberOfGuests, final boolean empty) {
+    private OrderTable(final OrderTableId id, final String name, final int numberOfGuests, final boolean empty) {
         verify(name);
         this.id = id;
         this.name = name;
@@ -54,7 +50,7 @@ public class OrderTable {
     }
 
     public UUID getId() {
-        return id;
+        return id.getId();
     }
 
     public void sit() {

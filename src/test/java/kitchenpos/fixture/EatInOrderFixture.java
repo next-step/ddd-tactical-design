@@ -27,7 +27,7 @@ public class EatInOrderFixture {
     }
 
     public static EatInOrder 매장주문(final OrderTable orderTable) {
-        return new EatInOrder(Arrays.asList(주문상품()), orderTable);
+        return new EatInOrder(Arrays.asList(주문상품()), orderTable.getId());
     }
 
     public static EatInOrder 수락된_매장주문(final OrderTable orderTable) {
@@ -49,7 +49,7 @@ public class EatInOrderFixture {
     }
 
     public static EatInOrder 매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
-        return new EatInOrder(orderLineItems, orderTable);
+        return new EatInOrder(orderLineItems, orderTable.getId());
     }
 
     public static EatInOrder 수락된_매장주문(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {

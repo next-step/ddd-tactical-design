@@ -1,15 +1,11 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
 import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.eatinorder.domain.*;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuClient;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
-import kitchenpos.eatinorders.tobe.ordertable.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.ordertable.infra.InMemoryOrderTableRepository;
@@ -23,7 +19,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -59,7 +54,7 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new FakeMenuClient();
         final EatInOrderTableService eatInOrderTableService = new EatInOrderTableService(orderRepository, orderTableRepository);
-        orderService = new EatInOrderService(orderRepository, eatInOrderTableService, menuLoader, menuClient);
+        orderService = new EatInOrderService(orderRepository, eatInOrderTableService, new OrderTableLoader(), menuLoader, menuClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

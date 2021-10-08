@@ -1,10 +1,7 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
 import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderLineItem;
-import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
+import kitchenpos.eatinorders.tobe.eatinorder.domain.*;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
@@ -21,12 +18,14 @@ import static java.util.stream.Collectors.toList;
 public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final EatInOrderTableService eatInOrderTableService;
+    private final OrderTableLoader orderTableLoader;
     private final MenuLoader menuLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final MenuLoader menuLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final MenuLoader menuLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
         this.eatInOrderTableService = eatInOrderTableService;
+        this.orderTableLoader = orderTableLoader;
         this.menuLoader = menuLoader;
         this.menuClient = menuClient;
     }
@@ -35,7 +34,7 @@ public class EatInOrderService {
     public EatInOrder create(final CreateRequest request) {
         final List<OrderLineItem> orderLineItems = loadOrderLineItems(request.getOrderLineItemRequests());
         final OrderTable orderTable = loadOrderTable(request.getOrderTableId());
-        final EatInOrder order = new EatInOrder(orderLineItems, orderTable);
+        final EatInOrder order = new EatInOrder(orderLineItems, orderTable.getId());
         return orderRepository.save(order);
     }
 
@@ -49,15 +48,7 @@ public class EatInOrderService {
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
-        final OrderTable orderTable = eatInOrderTableService.findById(orderTableId);
-        verifyOrderTable(orderTable);
-        return orderTable;
-    }
-
-    private void verifyOrderTable(final OrderTable orderTable) {
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException("주문 테이블은 비어있을 수 없습니다.");
-        }
+        return orderTableLoader.load(eatInOrderTableService.findById(orderTableId));
     }
 
     @Transactional

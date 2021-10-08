@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.eatinorder.domain;
 
 import kitchenpos.common.domain.AbstractOrder;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableId;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,13 +32,10 @@ public class EatInOrder extends AbstractOrder {
     )
     private List<OrderLineItem> orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+    @AttributeOverrides(
+            @AttributeOverride(name = "id", column = @Column(name = "order_table_id"))
     )
-    private OrderTable orderTable;
+    private OrderTableId orderTableId;
 
     protected EatInOrder() {
     }
@@ -47,15 +45,15 @@ public class EatInOrder extends AbstractOrder {
         return orderDateTime;
     }
 
-    public EatInOrder(final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
-        this(UUID.randomUUID(), DEFAULT_STATUS, orderLineItems, orderTable);
+    public EatInOrder(final List<OrderLineItem> orderLineItems, final UUID orderTableId) {
+        this(UUID.randomUUID(), DEFAULT_STATUS, orderLineItems, new OrderTableId(orderTableId));
     }
 
-    private EatInOrder(final UUID id, final OrderStatus status, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+    private EatInOrder(final UUID id, final OrderStatus status, final List<OrderLineItem> orderLineItems, final OrderTableId orderTableId) {
         this.id = id;
         this.status = status;
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
     public UUID getId() {
@@ -63,7 +61,7 @@ public class EatInOrder extends AbstractOrder {
     }
 
     public UUID getOrderTableId() {
-        return orderTable.getId();
+        return orderTableId.getId();
     }
 
     public OrderStatus getStatus() {
@@ -96,11 +94,11 @@ public class EatInOrder extends AbstractOrder {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final EatInOrder that = (EatInOrder) o;
-        return Objects.equals(id, that.id) || (status == that.status && Objects.equals(orderLineItems, that.orderLineItems) && Objects.equals(orderTable, that.orderTable));
+        return Objects.equals(id, that.id) || (status == that.status && Objects.equals(orderLineItems, that.orderLineItems) && Objects.equals(orderTableId, that.orderTableId));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, orderLineItems, orderTable);
+        return Objects.hash(status, orderLineItems, orderTableId);
     }
 }
