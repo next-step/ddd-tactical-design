@@ -1,6 +1,6 @@
 package kitchenpos.tobe.products.application;
 
-import static kitchenpos.tobe.Fixtures.product;
+import static kitchenpos.tobe.menus.application.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

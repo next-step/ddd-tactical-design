@@ -1,4 +1,4 @@
-package kitchenpos.tobe;
+package kitchenpos.tobe.menus.application;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -9,8 +9,6 @@ import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.domain.service.MenuDomainService;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.service.ProductDomainService;
-import kitchenpos.tobe.menus.application.InMemoryMenuGroupRepository;
-import kitchenpos.tobe.menus.application.FakeProductRepository;
 import kitchenpos.tobe.products.application.FakePurgomalumClient;
 
 public class Fixtures {
