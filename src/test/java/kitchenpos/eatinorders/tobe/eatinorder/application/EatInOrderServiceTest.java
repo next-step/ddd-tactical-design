@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuClient;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.InMemoryOrderRepository;
@@ -29,6 +30,7 @@ class EatInOrderServiceTest {
     private FakeMenuClient menuClient;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService orderService;
+    private MenuLoader menuLoader = new MenuLoader();
     private Menu menu;
     private long price;
 
@@ -37,7 +39,7 @@ class EatInOrderServiceTest {
         orderRepository = new InMemoryOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new FakeMenuClient();
-        orderService = new EatInOrderService(orderRepository, orderTableRepository, menuClient);
+        orderService = new EatInOrderService(orderRepository, orderTableRepository, menuLoader, menuClient);
         price = 19_000L;
         menu = MenuFixture.메뉴(price, MenuFixture.금액이불러와진_메뉴상품목록(price));
     }

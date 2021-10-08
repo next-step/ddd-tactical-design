@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
@@ -22,11 +23,13 @@ import static java.util.stream.Collectors.toList;
 public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
+    private final MenuLoader menuLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final OrderTableRepository orderTableRepository, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final OrderTableRepository orderTableRepository, final MenuLoader menuLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;
+        this.menuLoader = menuLoader;
         this.menuClient = menuClient;
     }
 
@@ -34,32 +37,17 @@ public class EatInOrderService {
     public EatInOrder create(final CreateRequest request) {
         final List<OrderLineItem> orderLineItems = loadOrderLineItems(request.getOrderLineItemRequests());
         final OrderTable orderTable = loadOrderTable(request.getOrderTableId());
-        EatInOrder order = new EatInOrder(orderLineItems, orderTable);
+        final EatInOrder order = new EatInOrder(orderLineItems, orderTable);
         return orderRepository.save(order);
     }
 
     private List<OrderLineItem> loadOrderLineItems(final List<OrderLineItemCreateRequest> requests) {
-        final List<MenuResponse> menus = menuClient.findAllByIdn(
-                requests.stream()
-                        .map(OrderLineItemCreateRequest::getMenuId)
-                        .collect(toList())
-        );
-        if (menus.size() != requests.size()) {
-            throw new IllegalArgumentException();
-        }
-        for (final OrderLineItemCreateRequest request : requests) {
-            final MenuResponse menu = menus.stream()
-                    .filter(item -> Objects.equals(item.getMenuId(), request.getMenuId()))
-                    .findAny().orElseThrow(NoSuchElementException::new);
-
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(request.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-        }
-        return requests.stream().map(OrderLineItemCreateRequest::toEntity).collect(toList());
+        return menuLoader.loadOrderLineItems(requests,
+                menuClient.findAllByIdn(
+                        requests.stream()
+                                .map(OrderLineItemCreateRequest::getMenuId)
+                                .collect(toList())
+                ));
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
