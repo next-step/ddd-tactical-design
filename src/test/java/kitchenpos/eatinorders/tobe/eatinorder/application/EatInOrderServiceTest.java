@@ -145,23 +145,23 @@ class EatInOrderServiceTest {
             .isInstanceOf(IllegalStateException.class);
     }
 
-//
-//    @DisplayName("주문을 서빙한다.")
-//    @Test
-//    void serve() {
-//        final UUID orderId = orderRepository.save(order(OrderStatus.ACCEPTED)).getId();
-//        final Order actual = orderService.serve(orderId);
-//        assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
-//    }
-//
-//    @DisplayName("접수된 주문만 서빙할 수 있다.")
-//    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
-//    @ParameterizedTest
-//    void serve(final OrderStatus status) {
-//        final UUID orderId = orderRepository.save(order(status)).getId();
-//        assertThatThrownBy(() -> orderService.serve(orderId))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
+
+    @DisplayName("주문을 서빙한다.")
+    @Test
+    void serve() {
+        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(OrderStatus.ACCEPTED, orderTable)).getId();
+        final EatInOrder actual = orderService.serve(orderId);
+        assertThat(actual).isEqualTo(EatInOrderFixture.매장주문(OrderStatus.SERVED, orderTable));
+    }
+
+    @DisplayName("접수된 주문만 서빙할 수 있다.")
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void serve(final OrderStatus status) {
+        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(status, orderTable)).getId();
+        assertThatThrownBy(() -> orderService.serve(orderId))
+            .isInstanceOf(IllegalStateException.class);
+    }
 
 //
 //    @DisplayName("주문을 완료한다.")

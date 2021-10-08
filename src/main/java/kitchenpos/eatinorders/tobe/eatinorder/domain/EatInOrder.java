@@ -67,10 +67,17 @@ public class EatInOrder extends AbstractOrder {
     }
 
     public void accept() {
-        if(status != OrderStatus.WAITING) {
+        if(this.status != OrderStatus.WAITING) {
             throw new IllegalStateException("대기중인 주문만 수락할 수 있습니다.");
         }
         this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (this.status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.SERVED;
     }
 
     @Override

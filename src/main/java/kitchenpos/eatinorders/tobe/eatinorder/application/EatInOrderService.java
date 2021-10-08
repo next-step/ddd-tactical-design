@@ -70,18 +70,12 @@ public class EatInOrderService {
         return order;
     }
 
-//
-//    @Transactional
-//    public EatInOrder serve(final UUID orderId) {
-//        final EatInOrder order = orderRepository.findById(orderId)
-//            .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.ACCEPTED) {
-//            throw new IllegalStateException();
-//        }
-//        order.setStatus(OrderStatus.SERVED);
-//        return order;
-//    }
-//
+    @Transactional
+    public EatInOrder serve(final UUID orderId) {
+        final EatInOrder order = findById(orderId);
+        order.serve();
+        return order;
+    }
 
 //    @Transactional
 //    public EatInOrder complete(final UUID orderId) {

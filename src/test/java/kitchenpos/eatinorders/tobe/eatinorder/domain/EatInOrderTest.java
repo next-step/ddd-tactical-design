@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
@@ -53,5 +54,23 @@ class EatInOrderTest {
                 Arguments.of(OrderStatus.SERVED),
                 Arguments.of(OrderStatus.COMPLETED)
         );
+    }
+
+    @DisplayName("서빙할 수 있다.")
+    @Test
+    void serve() {
+        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, OrderStatus.ACCEPTED, ORDER_TABLE);
+        order.serve();
+        assertThat(order).isEqualTo(new EatInOrder(ORDER_LINE_ITEMS, OrderStatus.SERVED, ORDER_TABLE));
+    }
+
+    @DisplayName("수락상태가 아닌 주문을 서빙하면 IllegalStateException이 발생한다.")
+    @ParameterizedTest
+    @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+    void serve_notWaiting(final OrderStatus status) {
+        final EatInOrder order = new EatInOrder(ORDER_LINE_ITEMS, status, ORDER_TABLE);
+        ThrowableAssert.ThrowingCallable throwingCallable = order::serve;
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(throwingCallable);
     }
 }
