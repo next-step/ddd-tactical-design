@@ -63,25 +63,13 @@ public class EatInOrderService {
         }
     }
 
-//    @Transactional
-//    public EatInOrder accept(final UUID orderId) {
-//        final EatInOrder order = orderRepository.findById(orderId)
-//            .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.WAITING) {
-//            throw new IllegalStateException();
-//        }
-//        if (order.getType() == OrderType.DELIVERY) {
-//            BigDecimal sum = BigDecimal.ZERO;
-//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-//                sum = orderLineItem.getMenu()
-//                    .getPrice()
-//                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-//            }
-//            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
-//        }
-//        order.setStatus(OrderStatus.ACCEPTED);
-//        return order;
-//    }
+    @Transactional
+    public EatInOrder accept(final UUID orderId) {
+        final EatInOrder order = findById(orderId);
+        order.accept();
+        return order;
+    }
+
 //
 //    @Transactional
 //    public EatInOrder serve(final UUID orderId) {
@@ -94,31 +82,7 @@ public class EatInOrderService {
 //        return order;
 //    }
 //
-//    @Transactional
-//    public EatInOrder startDelivery(final UUID orderId) {
-//        final EatInOrder order = orderRepository.findById(orderId)
-//            .orElseThrow(NoSuchElementException::new);
-//        if (order.getType() != OrderType.DELIVERY) {
-//            throw new IllegalStateException();
-//        }
-//        if (order.getStatus() != OrderStatus.SERVED) {
-//            throw new IllegalStateException();
-//        }
-//        order.setStatus(OrderStatus.DELIVERING);
-//        return order;
-//    }
-//
-//    @Transactional
-//    public EatInOrder completeDelivery(final UUID orderId) {
-//        final EatInOrder order = orderRepository.findById(orderId)
-//            .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.DELIVERING) {
-//            throw new IllegalStateException();
-//        }
-//        order.setStatus(OrderStatus.DELIVERED);
-//        return order;
-//    }
-//
+
 //    @Transactional
 //    public EatInOrder complete(final UUID orderId) {
 //        final EatInOrder order = orderRepository.findById(orderId)
@@ -146,8 +110,14 @@ public class EatInOrderService {
 //        return order;
 //    }
 //
-//    @Transactional(readOnly = true)
-//    public List<EatInOrder> findAll() {
-//        return orderRepository.findAll();
-//    }
+    @Transactional(readOnly = true)
+    public List<EatInOrder> findAll() {
+        return orderRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public EatInOrder findById(final UUID orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }

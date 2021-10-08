@@ -51,6 +51,10 @@ public class EatInOrder extends AbstractOrder {
         this(UUID.randomUUID(), DEFAULT_STATUS, orderLineItems, orderTable);
     }
 
+    public EatInOrder(final List<OrderLineItem> orderLineItems, final OrderStatus status, final OrderTable orderTable) {
+        this(UUID.randomUUID(), status, orderLineItems, orderTable);
+    }
+
     private EatInOrder(final UUID id, final OrderStatus status, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
         this.id = id;
         this.status = status;
@@ -60,6 +64,13 @@ public class EatInOrder extends AbstractOrder {
 
     public UUID getId() {
         return id;
+    }
+
+    public void accept() {
+        if(status != OrderStatus.WAITING) {
+            throw new IllegalStateException("대기중인 주문만 수락할 수 있습니다.");
+        }
+        this.status = OrderStatus.ACCEPTED;
     }
 
     @Override

@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.eatinorder.application;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.MenuLoader;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderRepository;
+import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuClient;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
@@ -11,6 +12,7 @@ import kitchenpos.eatinorders.tobe.ordertable.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.ordertable.infra.InMemoryOrderTableRepository;
+import kitchenpos.fixture.EatInOrderFixture;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.OrderTableFixture;
 import kitchenpos.menus.tobe.menu.domain.Menu;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -124,24 +127,24 @@ class EatInOrderServiceTest {
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
-//
-//    @DisplayName("주문을 접수한다.")
-//    @Test
-//    void accept() {
-//        final UUID orderId = orderRepository.save(order(OrderStatus.WAITING, orderTable(false, 4))).getId();
-//        final Order actual = orderService.accept(orderId);
-//        assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
-//    }
-//
-//    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
-//    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
-//    @ParameterizedTest
-//    void accept(final OrderStatus status) {
-//        final UUID orderId = orderRepository.save(order(status, orderTable(false, 4))).getId();
-//        assertThatThrownBy(() -> orderService.accept(orderId))
-//            .isInstanceOf(IllegalStateException.class);
-//    }
-//
+
+    @DisplayName("주문을 접수한다.")
+    @Test
+    void accept() {
+        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(OrderStatus.WAITING, orderTable)).getId();
+        final EatInOrder actual = orderService.accept(orderId);
+        assertThat(actual).isEqualTo(EatInOrderFixture.매장주문(OrderStatus.ACCEPTED, orderTable));
+    }
+
+    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
+    @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
+    @ParameterizedTest
+    void accept(final OrderStatus status) {
+        final UUID orderId = orderRepository.save(EatInOrderFixture.매장주문(status, orderTable)).getId();
+        assertThatThrownBy(() -> orderService.accept(orderId))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
 //
 //    @DisplayName("주문을 서빙한다.")
 //    @Test
