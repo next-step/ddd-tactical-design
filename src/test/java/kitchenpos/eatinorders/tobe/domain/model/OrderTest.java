@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -115,13 +116,13 @@ public class OrderTest {
 
     private Order makeEatInOrder(UUID orderTableId) {
         Menu menu = menuRepository.save(MenuFixture.MENU_FIXTURE(19000L, "두마리후라이드", 10000L, 2L));
-        OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(OrderLineItemFixture.ORDER_LINE_ITEM_FIXTURE(19000L, 2L, menu.getId(), orderLineItemValidator)));
+        List<OrderLineItem> orderLineItems = Arrays.asList(OrderLineItemFixture.ORDER_LINE_ITEM_FIXTURE(19000L, 2L, menu.getId(), orderLineItemValidator));
         return orderRepository.save(OrderFixture.ORDER_FIXTURE(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, orderTableId, new OrderValidator(orderTableRepository)));
     }
 
     private Order underZeroQuantityOrder(OrderType orderType, Long quantity, UUID orderTableId) {
         Menu menu = menuRepository.save(MenuFixture.MENU_FIXTURE(19000L, "두마리후라이드", 10000L, 2L));
-        OrderLineItems orderLineItems = new OrderLineItems(Arrays.asList(OrderLineItemFixture.ORDER_LINE_ITEM_FIXTURE(19000L, quantity, menu.getId(), orderLineItemValidator)));
+        List<OrderLineItem> orderLineItems = Arrays.asList(OrderLineItemFixture.ORDER_LINE_ITEM_FIXTURE(19000L, quantity, menu.getId(), orderLineItemValidator));
         return orderRepository.save(OrderFixture.ORDER_FIXTURE(orderType, OrderStatus.WAITING, orderLineItems, orderTableId, new OrderValidator(orderTableRepository)));
     }
 

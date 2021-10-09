@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.tobe.domain.validator.OrderValidator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -23,8 +24,8 @@ public class Order {
 
     private LocalDateTime orderDateTime;
 
-    @Embedded
-    private OrderLineItems orderLineItems;
+    @OneToMany
+    private List<OrderLineItem> orderLineItems;
 
     private UUID orderTableId;
 
@@ -32,11 +33,10 @@ public class Order {
 
     }
 
-    public Order(OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId, OrderValidator orderValidator) {
+    public Order(OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, List<OrderLineItem> orderLineItems, UUID orderTableId, OrderValidator orderValidator) {
         this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
         orderValidator.checkTableStatus(orderTableId);
         orderValidator.checkOrderLineItemQuantity(orderLineItems, orderType);

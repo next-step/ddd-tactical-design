@@ -4,10 +4,7 @@ import kitchenpos.common.domain.model.Price;
 import kitchenpos.common.domain.model.Quantity;
 import kitchenpos.eatinorders.tobe.domain.validator.OrderLineItemValidator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -22,6 +19,9 @@ public class OrderLineItem {
     private Quantity quantity;
 
     private UUID menuId;
+
+    @ManyToOne
+    private Order order;
 
     protected OrderLineItem() {
 
