@@ -13,6 +13,9 @@ public class NumberOfGuests {
     }
 
     public NumberOfGuests(long value) {
+        if(value < 0) {
+            throw new IllegalArgumentException("방문한 손님 수는 음수일 수 없습니다.");
+        }
         this.value = value;
     }
 
