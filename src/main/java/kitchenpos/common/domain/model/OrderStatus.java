@@ -27,7 +27,7 @@ OrderStatus {
             throw new IllegalArgumentException("이미 완료 상태입니다.");
         }
 
-        if (orderType == OrderType.EAT_IN && this.level == 3) {
+        if (orderType != OrderType.DELIVERY && this.level == 3) {
             return COMPLETED;
         }
 
