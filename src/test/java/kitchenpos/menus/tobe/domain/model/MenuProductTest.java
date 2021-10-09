@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.common.domain.model.Quantity;
 import kitchenpos.common.domain.model.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,7 @@ public class MenuProductTest {
     void create() {
 
         Assertions.assertDoesNotThrow(
-                () -> new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new MenuQuantity(BigDecimal.valueOf(2L)))
+                () -> new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new Quantity(BigDecimal.valueOf(2L)))
         );
     }
 
@@ -26,7 +27,7 @@ public class MenuProductTest {
     void wrongPriceCreate() {
         // wrong price
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                        new MenuProduct(UUID.randomUUID(), new Price(null), new MenuQuantity(BigDecimal.valueOf(2L))))
+                        new MenuProduct(UUID.randomUUID(), new Price(null), new Quantity(BigDecimal.valueOf(2L))))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -35,14 +36,14 @@ public class MenuProductTest {
     void wrongQuantityCreate() {
         // wrong quantity
         org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                        new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new MenuQuantity(null)))
+                        new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new Quantity(null)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("합산 검증")
     @Test
     void getAmountTest() {
-        MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new MenuQuantity(BigDecimal.valueOf(2L)));
+        MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(10000L)), new Quantity(BigDecimal.valueOf(2L)));
         assertThat(menuProduct.getAmount().compareTo(BigDecimal.valueOf(20000L))).isEqualTo(0);
     }
 

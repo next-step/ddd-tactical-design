@@ -17,7 +17,7 @@ public class OrderTableValidator {
         this.orderTableRepository = orderTableRepository;
     }
 
-    public void manageTableNumberOfGuests(UUID orderTableId) {
+    public void clearTable(UUID orderTableId) {
         if (isAllOrderCompleted(orderTableId)) {
             OrderTable orderTable = orderTableRepository.findById(orderTableId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 테이블입니다."));

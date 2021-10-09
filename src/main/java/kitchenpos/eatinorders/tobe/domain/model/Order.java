@@ -43,14 +43,10 @@ public class Order {
     }
 
     public void advanceOrderStatus(OrderTableValidator orderTableValidator) {
-
-        if (this.orderStatus == OrderStatus.SERVED && this.orderType == OrderType.EAT_IN) {
-            this.orderStatus = this.orderStatus.advanceLevel(this.orderType);
-            orderTableValidator.manageTableNumberOfGuests(orderTableId);
-            return;
-        }
-
         this.orderStatus = this.orderStatus.advanceLevel(this.orderType);
+        if (this.orderStatus == OrderStatus.COMPLETED && this.orderType == OrderType.EAT_IN) {
+            orderTableValidator.clearTable(orderTableId);
+        }
     }
 
     public UUID getId() {

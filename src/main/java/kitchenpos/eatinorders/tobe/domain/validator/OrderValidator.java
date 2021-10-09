@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain.validator;
 
-import kitchenpos.common.domain.model.OrderStatus;
 import kitchenpos.common.domain.model.OrderType;
 import kitchenpos.eatinorders.tobe.domain.model.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
@@ -35,7 +34,7 @@ public class OrderValidator {
 
     private boolean containsUnderZeroQuantity(OrderLineItems orderLineItems) {
         return orderLineItems.getOrderLineItems().stream()
-                .anyMatch(orderLineItem -> orderLineItem.getOrderLineItemQuantity().getQuantity().compareTo(BigDecimal.ZERO) <= 0);
+                .anyMatch(orderLineItem -> orderLineItem.getQuantity().getValue().compareTo(BigDecimal.ZERO) <= 0);
     }
 }
 

@@ -14,7 +14,7 @@ public class OrderLineItemValidator {
         this.menuRepository = menuRepository;
     }
 
-    public void compareToMenuPrice(OrderLineItem orderLineItem) {
+    public void validate(OrderLineItem orderLineItem) {
         Menu menu = menuRepository.findById(orderLineItem.getMenuId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
 

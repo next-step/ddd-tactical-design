@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.common.domain.model.Price;
+import kitchenpos.common.domain.model.Quantity;
 import kitchenpos.eatinorders.tobe.domain.validator.OrderLineItemValidator;
 
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ public class OrderLineItem {
 
     private Price price;
 
-    private OrderLineItemQuantity orderLineItemQuantity;
+    private Quantity quantity;
 
     private UUID menuId;
 
@@ -26,11 +27,11 @@ public class OrderLineItem {
 
     }
 
-    public OrderLineItem(Price price, OrderLineItemQuantity orderLineItemQuantity, UUID menuId, OrderLineItemValidator orderLineItemValidator) {
+    public OrderLineItem(Price price, Quantity quantity, UUID menuId, OrderLineItemValidator orderLineItemValidator) {
         this.price = price;
-        this.orderLineItemQuantity = orderLineItemQuantity;
+        this.quantity = quantity;
         this.menuId = menuId;
-        orderLineItemValidator.compareToMenuPrice(this);
+        orderLineItemValidator.validate(this);
     }
 
     public UUID getMenuId() {
@@ -45,7 +46,7 @@ public class OrderLineItem {
         this.id = id;
     }
 
-    public OrderLineItemQuantity getOrderLineItemQuantity() {
-        return this.orderLineItemQuantity;
+    public Quantity getQuantity() {
+        return quantity;
     }
 }
