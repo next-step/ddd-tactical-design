@@ -44,25 +44,13 @@ public class Order {
 
     public void advanceOrderStatus(OrderTableValidator orderTableValidator) {
 
-        if (this.orderStatus == OrderStatus.WAITING) {
-            this.orderStatus = OrderStatus.ACCEPTED;
-            return;
-        }
-
-        if (this.orderStatus == OrderStatus.ACCEPTED) {
-            this.orderStatus = OrderStatus.SERVED;
-            return;
-        }
-
-        if (this.orderStatus == OrderStatus.SERVED) {
-            this.orderStatus = OrderStatus.COMPLETED;
+        if (this.orderStatus == OrderStatus.SERVED && this.orderType == OrderType.EAT_IN) {
+            this.orderStatus = this.orderStatus.advanceLevel(this.orderType);
             orderTableValidator.manageTableNumberOfGuests(orderTableId);
             return;
         }
 
-        if (this.orderStatus == OrderStatus.COMPLETED) {
-            throw new IllegalStateException("이미 완료된 주문입니다.");
-        }
+        this.orderStatus = this.orderStatus.advanceLevel(this.orderType);
     }
 
     public UUID getId() {

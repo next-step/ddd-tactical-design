@@ -92,7 +92,7 @@ public class OrderTest {
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
 
         assertThatThrownBy(() -> order.advanceOrderStatus(orderTableValidator))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("주문 완료 처리시 해당 테이블 주문 전수 검사 후 모든 주문이 완료 상태일시 empty table 처리 여부 검증")
