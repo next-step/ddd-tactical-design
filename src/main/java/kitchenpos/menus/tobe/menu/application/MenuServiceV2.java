@@ -38,7 +38,7 @@ public class MenuServiceV2 {
     @Transactional
     public Menu create(final MenuRequest request) {
         menuGroupRepository.findById(request.getMenuGroupId())
-            .orElseThrow(() -> new NoSuchElementException("메뉴그룹을 찾을 수 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("해당 메뉴그룹을 찾을 수 없습니다."));
         final DisplayedName displayedName = new DisplayedName(request.getName(), profanities);
         final MenuPrice price = new MenuPrice(request.getPrice());
         final MenuProducts menuProducts = menuProductsMapper.toMenuProducts(request.getMenuProducts());
@@ -49,21 +49,21 @@ public class MenuServiceV2 {
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuPrice price) {
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다."));
         return menu.changePrice(price);
     }
 
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다."));
         return menu.display();
     }
 
     @Transactional
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NoSuchElementException("해당 메뉴를 찾을 수 없습니다."));
         return menu.hide();
     }
 

@@ -112,8 +112,9 @@ class MenuServiceV2Test {
     void createExpensiveMenu() {
         final MenuRequest expected = new MenuRequest("후라이드+후라이드", BigDecimal.valueOf(190_000L), menuGroupId, true, new MenuProductRequest(product.getId(), 2L));
 
-        assertThatThrownBy(() -> menuServiceV2.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+        final Menu menu = menuServiceV2.create(expected);
+
+        assertThat(menu.isDisplayed()).isFalse();
     }
 
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
@@ -160,8 +161,12 @@ class MenuServiceV2Test {
     void changePriceExpensive() {
         final Menu menu = MENU1();
         menuRepository.save(menu);
-        assertThatThrownBy(() -> menuServiceV2.changePrice(menu.getId(), new MenuPrice(100_000L)))
-            .isInstanceOf(IllegalArgumentException.class);
+
+        assertThat(menu.isDisplayed()).isTrue();
+
+        final Menu changedMenu = menuServiceV2.changePrice(menu.getId(), new MenuPrice(100_000L));
+
+        assertThat(changedMenu.isDisplayed()).isFalse();
     }
 
     @DisplayName("메뉴를 노출할 수 있다.")

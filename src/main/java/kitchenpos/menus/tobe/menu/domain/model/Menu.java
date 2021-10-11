@@ -46,17 +46,23 @@ public class Menu {
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        isValidPrice(menuPrice);
+        if (isNotValidPrice(menuPrice)) {
+            hide();
+        }
     }
 
     public Menu changePrice(final MenuPrice menuPrice) {
-        isValidPrice(menuPrice);
+        if (isNotValidPrice(menuPrice)) {
+            hide();
+        }
         this.menuPrice = menuPrice;
         return this;
     }
 
     public Menu display() {
-        isValidPrice(menuPrice);
+        if (isNotValidPrice(menuPrice)) {
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
+        }
         this.displayed = true;
         return this;
     }
@@ -66,10 +72,12 @@ public class Menu {
         return this;
     }
 
-    public void isValidPrice(final Price price) {
-        if (price.compareTo(menuProducts.calculateTotalPrice()) > 0) {
-            throw new IllegalArgumentException();
-        }
+    private boolean isNotValidPrice(final Price price) {
+        return price.compareTo(menuProducts.calculateTotalPrice()) > 0;
+    }
+
+    public boolean isNotValidPrice() {
+        return isNotValidPrice(menuPrice);
     }
 
     public UUID getId() {

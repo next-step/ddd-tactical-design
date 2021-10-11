@@ -42,7 +42,7 @@ public class ProductService {
         //TODO menu display 판단 로직 개선
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
-            menu.isValidPrice(price);
+            menu.isNotValidPrice();
         }
 
         return changedProduct;
