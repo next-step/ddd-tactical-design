@@ -8,7 +8,7 @@ import java.util.UUID;
 import static kitchenpos.menus.tobe.domain.exception.WrongPriceException.PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE;
 
 public class Menu {
-    private final UUID id;
+    private final UUID id = UUID.randomUUID();
 
     private final DisplayedName name;
 
@@ -20,9 +20,8 @@ public class Menu {
 
     private final MenuProducts menuProducts;
 
-    public Menu(final UUID id, final DisplayedName name, final Price price, final boolean displayed,
+    public Menu(final DisplayedName name, final Price price, final boolean displayed,
                 final MenuGroup menuGroup, final MenuProducts menuProducts, final MenuCreateValidator validator) {
-        this.id = id;
         this.name = name;
         this.price = price;
         this.displayed = displayed;

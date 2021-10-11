@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.fixture;
 
 import kitchenpos.common.tobe.domain.DisplayedName;
-import kitchenpos.menus.tobe.domain.MenuCreateValidator;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.Price;
@@ -9,8 +8,6 @@ import kitchenpos.menus.tobe.domain.Price;
 import java.util.UUID;
 
 public class MenuRequest {
-    private UUID id;
-
     private DisplayedName name;
 
     private Price price;
@@ -21,30 +18,18 @@ public class MenuRequest {
 
     private MenuProducts menuProducts;
 
-    private MenuCreateValidator validator;
-
     public MenuRequest(
-            final UUID id,
             final DisplayedName name,
             final Price price,
             final boolean displayed,
             final MenuGroup menuGroup,
             final MenuProducts menuProducts
     ) {
-        this.id = id;
         this.name = name;
         this.price = price;
         this.displayed = displayed;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public DisplayedName getName() {

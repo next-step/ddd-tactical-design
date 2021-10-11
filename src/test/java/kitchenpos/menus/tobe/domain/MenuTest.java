@@ -23,11 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuTest {
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
+    private MenuCreateValidator validator;
 
     @BeforeEach
     void setUp() {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new FakeInMemoryProductRepository();
+        validator = new MenuCreateValidator(menuGroupRepository, productRepository);
     }
 
     @DisplayName("Menu를 생성한다.")
@@ -36,27 +38,18 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
         //when
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                menuRequest.isDisplayed(),
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        Menu menu = MenuFixture.menu(menuRequest, validator);
 
         //then
         assertAll(
                 () -> assertThat(menu).isNotNull(),
-                () -> assertThat(menu.getId()).isEqualTo(menuRequest.getId()),
-                () -> assertThat(menu.getName()).isEqualTo(menuRequest.getName()),
-                () -> assertThat(menu.getPrice()).isEqualTo(menuRequest.getPrice()),
-                () -> assertThat(menu.getMenuGroup()).isEqualTo(menuRequest.getMenuGroup()),
-                () -> assertThat(menu.getMenuProducts()).isEqualTo(menuRequest.getMenuProducts())
+                () -> assertThat(menu.getId()).isEqualTo(menu.getId()),
+                () -> assertThat(menu.getName()).isEqualTo(menu.getName()),
+                () -> assertThat(menu.getPrice()).isEqualTo(menu.getPrice()),
+                () -> assertThat(menu.getMenuGroup()).isEqualTo(menu.getMenuGroup()),
+                () -> assertThat(menu.getMenuProducts()).isEqualTo(menu.getMenuProducts())
         );
     }
 
@@ -69,20 +62,11 @@ class MenuTest {
         MenuProduct menuProduct = MenuProductFixture.menuProduct_with_non_existent_product();
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProduct));
         menuRequest.setMenuProducts(menuProducts);
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
         //when then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() ->
-                        new Menu(
-                                menuRequest.getId(),
-                                menuRequest.getName(),
-                                menuRequest.getPrice(),
-                                menuRequest.isDisplayed(),
-                                menuRequest.getMenuGroup(),
-                                menuRequest.getMenuProducts(),
-                                validator
-                        ));
+                        MenuFixture.menu(menuRequest, validator));
     }
 
     @DisplayName("Menu 생성 실패 - 존재하지 않는 메뉴 그룹에 메뉴를 추가할 수 없다.")
@@ -90,20 +74,11 @@ class MenuTest {
     void create_fail_non_existent_MenuGroup() {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
 
         //when then
         assertThatExceptionOfType(NoSuchElementException.class)
                 .isThrownBy(() ->
-                        new Menu(
-                                menuRequest.getId(),
-                                menuRequest.getName(),
-                                menuRequest.getPrice(),
-                                menuRequest.isDisplayed(),
-                                menuRequest.getMenuGroup(),
-                                menuRequest.getMenuProducts(),
-                                validator
-                        ));
+                        MenuFixture.menu(menuRequest, validator));
     }
 
     @DisplayName("Menu 생성 실패 - 메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 작거나 같아야 한다.")
@@ -112,22 +87,13 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
         Price totalMenuProductsPrice = menuRequest.getMenuProducts().getTotalMenuProductsPrice();
         menuRequest.setPrice(totalMenuProductsPrice.add(new Price(1000)));
 
         //when then
         assertThatExceptionOfType(WrongPriceException.class)
                 .isThrownBy(() ->
-                        new Menu(
-                                menuRequest.getId(),
-                                menuRequest.getName(),
-                                menuRequest.getPrice(),
-                                menuRequest.isDisplayed(),
-                                menuRequest.getMenuGroup(),
-                                menuRequest.getMenuProducts(),
-                                validator
-                        ))
+                        MenuFixture.menu(menuRequest, validator))
                 .withMessage(PRICE_SHOULD_NOT_BE_MORE_THAN_TOTAL_PRODUCTS_PRICE);
     }
 
@@ -137,17 +103,7 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                menuRequest.isDisplayed(),
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        Menu menu = MenuFixture.menu(menuRequest, validator);
         Price newPrice = menu.getPrice().subtract(new Price(1000L));
 
         //when
@@ -163,17 +119,7 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                menuRequest.isDisplayed(),
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        Menu menu = MenuFixture.menu(menuRequest, validator);
         Price totalMenuProductsPrice = menu.getMenuProducts().getTotalMenuProductsPrice();
         Price newPrice = totalMenuProductsPrice.add(new Price(1000L));
 
@@ -189,17 +135,7 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                menuRequest.isDisplayed(),
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        Menu menu = MenuFixture.menu(menuRequest, validator);
 
         //when
         menu.hide();
@@ -214,17 +150,8 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                false,
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        menuRequest.setDisplayed(false);
+        Menu menu = MenuFixture.menu(menuRequest, validator);
 
         //when
         menu.display();
@@ -239,17 +166,8 @@ class MenuTest {
         //given
         MenuRequest menuRequest = MenuFixture.menuRequest();
         menuGroupRepository.save(menuRequest.getMenuGroup());
-        MenuCreateValidator validator = new MenuCreateValidator(menuGroupRepository, productRepository);
-
-        Menu menu = new Menu(
-                menuRequest.getId(),
-                menuRequest.getName(),
-                menuRequest.getPrice(),
-                false,
-                menuRequest.getMenuGroup(),
-                menuRequest.getMenuProducts(),
-                validator
-        );
+        menuRequest.setDisplayed(false);
+        Menu menu = MenuFixture.menu(menuRequest, validator);
 
         // 메뉴 가격 인하
         menu.getMenuProducts().getMenuProducts()
