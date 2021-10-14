@@ -58,4 +58,8 @@ public class TobeOrderTable {
     public void changeNumberOfGuests(int numberOfGuests) {
         this.numberOfGuests = numberOfGuests;
     };
+
+    public void setTheTable() {
+        this.empty = false;
+    }
 }

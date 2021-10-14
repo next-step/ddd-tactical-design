@@ -32,14 +32,14 @@ public class TobeOrderTableService {
         return orderTableRepository.save(orderTable);
     }
 
-//    @Transactional
-//    public OrderTable sit(final UUID orderTableId) {
-//        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-//            .orElseThrow(NoSuchElementException::new);
-//        orderTable.setEmpty(false);
-//        return orderTable;
-//    }
-//
+    @Transactional
+    public TobeOrderTable sit(final UUID orderTableId) {
+        final TobeOrderTable orderTable = orderTableRepository.findById(orderTableId)
+            .orElseThrow(NoSuchElementException::new);
+        orderTable.setTheTable();
+        return orderTable;
+    }
+
 //    @Transactional
 //    public OrderTable clear(final UUID orderTableId) {
 //        final OrderTable orderTable = orderTableRepository.findById(orderTableId)

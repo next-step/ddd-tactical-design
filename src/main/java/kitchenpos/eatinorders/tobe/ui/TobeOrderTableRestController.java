@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.tobe.ui;
 
-import kitchenpos.eatinorders.application.OrderTableService;
-import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.application.TobeOrderTableService;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +25,11 @@ public class TobeOrderTableRestController {
             .body(response);
     }
 
-    /*@PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<OrderTable> sit(@PathVariable final UUID orderTableId) {
+    @PutMapping("/{orderTableId}/sit")
+    public ResponseEntity<TobeOrderTable> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
-
+/*
     @PutMapping("/{orderTableId}/clear")
     public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
@@ -48,5 +46,6 @@ public class TobeOrderTableRestController {
     @GetMapping
     public ResponseEntity<List<OrderTable>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());
-    }*/
+    }
+*/
 }
