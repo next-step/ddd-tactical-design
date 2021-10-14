@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TobeOrderTableRepository {
-    OrderTable save(OrderTable orderTable);
+    TobeOrderTable save(TobeOrderTable orderTable);
 
-    Optional<OrderTable> findById(UUID id);
+    Optional<TobeOrderTable> findById(UUID id);
 
-    List<OrderTable> findAll();
+    List<TobeOrderTable> findAll();
 }
 

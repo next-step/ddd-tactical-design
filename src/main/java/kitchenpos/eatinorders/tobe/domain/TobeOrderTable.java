@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -22,6 +23,39 @@ public class TobeOrderTable {
     @Column(name = "empty", nullable = false)
     private boolean empty;
 
-    public TobeOrderTable() {
+    protected TobeOrderTable() {
     }
+
+    public TobeOrderTable(String name) {
+        validationTableName(name);
+        this.name = name;
+        this.id = UUID.randomUUID();
+        this.numberOfGuests = 0;
+        this.empty = true;
+    }
+
+    private void validationTableName(String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void changeNumberOfGuests(int numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    };
 }
