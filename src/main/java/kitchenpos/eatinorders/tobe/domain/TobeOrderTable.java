@@ -62,4 +62,9 @@ public class TobeOrderTable {
     public void setTheTable() {
         this.empty = false;
     }
+
+    public void clear() {
+        this.empty = true;
+        this.numberOfGuests = 0;
+    }
 }

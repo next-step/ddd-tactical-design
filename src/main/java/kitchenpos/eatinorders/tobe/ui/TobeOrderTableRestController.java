@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/order-tables")
@@ -29,12 +28,12 @@ public class TobeOrderTableRestController {
     public ResponseEntity<TobeOrderTable> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
-/*
+
     @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<TobeOrderTable> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
     }
-
+/*
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,

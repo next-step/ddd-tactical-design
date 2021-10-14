@@ -40,17 +40,17 @@ public class TobeOrderTableService {
         return orderTable;
     }
 
-//    @Transactional
-//    public OrderTable clear(final UUID orderTableId) {
-//        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-//            .orElseThrow(NoSuchElementException::new);
+    @Transactional
+    public TobeOrderTable clear(final UUID orderTableId) {
+        final TobeOrderTable orderTable = orderTableRepository.findById(orderTableId)
+            .orElseThrow(NoSuchElementException::new);
+        // TODO : OrderService 진행할 때 리팩토링 예정
 //        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
 //            throw new IllegalStateException();
 //        }
-//        orderTable.setNumberOfGuests(0);
-//        orderTable.setEmpty(true);
-//        return orderTable;
-//    }
+        orderTable.clear();
+        return orderTable;
+    }
 //
 //    @Transactional
 //    public OrderTable changeNumberOfGuests(final UUID orderTableId, final TobeOrderTable request) {
