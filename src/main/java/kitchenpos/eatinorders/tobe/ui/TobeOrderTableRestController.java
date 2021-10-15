@@ -18,24 +18,24 @@ public class TobeOrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<TobeOrderTable> create(@RequestBody final OrderTableForm request) {
-        final TobeOrderTable response = orderTableService.create(request);
+    public ResponseEntity<OrderTableForm> create(@RequestBody final OrderTableForm request) {
+        final OrderTableForm response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<TobeOrderTable> sit(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<OrderTableForm> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<TobeOrderTable> clear(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<OrderTableForm> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<TobeOrderTable> changeNumberOfGuests(
+    public ResponseEntity<OrderTableForm> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
         @RequestBody final OrderTableForm request
     ) {

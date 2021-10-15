@@ -2,9 +2,7 @@ package kitchenpos.eatinorders.application.tobe;
 
 import kitchenpos.eatinorders.application.InMemoryOrderRepository;
 import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.application.TobeOrderTableService;
-import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTableRepository;
 import kitchenpos.eatinorders.tobe.ui.OrderTableForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TobeOrderTableServiceTest {
+
     private TobeOrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
     private TobeOrderTableService orderTableService;
@@ -37,7 +36,7 @@ class TobeOrderTableServiceTest {
     @Test
     void create() {
         final OrderTableForm expected = createOrderTableRequest();
-        final TobeOrderTable actual = orderTableService.create(expected);
+        final OrderTableForm actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -61,7 +60,7 @@ class TobeOrderTableServiceTest {
     void sit() {
         final OrderTableForm expected = createOrderTableRequest();
         final UUID orderTableId = orderTableService.create(expected).getId();
-        final TobeOrderTable actual = orderTableService.sit(orderTableId);
+        final OrderTableForm actual = orderTableService.sit(orderTableId);
         assertThat(actual.isEmpty()).isFalse();
     }
 
@@ -70,7 +69,7 @@ class TobeOrderTableServiceTest {
     void clear() {
         final OrderTableForm expected = createOrderTableRequest();
         final UUID orderTableId = orderTableService.create(expected).getId();
-        final TobeOrderTable actual = orderTableService.clear(orderTableId);
+        final OrderTableForm actual = orderTableService.clear(orderTableId);
         assertAll(
             () -> assertThat(actual.getNumberOfGuests()).isZero(),
             () -> assertThat(actual.isEmpty()).isTrue()
@@ -92,11 +91,11 @@ class TobeOrderTableServiceTest {
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
-        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm orderTable = orderTableService.create(createOrderTableRequest());
         final OrderTableForm expected = changeNumberOfGuestsRequest(4);
 
-        orderTable.setTheTable();
-        final TobeOrderTable actual = orderTableService.changeNumberOfGuests(orderTable.getId(), expected);
+        orderTableService.sit(orderTable.getId());
+        final OrderTableForm actual = orderTableService.changeNumberOfGuests(orderTable.getId(), expected);
 
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
@@ -105,10 +104,10 @@ class TobeOrderTableServiceTest {
     @ValueSource(ints = -1)
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
-        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm orderTable = orderTableService.create(createOrderTableRequest());
         final OrderTableForm expected = changeNumberOfGuestsRequest(numberOfGuests);
 
-        orderTable.setTheTable();
+        orderTableService.sit(orderTable.getId());
 
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -117,21 +116,21 @@ class TobeOrderTableServiceTest {
     @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsInEmptyTable() {
-        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm orderTable = orderTableService.create(createOrderTableRequest());
         final OrderTableForm expected = changeNumberOfGuestsRequest(4);
 
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), expected))
             .isInstanceOf(IllegalStateException.class);
     }
-/*
+
     @DisplayName("주문 테이블의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        orderTableRepository.save(orderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
+        orderTableService.create(createOrderTableRequest());
+        final List<OrderTableForm> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
-*/
+
     private OrderTableForm createOrderTableRequest() {
         return createOrderTableRequest("1번");
     }

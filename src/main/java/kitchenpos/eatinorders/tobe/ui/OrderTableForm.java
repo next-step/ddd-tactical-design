@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.ui;
 
+import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
+
 import java.util.UUID;
 
 public class OrderTableForm {
@@ -38,5 +40,14 @@ public class OrderTableForm {
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
+    }
+
+    public static OrderTableForm of(TobeOrderTable orderTable) {
+        OrderTableForm orderTableForm = new OrderTableForm();
+        orderTableForm.setId(orderTable.getId());
+        orderTableForm.setName(orderTable.getName());
+        orderTableForm.setEmpty(orderTable.isEmpty());
+        orderTableForm.setNumberOfGuests(orderTable.getNumberOfGuests());
+        return orderTableForm;
     }
 }
