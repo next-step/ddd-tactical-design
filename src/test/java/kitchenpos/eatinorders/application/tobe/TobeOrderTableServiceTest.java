@@ -36,7 +36,7 @@ class TobeOrderTableServiceTest {
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
-        final OrderTableForm expected = createOrderTableRequest("1번");
+        final OrderTableForm expected = createOrderTableRequest();
         final TobeOrderTable actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -59,7 +59,7 @@ class TobeOrderTableServiceTest {
     @DisplayName("빈 테이블을 해지할 수 있다.")
     @Test
     void sit() {
-        final OrderTableForm expected = createOrderTableRequest("1번");
+        final OrderTableForm expected = createOrderTableRequest();
         final UUID orderTableId = orderTableService.create(expected).getId();
         final TobeOrderTable actual = orderTableService.sit(orderTableId);
         assertThat(actual.isEmpty()).isFalse();
@@ -68,7 +68,7 @@ class TobeOrderTableServiceTest {
     @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
     void clear() {
-        final OrderTableForm expected = createOrderTableRequest("1번");
+        final OrderTableForm expected = createOrderTableRequest();
         final UUID orderTableId = orderTableService.create(expected).getId();
         final TobeOrderTable actual = orderTableService.clear(orderTableId);
         assertAll(
@@ -87,13 +87,17 @@ class TobeOrderTableServiceTest {
         assertThatThrownBy(() -> orderTableService.clear(orderTableId))
             .isInstanceOf(IllegalStateException.class);
     }
+*/
 
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final TobeOrderTable expected = changeNumberOfGuestsRequest(4);
-        final TobeOrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
+        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm expected = changeNumberOfGuestsRequest(4);
+
+        orderTable.setTheTable();
+        final TobeOrderTable actual = orderTableService.changeNumberOfGuests(orderTable.getId(), expected);
+
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
 
@@ -101,21 +105,25 @@ class TobeOrderTableServiceTest {
     @ValueSource(ints = -1)
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
-        final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final TobeOrderTable expected = changeNumberOfGuestsRequest(numberOfGuests);
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
+        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm expected = changeNumberOfGuestsRequest(numberOfGuests);
+
+        orderTable.setTheTable();
+
+        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsInEmptyTable() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final TobeOrderTable expected = changeNumberOfGuestsRequest(4);
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
+        final TobeOrderTable orderTable = orderTableService.create(createOrderTableRequest());
+        final OrderTableForm expected = changeNumberOfGuestsRequest(4);
+
+        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), expected))
             .isInstanceOf(IllegalStateException.class);
     }
-
+/*
     @DisplayName("주문 테이블의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
@@ -124,9 +132,19 @@ class TobeOrderTableServiceTest {
         assertThat(actual).hasSize(1);
     }
 */
+    private OrderTableForm createOrderTableRequest() {
+        return createOrderTableRequest("1번");
+    }
+
     private OrderTableForm createOrderTableRequest(final String name) {
         final OrderTableForm orderTable = new OrderTableForm();
         orderTable.setName(name);
+        return orderTable;
+    }
+
+    private OrderTableForm changeNumberOfGuestsRequest(final int numberOfGuests) {
+        final OrderTableForm orderTable = new OrderTableForm();
+        orderTable.setNumberOfGuests(numberOfGuests);
         return orderTable;
     }
 }

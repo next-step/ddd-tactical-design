@@ -33,15 +33,15 @@ public class TobeOrderTableRestController {
     public ResponseEntity<TobeOrderTable> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
     }
-/*
+
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<OrderTable> changeNumberOfGuests(
+    public ResponseEntity<TobeOrderTable> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
-        @RequestBody final OrderTable request
+        @RequestBody final OrderTableForm request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
-
+/*
     @GetMapping
     public ResponseEntity<List<OrderTable>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());

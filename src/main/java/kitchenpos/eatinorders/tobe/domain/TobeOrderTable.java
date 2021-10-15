@@ -1,9 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,11 +11,11 @@ public class TobeOrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private TableName name;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private TableNumberOfGuests numberOfGuests;
 
     @Column(name = "empty", nullable = false)
     private boolean empty;
@@ -26,29 +23,27 @@ public class TobeOrderTable {
     protected TobeOrderTable() {
     }
 
-    public TobeOrderTable(String name) {
-        validationTableName(name);
-        this.name = name;
+    public TobeOrderTable(TableName tableName) {
+        this(tableName, new TableNumberOfGuests(0));
+    }
+
+    public TobeOrderTable(TableName tableName, TableNumberOfGuests tableNumberOfGuests) {
+        this.name = tableName;
         this.id = UUID.randomUUID();
-        this.numberOfGuests = 0;
+        this.numberOfGuests = tableNumberOfGuests;
         this.empty = true;
     }
 
-    private void validationTableName(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-    }
     public UUID getId() {
         return id;
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
     public int getNumberOfGuests() {
-        return numberOfGuests;
+        return numberOfGuests.getNumberOfGuests();
     }
 
     public boolean isEmpty() {
@@ -56,7 +51,10 @@ public class TobeOrderTable {
     }
 
     public void changeNumberOfGuests(int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
+        if (empty) {
+            throw new IllegalStateException();
+        }
+        this.numberOfGuests.changeNumberOfGuests(numberOfGuests);
     };
 
     public void setTheTable() {
@@ -65,6 +63,6 @@ public class TobeOrderTable {
 
     public void clear() {
         this.empty = true;
-        this.numberOfGuests = 0;
+        numberOfGuests.clear();
     }
 }

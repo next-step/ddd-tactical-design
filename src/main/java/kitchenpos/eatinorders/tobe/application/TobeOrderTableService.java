@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.TableName;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTableRepository;
 import kitchenpos.eatinorders.tobe.ui.OrderTableForm;
@@ -27,8 +28,8 @@ public class TobeOrderTableService {
 
     @Transactional
     public TobeOrderTable create(final OrderTableForm request) {
-        final String name = request.getName();
-        final TobeOrderTable orderTable = new TobeOrderTable(name);
+        final TableName tableName = new TableName(request.getName());
+        final TobeOrderTable orderTable = new TobeOrderTable(tableName);
         return orderTableRepository.save(orderTable);
     }
 
@@ -51,22 +52,16 @@ public class TobeOrderTableService {
         orderTable.clear();
         return orderTable;
     }
-//
-//    @Transactional
-//    public OrderTable changeNumberOfGuests(final UUID orderTableId, final TobeOrderTable request) {
-//        final int numberOfGuests = request.getNumberOfGuests();
-//        if (numberOfGuests < 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-//            .orElseThrow(NoSuchElementException::new);
-//        if (orderTable.isEmpty()) {
-//            throw new IllegalStateException();
-//        }
-//        orderTable.setNumberOfGuests(numberOfGuests);
-//        return orderTable;
-//    }
-//
+
+    @Transactional
+    public TobeOrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableForm request) {
+        final int numberOfGuests = request.getNumberOfGuests();
+        final TobeOrderTable orderTable = orderTableRepository.findById(orderTableId)
+            .orElseThrow(NoSuchElementException::new);
+        orderTable.changeNumberOfGuests(numberOfGuests);
+        return orderTable;
+    }
+
 //    @Transactional(readOnly = true)
 //    public List<OrderTable> findAll() {
 //        return orderTableRepository.findAll();
