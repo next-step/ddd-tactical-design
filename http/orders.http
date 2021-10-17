@@ -10,6 +10,11 @@ Content-Type: application/json
       "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
       "price": 16000,
       "quantity": 3
+    },
+    {
+      "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
+      "price": 16000,
+      "quantity": 3
     }
   ]
 }

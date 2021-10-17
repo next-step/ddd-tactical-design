@@ -6,7 +6,7 @@ import static kitchenpos.products.tobe.exception.WrongDisplayedNameExeption.DISP
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.infra.Profanities;
 import kitchenpos.products.tobe.exception.WrongDisplayedNameExeption;
 
 @Embeddable
@@ -18,8 +18,8 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    public DisplayedName(final String name, final PurgomalumClient purgomalumClient) {
-        validateName(name, purgomalumClient);
+    public DisplayedName(final String name, final Profanities profanities) {
+        validateName(name, profanities);
         this.name = name;
     }
 
@@ -44,11 +44,11 @@ public class DisplayedName {
         return Objects.hash(name);
     }
 
-    public void validateName(final String name, final PurgomalumClient purgomalumClient) {
+    public void validateName(final String name, final Profanities profanities) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_BE_EMPTY);
         }
-        if (purgomalumClient.containsProfanity(name)) {
+        if (profanities.contains(name)) {
             throw new WrongDisplayedNameExeption(DISPLAYED_NAME_SHOULD_NOT_CONTAIN_PROFANITY);
         }
     }
