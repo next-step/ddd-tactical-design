@@ -14,18 +14,16 @@ import java.util.UUID;
 
 @Service
 public class OrderTableService {
-    private final OrderTableRepository orderTableRepository;
     private final EatInOrderTableService eatInOrderTableService;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderTableService eatInOrderTableService) {
-        this.orderTableRepository = orderTableRepository;
+    public OrderTableService(final EatInOrderTableService eatInOrderTableService) {
         this.eatInOrderTableService = eatInOrderTableService;
     }
 
     @Transactional
     public OrderTable create(final CreateRequest request) {
         final OrderTable orderTable = request.toEntity();
-        return orderTableRepository.save(orderTable);
+        return eatInOrderTableService.saveOrderTable(orderTable);
     }
 
     @Transactional
@@ -50,12 +48,11 @@ public class OrderTableService {
 
     @Transactional(readOnly = true)
     public OrderTable findById(final UUID orderTableId) {
-        return orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
+        return eatInOrderTableService.findOrderTableById(orderTableId);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+        return eatInOrderTableService.findOrderTableAll();
     }
 }

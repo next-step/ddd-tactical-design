@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.eatinorder.domain;
 
-import kitchenpos.common.domain.AbstractOrder;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTableId;
 
 import javax.persistence.*;
@@ -11,7 +10,7 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class EatInOrder extends AbstractOrder {
+public class EatInOrder {
     private static final OrderStatus DEFAULT_STATUS = OrderStatus.WAITING;
 
     @Column(name = "id", columnDefinition = "varbinary(16)")
@@ -36,12 +35,10 @@ public class EatInOrder extends AbstractOrder {
     )
     private OrderTableId orderTableId;
 
-    protected EatInOrder() {
-    }
+    @Column(name = "order_date_time", nullable = false)
+    private LocalDateTime orderDateTime;
 
-    @Override
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
+    protected EatInOrder() {
     }
 
     public EatInOrder(final List<OrderLineItem> orderLineItems, final UUID orderTableId) {
@@ -53,6 +50,7 @@ public class EatInOrder extends AbstractOrder {
         this.status = status;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
+        this.orderDateTime = LocalDateTime.now();
     }
 
     public UUID getId() {
@@ -65,6 +63,10 @@ public class EatInOrder extends AbstractOrder {
 
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
     }
 
     public void accept() {

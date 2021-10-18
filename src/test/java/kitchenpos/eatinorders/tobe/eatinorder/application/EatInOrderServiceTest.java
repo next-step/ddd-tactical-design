@@ -36,7 +36,7 @@ class EatInOrderServiceTest {
     private FakeMenuClient menuClient;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService orderService;
-    private MenuLoader menuLoader = new MenuLoader();
+    private OrderLineItemLoader orderLineItemLoader = new OrderLineItemLoader();
 
     private OrderTable orderTable = OrderTableFixture.앉은테이블( 4);
     private long price = 19_000L;
@@ -54,7 +54,7 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new FakeMenuClient();
         final EatInOrderTableService eatInOrderTableService = new EatInOrderTableService(orderRepository, orderTableRepository);
-        orderService = new EatInOrderService(orderRepository, eatInOrderTableService, new OrderTableLoader(), menuLoader, menuClient);
+        orderService = new EatInOrderService(orderRepository, eatInOrderTableService, new OrderTableLoader(), orderLineItemLoader, menuClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

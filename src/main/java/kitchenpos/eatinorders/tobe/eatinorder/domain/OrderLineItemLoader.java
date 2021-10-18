@@ -11,7 +11,7 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 @Component
-public class MenuLoader {
+public class OrderLineItemLoader {
     public List<OrderLineItem> loadOrderLineItems(final List<OrderLineItemCreateRequest> requests, final List<MenuResponse> menus) {
         verifyMenuSize(requests, menus);
         requests.forEach(request -> verifyMenu(request, findMenu(request, menus)));

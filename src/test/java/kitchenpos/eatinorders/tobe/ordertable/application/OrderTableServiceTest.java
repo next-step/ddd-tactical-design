@@ -40,7 +40,7 @@ class OrderTableServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
         final EatInOrderTableService eatInOrderTableService = new EatInOrderTableService(orderRepository, orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, eatInOrderTableService);
+        orderTableService = new OrderTableService(eatInOrderTableService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

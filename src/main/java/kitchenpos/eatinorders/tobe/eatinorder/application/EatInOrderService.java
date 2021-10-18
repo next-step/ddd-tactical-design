@@ -19,14 +19,14 @@ public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final EatInOrderTableService eatInOrderTableService;
     private final OrderTableLoader orderTableLoader;
-    private final MenuLoader menuLoader;
+    private final OrderLineItemLoader orderLineItemLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final MenuLoader menuLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final OrderLineItemLoader orderLineItemLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
         this.eatInOrderTableService = eatInOrderTableService;
         this.orderTableLoader = orderTableLoader;
-        this.menuLoader = menuLoader;
+        this.orderLineItemLoader = orderLineItemLoader;
         this.menuClient = menuClient;
     }
 
@@ -39,7 +39,7 @@ public class EatInOrderService {
     }
 
     private List<OrderLineItem> loadOrderLineItems(final List<OrderLineItemCreateRequest> requests) {
-        return menuLoader.loadOrderLineItems(requests,
+        return orderLineItemLoader.loadOrderLineItems(requests,
                 menuClient.findAllByIdn(
                         requests.stream()
                                 .map(OrderLineItemCreateRequest::getMenuId)
@@ -48,7 +48,7 @@ public class EatInOrderService {
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
-        return orderTableLoader.load(eatInOrderTableService.findById(orderTableId));
+        return orderTableLoader.load(eatInOrderTableService.findOrderTableById(orderTableId));
     }
 
     @Transactional
