@@ -12,13 +12,13 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 public class OrderLineItemLoader {
-    public List<OrderLineItem> loadOrderLineItems(final List<OrderLineItemCreateRequest> requests, final List<MenuResponse> menus) {
+    public OrderLineItems loadOrderLineItems(final List<OrderLineItemCreateRequest> requests, final List<MenuResponse> menus) {
         verifyMenuSize(requests, menus);
         requests.forEach(request -> verifyMenu(request, findMenu(request, menus)));
 
-        return requests.stream()
+        return new OrderLineItems(requests.stream()
                 .map(OrderLineItemCreateRequest::toEntity)
-                .collect(toList());
+                .collect(toList()));
     }
 
     private void verifyMenuSize(final List<OrderLineItemCreateRequest> requests, final List<MenuResponse> menus) {

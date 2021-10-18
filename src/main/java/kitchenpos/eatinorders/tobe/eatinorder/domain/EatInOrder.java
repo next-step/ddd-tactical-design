@@ -21,14 +21,8 @@ public class EatInOrder {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
     @AttributeOverrides(
             @AttributeOverride(name = "id", column = @Column(name = "order_table_id"))
@@ -42,10 +36,14 @@ public class EatInOrder {
     }
 
     public EatInOrder(final List<OrderLineItem> orderLineItems, final UUID orderTableId) {
+        this(new OrderLineItems(orderLineItems), orderTableId);
+    }
+
+    public EatInOrder(final OrderLineItems orderLineItems, final UUID orderTableId) {
         this(UUID.randomUUID(), DEFAULT_STATUS, orderLineItems, new OrderTableId(orderTableId));
     }
 
-    private EatInOrder(final UUID id, final OrderStatus status, final List<OrderLineItem> orderLineItems, final OrderTableId orderTableId) {
+    private EatInOrder(final UUID id, final OrderStatus status, final OrderLineItems orderLineItems, final OrderTableId orderTableId) {
         this.id = id;
         this.status = status;
         this.orderLineItems = orderLineItems;

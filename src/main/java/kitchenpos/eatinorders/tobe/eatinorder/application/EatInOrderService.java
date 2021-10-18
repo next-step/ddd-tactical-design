@@ -32,13 +32,13 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final CreateRequest request) {
-        final List<OrderLineItem> orderLineItems = loadOrderLineItems(request.getOrderLineItemRequests());
+        final OrderLineItems orderLineItems = loadOrderLineItems(request.getOrderLineItemRequests());
         final OrderTable orderTable = loadOrderTable(request.getOrderTableId());
         final EatInOrder order = new EatInOrder(orderLineItems, orderTable.getId());
         return orderRepository.save(order);
     }
 
-    private List<OrderLineItem> loadOrderLineItems(final List<OrderLineItemCreateRequest> requests) {
+    private OrderLineItems loadOrderLineItems(final List<OrderLineItemCreateRequest> requests) {
         return orderLineItemLoader.loadOrderLineItems(requests,
                 menuClient.findAllByIdn(
                         requests.stream()
