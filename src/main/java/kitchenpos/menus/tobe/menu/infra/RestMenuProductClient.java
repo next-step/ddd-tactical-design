@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.menu.infra;
 import kitchenpos.menus.tobe.menu.application.MenuProductClient;
 import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,16 +17,6 @@ public class RestMenuProductClient implements MenuProductClient {
 
     public RestMenuProductClient(final ProductService productService) {
         this.productService = productService;
-    }
-
-    @Override
-    public List<Product> findAllByIdIn(List<UUID> productIds) {
-        return productService.findAllByIdIn(productIds);
-    }
-
-    @Override
-    public Product findById(UUID productId) {
-        return productService.findById(productId);
     }
 
     @Override

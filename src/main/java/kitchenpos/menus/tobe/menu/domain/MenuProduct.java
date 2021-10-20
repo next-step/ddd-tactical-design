@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.menu.domain;
 
 import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Price;
-import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
 
 import javax.persistence.*;
@@ -46,10 +45,6 @@ public class MenuProduct {
     }
 
     public void loadPrice(final ProductResponse product) {
-        this.price = product.getPrice();
-    }
-
-    public void loadProduct(final Product product) {
         this.price = product.getPrice();
     }
 

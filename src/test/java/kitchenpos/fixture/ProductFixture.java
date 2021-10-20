@@ -6,7 +6,6 @@ import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class ProductFixture {
     public static Product 상품() {
@@ -29,7 +28,4 @@ public class ProductFixture {
         return new Product(new Name(name, new FakeProfanities()), new Price(price));
     }
 
-    public static Product 상품(final UUID id, final long price) {
-        return new Product(id, new Name("올바른 이름", new FakeProfanities()), new Price(BigDecimal.valueOf(price)));
-    }
 }

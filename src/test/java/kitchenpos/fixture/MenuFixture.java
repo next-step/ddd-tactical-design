@@ -35,10 +35,14 @@ public class MenuFixture {
         return new MenuProduct(productId, new Quantity(quantity));
     }
 
-    public static List<MenuProduct> 메뉴상품목록1(final UUID... productIds) {
+    public static List<MenuProduct> 메뉴상품목록(final UUID... productIds) {
         return Arrays.stream(productIds)
                         .map(MenuFixture::메뉴상품)
                         .collect(toList());
+    }
+
+    public static MenuProducts 금액이불러와진_메뉴상품목록(final long... price) {
+        return 금액이불러와진_메뉴상품목록(Arrays.stream(price).mapToObj(p -> ProductFixture.상품(p)).collect(toList()));
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록() {
@@ -46,7 +50,7 @@ public class MenuFixture {
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
-        final List<MenuProduct> menuProducts = 메뉴상품목록1(products.stream().map(Product::getId).toArray(UUID[]::new));
+        final List<MenuProduct> menuProducts = 메뉴상품목록(products.stream().map(Product::getId).toArray(UUID[]::new));
         final List<ProductResponse> productList = products.stream().map(product -> new ProductResponse(product.getId(), product.getPrice())).collect(toList());
 
         return loader.loadMenuProducts(menuProducts, productList);
@@ -56,16 +60,24 @@ public class MenuFixture {
         return 금액이불러와진_메뉴상품목록(Arrays.asList(products));
     }
 
-    public static Menu 메뉴() {
-        return 메뉴("메뉴이름", 1000L, 메뉴그룹(), Arrays.asList(메뉴상품(), 메뉴상품()));
+    public static Menu 메뉴(final long price) {
+        return 메뉴("메뉴이름", price, 메뉴그룹(), 메뉴상품(), 메뉴상품());
     }
 
-    public static Menu 메뉴(final String name, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
-        return new Menu(new Name(name, new FakeProfanities()), new Price(price), menuGroup, menuProducts);
+    public static Menu 메뉴() {
+        return 메뉴("메뉴이름", 1000L, 메뉴그룹(), 메뉴상품(), 메뉴상품());
+    }
+
+    public static Menu 메뉴(final String name, final long price, final MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        return new Menu(new Name(name, new FakeProfanities()), new Price(price), menuGroup, Arrays.asList(menuProducts));
     }
 
     public static Menu 메뉴(final long price, final MenuGroup menuGroup, final MenuProducts menuProducts) {
         return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), menuGroup, true, menuProducts);
+    }
+
+    public static Menu 메뉴(final long price, final boolean displayed, final MenuProducts menuProducts) {
+        return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), 메뉴그룹(), displayed, menuProducts);
     }
 
     public static Menu 메뉴(final long price, final MenuProducts menuProducts) {

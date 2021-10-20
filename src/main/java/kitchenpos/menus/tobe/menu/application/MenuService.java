@@ -10,6 +10,7 @@ import kitchenpos.menus.tobe.menu.ui.dto.MenuCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         final MenuGroup menuGroup = loadMenuGroup(request.getMenuGroupId());
-        final MenuProducts menuProducts = loadMenuProducts(request.getMenuProducts1());
+        final MenuProducts menuProducts = loadMenuProducts(request.getMenuProducts());
         return menuRepository.save(new Menu(
                 request.getName(profanities),
                 request.getPrice(),
@@ -91,6 +92,11 @@ public class MenuService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         menus.forEach(menu -> loadMenuProducts(menu.getMenuProducts()));
         return menus;
+    }
+
+    @Transactional
+    public List<Menu> findAllByIdn(List<UUID> menuIds) {
+        return menuRepository.findAllByIdIn(menuIds);
     }
 
     private MenuGroup loadMenuGroup(final UUID menuGroupId) {
