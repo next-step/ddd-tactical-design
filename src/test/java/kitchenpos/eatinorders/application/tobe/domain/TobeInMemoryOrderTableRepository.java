@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application.tobe;
+package kitchenpos.eatinorders.application.tobe.domain;
 
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTableRepository;
