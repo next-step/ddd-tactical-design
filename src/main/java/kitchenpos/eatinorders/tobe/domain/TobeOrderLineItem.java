@@ -22,17 +22,13 @@ public class TobeOrderLineItem {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private BigDecimal price;
-
     protected TobeOrderLineItem() {
     }
 
-    public TobeOrderLineItem(Long seq, Menu menu, long quantity, BigDecimal price) {
+    public TobeOrderLineItem(Long seq, Menu menu, long quantity) {
         this.seq = seq;
         this.menu = menu;
         this.quantity = quantity;
-        this.price = price;
     }
 
     public Long getSeq() {
@@ -48,6 +44,6 @@ public class TobeOrderLineItem {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return menu.getMenuPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }

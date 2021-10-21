@@ -57,26 +57,14 @@ public class TobeOrderService {
         ));
     }
 
-//    @Transactional
-//    public Order accept(final UUID orderId) {
-//        final Order order = orderRepository.findById(orderId)
-//                .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.WAITING) {
-//            throw new IllegalStateException();
-//        }
-//        if (order.getType() == OrderType.DELIVERY) {
-//            BigDecimal sum = BigDecimal.ZERO;
-//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-//                sum = orderLineItem.getMenu()
-//                        .getPrice()
-//                        .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-//            }
-//            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
-//        }
-//        order.setStatus(OrderStatus.ACCEPTED);
-//        return order;
-//    }
-//
+    @Transactional
+    public OrderForm accept(final UUID orderId) {
+        final TobeOrder order = orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+        order.accept(kitchenridersClient);
+        return OrderForm.of(order);
+    }
+
 //    @Transactional
 //    public Order serve(final UUID orderId) {
 //        final Order order = orderRepository.findById(orderId)

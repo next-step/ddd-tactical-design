@@ -25,10 +25,10 @@ public class TobeOrderRestController {
             .body(response);
     }
 
-//    @PutMapping("/{orderId}/accept")
-//    public ResponseEntity<Order> accept(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(orderService.accept(orderId));
-//    }
+    @PutMapping("/{orderId}/accept")
+    public ResponseEntity<OrderForm> accept(@PathVariable final UUID orderId) {
+        return ResponseEntity.ok(orderService.accept(orderId));
+    }
 //
 //    @PutMapping("/{orderId}/serve")
 //    public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {

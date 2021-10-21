@@ -29,8 +29,7 @@ public class OrderLineFactory {
                     new TobeOrderLineItem(
                         item.getSeq(),
                         findMenu(item.getMenuId(), menus),
-                        item.getQuantity(),
-                        item.getPrice()
+                        item.getQuantity()
                     )
                 )
                 .collect(Collectors.toList());

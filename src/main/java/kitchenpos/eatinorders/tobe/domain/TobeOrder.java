@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.deliveryorders.infra.KitchenridersClient;
+import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
 
@@ -56,25 +58,6 @@ public class TobeOrder {
         this.orderTableId = orderTableId;
     }
 
-    private void validationEatInOrderTableId(OrderType type, UUID orderTableId) {
-        if (type == OrderType.EAT_IN && Objects.isNull(orderTableId)) {
-            throw new IllegalArgumentException("주문테이블이 없습니다.");
-        }
-    }
-
-    private void validationDeilveryAddress(OrderType type, String deliveryAddress) {
-        if (type == OrderType.DELIVERY &&
-                (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty())) {
-            throw new IllegalArgumentException("배송지가 없습니다.");
-        }
-    }
-
-    private void validationOrderType(OrderType type) {
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     public UUID getId() {
         return id;
     }
@@ -101,5 +84,38 @@ public class TobeOrder {
 
     public UUID getOrderTableId() {
         return orderTableId;
+    }
+
+    public void accept(KitchenridersClient kitchenridersClient) {
+        validationAcceptOrderStatus();
+        if (type == OrderType.DELIVERY) {
+            kitchenridersClient.requestDelivery(id, orderLineItems.itemsTotalPrice(), deliveryAddress);
+        }
+        status = OrderStatus.ACCEPTED;
+    }
+
+    private void validationAcceptOrderStatus() {
+        if (status != OrderStatus.WAITING) {
+            throw new IllegalStateException("주문 대기 상태만 확인이 가능합니다.");
+        }
+    }
+
+    private void validationEatInOrderTableId(OrderType type, UUID orderTableId) {
+        if (type == OrderType.EAT_IN && Objects.isNull(orderTableId)) {
+            throw new IllegalArgumentException("주문테이블이 없습니다.");
+        }
+    }
+
+    private void validationDeilveryAddress(OrderType type, String deliveryAddress) {
+        if (type == OrderType.DELIVERY &&
+                (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty())) {
+            throw new IllegalArgumentException("배송지가 없습니다.");
+        }
+    }
+
+    private void validationOrderType(OrderType type) {
+        if (Objects.isNull(type)) {
+            throw new IllegalArgumentException();
+        }
     }
 }
