@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.fixture;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.Quantity;
+import kitchenpos.common.domain.model.Price;
+import kitchenpos.common.domain.model.Quantity;
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.products.tobe.domain.model.Product;
 

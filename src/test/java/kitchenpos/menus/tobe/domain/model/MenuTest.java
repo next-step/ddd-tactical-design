@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.model.Price;
 import kitchenpos.menus.tobe.domain.fixture.MenuFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -18,7 +18,7 @@ create table menu_group
 create table menu_product
 (
     seq        bigint        not null auto_increment,
-    quantity   bigint        not null,
+    menuQuantity   bigint        not null,
     product_id varbinary(16) not null,
     menu_id    varbinary(16) not null,
     primary key (seq)
@@ -27,7 +27,7 @@ create table menu_product
 create table order_line_item
 (
     seq      bigint        not null auto_increment,
-    quantity bigint        not null,
+    menuQuantity bigint        not null,
     menu_id  varbinary(16) not null,
     order_id varbinary(16) not null,
     primary key (seq)

@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.model.Name;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

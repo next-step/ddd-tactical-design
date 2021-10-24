@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.menus.tobe.domain.Quantity;
+import kitchenpos.common.domain.model.Quantity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

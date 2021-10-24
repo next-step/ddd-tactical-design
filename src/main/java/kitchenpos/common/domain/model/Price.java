@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.common.domain.model;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class Price {
         return new Price(value);
     }
 
-    public BigDecimal getPrice() {
+    public BigDecimal getValue() {
         return this.value;
     }
 

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.common.domain.model;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ public class Quantity {
 
     }
 
-    public BigDecimal getQuantity() {
+    public BigDecimal getValue() {
         return this.value;
     }
 
