@@ -24,8 +24,8 @@ public class Order {
 
     private LocalDateTime orderDateTime;
 
-    @OneToMany
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
     private UUID orderTableId;
 
@@ -33,13 +33,15 @@ public class Order {
 
     }
 
-    public Order(OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, List<OrderLineItem> orderLineItems, UUID orderTableId, OrderValidator orderValidator) {
+    public Order(OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId, OrderValidator orderValidator) {
+        orderValidator.checkEmptyOrderLineItems(orderLineItems);
+        orderValidator.checkOrderLineItemQuantity(orderLineItems, orderType);
+        orderValidator.checkTableStatus(orderTableId);
+
         this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.orderDateTime = orderDateTime;
         this.orderTableId = orderTableId;
-        orderValidator.checkTableStatus(orderTableId);
-        orderValidator.checkOrderLineItemQuantity(orderLineItems, orderType);
     }
 
     public void advanceOrderStatus(OrderTableValidator orderTableValidator) {
