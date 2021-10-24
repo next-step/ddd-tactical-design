@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.ProductForm;
 import kitchenpos.tobeinfra.TobePurgomalumClient;

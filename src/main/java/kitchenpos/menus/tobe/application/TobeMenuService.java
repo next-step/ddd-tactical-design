@@ -89,4 +89,12 @@ public class TobeMenuService {
                 .map(MenuForm::of)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<MenuForm> findAllByIdIn(List<UUID> ids) {
+        return menuRepository.findAllByIdIn(ids)
+                .stream()
+                .map(MenuForm::of)
+                .collect(Collectors.toList());
+    }
 }

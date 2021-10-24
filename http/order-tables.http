@@ -1,16 +1,16 @@
 ###
-POST {{host}}/api/order-tables
+POST {{host}}/tobe/api/order-tables
 Content-Type: application/json
 
 {
-  "name": "9번"
+  "name": "10번"
 }
 
 ###
 PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/sit
 
 ###
-PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/clear
+PUT {{host}}/tobe/api/order-tables/4d90c806-76f0-48d5-be9b-9b85b05df0f3/clear
 
 ###
 PUT {{host}}/api/order-tables/8d710043-29b6-420e-8452-233f5a035520/number-of-guests
@@ -21,4 +21,4 @@ Content-Type: application/json
 }
 
 ###
-GET {{host}}/api/order-tables
+GET {{host}}/tobe/api/order-tables
