@@ -14,19 +14,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class ApiMenuAdaptor implements MenuAdaptor {
+public class MenuHandlerAdaptor implements MenuAdaptor {
     private final TobeProductService productService;
 
-    public ApiMenuAdaptor(final TobeProductService productService) {
+    public MenuHandlerAdaptor(final TobeProductService productService) {
         this.productService = productService;
     }
 
     @Override
     public List<TobeMenuProduct> productFindAllByIdIn(List<MenuProductForm> menuProductForms) {
-        List<UUID> productIds = menuProductForms.stream()
-                .map(MenuProductForm::getProductId)
-                .collect(Collectors.toList());
-
         List<TobeMenuProduct> menuProducts = menuProductForms.stream()
                 .map(form -> {
                     final TobeProduct product = productFormToProduct(productService.findById(form.getProductId()));
