@@ -10,15 +10,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class ApiOrderMenuAdaptor implements OrderMenuAdaptor {
+public class OrderMenuHandlerAdaptor implements OrderMenuAdaptor {
     private final TobeMenuService menuService;
 
-    public ApiOrderMenuAdaptor(TobeMenuService menuService) {
+    public OrderMenuHandlerAdaptor(TobeMenuService menuService) {
         this.menuService = menuService;
     }
 
     @Override
-    public List<Menu> menufindAllByIdIn(List<UUID> ids) {
+    public List<Menu> findAllByIdIn(List<UUID> ids) {
         List<Menu> menus = menuService.findAllByIdIn(ids).stream()
                 .map(form -> menuFormToMenu(form))
                 .collect(Collectors.toList());

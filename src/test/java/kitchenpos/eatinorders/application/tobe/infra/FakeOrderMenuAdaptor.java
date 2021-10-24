@@ -16,7 +16,7 @@ public class FakeOrderMenuAdaptor implements OrderMenuAdaptor {
     }
 
     @Override
-    public List<Menu> menufindAllByIdIn(List<UUID> ids) {
+    public List<Menu> findAllByIdIn(List<UUID> ids) {
         return menus.values().stream()
                 .filter(menu -> ids.contains(menu.getId()))
                 .collect(Collectors.toList());

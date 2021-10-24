@@ -5,10 +5,10 @@ import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApiOrderAdaptor implements OrderAdaptor {
+public class OrderHandlerAdaptor implements OrderAdaptor {
     private final TobeOrderService orderService;
 
-    public ApiOrderAdaptor(TobeOrderService orderService) {
+    public OrderHandlerAdaptor(TobeOrderService orderService) {
         this.orderService = orderService;
     }
 

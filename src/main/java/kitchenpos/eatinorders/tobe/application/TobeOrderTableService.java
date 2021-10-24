@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.domain.TableName;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTableRepository;

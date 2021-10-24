@@ -37,11 +37,7 @@ public class TobeOrderService {
         ValidationOrderService.validateOrderLineItem(request.getOrderLineItems());
 
         final List<OrderLineItemForm> orderLineItemRequests = request.getOrderLineItems();
-        final List<Menu> menus = orderMenuAdaptor.menufindAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(OrderLineItemForm::getMenuId)
-                .collect(Collectors.toList())
-        );
+        final List<Menu> menus = callMenuAdaptor(orderLineItemRequests);
 
         ValidationOrderService.menuSizeEqualsOrderLineItemSize(menus, orderLineItemRequests);
 
@@ -55,6 +51,14 @@ public class TobeOrderService {
 
         orderRepository.save(order);
         return OrderForm.of(order);
+    }
+
+    private List<Menu> callMenuAdaptor(List<OrderLineItemForm> orderLineItemRequests) {
+        return orderMenuAdaptor.findAllByIdIn(
+                orderLineItemRequests.stream()
+                        .map(OrderLineItemForm::getMenuId)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Transactional

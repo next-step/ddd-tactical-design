@@ -35,7 +35,7 @@ public class TobeOrderLineItems {
         return orderLineItems;
     }
 
-    public BigDecimal itemsTotalPrice() {
+    public BigDecimal orderPrice() {
         BigDecimal sum = BigDecimal.ZERO;
         for (TobeOrderLineItem item: orderLineItems) {
             sum = sum.add(item.getPrice());

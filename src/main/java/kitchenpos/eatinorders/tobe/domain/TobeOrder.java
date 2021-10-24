@@ -88,7 +88,7 @@ public class TobeOrder extends AbstractAggregateRoot<TobeOrder> {
     public void accept(KitchenridersClient kitchenridersClient) {
         validationAcceptOrderStatus();
         if (type == OrderType.DELIVERY) {
-            kitchenridersClient.requestDelivery(id, orderLineItems.itemsTotalPrice(), deliveryAddress);
+            kitchenridersClient.requestDelivery(id, orderLineItems.orderPrice(), deliveryAddress);
         }
         status = OrderStatus.ACCEPTED;
     }
@@ -112,7 +112,7 @@ public class TobeOrder extends AbstractAggregateRoot<TobeOrder> {
         validationCompleteOrderStatus();
         status = OrderStatus.COMPLETED;
         if (type == OrderType.EAT_IN) {
-            registerEvent(new OrderCompleteEvent(id));
+            registerEvent(new CompleteEvent(id));
         }
     }
 

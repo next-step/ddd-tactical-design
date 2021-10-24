@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.tobe.domain.OrderCompleteEvent;
+import kitchenpos.eatinorders.tobe.domain.CompleteEvent;
 
 public interface OrderTableObserver {
-    void orderComplete(OrderCompleteEvent event);
+    void orderComplete(CompleteEvent event);
 }

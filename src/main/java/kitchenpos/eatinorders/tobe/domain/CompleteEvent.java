@@ -2,10 +2,10 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.UUID;
 
-public class OrderCompleteEvent {
+public class CompleteEvent {
     private UUID tableId;
 
-    public OrderCompleteEvent(UUID tableId) {
+    public CompleteEvent(UUID tableId) {
         this.tableId = tableId;
     }
 
