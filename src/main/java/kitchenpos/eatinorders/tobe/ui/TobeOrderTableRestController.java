@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/tobe/api/order-tables")
@@ -41,10 +42,9 @@ public class TobeOrderTableRestController {
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
-/*
+
     @GetMapping
-    public ResponseEntity<List<OrderTable>> findAll() {
+    public ResponseEntity<List<OrderTableForm>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());
     }
-*/
 }

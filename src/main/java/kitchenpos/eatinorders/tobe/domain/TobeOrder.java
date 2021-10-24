@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class TobeOrder {
+public class TobeOrder extends AbstractAggregateRoot<TobeOrder> {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
@@ -57,7 +57,6 @@ public class TobeOrder {
         this.deliveryAddress = deliveryAddress;
         this.orderTableId = orderTableId;
     }
-
     public UUID getId() {
         return id;
     }
@@ -94,9 +93,44 @@ public class TobeOrder {
         status = OrderStatus.ACCEPTED;
     }
 
+    public void server() {
+        validationServerOrderStatus();
+        status = OrderStatus.SERVED;
+    }
+
+    public void startDelivery() {
+        validationDeliveryOrderStatus();
+        status = OrderStatus.DELIVERING;
+    }
+
+    public void completeDelivery() {
+        validationCompleteDeliveryOrderStatus();
+        status = OrderStatus.DELIVERED;
+    }
+
+    public void complete() {
+        validationCompleteOrderStatus();
+        status = OrderStatus.COMPLETED;
+        if (type == OrderType.EAT_IN) {
+            registerEvent(new OrderCompleteEvent(id));
+        }
+    }
+
+    private void validationCompleteDeliveryOrderStatus() {
+        if (status != OrderStatus.DELIVERING) {
+            throw new IllegalStateException("배송 중이 아닙니다.");
+        }
+    }
+
+    private void validationServerOrderStatus() {
+        if (status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException("주문 승인 상태만 가능합니다.");
+        }
+    }
+
     private void validationAcceptOrderStatus() {
         if (status != OrderStatus.WAITING) {
-            throw new IllegalStateException("주문 대기 상태만 확인이 가능합니다.");
+            throw new IllegalStateException("주문 대기 상태만 가능합니다.");
         }
     }
 
@@ -116,6 +150,24 @@ public class TobeOrder {
     private void validationOrderType(OrderType type) {
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException();
+        }
+    }
+
+    private void validationDeliveryOrderStatus() {
+        if (type != OrderType.DELIVERY) {
+            throw new IllegalStateException("배달 주문건이 아닙니다.");
+        }
+        if (status!= OrderStatus.SERVED) {
+            throw new IllegalStateException("배송할 수 있는 상태가 아닙니다.");
+        }
+    }
+
+    private void validationCompleteOrderStatus() {
+        if (type == OrderType.DELIVERY && status != OrderStatus.DELIVERED) {
+            throw new IllegalStateException("배송 완료가 안되었습니다.");
+        }
+        if (type != OrderType.DELIVERY && status != OrderStatus.SERVED) {
+            throw new IllegalStateException("주문메뉴 서빙이 안되었습니다.");
         }
     }
 }

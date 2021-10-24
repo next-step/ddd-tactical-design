@@ -1,7 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.infra.OrderAdaptor;
+
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -61,8 +62,15 @@ public class TobeOrderTable {
         this.empty = false;
     }
 
-    public void clear() {
+    public void clear(OrderAdaptor orderAdaptor) {
+        validationOrderCompleteStatus(orderAdaptor);
         this.empty = true;
         numberOfGuests.clear();
+    }
+
+    private void validationOrderCompleteStatus(OrderAdaptor orderAdaptor) {
+        if (!orderAdaptor.isOrderComplete(this)) {
+            throw new IllegalStateException("주문 완료가 아닙니다.");
+        }
     }
 }

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu")
-@Entity
+@Entity(name = "orderMenu")
 public class Menu {
 
     @Column(name = "id", columnDefinition = "varbinary(16)")

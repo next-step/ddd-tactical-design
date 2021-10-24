@@ -1,7 +1,9 @@
 package kitchenpos.eatinorders.application.tobe.domain;
 
+import kitchenpos.eatinorders.application.tobe.infra.FakeOrderAdaptor;
 import kitchenpos.eatinorders.tobe.domain.TableName;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,6 +12,12 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class TobeOrderTableTest {
+    private FakeOrderAdaptor orderAdaptor;
+
+    @BeforeEach
+    void setUp() {
+        orderAdaptor = new FakeOrderAdaptor();
+    }
 
     @Test
     void 주문_테이블_생성() {
@@ -46,7 +54,7 @@ public class TobeOrderTableTest {
     @Test
     void 주문_테이블_정리() {
         TobeOrderTable orderTable = createOrderTable();
-        orderTable.clear();
+        orderTable.clear(orderAdaptor);
         assertAll(
                 () -> assertThat(orderTable.isEmpty()).isTrue(),
                 () -> assertThat(orderTable.getNumberOfGuests()).isEqualTo(0)

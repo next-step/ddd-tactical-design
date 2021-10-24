@@ -10,6 +10,7 @@ public class OrderLineItemForm {
     private MenuForm menu;
     private Long quantity;
     private BigDecimal price;
+    private UUID menuId;
 
     public Long getSeq() {
         return seq;
@@ -24,7 +25,7 @@ public class OrderLineItemForm {
     }
 
     public UUID getMenuId() {
-        return menu.getId();
+        return menuId;
     }
 
     public void setMenu(MenuForm menu) {
@@ -47,12 +48,17 @@ public class OrderLineItemForm {
         this.price = price;
     }
 
+    public void setMenuId(UUID menuId) {
+        this.menuId = menuId;
+    }
+
     public static OrderLineItemForm of(TobeOrderLineItem orderLineItem) {
         OrderLineItemForm orderLineItemForm = new OrderLineItemForm();
         orderLineItemForm.setSeq(orderLineItem.getSeq());
         orderLineItemForm.setPrice(orderLineItem.getPrice());
         orderLineItemForm.setQuantity(orderLineItem.getQuantity());
         orderLineItemForm.setMenu(MenuForm.of(orderLineItem.getMenu()));
+        orderLineItemForm.setMenuId(orderLineItem.getMenu().getId());
         return orderLineItemForm;
     }
 }

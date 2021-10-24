@@ -1,33 +1,33 @@
 ###
-POST {{host}}/api/orders
+POST {{host}}/tobe/api/orders
 Content-Type: application/json
 
 {
   "type": "EAT_IN",
-  "orderTableId": "8d710043-29b6-420e-8452-233f5a035520",
+  "orderTableId": "4d90c806-76f0-48d5-be9b-9b85b05df0f3",
   "orderLineItems": [
     {
-      "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
-      "price": 16000,
-      "quantity": 3
+      "menuId": "a64af6ca-c34d-4cd8-82fe-454abf512d1f",
+      "price": 17000,
+      "quantity": 2
     }
   ]
 }
 
 ###
-PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/accept
+PUT {{host}}/tobe/api/orders/b8a8947d-9591-4a0c-ab9f-e74eb7f14d82/accept
 
 ###
-PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/serve
+PUT {{host}}/tobe/api/orders/b8a8947d-9591-4a0c-ab9f-e74eb7f14d82/serve
 
 ###
-PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/start-delivery
+PUT {{host}}/tobe/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/start-delivery
 
 ###
-PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete-delivery
+PUT {{host}}/tobe/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete-delivery
 
 ###
-PUT {{host}}/api/orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete
+PUT {{host}}/tobe/api/orders/b8a8947d-9591-4a0c-ab9f-e74eb7f14d82/complete
 
 ###
-GET {{host}}/api/orders
+GET {{host}}/tobe/api/orders

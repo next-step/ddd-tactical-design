@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class TobeOrderLineItems {
     }
 
     public List<TobeOrderLineItem> getOrderLineItems() {
-        return Collections.unmodifiableList(orderLineItems);
+        return orderLineItems;
     }
 
     public BigDecimal itemsTotalPrice() {

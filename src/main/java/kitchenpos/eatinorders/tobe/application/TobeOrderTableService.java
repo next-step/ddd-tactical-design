@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.tobe.domain.TableName;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderTableRepository;
+import kitchenpos.eatinorders.tobe.infra.OrderAdaptor;
 import kitchenpos.eatinorders.tobe.ui.OrderTableForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class TobeOrderTableService {
     private final TobeOrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final OrderAdaptor orderAdaptor;
 
-    public TobeOrderTableService(final TobeOrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public TobeOrderTableService(final TobeOrderTableRepository orderTableRepository, final OrderAdaptor orderAdaptor) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.orderAdaptor = orderAdaptor;
     }
 
     @Transactional
@@ -42,11 +43,7 @@ public class TobeOrderTableService {
     public OrderTableForm clear(final UUID orderTableId) {
         final TobeOrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        // TODO : OrderService 진행할 때 리팩토링 예정
-//        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-//            throw new IllegalStateException();
-//        }
-        orderTable.clear();
+        orderTable.clear(orderAdaptor);
         return OrderTableForm.of(orderTable);
     }
 

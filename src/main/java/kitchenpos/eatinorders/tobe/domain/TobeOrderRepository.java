@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +13,8 @@ public interface TobeOrderRepository {
 
     List<TobeOrder> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
+    Optional<TobeOrder> findByOrderTableId(UUID orderTableId);
+
+    boolean existsByOrderTableIdAndStatusNot(UUID orderTableId, OrderStatus status);
 }
 

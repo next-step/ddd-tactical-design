@@ -50,7 +50,7 @@ public class TobeOrderTest extends OrderFixtures {
     }
 
     @Test
-    void 주문대기_확인처리() {
+    void 주문대기_처리() {
         TobeOrder order = createOrder();
         order.accept(kitchenridersClient);
         assertThat(order.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
@@ -61,5 +61,56 @@ public class TobeOrderTest extends OrderFixtures {
         TobeOrder order = createOrder();
         order.accept(kitchenridersClient);
         assertThatIllegalStateException().isThrownBy(() -> order.accept(kitchenridersClient));
+    }
+
+    @Test
+    void 주문승인_처리() {
+        TobeOrder order = createOrder();
+        order.accept(kitchenridersClient);
+        order.server();
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.SERVED);
+    }
+
+    @Test
+    void 주문승인_예외처리() {
+        TobeOrder order = createOrder();
+        assertThatIllegalStateException().isThrownBy(() -> order.server());
+    }
+
+    @Test
+    void 주문_배송_처리() {
+        TobeOrder order = createOrder(OrderType.DELIVERY);
+        order.accept(kitchenridersClient);
+        order.server();
+        order.startDelivery();
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.DELIVERING);
+    }
+
+    @Test
+    void 주문_배송_예외처리() {
+        TobeOrder order = createOrder(OrderType.DELIVERY);
+        assertThatIllegalStateException().isThrownBy(() -> order.startDelivery());
+    }
+
+    @NullAndEmptySource
+    @ParameterizedTest
+    void 주문_배송지_예외처리(String address) {
+        assertThatIllegalArgumentException().isThrownBy(() -> createOrder(OrderType.DELIVERY, address, createOrderLineItems()));
+    }
+
+    @Test
+    void 주문_배송_완료_처리() {
+        TobeOrder order = createOrder(OrderType.DELIVERY);
+        order.accept(kitchenridersClient);
+        order.server();
+        order.startDelivery();
+        order.completeDelivery();
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.DELIVERED);
+    }
+
+    @Test
+    void 주문_배송_완료_예외처리() {
+        TobeOrder order = createOrder(OrderType.DELIVERY);
+        assertThatIllegalStateException().isThrownBy(() -> order.completeDelivery());
     }
 }

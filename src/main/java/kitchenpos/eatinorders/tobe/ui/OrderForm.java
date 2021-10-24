@@ -78,10 +78,11 @@ public class OrderForm {
         OrderForm orderForm = new OrderForm();
         orderForm.setId(order.getId());
         orderForm.setOrderDateTime(order.getOrderDateTime());
-        orderForm.setOrderLineItems(order.getOrderLineItems().stream().map(OrderLineItemForm::of).collect(Collectors.toList()));
         orderForm.setStatus(order.getStatus());
         orderForm.setType(order.getType());
         orderForm.setDeliveryAddress(order.getDeliveryAddress());
+        orderForm.setOrderTableId(order.getOrderTableId());
+        orderForm.setOrderLineItems(order.getOrderLineItems().stream().map(OrderLineItemForm::of).collect(Collectors.toList()));
         return orderForm;
     }
 }

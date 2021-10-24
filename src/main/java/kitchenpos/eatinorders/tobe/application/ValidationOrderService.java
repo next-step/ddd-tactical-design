@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.application;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.Menu;
 import kitchenpos.eatinorders.tobe.ui.OrderLineItemForm;

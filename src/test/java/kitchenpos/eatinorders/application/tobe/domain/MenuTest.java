@@ -5,7 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.Menu;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 

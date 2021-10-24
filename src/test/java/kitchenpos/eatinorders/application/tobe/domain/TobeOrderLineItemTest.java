@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.application.tobe.domain;
 
 import kitchenpos.eatinorders.application.tobe.OrderFixtures;
-import kitchenpos.eatinorders.tobe.domain.Menu;
 import kitchenpos.eatinorders.tobe.domain.TobeOrderLineItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

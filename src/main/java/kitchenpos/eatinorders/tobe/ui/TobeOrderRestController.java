@@ -29,26 +29,26 @@ public class TobeOrderRestController {
     public ResponseEntity<OrderForm> accept(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderService.accept(orderId));
     }
-//
-//    @PutMapping("/{orderId}/serve")
-//    public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(orderService.serve(orderId));
-//    }
-//
-//    @PutMapping("/{orderId}/start-delivery")
-//    public ResponseEntity<Order> startDelivery(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(orderService.startDelivery(orderId));
-//    }
-//
-//    @PutMapping("/{orderId}/complete-delivery")
-//    public ResponseEntity<Order> completeDelivery(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(orderService.completeDelivery(orderId));
-//    }
-//
-//    @PutMapping("/{orderId}/complete")
-//    public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(orderService.complete(orderId));
-//    }
+
+    @PutMapping("/{orderId}/serve")
+    public ResponseEntity<OrderForm> serve(@PathVariable final UUID orderId) {
+        return ResponseEntity.ok(orderService.serve(orderId));
+    }
+
+    @PutMapping("/{orderId}/start-delivery")
+    public ResponseEntity<OrderForm> startDelivery(@PathVariable final UUID orderId) {
+        return ResponseEntity.ok(orderService.startDelivery(orderId));
+    }
+
+    @PutMapping("/{orderId}/complete-delivery")
+    public ResponseEntity<OrderForm> completeDelivery(@PathVariable final UUID orderId) {
+        return ResponseEntity.ok(orderService.completeDelivery(orderId));
+    }
+
+    @PutMapping("/{orderId}/complete")
+    public ResponseEntity<OrderForm> complete(@PathVariable final UUID orderId) {
+        return ResponseEntity.ok(orderService.complete(orderId));
+    }
 
     @GetMapping
     public ResponseEntity<List<OrderForm>> findAll() {
