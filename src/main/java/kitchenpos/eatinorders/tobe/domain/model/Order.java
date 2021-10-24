@@ -7,7 +7,6 @@ import kitchenpos.eatinorders.tobe.domain.validator.OrderValidator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -44,10 +43,10 @@ public class Order {
         this.orderTableId = orderTableId;
     }
 
-    public void advanceOrderStatus(OrderTableValidator orderTableValidator) {
-        this.orderStatus = this.orderStatus.advanceLevel(this.orderType);
+    public void advanceOrderStatus(OrderTableValidator orderTableValidator, OrderValidator orderValidator) {
+        orderValidator.advanceOrderStatus(this);
         if (this.orderStatus == OrderStatus.COMPLETED && this.orderType == OrderType.EAT_IN) {
-            orderTableValidator.clearTable(orderTableId);
+            orderTableValidator.makeEmptyTable(orderTableId);
         }
     }
 
@@ -71,4 +70,7 @@ public class Order {
         this.id = id;
     }
 
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

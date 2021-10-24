@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.validator;
 
+import kitchenpos.eatinorders.tobe.domain.model.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.domain.model.Order;
 import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderRepository;
@@ -17,11 +18,13 @@ public class OrderTableValidator {
         this.orderTableRepository = orderTableRepository;
     }
 
-    public void clearTable(UUID orderTableId) {
+    public void makeEmptyTable(UUID orderTableId) {
         if (isAllOrderCompleted(orderTableId)) {
             OrderTable orderTable = orderTableRepository.findById(orderTableId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 테이블입니다."));
-            orderTable.makeEmptyTable();
+
+            orderTable.setNumberOfGuests(new NumberOfGuests(0L));
+            orderTable.clearTable();
         }
     }
 

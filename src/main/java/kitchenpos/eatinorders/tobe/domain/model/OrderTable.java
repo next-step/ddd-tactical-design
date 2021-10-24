@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
+import kitchenpos.eatinorders.tobe.domain.validator.OrderTableValidator;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -35,11 +37,6 @@ public class OrderTable {
         return this.numberOfGuests;
     }
 
-    public void makeEmptyTable() {
-        this.numberOfGuests = new NumberOfGuests(0L);
-        clearTable();
-    }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -56,4 +53,7 @@ public class OrderTable {
         return this.empty;
     }
 
+    public void setNumberOfGuests(NumberOfGuests numberOfGuests) {
+        this.numberOfGuests = numberOfGuests;
+    }
 }

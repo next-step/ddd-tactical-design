@@ -76,39 +76,41 @@ public class OrderTest {
     @Test
     void advanceOrderStatusTest() {
         OrderTableValidator orderTableValidator = new OrderTableValidator(orderRepository, orderTableRepository);
+        OrderValidator orderValidator = new OrderValidator(orderTableRepository);
         OrderTable orderTable = orderTableRepository.save(OrderTableFixture.ORDER_TABLE_FIXTURE(new NumberOfGuests(2L)));
         orderTable.setUpTable();
         Order order = makeEatInOrder(orderTable.getId());
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.WAITING);
 
-        order.advanceOrderStatus(orderTableValidator);
+        order.advanceOrderStatus(orderTableValidator, orderValidator);
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ACCEPTED);
 
-        order.advanceOrderStatus(orderTableValidator);
+        order.advanceOrderStatus(orderTableValidator, orderValidator);
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.SERVED);
 
-        order.advanceOrderStatus(orderTableValidator);
+        order.advanceOrderStatus(orderTableValidator, orderValidator);
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
 
-        assertThatThrownBy(() -> order.advanceOrderStatus(orderTableValidator))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> order.advanceOrderStatus(orderTableValidator, orderValidator))
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("주문 완료 처리시 해당 테이블 주문 전수 검사 후 모든 주문이 완료 상태일시 empty table 처리 여부 검증")
     @Test
     void emptyTableTest() {
         OrderTableValidator orderTableValidator = new OrderTableValidator(orderRepository, orderTableRepository);
+        OrderValidator orderValidator = new OrderValidator(orderTableRepository);
         OrderTable orderTable = orderTableRepository.save(OrderTableFixture.ORDER_TABLE_FIXTURE(new NumberOfGuests(2L)));
         orderTable.setUpTable();
         Order order1 = makeEatInOrder(orderTable.getId());
         Order order2 = makeEatInOrder(orderTable.getId());
 
-        completeOrder(orderTableValidator, order1);
+        completeOrder(orderTableValidator, orderValidator, order1);
         assertThat(orderTable.getNumberOfGuests().getValue()).isNotEqualTo(0L);
         assertThat(orderTable.isEmpty()).isFalse();
 
-        completeOrder(orderTableValidator, order2);
+        completeOrder(orderTableValidator, orderValidator, order2);
         assertThat(orderTable.getNumberOfGuests().getValue()).isEqualTo(0L);
         assertThat(orderTable.isEmpty()).isTrue();
     }
@@ -125,10 +127,10 @@ public class OrderTest {
         return orderRepository.save(OrderFixture.ORDER_FIXTURE(orderType, OrderStatus.WAITING, orderLineItems, orderTableId, new OrderValidator(orderTableRepository)));
     }
 
-    private void completeOrder(OrderTableValidator orderTableValidator, Order order) {
-        order.advanceOrderStatus(orderTableValidator); // WAITING -> ACCEPTED
-        order.advanceOrderStatus(orderTableValidator); // ACCEPTED -> SERVED
-        order.advanceOrderStatus(orderTableValidator); // SERVED -> COMPLETE
+    private void completeOrder(OrderTableValidator orderTableValidator, OrderValidator orderValidator, Order order) {
+        order.advanceOrderStatus(orderTableValidator, orderValidator); // WAITING -> ACCEPTED
+        order.advanceOrderStatus(orderTableValidator, orderValidator); // ACCEPTED -> SERVED
+        order.advanceOrderStatus(orderTableValidator, orderValidator); // SERVED -> COMPLETE
     }
 
 }
