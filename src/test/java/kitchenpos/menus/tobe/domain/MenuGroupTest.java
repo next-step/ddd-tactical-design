@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.tobe.application.FakePurgomalumClient;
 import kitchenpos.common.tobe.domain.DisplayedName;
@@ -7,12 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ProductTest {
+class MenuGroupTest {
     private Profanities profanities;
 
     @BeforeEach
@@ -20,22 +20,19 @@ class ProductTest {
         profanities = new FakePurgomalumClient();
     }
 
-    @DisplayName("상품을 생성할 수 있다.")
+    @DisplayName("MenuGroup을 생성한다.")
     @Test
     void create() {
         //given
-        DisplayedName name = new DisplayedName("후라이드", profanities);
-        Price price = new Price(BigDecimal.valueOf(16_000L));
+        final DisplayedName name = new DisplayedName("베스트 메뉴", profanities);
 
         //when
-        Product product = new Product(name, price);
+        MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), name);
 
         //then
         assertAll(
-                () -> assertThat(product).isNotNull(),
-                () -> assertThat(product.getDisplayedName().getName()).isEqualTo(name.getName()),
-                () -> assertThat(product.getPrice().getPrice()).isEqualTo(price.getPrice())
+                () -> assertThat(menuGroup).isNotNull(),
+                () -> assertThat(menuGroup.getName()).isEqualTo(name)
         );
     }
-
 }

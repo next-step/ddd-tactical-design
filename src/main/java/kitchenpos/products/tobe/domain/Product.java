@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.tobe.domain.DisplayedName;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -19,17 +19,12 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product() {
+    protected Product() {
     }
 
-    public Product(final PurgomalumClient purgomalumClient, final String name, final BigDecimal price) {
-        DisplayedName.validateName(purgomalumClient, name);
-        this.displayedName = new DisplayedName(name);
-        this.price = new Price(price);
-    }
-
-    public Product(final PurgomalumClient purgomalumClient, final String name, final Long price) {
-        this(purgomalumClient, name, BigDecimal.valueOf(price));
+    public Product(final DisplayedName displayedName, final Price price) {
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public UUID getId() {
@@ -42,5 +37,22 @@ public class Product {
 
     public Price getPrice() {
         return price;
+    }
+
+    public void change(final Price price) {
+        this.price = price;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        final Product product = (Product) o;
+        return getId().equals(product.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
