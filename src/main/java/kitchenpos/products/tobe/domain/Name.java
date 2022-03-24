@@ -22,6 +22,7 @@ public class Name {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
         }
+
         if (profanities.contains(name)) {
             throw new IllegalArgumentException("이름에 비속어는 포함될 수 없습니다.");
         }
