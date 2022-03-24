@@ -1,9 +1,9 @@
-package kitchenpos.fixture;
+package kitchenpos;
 
 import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.infra.FakeProfanities;
+import kitchenpos.products.tobe.domain.FakeProfanities;
 
 import java.math.BigDecimal;
 

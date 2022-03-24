@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.infra.FakeProfanities;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
