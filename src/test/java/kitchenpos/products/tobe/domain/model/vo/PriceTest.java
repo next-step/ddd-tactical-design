@@ -26,7 +26,7 @@ class PriceTest {
 
 
     @Test
-    @DisplayName("객체의 값을 동일한지 비교한다.")
+    @DisplayName("객체의 값이 동일한지 비교한다.")
     void isSame() {
         //given
         Price origin = new Price(NORMAL_PRICE);
