@@ -1,6 +1,5 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.policy.ProductNamingRule;
 import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
@@ -39,7 +38,24 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public static class ProductBuilder{
+    public ProductPrice changePrice(ProductPrice productPrice, ProductPricingRule rule) {
+        this.price = new ProductPrice(productPrice.getValue(), rule);
+        return this.price;
+    }
+
+    public ProductId getId() {
+        return id;
+    }
+
+    public ProductName getName() {
+        return name;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
+    }
+
+    public static class ProductBuilder {
         private ProductName name;
         private ProductPrice price;
 
@@ -58,27 +74,10 @@ public class TobeProduct {
         }
 
         public TobeProduct build() {
-            if(Objects.isNull(name)||Objects.isNull(price)) {
+            if (Objects.isNull(name) || Objects.isNull(price)) {
                 throw new IllegalArgumentException();
             }
             return new TobeProduct(name, price);
         }
-    }
-
-    public ProductPrice changePrice(ProductPrice productPrice, ProductPricingRule rule) {
-        this.price = new ProductPrice(productPrice.getValue(), rule);
-        return this.price;
-    }
-
-    public ProductId getId() {
-        return id;
-    }
-
-    public ProductName getName() {
-        return name;
-    }
-
-    public ProductPrice getPrice() {
-        return price;
     }
 }

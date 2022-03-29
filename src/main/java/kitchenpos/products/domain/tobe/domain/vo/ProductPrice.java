@@ -11,11 +11,11 @@ import java.util.Objects;
 @Embeddable
 public class ProductPrice {
 
-    @Column(name="price")
+    @Column(name = "price")
     private BigDecimal price;
 
     public ProductPrice(BigDecimal price, ProductPricingRule rule) {
-        if(Objects.isNull(rule)) {
+        if (Objects.isNull(rule)) {
             throw new ProductNamingRuleViolationException("상품가격 정책을 선택해 주십시오");
         }
         rule.checkRule(price);

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class DefaultProductNamingRule implements ProductNamingRule {
 
-    private PurgomalumClient purgomalumClient;
+    private final PurgomalumClient purgomalumClient;
 
     public DefaultProductNamingRule(PurgomalumClient purgomalumClient) {
         this.purgomalumClient = purgomalumClient;

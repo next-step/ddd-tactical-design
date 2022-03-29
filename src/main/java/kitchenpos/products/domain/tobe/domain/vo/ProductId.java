@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Embeddable
 public class ProductId implements Serializable {
-    @Column(name="id")
+    @Column(name = "id")
     private UUID id;
 
     public ProductId(UUID id) {
