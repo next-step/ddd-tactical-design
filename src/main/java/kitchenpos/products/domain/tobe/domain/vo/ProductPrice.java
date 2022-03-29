@@ -1,10 +1,12 @@
 package kitchenpos.products.domain.tobe.domain.vo;
 
 import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.products.exception.ProductNamingRuleViolationException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
@@ -13,6 +15,9 @@ public class ProductPrice {
     private BigDecimal price;
 
     public ProductPrice(BigDecimal price, ProductPricingRule rule) {
+        if(Objects.isNull(rule)) {
+            throw new ProductNamingRuleViolationException("상품가격 정책을 선택해 주십시오");
+        }
         rule.checkRule(price);
         this.price = price;
     }
