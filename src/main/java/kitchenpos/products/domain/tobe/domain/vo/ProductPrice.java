@@ -1,11 +1,10 @@
 package kitchenpos.products.domain.tobe.domain.vo;
 
-import kitchenpos.products.exception.IllegalProductPricingPolicy;
+import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
@@ -13,8 +12,8 @@ public class ProductPrice {
     @Column(name="price")
     private BigDecimal price;
 
-    public ProductPrice(BigDecimal price) {
-        checkProductPricingPolicy(price);
+    public ProductPrice(BigDecimal price, ProductPricingRule rule) {
+        rule.checkRule(price);
         this.price = price;
     }
 
@@ -24,12 +23,6 @@ public class ProductPrice {
 
     public BigDecimal getValue() {
         return price;
-    }
-
-    private void checkProductPricingPolicy(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalProductPricingPolicy("잘못된 상품 금액입니다");
-        }
     }
 
     @Override
