@@ -1,20 +1,22 @@
 package kitchenpos.products.domain.tobe.domain;
 
+import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.products.domain.tobe.domain.vo.ProductId;
+import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Table(name = "product")
 @Entity
 public class TobeProduct {
     @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private ProductId id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Column(name = "price", nullable = false)
     @Embedded
@@ -23,21 +25,20 @@ public class TobeProduct {
     public TobeProduct() {
     }
 
-    public ProductPrice changePrice(ProductPrice productPrice) {
-        this.price = new ProductPrice(productPrice.getValue());
+    public ProductPrice changePrice(ProductPrice productPrice, ProductPricingRule rule) {
+        this.price = new ProductPrice(productPrice.getValue(), rule);
         return this.price;
     }
 
-    public UUID getId() {
+    public ProductId getId() {
         return id;
     }
 
-    public String getName() {
+    public ProductName getName() {
         return name;
     }
 
     public ProductPrice getPrice() {
         return price;
     }
-
 }
