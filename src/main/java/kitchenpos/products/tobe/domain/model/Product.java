@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain.model;
 
 import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
-import kitchenpos.products.tobe.domain.model.vo.Price;
+import kitchenpos.global.domain.vo.Price;
 import kitchenpos.products.tobe.domain.model.vo.ProductName;
 
 import java.math.BigDecimal;

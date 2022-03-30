@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.exception;
+package kitchenpos.global.exception;
 
 public class IllegalPriceException extends IllegalArgumentException {
 
