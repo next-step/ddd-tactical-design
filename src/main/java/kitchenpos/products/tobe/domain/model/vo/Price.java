@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain.model.vo;
 
-import kitchenpos.global.document.ValueObject;
+import kitchenpos.global.maker.ValueObject;
 import kitchenpos.products.tobe.exception.IllegalPriceException;
 
 import java.math.BigDecimal;
