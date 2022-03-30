@@ -1,4 +1,4 @@
-package kitchenpos.global.maker;
+package kitchenpos.global.marker;
 
 /**
  * ValueObject is the empty marker interface.

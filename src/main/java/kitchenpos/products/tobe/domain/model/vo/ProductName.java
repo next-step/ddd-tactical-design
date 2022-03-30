@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain.model.vo;
 
-import kitchenpos.global.maker.ValueObject;
+import kitchenpos.global.marker.ValueObject;
 import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
 import kitchenpos.products.tobe.exception.IllegalProductNameException;
 
