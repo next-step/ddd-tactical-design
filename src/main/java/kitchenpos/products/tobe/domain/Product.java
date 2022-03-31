@@ -5,14 +5,14 @@ import kitchenpos.products.infra.PurgomalumClient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Product2 {
+public class Product {
     private static final String INVALID_NAME_MESSAGE = "상품의 이름으로 사용할 수 없습니다.";
 
     private final UUID id;
     private final String name;
     private ProductPrice price;
 
-    public Product2(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         validateName(name, purgomalumClient);
 
         this.id = UUID.randomUUID();
