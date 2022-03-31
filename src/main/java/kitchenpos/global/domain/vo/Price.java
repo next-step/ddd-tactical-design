@@ -42,6 +42,11 @@ public final class Price implements ValueObject {
         return new Price(this.price.multiply(BigDecimal.valueOf(quantity)));
     }
 
+
+    public boolean lessThanEquals(Price other) {
+        return this.price.compareTo(other.price) <= 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

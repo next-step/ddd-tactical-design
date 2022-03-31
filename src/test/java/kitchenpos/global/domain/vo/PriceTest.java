@@ -3,6 +3,8 @@ package kitchenpos.global.domain.vo;
 import kitchenpos.global.exception.IllegalPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
@@ -60,6 +62,14 @@ class PriceTest {
     void multiply02() {
         Price price1 = new Price(NORMAL_PRICE);
         assertThat(price1.multiply(1L)).isEqualTo(price1);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1000", "1500"})
+    @DisplayName("가격이 더 작거나 같은지 확인한다.")
+    void greaterThanEquals(BigDecimal other) {
+        Price price = new Price(BigDecimal.valueOf(1000L));
+        assertThat(price.lessThanEquals(new Price(other))).isTrue();
     }
 
 
