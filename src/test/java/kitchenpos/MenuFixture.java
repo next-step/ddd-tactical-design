@@ -48,7 +48,7 @@ public class MenuFixture {
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
         final List<MenuProduct> menuProducts = 메뉴상품목록1(products.stream().map(Product::getId).toArray(UUID[]::new));
-        final List<ProductResponse> productList = products.stream().map(product -> new ProductResponse(product.getId(), new Price(product.getPrice().getPriceValue()))).collect(toList());
+        final List<ProductResponse> productList = products.stream().map(product -> new ProductResponse(product.getId(), new Price(product.getPrice().value()))).collect(toList());
 
         return loader.loadMenuProducts(menuProducts, productList);
     }

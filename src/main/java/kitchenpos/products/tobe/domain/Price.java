@@ -19,7 +19,7 @@ public class Price {
         this.price = price;
     }
 
-    public BigDecimal getPriceValue() {
+    public BigDecimal value() {
         return price;
     }
 

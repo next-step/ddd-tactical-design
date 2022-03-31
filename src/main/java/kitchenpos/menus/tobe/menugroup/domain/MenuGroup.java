@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.menugroup.domain;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;

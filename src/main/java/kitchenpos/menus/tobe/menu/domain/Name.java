@@ -14,6 +14,10 @@ public class Name {
     protected Name() {
     }
 
+    public Name(final String name) {
+        this(name, new DefaultProfanities());
+    }
+
     public Name(final String name, Profanities profanities) {
         verify(name, profanities);
         this.name = name;
