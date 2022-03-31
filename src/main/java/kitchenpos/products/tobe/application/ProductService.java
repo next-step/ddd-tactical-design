@@ -4,7 +4,6 @@ import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.ui.dto.ProductCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +15,14 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final Profanities profanities;
-    private final ApplicationEventPublisher eventPublisher;
+    private final ProductProducer eventPublisher;
 
     @Autowired
-    public ProductService(final ProductRepository productRepository, final ApplicationEventPublisher eventPublisher) {
+    public ProductService(final ProductRepository productRepository, final ProductProducer eventPublisher) {
         this(productRepository, new DefaultProfanities(), eventPublisher);
     }
 
-    public ProductService(final ProductRepository productRepository, final Profanities profanities, final ApplicationEventPublisher eventPublisher) {
+    public ProductService(final ProductRepository productRepository, final Profanities profanities, final ProductProducer eventPublisher) {
         this.productRepository = productRepository;
         this.profanities = profanities;
         this.eventPublisher = eventPublisher;
@@ -39,7 +38,7 @@ public class ProductService {
     public Product changePrice(UUID productId, ProductChangePriceRequest request) {
         final Product product = findById(productId);
         product.changePrice(request.price());
-        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId));
+        eventPublisher.publish(productId);
         return product;
     }
 

@@ -12,6 +12,7 @@ import kitchenpos.menus.tobe.menugroup.application.MenuGroupService;
 import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 import kitchenpos.menus.tobe.menugroup.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.menugroup.infra.InMemoryMenuGroupRepository;
+import kitchenpos.products.tobe.infra.ProductProducerImpl;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -24,7 +25,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -39,7 +39,6 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private ApplicationEventPublisher eventPublisher = new FakeEventPublisher();
     private MenuService menuService;
     private MenuGroup menuGroup;
     private UUID menuGroupId;
@@ -51,7 +50,7 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
-        ProductService productService = new ProductService(productRepository, new kitchenpos.products.tobe.domain.FakeProfanities(), eventPublisher);
+        ProductService productService = new ProductService(productRepository, new kitchenpos.products.tobe.domain.FakeProfanities(), new ProductProducerImpl(event -> {}));
         MenuProductApiCaller menuProductClient = new MenuProductApiCaller(productService);
         menuService = new MenuService(menuRepository, new MenuProductLoader(), menuProductClient, menuGroupService, new FakeProfanities());
         menuGroup = menuGroupRepository.save(MenuFixture.메뉴그룹());
