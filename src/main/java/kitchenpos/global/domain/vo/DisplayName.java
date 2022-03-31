@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.model.vo;
+package kitchenpos.global.domain.vo;
 
 import kitchenpos.global.marker.ValueObject;
 import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
@@ -6,11 +6,11 @@ import kitchenpos.products.tobe.exception.IllegalProductNameException;
 
 import java.util.Objects;
 
-public final class ProductName implements ValueObject {
+public final class DisplayName implements ValueObject {
 
     private final String name;
 
-    public ProductName(String name, BannedWordCheckClient bannedWordCheckClient) {
+    public DisplayName(String name, BannedWordCheckClient bannedWordCheckClient) {
         validate(name, bannedWordCheckClient);
         this.name = name;
     }
@@ -26,7 +26,7 @@ public final class ProductName implements ValueObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
+        DisplayName that = (DisplayName) o;
         return Objects.equals(name, that.name);
     }
 

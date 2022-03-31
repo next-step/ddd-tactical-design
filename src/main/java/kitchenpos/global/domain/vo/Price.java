@@ -8,6 +8,8 @@ import java.util.Objects;
 
 public final class Price implements ValueObject {
 
+    public static final Price ZERO = new Price(BigDecimal.ZERO);
+
     private final BigDecimal price;
 
     public Price(BigDecimal price) {

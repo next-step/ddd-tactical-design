@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain.model;
 
 import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
 import kitchenpos.global.domain.vo.Price;
-import kitchenpos.products.tobe.domain.model.vo.ProductName;
+import kitchenpos.global.domain.vo.DisplayName;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -11,12 +11,12 @@ import java.util.UUID;
 public final class Product {
 
     private final UUID id;
-    private final ProductName name;
+    private final DisplayName name;
     private Price price;
 
     public Product(String name, BigDecimal price, BannedWordCheckClient purgomalumClient) {
         this.id = UUID.randomUUID();
-        this.name = new ProductName(name, purgomalumClient);
+        this.name = new DisplayName(name, purgomalumClient);
         this.price = new Price(price);
     }
 
@@ -30,7 +30,7 @@ public final class Product {
         return id;
     }
 
-    public ProductName getName() {
+    public DisplayName getName() {
         return name;
     }
 

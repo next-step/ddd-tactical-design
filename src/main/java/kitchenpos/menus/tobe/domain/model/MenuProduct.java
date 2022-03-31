@@ -18,7 +18,7 @@ public final class MenuProduct {
         this.productId = productId;
     }
 
-    public Price getTotalPrice() {
+    public Price getSubTotalPrice() {
         return this.price.multiply(this.quantity);
     }
 }
