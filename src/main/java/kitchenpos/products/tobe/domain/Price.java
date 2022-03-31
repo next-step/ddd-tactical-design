@@ -19,6 +19,10 @@ public class Price {
         this.price = price;
     }
 
+    public BigDecimal getPriceValue() {
+        return price;
+    }
+
     private void verify(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BOUND_PRICE) < 0) {
             throw new IllegalArgumentException("가격의 값이 올바르지 않습니다.");

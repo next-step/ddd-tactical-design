@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.ProductFixture;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.FakeEventPublisher;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,15 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
     private Profanities profanities = new FakeProfanities();
+    private ApplicationEventPublisher eventPublisher = new FakeEventPublisher();
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository, profanities);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

@@ -25,11 +25,11 @@ class ProductTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     void changePrice(final BigDecimal price) {
         final Product product = ProductFixture.상품();
-        final Product changeProduct = ProductFixture.상품(price);
+        final Price newPrice = new Price(price);
 
-        product.changePrice(changeProduct);
+        product.changePrice(newPrice);
 
-        assertThat(product.getPrice()).isEqualTo(changeProduct.getPrice());
+        assertThat(product.getPrice()).isEqualTo(newPrice);
     }
 
 }
