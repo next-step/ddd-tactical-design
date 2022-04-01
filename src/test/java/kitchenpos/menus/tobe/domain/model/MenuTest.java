@@ -107,7 +107,7 @@ class MenuTest {
                 MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
         );
         //when
-        menu.changePrice(BigDecimal.valueOf(1500L));
+        menu.changePrice(new Price(BigDecimal.valueOf(1500L)));
 
         //then
         assertThat(menu.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(1500L)));
@@ -128,7 +128,7 @@ class MenuTest {
                 MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
         );
         //when
-        BigDecimal 변경할_가격 = BigDecimal.valueOf(4500L);
+        Price 변경할_가격 = new Price(BigDecimal.valueOf(4500L));
         assertThatThrownBy(() -> menu.changePrice(변경할_가격))
                 .isInstanceOf(ViolationOfMenuPricePolicyException.class);
 

@@ -46,10 +46,9 @@ public final class Menu {
         this.displayed = false;
     }
 
-    public void changePrice(BigDecimal price) {
-        Price prize = new Price(price);
-        verifyMenuPricePolicy(prize, this.menuProducts.getTotalPrice());
-        this.price = prize;
+    public void changePrice(Price price) {
+        verifyMenuPricePolicy(price, this.menuProducts.getTotalPrice());
+        this.price = price;
     }
 
     public Price getPrice() {
