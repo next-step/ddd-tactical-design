@@ -8,8 +8,8 @@ import org.springframework.util.StringUtils;
 @Embeddable
 public class DisplayedName {
 
-  private static final String NAME_MUST_NOT_BE_EMPTY = "이름은 빈 값이 아니어야 합니다. 입력 값 : %d";
-  private static final String NAME_MUST_NOT_BE_PROFANITY = "이름은 비속어가 아니어야 합니다. 입력 값 : %d";
+  private static final String NAME_MUST_NOT_BE_EMPTY = "이름은 빈 값이 아니어야 합니다. 입력 값 : %s";
+  private static final String NAME_MUST_NOT_BE_PROFANITY = "이름은 비속어가 아니어야 합니다. 입력 값 : %s";
 
   private String name;
 

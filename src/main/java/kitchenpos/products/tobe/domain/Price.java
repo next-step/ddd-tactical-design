@@ -11,7 +11,7 @@ public class Price {
 
   private BigDecimal price;
 
-  protected Price() {};
+  protected Price() {}
 
   public Price(BigDecimal price) {
     validatePrice(price);

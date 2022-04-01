@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
@@ -14,10 +16,16 @@ class PriceTest {
   void positiveTest() {
     //given
     BigDecimal negativeValue = BigDecimal.valueOf(-1);
+    BigDecimal zeroValue = BigDecimal.ZERO;
+    BigDecimal positiveValue = BigDecimal.TEN;
 
     //when & then
-    assertThatThrownBy(() -> new Price(negativeValue))
-        .isInstanceOf(IllegalArgumentException.class);
+    assertAll(
+        () -> assertThatThrownBy(() -> new Price(negativeValue)).isInstanceOf(IllegalArgumentException.class),
+        () -> assertDoesNotThrow(() -> new Price(zeroValue)),
+        () -> assertDoesNotThrow(() -> new Price(positiveValue))
+    );
+
   }
 
   @DisplayName("같은 가격인지 비교할 수 있다.")
