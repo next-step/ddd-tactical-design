@@ -39,6 +39,9 @@ public final class Price implements ValueObject {
     }
 
     public Price multiply(long quantity) {
+        if(quantity == 1) {
+            return this;
+        }
         return new Price(this.price.multiply(BigDecimal.valueOf(quantity)));
     }
 
