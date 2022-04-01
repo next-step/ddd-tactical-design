@@ -2,8 +2,11 @@ package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.global.domain.vo.Price;
 import kitchenpos.menus.tobe.domain.dto.ProductResponse;
+import kitchenpos.menus.tobe.domain.exception.IllegalMenuProductQuantityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -22,6 +25,14 @@ class MenuProductTest {
         assertThat(menuProduct).isNotNull();
     }
 
+    @DisplayName("메뉴 상품(Menu Product)의 수량은 반드시 1보다 커야 한다.")
+    @ValueSource(ints = {-1, 0})
+    @ParameterizedTest
+    void create02(int 메뉴_수량) {
+        assertThatThrownBy(() -> new MenuProduct(new ProductResponse(UUID.randomUUID(), new Price(BigDecimal.valueOf(1000L))), 메뉴_수량 ))
+                .isInstanceOf(IllegalMenuProductQuantityException.class);
+    }
+
     @DisplayName("메뉴 상품(Menu Product)의 가격은 상품의 가격 * 수량이다.")
     @Test
     void getTotalPrice() {
@@ -30,5 +41,6 @@ class MenuProductTest {
         );
         assertThat(menuProduct.getSubTotalPrice()).isEqualTo(new Price(BigDecimal.valueOf(2000L)));
     }
+
 
 }
