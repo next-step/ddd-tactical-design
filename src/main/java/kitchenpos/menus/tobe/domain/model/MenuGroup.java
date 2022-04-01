@@ -1,10 +1,7 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
-import kitchenpos.products.tobe.exception.IllegalProductNameException;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public final class MenuGroup {

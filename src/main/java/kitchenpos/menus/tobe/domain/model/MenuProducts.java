@@ -10,13 +10,13 @@ public class MenuProducts {
 
     private final List<MenuProduct> elements;
 
-    public MenuProducts(MenuProduct ... elements) {
+    public MenuProducts(MenuProduct... elements) {
         validate(elements);
         this.elements = Arrays.asList(elements);
     }
 
     private void validate(MenuProduct[] elements) {
-        if(elements.length == 0) {
+        if (elements.length == 0) {
             throw new IllegalMenuProductSizeException();
         }
     }

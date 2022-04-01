@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain.vo;
 
 import kitchenpos.global.marker.ValueObject;
 import kitchenpos.menus.tobe.domain.exception.IllegalMenuGroupNameException;
-import kitchenpos.products.tobe.exception.IllegalProductNameException;
 
 import java.util.Objects;
 
