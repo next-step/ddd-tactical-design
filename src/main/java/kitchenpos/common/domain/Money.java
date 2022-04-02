@@ -24,6 +24,18 @@ public final class Money implements Comparable<Money> {
         return this.compareTo(other) < 0;
     }
 
+    public boolean isMoreThan(Money other) {
+        return this.compareTo(other) > 0;
+    }
+
+    public Money plus(Money other) {
+        return new Money(this.value.add(other.value));
+    }
+
+    public Money times(long quantity) {
+        return new Money(value.multiply(BigDecimal.valueOf(quantity)));
+    }
+
     @Override
     public int compareTo(Money o) {
         return value.compareTo(o.value);

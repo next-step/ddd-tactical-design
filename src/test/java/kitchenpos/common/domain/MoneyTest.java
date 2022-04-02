@@ -37,15 +37,39 @@ class MoneyTest {
     @DisplayName("비교할 수 있다")
     @Nested
     class 비교할_수_있다 {
+        private final Money one = new Money(1);
 
         @DisplayName("작은 경우")
         @Test
         void 작은_경우() {
-            final Money one = new Money(1);
             assertAll(
                 () -> assertThat(Money.ZERO.isLessThan(one)).isTrue(),
                 () -> assertThat(Money.ZERO.isLessThan(Money.ZERO)).isFalse()
             );
         }
+
+        @DisplayName("큰 경우")
+        @Test
+        void 큰_경우() {
+            assertAll(
+                () -> assertThat(one.isMoreThan(Money.ZERO)).isTrue(),
+                () -> assertThat(one.isMoreThan(one)).isFalse()
+            );
+        }
+    }
+
+    @DisplayName("더할 수 있다")
+    @Test
+    void 더할_수_있다() {
+        final Money 백 = new Money(100);
+        final Money 이백 = new Money(200);
+        assertThat(백.plus(이백)).isEqualTo(new Money(300));
+    }
+
+    @DisplayName("곱할 수 있다")
+    @Test
+    void 곱할_수_있다() {
+        final Money 백 = new Money(100);
+        assertThat(백.times(3)).isEqualTo(new Money(300));
     }
 }

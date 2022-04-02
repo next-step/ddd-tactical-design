@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -41,5 +42,13 @@ class MenuProductTest {
         void 수량이_0이상이면_추가할_수_있다(long quantity) {
             assertDoesNotThrow(() -> new MenuProduct(productId, Money.ZERO, quantity));
         }
+    }
+
+    @DisplayName("가격을 계산할 수 있다.")
+    @Test
+    void 가격을_계산할_수_있다() {
+        final MenuProduct menuProduct = new MenuProduct(productId, new Money(1_000), 2);
+
+        assertThat(menuProduct.calculatePrice()).isEqualTo(new Money(2_000));
     }
 }

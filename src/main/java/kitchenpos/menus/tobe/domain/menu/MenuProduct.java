@@ -8,20 +8,20 @@ public final class MenuProduct {
 
     private final MenuProductId seq;
     private final ProductId productId;
-    private final Money price;
+    private final Money productPrice;
     private final long quantity;
 
-    public MenuProduct(MenuProductId seq, ProductId productId, Money price, long quantity) {
+    public MenuProduct(MenuProductId seq, ProductId productId, Money productPrice, long quantity) {
         validQuantity(quantity);
         validProduct(productId);
         this.seq = seq;
         this.productId = productId;
-        this.price = price;
+        this.productPrice = productPrice;
         this.quantity = quantity;
     }
 
     private void validProduct(ProductId productId) {
-        if (productId == null) {
+        if (Objects.isNull(productId)) {
             throw new IllegalArgumentException("상품 id는 비어 있을 수 없습니다. productId: null");
         }
     }
@@ -40,6 +40,10 @@ public final class MenuProduct {
 
     public MenuProduct(ProductId productId, long price, long quantity) {
         this(null, productId, new Money(price), quantity);
+    }
+
+    public Money calculatePrice() {
+        return productPrice.times(quantity);
     }
 
     @Override
