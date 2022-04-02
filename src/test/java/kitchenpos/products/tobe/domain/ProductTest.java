@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -34,6 +35,12 @@ class ProductTest {
                 .isThrownBy(() -> new Product(UUID.randomUUID(), "test", -1));
         }
 
+        @DisplayName("이름이 비어있지 않고 가격이 0원 이상이라면 등록할 수 있다")
+        @ParameterizedTest(name = "이름: {0}, 가격: {1} 인 경우")
+        @CsvSource(value = {"테스트,100", "test,0"})
+        void 이름이_비어있지_않고_가격이_0원_이상이라면_등록할_수_있다(String name, long price) {
+            assertDoesNotThrow(() -> new Product(UUID.randomUUID(), name, price));
+        }
     }
 
     @Nested
