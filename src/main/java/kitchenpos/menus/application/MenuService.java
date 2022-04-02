@@ -6,8 +6,8 @@ import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.BanWordFilter;
+import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
