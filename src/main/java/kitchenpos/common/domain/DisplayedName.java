@@ -8,7 +8,9 @@ public final class DisplayedName {
 
     public DisplayedName(String value) {
         if (Objects.isNull(value) || value.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                String.format("DisplayedName 은 비어 있을 수 없습니다. value: %s", value)
+            );
         }
         this.value = value;
     }

@@ -11,7 +11,7 @@ public final class Money implements Comparable<Money> {
 
     public Money(BigDecimal value) {
         if (Objects.isNull(value)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Money는 비어 있을 수 없습니다. value: null");
         }
         this.value = value;
     }

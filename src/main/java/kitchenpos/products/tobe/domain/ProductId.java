@@ -8,7 +8,7 @@ public final class ProductId {
 
     public ProductId(UUID value) {
         if (Objects.isNull(value)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("id는 null 일 수 없습니다.");
         }
         this.value = value;
     }
