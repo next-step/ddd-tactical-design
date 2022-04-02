@@ -8,27 +8,41 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("상품은")
 class ProductTest {
 
-    @Test
-    @DisplayName("가격은 0원 이상 이어야 한다")
-    void 상품의_가격은_0원_이상_이어야_한다() {
+    @Nested
+    @DisplayName("등록할 수 있다.")
+    class 등록할_수_있다 {
 
-        assertThatIllegalArgumentException()
-            .isThrownBy(() -> new Product(UUID.randomUUID(), "test", -1));
+        @DisplayName("이름이 비어있다면 등록할 수 없다")
+        @ParameterizedTest(name = "{0}인 경우")
+        @NullAndEmptySource
+        void 이름이_비어있다면_등록할_수_없다(String value) {
+            assertThatIllegalArgumentException()
+                .isThrownBy(() -> new Product(UUID.randomUUID(), value, 1000));
+        }
+
+        @DisplayName("가격이 0원 미만이라면 등록할 수 없다")
+        @Test
+        void 가격이_0원_미만이라면_등록할_수_없다() {
+            assertThatIllegalArgumentException()
+                .isThrownBy(() -> new Product(UUID.randomUUID(), "test", -1));
+        }
+
     }
 
     @Nested
     @DisplayName("변경할 가격이")
     class 변경할_가격이 {
 
-        @DisplayName("0원 보다 작다면 변경 불가능하다.")
+        @DisplayName("0원 미만이라면 변경 불가능하다.")
         @ParameterizedTest(name = "{0} 인 경우")
         @ValueSource(longs = {-1, -10})
-        void 빵원_보다_작다면_변경_불가능하다(long value) {
+        void 빵원_미만이라면_변경_불가능하다(long value) {
             final Product product = new Product(UUID.randomUUID(), "test", 1000);
 
             assertThatIllegalArgumentException()

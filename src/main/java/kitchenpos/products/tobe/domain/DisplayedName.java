@@ -7,7 +7,7 @@ public final class DisplayedName {
     private final String value;
 
     public DisplayedName(String value) {
-        if (Objects.isNull(value)) {
+        if (Objects.isNull(value) || value.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.value = value;
