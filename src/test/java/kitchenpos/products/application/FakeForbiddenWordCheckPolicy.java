@@ -1,4 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.application;
+
+import kitchenpos.products.tobe.domain.ForbiddenWordCheckPolicy;
 
 import java.util.Collections;
 import java.util.HashSet;
