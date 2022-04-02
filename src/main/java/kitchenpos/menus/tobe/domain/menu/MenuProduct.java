@@ -25,6 +25,10 @@ public final class MenuProduct {
         this(null, productId, price, quantity);
     }
 
+    public MenuProduct(ProductId productId, long price, long quantity) {
+        this(null, productId, new Money(price), quantity);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
