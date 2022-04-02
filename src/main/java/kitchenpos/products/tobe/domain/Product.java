@@ -1,31 +1,21 @@
 package kitchenpos.products.tobe.domain;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
 	private UUID id;
 	private ProductName productName;
-	private BigDecimal price;
+	private ProductPrice productPrice;
 
-	public Product(UUID id, ProductName productName, BigDecimal price) {
-		verifyPrice(price);
-
+	public Product(UUID id, ProductName productName, ProductPrice productPrice) {
 		this.id = id;
 		this.productName = productName;
-		this.price = price;
+		this.productPrice = productPrice;
 	}
 
-	public void changePrice(BigDecimal price) {
-		verifyPrice(price);
-		this.price = price;
-	}
-
-	private void verifyPrice(BigDecimal price) {
-		if (price.compareTo(BigDecimal.ZERO) < 0) {
-			throw new IllegalArgumentException("상품 가격은 0원보다 작을 수 없습니다. price: " + price);
-		}
+	public void changePrice(ProductPrice productPrice) {
+		this.productPrice = productPrice;
 	}
 
 	public UUID getId() {
@@ -35,9 +25,9 @@ public class Product {
 	public ProductName getProductName() {
 		return productName;
 	}
-	
-	public BigDecimal getPrice() {
-		return price;
+
+	public ProductPrice getPrice() {
+		return productPrice;
 	}
 
 	@Override
