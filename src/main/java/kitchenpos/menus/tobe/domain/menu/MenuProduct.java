@@ -12,13 +12,26 @@ public final class MenuProduct {
     private final long quantity;
 
     public MenuProduct(MenuProductId seq, ProductId productId, Money price, long quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException(String.format("수량은 0보다 작을 수 없습니다. quantity: %s", quantity));
-        }
+        validQuantity(quantity);
+        validProduct(productId);
         this.seq = seq;
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    private void validProduct(ProductId productId) {
+        if (productId == null) {
+            throw new IllegalArgumentException("상품 id는 비어 있을 수 없습니다. productId: null");
+        }
+    }
+
+    private void validQuantity(long quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException(
+                String.format("수량은 0보다 작을 수 없습니다. quantity: %s", quantity)
+            );
+        }
     }
 
     public MenuProduct(ProductId productId, Money price, long quantity) {
