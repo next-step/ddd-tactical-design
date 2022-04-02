@@ -32,8 +32,8 @@ public final class Money implements Comparable<Money> {
         return new Money(this.value.add(other.value));
     }
 
-    public Money times(long quantity) {
-        return new Money(value.multiply(BigDecimal.valueOf(quantity)));
+    public Money times(long i) {
+        return new Money(value.multiply(BigDecimal.valueOf(i)));
     }
 
     @Override
