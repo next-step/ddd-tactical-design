@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Money;
 
 public final class Product {
 
