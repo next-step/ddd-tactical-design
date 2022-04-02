@@ -6,31 +6,20 @@ import java.util.UUID;
 
 public class Product {
 	private UUID id;
-	private String name;
+	private ProductName productName;
 	private BigDecimal price;
 
-	public Product(UUID id, String name, BigDecimal price, ForbiddenWordCheckPolicy forbiddenWordCheckPolicy) {
-		verifyName(name, forbiddenWordCheckPolicy);
+	public Product(UUID id, ProductName productName, BigDecimal price) {
 		verifyPrice(price);
 
 		this.id = id;
-		this.name = name;
+		this.productName = productName;
 		this.price = price;
 	}
 
 	public void changePrice(BigDecimal price) {
 		verifyPrice(price);
 		this.price = price;
-	}
-
-	private void verifyName(String name, ForbiddenWordCheckPolicy forbiddenWordCheckPolicy) {
-		if (Objects.isNull(name) || name.isEmpty()) {
-			throw new IllegalArgumentException("상품 이름은 비워둘 수 없습니다. name: " + name);
-		}
-
-		if (forbiddenWordCheckPolicy.hasForbiddenWord(name)) {
-			throw new IllegalArgumentException("상품 이름에 금칙어가 포함될 수 없습니다. name: " + name);
-		}
 	}
 
 	private void verifyPrice(BigDecimal price) {
@@ -43,10 +32,10 @@ public class Product {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public ProductName getProductName() {
+		return productName;
 	}
-
+	
 	public BigDecimal getPrice() {
 		return price;
 	}
