@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
-	private UUID id;
-	private ProductName productName;
+	private final UUID id;
+	private final ProductName productName;
 	private ProductPrice productPrice;
 
 	public Product(UUID id, ProductName productName, ProductPrice productPrice) {
