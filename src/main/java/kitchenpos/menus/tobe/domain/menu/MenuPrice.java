@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class MenuPrice {
+public class MenuPrice implements Comparable<MenuPrice> {
 
   private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "메뉴 가격은 0 원 이상이어야 합니다. 입력 값 : %d";
 
@@ -26,6 +26,18 @@ public class MenuPrice {
 
   private boolean isNegative(BigDecimal price) {
     return price.compareTo(BigDecimal.ZERO) < 0;
+  }
+
+  public BigDecimal value() {
+    return price;
+  }
+
+  public long longValue() {
+    return price.longValue();
+  }
+
+  public int compareTo(MenuPrice otherPrice) {
+    return price.compareTo(otherPrice.price);
   }
 
   @Override
