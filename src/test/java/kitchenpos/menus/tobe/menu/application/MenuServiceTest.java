@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.Fixtures.INVALID_ID;
+import static kitchenpos.MenuFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -209,64 +210,8 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuCreateRequest createMenuRequest(
-            final String name,
-            final long price,
-            final UUID menuGroupId,
-            final boolean displayed,
-            final MenuProductRequest... menuProducts
-    ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
-    }
-
-    private MenuCreateRequest createMenuRequest(
-            final String name,
-            final BigDecimal price,
-            final UUID menuGroupId,
-            final boolean displayed,
-            final MenuProductRequest... menuProducts
-    ) {
-        return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
-    }
-
-    private MenuCreateRequest createMenuRequest(
-            final String name,
-            final long price,
-            final UUID menuGroupId,
-            final boolean displayed,
-            final List<MenuProductRequest> menuProducts
-    ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
-    }
-
-    private MenuCreateRequest createMenuRequest(
-            final String name,
-            final BigDecimal price,
-            final UUID menuGroupId,
-            final boolean displayed,
-            final List<MenuProductRequest> menuProducts
-    ) {
-        return new MenuCreateRequest(name, price, menuGroupId, displayed, menuProducts);
-    }
-
-    private static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
-        return new MenuProductRequest(productId, quantity);
-    }
-
-    private MenuChangePriceRequest changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private MenuChangePriceRequest changePriceRequest(final BigDecimal price) {
-        return new MenuChangePriceRequest(price);
-    }
-
-    private Menu 간단메뉴() {
-        return MenuFixture.메뉴(19_000L, MenuFixture.금액이불러와진_메뉴상품목록(product));
-    }
-
     private Menu 메뉴저장하기() {
-        return menuRepository.save(간단메뉴());
+        return menuRepository.save(간단메뉴(product));
     }
 
     private Menu 메뉴저장하기(Menu menu) {

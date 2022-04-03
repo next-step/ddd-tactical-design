@@ -2,10 +2,14 @@ package kitchenpos;
 
 import kitchenpos.menus.tobe.menu.domain.*;
 import kitchenpos.menus.tobe.menu.domain.product.Price;
+import kitchenpos.menus.tobe.menu.ui.dto.MenuChangePriceRequest;
+import kitchenpos.menus.tobe.menu.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.tobe.menu.ui.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.menu.ui.dto.ProductResponse;
 import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -71,6 +75,62 @@ public class MenuFixture {
 
     public static Menu 메뉴(final long price, final MenuProducts menuProducts) {
         return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), 메뉴그룹(), true, menuProducts);
+    }
+
+    public static MenuCreateRequest createMenuRequest(
+            final String name,
+            final long price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final MenuProductRequest... menuProducts
+    ) {
+        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+    }
+
+    public static MenuCreateRequest createMenuRequest(
+            final String name,
+            final BigDecimal price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final MenuProductRequest... menuProducts
+    ) {
+        return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
+    }
+
+    public static MenuCreateRequest createMenuRequest(
+            final String name,
+            final long price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final List<MenuProductRequest> menuProducts
+    ) {
+        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+    }
+
+    public static MenuCreateRequest createMenuRequest(
+            final String name,
+            final BigDecimal price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final List<MenuProductRequest> menuProducts
+    ) {
+        return new MenuCreateRequest(name, price, menuGroupId, displayed, menuProducts);
+    }
+
+    public static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
+        return new MenuProductRequest(productId, quantity);
+    }
+
+    public static MenuChangePriceRequest changePriceRequest(final long price) {
+        return changePriceRequest(BigDecimal.valueOf(price));
+    }
+
+    public static MenuChangePriceRequest changePriceRequest(final BigDecimal price) {
+        return new MenuChangePriceRequest(price);
+    }
+
+    public static Menu 간단메뉴(Product product) {
+        return MenuFixture.메뉴(19_000L, MenuFixture.금액이불러와진_메뉴상품목록(product));
     }
 
 }
