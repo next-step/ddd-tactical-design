@@ -5,6 +5,8 @@ import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.exception.ProductNamingRuleViolationException;
+import kitchenpos.products.exception.ProductPricingRuleViolationException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -39,7 +41,8 @@ public class TobeProduct {
     }
 
     public ProductPrice changePrice(ProductPrice productPrice, ProductPricingRule rule) {
-        this.price = new ProductPrice(productPrice.getValue(), rule);
+        rule.checkRule(productPrice.getValue());
+        this.price = new ProductPrice(productPrice.getValue());
         return this.price;
     }
 
@@ -86,10 +89,15 @@ public class TobeProduct {
         }
 
         public TobeProduct build() {
-            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(namingRule)||Objects.isNull(pricingRule)) {
-                throw new IllegalArgumentException();
+            if (Objects.isNull(name) || Objects.isNull(namingRule)) {
+                throw new ProductNamingRuleViolationException();
             }
-            return new TobeProduct(new ProductName(name, namingRule), new ProductPrice(price, pricingRule));
+            if (Objects.isNull(price) || Objects.isNull(pricingRule)) {
+                throw new ProductPricingRuleViolationException();
+            }
+            namingRule.checkRule(name);
+            pricingRule.checkRule(price);
+            return new TobeProduct(new ProductName(name), new ProductPrice(price));
         }
     }
 }

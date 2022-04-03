@@ -6,8 +6,8 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.products.domain.tobe.policy.FakeProductNamingRule;
-import kitchenpos.products.domain.tobe.policy.FakeProductPricingRule;
+import kitchenpos.products.domain.tobe.policy.FakeSuccessProductNamingRule;
+import kitchenpos.products.domain.tobe.policy.FakeSuccessProductPricingRule;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -130,8 +130,8 @@ public class Fixtures {
         return product;
     }
 
-    public static TobeProduct tobeProduct(final String name, final long price) {
-        return new ProductBuilder().name("후라이드").namingRule(new FakeProductNamingRule())
-                .price(BigDecimal.valueOf(price)).pricingRule(new FakeProductPricingRule()).build();
+    public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
+        return new ProductBuilder().name("후라이드").namingRule(new FakeSuccessProductNamingRule())
+                .price(price).pricingRule(new FakeSuccessProductPricingRule()).build();
     }
 }
