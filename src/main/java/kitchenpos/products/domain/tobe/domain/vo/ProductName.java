@@ -13,11 +13,7 @@ public class ProductName {
     @Column(name = "name")
     private String name;
 
-    public ProductName(String name, ProductNamingRule rule) {
-        if (Objects.isNull(rule)) {
-            throw new ProductNamingRuleViolationException("상품이름 정책을 선택해 주십시");
-        }
-        rule.checkRule(name);
+    public ProductName(String name) {
         this.name = name;
     }
 
