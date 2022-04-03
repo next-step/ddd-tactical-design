@@ -56,28 +56,40 @@ public class TobeProduct {
     }
 
     public static class ProductBuilder {
-        private ProductName name;
-        private ProductPrice price;
+        private String name;
+        private ProductNamingRule namingRule;
+        private BigDecimal price;
+        private ProductPricingRule pricingRule;
 
         public ProductBuilder() {
 
         }
 
         public ProductBuilder name(String name, ProductNamingRule namingRule) {
-            this.name = new ProductName(name, namingRule);
+            this.name=name;
             return this;
         }
 
-        public ProductBuilder price(BigDecimal price, ProductPricingRule pricingRule) {
-            this.price = new ProductPrice(price, pricingRule);
+        public ProductBuilder namingRule(ProductNamingRule namingRule) {
+            this.namingRule=namingRule;
+            return this;
+        }
+
+        public ProductBuilder price(BigDecimal price) {
+            this.price=price;
+            return this;
+        }
+
+        public ProductBuilder pricingRule(ProductPricingRule pricingRule) {
+            this.pricingRule=pricingRule;
             return this;
         }
 
         public TobeProduct build() {
-            if (Objects.isNull(name) || Objects.isNull(price)) {
+            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(namingRule)||Objects.isNull(pricingRule)) {
                 throw new IllegalArgumentException();
             }
-            return new TobeProduct(name, price);
+            return new TobeProduct(new ProductName(name, namingRule), new ProductPrice(price, pricingRule));
         }
     }
 }
