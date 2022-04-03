@@ -4,10 +4,10 @@ import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
 
 import java.math.BigDecimal;
 
-public class FakeProductPricingRule implements ProductPricingRule {
+public class FakeSuccessProductPricingRule implements ProductPricingRule {
 
     @Override
-    public void checkRule(BigDecimal price) {
-
+    public boolean checkRule(BigDecimal price) {
+        return true;
     }
 }

@@ -1,5 +1,5 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
 public interface ProductNamingRule {
-    void checkRule(String name);
+    boolean checkRule(String name);
 }

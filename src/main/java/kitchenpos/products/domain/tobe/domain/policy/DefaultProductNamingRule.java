@@ -14,9 +14,10 @@ public class DefaultProductNamingRule implements ProductNamingRule {
     }
 
     @Override
-    public void checkRule(String name) {
+    public boolean checkRule(String name) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new ProductNamingRuleViolationException("잘못된 상품 명입니다");
         }
+        return true;
     }
 }
