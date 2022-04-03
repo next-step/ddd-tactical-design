@@ -10,7 +10,7 @@ public class ProductPriceChangeRequest {
     private ProductId productId;
     private ProductPricingRule productPricingRule;
 
-    public ProductPriceChangeRequest(BigDecimal price, ProductId productId, ProductPricingRule productPricingRule) {
+    public ProductPriceChangeRequest(ProductId productId, BigDecimal price, ProductPricingRule productPricingRule) {
         this.price = price;
         this.productId = productId;
         this.productPricingRule = productPricingRule;

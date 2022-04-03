@@ -9,6 +9,6 @@ public class FakeFailProductPricingRule implements ProductPricingRule {
 
     @Override
     public boolean checkRule(BigDecimal price) {
-        throw new ProductPricingRuleViolationException("잘못된 상품 명입니다");
+        throw new ProductPricingRuleViolationException("잘못된 상품가격 입니다");
     }
 }

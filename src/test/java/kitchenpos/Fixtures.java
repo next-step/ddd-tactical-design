@@ -131,7 +131,7 @@ public class Fixtures {
     }
 
     public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
-        return new ProductBuilder().name("후라이드").namingRule(new FakeSuccessProductNamingRule())
+        return new ProductBuilder().name(name).namingRule(new FakeSuccessProductNamingRule())
                 .price(price).pricingRule(new FakeSuccessProductPricingRule()).build();
     }
 }
