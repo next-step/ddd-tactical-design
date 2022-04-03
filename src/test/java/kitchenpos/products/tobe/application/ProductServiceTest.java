@@ -1,9 +1,11 @@
 package kitchenpos.products.tobe.application;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.domain.Product;
 import kitchenpos.products.infra.MockPurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.MockProductRepository;
@@ -109,7 +111,7 @@ class ProductServiceTest {
     void changePrice(Long price) {
         // given
         UUID productId = productRepository.save(newProduct("후라이드", 16_000L)).getId();
-        ModifyProductPriceRequest expected = new ModifyProductPriceRequest(15_000L);
+        ModifyProductPriceRequest expected = new ModifyProductPriceRequest(price);
 
         // when
         assertThatThrownBy(() -> sut.changePrice(productId, expected))
@@ -131,5 +133,20 @@ class ProductServiceTest {
 
         // then
         assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        // given
+        productRepository.save(newProduct("후라이드", 16_000L));
+        productRepository.save(newProduct("양념치킨", 16_000L));
+
+        // when
+        List<ProductResponse> actual = sut.findAll();
+
+        // then
+        assertThat(actual).hasSize(2);
+        assertThat(actual).extracting(ProductResponse::getName).containsOnly("후라이드", "양념치킨");
     }
 }

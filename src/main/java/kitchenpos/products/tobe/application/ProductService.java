@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.application;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -15,6 +16,9 @@ import kitchenpos.products.tobe.dto.ModifyProductPriceRequest;
 import kitchenpos.products.tobe.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ProductService {
@@ -63,5 +67,13 @@ public class ProductService {
         }
 
         return ProductResponse.from(product);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll()
+                                .stream()
+                                .map(ProductResponse::from)
+                                .collect(collectingAndThen(toList(), Collections::unmodifiableList));
     }
 }
