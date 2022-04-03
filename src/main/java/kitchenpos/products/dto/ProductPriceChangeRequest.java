@@ -16,6 +16,9 @@ public class ProductPriceChangeRequest {
         this.productPricingRule = productPricingRule;
     }
 
+    public ProductPriceChangeRequest() {
+    }
+
     public BigDecimal getPrice() {
         return price;
     }

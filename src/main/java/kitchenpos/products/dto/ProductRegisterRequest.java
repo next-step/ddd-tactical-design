@@ -23,6 +23,9 @@ public class ProductRegisterRequest {
         this.productNamingRule = productNamingRule;
     }
 
+    public ProductRegisterRequest() {
+    }
+
     public String getName() {
         return name;
     }
