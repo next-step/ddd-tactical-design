@@ -39,9 +39,4 @@ class TobeProductTest {
         assertThatThrownBy(() -> 상품.changePrice(가격, new FakeFailProductPricingRule()))
                 .isInstanceOf(ProductPricingRuleViolationException.class);
     }
-
-    private TobeProduct changePriceRequest(final BigDecimal price) {
-        return tobeProduct("후라이드치킨",price);
-    }
-
 }
