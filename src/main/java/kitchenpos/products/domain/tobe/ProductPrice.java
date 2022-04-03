@@ -39,16 +39,4 @@ public class ProductPrice {
     public ProductPrice multiply(BigDecimal value) {
         return new ProductPrice(price.multiply(value));
     }
-
-    public boolean isLessThan(BigDecimal value) {
-        return price.compareTo(value) < 0;
-    }
-
-    public boolean isMoreThan(BigDecimal value) {
-        return price.compareTo(value) > 0;
-    }
-
-    public boolean isSame(BigDecimal value) {
-        return price.compareTo(value) == 0;
-    }
 }

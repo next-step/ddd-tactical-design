@@ -31,31 +31,4 @@ class ProductPriceTest {
 
         assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(10000));
     }
-
-    @DisplayName("가격을 입력받아 비교가격과 동일하면 true를 리턴한다.")
-    @Test
-    void is_same_price() {
-        final ProductPrice productPrice = ProductPrice.valueOf(BigDecimal.TEN);
-        final BigDecimal other = BigDecimal.TEN;
-
-        assertThat(productPrice.isSame(other)).isTrue();
-    }
-
-    @DisplayName("본래 가격을 입력받아 비교가격보다 적다면 true를 리턴한다.")
-    @Test
-    void is_less_price() {
-        final ProductPrice productPrice = ProductPrice.valueOf(BigDecimal.TEN);
-        final BigDecimal other = BigDecimal.valueOf(1000);
-
-        assertThat(productPrice.isLessThan(other)).isTrue();
-    }
-
-    @DisplayName("본래 가격이 비교가격보다 더 크다면 true를 리턴한다.")
-    @Test
-    void is_bigger_price() {
-        final ProductPrice productPrice = ProductPrice.valueOf(BigDecimal.valueOf(2000));
-        final BigDecimal other = BigDecimal.valueOf(1000);
-
-        assertThat(productPrice.isMoreThan(other)).isTrue();
-    }
 }
