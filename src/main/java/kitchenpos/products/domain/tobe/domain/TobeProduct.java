@@ -65,7 +65,7 @@ public class TobeProduct {
 
         }
 
-        public ProductBuilder name(String name, ProductNamingRule namingRule) {
+        public ProductBuilder name(String name) {
             this.name=name;
             return this;
         }
