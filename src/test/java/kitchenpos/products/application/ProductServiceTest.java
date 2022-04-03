@@ -41,7 +41,7 @@ class ProductServiceTest {
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
-    void create2() {
+    void create() {
         final CreateProductRequest request = createProductRequest("후라이드", 16_000L);
         final Product actual = productService.create(request);
         assertThat(actual).isNotNull();
@@ -56,7 +56,7 @@ class ProductServiceTest {
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
-    void create2(final BigDecimal price) {
+    void create(final BigDecimal price) {
         final CreateProductRequest request = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(request))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -66,7 +66,7 @@ class ProductServiceTest {
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
-    void create2(final String name) {
+    void create(final String name) {
         final CreateProductRequest request = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(request))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -74,7 +74,7 @@ class ProductServiceTest {
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
-    void changePrice2() {
+    void changePrice() {
         BigDecimal newPrice = BigDecimal.valueOf(15_000L);
         final UUID productId = productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient)).getId();
         final Product actual = productService.changePrice(productId, newPrice);
@@ -85,7 +85,7 @@ class ProductServiceTest {
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
-    void changePrice2(final BigDecimal price) {
+    void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -93,7 +93,7 @@ class ProductServiceTest {
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
-    void changePriceInMenu2() {
+    void changePriceInMenu() {
         final Product product = productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), BigDecimal.valueOf(8_000L));
@@ -102,7 +102,7 @@ class ProductServiceTest {
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
-    void findAll2() {
+    void findAll() {
         productRepository.save(new Product("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient));
         productRepository.save(new Product("양념치킨", BigDecimal.valueOf(16_000L), purgomalumClient));
         final List<Product> actual = productService.findAll();
