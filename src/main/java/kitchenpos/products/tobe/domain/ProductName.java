@@ -8,7 +8,7 @@ import kitchenpos.util.StringUtils;
 @Embeddable
 public class ProductName {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     protected ProductName() {
