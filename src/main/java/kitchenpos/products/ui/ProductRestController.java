@@ -1,13 +1,13 @@
-package kitchenpos.products.tobe.ui;
+package kitchenpos.products.ui;
 
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
-import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.dto.CreateProductRequest;
-import kitchenpos.products.tobe.dto.ModifyProductPriceRequest;
-import kitchenpos.products.tobe.dto.ProductResponse;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.dto.CreateProductRequest;
+import kitchenpos.products.dto.ModifyProductPriceRequest;
+import kitchenpos.products.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

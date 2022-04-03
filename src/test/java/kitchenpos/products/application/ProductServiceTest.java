@@ -1,18 +1,17 @@
-package kitchenpos.products.tobe.application;
+package kitchenpos.products.application;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.infra.MockPurgomalumClient;
+import kitchenpos.products.dto.CreateProductRequest;
+import kitchenpos.products.dto.ModifyProductPriceRequest;
+import kitchenpos.products.dto.ProductResponse;
+import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.MockProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.dto.CreateProductRequest;
-import kitchenpos.products.tobe.dto.ModifyProductPriceRequest;
-import kitchenpos.products.tobe.dto.ProductResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,13 +44,13 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
 
     @Spy
-    private PurgomalumClient purgomalumClient = new MockPurgomalumClient();
+    private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
     @InjectMocks
     private ProductService sut;
 
     @ParameterizedTest
-    @ValueSource(strings = {"shit", "fuck"})
+    @ValueSource(strings = {"욕설", "비속어"})
     @DisplayName("상품명에 비속어 포함 시 상품 생성 실패")
     void createFail(String name) {
         // given
