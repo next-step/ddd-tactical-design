@@ -68,6 +68,7 @@ public final class MenuProduct {
         return "MenuProduct{" +
             "seq=" + seq +
             ", productId=" + productId +
+            ", productPrice=" + productPrice +
             ", quantity=" + quantity +
             '}';
     }
