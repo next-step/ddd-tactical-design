@@ -40,9 +40,9 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public ProductPrice changePrice(ProductPrice productPrice, ProductPricingRule rule) {
-        rule.checkRule(productPrice.getValue());
-        this.price = new ProductPrice(productPrice.getValue());
+    public ProductPrice changePrice(BigDecimal price, ProductPricingRule rule) {
+        rule.checkRule(price);
+        this.price = new ProductPrice(price);
         return this.price;
     }
 
