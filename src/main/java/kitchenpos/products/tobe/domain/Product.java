@@ -20,4 +20,32 @@ public class Product {
 
     @Embedded
     private ProductPrice price;
+
+    protected Product() { }
+
+    private Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    private Product(UUID id, String name, Long price) {
+        this(id, new ProductName(name), new ProductPrice(price));
+    }
+
+    public static Product of(UUID id, String name, Long price) {
+        return new Product(id, name, price);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public ProductName getName() {
+        return name;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
+    }
 }

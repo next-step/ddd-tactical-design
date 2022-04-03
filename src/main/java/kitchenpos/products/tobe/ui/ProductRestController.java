@@ -1,0 +1,29 @@
+package kitchenpos.products.tobe.ui;
+
+import java.net.URI;
+import javax.validation.Valid;
+import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.dto.CreateProductRequest;
+import kitchenpos.products.tobe.dto.ProductResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequestMapping("/api/products")
+@RestController
+public class ProductRestController {
+    private final ProductService productService;
+
+    public ProductRestController(final ProductService productService) {
+        this.productService = productService;
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductResponse> create(@RequestBody @Valid CreateProductRequest request) {
+        final ProductResponse response = productService.create(request);
+        return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
+                             .body(response);
+    }
+}
