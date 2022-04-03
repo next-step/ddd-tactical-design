@@ -11,6 +11,7 @@ import kitchenpos.products.exception.ProductPricingRuleViolationException;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 @Table(name = "product")
 @Entity
@@ -40,10 +41,10 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public ProductPrice changePrice(BigDecimal price, ProductPricingRule rule) {
+    public TobeProduct changePrice(BigDecimal price, ProductPricingRule rule) {
         rule.checkRule(price);
         this.price = new ProductPrice(price);
-        return this.price;
+        return this;
     }
 
     public ProductId getId() {
@@ -59,6 +60,7 @@ public class TobeProduct {
     }
 
     public static class ProductBuilder {
+        private ProductId productId;
         private String name;
         private ProductNamingRule namingRule;
         private BigDecimal price;
@@ -97,7 +99,7 @@ public class TobeProduct {
             }
             namingRule.checkRule(name);
             pricingRule.checkRule(price);
-            return new TobeProduct(new ProductName(name), new ProductPrice(price));
+            return new TobeProduct(new ProductId(UUID.randomUUID()),new ProductName(name), new ProductPrice(price));
         }
     }
 }
