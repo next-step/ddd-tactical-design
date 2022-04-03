@@ -124,4 +124,8 @@ public class Fixtures {
         product.setPrice(BigDecimal.valueOf(price));
         return product;
     }
+
+    public static kitchenpos.products.tobe.domain.Product newProduct(String name, long price) {
+        return kitchenpos.products.tobe.domain.Product.of(UUID.randomUUID(), name, price);
+    }
 }

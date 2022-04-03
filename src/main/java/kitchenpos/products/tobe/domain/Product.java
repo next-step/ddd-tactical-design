@@ -37,6 +37,10 @@ public class Product {
         return new Product(id, name, price);
     }
 
+    public void changePrice(Long price) {
+        this.price = new ProductPrice(price);
+    }
+
     public UUID getId() {
         return id;
     }
