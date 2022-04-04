@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import kitchenpos.menus.stub.TestProductRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
@@ -19,7 +20,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(1000L);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -30,7 +32,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(1000L);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = false;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -41,7 +44,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(10000000L);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = false;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -63,7 +67,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(1000L);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(0)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(0), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -73,7 +78,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(0);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -84,7 +90,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(10000);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -95,7 +102,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(1000L);
     MenuGroup menuGroup = null;
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }
@@ -106,7 +114,8 @@ public class MenuFixture {
     BigDecimal price = BigDecimal.valueOf(1000L);
     MenuGroup menuGroup = new MenuGroup("메뉴그룹1");
     boolean displayed = true;
-    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct("메뉴상품", BigDecimal.valueOf(1000L), 1L, new MenuProductQuantity(1)));
+    long productId = 1L;
+    List<MenuProduct> menuProducts = Arrays.asList(new MenuProduct(productId, new MenuProductQuantity(1), new TestProductRepository(productId, "메뉴상품", BigDecimal.valueOf(1000L))));
 
     return new Menu(menuName, profanity, price, menuGroup, displayed, menuProducts);
   }

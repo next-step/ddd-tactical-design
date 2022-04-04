@@ -1,6 +1,7 @@
 package kitchenpos.menus.fixture;
 
 import java.math.BigDecimal;
+import kitchenpos.menus.stub.TestProductRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
 
@@ -13,7 +14,7 @@ public class MenuProductFixture {
     BigDecimal productPrice = BigDecimal.valueOf(1000L * index);
     Long productId = index;
     MenuProductQuantity quantity = new MenuProductQuantity(index);
-    return new MenuProduct(testName, productPrice, productId, quantity);
+    return new MenuProduct(productId, quantity, new TestProductRepository(productId, testName, productPrice));
   }
 
 }

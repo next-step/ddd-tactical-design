@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
+import kitchenpos.menus.stub.TestProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class MenuProductTest {
     BigDecimal productPrice = BigDecimal.valueOf(1000L);
     Long productId = 1L;
     MenuProductQuantity quantity = new MenuProductQuantity(3L);
-    MenuProduct givenMenuProduct = new MenuProduct(productName, productPrice, productId, quantity);
+    MenuProduct givenMenuProduct = new MenuProduct(productId, quantity, new TestProductRepository(productId, productName, productPrice));
 
     //when
     BigDecimal result = givenMenuProduct.calculateAmount();

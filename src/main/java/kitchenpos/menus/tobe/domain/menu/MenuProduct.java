@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import kitchenpos.menus.tobe.domain.product.Product;
+import kitchenpos.menus.tobe.domain.product.ProductRepository;
 
 @Entity
 @Table(name = "menu_product")
@@ -25,31 +28,28 @@ public class MenuProduct {
   @JoinColumn(name = "menu_id")
   private Menu menu;
 
-  @Column(nullable = false)
-  private String productName;
-
-  @Column(nullable = false)
-  private BigDecimal productPrice;
+  @Embedded
+  private MenuProductQuantity quantity;
 
   @Column(nullable = false)
   private Long productId;
 
-  @Embedded
-  private MenuProductQuantity quantity;
+  @Transient
+  private ProductRepository productRepository;
 
   protected MenuProduct() {
   }
 
-  public MenuProduct(String productName, BigDecimal productPrice, Long productId,
-      MenuProductQuantity quantity) {
-    this.productName = productName;
-    this.productPrice = productPrice;
+  public MenuProduct(Long productId, MenuProductQuantity quantity, ProductRepository productRepository) {
     this.productId = productId;
     this.quantity = quantity;
+    this.productRepository = productRepository;
   }
 
   public BigDecimal calculateAmount() {
-    return productPrice.multiply(BigDecimal.valueOf(quantity.getValue()));
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new IllegalArgumentException(""));
+    return quantity.multiplyPrice(product.getPrice());
   }
 
   public void connectRelation(Menu menu) {

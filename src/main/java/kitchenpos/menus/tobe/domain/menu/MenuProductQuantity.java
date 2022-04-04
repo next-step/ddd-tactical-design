@@ -1,7 +1,9 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.product.Price;
 
 @Embeddable
 public class MenuProductQuantity {
@@ -46,5 +48,9 @@ public class MenuProductQuantity {
   @Override
   public int hashCode() {
     return Objects.hash(quantity);
+  }
+
+  public BigDecimal multiplyPrice(Price price) {
+    return price.multiply(BigDecimal.valueOf(quantity));
   }
 }
