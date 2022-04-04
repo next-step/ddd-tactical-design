@@ -1,24 +1,24 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
+import kitchenpos.global.domain.vo.Name;
 
 import java.util.UUID;
 
 public final class MenuGroup {
 
     private UUID id;
-    private MenuGroupName name;
+    private Name name;
 
     public MenuGroup(final String name) {
         this.id = UUID.randomUUID();
-        this.name = new MenuGroupName(name);
+        this.name = new Name(name);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public MenuGroupName getName() {
+    public Name getName() {
         return name;
     }
 }

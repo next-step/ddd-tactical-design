@@ -1,23 +1,17 @@
 package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.global.domain.vo.Price;
-import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
 import kitchenpos.menus.helper.MenuFixtureFactory;
-import kitchenpos.menus.tobe.domain.exception.ViolationOfMenuPricePolicyException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MenuTest {
 
@@ -32,9 +26,11 @@ class MenuTest {
                 메뉴_가격,
                 text -> false,
                 displayed,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
-        )).isInstanceOf(ViolationOfMenuPricePolicyException.class);
+                Arrays.asList(
+                    MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                    MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
+        )).isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("메뉴의 가격이 상품의 가격의 합보다 낮은 경우 메뉴(Menu)를 숨기(invisible)거나 노출(visible)할 수 있다. ")
@@ -47,8 +43,10 @@ class MenuTest {
                 BigDecimal.valueOf(2000L),
                 text -> false,
                 displayed,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                Arrays.asList(
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
         );
         assertThat(menu.isDisplayed()).isEqualTo(displayed);
     }
@@ -63,8 +61,10 @@ class MenuTest {
                 BigDecimal.valueOf(2000L),
                 text -> false,
                 true,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                Arrays.asList(
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
         );
         //when
         menu.hide();
@@ -83,8 +83,10 @@ class MenuTest {
                 BigDecimal.valueOf(2000L),
                 text -> false,
                 false,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                Arrays.asList(
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
         );
         //when
         menu.show();
@@ -103,8 +105,10 @@ class MenuTest {
                 BigDecimal.valueOf(2000L),
                 text -> false,
                 true,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                Arrays.asList(
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
         );
         //when
         menu.changePrice(new Price(BigDecimal.valueOf(1500L)));
@@ -124,13 +128,15 @@ class MenuTest {
                 BigDecimal.valueOf(2000L),
                 text -> false,
                 true,
-                MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                Arrays.asList(
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                )
         );
         //when
         Price 변경할_가격 = new Price(BigDecimal.valueOf(4500L));
         assertThatThrownBy(() -> menu.changePrice(변경할_가격))
-                .isInstanceOf(ViolationOfMenuPricePolicyException.class);
+                .isInstanceOf(IllegalStateException.class);
 
     }
 }

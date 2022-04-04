@@ -1,23 +1,23 @@
 package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.global.domain.vo.Price;
-import kitchenpos.menus.tobe.domain.exception.IllegalMenuProductSizeException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MenuProducts {
 
-    private final List<MenuProduct> elements;
+    private final List<MenuProduct> elements = new ArrayList<>();
 
-    public MenuProducts(MenuProduct... elements) {
-        validate(elements);
-        this.elements = Arrays.asList(elements);
+    public MenuProducts(List<MenuProduct> products) {
+        validate(products);
+        this.elements.addAll(products);
     }
 
-    private void validate(MenuProduct[] elements) {
-        if (elements.length == 0) {
-            throw new IllegalMenuProductSizeException();
+    private void validate(List<MenuProduct> elements) {
+        if (elements.isEmpty()) {
+            throw new IllegalArgumentException("반드시 하나 이상의 상품을 가져야 합니다.");
         }
     }
 

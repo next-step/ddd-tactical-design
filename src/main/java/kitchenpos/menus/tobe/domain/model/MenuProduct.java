@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain.model;
 
 import kitchenpos.global.domain.vo.Price;
 import kitchenpos.menus.tobe.domain.dto.ProductResponse;
-import kitchenpos.menus.tobe.domain.exception.IllegalMenuProductQuantityException;
 
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public final class MenuProduct {
 
     private void validate(long quantity) {
         if(quantity < MIN_MENU_PRODUCT_QUANTITY) {
-            throw new IllegalMenuProductQuantityException();
+            throw new IllegalArgumentException("메뉴 상품의 가격은 반드시 1 이상이여야 합니다.");
         }
     }
 

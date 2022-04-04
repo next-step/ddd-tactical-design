@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
-import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
+import kitchenpos.global.domain.vo.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class MenuGroupTest {
 
         assertAll(
                 () -> assertThat(group.getId()).isNotNull(),
-                () -> assertThat(group.getName()).isEqualTo(new MenuGroupName(메뉴_그룹_이름))
+                () -> assertThat(group.getName()).isEqualTo(new Name(메뉴_그룹_이름))
         );
     }
 

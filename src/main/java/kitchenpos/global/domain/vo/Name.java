@@ -1,30 +1,33 @@
-package kitchenpos.menus.tobe.domain.vo;
+package kitchenpos.global.domain.vo;
 
 import kitchenpos.global.marker.ValueObject;
-import kitchenpos.menus.tobe.domain.exception.IllegalMenuGroupNameException;
 
 import java.util.Objects;
 
-public final class MenuGroupName implements ValueObject {
+public final class Name implements ValueObject {
 
     private final String name;
 
-    public MenuGroupName(String name) {
+    public Name(String name) {
         validate(name);
         this.name = name;
     }
 
     private void validate(String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalMenuGroupNameException();
+            throw new IllegalArgumentException("이름이 올바르지 않습니다.");
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuGroupName that = (MenuGroupName) o;
+        Name that = (Name) o;
         return Objects.equals(name, that.name);
     }
 

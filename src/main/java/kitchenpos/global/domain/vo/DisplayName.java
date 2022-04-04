@@ -1,26 +1,24 @@
 package kitchenpos.global.domain.vo;
 
-import kitchenpos.global.marker.ValueObject;
 import kitchenpos.global.infrastructure.external.BannedWordCheckClient;
-import kitchenpos.products.tobe.exception.IllegalProductNameException;
+import kitchenpos.global.marker.ValueObject;
 
 import java.util.Objects;
 
 public final class DisplayName implements ValueObject {
 
-    private final String name;
+    private final Name name;
 
     public DisplayName(String name, BannedWordCheckClient bannedWordCheckClient) {
-        validate(name, bannedWordCheckClient);
-        this.name = name;
+        this.name = new Name(name);
+        validate(this.name, bannedWordCheckClient);
     }
 
-    private void validate(String name, BannedWordCheckClient bannedWordCheckClient) {
-        if (Objects.isNull(name) || bannedWordCheckClient.containsProfanity(name)) {
-            throw new IllegalProductNameException();
+    private void validate(Name name, BannedWordCheckClient bannedWordCheckClient) {
+        if (bannedWordCheckClient.containsProfanity(name.getName())) {
+            throw new IllegalArgumentException("상품의 이름이 금지어를 포함하고 있습니다.");
         }
     }
-
 
     @Override
     public boolean equals(Object o) {
