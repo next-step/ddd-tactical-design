@@ -1,12 +1,14 @@
-package kitchenpos.products.tobe.domain.model.vo;
+package kitchenpos.global.domain.vo;
 
 import kitchenpos.global.marker.ValueObject;
-import kitchenpos.products.tobe.exception.IllegalPriceException;
+import kitchenpos.global.exception.IllegalPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public final class Price implements ValueObject {
+
+    public static final Price ZERO = new Price(BigDecimal.ZERO);
 
     private final BigDecimal price;
 
@@ -29,6 +31,25 @@ public final class Price implements ValueObject {
         return !isSame(price);
     }
 
+    public Price add(Price price) {
+        if(price.isSame(BigDecimal.ZERO)) {
+            return this;
+        }
+        return new Price(this.price.add(price.price));
+    }
+
+    public Price multiply(long quantity) {
+        if(quantity == 1) {
+            return this;
+        }
+        return new Price(this.price.multiply(BigDecimal.valueOf(quantity)));
+    }
+
+
+    public boolean lessThanEquals(Price other) {
+        return this.price.compareTo(other.price) <= 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,5 +62,6 @@ public final class Price implements ValueObject {
     public int hashCode() {
         return Objects.hash(price);
     }
+
 
 }
