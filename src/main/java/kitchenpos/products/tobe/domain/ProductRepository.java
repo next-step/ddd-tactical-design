@@ -9,10 +9,10 @@ public interface ProductRepository {
 
   Product save(Product product);
 
-  Optional<Product> findById(UUID id);
+  Optional<Product> findById(Long id);
 
   List<Product> findAll();
 
-  List<Product> findAllByIdIn(List<UUID> ids);
+  List<Product> findAllByIdIn(List<Long> ids);
 
 }
