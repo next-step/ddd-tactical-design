@@ -23,6 +23,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(UUID id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -45,5 +51,9 @@ public class Product {
 
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    public Product changePrice(final BigDecimal price) {
+        return new Product(id, name, price);
     }
 }
