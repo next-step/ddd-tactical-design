@@ -5,12 +5,17 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.tobe.domain.TobeProduct;
+import kitchenpos.products.domain.tobe.policy.FakeSuccessProductNamingRule;
+import kitchenpos.products.domain.tobe.policy.FakeSuccessProductPricingRule;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+
+import static kitchenpos.products.domain.tobe.domain.TobeProduct.*;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -123,5 +128,10 @@ public class Fixtures {
         product.setName(name);
         product.setPrice(BigDecimal.valueOf(price));
         return product;
+    }
+
+    public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
+        return new ProductBuilder().name(name).namingRule(new FakeSuccessProductNamingRule())
+                .price(price).pricingRule(new FakeSuccessProductPricingRule()).build();
     }
 }
