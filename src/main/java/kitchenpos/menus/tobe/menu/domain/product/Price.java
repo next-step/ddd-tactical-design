@@ -1,4 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain.product;
+
+import kitchenpos.menus.tobe.menu.domain.Quantity;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -8,10 +10,13 @@ import java.util.Objects;
 public class Price {
     private static final BigDecimal BOUND_PRICE = BigDecimal.ZERO;
 
-    private final BigDecimal price;
+    private BigDecimal price;
 
     protected Price() {
-        this(BOUND_PRICE);
+    }
+
+    public Price(final long price) {
+        this(BigDecimal.valueOf(price));
     }
 
     public Price(BigDecimal price) {
@@ -19,14 +24,18 @@ public class Price {
         this.price = price;
     }
 
-    public BigDecimal value() {
-        return price;
-    }
-
     private void verify(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BOUND_PRICE) < 0) {
+        if(Objects.isNull(price) || price.compareTo(BOUND_PRICE) < 0) {
             throw new IllegalArgumentException("가격의 값이 올바르지 않습니다.");
         }
+    }
+
+    public BigDecimal calculate(final Quantity quantity) {
+        return price.multiply(quantity.value());
+    }
+
+    public boolean isBelowAmount(final BigDecimal amount) {
+        return this.price.compareTo(amount) <= 0;
     }
 
     @Override
@@ -41,5 +50,4 @@ public class Price {
     public int hashCode() {
         return Objects.hash(price);
     }
-
 }

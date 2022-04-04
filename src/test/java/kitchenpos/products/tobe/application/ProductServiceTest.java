@@ -1,8 +1,7 @@
 package kitchenpos.products.tobe.application;
 
 import kitchenpos.ProductFixture;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.CallCountRecordedProductProducer;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.ui.dto.ProductChangePriceRequest;
@@ -21,18 +20,18 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
-    private Profanities profanities = new FakeProfanities();
+    private final Profanities profanities = new FakeProfanities();
+    private final CallCountRecordedProductProducer eventPublisher = new CallCountRecordedProductProducer();
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository, profanities);
+        productService = new ProductService(productRepository, profanities, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -95,6 +94,20 @@ class ProductServiceTest {
         productRepository.save(ProductFixture.상품("양념치킨", 16_000L));
         final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
+    }
+
+    @DisplayName("상품가격이 변경되면 event가 발생한다")
+    @Test
+    void publishProductEventTest() {
+        final UUID productId = productRepository.save(ProductFixture.상품("후라이드", 16_000L)).getId();
+        final ProductChangePriceRequest expected = changePriceRequest(15_000L);
+        productService.changePrice(productId, expected);
+
+        assertAll(
+                () -> assertThat(eventPublisher.getCallCounter()).isEqualTo(1),
+                () -> assertThat(eventPublisher.getCallCounter()).isLessThan(2),
+                () -> assertThat(eventPublisher.getCallCounter()).isPositive()
+        );
     }
 
     private ProductCreateRequest createProductRequest(final String name, final long price) {

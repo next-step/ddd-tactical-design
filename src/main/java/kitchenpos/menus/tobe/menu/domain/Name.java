@@ -1,16 +1,21 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain;
 
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class Name {
-    private final String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     protected Name() {
-        this("", text -> false);
+    }
+
+    public Name(final String name) {
+        this(name, new DefaultProfanities());
     }
 
     public Name(final String name, Profanities profanities) {
@@ -28,10 +33,6 @@ public class Name {
         }
     }
 
-    public String value() {
-        return name;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -44,5 +45,4 @@ public class Name {
     public int hashCode() {
         return Objects.hash(name);
     }
-
 }

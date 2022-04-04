@@ -1,7 +1,8 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu.domain.product;
+
+import kitchenpos.menus.tobe.menu.domain.Name;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -33,8 +34,8 @@ public class Product {
         this.price = price;
     }
 
-    public void changePrice(final Price price) {
-        this.price = price;
+    public void changePrice(final Product product) {
+        this.price = product.price;
     }
 
     public UUID getId() {
