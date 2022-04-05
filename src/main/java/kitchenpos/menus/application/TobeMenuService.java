@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuRepository;
 import kitchenpos.menus.dto.MenuDisplayRequest;
+import kitchenpos.menus.dto.MenuHideRequest;
 import kitchenpos.menus.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.dto.MenuRegisterRequest;
 import kitchenpos.products.domain.tobe.domain.TobeProductRepository;
@@ -41,6 +42,7 @@ public class TobeMenuService {
                 .pricingRule(request.getPricingRule())
                 .menuProducts(request.getMenuProducts())
                 .menuGroup(menuGroup)
+                .displayed(request.isDisplayed())
                 .build();
         return menuRepository.save(menu);
     }
@@ -60,7 +62,7 @@ public class TobeMenuService {
     }
 
     @Transactional
-    public TobeMenu hide(final MenuDisplayRequest request) {
+    public TobeMenu hide(final MenuHideRequest request) {
         TobeMenu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
         return menu.hide();

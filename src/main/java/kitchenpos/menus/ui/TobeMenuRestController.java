@@ -44,9 +44,9 @@ public class TobeMenuRestController {
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<MenuDisplayResponse> hide(@PathVariable final MenuDisplayRequest request) {
+    public ResponseEntity<MenuHideResponse> hide(@PathVariable final MenuHideRequest request) {
         final TobeMenu menu = menuService.hide(request);
-        final MenuDisplayResponse response = new MenuDisplayResponse(menu);
+        final MenuHideResponse response = new MenuHideResponse(menu);
         return ResponseEntity.ok(response);
     }
 
