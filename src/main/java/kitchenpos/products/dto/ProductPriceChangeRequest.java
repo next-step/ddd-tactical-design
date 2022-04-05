@@ -1,6 +1,6 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.common.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 
 import java.math.BigDecimal;
@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 public class ProductPriceChangeRequest {
     private BigDecimal price;
     private ProductId productId;
-    private ProductPricingRule productPricingRule;
+    private PricingRule productPricingRule;
 
-    public ProductPriceChangeRequest(ProductId productId, BigDecimal price, ProductPricingRule productPricingRule) {
+    public ProductPriceChangeRequest(ProductId productId, BigDecimal price, PricingRule productPricingRule) {
         this.price = price;
         this.productId = productId;
         this.productPricingRule = productPricingRule;
@@ -35,11 +35,11 @@ public class ProductPriceChangeRequest {
         this.productId = productId;
     }
 
-    public ProductPricingRule getProductPricingRule() {
+    public PricingRule getProductPricingRule() {
         return productPricingRule;
     }
 
-    public void setProductPricingRule(ProductPricingRule productPricingRule) {
+    public void setProductPricingRule(PricingRule productPricingRule) {
         this.productPricingRule = productPricingRule;
     }
 

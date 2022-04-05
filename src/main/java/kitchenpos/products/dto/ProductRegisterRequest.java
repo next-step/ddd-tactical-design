@@ -1,21 +1,21 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.domain.tobe.domain.policy.ProductNamingRule;
-import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.common.policy.NamingRule;
+import kitchenpos.common.policy.PricingRule;
 
 import java.math.BigDecimal;
 
 public class ProductRegisterRequest {
     private String name;
     private BigDecimal price;
-    private ProductPricingRule productPricingRule;
-    private ProductNamingRule productNamingRule;
+    private PricingRule productPricingRule;
+    private NamingRule productNamingRule;
 
     public ProductRegisterRequest(
             String name,
-            ProductNamingRule productNamingRule,
+            NamingRule productNamingRule,
             BigDecimal price,
-            ProductPricingRule productPricingRule
+            PricingRule productPricingRule
     ) {
         this.name = name;
         this.price = price;
@@ -42,19 +42,19 @@ public class ProductRegisterRequest {
         this.price = price;
     }
 
-    public ProductPricingRule getProductPricingRule() {
+    public PricingRule getProductPricingRule() {
         return productPricingRule;
     }
 
-    public void setProductPricingRule(ProductPricingRule productPricingRule) {
+    public void setProductPricingRule(PricingRule productPricingRule) {
         this.productPricingRule = productPricingRule;
     }
 
-    public ProductNamingRule getProductNamingRule() {
+    public NamingRule getProductNamingRule() {
         return productNamingRule;
     }
 
-    public void setProductNamingRule(ProductNamingRule productNamingRule) {
+    public void setProductNamingRule(NamingRule productNamingRule) {
         this.productNamingRule = productNamingRule;
     }
 

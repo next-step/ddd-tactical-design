@@ -18,22 +18,29 @@ public class TobeMenuGroup {
     @Column(name = "name", nullable = false)
     private MenuGroupName name;
 
-    public TobeMenuGroup() {
-    }
+    protected TobeMenuGroup() { }
 
     public MenuGroupId getId() {
         return id;
-    }
-
-    public void setId(final MenuGroupId id) {
-        this.id = id;
     }
 
     public MenuGroupName getName() {
         return name;
     }
 
-    public void setName(final MenuGroupName name) {
-        this.name = name;
+    public static class MenuGroupBuilder {
+        private MenuGroupId menuGroupId;
+        private String name;
+
+
+        public MenuGroupBuilder() {
+
+        }
+
+        public MenuGroupBuilder menuGroupName(String name) {
+            this.name = name;
+            return this;
+        }
     }
+
 }

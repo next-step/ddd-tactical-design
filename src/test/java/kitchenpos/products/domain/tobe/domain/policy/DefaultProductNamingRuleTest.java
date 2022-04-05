@@ -1,5 +1,6 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
+import kitchenpos.common.policy.NamingRule;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.exception.ProductNamingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DefaultProductNamingRuleTest {
 
-    private ProductNamingRule productNamingRule;
+    private NamingRule productNamingRule;
 
     @BeforeEach
     void setUp() {

@@ -1,5 +1,6 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
+import kitchenpos.common.policy.PricingRule;
 import kitchenpos.products.exception.ProductPricingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DefaultProductPricingRuleTest {
 
-    private ProductPricingRule productPricingRule;
+    private PricingRule productPricingRule;
 
     @BeforeEach
     void setUp() {

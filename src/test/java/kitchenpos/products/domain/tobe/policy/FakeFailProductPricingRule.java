@@ -1,11 +1,11 @@
 package kitchenpos.products.domain.tobe.policy;
 
-import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.common.policy.PricingRule;
 import kitchenpos.products.exception.ProductPricingRuleViolationException;
 
 import java.math.BigDecimal;
 
-public class FakeFailProductPricingRule implements ProductPricingRule {
+public class FakeFailProductPricingRule implements PricingRule {
 
     @Override
     public boolean checkRule(BigDecimal price) {

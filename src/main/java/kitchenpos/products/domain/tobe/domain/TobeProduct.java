@@ -1,7 +1,7 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.products.domain.tobe.domain.policy.ProductNamingRule;
-import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
+import kitchenpos.common.policy.NamingRule;
+import kitchenpos.common.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
@@ -41,7 +41,7 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public TobeProduct changePrice(BigDecimal price, ProductPricingRule rule) {
+    public TobeProduct changePrice(BigDecimal price, PricingRule rule) {
         rule.checkRule(price);
         this.price = new ProductPrice(price);
         return this;
@@ -62,9 +62,9 @@ public class TobeProduct {
     public static class ProductBuilder {
         private ProductId productId;
         private String name;
-        private ProductNamingRule namingRule;
+        private NamingRule namingRule;
         private BigDecimal price;
-        private ProductPricingRule pricingRule;
+        private PricingRule pricingRule;
 
         public ProductBuilder() {
 
@@ -75,7 +75,7 @@ public class TobeProduct {
             return this;
         }
 
-        public ProductBuilder namingRule(ProductNamingRule namingRule) {
+        public ProductBuilder namingRule(NamingRule namingRule) {
             this.namingRule=namingRule;
             return this;
         }
@@ -85,7 +85,7 @@ public class TobeProduct {
             return this;
         }
 
-        public ProductBuilder pricingRule(ProductPricingRule pricingRule) {
+        public ProductBuilder pricingRule(PricingRule pricingRule) {
             this.pricingRule=pricingRule;
             return this;
         }

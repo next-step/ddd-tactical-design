@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe.domain.policy;
+package kitchenpos.menus.domain.tobe.domain.policy;
 
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.products.exception.ProductNamingRuleViolationException;
@@ -6,11 +6,11 @@ import kitchenpos.products.infra.PurgomalumClient;
 
 import java.util.Objects;
 
-public class DefaultProductNamingRule implements NamingRule {
+public class DefaultMenuGroupNamingRule implements NamingRule {
 
     private final PurgomalumClient purgomalumClient;
 
-    public DefaultProductNamingRule(PurgomalumClient purgomalumClient) {
+    public DefaultMenuGroupNamingRule(PurgomalumClient purgomalumClient) {
         this.purgomalumClient = purgomalumClient;
     }
 
