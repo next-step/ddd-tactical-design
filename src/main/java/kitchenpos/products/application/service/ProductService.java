@@ -1,11 +1,12 @@
-package kitchenpos.products.application;
+package kitchenpos.products.application.service;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.port.in.ProductServicePort;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.application.port.out.ProductRepository;
+import kitchenpos.products.application.port.out.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class ProductService {
+public class ProductService implements ProductServicePort {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
@@ -31,6 +32,7 @@ public class ProductService {
         this.purgomalumClient = purgomalumClient;
     }
 
+    @Override
     @Transactional
     public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
@@ -48,6 +50,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Override
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getPrice();
@@ -72,6 +75,7 @@ public class ProductService {
         return product;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
