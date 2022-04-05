@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain.tobe.domain.policy;
 
-import kitchenpos.Fixtures;
 import kitchenpos.common.exception.PricingRuleViolationException;
 import kitchenpos.common.policy.PricingRule;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
+import static kitchenpos.Fixtures.tobeMenuProducts;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,7 +19,7 @@ class DefaultMenuPricingRuleTest {
 
     @BeforeEach
     void setUp() {
-        menuPricingRule = new DefaultMenuPricingRule(Fixtures.tobeMenuProducts("후라이드",16_000L));
+        menuPricingRule = new DefaultMenuPricingRule(tobeMenuProducts("후라이드",16_000L, 1L));
     }
 
     @DisplayName("메뉴가격은 0원 이상이어야 한다")

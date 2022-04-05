@@ -1,10 +1,12 @@
 package kitchenpos;
 
 import kitchenpos.common.policy.NamingRule;
+import kitchenpos.common.policy.PricingRule;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.products.domain.Product;
@@ -148,17 +150,33 @@ public class Fixtures {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(namingRule).build();
     }
 
-    public static List<TobeMenuProduct> tobeMenuProducts(final String name, final long price) {
+    public static TobeMenu menu(final long price, final PricingRule pricingRule, final boolean displayed, final List<TobeMenuProduct> menuProducts) {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .name("후라이드+후라이드")
+                .namingRule(new FakeSuccessNamingRule())
+                .price(BigDecimal.valueOf(price))
+                .pricingRule(pricingRule)
+                .displayed(displayed)
+                .menuProducts(menuProducts)
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenuProduct tobeMenuProduct(final String name, final long price, final long quantity) {
+        TobeProduct product = tobeProduct(name, price);
+        return new TobeMenuProduct.Builder().product(product).quantity(quantity).productId(product.getId()).build();
+    }
+
+    public static List<TobeMenuProduct> tobeMenuProducts(final String name, final long price, final long quantity) {
         List<TobeMenuProduct> menuProducts = new ArrayList<>();
-        for(int i = 0 ; i < 2 ; i ++) {
-            TobeProduct product = tobeProduct(name, price);
-            TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
-                    .product(product)
-                    .quantity(1L)
-                    .productId(product.getId())
-                    .build();
-            menuProducts.add(menuProduct);
-        }
+        TobeProduct product = tobeProduct(name, price);
+        TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
+                .product(product)
+                .quantity(quantity)
+                .productId(product.getId())
+                .build();
+        menuProducts.add(menuProduct);
         return menuProducts;
     }
 }
