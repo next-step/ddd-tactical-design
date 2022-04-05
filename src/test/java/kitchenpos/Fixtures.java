@@ -1,5 +1,6 @@
 package kitchenpos;
 
+import kitchenpos.common.policy.NamingRule;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -138,5 +139,9 @@ public class Fixtures {
 
     public static TobeMenuGroup tobeMenuGroup(final String name) {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(new FakeSuccessNamingRule()).build();
+    }
+
+    public static TobeMenuGroup tobeMenuGroup(final String name, final NamingRule namingRule) {
+        return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(namingRule).build();
     }
 }
