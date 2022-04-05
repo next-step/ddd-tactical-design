@@ -7,6 +7,7 @@ import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -50,5 +51,9 @@ public class TobeMenuProduct {
         return productId;
     }
 
-
+    public BigDecimal calculateAmount() {
+        return product.getPrice()
+                .getValue()
+                .multiply(BigDecimal.valueOf(quantity.getValue()));
+    }
 }
