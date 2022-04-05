@@ -1,6 +1,8 @@
 package kitchenpos.products.exception;
 
-public class ProductPricingRuleViolationException extends RuntimeException{
+import kitchenpos.common.exception.PricingRuleViolationException;
+
+public class ProductPricingRuleViolationException extends PricingRuleViolationException {
 
     public ProductPricingRuleViolationException() {
         super();

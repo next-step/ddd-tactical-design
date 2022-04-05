@@ -1,6 +1,8 @@
 package kitchenpos.products.exception;
 
-public class ProductNamingRuleViolationException extends RuntimeException{
+import kitchenpos.common.exception.NamingRuleViolationException;
+
+public class ProductNamingRuleViolationException extends NamingRuleViolationException {
 
     public ProductNamingRuleViolationException() {
         super();

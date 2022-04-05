@@ -1,6 +1,8 @@
 package kitchenpos.menus.exception;
 
-public class MenuGroupNamingRuleViolationException extends RuntimeException{
+import kitchenpos.common.exception.NamingRuleViolationException;
+
+public class MenuGroupNamingRuleViolationException extends NamingRuleViolationException {
 
     public MenuGroupNamingRuleViolationException() {
         super();
