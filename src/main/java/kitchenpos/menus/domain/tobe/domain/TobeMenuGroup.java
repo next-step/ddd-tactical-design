@@ -57,6 +57,11 @@ public class TobeMenuGroup {
             return this;
         }
 
+        public MenuGroupBuilder namingRule(NamingRule namingRule) {
+            this.namingRule = namingRule;
+            return this;
+        }
+
         public TobeMenuGroup build() {
             if (Objects.isNull(name) || Objects.isNull(namingRule)) {
                 throw new MenuGroupNamingRuleViolationException();
