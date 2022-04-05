@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -15,13 +15,13 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String displayedName;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
-    public Product() {
+    protected Product() {
     }
 
-    public Product(UUID id, String displayedName, BigDecimal price) {
+    public Product(UUID id, String displayedName, ProductPrice price) {
         this.id = id;
         this.displayedName = displayedName;
         this.price = price;
@@ -35,11 +35,11 @@ public class Product {
         return displayedName;
     }
 
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 
-    public void changePrice(BigDecimal price) {
+    public void changePrice(ProductPrice price) {
         this.price = price;
     }
 }
