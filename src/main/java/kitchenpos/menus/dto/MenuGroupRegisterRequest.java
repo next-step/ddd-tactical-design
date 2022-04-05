@@ -6,10 +6,6 @@ public class MenuGroupRegisterRequest {
     private String name;
     private NamingRule namingRule;
 
-    public MenuGroupRegisterRequest(String name) {
-        this.name = name;
-    }
-
     public MenuGroupRegisterRequest(String name, NamingRule namingRule) {
         this.name = name;
         this.namingRule = namingRule;
