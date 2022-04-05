@@ -22,7 +22,8 @@ public class TobeMenuGroup {
     @Column(name = "name", nullable = false)
     private MenuGroupName name;
 
-    protected TobeMenuGroup() { }
+    protected TobeMenuGroup() {
+    }
 
     private TobeMenuGroup(MenuGroupId id, MenuGroupName name) {
         this.id = id;
@@ -38,7 +39,7 @@ public class TobeMenuGroup {
     }
 
     public static class MenuGroupBuilder {
-        private MenuGroupId menuGroupId;
+        private final MenuGroupId menuGroupId;
         private String name;
         private NamingRule namingRule;
 
@@ -47,7 +48,7 @@ public class TobeMenuGroup {
         }
 
         public MenuGroupBuilder name(String name) {
-            this.name=name;
+            this.name = name;
             return this;
         }
 
@@ -66,7 +67,7 @@ public class TobeMenuGroup {
                 throw new NamingRuleViolationException();
             }
             namingRule.checkRule(name);
-            return new TobeMenuGroup(this.menuGroupId, new  MenuGroupName(name));
+            return new TobeMenuGroup(this.menuGroupId, new MenuGroupName(name));
         }
     }
 

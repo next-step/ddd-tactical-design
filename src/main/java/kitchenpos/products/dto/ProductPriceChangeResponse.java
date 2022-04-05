@@ -2,7 +2,6 @@ package kitchenpos.products.dto;
 
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
-import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 
 import java.math.BigDecimal;
 

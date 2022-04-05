@@ -2,7 +2,6 @@ package kitchenpos.menus.domain.tobe.domain.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.math.BigDecimal;
 
 @Embeddable
 public class MenuProductQuantity {
@@ -11,7 +10,7 @@ public class MenuProductQuantity {
     private long quantity;
 
     public MenuProductQuantity(long quantity) {
-        if(quantity < 0) {
+        if (quantity < 0) {
             throw new IllegalArgumentException();
         }
         this.quantity = quantity;

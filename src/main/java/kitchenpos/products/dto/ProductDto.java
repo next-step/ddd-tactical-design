@@ -1,6 +1,5 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 

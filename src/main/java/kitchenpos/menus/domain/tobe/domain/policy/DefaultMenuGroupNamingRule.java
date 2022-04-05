@@ -7,7 +7,8 @@ import java.util.Objects;
 
 public class DefaultMenuGroupNamingRule implements NamingRule {
 
-    public DefaultMenuGroupNamingRule() { }
+    public DefaultMenuGroupNamingRule() {
+    }
 
     @Override
     public boolean checkRule(String name) {

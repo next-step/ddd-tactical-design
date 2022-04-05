@@ -26,7 +26,7 @@ public class TobeProductRestController {
         final TobeProduct product = productService.create(request);
         final ProductRegisterResponse response = new ProductRegisterResponse(product);
         return ResponseEntity.created(URI.create("/api/products/" + response.getProductId().getValue()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")

@@ -30,16 +30,16 @@ public class InMemoryTobeMenuRepository implements TobeMenuRepository {
     @Override
     public List<TobeMenu> findAllByIdIn(final List<MenuId> ids) {
         return menus.values()
-            .stream()
-            .filter(menu -> ids.contains(menu.getId()))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(menu -> ids.contains(menu.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<TobeMenu> findAllByProductId(final ProductId productId) {
         return menus.values()
-            .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+                .collect(Collectors.toList());
     }
 }

@@ -3,7 +3,6 @@ package kitchenpos.menus.domain.tobe.domain.vo;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Embeddable
 public class MenuProductSeq implements Serializable {

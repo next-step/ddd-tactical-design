@@ -2,15 +2,15 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.exception.NamingRuleViolationException;
 import kitchenpos.common.exception.PricingRuleViolationException;
+import kitchenpos.common.policy.FakeFailNamingRule;
+import kitchenpos.common.policy.FakeFailPricingRule;
+import kitchenpos.common.policy.FakeSuccessNamingRule;
+import kitchenpos.common.policy.FakeSuccessPricingRule;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.tobe.domain.InMemoryTobeProductRepository;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.TobeProductRepository;
-import kitchenpos.common.policy.FakeFailNamingRule;
-import kitchenpos.common.policy.FakeFailPricingRule;
-import kitchenpos.common.policy.FakeSuccessNamingRule;
-import kitchenpos.common.policy.FakeSuccessPricingRule;
 import kitchenpos.products.dto.ProductPriceChangeRequest;
 import kitchenpos.products.dto.ProductRegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.tobeProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -51,15 +51,15 @@ class TobeProductServiceTest {
         //then
         assertThat(상품).isNotNull();
         assertAll(
-            () -> assertThat(상품.getId()).isNotNull(),
-            () -> assertThat(상품.getName().getValue()).isEqualTo(상품등록요청.getName()),
-            () -> assertThat(상품.getPrice().getValue()).isEqualTo(상품등록요청.getPrice())
+                () -> assertThat(상품.getId()).isNotNull(),
+                () -> assertThat(상품.getName().getValue()).isEqualTo(상품등록요청.getName()),
+                () -> assertThat(상품.getPrice().getValue()).isEqualTo(상품등록요청.getPrice())
         );
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
     @Test
-    void create_fail_pricing_rule_violation( ) {
+    void create_fail_pricing_rule_violation() {
         //given
         final ProductRegisterRequest 상품등록요청 =
                 new ProductRegisterRequest("후라이드", new FakeSuccessNamingRule(),

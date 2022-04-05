@@ -60,7 +60,7 @@ public class TobeProduct {
     }
 
     public static class Builder {
-        private ProductId productId;
+        private final ProductId productId;
         private String name;
         private NamingRule namingRule;
         private BigDecimal price;
@@ -72,22 +72,22 @@ public class TobeProduct {
         }
 
         public Builder name(String name) {
-            this.name=name;
+            this.name = name;
             return this;
         }
 
         public Builder namingRule(NamingRule namingRule) {
-            this.namingRule=namingRule;
+            this.namingRule = namingRule;
             return this;
         }
 
         public Builder price(BigDecimal price) {
-            this.price=price;
+            this.price = price;
             return this;
         }
 
         public Builder pricingRule(PricingRule pricingRule) {
-            this.pricingRule=pricingRule;
+            this.pricingRule = pricingRule;
             return this;
         }
 

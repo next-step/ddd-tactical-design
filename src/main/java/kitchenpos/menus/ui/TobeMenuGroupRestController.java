@@ -1,8 +1,6 @@
 package kitchenpos.menus.ui;
 
-import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.application.TobeMenuGroupService;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.dto.MenuGroupRegisterRequest;
@@ -28,7 +26,7 @@ public class TobeMenuGroupRestController {
         final TobeMenuGroup menuGroup = menuGroupService.create(request);
         final MenuGroupRegisterResponse response = new MenuGroupRegisterResponse(menuGroup);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @GetMapping

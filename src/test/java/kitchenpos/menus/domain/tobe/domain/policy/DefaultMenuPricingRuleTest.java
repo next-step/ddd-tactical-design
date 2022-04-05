@@ -19,11 +19,11 @@ class DefaultMenuPricingRuleTest {
 
     @BeforeEach
     void setUp() {
-        menuPricingRule = new DefaultMenuPricingRule(tobeMenuProducts("후라이드",16_000L, 1L));
+        menuPricingRule = new DefaultMenuPricingRule(tobeMenuProducts("후라이드", 16_000L, 1L));
     }
 
     @DisplayName("메뉴가격은 0원 이상이어야 한다")
-    @ValueSource(strings = {"16000","0"})
+    @ValueSource(strings = {"16000", "0"})
     @ParameterizedTest
     void checkRule_success(final BigDecimal price) {
         //given, when

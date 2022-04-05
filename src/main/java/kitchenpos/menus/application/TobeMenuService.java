@@ -22,9 +22,9 @@ public class TobeMenuService {
     private final TobeProductRepository productRepository;
 
     public TobeMenuService(
-        final TobeMenuRepository menuRepository,
-        final TobeMenuGroupRepository menuGroupRepository,
-        final TobeProductRepository productRepository
+            final TobeMenuRepository menuRepository,
+            final TobeMenuGroupRepository menuGroupRepository,
+            final TobeProductRepository productRepository
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
@@ -51,7 +51,7 @@ public class TobeMenuService {
     public TobeMenu changePrice(final MenuPriceChangeRequest request) {
         TobeMenu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
-        return menu.changePrice(request.getPrice(),request.getPricingRule());
+        return menu.changePrice(request.getPrice(), request.getPricingRule());
     }
 
     @Transactional

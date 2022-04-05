@@ -46,6 +46,17 @@ class TobeMenuServiceTest {
     private MenuGroupId menuGroupId;
     private List<TobeMenuProduct> menuProducts;
 
+    private static List<Arguments> menuProducts() {
+        TobeProduct product = tobeProduct("굿굿치킨", 16_000L);
+        TobeMenuProduct invalid = new TobeMenuProduct.Builder().product(product).quantity(2L).productId(new ProductId(INVALID_ID)).build();
+        return Arrays.asList(
+                null,
+                Arguments.of(Collections.emptyList())
+                //TODO: ID Validation Check
+                //Arguments.of(Arrays.asList(invalid))
+        );
+    }
+
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryTobeMenuRepository();
@@ -60,10 +71,10 @@ class TobeMenuServiceTest {
     void create() {
         //given
         final MenuRegisterRequest request = new MenuRegisterRequest(
-                "맛난치킨",  new FakeSuccessNamingRule(),
+                "맛난치킨", new FakeSuccessNamingRule(),
                 BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
                 menuGroupId,
-                tobeMenuProducts("맛나치킨",16_000L,1),
+                tobeMenuProducts("맛나치킨", 16_000L, 1),
                 true
         );
 
@@ -87,7 +98,7 @@ class TobeMenuServiceTest {
     @ParameterizedTest
     void create(final List<TobeMenuProduct> menuProducts) {
         final MenuRegisterRequest request = new MenuRegisterRequest(
-                "맛난치킨",  new FakeSuccessNamingRule(),
+                "맛난치킨", new FakeSuccessNamingRule(),
                 BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
                 menuGroupId,
                 menuProducts,
@@ -97,30 +108,19 @@ class TobeMenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    private static List<Arguments> menuProducts() {
-        TobeProduct product = tobeProduct("굿굿치킨", 16_000L);
-        TobeMenuProduct invalid = new TobeMenuProduct.Builder().product(product).quantity(2L).productId(new ProductId(INVALID_ID)).build();
-        return Arrays.asList(
-                null,
-                Arguments.of(Collections.emptyList())
-                //TODO: ID Validation Check
-                //Arguments.of(Arrays.asList(invalid))
-        );
-    }
-
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
         //given&&when&&then
-       assertThatThrownBy(() -> {
-           final MenuRegisterRequest request = new MenuRegisterRequest(
-                   "맛난치킨",  new FakeSuccessNamingRule(),
-                   BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
-                   menuGroupId,
-                   tobeMenuProducts("맛나치킨",16_000L,-1),
-                   true
-           );
-           menuService.create(request);
+        assertThatThrownBy(() -> {
+            final MenuRegisterRequest request = new MenuRegisterRequest(
+                    "맛난치킨", new FakeSuccessNamingRule(),
+                    BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
+                    menuGroupId,
+                    tobeMenuProducts("맛나치킨", 16_000L, -1),
+                    true
+            );
+            menuService.create(request);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -128,10 +128,10 @@ class TobeMenuServiceTest {
     @Test
     void create_fail_pricing_rule_violation() {
         final MenuRegisterRequest request = new MenuRegisterRequest(
-                "맛난치킨",  new FakeSuccessNamingRule(),
+                "맛난치킨", new FakeSuccessNamingRule(),
                 BigDecimal.valueOf(15_000L), new FakeFailPricingRule(),
                 menuGroupId,
-                tobeMenuProducts("맛나치킨",16_000L,1),
+                tobeMenuProducts("맛나치킨", 16_000L, 1),
                 true
         );
         assertThatThrownBy(() -> menuService.create(request))
@@ -143,10 +143,10 @@ class TobeMenuServiceTest {
     @ParameterizedTest
     void create(final MenuGroupId menuGroupId) {
         final MenuRegisterRequest request = new MenuRegisterRequest(
-                "맛난치킨",  new FakeSuccessNamingRule(),
+                "맛난치킨", new FakeSuccessNamingRule(),
                 BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
                 menuGroupId,
-                tobeMenuProducts("맛나치킨",16_000L,1),
+                tobeMenuProducts("맛나치킨", 16_000L, 1),
                 true
         );
         assertThatThrownBy(() -> menuService.create(request))
@@ -157,10 +157,10 @@ class TobeMenuServiceTest {
     @Test
     void create_fail_naming_rule_violation() {
         final MenuRegisterRequest request = new MenuRegisterRequest(
-                "맛난치킨",  new FakeFailNamingRule(),
+                "맛난치킨", new FakeFailNamingRule(),
                 BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule(),
                 menuGroupId,
-                tobeMenuProducts("맛나치킨",16_000L,1),
+                tobeMenuProducts("맛나치킨", 16_000L, 1),
                 true
         );
         assertThatThrownBy(() -> menuService.create(request))
@@ -171,7 +171,7 @@ class TobeMenuServiceTest {
     @Test
     void changePrice() {
         //given
-        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
         final MenuPriceChangeRequest request = new MenuPriceChangeRequest(menu.getId(), BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule());
 
         //when
@@ -185,7 +185,7 @@ class TobeMenuServiceTest {
     @Test
     void changePrice_fail_pricing_rule_violation() {
         //given
-        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
         final MenuPriceChangeRequest 가격변경요청 = new MenuPriceChangeRequest(menu.getId(), BigDecimal.valueOf(15_000L), new FakeFailPricingRule());
 
         //when&&then
@@ -198,7 +198,7 @@ class TobeMenuServiceTest {
     @Test
     void display() {
         //given
-        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
         final MenuDisplayRequest request = new MenuDisplayRequest(menu.getId(), new FakeSuccessPricingRule());
 
         //when
@@ -212,7 +212,7 @@ class TobeMenuServiceTest {
     @Test
     void displayExpensiveMenu() {
         //given
-        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
         final MenuDisplayRequest request = new MenuDisplayRequest(menu.getId(), new FakeFailPricingRule());
 
         //when&&then
@@ -224,7 +224,7 @@ class TobeMenuServiceTest {
     @Test
     void hide() {
         //given
-        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
         final MenuHideRequest request = new MenuHideRequest(menu.getId());
 
         //when
@@ -238,7 +238,7 @@ class TobeMenuServiceTest {
     @Test
     void findAll() {
         //given
-        menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨",16_000L,1)));
+        menuRepository.save(menu(14_000L, new FakeSuccessPricingRule(), true, tobeMenuProducts("맛나치킨", 16_000L, 1)));
 
         //when&&then
         assertThat(menuService.findAll()).hasSize(1);

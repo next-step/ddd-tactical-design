@@ -33,7 +33,7 @@ class DefaultMenuNamingRuleTest {
     }
 
     @DisplayName("메뉴명이 빈 값이거나, 욕설 혹은 비속어가 포함될 경우 메뉴명 정책 위반이다")
-    @ValueSource(strings = {"욕설","비속어"})
+    @ValueSource(strings = {"욕설", "비속어"})
     @NullSource
     @ParameterizedTest
     void checkRule_fail(final String name) {

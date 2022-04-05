@@ -4,10 +4,7 @@ import kitchenpos.common.exception.NamingRuleViolationException;
 import kitchenpos.common.exception.PricingRuleViolationException;
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.common.policy.PricingRule;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
-import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -30,9 +27,9 @@ public class TobeMenu {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private TobeMenuGroup menuGroup;
 
@@ -41,10 +38,10 @@ public class TobeMenu {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<TobeMenuProduct> menuProducts;
 
@@ -64,7 +61,7 @@ public class TobeMenu {
     }
 
     public TobeMenu changePrice(final BigDecimal price, final PricingRule rule) {
-        if(Objects.isNull(rule) || Objects.isNull(price) || !rule.checkRule(price)) {
+        if (Objects.isNull(rule) || Objects.isNull(price) || !rule.checkRule(price)) {
             throw new PricingRuleViolationException();
         }
         this.price = new MenuPrice(price);
@@ -72,7 +69,7 @@ public class TobeMenu {
     }
 
     public TobeMenu display(final PricingRule pricingRule) {
-        if(Objects.isNull(pricingRule) || !pricingRule.checkRule(this.price.getValue())) {
+        if (Objects.isNull(pricingRule) || !pricingRule.checkRule(this.price.getValue())) {
             throw new PricingRuleViolationException();
         }
         this.displayed = new MenuDisplayed(true);
@@ -84,8 +81,36 @@ public class TobeMenu {
         return this;
     }
 
+    public MenuId getId() {
+        return id;
+    }
+
+    public MenuName getName() {
+        return name;
+    }
+
+    public MenuPrice getPrice() {
+        return price;
+    }
+
+    public TobeMenuGroup getMenuGroup() {
+        return menuGroup;
+    }
+
+    public MenuDisplayed getDisplayed() {
+        return displayed;
+    }
+
+    public List<TobeMenuProduct> getMenuProducts() {
+        return menuProducts;
+    }
+
+    public MenuGroupId getMenuGroupId() {
+        return menuGroupId;
+    }
+
     public static class Builder {
-        private MenuId menuId;
+        private final MenuId menuId;
         private String name;
         private NamingRule namingRule;
         private BigDecimal price;
@@ -99,17 +124,17 @@ public class TobeMenu {
         }
 
         public Builder name(final String name) {
-            this.name=name;
+            this.name = name;
             return this;
         }
 
         public Builder namingRule(final NamingRule namingRule) {
-            this.namingRule=namingRule;
+            this.namingRule = namingRule;
             return this;
         }
 
         public Builder price(final BigDecimal price) {
-            this.price=price;
+            this.price = price;
             return this;
         }
 
@@ -140,38 +165,10 @@ public class TobeMenu {
             if (Objects.isNull(price) || Objects.isNull(pricingRule) || !pricingRule.checkRule(price)) {
                 throw new PricingRuleViolationException();
             }
-            if(Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
                 throw new IllegalArgumentException();
             }
             return new TobeMenu(menuId, new MenuName(name), new MenuPrice(price), menuGroup, new MenuDisplayed(displayed), menuProducts);
         }
-    }
-
-    public MenuId getId() {
-        return id;
-    }
-
-    public MenuName getName() {
-        return name;
-    }
-
-    public MenuPrice getPrice() {
-        return price;
-    }
-
-    public TobeMenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public MenuDisplayed getDisplayed() {
-        return displayed;
-    }
-
-    public List<TobeMenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public MenuGroupId getMenuGroupId() {
-        return menuGroupId;
     }
 }

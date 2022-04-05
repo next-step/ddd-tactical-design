@@ -1,5 +1,7 @@
 package kitchenpos;
 
+import kitchenpos.common.policy.FakeSuccessNamingRule;
+import kitchenpos.common.policy.FakeSuccessPricingRule;
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.common.policy.PricingRule;
 import kitchenpos.eatinorders.domain.*;
@@ -11,14 +13,12 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.common.policy.FakeSuccessNamingRule;
-import kitchenpos.common.policy.FakeSuccessPricingRule;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static kitchenpos.products.domain.tobe.domain.TobeProduct.*;
+import static kitchenpos.products.domain.tobe.domain.TobeProduct.Builder;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -137,6 +137,7 @@ public class Fixtures {
         return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
                 .price(price).pricingRule(new FakeSuccessPricingRule()).build();
     }
+
     public static TobeProduct tobeProduct(final String name, final long price) {
         return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
                 .price(BigDecimal.valueOf(price)).pricingRule(new FakeSuccessPricingRule()).build();

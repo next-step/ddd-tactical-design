@@ -24,7 +24,7 @@ public class TobeProductService {
 
     @Transactional
     public TobeProduct create(final ProductRegisterRequest request) {
-        if(Objects.isNull(request)) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
         TobeProduct tobeProduct = new TobeProduct.Builder()
@@ -38,13 +38,13 @@ public class TobeProductService {
     @Transactional
     public TobeProduct changePrice(final ProductPriceChangeRequest request) {
         //TODO: 추후 도메인 서비스를 도입하여 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
-        if(Objects.isNull(request)) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
         TobeProduct tobeProduct = productRepository.findById(request.getProductId())
                 .orElseThrow(NoSuchElementException::new);
         return tobeProduct
-                .changePrice(request.getPrice(),request.getProductPricingRule());
+                .changePrice(request.getPrice(), request.getProductPricingRule());
     }
 
     @Transactional(readOnly = true)

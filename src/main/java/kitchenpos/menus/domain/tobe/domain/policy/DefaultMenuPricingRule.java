@@ -12,7 +12,7 @@ public class DefaultMenuPricingRule implements PricingRule {
     private final List<TobeMenuProduct> menuProducts;
 
     public DefaultMenuPricingRule(List<TobeMenuProduct> menuProducts) {
-        if(Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new PricingRuleViolationException();
         }
         this.menuProducts = menuProducts;
@@ -29,6 +29,6 @@ public class DefaultMenuPricingRule implements PricingRule {
     private BigDecimal getTotalAmount() {
         return menuProducts.stream()
                 .map(TobeMenuProduct::calculateAmount)
-                .reduce(BigDecimal.ZERO, (a,b) -> a.add(b));
+                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
     }
 }

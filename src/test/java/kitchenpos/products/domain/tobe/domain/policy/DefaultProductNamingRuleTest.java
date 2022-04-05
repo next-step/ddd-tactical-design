@@ -33,7 +33,7 @@ class DefaultProductNamingRuleTest {
     }
 
     @DisplayName("상품명이 빈 값이거나, 욕설 혹은 비속어가 포함될 경우 상품가격 정책 위반이다")
-    @ValueSource(strings = {"욕설","비속어"})
+    @ValueSource(strings = {"욕설", "비속어"})
     @NullSource
     @ParameterizedTest
     void checkRule_fail(final String name) {

@@ -19,7 +19,7 @@ public class TobeMenuGroupService {
 
     @Transactional
     public TobeMenuGroup create(final MenuGroupRegisterRequest request) {
-        if(Objects.isNull(request)) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
         TobeMenuGroup menuGroup = new TobeMenuGroup.MenuGroupBuilder()

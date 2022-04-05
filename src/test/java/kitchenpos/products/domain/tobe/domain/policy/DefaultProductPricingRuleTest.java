@@ -23,7 +23,7 @@ class DefaultProductPricingRuleTest {
     }
 
     @DisplayName("상품가격은 0원 이상이어야 한다")
-    @ValueSource(strings = {"16000","0"})
+    @ValueSource(strings = {"16000", "0"})
     @ParameterizedTest
     void checkRule_success(final BigDecimal price) {
         //given, when
