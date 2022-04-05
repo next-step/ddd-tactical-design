@@ -67,6 +67,7 @@ public class TobeProduct {
         private PricingRule pricingRule;
 
         public Builder() {
+            this.productId = new ProductId(UUID.randomUUID());
 
         }
 
@@ -91,15 +92,13 @@ public class TobeProduct {
         }
 
         public TobeProduct build() {
-            if (Objects.isNull(name) || Objects.isNull(namingRule)) {
+            if (Objects.isNull(name) || Objects.isNull(namingRule) || !namingRule.checkRule(name)) {
                 throw new NamingRuleViolationException();
             }
-            if (Objects.isNull(price) || Objects.isNull(pricingRule)) {
+            if (Objects.isNull(price) || Objects.isNull(pricingRule) || !pricingRule.checkRule(price)) {
                 throw new PricingRuleViolationException();
             }
-            namingRule.checkRule(name);
-            pricingRule.checkRule(price);
-            return new TobeProduct(new ProductId(UUID.randomUUID()),new ProductName(name), new ProductPrice(price));
+            return new TobeProduct(productId, new ProductName(name), new ProductPrice(price));
         }
     }
 }

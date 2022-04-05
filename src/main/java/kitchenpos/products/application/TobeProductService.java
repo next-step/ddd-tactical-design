@@ -27,7 +27,7 @@ public class TobeProductService {
         if(Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
-        TobeProduct tobeProduct = new TobeProduct.ProductBuilder()
+        TobeProduct tobeProduct = new TobeProduct.Builder()
                 .name(request.getName())
                 .namingRule(request.getProductNamingRule())
                 .price(request.getPrice())

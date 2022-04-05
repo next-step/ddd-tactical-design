@@ -133,7 +133,7 @@ public class Fixtures {
     }
 
     public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
-        return new ProductBuilder().name(name).namingRule(new FakeSuccessNamingRule())
+        return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
                 .price(price).pricingRule(new FakeSuccessPricingRule()).build();
     }
 
