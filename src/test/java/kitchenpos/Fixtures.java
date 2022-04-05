@@ -6,6 +6,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
+import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.common.policy.FakeSuccessNamingRule;
@@ -13,9 +14,7 @@ import kitchenpos.common.policy.FakeSuccessPricingRule;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import static kitchenpos.products.domain.tobe.domain.TobeProduct.*;
 
@@ -136,6 +135,10 @@ public class Fixtures {
         return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
                 .price(price).pricingRule(new FakeSuccessPricingRule()).build();
     }
+    public static TobeProduct tobeProduct(final String name, final long price) {
+        return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
+                .price(BigDecimal.valueOf(price)).pricingRule(new FakeSuccessPricingRule()).build();
+    }
 
     public static TobeMenuGroup tobeMenuGroup(final String name) {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(new FakeSuccessNamingRule()).build();
@@ -143,5 +146,19 @@ public class Fixtures {
 
     public static TobeMenuGroup tobeMenuGroup(final String name, final NamingRule namingRule) {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(namingRule).build();
+    }
+
+    public static List<TobeMenuProduct> tobeMenuProducts(final String name, final long price) {
+        List<TobeMenuProduct> menuProducts = new ArrayList<>();
+        for(int i = 0 ; i < 2 ; i ++) {
+            TobeProduct product = tobeProduct(name, price);
+            TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
+                    .product(product)
+                    .quantity(1L)
+                    .productId(product.getId())
+                    .build();
+            menuProducts.add(menuProduct);
+        }
+        return menuProducts;
     }
 }
