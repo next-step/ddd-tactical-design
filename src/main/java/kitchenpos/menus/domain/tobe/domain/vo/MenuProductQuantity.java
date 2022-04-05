@@ -11,6 +11,9 @@ public class MenuProductQuantity {
     private long quantity;
 
     public MenuProductQuantity(long quantity) {
+        if(quantity < 0) {
+            throw new IllegalArgumentException();
+        }
         this.quantity = quantity;
     }
 
