@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -21,10 +22,10 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String displayedName, ProductPrice price) {
+    public Product(UUID id, String displayedName, BigDecimal price) {
         this.id = id;
         this.displayedName = displayedName;
-        this.price = price;
+        this.price = new ProductPrice(price);
     }
 
     public UUID getId() {
@@ -39,7 +40,7 @@ public class Product {
         return price;
     }
 
-    public void changePrice(ProductPrice price) {
-        this.price = price;
+    public void changePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
     }
 }
