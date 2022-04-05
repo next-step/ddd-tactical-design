@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.eatinorder.application;
 
+import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.*;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
@@ -16,12 +17,14 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class EatInOrderService {
     private final OrderRepository orderRepository;
+    private final EatInOrderTableService eatInOrderTableService;
     private final OrderTableLoader orderTableLoader;
     private final OrderLineItemLoader orderLineItemLoader;
     private final MenuClient menuClient;
 
-    public EatInOrderService(final OrderRepository orderRepository, final OrderTableLoader orderTableLoader, final OrderLineItemLoader orderLineItemLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final OrderLineItemLoader orderLineItemLoader, final MenuClient menuClient) {
         this.orderRepository = orderRepository;
+        this.eatInOrderTableService = eatInOrderTableService;
         this.orderTableLoader = orderTableLoader;
         this.orderLineItemLoader = orderLineItemLoader;
         this.menuClient = menuClient;
@@ -45,7 +48,7 @@ public class EatInOrderService {
     }
 
     private OrderTable loadOrderTable(final UUID orderTableId) {
-        return null;
+        return orderTableLoader.load(eatInOrderTableService.findOrderTableById(orderTableId));
     }
 
     @Transactional
@@ -66,6 +69,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder order = findById(orderId);
         order.complete();
+        eatInOrderTableService.clearTable(order.getOrderTableId());
         return order;
     }
 

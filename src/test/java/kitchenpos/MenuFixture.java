@@ -46,15 +46,25 @@ public class MenuFixture {
                 .collect(toList());
     }
 
+    public static MenuProducts 금액이불러와진_메뉴상품목록(final long... price) {
+        return 금액이불러와진_메뉴상품목록(Arrays.stream(price).mapToObj(p -> ProductFixture.상품(p)).collect(toList()));
+    }
+
     public static MenuProducts 금액이불러와진_메뉴상품목록() {
         return 금액이불러와진_메뉴상품목록(ProductFixture.상품(), ProductFixture.상품());
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final List<Product> products) {
-        final List<MenuProduct> menuProducts = 메뉴상품목록1(products.stream().map(Product::getId).toArray(UUID[]::new));
+        final List<MenuProduct> menuProducts = 메뉴상품목록(products.stream().map(Product::getId).toArray(UUID[]::new));
         final List<ProductResponse> productList = products.stream().map(product -> new ProductResponse(product.getId(), new Price(product.getPrice().value()))).collect(toList());
 
         return loader.loadMenuProducts(menuProducts, productList);
+    }
+
+    public static List<MenuProduct> 메뉴상품목록(final UUID... productIds) {
+        return Arrays.stream(productIds)
+                .map(MenuFixture::메뉴상품)
+                .collect(toList());
     }
 
     public static MenuProducts 금액이불러와진_메뉴상품목록(final Product... products) {
@@ -71,6 +81,10 @@ public class MenuFixture {
 
     public static Menu 메뉴(final long price, final MenuGroup menuGroup, final MenuProducts menuProducts) {
         return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), menuGroup, true, menuProducts);
+    }
+
+    public static Menu 메뉴(final long price, final boolean displayed, final MenuProducts menuProducts) {
+        return new Menu(new Name("메뉴 이름", new FakeProfanities()), new Price(price), 메뉴그룹(), displayed, menuProducts);
     }
 
     public static Menu 메뉴(final long price, final MenuProducts menuProducts) {

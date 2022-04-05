@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.ordertable.application;
 
+import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.ordertable.ui.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.tobe.ordertable.ui.dto.CreateRequest;
@@ -11,14 +12,16 @@ import java.util.UUID;
 
 @Service
 public class OrderTableService {
+    private final EatInOrderTableService eatInOrderTableService;
 
-    public OrderTableService() {
+    public OrderTableService(final EatInOrderTableService eatInOrderTableService) {
+        this.eatInOrderTableService = eatInOrderTableService;
     }
 
     @Transactional
     public OrderTable create(final CreateRequest request) {
         final OrderTable orderTable = request.toEntity();
-        return orderTable;
+        return eatInOrderTableService.saveOrderTable(orderTable);
     }
 
     @Transactional
@@ -30,7 +33,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        return null;
+        return eatInOrderTableService.clearTableWithException(orderTableId);
     }
 
     @Transactional
@@ -43,11 +46,11 @@ public class OrderTableService {
 
     @Transactional(readOnly = true)
     public OrderTable findById(final UUID orderTableId) {
-        return null;
+        return eatInOrderTableService.findOrderTableById(orderTableId);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
-        return null;
+        return eatInOrderTableService.findOrderTableAll();
     }
 }
