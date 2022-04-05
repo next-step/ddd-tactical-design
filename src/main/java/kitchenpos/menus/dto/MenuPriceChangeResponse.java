@@ -7,7 +7,7 @@ import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MenuRegisterResponse {
+public class MenuPriceChangeResponse {
     private MenuId menuId;
     private String name;
     private BigDecimal price;
@@ -15,10 +15,10 @@ public class MenuRegisterResponse {
     private List<TobeMenuProduct> menuProducts;
     private boolean displayed;
 
-    public MenuRegisterResponse() {
+    public MenuPriceChangeResponse() {
     }
 
-    public MenuRegisterResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
+    public MenuPriceChangeResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
         this.menuId = menuId;
         this.name = name;
         this.price = price;
@@ -80,7 +80,7 @@ public class MenuRegisterResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuRegisterResponse menuDto = (MenuRegisterResponse) o;
+        MenuPriceChangeResponse menuDto = (MenuPriceChangeResponse) o;
 
         if (displayed != menuDto.displayed) return false;
         if (menuId != null ? !menuId.equals(menuDto.menuId) : menuDto.menuId != null) return false;
