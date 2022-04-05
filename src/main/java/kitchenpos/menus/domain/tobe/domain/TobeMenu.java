@@ -140,6 +140,9 @@ public class TobeMenu {
             if (Objects.isNull(price) || Objects.isNull(pricingRule) || !pricingRule.checkRule(price)) {
                 throw new PricingRuleViolationException();
             }
+            if(Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
             return new TobeMenu(menuId, new MenuName(name), new MenuPrice(price), menuGroup, new MenuDisplayed(displayed), menuProducts);
         }
     }
