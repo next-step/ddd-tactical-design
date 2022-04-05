@@ -21,7 +21,7 @@ class DefaultMenuGroupNamingRuleTest {
         menuGroupNamingRule = new DefaultMenuGroupNamingRule();
     }
 
-    @DisplayName("상품명이 빈 값이 아니고, 비속어가 포함되지 않아야 한다")
+    @DisplayName("메뉴그룹명은 빈 값일 수 없다")
     @Test
     void checkRule_success() {
         //given, when
@@ -31,8 +31,8 @@ class DefaultMenuGroupNamingRuleTest {
         assertThat(result).isTrue();
     }
 
-    @DisplayName("상품명이 빈 값이거나, 욕설 혹은 비속어가 포함될 경우 상품가격 정책 위반이다")
-    @ValueSource(strings = {"욕설","비속어"})
+    @DisplayName("메뉴그룹명이 빈 값일 경우 메뉴그룹명 정책 위반이다")
+    @ValueSource(strings = {""})
     @NullSource
     @ParameterizedTest
     void checkRule_fail(final String name) {
@@ -40,5 +40,4 @@ class DefaultMenuGroupNamingRuleTest {
         assertThatThrownBy(() -> menuGroupNamingRule.checkRule(name))
                 .isInstanceOf(NamingRuleViolationException.class);
     }
-
 }
