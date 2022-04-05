@@ -1,8 +1,8 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
+import kitchenpos.common.exception.NamingRuleViolationException;
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +39,6 @@ class DefaultProductNamingRuleTest {
     void checkRule_fail(final String name) {
         //given, when,then
         assertThatThrownBy(() -> productNamingRule.checkRule(name))
-                .isInstanceOf(ProductNamingRuleViolationException.class);
+                .isInstanceOf(NamingRuleViolationException.class);
     }
 }

@@ -1,10 +1,9 @@
 package kitchenpos.menus.domain.tobe.domain;
 
+import kitchenpos.common.exception.NamingRuleViolationException;
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupName;
-import kitchenpos.menus.exception.MenuGroupNamingRuleViolationException;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -64,7 +63,7 @@ public class TobeMenuGroup {
 
         public TobeMenuGroup build() {
             if (Objects.isNull(name) || Objects.isNull(namingRule)) {
-                throw new MenuGroupNamingRuleViolationException();
+                throw new NamingRuleViolationException();
             }
             namingRule.checkRule(name);
             return new TobeMenuGroup(this.menuGroupId, new  MenuGroupName(name));

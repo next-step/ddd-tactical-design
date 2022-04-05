@@ -1,34 +1,25 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.exception.NamingRuleViolationException;
+import kitchenpos.common.exception.PricingRuleViolationException;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.domain.InMemoryTobeProductRepository;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.TobeProductRepository;
-import kitchenpos.products.domain.tobe.domain.vo.ProductId;
-import kitchenpos.products.domain.tobe.policy.FakeFailProductNamingRule;
-import kitchenpos.products.domain.tobe.policy.FakeFailProductPricingRule;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductNamingRule;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductPricingRule;
+import kitchenpos.common.policy.FakeFailNamingRule;
+import kitchenpos.common.policy.FakeFailPricingRule;
+import kitchenpos.common.policy.FakeSuccessNamingRule;
+import kitchenpos.common.policy.FakeSuccessPricingRule;
 import kitchenpos.products.dto.ProductPriceChangeRequest;
 import kitchenpos.products.dto.ProductRegisterRequest;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
-import kitchenpos.products.exception.ProductPricingRuleViolationException;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,8 +43,8 @@ class TobeProductServiceTest {
     void create_success() {
         //given
         final ProductRegisterRequest 상품등록요청 =
-                new ProductRegisterRequest("후라이드", new FakeSuccessProductNamingRule(),
-                        BigDecimal.valueOf(16_000L), new FakeSuccessProductPricingRule());
+                new ProductRegisterRequest("후라이드", new FakeSuccessNamingRule(),
+                        BigDecimal.valueOf(16_000L), new FakeSuccessPricingRule());
         //when
         final TobeProduct 상품 = productService.create(상품등록요청);
 
@@ -71,11 +62,11 @@ class TobeProductServiceTest {
     void create_fail_pricing_rule_violation( ) {
         //given
         final ProductRegisterRequest 상품등록요청 =
-                new ProductRegisterRequest("후라이드", new FakeSuccessProductNamingRule(),
-                        BigDecimal.valueOf(16_000L), new FakeFailProductPricingRule());
+                new ProductRegisterRequest("후라이드", new FakeSuccessNamingRule(),
+                        BigDecimal.valueOf(16_000L), new FakeFailPricingRule());
         //when&&then
         assertThatThrownBy(() -> productService.create(상품등록요청))
-                .isInstanceOf(ProductPricingRuleViolationException.class);
+                .isInstanceOf(PricingRuleViolationException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -83,11 +74,11 @@ class TobeProductServiceTest {
     void create_fail_naming_rule_violation() {
         //given
         final ProductRegisterRequest 상품등록요청 =
-                new ProductRegisterRequest("후라이드", new FakeFailProductNamingRule(),
-                        BigDecimal.valueOf(16_000L), new FakeSuccessProductPricingRule());
+                new ProductRegisterRequest("후라이드", new FakeFailNamingRule(),
+                        BigDecimal.valueOf(16_000L), new FakeSuccessPricingRule());
         //when&&then
         assertThatThrownBy(() -> productService.create(상품등록요청))
-                .isInstanceOf(ProductNamingRuleViolationException.class);
+                .isInstanceOf(NamingRuleViolationException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
@@ -95,7 +86,7 @@ class TobeProductServiceTest {
     void changePrice_success() {
         //given
         final TobeProduct 상품 = productRepository.save(tobeProduct("후라이드", BigDecimal.valueOf(16_000L)));
-        final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(상품.getId(), BigDecimal.valueOf(15_000L), new FakeSuccessProductPricingRule());
+        final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(상품.getId(), BigDecimal.valueOf(15_000L), new FakeSuccessPricingRule());
 
         //when
         final TobeProduct 가격변경상품 = productService.changePrice(가격변경요청);
@@ -114,11 +105,11 @@ class TobeProductServiceTest {
     void changePrice_fail() {
         //given
         final TobeProduct 상품 = productRepository.save(tobeProduct("후라이드", BigDecimal.valueOf(16_000L)));
-        final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(상품.getId(), BigDecimal.valueOf(15_000L), new FakeFailProductPricingRule());
+        final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(상품.getId(), BigDecimal.valueOf(15_000L), new FakeFailPricingRule());
 
         //when&&then
         assertThatThrownBy(() -> productService.changePrice(가격변경요청))
-                .isInstanceOf(ProductPricingRuleViolationException.class);
+                .isInstanceOf(PricingRuleViolationException.class);
     }
 
     @Disabled

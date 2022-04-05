@@ -1,7 +1,6 @@
 package kitchenpos.common.policy;
 
 import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
 
 public class FakeFailNamingRule implements NamingRule {
     @Override

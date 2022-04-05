@@ -1,12 +1,12 @@
 package kitchenpos.products.domain.tobe.domain;
 
+import kitchenpos.common.exception.NamingRuleViolationException;
+import kitchenpos.common.exception.PricingRuleViolationException;
 import kitchenpos.common.policy.NamingRule;
 import kitchenpos.common.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
-import kitchenpos.products.exception.ProductPricingRuleViolationException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -92,10 +92,10 @@ public class TobeProduct {
 
         public TobeProduct build() {
             if (Objects.isNull(name) || Objects.isNull(namingRule)) {
-                throw new ProductNamingRuleViolationException();
+                throw new NamingRuleViolationException();
             }
             if (Objects.isNull(price) || Objects.isNull(pricingRule)) {
-                throw new ProductPricingRuleViolationException();
+                throw new PricingRuleViolationException();
             }
             namingRule.checkRule(name);
             pricingRule.checkRule(price);

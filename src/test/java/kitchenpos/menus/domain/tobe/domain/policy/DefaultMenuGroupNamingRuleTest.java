@@ -1,9 +1,7 @@
 package kitchenpos.menus.domain.tobe.domain.policy;
 
+import kitchenpos.common.exception.NamingRuleViolationException;
 import kitchenpos.common.policy.NamingRule;
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.domain.tobe.domain.policy.DefaultProductNamingRule;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +38,7 @@ class DefaultMenuGroupNamingRuleTest {
     void checkRule_fail(final String name) {
         //given, when,then
         assertThatThrownBy(() -> menuGroupNamingRule.checkRule(name))
-                .isInstanceOf(ProductNamingRuleViolationException.class);
+                .isInstanceOf(NamingRuleViolationException.class);
     }
 
 }

@@ -1,7 +1,7 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
+import kitchenpos.common.exception.PricingRuleViolationException;
 import kitchenpos.common.policy.PricingRule;
-import kitchenpos.products.exception.ProductPricingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +40,6 @@ class DefaultProductPricingRuleTest {
     void checkRule_fail(final BigDecimal price) {
         //given, when,then
         assertThatThrownBy(() -> productPricingRule.checkRule(price))
-                .isInstanceOf(ProductPricingRuleViolationException.class);
+                .isInstanceOf(PricingRuleViolationException.class);
     }
 }
