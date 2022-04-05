@@ -1,0 +1,28 @@
+package kitchenpos.products.tobe.domain;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class ProductPriceTest {
+
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "1"})
+    void create(BigDecimal price) {
+        assertThatCode(() -> new ProductPrice(price))
+                .doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "-1")
+    @NullSource
+    void createInvalidPrice(BigDecimal price) {
+        assertThatThrownBy(() -> new ProductPrice(price))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+}

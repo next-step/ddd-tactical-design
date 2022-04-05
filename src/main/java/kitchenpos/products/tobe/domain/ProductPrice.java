@@ -6,6 +6,7 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
+    private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "가격은 0이상의 정수 이어야 합니다. 입력 값 : %s";
     private final BigDecimal price;
 
     protected ProductPrice() {
@@ -13,11 +14,22 @@ public class ProductPrice {
     }
 
     public ProductPrice(final BigDecimal price) {
+        validate(price);
         this.price = price;
     }
 
-    public ProductPrice(final int price) {
+    public ProductPrice(final long price) {
         this(BigDecimal.valueOf(price));
+    }
+
+    private void validate(BigDecimal price) {
+        if (Objects.isNull(price) || isNegative(price)) {
+            throw new IllegalArgumentException(PRICE_MUST_BE_POSITIVE_NUMBER);
+        }
+    }
+
+    private boolean isNegative(BigDecimal price) {
+        return price.compareTo(BigDecimal.ZERO) < 0;
     }
 
     @Override
