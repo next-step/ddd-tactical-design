@@ -10,7 +10,7 @@ public class ProductPrice {
     private final BigDecimal price;
 
     protected ProductPrice() {
-        price = null;
+        this.price = null;
     }
 
     public ProductPrice(final BigDecimal price) {

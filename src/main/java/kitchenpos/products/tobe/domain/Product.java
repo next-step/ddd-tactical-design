@@ -13,8 +13,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String displayedName;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private ProductPrice price;
@@ -22,9 +22,9 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String displayedName, BigDecimal price) {
+    public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
-        this.displayedName = displayedName;
+        this.name = new ProductName(name);
         this.price = new ProductPrice(price);
     }
 
@@ -32,8 +32,8 @@ public class Product {
         return id;
     }
 
-    public String getDisplayedName() {
-        return displayedName;
+    public ProductName getName() {
+        return name;
     }
 
     public ProductPrice getPrice() {
