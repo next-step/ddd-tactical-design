@@ -20,14 +20,14 @@ public class EatInOrderService {
     private final EatInOrderTableService eatInOrderTableService;
     private final OrderTableLoader orderTableLoader;
     private final OrderLineItemLoader orderLineItemLoader;
-    private final MenuClient menuClient;
+    private final MenuRepository menuRepository;
 
-    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final OrderLineItemLoader orderLineItemLoader, final MenuClient menuClient) {
+    public EatInOrderService(final OrderRepository orderRepository, final EatInOrderTableService eatInOrderTableService, final OrderTableLoader orderTableLoader, final OrderLineItemLoader orderLineItemLoader, final MenuRepository menuRepository) {
         this.orderRepository = orderRepository;
         this.eatInOrderTableService = eatInOrderTableService;
         this.orderTableLoader = orderTableLoader;
         this.orderLineItemLoader = orderLineItemLoader;
-        this.menuClient = menuClient;
+        this.menuRepository = menuRepository;
     }
 
     @Transactional
@@ -40,7 +40,7 @@ public class EatInOrderService {
 
     private OrderLineItems loadOrderLineItems(final List<OrderLineItemCreateRequest> requests) {
         return orderLineItemLoader.loadOrderLineItems(requests,
-                menuClient.findAllByIdn(
+                menuRepository.findAllByIdn(
                         requests.stream()
                                 .map(OrderLineItemCreateRequest::getMenuId)
                                 .collect(toList())

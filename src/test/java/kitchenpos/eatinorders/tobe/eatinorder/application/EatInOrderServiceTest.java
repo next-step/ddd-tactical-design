@@ -5,7 +5,7 @@ import kitchenpos.MenuFixture;
 import kitchenpos.OrderTableFixture;
 import kitchenpos.eatinorders.tobe.application.EatInOrderTableService;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.*;
-import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuClient;
+import kitchenpos.eatinorders.tobe.eatinorder.infra.FakeMenuRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @DisplayName("매장주문 응용 서비스(EatInOrderService)는")
 class EatInOrderServiceTest {
     private OrderRepository orderRepository;
-    private FakeMenuClient menuClient;
+    private FakeMenuRepository menuClient;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService orderService;
     private OrderLineItemLoader orderLineItemLoader = new OrderLineItemLoader();
@@ -55,7 +55,7 @@ class EatInOrderServiceTest {
     void setUp() {
         orderRepository = new InMemoryOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        menuClient = new FakeMenuClient();
+        menuClient = new FakeMenuRepository();
         final EatInOrderTableService eatInOrderTableService = new EatInOrderTableService(orderRepository, orderTableRepository);
         orderService = new EatInOrderService(orderRepository, eatInOrderTableService, new OrderTableLoader(), orderLineItemLoader, menuClient);
     }

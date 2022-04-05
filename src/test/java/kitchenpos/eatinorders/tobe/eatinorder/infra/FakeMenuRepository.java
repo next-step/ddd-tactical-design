@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.tobe.eatinorder.infra;
 
-import kitchenpos.eatinorders.tobe.eatinorder.application.MenuClient;
+import kitchenpos.eatinorders.tobe.eatinorder.application.MenuRepository;
 import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.MenuResponse;
 import kitchenpos.menus.tobe.menu.domain.Menu;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class FakeMenuClient implements MenuClient {
+public class FakeMenuRepository implements MenuRepository {
     private ConcurrentHashMap<UUID, Menu> repository = new ConcurrentHashMap<>();
 
     public Menu save(final Menu menu) {
