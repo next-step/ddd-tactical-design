@@ -1,5 +1,6 @@
 package kitchenpos.menus.dto;
 
+import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
@@ -25,6 +26,15 @@ public class MenuRegisterResponse {
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.displayed = displayed;
+    }
+
+    public MenuRegisterResponse(TobeMenu menu) {
+        this.menuId = menu.getId();
+        this.name = menu.getName().getValue();
+        this.price = menu.getPrice().getValue();
+        this.menuGroupId = menu.getMenuGroupId();
+        this.menuProducts = menu.getMenuProducts();
+        this.displayed = menu.getDisplayed().getValue();
     }
 
     public MenuId getMenuId() {
@@ -87,10 +97,7 @@ public class MenuRegisterResponse {
         if (name != null ? !name.equals(menuDto.name) : menuDto.name != null) return false;
         if (price != null ? !price.equals(menuDto.price) : menuDto.price != null) return false;
         if (menuGroupId != null ? !menuGroupId.equals(menuDto.menuGroupId) : menuDto.menuGroupId != null) return false;
-        if (menuProducts != null ? !menuProducts.equals(menuDto.menuProducts) : menuDto.menuProducts != null)
-            return false;
-
-        return true;
+        return menuProducts != null ? menuProducts.equals(menuDto.menuProducts) : menuDto.menuProducts == null;
     }
 
     @Override
