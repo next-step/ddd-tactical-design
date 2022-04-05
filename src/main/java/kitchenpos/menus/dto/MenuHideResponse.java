@@ -8,7 +8,7 @@ import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MenuDisplayedChangeResponse {
+public class MenuHideResponse {
     private MenuId menuId;
     private String name;
     private BigDecimal price;
@@ -16,10 +16,10 @@ public class MenuDisplayedChangeResponse {
     private List<TobeMenuProduct> menuProducts;
     private boolean displayed;
 
-    public MenuDisplayedChangeResponse() {
+    public MenuHideResponse() {
     }
 
-    public MenuDisplayedChangeResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
+    public MenuHideResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
         this.menuId = menuId;
         this.name = name;
         this.price = price;
@@ -28,7 +28,7 @@ public class MenuDisplayedChangeResponse {
         this.displayed = displayed;
     }
 
-    public MenuDisplayedChangeResponse(TobeMenu menu) {
+    public MenuHideResponse(TobeMenu menu) {
         this.menuId = menu.getId();
         this.name = menu.getName().getValue();
         this.price = menu.getPrice().getValue();
@@ -90,7 +90,7 @@ public class MenuDisplayedChangeResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuDisplayedChangeResponse menuDto = (MenuDisplayedChangeResponse) o;
+        MenuHideResponse menuDto = (MenuHideResponse) o;
 
         if (displayed != menuDto.displayed) return false;
         if (menuId != null ? !menuId.equals(menuDto.menuId) : menuDto.menuId != null) return false;

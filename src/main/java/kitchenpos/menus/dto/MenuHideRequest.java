@@ -2,13 +2,13 @@ package kitchenpos.menus.dto;
 
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 
-public class MenuDisplayedChangeRequest {
+public class MenuHideRequest {
     private MenuId menuId;
 
-    public MenuDisplayedChangeRequest() {
+    public MenuHideRequest() {
     }
 
-    public MenuDisplayedChangeRequest(MenuId menuId) {
+    public MenuHideRequest(MenuId menuId) {
         this.menuId = menuId;
     }
 
@@ -25,7 +25,7 @@ public class MenuDisplayedChangeRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuDisplayedChangeRequest that = (MenuDisplayedChangeRequest) o;
+        MenuHideRequest that = (MenuHideRequest) o;
 
         return menuId != null ? menuId.equals(that.menuId) : that.menuId == null;
     }
