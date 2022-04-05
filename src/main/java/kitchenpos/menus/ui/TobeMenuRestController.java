@@ -37,16 +37,16 @@ public class TobeMenuRestController {
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<MenuDisplayedChangeResponse> display(@PathVariable final MenuDisplayedChangeRequest request) {
+    public ResponseEntity<MenuDisplayResponse> display(@PathVariable final MenuDisplayRequest request) {
         final TobeMenu menu = menuService.display(request);
-        final MenuDisplayedChangeResponse response = new MenuDisplayedChangeResponse(menu);
+        final MenuDisplayResponse response = new MenuDisplayResponse(menu);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<MenuDisplayedChangeResponse> hide(@PathVariable final MenuDisplayedChangeRequest request) {
+    public ResponseEntity<MenuDisplayResponse> hide(@PathVariable final MenuDisplayRequest request) {
         final TobeMenu menu = menuService.hide(request);
-        final MenuDisplayedChangeResponse response = new MenuDisplayedChangeResponse(menu);
+        final MenuDisplayResponse response = new MenuDisplayResponse(menu);
         return ResponseEntity.ok(response);
     }
 
