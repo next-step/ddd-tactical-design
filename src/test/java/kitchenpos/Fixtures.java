@@ -4,10 +4,11 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductNamingRule;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductPricingRule;
+import kitchenpos.common.policy.FakeSuccessNamingRule;
+import kitchenpos.common.policy.FakeSuccessPricingRule;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -131,7 +132,11 @@ public class Fixtures {
     }
 
     public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
-        return new ProductBuilder().name(name).namingRule(new FakeSuccessProductNamingRule())
-                .price(price).pricingRule(new FakeSuccessProductPricingRule()).build();
+        return new ProductBuilder().name(name).namingRule(new FakeSuccessNamingRule())
+                .price(price).pricingRule(new FakeSuccessPricingRule()).build();
+    }
+
+    public static TobeMenuGroup tobeMenuGroup(final String name) {
+        return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(new FakeSuccessNamingRule()).build();
     }
 }
