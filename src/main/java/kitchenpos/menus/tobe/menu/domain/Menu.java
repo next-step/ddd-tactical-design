@@ -4,6 +4,7 @@ import kitchenpos.menus.tobe.menu.domain.product.Price;
 import kitchenpos.menus.tobe.menugroup.domain.MenuGroup;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,9 +13,8 @@ import static java.util.UUID.randomUUID;
 @Table(name = "menu")
 @Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private MenuId id;
 
     @Embedded
     private Name name;
@@ -47,7 +47,11 @@ public class Menu {
         this(randomUUID(), name, amount, menuGroup, displayed, menuProducts);
     }
 
-    private Menu(final UUID id, final Name name, final Price amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+    private Menu(final UUID id, final Name name, final Price price, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
+        this(new MenuId(id), name, price, menuGroup, displayed, menuProducts);
+    }
+
+    private Menu(final MenuId id, final Name name, final Price amount, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
         verify(amount, menuProducts);
         this.id = id;
         this.name = name;
@@ -78,8 +82,8 @@ public class Menu {
         }
     }
 
-    public Price getPrice() {
-        return price;
+    public BigDecimal getPrice() {
+        return price.value();
     }
 
     public void hide() {
@@ -94,7 +98,7 @@ public class Menu {
     }
 
     public UUID getId() {
-        return id;
+        return id.getId();
     }
 
     public boolean isDisplayed() {

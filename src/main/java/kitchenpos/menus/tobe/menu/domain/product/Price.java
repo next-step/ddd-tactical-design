@@ -38,6 +38,10 @@ public class Price {
         return this.price.compareTo(amount) <= 0;
     }
 
+    public BigDecimal value() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
