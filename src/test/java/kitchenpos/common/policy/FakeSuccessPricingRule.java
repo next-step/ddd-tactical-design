@@ -1,10 +1,10 @@
-package kitchenpos.products.domain.tobe.policy;
+package kitchenpos.common.policy;
 
 import kitchenpos.common.policy.PricingRule;
 
 import java.math.BigDecimal;
 
-public class FakeSuccessProductPricingRule implements PricingRule {
+public class FakeSuccessPricingRule implements PricingRule {
 
     @Override
     public boolean checkRule(BigDecimal price) {

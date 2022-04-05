@@ -1,8 +1,8 @@
-package kitchenpos.products.domain.tobe.policy;
+package kitchenpos.common.policy;
 
 import kitchenpos.common.policy.NamingRule;
 
-public class FakeSuccessProductNamingRule implements NamingRule {
+public class FakeSuccessNamingRule implements NamingRule {
     @Override
     public boolean checkRule(String name) {
         return true;
