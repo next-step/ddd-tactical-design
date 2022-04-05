@@ -59,33 +59,33 @@ public class TobeProduct {
         return price;
     }
 
-    public static class ProductBuilder {
+    public static class Builder {
         private ProductId productId;
         private String name;
         private NamingRule namingRule;
         private BigDecimal price;
         private PricingRule pricingRule;
 
-        public ProductBuilder() {
+        public Builder() {
 
         }
 
-        public ProductBuilder name(String name) {
+        public Builder name(String name) {
             this.name=name;
             return this;
         }
 
-        public ProductBuilder namingRule(NamingRule namingRule) {
+        public Builder namingRule(NamingRule namingRule) {
             this.namingRule=namingRule;
             return this;
         }
 
-        public ProductBuilder price(BigDecimal price) {
+        public Builder price(BigDecimal price) {
             this.price=price;
             return this;
         }
 
-        public ProductBuilder pricingRule(PricingRule pricingRule) {
+        public Builder pricingRule(PricingRule pricingRule) {
             this.pricingRule=pricingRule;
             return this;
         }
