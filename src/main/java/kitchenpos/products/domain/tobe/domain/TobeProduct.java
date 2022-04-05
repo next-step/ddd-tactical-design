@@ -61,7 +61,7 @@ public class TobeProduct {
 
     public static class ProductBuilder {
         private ProductId productId;
-        private java.lang.String name;
+        private String name;
         private ProductNamingRule namingRule;
         private BigDecimal price;
         private ProductPricingRule pricingRule;
@@ -70,7 +70,7 @@ public class TobeProduct {
 
         }
 
-        public ProductBuilder name(java.lang.String name) {
+        public ProductBuilder name(String name) {
             this.name=name;
             return this;
         }
