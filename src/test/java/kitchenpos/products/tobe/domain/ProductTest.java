@@ -17,13 +17,13 @@ class ProductTest {
     @DisplayName("상품을 생성할 수 있다.")
     @Test
     void constructor() {
-        assertDoesNotThrow(() -> product2(14000));
+        assertDoesNotThrow(() -> product(14000));
     }
 
     @DisplayName("상품의 가격은 0 보다 작을 수 없다.")
     @Test
     void negativePrice() {
-        assertThatThrownBy(() -> product2(-100))
+        assertThatThrownBy(() -> product(-100))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
     }
@@ -49,7 +49,7 @@ class ProductTest {
     @Test
     void changePrice() {
         BigDecimal newPrice = BigDecimal.valueOf(14000);
-        Product product = product2(10000);
+        Product product = product(10000);
 
         product.changePrice(newPrice);
 
@@ -59,14 +59,22 @@ class ProductTest {
     @DisplayName("상품의 가격은 0원 이하로 변경할 수 없다.")
     @Test
     void changeNegativePrice() {
-        Product product = product2(10000);
+        Product product = product(10000);
 
         assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-100)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
     }
 
-    private Product product2(Integer price) {
+    @DisplayName("상품의 가격과 수량을 곱한 결과값을 알 수 있다.")
+    @Test
+    void multiplyPrice() {
+        Product product = product(20000);
+
+        assertThat(product.multiplyPrice(BigDecimal.valueOf(5))).isEqualTo(BigDecimal.valueOf(100000));
+    }
+
+    private Product product(Integer price) {
         return new Product("엽기떡볶이", BigDecimal.valueOf(price), new FakePurgomalumClient());
     }
 }

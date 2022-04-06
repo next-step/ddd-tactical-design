@@ -31,6 +31,10 @@ public class Product {
     }
 
     public ProductPrice getPrice() {
-        return this.price;
+        return price;
+    }
+
+    public BigDecimal multiplyPrice(BigDecimal quantity) {
+        return price.multiplyPrice(quantity);
     }
 }

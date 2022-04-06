@@ -1,15 +1,15 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class ProductPrice {
+public class MenuPrice {
     private static final BigDecimal MIN = BigDecimal.ZERO;
-    private static final String INVALID_PRICE_MESSAGE = "상품의 가격은 0원 이상이어야 합니다.";
+    private final String INVALID_PRICE_MESSAGE = "잘못된 메뉴 가격 입니다.";
 
     private final BigDecimal value;
 
-    public ProductPrice(BigDecimal value) {
+    public MenuPrice(BigDecimal value) {
         validate(value);
         this.value = value;
     }
@@ -20,20 +20,20 @@ public class ProductPrice {
         }
     }
 
-    public BigDecimal multiplyPrice(BigDecimal value) {
-        return this.value.multiply(value);
+    public int compareTo(BigDecimal value) {
+        return this.value.compareTo(value);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
-        return Objects.equals(value, that.value);
+        MenuPrice menuPrice = (MenuPrice) o;
+        return Objects.equals(INVALID_PRICE_MESSAGE, menuPrice.INVALID_PRICE_MESSAGE) && Objects.equals(value, menuPrice.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(INVALID_PRICE_MESSAGE, value);
     }
 }
