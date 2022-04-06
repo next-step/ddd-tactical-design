@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.Fixtures;
-import kitchenpos.products.tobe.domain.Product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
