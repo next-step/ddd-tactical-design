@@ -14,8 +14,8 @@ public final class MenuGroup {
         this.name = name;
     }
 
-    public MenuGroup(UUID id, String name) {
-        this(new MenuGroupId(id), new DisplayedName(name, text -> false));
+    public MenuGroup(UUID id, DisplayedName name) {
+        this(new MenuGroupId(id), name);
     }
 
     @Override
