@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,7 +11,7 @@ public final class Money implements Comparable<Money> {
 
     public Money(BigDecimal value) {
         if (Objects.isNull(value)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Money는 비어 있을 수 없습니다. value: null");
         }
         this.value = value;
     }
@@ -22,6 +22,18 @@ public final class Money implements Comparable<Money> {
 
     public boolean isLessThan(Money other) {
         return this.compareTo(other) < 0;
+    }
+
+    public boolean isMoreThan(Money other) {
+        return this.compareTo(other) > 0;
+    }
+
+    public Money plus(Money other) {
+        return new Money(this.value.add(other.value));
+    }
+
+    public Money times(long i) {
+        return new Money(value.multiply(BigDecimal.valueOf(i)));
     }
 
     @Override

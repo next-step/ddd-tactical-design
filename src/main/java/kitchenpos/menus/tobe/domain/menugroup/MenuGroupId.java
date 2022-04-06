@@ -1,12 +1,12 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public final class ProductId {
+public final class MenuGroupId {
     private final UUID value;
 
-    public ProductId(UUID value) {
+    public MenuGroupId(UUID value) {
         if (Objects.isNull(value)) {
             throw new IllegalArgumentException("id는 null 일 수 없습니다.");
         }
@@ -18,11 +18,11 @@ public final class ProductId {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ProductId)) {
+        if (!(o instanceof MenuGroupId)) {
             return false;
         }
-        ProductId productId = (ProductId) o;
-        return Objects.equals(value, productId.value);
+        MenuGroupId that = (MenuGroupId) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override
@@ -32,7 +32,7 @@ public final class ProductId {
 
     @Override
     public String toString() {
-        return "ProductId{" +
+        return "MenuGroupId{" +
             "value=" + value +
             '}';
     }

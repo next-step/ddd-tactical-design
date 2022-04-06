@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Money;
 
 public final class Product {
 
@@ -16,13 +18,15 @@ public final class Product {
         this.price = price;
     }
 
-    public Product(UUID id, String name, long price) {
-        this(new ProductId(id), new DisplayedName(name), new Money(price));
+    public Product(UUID id, DisplayedName name, long price) {
+        this(new ProductId(id), name, new Money(price));
     }
 
     private void validPrice(Money price) {
         if (price.isLessThan(Money.ZERO)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                String.format("가격은 0보다 작을 수 없습니다. price: %s", price)
+            );
         }
     }
 
