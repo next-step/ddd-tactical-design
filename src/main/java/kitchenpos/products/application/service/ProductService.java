@@ -1,5 +1,6 @@
 package kitchenpos.products.application.service;
 
+import kitchenpos.common.UseCaseService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
@@ -7,7 +8,6 @@ import kitchenpos.products.application.port.in.ProductServicePort;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.application.port.out.ProductRepository;
 import kitchenpos.products.application.port.out.PurgomalumClient;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
-@Service
+@UseCaseService
 public class ProductService implements ProductServicePort {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
