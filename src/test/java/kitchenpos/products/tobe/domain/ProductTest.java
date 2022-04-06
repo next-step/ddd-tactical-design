@@ -37,6 +37,15 @@ class ProductTest {
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
     }
 
+    @DisplayName("상품의 가격은 입력하지 않을 수 없다.")
+    @ParameterizedTest
+    @NullSource
+    void nullName(String name) {
+        assertThatThrownBy(() -> new Product(name, BigDecimal.valueOf(12000), new FakePurgomalumClient()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("상품의 이름으로 사용할 수 없습니다.");
+    }
+
     @DisplayName("상품의 이름에 금지어가 포함될 수 없다.")
     @Test
     void forbiddenName() {
