@@ -6,10 +6,15 @@ public final class DisplayedName {
 
     private final String value;
 
-    public DisplayedName(String value) {
+    public DisplayedName(String value, DisplayedNamePolicy policy) {
         if (Objects.isNull(value) || value.isEmpty()) {
             throw new IllegalArgumentException(
                 String.format("DisplayedName 은 비어 있을 수 없습니다. value: %s", value)
+            );
+        }
+        if (policy.hasProfanity(value)) {
+            throw new IllegalArgumentException(
+                String.format("비속어가 포함될 수 없습니다. value: %s", value)
             );
         }
         this.value = value;

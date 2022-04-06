@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.UUID;
+import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Money;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ class MenuTest {
         1_000,
         1
     );
+    final DisplayedName name = new DisplayedName("test", text -> false);
 
     @DisplayName("등록할 수 있다.")
     @Nested
@@ -35,7 +37,7 @@ class MenuTest {
                 .isThrownBy(
                     () -> new Menu(
                         UUID.randomUUID(),
-                        "test",
+                        name,
                         price,
                         menuGroupId,
                         true,
@@ -64,7 +66,7 @@ class MenuTest {
                 .isThrownBy(
                     () -> new Menu(
                         UUID.randomUUID(),
-                        "test",
+                        name,
                         1_001,
                         menuGroupId,
                         true,
@@ -81,7 +83,7 @@ class MenuTest {
                 .isThrownBy(
                     () -> new Menu(
                         UUID.randomUUID(),
-                        "test",
+                        name,
                         1_000,
                         null,
                         true,
@@ -93,12 +95,12 @@ class MenuTest {
         @DisplayName("이름이 비어 있다면 등록할 수 없다.")
         @ParameterizedTest(name = "{0}인 경우")
         @NullAndEmptySource
-        void 이름이_비어_있다면_등록할_수_없다(String name) {
+        void 이름이_비어_있다면_등록할_수_없다(String value) {
             assertThatIllegalArgumentException()
                 .isThrownBy(
                     () -> new Menu(
                         UUID.randomUUID(),
-                        name,
+                        new DisplayedName(value, text -> false),
                         1_000,
                         menuGroupId,
                         true,
@@ -113,7 +115,7 @@ class MenuTest {
             assertDoesNotThrow(
                 () -> new Menu(
                     UUID.randomUUID(),
-                    "test",
+                    name,
                     1_000,
                     menuGroupId,
                     true,
@@ -132,7 +134,7 @@ class MenuTest {
         void 변경할_가격이_0보다_작다면_변경할_수_없다() {
             final Menu menu = new Menu(
                 UUID.randomUUID(),
-                "test",
+                name,
                 1_000,
                 menuGroupId,
                 true,
@@ -148,7 +150,7 @@ class MenuTest {
         void 변경할_가격이_속한_메뉴_상품의_금액의_합보다_크면_변경할_수_없다() {
             final Menu menu = new Menu(
                 UUID.randomUUID(),
-                "test",
+                name,
                 1_000,
                 menuGroupId,
                 true,
@@ -165,7 +167,7 @@ class MenuTest {
         void 변경할_가격이_속한_메뉴_상품의_금액의_합보다_작거나_같다면_변경할_수_있다(long changePrice) {
             final Menu menu = new Menu(
                 UUID.randomUUID(),
-                "test",
+                name,
                 1_000,
                 menuGroupId,
                 true,
@@ -184,7 +186,7 @@ class MenuTest {
         void 전시할_수_있다() {
             final Menu menu = new Menu(
                 UUID.randomUUID(),
-                "test",
+                name,
                 1_000,
                 menuGroupId,
                 false,
@@ -199,7 +201,7 @@ class MenuTest {
         void 숨길_수_있다() {
             final Menu menu = new Menu(
                 UUID.randomUUID(),
-                "test",
+                name,
                 1_000,
                 menuGroupId,
                 true,

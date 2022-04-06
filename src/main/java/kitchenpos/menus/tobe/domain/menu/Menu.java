@@ -36,7 +36,7 @@ public final class Menu {
 
     public Menu(
         UUID id,
-        String name,
+        DisplayedName name,
         long price,
         UUID menuGroupId,
         boolean displayed,
@@ -44,7 +44,7 @@ public final class Menu {
     ) {
         this(
             new MenuId(id),
-            new DisplayedName(name),
+            name,
             new Money(price),
             new MenuGroupId(menuGroupId),
             displayed,

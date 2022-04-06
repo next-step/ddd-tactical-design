@@ -18,8 +18,8 @@ public final class Product {
         this.price = price;
     }
 
-    public Product(UUID id, String name, long price) {
-        this(new ProductId(id), new DisplayedName(name), new Money(price));
+    public Product(UUID id, DisplayedName name, long price) {
+        this(new ProductId(id), name, new Money(price));
     }
 
     private void validPrice(Money price) {
