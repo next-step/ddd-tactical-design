@@ -12,11 +12,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("메뉴 그룹은")
 class MenuGroupTest {
 
-    private final DisplayedNamePolicy policy = new FakeDisplayedNamePolicy();
+    private final DisplayedNamePolicy NAME_POLICY = new FakeDisplayedNamePolicy();
 
     @Nested
     @DisplayName("등록할 수 있다.")
@@ -27,13 +28,21 @@ class MenuGroupTest {
         @NullAndEmptySource
         void 이름이_비어있다면_등록할_수_없다(String value) {
             assertThatIllegalArgumentException()
-                .isThrownBy(() -> new MenuGroup(UUID.randomUUID(), new DisplayedName(value, policy)));
+                .isThrownBy(() -> new MenuGroup(UUID.randomUUID(), new DisplayedName(value, NAME_POLICY)));
         }
 
-        @DisplayName("이름이 비어있지 않다면 등록할 수 있다")
+        @DisplayName("비속어가 포함되어 있다면 등록할 수 없다")
+        @ParameterizedTest
+        @ValueSource(strings = {"비속어", "욕설"})
+        void 비속어가_포함되어_있다면_추가할_수_없다(String value) {
+            assertThatIllegalArgumentException()
+                .isThrownBy(() -> new MenuGroup(UUID.randomUUID(), new DisplayedName(value, NAME_POLICY)));
+        }
+
+        @DisplayName("이름이 비어있지 않고 비속어가 포함되어 있지 않다면 등록할 수 있다")
         @Test
-        void 이름이_비어있지_않다면_등록할_수_있다() {
-            assertDoesNotThrow(() -> new MenuGroup(UUID.randomUUID(), new DisplayedName("test", policy)));
+        void 이름이_비어있지_않고_비속어가_포함되어_있지_않다면_등록할_수_있다() {
+            assertDoesNotThrow(() -> new MenuGroup(UUID.randomUUID(), new DisplayedName("test", NAME_POLICY)));
         }
     }
 }

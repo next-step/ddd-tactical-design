@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.UUID;
 import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.DisplayedNamePolicy;
+import kitchenpos.common.domain.FakeDisplayedNamePolicy;
 import kitchenpos.common.domain.Money;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("메뉴는")
 class MenuTest {
+
+    private final DisplayedNamePolicy NAME_POLICY = new FakeDisplayedNamePolicy();
 
     private final UUID menuGroupId = UUID.randomUUID();
     private final MenuProduct 천원메뉴상품 = new MenuProduct(
@@ -100,7 +104,7 @@ class MenuTest {
                 .isThrownBy(
                     () -> new Menu(
                         UUID.randomUUID(),
-                        new DisplayedName(value, text -> false),
+                        new DisplayedName(value, NAME_POLICY),
                         1_000,
                         menuGroupId,
                         true,
@@ -109,9 +113,26 @@ class MenuTest {
                 );
         }
 
-        @DisplayName("가격이 속한 메뉴 상품의 금액의 합보다 작고 특정 메뉴그룹에 속하고 이름이 비어있지 않다면 등록 가능하다")
+        @DisplayName("비속어가 포함되어 있다면 추가할 수 없다")
+        @ParameterizedTest
+        @ValueSource(strings = {"비속어", "욕설"})
+        void 비속어가_포함되어_있다면_추가할_수_없다(String value) {
+            assertThatIllegalArgumentException()
+                .isThrownBy(
+                    () -> new Menu(
+                        UUID.randomUUID(),
+                        new DisplayedName(value, NAME_POLICY),
+                        1_000,
+                        menuGroupId,
+                        true,
+                        천원메뉴상품
+                    )
+                );
+        }
+
+        @DisplayName("가격이 속한 메뉴 상품의 금액의 합보다 작고 특정 메뉴그룹에 속하고 이름이 비어있않고 비속어가 포함되어 있지  않다면 등록 가능하다")
         @Test
-        void 가격이_속한_메뉴_상품의_금액의_합보다_작고_특정_메뉴그룹에_속하고_이름이_비어있지_않다면_등록_가능하다() {
+        void 가격이_속한_메뉴_상품의_금액의_합보다_작고_특정_메뉴그룹에_속하고_이름이_비어있고_비속어가_포함되어_있지_않다면_등록_가능하다() {
             assertDoesNotThrow(
                 () -> new Menu(
                     UUID.randomUUID(),
