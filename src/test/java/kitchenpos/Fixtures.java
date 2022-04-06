@@ -1,5 +1,7 @@
 package kitchenpos;
 
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProfanityFilteredName;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -126,7 +128,10 @@ public class Fixtures {
     }
 
     public static kitchenpos.products.tobe.domain.Product tobe_product(final String name, final long price) {
-        final kitchenpos.products.tobe.domain.Product product = new kitchenpos.products.tobe.domain.Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
+        final ProfanityFilteredName profanityFilteredName = ProfanityFilteredName.of(name);
+        final Price wrappingPrice = Price.of(BigDecimal.valueOf(price));
+
+        final kitchenpos.products.tobe.domain.Product product = new kitchenpos.products.tobe.domain.Product(UUID.randomUUID(), profanityFilteredName, wrappingPrice);
         return product;
     }
 }

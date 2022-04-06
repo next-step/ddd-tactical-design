@@ -1,9 +1,15 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProfanityFilteredName;
+import org.springframework.util.ObjectUtils;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -14,19 +20,19 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Price price;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProfanityFilteredName profanityFilteredName;
 
-    public Product() {
+    protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
+    public Product(UUID id, ProfanityFilteredName profanityFilteredName, Price price) {
         this.id = id;
-        this.name = name;
         this.price = price;
+        this.profanityFilteredName = profanityFilteredName;
     }
 
     public UUID getId() {
@@ -34,10 +40,14 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getValue();
     }
 
-    public Product changePrice(final BigDecimal price) {
-        return new Product(id, name, price);
+    public String getName() {
+        return profanityFilteredName.getValue();
+    }
+
+    public Product changePrice(final Price price) {
+        return new Product(id, profanityFilteredName, price);
     }
 }
