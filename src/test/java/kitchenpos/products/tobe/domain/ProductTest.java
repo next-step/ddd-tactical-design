@@ -33,8 +33,6 @@ class ProductTest {
         Product product = new Product(UUID.randomUUID(), "김치", 0);
 
         product.changePrice(10);
-
-        assertThat(product.getPrice()).isEqualTo(new ProductPrice(10));
     }
 
     @Test
