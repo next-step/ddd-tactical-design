@@ -98,6 +98,11 @@ public class MenuService {
         return menus;
     }
 
+    @Transactional
+    public List<Menu> findAllByIdn(List<UUID> menuIds) {
+        return menuRepository.findAllByIdIn(menuIds);
+    }
+
     private MenuGroup loadMenuGroup(final UUID menuGroupId) {
         return menuGroupService.findById(menuGroupId);
     }
