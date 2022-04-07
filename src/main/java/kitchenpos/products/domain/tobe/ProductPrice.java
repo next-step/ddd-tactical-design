@@ -39,4 +39,21 @@ public class ProductPrice {
     public ProductPrice multiply(BigDecimal value) {
         return new ProductPrice(price.multiply(value));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductPrice)) {
+            return false;
+        }
+        ProductPrice that = (ProductPrice) o;
+        return Objects.equals(getPrice(), that.getPrice());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPrice());
+    }
 }

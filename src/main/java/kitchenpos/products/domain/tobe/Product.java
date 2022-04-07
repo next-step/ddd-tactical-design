@@ -36,16 +36,8 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name.getName();
-    }
-
-    public BigDecimal getPrice() {
-        return price.getPrice();
+    public ProductPrice getPrice() {
+        return price;
     }
 
     @Override
@@ -57,11 +49,11 @@ public class Product {
             return false;
         }
         Product product = (Product) o;
-        return Objects.equals(getId(), product.getId());
+        return Objects.equals(id, product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(id);
     }
 }

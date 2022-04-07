@@ -1,6 +1,7 @@
 package kitchenpos.products.domain;
 
 import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.support.StubBanWordFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,9 +21,9 @@ class ProductTest {
         final Product product = createProductWithValidName(name, price);
 
         assertAll(
-                () -> assertThat(product.getId()).isNotNull(),
-                () -> assertThat(product.getName()).isEqualTo(name),
-                () -> assertThat(product.getPrice()).isEqualTo(price)
+                () -> assertThat(product).extracting("id").isNotNull(),
+                () -> assertThat(product).extracting("name").isNotNull(),
+                () -> assertThat(product).extracting("price").isNotNull()
         );
     }
 
@@ -36,7 +37,7 @@ class ProductTest {
 
         product.changePrice(changePrice);
 
-        assertThat(product.getPrice()).isEqualTo(changePrice);
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(changePrice));
     }
 
     public Product createProductWithValidName(String name, BigDecimal price) {
