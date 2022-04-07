@@ -9,6 +9,15 @@ public final class CreatOrderLineItemCommand {
     private BigDecimal price;
     private long quantity;
 
+    public CreatOrderLineItemCommand() {
+    }
+
+    public CreatOrderLineItemCommand(UUID menuId, BigDecimal price, long quantity) {
+        this.menuId = menuId;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public UUID getMenuId() {
         return menuId;
     }
