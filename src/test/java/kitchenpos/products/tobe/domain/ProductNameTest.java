@@ -14,6 +14,6 @@ class ProductNameTest {
     @ValueSource(strings = {"", " ", "          "})
     @DisplayName("빈 이름으로는 이름 생성 불가능")
     void createNameTest(String value) {
-        assertThatIllegalArgumentException().isThrownBy(() -> new ProductName(value));
+        assertThatIllegalArgumentException().isThrownBy(() -> new ProductName(value, name -> false));
     }
 }

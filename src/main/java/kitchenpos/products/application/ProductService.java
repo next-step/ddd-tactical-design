@@ -37,11 +37,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse create(final CreateProductRequest request) {
-        if (purgomalumClient.containsProfanity(request.getName())) {
-            throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
-        }
-
-        Product saved = productRepository.save(Product.of(request.getName(), request.getPrice()));
+        Product saved = productRepository.save(Product.of(request.getName(), request.getPrice(), purgomalumClient));
         return ProductResponse.from(saved);
     }
 

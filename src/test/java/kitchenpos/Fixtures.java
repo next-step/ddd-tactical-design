@@ -11,8 +11,13 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.products.infra.FakePurgomalumClient;
+import kitchenpos.products.infra.PurgomalumClient;
 
 public class Fixtures {
+
+    private static final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static Menu menu() {
@@ -126,6 +131,6 @@ public class Fixtures {
     }
 
     public static kitchenpos.products.tobe.domain.Product newProduct(String name, long price) {
-        return kitchenpos.products.tobe.domain.Product.of(name, price);
+        return kitchenpos.products.tobe.domain.Product.of(name, price, purgomalumClient);
     }
 }

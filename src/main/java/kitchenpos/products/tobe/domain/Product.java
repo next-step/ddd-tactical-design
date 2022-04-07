@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.products.infra.PurgomalumClient;
 
 @Table(name = "product")
 @Entity
@@ -29,12 +30,12 @@ public class Product {
         this.price = price;
     }
 
-    private Product(String name, Long price) {
-        this(UUID.randomUUID(), new ProductName(name), new ProductPrice(price));
+    private Product(String name, Long price, PurgomalumClient purgomalumClient) {
+        this(UUID.randomUUID(), new ProductName(name, purgomalumClient), new ProductPrice(price));
     }
 
-    public static Product of(String name, Long price) {
-        return new Product(name, price);
+    public static Product of(String name, Long price, PurgomalumClient purgomalumClient) {
+        return new Product(name, price, purgomalumClient);
     }
 
     public void changePrice(Long price) {
