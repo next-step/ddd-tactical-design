@@ -1,7 +1,5 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.domain.tobe;
 
-import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.support.StubBanWordFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
