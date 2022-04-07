@@ -28,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.EatInOrderFixture.createOrderLineItemRequest;
+import static kitchenpos.EatInOrderFixture.createOrderRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -247,15 +249,4 @@ class EatInOrderServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    private CreateRequest createOrderRequest(final UUID orderTableId, final OrderLineItemCreateRequest... orderLineItems) {
-        return createOrderRequest(orderTableId, Arrays.asList(orderLineItems));
-    }
-
-    private CreateRequest createOrderRequest(final UUID orderTableId, final List<OrderLineItemCreateRequest> orderLineItems) {
-        return new CreateRequest(orderTableId, orderLineItems);
-    }
-
-    private static OrderLineItemCreateRequest createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
-        return new OrderLineItemCreateRequest(menuId, quantity, BigDecimal.valueOf(price));
-    }
 }

@@ -3,9 +3,12 @@ package kitchenpos;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.eatinorder.domain.Quantity;
+import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.CreateRequest;
+import kitchenpos.eatinorders.tobe.eatinorder.ui.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.tobe.ordertable.domain.OrderTable;
 import kitchenpos.menus.tobe.menu.domain.MenuId;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -62,5 +65,17 @@ public class EatInOrderFixture {
         final EatInOrder eatInOrder = 서빙된_매장주문(orderLineItems, orderTable);
         eatInOrder.complete();
         return eatInOrder;
+    }
+
+    public static CreateRequest createOrderRequest(final UUID orderTableId, final OrderLineItemCreateRequest... orderLineItems) {
+        return createOrderRequest(orderTableId, Arrays.asList(orderLineItems));
+    }
+
+    public static CreateRequest createOrderRequest(final UUID orderTableId, final List<OrderLineItemCreateRequest> orderLineItems) {
+        return new CreateRequest(orderTableId, orderLineItems);
+    }
+
+    public static OrderLineItemCreateRequest createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
+        return new OrderLineItemCreateRequest(menuId, quantity, BigDecimal.valueOf(price));
     }
 }
