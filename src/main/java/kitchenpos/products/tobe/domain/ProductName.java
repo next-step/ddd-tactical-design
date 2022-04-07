@@ -11,9 +11,7 @@ public class ProductName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected ProductName() {
-
-    }
+    protected ProductName() { }
 
     public ProductName(String name) {
         if (StringUtils.isBlank(name)) {

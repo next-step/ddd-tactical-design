@@ -41,7 +41,7 @@ public class ProductService {
             throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
         }
 
-        Product saved = productRepository.save(Product.of(UUID.randomUUID(), request.getName(), request.getPrice()));
+        Product saved = productRepository.save(Product.of(request.getName(), request.getPrice()));
         return ProductResponse.from(saved);
     }
 

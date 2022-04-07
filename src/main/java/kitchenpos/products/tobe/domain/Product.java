@@ -29,12 +29,12 @@ public class Product {
         this.price = price;
     }
 
-    private Product(UUID id, String name, Long price) {
-        this(id, new ProductName(name), new ProductPrice(price));
+    private Product(String name, Long price) {
+        this(UUID.randomUUID(), new ProductName(name), new ProductPrice(price));
     }
 
-    public static Product of(UUID id, String name, Long price) {
-        return new Product(id, name, price);
+    public static Product of(String name, Long price) {
+        return new Product(name, price);
     }
 
     public void changePrice(Long price) {

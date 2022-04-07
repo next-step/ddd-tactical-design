@@ -126,6 +126,6 @@ public class Fixtures {
     }
 
     public static kitchenpos.products.tobe.domain.Product newProduct(String name, long price) {
-        return kitchenpos.products.tobe.domain.Product.of(UUID.randomUUID(), name, price);
+        return kitchenpos.products.tobe.domain.Product.of(name, price);
     }
 }
