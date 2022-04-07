@@ -9,7 +9,7 @@ public class ProductResponse {
 
     private ProductResponse() { }
 
-    public ProductResponse(String id, String name, Long price) {
+    private ProductResponse(String id, String name, Long price) {
         this.id = id;
         this.name = name;
         this.price = price;
