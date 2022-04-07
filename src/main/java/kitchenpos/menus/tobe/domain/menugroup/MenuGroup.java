@@ -1,6 +1,5 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -10,34 +9,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "product")
-public class Product {
+@Table(name = "menu_group")
+public class MenuGroup {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Embedded
-  private DisplayedName name;
+  private MenuGroupName name;
 
-  @Embedded
-  private Price price;
-
-  protected Product() {
+  protected MenuGroup() {
   }
 
-  public Product(DisplayedName name, BigDecimal price) {
-    this.name = name;
-    this.price = new Price(price);
-  }
-
-  public Price getPrice() {
-    return price;
-  }
-
-  public Product changePrice(Price price) {
-    this.price = price;
-    return this;
+  public MenuGroup(String name) {
+    this.name = new MenuGroupName(name);
   }
 
   @Override
@@ -48,8 +34,8 @@ public class Product {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Product product = (Product) o;
-    return Objects.equals(id, product.id);
+    MenuGroup menuGroup = (MenuGroup) o;
+    return Objects.equals(id, menuGroup.id);
   }
 
   @Override

@@ -12,7 +12,7 @@ class ProductTest {
   @Test
   void changePriceTest() {
     //given
-    Product givenProduct = new Product(new DisplayedName("이름", false), new Price(BigDecimal.valueOf(1000)));
+    Product givenProduct = new Product(new DisplayedName("이름", false),BigDecimal.valueOf(1000));
     Price toChangePrice = new Price(BigDecimal.valueOf(2000));
 
     //when

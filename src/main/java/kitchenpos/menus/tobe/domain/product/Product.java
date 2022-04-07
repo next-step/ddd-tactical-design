@@ -1,26 +1,15 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.product;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "product")
+
 public class Product {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Embedded
   private DisplayedName name;
 
-  @Embedded
   private Price price;
 
   protected Product() {

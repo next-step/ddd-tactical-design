@@ -1,10 +1,8 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.product;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
-@Embeddable
 public class Price {
 
   private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "가격은 0 원 이상이어야 합니다. 입력 값 : %d";
@@ -26,6 +24,10 @@ public class Price {
 
   private boolean isNegative(BigDecimal price) {
     return price.compareTo(BigDecimal.ZERO) < 0;
+  }
+
+  public BigDecimal multiply(BigDecimal value) {
+    return price.multiply(value);
   }
 
   @Override

@@ -1,19 +1,19 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Price {
+public class MenuPrice implements Comparable<MenuPrice> {
 
-  private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "가격은 0 원 이상이어야 합니다. 입력 값 : %d";
+  private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "메뉴 가격은 0 원 이상이어야 합니다. 입력 값 : %d";
 
   private BigDecimal price;
 
-  protected Price() {}
+  protected MenuPrice() {}
 
-  public Price(BigDecimal price) {
+  public MenuPrice(BigDecimal price) {
     validatePrice(price);
     this.price = price;
   }
@@ -28,6 +28,18 @@ public class Price {
     return price.compareTo(BigDecimal.ZERO) < 0;
   }
 
+  public BigDecimal value() {
+    return price;
+  }
+
+  public long longValue() {
+    return price.longValue();
+  }
+
+  public int compareTo(MenuPrice otherPrice) {
+    return price.compareTo(otherPrice.price);
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -36,7 +48,7 @@ public class Price {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Price price1 = (Price) o;
+    MenuPrice price1 = (MenuPrice) o;
     return Objects.equals(price, price1.price);
   }
 

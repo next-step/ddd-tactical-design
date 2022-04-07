@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class PriceTest {
+class MenuPriceTest {
 
-  @DisplayName("가격은 0원 이상이어야 한다.")
+  @DisplayName("메뉴 가격은 0원 이상이어야 한다.")
   @Test
   void positiveTest() {
     //given
@@ -21,9 +21,9 @@ class PriceTest {
 
     //when & then
     assertAll(
-        () -> assertThatThrownBy(() -> new Price(negativeValue)).isInstanceOf(IllegalArgumentException.class),
-        () -> assertDoesNotThrow(() -> new Price(zeroValue)),
-        () -> assertDoesNotThrow(() -> new Price(positiveValue))
+        () -> assertThatThrownBy(() -> new MenuPrice(negativeValue)).isInstanceOf(IllegalArgumentException.class),
+        () -> assertDoesNotThrow(() -> new MenuPrice(zeroValue)),
+        () -> assertDoesNotThrow(() -> new MenuPrice(positiveValue))
     );
 
   }
@@ -33,8 +33,8 @@ class PriceTest {
   void equalsTest() {
     //given
     BigDecimal value = BigDecimal.valueOf(1000);
-    Price price = new Price(value);
-    Price thOther = new Price(value);
+    MenuPrice price = new MenuPrice(value);
+    MenuPrice thOther = new MenuPrice(value);
 
     //when & then
     assertThat(price.equals(thOther)).isTrue();

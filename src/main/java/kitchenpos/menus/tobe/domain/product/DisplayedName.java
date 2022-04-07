@@ -1,11 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.product;
 
 import java.util.Objects;
-import javax.persistence.Embeddable;
-import jdk.internal.joptsimple.internal.Strings;
-import org.springframework.util.StringUtils;
 
-@Embeddable
 public class DisplayedName {
 
   private static final String NAME_MUST_NOT_BE_EMPTY = "이름은 빈 값이 아니어야 합니다. 입력 값 : %s";

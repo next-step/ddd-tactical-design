@@ -1,21 +1,19 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import java.util.Objects;
 import javax.persistence.Embeddable;
-import jdk.internal.joptsimple.internal.Strings;
-import org.springframework.util.StringUtils;
 
 @Embeddable
-public class DisplayedName {
+public class MenuName {
 
-  private static final String NAME_MUST_NOT_BE_EMPTY = "이름은 빈 값이 아니어야 합니다. 입력 값 : %s";
-  private static final String NAME_MUST_NOT_BE_PROFANITY = "이름은 비속어가 아니어야 합니다. 입력 값 : %s";
+  private static final String NAME_MUST_NOT_BE_EMPTY = "메뉴 이름은 빈 값이 아니어야 합니다. 입력 값 : %s";
+  private static final String NAME_MUST_NOT_BE_PROFANITY = "메뉴 이름은 비속어가 아니어야 합니다. 입력 값 : %s";
 
   private String name;
 
-  protected DisplayedName() {}
+  protected MenuName() {}
 
-  public DisplayedName(String name, boolean isProfanity) {
+  public MenuName(String name, boolean isProfanity) {
     validateName(name, isProfanity);
     this.name = name;
   }
@@ -41,7 +39,7 @@ public class DisplayedName {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DisplayedName that = (DisplayedName) o;
+    MenuName that = (MenuName) o;
     return Objects.equals(name, that.name);
   }
 
