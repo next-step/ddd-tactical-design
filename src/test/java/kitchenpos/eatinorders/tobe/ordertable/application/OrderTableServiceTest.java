@@ -20,6 +20,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.OrderTableFixture.changeNumberOfGuestsRequest;
+import static kitchenpos.OrderTableFixture.createOrderTableRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -125,11 +127,4 @@ class OrderTableServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private CreateRequest createOrderTableRequest(final String name) {
-        return new CreateRequest(name);
-    }
-
-    private ChangeNumberOfGuestsRequest changeNumberOfGuestsRequest(final int numberOfGuests) {
-        return new ChangeNumberOfGuestsRequest(numberOfGuests);
-    }
 }
