@@ -99,7 +99,7 @@ class EatInOrderTest {
             mode = Mode.EXCLUDE,
             names = "ACCEPTED"
         )
-        void 접수가_아니면_접수할_수_없다(OrderStatus status) {
+        void 접수가_아니면_서빙할_수_없다(OrderStatus status) {
             final EatInOrder eatInOrder = new EatInOrder(
                 id,
                 status,
@@ -113,7 +113,7 @@ class EatInOrderTest {
 
         @DisplayName("접수 라면 서빙할 수 있다.")
         @Test
-        void 접수_라면_접수할_수_있다() {
+        void 접수_라면_서빙할_수_있다() {
             final EatInOrder eatInOrder = new EatInOrder(
                 id,
                 OrderStatus.ACCEPTED,
