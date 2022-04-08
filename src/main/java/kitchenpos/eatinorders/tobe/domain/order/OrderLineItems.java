@@ -10,7 +10,9 @@ public final class OrderLineItems {
 
     public OrderLineItems(List<OrderLineItem> elements) {
         if (Objects.isNull(elements) || elements.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                String.format("OrderLineItems 는 비어 있을 수 없습니다. elements: %s", elements)
+            );
         }
         this.elements = elements;
     }

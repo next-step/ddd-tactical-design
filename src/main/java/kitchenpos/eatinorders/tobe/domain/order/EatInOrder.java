@@ -45,21 +45,21 @@ public final class EatInOrder {
 
     public void accept() {
         if (this.status != OrderStatus.WAITING) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("WAITING 상태가 아니면 접수가 불가능합니다. 현재 상태: " + status);
         }
         this.status = OrderStatus.ACCEPTED;
     }
 
     public void serve() {
         if (this.status != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("ACCEPTED 상태가 아니면 서빙이 불가능합니다. 현재 상태: " + status);
         }
         this.status = OrderStatus.SERVED;
     }
 
     public void complete() {
         if (this.status != OrderStatus.SERVED) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("SERVED 상태가 아니면 완료가 불가능합니다. 현재 상태: " + status);
         }
         this.status = OrderStatus.COMPLETED;
     }
