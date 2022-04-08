@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -75,6 +73,14 @@ class ProductTest {
         assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-100)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
+    }
+
+    @DisplayName("상품의 가격과 수량을 곱한 결과값을 알 수 있다.")
+    @Test
+    void multiplyPrice() {
+        Product product = product(20000);
+
+        assertThat(product.multiplyPrice(BigDecimal.valueOf(5))).isEqualTo(BigDecimal.valueOf(100000));
     }
 
     private Product product(Integer price) {

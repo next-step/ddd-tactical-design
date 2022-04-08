@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,6 +7,7 @@ import org.junit.jupiter.params.provider.NullSource;
 
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProductPriceTest {
@@ -27,5 +27,13 @@ class ProductPriceTest {
         assertThatThrownBy(() -> new ProductPrice(price))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
+    }
+
+    @DisplayName("상품의 가격과 곱한 결과를 구할 수 있다.")
+    @Test
+    void multiplyPrice() {
+        ProductPrice price = new ProductPrice(BigDecimal.valueOf(20000));
+
+        assertThat(price.multiplyPrice(BigDecimal.valueOf(5))).isEqualTo(BigDecimal.valueOf(100000));
     }
 }
