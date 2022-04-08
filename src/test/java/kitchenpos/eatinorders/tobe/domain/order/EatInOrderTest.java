@@ -84,7 +84,7 @@ class EatInOrderTest {
         @Test
         void 접수_대기_라면_접수할_수_있다() {
             final EatInOrder eatInOrder = new EatInOrder(id, orderTableId, orderLineItem);
-            assertDoesNotThrow(() -> eatInOrder.accept() );
+            assertDoesNotThrow(() -> eatInOrder.accept());
         }
     }
 
@@ -121,7 +121,7 @@ class EatInOrderTest {
                 LocalDateTime.now(),
                 orderLineItems
             );
-            assertDoesNotThrow(() -> eatInOrder.serve() );
+            assertDoesNotThrow(() -> eatInOrder.serve());
         }
     }
 
@@ -158,7 +158,7 @@ class EatInOrderTest {
                 LocalDateTime.now(),
                 orderLineItems
             );
-            assertDoesNotThrow(() -> eatInOrder.complete() );
+            assertDoesNotThrow(() -> eatInOrder.complete());
         }
     }
 }
