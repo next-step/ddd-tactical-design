@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayName("displayName은")
 class DisplayedNameTest {
 
-    private final DisplayedNamePolicy policy = new FakeDisplayedNamePolicy();
+    private static final DisplayedNamePolicy POLICY = new FakeDisplayedNamePolicy();
 
     @DisplayName("추가할 수 있다")
     @Nested
@@ -24,7 +24,7 @@ class DisplayedNameTest {
         @NullAndEmptySource
         void 비어있다면_추가할_수_없다(String value) {
             assertThatIllegalArgumentException()
-                .isThrownBy(() -> new DisplayedName(value, policy));
+                .isThrownBy(() -> new DisplayedName(value, POLICY));
         }
 
         @DisplayName("비속어가 포함되어 있다면 추가할 수 없다")
@@ -32,13 +32,13 @@ class DisplayedNameTest {
         @ValueSource(strings = {"비속어", "욕설"})
         void 비속어가_포함되어_있다면_추가할_수_없다(String value) {
             assertThatIllegalArgumentException()
-                .isThrownBy(() -> new DisplayedName(value, policy));
+                .isThrownBy(() -> new DisplayedName(value, POLICY));
         }
 
         @DisplayName("비어있지 않다면 추가할 수 있다.")
         @Test
         void 비어있지_않다면_추가할_수_있다() {
-            assertDoesNotThrow(() -> new DisplayedName("테스트", policy));
+            assertDoesNotThrow(() -> new DisplayedName("테스트", POLICY));
         }
     }
 }
