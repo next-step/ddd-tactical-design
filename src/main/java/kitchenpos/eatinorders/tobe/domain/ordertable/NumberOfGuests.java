@@ -8,7 +8,7 @@ public class NumberOfGuests {
 
   private static final int MINIMUM_COUNT = 0;
 
-  private static final String COUNT_MUST_NOT_BE_LESS_THAN_MINIMUM = "방문한 손님 수는 %d 이상 아니어야 합니다. 입력 값 : %d";
+  private static final String COUNT_MUST_NOT_BE_LESS_THAN_MINIMUM = "방문한 손님 수는 %d 이상이어야 합니다. 입력 값 : %d";
 
   private int count;
 
@@ -28,6 +28,10 @@ public class NumberOfGuests {
 
   private boolean isLessThanMinimum(int count) {
     return count < MINIMUM_COUNT;
+  }
+
+  public int getCount() {
+    return count;
   }
 
   @Override
