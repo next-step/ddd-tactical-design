@@ -16,7 +16,7 @@ public class Price {
 
     protected Price(BigDecimal price) {
         if(ObjectUtils.isEmpty(price) || isNegative(price)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("price is invalid");
         }
         this.price = price;
     }

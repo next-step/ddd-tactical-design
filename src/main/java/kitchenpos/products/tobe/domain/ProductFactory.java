@@ -2,24 +2,19 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityFilteredName;
-import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.util.ObjectUtils;
+import kitchenpos.common.domain.ProfanityFilteredNameFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 public class ProductFactory {
-    private final PurgomalumClient purgomalumClient;
 
-    public ProductFactory(PurgomalumClient purgomalumClient) {
-        this.purgomalumClient = purgomalumClient;
+    private ProductFactory() {
     }
 
-    public Product createProduct(String name, Price price) {
-        if(ObjectUtils.isEmpty(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-
-        ProfanityFilteredName profanityFilteredName = ProfanityFilteredName.of(name);
+    public static Product createProduct(String name, Price price) {
+        ProfanityFilteredName profanityFilteredName = ProfanityFilteredNameFactory.createProfanityFilteredName(name);
 
         return new Product(UUID.randomUUID(), profanityFilteredName, price);
     }

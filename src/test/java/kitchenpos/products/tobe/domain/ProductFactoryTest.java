@@ -1,9 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProfanityFilteredNameFactory;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,14 +16,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class ProductFactroryTest {
-    private ProductFactory productFactory;
-    private PurgomalumClient purgomalumClient;
-
+public class ProductFactoryTest {
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
-        productFactory = new ProductFactory(purgomalumClient);
+        ProfanityFilteredNameFactory profanityFilteredNameFactory = new ProfanityFilteredNameFactory(new FakePurgomalumClient());
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -33,7 +28,7 @@ public class ProductFactroryTest {
         //given
         final String name = "후라이드";
         final BigDecimal price = BigDecimal.valueOf(16_000L);
-        final kitchenpos.products.tobe.domain.Product product = productFactory.createProduct(name, Price.of(price));
+        final kitchenpos.products.tobe.domain.Product product = ProductFactory.createProduct(name, Price.of(price));
 
         assertThat(product).isNotNull();
         assertAll(
@@ -53,12 +48,12 @@ public class ProductFactroryTest {
         //when
         //then
         assertThatThrownBy(
-                () -> productFactory.createProduct("후라이드", Price.of(price))
+                () -> ProductFactory.createProduct("후라이드", Price.of(price))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
+    @ValueSource(strings = {"욕설", "비속어"})
     @NullSource
     @ParameterizedTest
     void create(final String name) {
@@ -67,7 +62,7 @@ public class ProductFactroryTest {
         //when
         //then
         assertThatThrownBy(
-                () -> productFactory.createProduct(name, Price.of(BigDecimal.valueOf(10_000L)))
+                () -> ProductFactory.createProduct(name, Price.of(BigDecimal.valueOf(10_000L)))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 }
