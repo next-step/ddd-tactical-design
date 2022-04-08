@@ -21,7 +21,7 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    protected Product() { /* empty */ }
+    protected Product() {}
 
     public Product(final String name, final PurgomalumClient purgomalumClient, final BigDecimal price) {
         this.name = new ProductName(name, purgomalumClient);
