@@ -1,6 +1,6 @@
 package kitchenpos.products.adapter.in.ui;
 
-import kitchenpos.products.application.port.in.ProductServicePort;
+import kitchenpos.products.application.port.in.ProductServiceUseCase;
 import kitchenpos.products.application.service.ProductService;
 import kitchenpos.products.domain.Product;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("/api/products")
 @RestController
 public class ProductRestController {
-    private final ProductServicePort productServicePort;
+    private final ProductServiceUseCase productServicePort;
 
     public ProductRestController(final ProductService productServicePort) {
         this.productServicePort = productServicePort;

@@ -2,7 +2,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.application.port.out.MenuRepository;
 import kitchenpos.products.application.service.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.application.port.out.ProductRepository;
