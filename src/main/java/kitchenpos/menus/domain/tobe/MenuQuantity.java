@@ -7,6 +7,7 @@ import java.util.Objects;
 @Embeddable
 public class MenuQuantity {
     private static final String NEGATIVE_NUMBER_NOT_ALLOWED = "수량이 음수일 수 없습니다.";
+
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 

@@ -16,6 +16,7 @@ import java.util.UUID;
 
 public class Menu {
     private static final String MENU_GROUP_NULL_NOT_ALLOWED = "menuGroup이 있어야합니다.";
+
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
@@ -36,6 +37,7 @@ public class Menu {
 
     @Embedded
     private MenuDisplayed displayed;
+
     @Embedded
     private List<MenuProduct> menuProducts;
 
