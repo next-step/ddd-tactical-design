@@ -4,20 +4,19 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.tobe.BanWordFilter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Menu {
+    private static final String MENU_GROUP_NULL_NOT_ALLOWED = "menuGroup이 있어야합니다.";
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
@@ -38,14 +37,7 @@ public class Menu {
 
     @Embedded
     private MenuDisplayed displayed;
-
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
+    @Embedded
     private List<MenuProduct> menuProducts;
 
     public Menu(String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
@@ -53,12 +45,19 @@ public class Menu {
     }
 
     public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+        validate(menuGroup);
         this.id = id;
         this.name = new MenuName(name, banWordFilter);
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
         this.displayed = new MenuDisplayed(displayed);
         this.menuProducts = menuProducts;
+    }
+
+    private void validate(MenuGroup menuGroup) {
+        if (menuGroup == null) {
+            throw new IllegalArgumentException(MENU_GROUP_NULL_NOT_ALLOWED);
+        }
     }
 
     public void show() {
