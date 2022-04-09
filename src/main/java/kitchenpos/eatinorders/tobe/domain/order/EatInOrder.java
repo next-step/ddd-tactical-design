@@ -20,7 +20,7 @@ public final class EatInOrder {
         OrderLineItems orderLineItems
     ) {
         if (Objects.isNull(orderTableId)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("orderTableId는 null일 수 없습니다.");
         }
         this.id = id;
         this.status = status;
