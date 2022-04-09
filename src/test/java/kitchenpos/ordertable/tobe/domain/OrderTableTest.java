@@ -7,7 +7,7 @@ import static kitchenpos.menus.fixture.OrderTableFixture.buildUsedTwoGuestsTable
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.eatinorders.tobe.domain.service.OrderTableOrderDomainService;
+import kitchenpos.eatinorders.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ class OrderTableTest {
     OrderTable usedTable = buildUsedTwoGuestsTable();
 
     //when
-    OrderTable result = usedTable.toBeReleased(new OrderCompletedDomainService());
+    OrderTable result = usedTable.toBeReleased(new RelatedOrderCompletedStatusCheckService());
 
     //then
     assertThat(result.isEmpty()).isTrue();
@@ -62,7 +62,7 @@ class OrderTableTest {
     OrderTable usedTable = buildUsedTwoGuestsTable();
 
     //when & then
-    assertThatThrownBy(() -> usedTable.toBeReleased(new OrderInCompletedDomainService())).isInstanceOf(
+    assertThatThrownBy(() -> usedTable.toBeReleased(new RelatedOrderInCompletedStatusCheckService())).isInstanceOf(
         IllegalStateException.class);
   }
 
@@ -93,7 +93,7 @@ class OrderTableTest {
   }
 
 
-  private static class OrderCompletedDomainService implements OrderTableOrderDomainService {
+  private static class RelatedOrderCompletedStatusCheckService implements OrderTableRelatedOrderStatusCheckService {
 
     @Override
     public boolean hasInCompletedOrders(OrderTable orderTable) {
@@ -101,7 +101,7 @@ class OrderTableTest {
     }
   }
 
-  private static class OrderInCompletedDomainService implements OrderTableOrderDomainService {
+  private static class RelatedOrderInCompletedStatusCheckService implements OrderTableRelatedOrderStatusCheckService {
 
     @Override
     public boolean hasInCompletedOrders(OrderTable orderTable) {

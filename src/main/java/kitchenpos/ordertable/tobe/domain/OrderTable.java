@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.eatinorders.tobe.domain.service.OrderTableOrderDomainService;
+import kitchenpos.eatinorders.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
 
 @Entity
 @Table(name = "order_table")
@@ -42,7 +42,7 @@ public class OrderTable {
     return this;
   }
 
-  public OrderTable toBeReleased(OrderTableOrderDomainService domainService) {
+  public OrderTable toBeReleased(OrderTableRelatedOrderStatusCheckService domainService) {
     if (domainService.hasInCompletedOrders(this)) {
       throw new IllegalStateException(INCOMPLETED_ORDER_EXIST);
     }
