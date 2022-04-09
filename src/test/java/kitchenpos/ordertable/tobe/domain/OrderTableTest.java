@@ -7,7 +7,7 @@ import static kitchenpos.menus.fixture.OrderTableFixture.buildUsedTwoGuestsTable
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.eatinorders.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
+import kitchenpos.ordertable.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.eatinorders.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
+import kitchenpos.ordertable.tobe.domain.service.OrderTableRelatedOrderStatusCheckService;
 
 @Entity
 @Table(name = "order_table")
