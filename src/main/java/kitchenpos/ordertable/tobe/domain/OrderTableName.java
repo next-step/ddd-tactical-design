@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.ordertable;
+package kitchenpos.ordertable.tobe.domain;
 
 import java.util.Objects;
 import javax.persistence.Embeddable;

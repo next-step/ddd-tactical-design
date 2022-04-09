@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.ordertable;
+package kitchenpos.ordertable.tobe.domain;
 
 import static kitchenpos.menus.fixture.OrderTableFixture.buildEmptyNameOrderTable;
 import static kitchenpos.menus.fixture.OrderTableFixture.buildNegativeNumberOfGuestsOrderTable;

@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.service;
 
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.ordertable.tobe.domain.OrderTable;
 
 public interface OrderTableOrderDomainService {
 

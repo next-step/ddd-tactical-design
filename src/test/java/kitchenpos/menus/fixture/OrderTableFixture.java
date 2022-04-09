@@ -1,6 +1,6 @@
 package kitchenpos.menus.fixture;
 
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.ordertable.tobe.domain.OrderTable;
 
 public class OrderTableFixture {
 
