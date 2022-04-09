@@ -4,7 +4,7 @@ import kitchenpos.common.UseCaseService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.application.port.out.MenuRepository;
-import kitchenpos.products.application.port.in.ProductServiceUseCase;
+import kitchenpos.products.application.port.in.ProductUseCase;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.application.port.out.ProductRepository;
 import kitchenpos.products.application.port.out.PurgomalumClient;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @UseCaseService
-public class ProductService implements ProductServiceUseCase {
+public class ProductService implements ProductUseCase {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
