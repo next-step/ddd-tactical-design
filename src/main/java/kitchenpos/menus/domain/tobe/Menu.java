@@ -1,7 +1,6 @@
 package kitchenpos.menus.domain.tobe;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
+
 import kitchenpos.products.domain.tobe.BanWordFilter;
 
 import javax.persistence.Column;
@@ -69,8 +68,15 @@ public class Menu {
     }
 
     public void changePrice(BigDecimal price) {
-
         this.price = new MenuPrice(price);
+    }
+
+    public boolean getDisplayed() {
+        return displayed.isDisplayed();
+    }
+
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     @Override

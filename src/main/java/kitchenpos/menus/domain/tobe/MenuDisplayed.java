@@ -22,6 +22,10 @@ public class MenuDisplayed {
         this.displayed = false;
     }
 
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

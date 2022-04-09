@@ -48,6 +48,10 @@ public class MenuPrice {
         return price.compareTo(value) > 0;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

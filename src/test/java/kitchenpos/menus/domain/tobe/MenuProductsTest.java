@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
+import static kitchenpos.support.MenuGenerator.createMenuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MenuProductsTest {
@@ -19,9 +19,5 @@ class MenuProductsTest {
         final MenuProducts actual = new MenuProducts(givenMenuProducts);
 
         assertThat(actual).isNotNull();
-    }
-
-    private MenuProduct createMenuProduct(long seq, long quantity) {
-        return new MenuProduct(seq, quantity, UUID.randomUUID());
     }
 }
