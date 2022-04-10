@@ -23,4 +23,12 @@ public class Price {
     public Long value() {
         return value;
     }
+
+    public boolean isBiggerThen(Price price) {
+        return this.value > price.value();
+    }
+
+    public boolean isBiggerThen(long value) {
+        return isBiggerThen(new Price(value));
+    }
 }
