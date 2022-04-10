@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ProductTest {
 
-  public static final BigDecimal PRICE = BigDecimal.valueOf(1000L);
-  public static final BigDecimal CHANGE_PRICE = BigDecimal.valueOf(2000L);
-  public static final BigDecimal MINUS_PRICE = BigDecimal.valueOf(-1000L);
+  private static final BigDecimal PRICE = BigDecimal.valueOf(1000L);
+  private static final BigDecimal CHANGE_PRICE = BigDecimal.valueOf(2000L);
+  private static final BigDecimal MINUS_PRICE = BigDecimal.valueOf(-1000L);
 
   private static Stream<Arguments> provideBigDecimalForIsNotNullAndMinusValue() {
     return Stream.of(
