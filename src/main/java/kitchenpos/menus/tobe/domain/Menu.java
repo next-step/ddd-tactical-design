@@ -44,6 +44,7 @@ public class Menu {
     protected Menu() { }
 
     private Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        validMenuGroup(menuGroup);
         validPrice(price, menuProducts);
         
         this.id = id;
@@ -54,14 +55,20 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public static Menu create(String name, PurgomalumClient purgomalumClient, Long price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
-        return new Menu(UUID.randomUUID(), new Name(name, purgomalumClient), new Price(price), menuGroup, displayed, MenuProducts.from(menuProducts));
+    private void validMenuGroup(MenuGroup menuGroup) {
+        if (menuGroup == null) {
+            throw new IllegalArgumentException("메뉴 그룹을 입력해 주세요.");
+        }
     }
 
     private void validPrice(Price price, MenuProducts menuProducts) {
         if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
         }
+    }
+
+    public static Menu create(String name, PurgomalumClient purgomalumClient, Long price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+        return new Menu(UUID.randomUUID(), new Name(name, purgomalumClient), new Price(price), menuGroup, displayed, MenuProducts.from(menuProducts));
     }
 
     public void modifyPrice(Long value) {
@@ -73,6 +80,10 @@ public class Menu {
     }
 
     public void displayMenu() {
+        if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
+            throw new IllegalStateException("메뉴에 속한 상품 금액의 합이 메뉴의 가격보다 크거나 같아야만 전시 상태로 변경할 수 있습니다.");
+        }
+
         this.displayed = true;
     }
 
