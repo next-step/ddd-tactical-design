@@ -28,11 +28,20 @@ public class MenuProduct {
     private Product product;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private Quantity quantity;
 
     protected MenuProduct() { }
 
+    private MenuProduct(Product product, Quantity quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public static MenuProduct create(Product product, Long quantity) {
+        return new MenuProduct(product, new Quantity(quantity));
+    }
+
     public long getPrice() {
-        return product.getPrice() * quantity;
+        return product.getPrice() * quantity.value();
     }
 }
