@@ -8,8 +8,7 @@ public class ProductName {
 
   private String name;
 
-  protected ProductName() {
-  }
+  protected ProductName() {/*no-op*/}
 
   public ProductName(String name) {
     validate(name);

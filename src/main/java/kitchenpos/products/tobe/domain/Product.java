@@ -20,8 +20,7 @@ public class Product {
   @Column(name = "price", nullable = false)
   private ProductPrice price;
 
-  protected Product() {
-  }
+  protected Product() {/*no-op*/}
 
   public Product(UUID id, ProductName name, ProductPrice price) {
     this.id = id;
