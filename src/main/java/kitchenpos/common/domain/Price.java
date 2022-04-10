@@ -1,26 +1,26 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class ProductPrice {
+public class Price {
 
     @Column(name = "price", nullable = false)
-    private Long price;
+    private Long value;
 
-    protected ProductPrice() {
+    protected Price() {
     }
 
-    public ProductPrice(Long price) {
-        if (price == null || price <= 0L) {
+    public Price(Long value) {
+        if (value == null || value <= 0L) {
             throw new IllegalArgumentException("가격은 0원 이하가 될 수 없습니다.");
         }
 
-        this.price = price;
+        this.value = value;
     }
 
     public Long value() {
-        return price;
+        return value;
     }
 }
