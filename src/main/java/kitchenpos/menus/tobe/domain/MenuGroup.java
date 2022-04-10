@@ -25,7 +25,7 @@ public class MenuGroup {
         this.name = name;
     }
 
-    public static MenuGroup of(String name, PurgomalumClient purgomalumClient) {
+    public static MenuGroup create(String name, PurgomalumClient purgomalumClient) {
         return new MenuGroup(UUID.randomUUID(), new Name(name, purgomalumClient));
     }
 }

@@ -31,4 +31,8 @@ public class MenuProduct {
     private long quantity;
 
     protected MenuProduct() { }
+
+    public long getPrice() {
+        return product.getPrice() * quantity;
+    }
 }
