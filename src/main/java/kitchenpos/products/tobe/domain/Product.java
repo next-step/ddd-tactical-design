@@ -48,11 +48,11 @@ public class Product {
         return id;
     }
 
-    public Name getName() {
-        return name;
+    public String getName() {
+        return name.value();
     }
 
-    public Price getPrice() {
-        return price;
+    public Long getPrice() {
+        return price.value();
     }
 }

@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 
