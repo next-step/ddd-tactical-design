@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.port.out.PurgomalumClient;
@@ -24,7 +24,7 @@ class ProductNameTest {
 
     @DisplayName("상품의 이름은 비어 있을 수 없다.")
     @ParameterizedTest
-    @NullSource
+    @NullAndEmptySource
     void can_not_be_null_name(final String name) {
         //given
         //when

@@ -19,7 +19,7 @@ public final class ProductName {
     }
 
     private void validation(final String name, final PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name)) {
+        if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException("상품의 이름은 비어 있을 수 없습니다.");
         }
         if (purgomalumClient.containsProfanity(name)) {
