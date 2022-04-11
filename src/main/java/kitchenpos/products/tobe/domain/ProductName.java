@@ -16,11 +16,19 @@ public class ProductName {
     }
 
     protected ProductName(PurgomalumClient purgomalumClient, String name) {
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+        validation(purgomalumClient, name);
 
         this.name = name;
+    }
+
+    private void validation(PurgomalumClient purgomalumClient, String name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException("상품명은 필수입니다.");
+        }
+
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException("상품명은 비속어를 사용할수 없습니다.");
+        }
     }
 
     public String getName() {
