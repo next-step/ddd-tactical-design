@@ -13,12 +13,12 @@ public class ProductPrice {
         this.price = null;
     }
 
-    public ProductPrice(final BigDecimal price) {
+    protected ProductPrice(final BigDecimal price) {
         validate(price);
         this.price = price;
     }
 
-    public ProductPrice(final long price) {
+    protected ProductPrice(final long price) {
         this(BigDecimal.valueOf(price));
     }
 

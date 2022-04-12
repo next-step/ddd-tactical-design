@@ -17,7 +17,7 @@ public class ProductName {
         this.name = null;
     }
 
-    public ProductName(PurgomalumClient purgomalumClient, String name) {
+    protected ProductName(PurgomalumClient purgomalumClient, String name) {
         validate(purgomalumClient, name);
         this.name = name;
     }
