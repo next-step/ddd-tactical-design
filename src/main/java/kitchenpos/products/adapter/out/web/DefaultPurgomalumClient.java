@@ -1,4 +1,4 @@
-package kitchenpos.products.infra;
+package kitchenpos.products.adapter.out.web;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
@@ -7,20 +7,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import kitchenpos.products.application.port.out.PurgomalumClient;
+
 @Component
 public class DefaultPurgomalumClient implements PurgomalumClient {
     private final RestTemplate restTemplate;
 
     public DefaultPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+        restTemplate = restTemplateBuilder.build();
     }
 
     @Override
     public boolean containsProfanity(final String text) {
         final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
-            .queryParam("text", text)
-            .build()
-            .toUri();
+                                            .queryParam("text", text)
+                                            .build()
+                                            .toUri();
         return Boolean.parseBoolean(restTemplate.getForObject(url, String.class));
     }
 }
