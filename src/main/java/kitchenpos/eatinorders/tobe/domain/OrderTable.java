@@ -12,7 +12,7 @@ public class OrderTable {
     private NumberOfGuests numberOfGuests;
     private boolean empty;
 
-    public OrderTable(String name, NumberOfGuests numberOfGuests, boolean empty) {
+    private OrderTable(String name, NumberOfGuests numberOfGuests, boolean empty) {
         validate(name);
         this.id = UUID.randomUUID();
         this.name = name;
