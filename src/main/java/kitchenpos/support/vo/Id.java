@@ -5,6 +5,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public abstract class Id extends ValueObject implements Serializable {
+public abstract class Id extends ValueObject<Id> implements Serializable {
 
 }

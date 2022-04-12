@@ -2,15 +2,15 @@ package kitchenpos.products.domain.tobe.domain.policy;
 
 import kitchenpos.support.exception.NamingRuleViolationException;
 import kitchenpos.support.policy.NamingRule;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.infra.Profanity;
 
 import java.util.Objects;
 
 public class DefaultProductNamingRule implements NamingRule {
 
-    private final PurgomalumClient purgomalumClient;
+    private final Profanity purgomalumClient;
 
-    public DefaultProductNamingRule(PurgomalumClient purgomalumClient) {
+    public DefaultProductNamingRule(Profanity purgomalumClient) {
         this.purgomalumClient = purgomalumClient;
     }
 

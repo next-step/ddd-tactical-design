@@ -1,11 +1,13 @@
 package kitchenpos.menus.domain.tobe.domain.vo;
 
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 @Embeddable
-public class MenuPrice {
+public class MenuPrice extends ValueObject<MenuPrice> {
 
     @Column(name = "price")
     private BigDecimal price;
@@ -20,20 +22,5 @@ public class MenuPrice {
 
     public BigDecimal getValue() {
         return price;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MenuPrice that = (MenuPrice) o;
-
-        return price != null ? price.equals(that.price) : that.price == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return price != null ? price.hashCode() : 0;
     }
 }

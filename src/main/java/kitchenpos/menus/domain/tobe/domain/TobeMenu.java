@@ -110,36 +110,29 @@ public class TobeMenu {
     }
 
     public static class Builder {
-        private final MenuId menuId;
-        private String name;
-        private NamingRule namingRule;
-        private BigDecimal price;
-        private PricingRule pricingRule;
+        private MenuId menuId;
+        private MenuName name;
+        private MenuPrice price;
         private TobeMenuGroup menuGroup;
-        private boolean displayed;
+        private MenuDisplayed displayed;
         private List<TobeMenuProduct> menuProducts;
 
         public Builder() {
-            this.menuId = new MenuId(UUID.randomUUID());
+
         }
 
-        public Builder name(final String name) {
+        public Builder id(final MenuId id) {
+            this.menuId=id;
+            return this;
+        }
+
+        public Builder name(final MenuName name) {
             this.name = name;
             return this;
         }
 
-        public Builder namingRule(final NamingRule namingRule) {
-            this.namingRule = namingRule;
-            return this;
-        }
-
-        public Builder price(final BigDecimal price) {
+        public Builder price(final MenuPrice price) {
             this.price = price;
-            return this;
-        }
-
-        public Builder pricingRule(final PricingRule pricingRule) {
-            this.pricingRule = pricingRule;
             return this;
         }
 
@@ -148,7 +141,7 @@ public class TobeMenu {
             return this;
         }
 
-        public Builder displayed(final boolean displayed) {
+        public Builder displayed(final MenuDisplayed displayed) {
             this.displayed = displayed;
             return this;
         }
@@ -159,16 +152,10 @@ public class TobeMenu {
         }
 
         public TobeMenu build() {
-            if (Objects.isNull(name) || Objects.isNull(namingRule) || !namingRule.checkRule(name)) {
-                throw new NamingRuleViolationException();
-            }
-            if (Objects.isNull(price) || Objects.isNull(pricingRule) || !pricingRule.checkRule(price)) {
-                throw new PricingRuleViolationException();
-            }
-            if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            return new TobeMenu(menuId, new MenuName(name), new MenuPrice(price), menuGroup, new MenuDisplayed(displayed), menuProducts);
+            return new TobeMenu(menuId, name, price, menuGroup, displayed, menuProducts);
         }
     }
 }

@@ -1,15 +1,21 @@
 package kitchenpos.menus.domain.tobe.domain.vo;
 
+import kitchenpos.support.infra.Profanity;
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class MenuName {
+public class MenuName extends ValueObject<MenuName> {
 
     @Column(name = "name")
     private String name;
 
-    public MenuName(String name) {
+    public MenuName(String name, Profanity profanity) {
+        if(profanity.containsProfanity(name)) {
+            throw new IllegalArgumentException("메뉴 이름에는 욕설이 포함될 수 없습니다.");
+        }
         this.name = name;
     }
 
@@ -19,20 +25,5 @@ public class MenuName {
 
     public String getValue() {
         return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MenuName menuName = (MenuName) o;
-
-        return name != null ? name.equals(menuName.name) : menuName.name == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
     }
 }
