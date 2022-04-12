@@ -18,6 +18,10 @@ public class MenuQuantity {
         this.quantity = quantity;
     }
 
+    public Long getQuantity() {
+        return quantity;
+    }
+
     private void validate(Long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException(NEGATIVE_NUMBER_NOT_ALLOWED);

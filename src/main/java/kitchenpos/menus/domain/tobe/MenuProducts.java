@@ -2,7 +2,6 @@ package kitchenpos.menus.domain.tobe;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -16,8 +15,7 @@ public class MenuProducts {
     @JoinColumn(
             name = "menu_id",
             nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            columnDefinition = "varbinary(16)"
     )
     private List<MenuProduct> values;
 
@@ -27,6 +25,17 @@ public class MenuProducts {
     public MenuProducts(List<MenuProduct> values) {
         validate(values);
         this.values = values;
+    }
+
+    //    public MenuPrice getTotalPrice() {
+//        return new MenuPrice(values.stream()
+//                .map(it-> it.getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
+//                .reduce(BigDecimal.ZERO, BigDecimal::add));
+//    }
+    public MenuPrice getTotalPrice() {
+        return values.stream()
+                .map(MenuProduct::getSumProduct)
+                .reduce(MenuPrice.valueOf(0), MenuPrice::add);
     }
 
     private void validate(List<MenuProduct> values) {

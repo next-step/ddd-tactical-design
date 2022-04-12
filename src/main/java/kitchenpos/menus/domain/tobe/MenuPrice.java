@@ -29,7 +29,11 @@ public class MenuPrice {
     }
 
     public MenuPrice add(MenuPrice value) {
-        return add(value);
+        return new MenuPrice(price.add(value.price));
+    }
+
+    public MenuPrice add(MenuPrice value1, MenuPrice value2) {
+        return new MenuPrice(value1.price.add(value2.price));
     }
 
     public MenuPrice add(BigDecimal value) {
@@ -44,8 +48,8 @@ public class MenuPrice {
         return new MenuPrice(price.multiply(value));
     }
 
-    public boolean isBiggerPrice(BigDecimal value) {
-        return price.compareTo(value) > 0;
+    public boolean isBiggerPrice(MenuPrice price) {
+        return this.price.compareTo(price.price) > 0;
     }
 
     public BigDecimal getPrice() {
