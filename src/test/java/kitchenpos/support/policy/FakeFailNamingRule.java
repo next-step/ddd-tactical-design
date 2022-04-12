@@ -1,6 +1,6 @@
-package kitchenpos.common.policy;
+package kitchenpos.support.policy;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
+import kitchenpos.support.exception.NamingRuleViolationException;
 
 public class FakeFailNamingRule implements NamingRule {
     @Override

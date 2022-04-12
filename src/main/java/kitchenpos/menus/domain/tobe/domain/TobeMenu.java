@@ -1,9 +1,9 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.common.exception.PricingRuleViolationException;
-import kitchenpos.common.policy.NamingRule;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.exception.NamingRuleViolationException;
+import kitchenpos.support.exception.PricingRuleViolationException;
+import kitchenpos.support.policy.NamingRule;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
 
 import javax.persistence.*;

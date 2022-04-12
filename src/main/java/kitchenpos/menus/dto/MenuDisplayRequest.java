@@ -1,6 +1,6 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 
 public class MenuDisplayRequest {

@@ -1,6 +1,6 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.common.policy.NamingRule;
+import kitchenpos.support.policy.NamingRule;
 
 public class MenuGroupRegisterRequest {
     private String name;

@@ -1,11 +1,11 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.common.exception.PricingRuleViolationException;
-import kitchenpos.common.policy.FakeFailNamingRule;
-import kitchenpos.common.policy.FakeFailPricingRule;
-import kitchenpos.common.policy.FakeSuccessNamingRule;
-import kitchenpos.common.policy.FakeSuccessPricingRule;
+import kitchenpos.support.exception.NamingRuleViolationException;
+import kitchenpos.support.exception.PricingRuleViolationException;
+import kitchenpos.support.policy.FakeFailNamingRule;
+import kitchenpos.support.policy.FakeFailPricingRule;
+import kitchenpos.support.policy.FakeSuccessNamingRule;
+import kitchenpos.support.policy.FakeSuccessPricingRule;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;

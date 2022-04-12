@@ -1,9 +1,9 @@
 package kitchenpos;
 
-import kitchenpos.common.policy.FakeSuccessNamingRule;
-import kitchenpos.common.policy.FakeSuccessPricingRule;
-import kitchenpos.common.policy.NamingRule;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.policy.FakeSuccessNamingRule;
+import kitchenpos.support.policy.FakeSuccessPricingRule;
+import kitchenpos.support.policy.NamingRule;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;

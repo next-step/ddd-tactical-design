@@ -1,8 +1,8 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.common.policy.FakeFailNamingRule;
-import kitchenpos.common.policy.FakeSuccessNamingRule;
+import kitchenpos.support.exception.NamingRuleViolationException;
+import kitchenpos.support.policy.FakeFailNamingRule;
+import kitchenpos.support.policy.FakeSuccessNamingRule;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.dto.MenuGroupRegisterRequest;

@@ -1,4 +1,4 @@
-package kitchenpos.common.policy;
+package kitchenpos.support.policy;
 
 public class FakeSuccessNamingRule implements NamingRule {
     @Override

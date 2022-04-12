@@ -1,7 +1,7 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.common.policy.NamingRule;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.policy.NamingRule;
+import kitchenpos.support.policy.PricingRule;
 
 import java.math.BigDecimal;
 

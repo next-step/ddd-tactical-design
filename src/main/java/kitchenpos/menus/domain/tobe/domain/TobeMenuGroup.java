@@ -1,7 +1,7 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.common.policy.NamingRule;
+import kitchenpos.support.exception.NamingRuleViolationException;
+import kitchenpos.support.policy.NamingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupName;
 

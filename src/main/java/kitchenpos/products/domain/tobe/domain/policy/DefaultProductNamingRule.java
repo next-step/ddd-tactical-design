@@ -1,7 +1,7 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
-import kitchenpos.common.exception.NamingRuleViolationException;
-import kitchenpos.common.policy.NamingRule;
+import kitchenpos.support.exception.NamingRuleViolationException;
+import kitchenpos.support.policy.NamingRule;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import java.util.Objects;

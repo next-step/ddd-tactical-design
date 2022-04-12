@@ -1,6 +1,6 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package kitchenpos.products.domain.tobe.domain.policy;
 
-import kitchenpos.common.exception.PricingRuleViolationException;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.exception.PricingRuleViolationException;
+import kitchenpos.support.policy.PricingRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

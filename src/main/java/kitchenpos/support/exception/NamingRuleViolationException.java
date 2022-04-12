@@ -1,4 +1,4 @@
-package kitchenpos.common.exception;
+package kitchenpos.support.exception;
 
 public class NamingRuleViolationException extends RuntimeException {
 

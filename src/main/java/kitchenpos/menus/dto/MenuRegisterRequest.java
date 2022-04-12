@@ -1,7 +1,7 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.common.policy.NamingRule;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.policy.NamingRule;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 

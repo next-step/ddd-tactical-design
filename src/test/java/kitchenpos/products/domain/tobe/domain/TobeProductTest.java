@@ -1,8 +1,8 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.common.exception.PricingRuleViolationException;
-import kitchenpos.common.policy.FakeFailPricingRule;
-import kitchenpos.common.policy.FakeSuccessPricingRule;
+import kitchenpos.support.exception.PricingRuleViolationException;
+import kitchenpos.support.policy.FakeFailPricingRule;
+import kitchenpos.support.policy.FakeSuccessPricingRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

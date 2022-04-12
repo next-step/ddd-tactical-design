@@ -1,7 +1,7 @@
 package kitchenpos.menus.domain.tobe.domain.policy;
 
-import kitchenpos.common.exception.PricingRuleViolationException;
-import kitchenpos.common.policy.PricingRule;
+import kitchenpos.support.exception.PricingRuleViolationException;
+import kitchenpos.support.policy.PricingRule;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 
 import java.math.BigDecimal;

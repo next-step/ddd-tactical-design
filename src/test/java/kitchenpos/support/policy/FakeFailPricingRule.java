@@ -1,6 +1,6 @@
-package kitchenpos.common.policy;
+package kitchenpos.support.policy;
 
-import kitchenpos.common.exception.PricingRuleViolationException;
+import kitchenpos.support.exception.PricingRuleViolationException;
 
 import java.math.BigDecimal;
 
