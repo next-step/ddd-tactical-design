@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -22,9 +24,9 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
-        this.id = id;
-        this.name = new ProductName(name);
+    public Product(PurgomalumClient purgomalumClient, String name, BigDecimal price) {
+        this.id = UUID.randomUUID();
+        this.name = new ProductName(name, purgomalumClient);
         this.price = new ProductPrice(price);
     }
 

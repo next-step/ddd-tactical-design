@@ -24,7 +24,7 @@ public class ProductPrice {
 
     private void validate(BigDecimal price) {
         if (Objects.isNull(price) || isNegative(price)) {
-            throw new IllegalArgumentException(PRICE_MUST_BE_POSITIVE_NUMBER);
+            throw new IllegalArgumentException(String.format(PRICE_MUST_BE_POSITIVE_NUMBER, price));
         }
     }
 
