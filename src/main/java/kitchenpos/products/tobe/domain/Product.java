@@ -26,7 +26,7 @@ public class Product {
 
     public Product(PurgomalumClient purgomalumClient, String name, BigDecimal price) {
         this.id = UUID.randomUUID();
-        this.name = new ProductName(name, purgomalumClient);
+        this.name = new ProductName(purgomalumClient, name);
         this.price = new ProductPrice(price);
     }
 

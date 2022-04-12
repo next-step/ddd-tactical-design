@@ -17,12 +17,12 @@ public class ProductName {
         this.name = null;
     }
 
-    public ProductName(String name, PurgomalumClient purgomalumClient) {
-        validate(name, purgomalumClient);
+    public ProductName(PurgomalumClient purgomalumClient, String name) {
+        validate(purgomalumClient, name);
         this.name = name;
     }
 
-    private void validate(String name, PurgomalumClient purgomalumClient) {
+    private void validate(PurgomalumClient purgomalumClient, String name) {
         if (Strings.isEmpty(name)) {
             throw new IllegalArgumentException(String.format(NAME_MUST_NOT_BE_EMPTY, name));
         }

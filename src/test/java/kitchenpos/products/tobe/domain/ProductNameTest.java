@@ -22,7 +22,7 @@ class ProductNameTest {
 
     @Test
     void create() {
-        assertThatCode(() -> new ProductName("짜장면", purgomalumClient))
+        assertThatCode(() -> new ProductName(purgomalumClient, "짜장면"))
                 .doesNotThrowAnyException();
     }
 
@@ -30,7 +30,7 @@ class ProductNameTest {
     @NullSource
     @EmptySource
     void createInvalidName(String name) {
-        assertThatThrownBy(() -> new ProductName(name, purgomalumClient))
+        assertThatThrownBy(() -> new ProductName(purgomalumClient, name))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이름은 빈 값이 아니어야 합니다. 입력 값 : " + name);
     }
@@ -38,7 +38,7 @@ class ProductNameTest {
     @DisplayName("상품 이름에는 비속어가 포함되지 않아야 한다")
     @Test
     void createProfanity() {
-        assertThatThrownBy(() -> new ProductName("비속어", purgomalumClient))
+        assertThatThrownBy(() -> new ProductName(purgomalumClient, "비속어"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이름에는 비속어가 포함되지 않아야 합니다. 입력 값 : 비속어");
     }
