@@ -1,8 +1,10 @@
 package kitchenpos.support.vo;
 
+import javax.persistence.Embeddable;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Embeddable
 public abstract class ValueObject<T extends ValueObject<T>> {
     @Override
     public int hashCode() {
