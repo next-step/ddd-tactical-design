@@ -23,8 +23,7 @@ public class TobeMenuGroupRestController {
 
     @PostMapping
     public ResponseEntity<MenuGroupRegisterResponse> create(@RequestBody final MenuGroupRegisterRequest request) {
-        final TobeMenuGroup menuGroup = menuGroupService.create(request);
-        final MenuGroupRegisterResponse response = new MenuGroupRegisterResponse(menuGroup);
+        final MenuGroupRegisterResponse response = menuGroupService.create(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
                 .body(response);
     }
@@ -33,9 +32,6 @@ public class TobeMenuGroupRestController {
     public ResponseEntity<List<MenuGroupDto>> findAll() {
         return ResponseEntity.ok(
                 menuGroupService.findAll()
-                        .stream()
-                        .map(MenuGroupDto::new)
-                        .collect(Collectors.toList())
         );
     }
 }

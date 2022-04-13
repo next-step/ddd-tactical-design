@@ -1,7 +1,5 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import kitchenpos.support.exception.NamingRuleViolationException;
-import kitchenpos.support.policy.NamingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupName;
 
@@ -41,7 +39,6 @@ public class TobeMenuGroup {
     public static class MenuGroupBuilder {
         private final MenuGroupId menuGroupId;
         private String name;
-        private NamingRule namingRule;
 
         public MenuGroupBuilder() {
             this.menuGroupId = new MenuGroupId(UUID.randomUUID());
@@ -57,16 +54,10 @@ public class TobeMenuGroup {
             return this;
         }
 
-        public MenuGroupBuilder namingRule(NamingRule namingRule) {
-            this.namingRule = namingRule;
-            return this;
-        }
-
         public TobeMenuGroup build() {
-            if (Objects.isNull(name) || Objects.isNull(namingRule)) {
-                throw new NamingRuleViolationException();
+            if (Objects.isNull(name)) {
+                throw new IllegalArgumentException();
             }
-            namingRule.checkRule(name);
             return new TobeMenuGroup(this.menuGroupId, new MenuGroupName(name));
         }
     }

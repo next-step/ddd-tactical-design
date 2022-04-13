@@ -150,11 +150,11 @@ public class Fixtures {
     }
 
     public static TobeMenuGroup tobeMenuGroup(final String name) {
-        return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(new FakeSuccessNamingRule()).build();
+        return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
     }
 
     public static TobeMenuGroup tobeMenuGroup(final String name, final NamingRule namingRule) {
-        return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(namingRule).build();
+        return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
     }
 
     public static TobeMenu menu(final long price, final boolean displayed, final List<TobeMenuProduct> menuProducts) {

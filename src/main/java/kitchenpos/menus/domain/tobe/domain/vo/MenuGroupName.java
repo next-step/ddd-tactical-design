@@ -1,15 +1,21 @@
 package kitchenpos.menus.domain.tobe.domain.vo;
 
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
-public class MenuGroupName {
+public class MenuGroupName extends ValueObject<MenuGroupName> {
 
     @Column(name = "name")
     private String name;
 
     public MenuGroupName(String name) {
+        if(Objects.isNull(name) || "".equals(name)) {
+            throw new IllegalArgumentException("메뉴이름은 빈 값이 될 수 없습니다.");
+        }
         this.name = name;
     }
 

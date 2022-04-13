@@ -1,14 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.support.exception.NamingRuleViolationException;
-import kitchenpos.support.policy.FakeFailNamingRule;
-import kitchenpos.support.policy.FakeSuccessNamingRule;
-import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
+import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.dto.MenuGroupRegisterRequest;
+import kitchenpos.menus.dto.MenuGroupRegisterResponse;
+import kitchenpos.support.exception.NamingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
 
@@ -32,28 +33,29 @@ class TobeMenuGroupServiceTest {
     @Test
     void create_success() {
         //given
-        final MenuGroupRegisterRequest 등록요청 = new MenuGroupRegisterRequest("후라이드", new FakeSuccessNamingRule());
+        final MenuGroupRegisterRequest 등록요청 = new MenuGroupRegisterRequest("후라이드그룹");
 
         //when
-        final TobeMenuGroup 등록된메뉴 = menuGroupService.create(등록요청);
+        final MenuGroupRegisterResponse 등록된메뉴 = menuGroupService.create(등록요청);
 
         //then
         assertThat(등록된메뉴).isNotNull();
         assertAll(
                 () -> assertThat(등록된메뉴.getId()).isNotNull(),
-                () -> assertThat(등록된메뉴.getName().getValue()).isEqualTo(등록요청.getName())
+                () -> assertThat(등록된메뉴.getName()).isEqualTo(등록요청.getName())
         );
     }
 
     @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
-    @Test
-    void create_fail() {
+    @NullAndEmptySource
+    @ParameterizedTest
+    void create_fail(final String name) {
         //given
-        final MenuGroupRegisterRequest 등록요청 = new MenuGroupRegisterRequest("후라이드", new FakeFailNamingRule());
+        final MenuGroupRegisterRequest 등록요청 = new MenuGroupRegisterRequest(name);
 
         //when&&then
         assertThatThrownBy(() -> menuGroupService.create(등록요청))
-                .isInstanceOf(NamingRuleViolationException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -63,7 +65,7 @@ class TobeMenuGroupServiceTest {
         menuGroupRepository.save(tobeMenuGroup("두마리메뉴"));
 
         //when&&then
-        final List<TobeMenuGroup> actual = menuGroupService.findAll();
+        final List<MenuGroupDto> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }
 }

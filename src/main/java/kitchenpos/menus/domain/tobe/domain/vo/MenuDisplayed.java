@@ -1,10 +1,12 @@
 package kitchenpos.menus.domain.tobe.domain.vo;
 
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class MenuDisplayed {
+public class MenuDisplayed extends ValueObject<MenuDisplayed> {
 
     @Column(name = "displayed")
     private boolean displayed;
