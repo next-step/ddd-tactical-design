@@ -5,6 +5,7 @@ import kitchenpos.products.domain.tobe.BanWordFilter;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,7 +31,8 @@ public class Menu {
     @ManyToOne(optional = false)
     @JoinColumn(
             name = "menu_group_id",
-            columnDefinition = "varbinary(16)"
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
