@@ -2,8 +2,10 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.support.domain.Value;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class ProductName extends Value {
 
   private String name;

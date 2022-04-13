@@ -2,8 +2,10 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.support.domain.Value;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
+@Embeddable
 public class ProductPrice extends Value {
 
   private static final BigDecimal ZERO = BigDecimal.ZERO;
