@@ -10,8 +10,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
-import static kitchenpos.products.tobe.domain.fixture.PriceFixture.MINUS_PRICE;
-import static kitchenpos.products.tobe.domain.fixture.PriceFixture.PRICE;
+import static kitchenpos.products.tobe.domain.fixture.PriceFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,9 +34,19 @@ public class ProductPriceTest {
   @ParameterizedTest
   @DisplayName("상품의 가격이 비어있거나 음수이면 IllegalArgumentException 예외 발생")
   @MethodSource("provideBigDecimalForIsNotNullAndMinusValue")
-  void test4(BigDecimal price) {
+  void test2(BigDecimal price) {
     assertThatThrownBy(
       () -> new ProductPrice(price)
     ).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  @DisplayName("동등성 비교")
+  void test3() {
+    ProductPrice price = new ProductPrice(PRICE);
+    assertAll(
+      () -> assertThat(price).isEqualTo(new ProductPrice(PRICE)),
+      () -> assertThat(price).isNotEqualTo(new ProductPrice(CHANGE_PRICE))
+    );
   }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,9 +34,20 @@ class ProductNameTest {
 
   @Test
   @DisplayName("상품의 이름에는 비속어가 포함되면 IllegalArgumentException 예외 발생")
-  void test7() {
+  void test3() {
     assertThatThrownBy(
       () -> new ProductName("욕설", profanities)
     ).isInstanceOf(IllegalArgumentException.class);
   }
+
+  @Test
+  @DisplayName("동등성 비교")
+  void test4() {
+    ProductName name = new ProductName("이름", profanities);
+    assertAll(
+      () -> assertThat(name).isEqualTo(new ProductName("이름", profanities)),
+      () -> assertThat(name).isNotEqualTo(new ProductName("이름아님", profanities))
+    );
+  }
+
 }
