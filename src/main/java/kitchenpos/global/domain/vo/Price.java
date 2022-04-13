@@ -1,7 +1,7 @@
 package kitchenpos.global.domain.vo;
 
-import kitchenpos.global.marker.ValueObject;
 import kitchenpos.global.exception.IllegalPriceException;
+import kitchenpos.global.marker.ValueObject;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -23,16 +23,16 @@ public final class Price implements ValueObject {
         }
     }
 
-    public boolean isSame(BigDecimal price) {
-        return this.price.compareTo(price) == 0;
+    public boolean isSame(Price other) {
+        return this.price.compareTo(other.price) == 0;
     }
 
-    public boolean isNotSame(BigDecimal price) {
-        return !isSame(price);
+    public boolean isNotSame(Price other) {
+        return !isSame(other);
     }
 
     public Price add(Price price) {
-        if(price.isSame(BigDecimal.ZERO)) {
+        if (price.isSame(ZERO)) {
             return this;
         }
         return new Price(this.price.add(price.price));

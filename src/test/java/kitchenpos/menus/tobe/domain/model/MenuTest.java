@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.global.domain.vo.DisplayedName;
 import kitchenpos.global.domain.vo.Price;
 import kitchenpos.menus.helper.MenuFixtureFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -15,20 +16,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuTest {
 
+    private static final DisplayedName 미트파이_세트 = new DisplayedName("미트파이와 레몬에이드 세트", text -> false);
+
     @DisplayName("메뉴 (Menu)의 가격은 속한 메뉴 상품 (Menu Product)의 가격의 합보다 작거나 같은 가격을 가져야 한다.")
-    @ValueSource(booleans =  {true, false})
+    @ValueSource(booleans = {true, false})
     @ParameterizedTest
     void create(boolean displayed) {
-        BigDecimal 메뉴_가격 = BigDecimal.valueOf(4000L);
+
+        Price 메뉴_가격 = new Price(BigDecimal.valueOf(4000L));
         assertThatThrownBy(() -> new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
+                미트파이_세트,
                 메뉴_가격,
-                text -> false,
                 displayed,
                 Arrays.asList(
-                    MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
-                    MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
+                        MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
+                        MenuFixtureFactory.미트파이_메뉴_상품_1500원_1개
                 )
         )).isInstanceOf(IllegalStateException.class);
     }
@@ -39,9 +42,8 @@ class MenuTest {
     void isDisplayed(boolean displayed) {
         Menu menu = new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
-                BigDecimal.valueOf(2000L),
-                text -> false,
+                미트파이_세트,
+                new Price(BigDecimal.valueOf(2000L)),
                 displayed,
                 Arrays.asList(
                         MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
@@ -57,9 +59,8 @@ class MenuTest {
         //given
         Menu menu = new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
-                BigDecimal.valueOf(2000L),
-                text -> false,
+                미트파이_세트,
+                new Price(BigDecimal.valueOf(2000L)),
                 true,
                 Arrays.asList(
                         MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
@@ -79,9 +80,8 @@ class MenuTest {
         //given
         Menu menu = new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
-                BigDecimal.valueOf(2000L),
-                text -> false,
+                미트파이_세트,
+                new Price(BigDecimal.valueOf(2000L)),
                 false,
                 Arrays.asList(
                         MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
@@ -101,9 +101,8 @@ class MenuTest {
         //given
         Menu menu = new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
-                BigDecimal.valueOf(2000L),
-                text -> false,
+                미트파이_세트,
+                new Price(BigDecimal.valueOf(2000L)),
                 true,
                 Arrays.asList(
                         MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,
@@ -124,9 +123,8 @@ class MenuTest {
 
         Menu menu = new Menu(
                 MenuFixtureFactory.런치_세트_메뉴,
-                "미트파이와 레몬에이드 세트",
-                BigDecimal.valueOf(2000L),
-                text -> false,
+                미트파이_세트,
+                new Price(BigDecimal.valueOf(2000L)),
                 true,
                 Arrays.asList(
                         MenuFixtureFactory.레몬에이드_메뉴_상품_1000원_1개,

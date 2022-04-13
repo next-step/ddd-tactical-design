@@ -11,9 +11,9 @@ public class OrderTable {
     private int numberOfGuests;
     private boolean empty;
 
-    public OrderTable(String name) {
+    public OrderTable(Name name) {
         this.id = UUID.randomUUID();
-        this.name = new Name(name);
+        this.name = name;
         this.numberOfGuests = 0;
         this.empty = true;
     }

@@ -14,12 +14,12 @@ class OrderTableTest {
     @Test
     void create() {
 
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
 
         assertAll(
                 () -> assertThat(table.getId()).isNotNull(),
-                () -> assertThat(table.getName()).isEqualTo(new Name(테이블_이름)),
+                () -> assertThat(table.getName()).isEqualTo(테이블_이름),
                 () -> assertThat(table.isEmpty()).isTrue(),
                 () -> assertThat(table.getNumberOfGuests()).isEqualTo(0)
         );
@@ -28,7 +28,7 @@ class OrderTableTest {
     @DisplayName("주문테이블(order table)을 지정(assign)할 수 있다")
     @Test
     void assign() {
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
 
         table.assign();
@@ -41,7 +41,7 @@ class OrderTableTest {
     void clear() {
 
         //given
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
         table.assign();
 
@@ -58,7 +58,7 @@ class OrderTableTest {
     @Test
     void changeNumberOfGuest01() {
         //given
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
 
 
@@ -72,7 +72,7 @@ class OrderTableTest {
     @Test
     void changeNumberOfGuest02() {
         //given
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
         table.assign();
 
@@ -87,7 +87,7 @@ class OrderTableTest {
     @Test
     void changeNumberOfGuest03() {
         //given
-        String 테이블_이름 = "루프탑 테이블";
+        Name 테이블_이름 = new Name("루프탑 테이블");
         OrderTable table = new OrderTable(테이블_이름);
         table.assign();
 
