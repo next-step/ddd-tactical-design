@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
-import javax.persistence.Embeddable;
-import java.math.BigDecimal;
-import java.util.Objects;
+import kitchenpos.support.domain.Value;
 
-public class ProductPrice {
+import java.math.BigDecimal;
+
+public class ProductPrice extends Value {
 
   private static final BigDecimal ZERO = BigDecimal.ZERO;
 
@@ -23,16 +23,4 @@ public class ProductPrice {
     }
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ProductPrice that = (ProductPrice) o;
-    return Objects.equals(price, that.price);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(price);
-  }
 }

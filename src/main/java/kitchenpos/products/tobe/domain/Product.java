@@ -19,8 +19,8 @@ public class Product {
     this.productPrice = productPrice;
   }
 
-  public Product(UUID productId, String name, BigDecimal price) {
-    this(productId, new ProductName(name), new ProductPrice(price));
+  public Product(UUID productId, ProductName name, BigDecimal price) {
+    this(productId, name, new ProductPrice(price));
   }
 
   public void changePrice(BigDecimal price) {
