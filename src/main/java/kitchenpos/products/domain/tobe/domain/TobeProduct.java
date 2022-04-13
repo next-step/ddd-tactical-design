@@ -1,9 +1,5 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.support.exception.NamingRuleViolationException;
-import kitchenpos.support.exception.PricingRuleViolationException;
-import kitchenpos.support.policy.NamingRule;
-import kitchenpos.support.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
@@ -41,8 +37,7 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public TobeProduct changePrice(BigDecimal price, PricingRule rule) {
-        rule.checkRule(price);
+    public TobeProduct changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
         return this;
     }
@@ -60,45 +55,35 @@ public class TobeProduct {
     }
 
     public static class Builder {
-        private final ProductId productId;
-        private String name;
-        private NamingRule namingRule;
-        private BigDecimal price;
-        private PricingRule pricingRule;
+        private ProductId productId;
+        private ProductName name;
+        private ProductPrice price;
+
 
         public Builder() {
             this.productId = new ProductId(UUID.randomUUID());
 
         }
+        public Builder productId(ProductId id) {
+            this.productId = id;
+            return this;
+        }
 
-        public Builder name(String name) {
+        public Builder name(ProductName name) {
             this.name = name;
             return this;
         }
 
-        public Builder namingRule(NamingRule namingRule) {
-            this.namingRule = namingRule;
-            return this;
-        }
-
-        public Builder price(BigDecimal price) {
+        public Builder price(ProductPrice price) {
             this.price = price;
             return this;
         }
 
-        public Builder pricingRule(PricingRule pricingRule) {
-            this.pricingRule = pricingRule;
-            return this;
-        }
-
         public TobeProduct build() {
-            if (Objects.isNull(name) || Objects.isNull(namingRule) || !namingRule.checkRule(name)) {
-                throw new NamingRuleViolationException();
+            if (Objects.isNull(name) || Objects.isNull(price)) {
+                throw new IllegalArgumentException();
             }
-            if (Objects.isNull(price) || Objects.isNull(pricingRule) || !pricingRule.checkRule(price)) {
-                throw new PricingRuleViolationException();
-            }
-            return new TobeProduct(productId, new ProductName(name), new ProductPrice(price));
+            return new TobeProduct(productId, name, price);
         }
     }
 }

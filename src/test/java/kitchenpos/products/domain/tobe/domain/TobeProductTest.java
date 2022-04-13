@@ -1,10 +1,9 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.support.exception.PricingRuleViolationException;
-import kitchenpos.support.policy.FakeFailPricingRule;
-import kitchenpos.support.policy.FakeSuccessPricingRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
@@ -21,21 +20,21 @@ class TobeProductTest {
         final TobeProduct 상품 = tobeProduct("후라이드", BigDecimal.valueOf(16_000L));
         final BigDecimal 가격 = BigDecimal.valueOf(15_000L);
         //when
-        상품.changePrice(가격, new FakeSuccessPricingRule());
+        상품.changePrice(가격);
 
         //then
         assertThat(상품.getPrice().getValue()).isEqualTo(가격);
     }
 
     @DisplayName("상품가격정책에 부합하지 않은 가격으로는 변경할 수 없다.")
-    @Test
-    void changePrice_fail_policy_violation() {
+    @ValueSource(strings = "-1")
+    @ParameterizedTest
+    void changePrice_fail_policy_violation(final BigDecimal price) {
         //given
         final TobeProduct 상품 = tobeProduct("후라이드", BigDecimal.valueOf(16_000L));
-        final BigDecimal 가격 = BigDecimal.valueOf(15_000L);
 
         //when&then
-        assertThatThrownBy(() -> 상품.changePrice(가격, new FakeFailPricingRule()))
-                .isInstanceOf(PricingRuleViolationException.class);
+        assertThatThrownBy(() -> 상품.changePrice(price))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

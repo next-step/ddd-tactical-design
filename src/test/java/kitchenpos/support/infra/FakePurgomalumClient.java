@@ -1,4 +1,4 @@
-package kitchenpos.support.policy.infra.profanity;
+package kitchenpos.support.infra;
 
 import kitchenpos.support.infra.profanity.Profanity;
 

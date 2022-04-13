@@ -1,15 +1,22 @@
 package kitchenpos.products.domain.tobe.domain.vo;
 
+import kitchenpos.support.infra.profanity.Profanity;
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class ProductName extends ValueObject<ProductName> {
 
     @Column(name = "name")
     private String name;
 
-    public ProductName(String name) {
+    public ProductName(String name, Profanity profanity) {
+        if(Objects.isNull(name) || "".equals(name) ||profanity.containsProfanity(name)) {
+            throw new IllegalArgumentException("올바른 상품명이 아닙니다.");
+        }
         this.name = name;
     }
 
@@ -19,20 +26,5 @@ public class ProductName {
 
     public String getValue() {
         return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductName that = (ProductName) o;
-
-        return name != null ? name.equals(that.name) : that.name == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
     }
 }

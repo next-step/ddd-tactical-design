@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
 
 import javax.persistence.*;
@@ -159,13 +158,17 @@ public class TobeMenu {
         }
     }
 
-    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
+    public static BigDecimal getSumOfMenuProductAmount(List<TobeMenuProduct> menuProducts) {
         BigDecimal sum = BigDecimal.ZERO;
         for (TobeMenuProduct menuProduct : menuProducts) {
             BigDecimal calculateAmount = menuProduct.calculateAmount();
             sum = sum.add(calculateAmount);
         }
-        if (price.isGreaterThan(sum)) {
+        return sum;
+    }
+
+    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
+        if (price.isGreaterThan(getSumOfMenuProductAmount(menuProducts))) {
             throw new IllegalArgumentException();
         }
     }

@@ -4,7 +4,6 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.dto.MenuGroupRegisterRequest;
 import kitchenpos.menus.dto.MenuGroupRegisterResponse;
-import kitchenpos.support.exception.NamingRuleViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,22 +1,20 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.support.policy.PricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
+import kitchenpos.support.dto.DTO;
 
 import java.math.BigDecimal;
 
-public class ProductPriceChangeRequest {
+public class ProductPriceChangeRequest extends DTO {
     private BigDecimal price;
     private ProductId productId;
-    private PricingRule productPricingRule;
-
-    public ProductPriceChangeRequest(ProductId productId, BigDecimal price, PricingRule productPricingRule) {
-        this.price = price;
-        this.productId = productId;
-        this.productPricingRule = productPricingRule;
-    }
 
     public ProductPriceChangeRequest() {
+    }
+
+    public ProductPriceChangeRequest(ProductId productId, BigDecimal price) {
+        this.price = price;
+        this.productId = productId;
     }
 
     public BigDecimal getPrice() {
@@ -33,33 +31,5 @@ public class ProductPriceChangeRequest {
 
     public void setProductId(ProductId productId) {
         this.productId = productId;
-    }
-
-    public PricingRule getProductPricingRule() {
-        return productPricingRule;
-    }
-
-    public void setProductPricingRule(PricingRule productPricingRule) {
-        this.productPricingRule = productPricingRule;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductPriceChangeRequest that = (ProductPriceChangeRequest) o;
-
-        if (price != null ? !price.equals(that.price) : that.price != null) return false;
-        if (productId != null ? !productId.equals(that.productId) : that.productId != null) return false;
-        return productPricingRule != null ? productPricingRule.equals(that.productPricingRule) : that.productPricingRule == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = price != null ? price.hashCode() : 0;
-        result = 31 * result + (productId != null ? productId.hashCode() : 0);
-        result = 31 * result + (productPricingRule != null ? productPricingRule.hashCode() : 0);
-        return result;
     }
 }

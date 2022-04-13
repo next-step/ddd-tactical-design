@@ -1,7 +1,6 @@
 package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.TobeMenuGroupService;
-import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.dto.MenuGroupRegisterRequest;
 import kitchenpos.menus.dto.MenuGroupRegisterResponse;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/menu-groups/tobe")
 @RestController

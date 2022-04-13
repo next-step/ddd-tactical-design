@@ -1,8 +1,7 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.support.dto.DTO;
-import kitchenpos.support.policy.PricingRule;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
+import kitchenpos.support.dto.DTO;
 
 public class MenuDisplayRequest extends DTO {
     private MenuId menuId;

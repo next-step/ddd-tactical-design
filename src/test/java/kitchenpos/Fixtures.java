@@ -1,13 +1,5 @@
 package kitchenpos;
 
-import kitchenpos.menus.domain.tobe.domain.vo.MenuDisplayed;
-import kitchenpos.menus.domain.tobe.domain.vo.MenuName;
-import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
-import kitchenpos.support.infra.profanity.Profanity;
-import kitchenpos.support.policy.FakeSuccessNamingRule;
-import kitchenpos.support.policy.FakeSuccessPricingRule;
-import kitchenpos.support.policy.NamingRule;
-import kitchenpos.support.policy.PricingRule;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -15,9 +7,15 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuDisplayed;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuName;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.support.policy.infra.profanity.FakePurgomalumClient;
+import kitchenpos.products.domain.tobe.domain.vo.ProductName;
+import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
+import kitchenpos.support.infra.FakePurgomalumClient;
+import kitchenpos.support.infra.profanity.Profanity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -140,20 +138,20 @@ public class Fixtures {
     }
 
     public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
-        return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
-                .price(price).pricingRule(new FakeSuccessPricingRule()).build();
+        return new Builder()
+                .name(new ProductName(name, profanity))
+                .price(new ProductPrice(price))
+                .build();
     }
 
     public static TobeProduct tobeProduct(final String name, final long price) {
-        return new Builder().name(name).namingRule(new FakeSuccessNamingRule())
-                .price(BigDecimal.valueOf(price)).pricingRule(new FakeSuccessPricingRule()).build();
+        return new Builder()
+                .name(new ProductName(name, profanity))
+                .price(new ProductPrice(BigDecimal.valueOf(price)))
+                .build();
     }
 
     public static TobeMenuGroup tobeMenuGroup(final String name) {
-        return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
-    }
-
-    public static TobeMenuGroup tobeMenuGroup(final String name, final NamingRule namingRule) {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
     }
 
@@ -168,8 +166,7 @@ public class Fixtures {
         return menu;
     }
 
-    public static TobeMenuProduct tobeMenuProduct(final String name, final long price, final long quantity) {
-        TobeProduct product = tobeProduct(name, price);
+    public static TobeMenuProduct tobeMenuProduct(final TobeProduct product, final long quantity) {
         return new TobeMenuProduct.Builder().product(product).quantity(quantity).productId(product.getId()).build();
     }
 
