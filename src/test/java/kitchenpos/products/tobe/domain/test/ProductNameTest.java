@@ -13,41 +13,41 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductNameTest {
-  private static final Profanities profanities = new FakeProfanities();
+    private static final Profanities profanities = new FakeProfanities();
 
-  @Test
-  @DisplayName("상품 이름을 등록할 수 있습니다.")
-  void test1() {
-    assertDoesNotThrow(
-      () -> new ProductName("치킨", profanities)
-    );
-  }
+    @Test
+    @DisplayName("상품 이름을 등록할 수 있습니다.")
+    void test1() {
+        assertDoesNotThrow(
+            () -> new ProductName("치킨", profanities)
+        );
+    }
 
-  @ParameterizedTest
-  @DisplayName("상품 이름이 존재하지 않으면 IllegalArgumentException 예외 발생")
-  @NullAndEmptySource
-  void test2(String name) {
-    assertThatThrownBy(
-      () -> new ProductName(name, profanities)
-    ).isInstanceOf(IllegalArgumentException.class);
-  }
+    @ParameterizedTest
+    @DisplayName("상품 이름이 존재하지 않으면 IllegalArgumentException 예외 발생")
+    @NullAndEmptySource
+    void test2(String name) {
+        assertThatThrownBy(
+            () -> new ProductName(name, profanities)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
 
-  @Test
-  @DisplayName("상품의 이름에는 비속어가 포함되면 IllegalArgumentException 예외 발생")
-  void test3() {
-    assertThatThrownBy(
-      () -> new ProductName("욕설", profanities)
-    ).isInstanceOf(IllegalArgumentException.class);
-  }
+    @Test
+    @DisplayName("상품의 이름에는 비속어가 포함되면 IllegalArgumentException 예외 발생")
+    void test3() {
+        assertThatThrownBy(
+            () -> new ProductName("욕설", profanities)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
 
-  @Test
-  @DisplayName("동등성 비교")
-  void test4() {
-    ProductName name = new ProductName("이름", profanities);
-    assertAll(
-      () -> assertThat(name).isEqualTo(new ProductName("이름", profanities)),
-      () -> assertThat(name).isNotEqualTo(new ProductName("이름아님", profanities))
-    );
-  }
+    @Test
+    @DisplayName("동등성 비교")
+    void test4() {
+        ProductName name = new ProductName("이름", profanities);
+        assertAll(
+            () -> assertThat(name).isEqualTo(new ProductName("이름", profanities)),
+            () -> assertThat(name).isNotEqualTo(new ProductName("이름아님", profanities))
+        );
+    }
 
 }

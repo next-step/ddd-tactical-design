@@ -20,40 +20,40 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ProductTest {
-  private static final Profanities profanities = new FakeProfanities();
+    private static final Profanities profanities = new FakeProfanities();
 
-  private static Stream<Arguments> provideBigDecimalForIsNotNullAndMinusValue() {
-    return Stream.of(
-      Arguments.of((BigDecimal) null),
-      Arguments.of(MINUS_PRICE)
-    );
-  }
+    private static Stream<Arguments> provideBigDecimalForIsNotNullAndMinusValue() {
+        return Stream.of(
+            Arguments.of((BigDecimal) null),
+            Arguments.of(MINUS_PRICE)
+        );
+    }
 
-  @Test
-  @DisplayName("상품을 생성할 수 있다.")
-  void test1() {
-    assertThatCode(
-      () -> new Product(null, PRODUCT_NAME, PRICE)
-    ).doesNotThrowAnyException();
-  }
+    @Test
+    @DisplayName("상품을 생성할 수 있다.")
+    void test1() {
+        assertThatCode(
+            () -> new Product(null, PRODUCT_NAME, PRICE)
+        ).doesNotThrowAnyException();
+    }
 
-  @Test
-  @DisplayName("상품의 가격을 변경할 수 있다.")
-  void test5() {
-    assertAll(
-      () -> assertDoesNotThrow(() -> 상품.changePrice(CHANGE_PRICE)),
-      () -> assertThat(상품.getPrice())
-        .isEqualTo(new ProductPrice(CHANGE_PRICE))
-    );
-  }
+    @Test
+    @DisplayName("상품의 가격을 변경할 수 있다.")
+    void test5() {
+        assertAll(
+            () -> assertDoesNotThrow(() -> 상품.changePrice(CHANGE_PRICE)),
+            () -> assertThat(상품.getPrice())
+                .isEqualTo(new ProductPrice(CHANGE_PRICE))
+        );
+    }
 
-  @ParameterizedTest
-  @MethodSource("provideBigDecimalForIsNotNullAndMinusValue")
-  @DisplayName("변경하는 상품의 가격이 음수거나 존재하지 않으면 IllegalArgumentException 예외 발생")
-  void test6(BigDecimal price) {
-    assertThatThrownBy(
-      () -> 상품.changePrice(price)
-    ).isInstanceOf(IllegalArgumentException.class);
-  }
+    @ParameterizedTest
+    @MethodSource("provideBigDecimalForIsNotNullAndMinusValue")
+    @DisplayName("변경하는 상품의 가격이 음수거나 존재하지 않으면 IllegalArgumentException 예외 발생")
+    void test6(BigDecimal price) {
+        assertThatThrownBy(
+            () -> 상품.changePrice(price)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
 
 }

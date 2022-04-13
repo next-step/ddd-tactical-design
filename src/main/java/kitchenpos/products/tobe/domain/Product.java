@@ -11,43 +11,43 @@ import java.util.UUID;
 @Entity
 public class Product {
 
-  @Id
-  @Column(name = "id", columnDefinition = "varbinary(16)")
-  private UUID productId;
+    @Id
+    @Column(name = "id", columnDefinition = "varbinary(16)")
+    private UUID productId;
 
-  @Column(name = "name", nullable = false)
-  @Embedded
-  private ProductName productName;
+    @Column(name = "name", nullable = false)
+    @Embedded
+    private ProductName productName;
 
-  @Column(name = "price", nullable = false)
-  @Embedded
-  private ProductPrice productPrice;
+    @Column(name = "price", nullable = false)
+    @Embedded
+    private ProductPrice productPrice;
 
-  protected Product() {/*no-op*/}
+    protected Product() {/*no-op*/}
 
-  public Product(UUID productId, ProductName productName, ProductPrice productPrice) {
-    this.productId = productId;
-    this.productName = productName;
-    this.productPrice = productPrice;
-  }
+    public Product(UUID productId, ProductName productName, ProductPrice productPrice) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+    }
 
-  public Product(UUID productId, ProductName name, BigDecimal price) {
-    this(productId, name, new ProductPrice(price));
-  }
+    public Product(UUID productId, ProductName name, BigDecimal price) {
+        this(productId, name, new ProductPrice(price));
+    }
 
-  public void changePrice(BigDecimal price) {
-    this.productPrice = new ProductPrice(price);
-  }
+    public void changePrice(BigDecimal price) {
+        this.productPrice = new ProductPrice(price);
+    }
 
-  public UUID getId() {
-    return productId;
-  }
+    public UUID getId() {
+        return productId;
+    }
 
-  public ProductName getName() {
-    return productName;
-  }
+    public ProductName getName() {
+        return productName;
+    }
 
-  public ProductPrice getPrice() {
-    return productPrice;
-  }
+    public ProductPrice getPrice() {
+        return productPrice;
+    }
 }
