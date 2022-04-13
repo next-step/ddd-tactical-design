@@ -3,7 +3,6 @@ package kitchenpos.products.tobe.domain;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
-@Embeddable
 public class ProductName {
 
   private String name;

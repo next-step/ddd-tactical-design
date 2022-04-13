@@ -1,23 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "product")
-@Entity
 public class Product {
-  @Column(name = "id", columnDefinition = "varbinary(16)")
-  @Id
   private UUID productId;
 
-  @Embedded
-  @Column(name = "name", nullable = false)
   private ProductName productName;
 
-  @Embedded
-  @Column(name = "price", nullable = false)
   private ProductPrice productPrice;
 
   protected Product() {/*no-op*/}

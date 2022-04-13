@@ -4,7 +4,6 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Embeddable
 public class ProductPrice {
 
   private static final BigDecimal ZERO = BigDecimal.ZERO;
