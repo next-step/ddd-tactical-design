@@ -1,6 +1,13 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuPrice;
+import kitchenpos.menus.ui.dto.MenuRequest;
+import kitchenpos.menus.ui.dto.MenuResponse;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
@@ -31,11 +38,9 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public MenuResponse create(final MenuRequest request) {
+        MenuPrice menuPrice = new MenuPrice(request.getPrice());
+
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
@@ -68,45 +73,25 @@ public class MenuService {
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
         }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+
+        menuPrice.validationTotalPrice(sum);
+
+        return new MenuResponse(menuRepository.save(request.toEntity(purgomalumClient, menuGroup)));
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
+    public MenuResponse changePrice(final UUID menuId, final MenuRequest request) {
         final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            final BigDecimal sum = menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            if (price.compareTo(sum) > 0) {
-                throw new IllegalArgumentException();
-            }
-        }
-        menu.setPrice(price);
-        return menu;
+
+        menu.changePrice(price);
+        return new MenuResponse(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public MenuResponse display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -117,20 +102,24 @@ public class MenuService {
                 throw new IllegalStateException();
             }
         }
-        menu.setDisplayed(true);
-        return menu;
+        menu.show();
+        return new MenuResponse(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public MenuResponse hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
-        return menu;
+        menu.hide();
+        return new MenuResponse(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        List<Menu> menus = menuRepository.findAll();
+
+        return menus.stream()
+                .map(menu -> new MenuResponse(menu))
+                .collect(Collectors.toList());
     }
 }
