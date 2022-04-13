@@ -1,11 +1,11 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.ui.dto.ProductRequest;
 import kitchenpos.products.ui.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,9 +45,9 @@ class ProductServiceTest {
         final ProductResponse actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -58,7 +58,7 @@ class ProductServiceTest {
     void create(final BigDecimal price) {
         final ProductRequest expected = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -68,7 +68,7 @@ class ProductServiceTest {
     void create(final String name) {
         final ProductRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
@@ -88,7 +88,7 @@ class ProductServiceTest {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")

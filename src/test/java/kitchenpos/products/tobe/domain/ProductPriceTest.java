@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +9,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductPriceTest {
 
