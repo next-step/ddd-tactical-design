@@ -13,7 +13,7 @@ public class MenuGroupName extends ValueObject<MenuGroupName> {
     private String name;
 
     public MenuGroupName(String name) {
-        if(Objects.isNull(name) || "".equals(name)) {
+        if (Objects.isNull(name) || "".equals(name)) {
             throw new IllegalArgumentException("메뉴이름은 빈 값이 될 수 없습니다.");
         }
         this.name = name;

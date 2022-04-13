@@ -13,7 +13,7 @@ public class MenuPrice extends ValueObject<MenuPrice> {
     private BigDecimal price;
 
     public MenuPrice(BigDecimal price) {
-        if(price.compareTo(BigDecimal.ZERO) < 1) {
+        if (price.compareTo(BigDecimal.ZERO) < 1) {
             throw new IllegalArgumentException("메뉴 가격은 0원 이상이어야 합니다.");
         }
         this.price = price;

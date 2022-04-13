@@ -35,7 +35,7 @@ public class TobeMenuService {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.profanity=profanity;
+        this.profanity = profanity;
     }
 
     @Transactional

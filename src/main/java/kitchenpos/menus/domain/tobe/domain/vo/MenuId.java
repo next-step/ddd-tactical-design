@@ -15,7 +15,8 @@ public class MenuId extends Id {
         this.id = id;
     }
 
-    protected MenuId() { }
+    protected MenuId() {
+    }
 
     public UUID getValue() {
         return id;

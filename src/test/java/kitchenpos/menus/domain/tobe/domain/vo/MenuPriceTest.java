@@ -27,7 +27,7 @@ class MenuPriceTest {
     }
 
     @DisplayName(value = "메뉴가격은 0원 이상이다")
-    @ValueSource(strings = {"0","-1"})
+    @ValueSource(strings = {"0", "-1"})
     @ParameterizedTest
     void 메뉴가격은_0원_이상이다(final BigDecimal price) throws Exception {
         //given

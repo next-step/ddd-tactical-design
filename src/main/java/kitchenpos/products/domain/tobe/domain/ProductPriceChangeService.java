@@ -21,8 +21,8 @@ public class ProductPriceChangeService {
         this.menuRepository = menuRepository;
     }
 
-    public ProductPriceChangeResponse priceChange (ProductPriceChangeRequest request) {
-        if(Objects.isNull(request)) {
+    public ProductPriceChangeResponse priceChange(ProductPriceChangeRequest request) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
         final TobeProduct product = productRepository.findById(request.getProductId()).orElseThrow(NoSuchElementException::new);

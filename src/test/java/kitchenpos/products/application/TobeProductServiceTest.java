@@ -60,7 +60,7 @@ class TobeProductServiceTest {
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
     @NullAndEmptySource
-    @ValueSource(strings = {"욕설","비속어"})
+    @ValueSource(strings = {"욕설", "비속어"})
     @ParameterizedTest
     void create_fail_naming_rule_violation(final String name) {
         //given
@@ -71,7 +71,7 @@ class TobeProductServiceTest {
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource( strings = {"-1"})
+    @ValueSource(strings = {"-1"})
     @NullSource
     @ParameterizedTest
     void create_fail_pricing_rule_violation(final BigDecimal price) {
@@ -102,7 +102,7 @@ class TobeProductServiceTest {
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource( strings = {"-1"})
+    @ValueSource(strings = {"-1"})
     @NullSource
     @ParameterizedTest
     void changePrice_fail(final BigDecimal price) {
@@ -119,8 +119,8 @@ class TobeProductServiceTest {
     @Test
     void changePriceInMenu() {
         //given
-        final TobeProduct product = productRepository.save(tobeProduct("맛나치킨",16_000));
-        final TobeMenu menu = menuRepository.save(menu(14_000L, true, new ArrayList<TobeMenuProduct>(Arrays.asList(tobeMenuProduct(product,1)))));
+        final TobeProduct product = productRepository.save(tobeProduct("맛나치킨", 16_000));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, true, new ArrayList<TobeMenuProduct>(Arrays.asList(tobeMenuProduct(product, 1)))));
         final ProductId productId = menu.getMenuProducts().get(0).getProductId();
         final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(productId, BigDecimal.valueOf(13_000L));
 

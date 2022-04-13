@@ -64,6 +64,7 @@ public class TobeProduct {
             this.productId = new ProductId(UUID.randomUUID());
 
         }
+
         public Builder productId(ProductId id) {
             this.productId = id;
             return this;

@@ -14,7 +14,7 @@ public class ProductName extends ValueObject<ProductName> {
     private String name;
 
     public ProductName(String name, Profanity profanity) {
-        if(Objects.isNull(name) || "".equals(name) ||profanity.containsProfanity(name)) {
+        if (Objects.isNull(name) || "".equals(name) || profanity.containsProfanity(name)) {
             throw new IllegalArgumentException("올바른 상품명이 아닙니다.");
         }
         this.name = name;

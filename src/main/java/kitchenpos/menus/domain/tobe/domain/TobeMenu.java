@@ -57,6 +57,21 @@ public class TobeMenu {
         this.menuGroupId = menuGroup.getId();
     }
 
+    public static BigDecimal getSumOfMenuProductAmount(List<TobeMenuProduct> menuProducts) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (TobeMenuProduct menuProduct : menuProducts) {
+            BigDecimal calculateAmount = menuProduct.calculateAmount();
+            sum = sum.add(calculateAmount);
+        }
+        return sum;
+    }
+
+    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
+        if (price.isGreaterThan(getSumOfMenuProductAmount(menuProducts))) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public TobeMenu changePrice(final MenuPrice price) {
         if (Objects.isNull(this.price)) {
             throw new IllegalArgumentException();
@@ -118,7 +133,7 @@ public class TobeMenu {
         }
 
         public Builder id(final MenuId id) {
-            this.menuId=id;
+            this.menuId = id;
             return this;
         }
 
@@ -151,25 +166,10 @@ public class TobeMenu {
             if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            if(displayed.isDisplayed()) {
+            if (displayed.isDisplayed()) {
                 checkPriceIsGreaterThanSumOfMenuProductAmount(price, menuProducts);
             }
             return new TobeMenu(menuId, name, price, menuGroup, displayed, menuProducts);
-        }
-    }
-
-    public static BigDecimal getSumOfMenuProductAmount(List<TobeMenuProduct> menuProducts) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (TobeMenuProduct menuProduct : menuProducts) {
-            BigDecimal calculateAmount = menuProduct.calculateAmount();
-            sum = sum.add(calculateAmount);
-        }
-        return sum;
-    }
-
-    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
-        if (price.isGreaterThan(getSumOfMenuProductAmount(menuProducts))) {
-            throw new IllegalArgumentException();
         }
     }
 }
