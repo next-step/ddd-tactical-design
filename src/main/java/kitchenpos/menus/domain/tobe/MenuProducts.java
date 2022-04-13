@@ -27,11 +27,6 @@ public class MenuProducts {
         this.values = values;
     }
 
-    //    public MenuPrice getTotalPrice() {
-//        return new MenuPrice(values.stream()
-//                .map(it-> it.getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
-//                .reduce(BigDecimal.ZERO, BigDecimal::add));
-//    }
     public MenuPrice getTotalPrice() {
         return values.stream()
                 .map(MenuProduct::getSumProduct)
