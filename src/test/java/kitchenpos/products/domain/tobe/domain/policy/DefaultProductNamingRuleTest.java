@@ -2,7 +2,7 @@ package kitchenpos.products.domain.tobe.domain.policy;
 
 import kitchenpos.support.exception.NamingRuleViolationException;
 import kitchenpos.support.policy.NamingRule;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.support.policy.infra.profanity.FakePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

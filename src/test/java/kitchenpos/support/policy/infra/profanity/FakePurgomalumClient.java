@@ -1,6 +1,6 @@
-package kitchenpos.products.application;
+package kitchenpos.support.policy.infra.profanity;
 
-import kitchenpos.support.infra.Profanity;
+import kitchenpos.support.infra.profanity.Profanity;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,10 +1,11 @@
 package kitchenpos.menus.dto;
 
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
+import kitchenpos.support.dto.DTO;
 
 import java.util.UUID;
 
-public class MenuGroupDto {
+public class MenuGroupDto extends DTO {
     private UUID id;
     private String name;
 

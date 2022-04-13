@@ -2,7 +2,7 @@ package kitchenpos.products.domain.tobe.domain.policy;
 
 import kitchenpos.support.exception.NamingRuleViolationException;
 import kitchenpos.support.policy.NamingRule;
-import kitchenpos.support.infra.Profanity;
+import kitchenpos.support.infra.profanity.Profanity;
 
 import java.util.Objects;
 

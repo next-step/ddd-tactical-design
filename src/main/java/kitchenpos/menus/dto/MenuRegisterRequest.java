@@ -14,6 +14,14 @@ public class MenuRegisterRequest extends DTO {
     private List<TobeMenuProduct> menuProducts;
     private boolean displayed;
 
+    public MenuRegisterRequest(String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
+        this.name = name;
+        this.price = price;
+        this.menuGroupId = menuGroupId;
+        this.menuProducts = menuProducts;
+        this.displayed = displayed;
+    }
+
     public MenuRegisterRequest() {
     }
 

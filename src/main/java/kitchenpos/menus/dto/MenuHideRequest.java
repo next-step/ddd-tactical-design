@@ -1,8 +1,9 @@
 package kitchenpos.menus.dto;
 
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
+import kitchenpos.support.dto.DTO;
 
-public class MenuHideRequest {
+public class MenuHideRequest extends DTO {
     private MenuId menuId;
 
     public MenuHideRequest() {

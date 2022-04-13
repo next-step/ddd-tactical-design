@@ -1,9 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import kitchenpos.support.exception.NamingRuleViolationException;
-import kitchenpos.support.exception.PricingRuleViolationException;
-import kitchenpos.support.policy.NamingRule;
-import kitchenpos.support.policy.PricingRule;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
 
 import javax.persistence.*;
@@ -58,20 +55,20 @@ public class TobeMenu {
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroup.getId();
     }
 
-    public TobeMenu changePrice(final BigDecimal price, final PricingRule rule) {
-        if (Objects.isNull(rule) || Objects.isNull(price) || !rule.checkRule(price)) {
-            throw new PricingRuleViolationException();
+    public TobeMenu changePrice(final MenuPrice price) {
+        if (Objects.isNull(this.price)) {
+            throw new IllegalArgumentException();
         }
-        this.price = new MenuPrice(price);
+        checkPriceIsGreaterThanSumOfMenuProductAmount(price, this.menuProducts);
+        this.price = price;
         return this;
     }
 
-    public TobeMenu display(final PricingRule pricingRule) {
-        if (Objects.isNull(pricingRule) || !pricingRule.checkRule(this.price.getValue())) {
-            throw new PricingRuleViolationException();
-        }
+    public TobeMenu display() {
+        checkPriceIsGreaterThanSumOfMenuProductAmount(this.price, this.menuProducts);
         this.displayed = new MenuDisplayed(true);
         return this;
     }
@@ -118,7 +115,7 @@ public class TobeMenu {
         private List<TobeMenuProduct> menuProducts;
 
         public Builder() {
-
+            this.menuId = new MenuId(UUID.randomUUID());
         }
 
         public Builder id(final MenuId id) {
@@ -155,7 +152,21 @@ public class TobeMenu {
             if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
                 throw new IllegalArgumentException();
             }
+            if(displayed.isDisplayed()) {
+                checkPriceIsGreaterThanSumOfMenuProductAmount(price, menuProducts);
+            }
             return new TobeMenu(menuId, name, price, menuGroup, displayed, menuProducts);
+        }
+    }
+
+    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (TobeMenuProduct menuProduct : menuProducts) {
+            BigDecimal calculateAmount = menuProduct.calculateAmount();
+            sum = sum.add(calculateAmount);
+        }
+        if (price.isGreaterThan(sum)) {
+            throw new IllegalArgumentException();
         }
     }
 }

@@ -4,11 +4,12 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
+import kitchenpos.support.dto.DTO;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MenuRegisterResponse {
+public class MenuRegisterResponse extends DTO {
     private MenuId menuId;
     private String name;
     private BigDecimal price;

@@ -1,5 +1,9 @@
 package kitchenpos;
 
+import kitchenpos.menus.domain.tobe.domain.vo.MenuDisplayed;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuName;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
+import kitchenpos.support.infra.profanity.Profanity;
 import kitchenpos.support.policy.FakeSuccessNamingRule;
 import kitchenpos.support.policy.FakeSuccessPricingRule;
 import kitchenpos.support.policy.NamingRule;
@@ -13,6 +17,7 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
+import kitchenpos.support.policy.infra.profanity.FakePurgomalumClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,6 +27,7 @@ import static kitchenpos.products.domain.tobe.domain.TobeProduct.Builder;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
+    private static final Profanity profanity = new FakePurgomalumClient();
 
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
@@ -151,13 +157,11 @@ public class Fixtures {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).namingRule(namingRule).build();
     }
 
-    public static TobeMenu menu(final long price, final PricingRule pricingRule, final boolean displayed, final List<TobeMenuProduct> menuProducts) {
+    public static TobeMenu menu(final long price, final boolean displayed, final List<TobeMenuProduct> menuProducts) {
         final TobeMenu menu = new TobeMenu.Builder()
-                .name("후라이드+후라이드")
-                .namingRule(new FakeSuccessNamingRule())
-                .price(BigDecimal.valueOf(price))
-                .pricingRule(pricingRule)
-                .displayed(displayed)
+                .name(new MenuName("후라이드+후라이드", profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(price)))
+                .displayed(new MenuDisplayed(displayed))
                 .menuProducts(menuProducts)
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();

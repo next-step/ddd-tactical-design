@@ -17,6 +17,10 @@ public class MenuDisplayed {
 
     }
 
+    public boolean isDisplayed() {
+        return this.displayed == true;
+    }
+
     public boolean getValue() {
         return displayed;
     }

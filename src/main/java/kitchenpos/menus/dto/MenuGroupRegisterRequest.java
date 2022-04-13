@@ -1,8 +1,9 @@
 package kitchenpos.menus.dto;
 
+import kitchenpos.support.dto.DTO;
 import kitchenpos.support.policy.NamingRule;
 
-public class MenuGroupRegisterRequest {
+public class MenuGroupRegisterRequest extends DTO {
     private String name;
     private NamingRule namingRule;
 
