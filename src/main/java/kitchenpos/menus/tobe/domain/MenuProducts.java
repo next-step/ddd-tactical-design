@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -26,7 +26,7 @@ public class MenuProducts {
 
     private MenuProducts(List<MenuProduct> items) {
         validItems(items);
-        this.items = Collections.unmodifiableList(items);
+        this.items = Collections.unmodifiableList(new ArrayList<>(items));
     }
 
     private void validItems(List<MenuProduct> items) {
