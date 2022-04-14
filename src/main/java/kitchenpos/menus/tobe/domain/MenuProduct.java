@@ -33,8 +33,15 @@ public class MenuProduct {
     protected MenuProduct() { }
 
     private MenuProduct(Product product, Quantity quantity) {
+        validProduct(product);
         this.product = product;
         this.quantity = quantity;
+    }
+
+    private void validProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("유효하지 않은 상품입니다.");
+        }
     }
 
     public static MenuProduct create(Product product, Long quantity) {
