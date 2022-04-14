@@ -28,4 +28,12 @@ public class MenuGroup {
     public static MenuGroup create(String name, PurgomalumClient purgomalumClient) {
         return new MenuGroup(UUID.randomUUID(), new Name(name, purgomalumClient));
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name.value();
+    }
 }
