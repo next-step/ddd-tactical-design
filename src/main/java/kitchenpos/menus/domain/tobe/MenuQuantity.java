@@ -14,12 +14,12 @@ public class MenuQuantity {
     protected MenuQuantity() {
     }
 
-    public MenuQuantity(long quantity) {
+    protected MenuQuantity(long quantity) {
         validate(quantity);
         this.quantity = quantity;
     }
 
-    public Long getQuantity() {
+    protected Long getQuantity() {
         return quantity;
     }
 

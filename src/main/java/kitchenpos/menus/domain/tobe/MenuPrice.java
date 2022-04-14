@@ -28,23 +28,23 @@ public class MenuPrice {
         return new MenuPrice(value);
     }
 
-    public MenuPrice add(MenuPrice value) {
+    protected MenuPrice add(MenuPrice value) {
         return new MenuPrice(price.add(value.price));
     }
 
-    public MenuPrice add(MenuPrice value1, MenuPrice value2) {
+    protected MenuPrice add(MenuPrice value1, MenuPrice value2) {
         return new MenuPrice(value1.price.add(value2.price));
     }
 
-    public MenuPrice add(BigDecimal value) {
+    protected MenuPrice add(BigDecimal value) {
         return new MenuPrice(price.add(value));
     }
 
-    public MenuPrice multiply(MenuPrice value) {
+    protected MenuPrice multiply(MenuPrice value) {
         return multiply(value.price);
     }
 
-    public MenuPrice multiply(BigDecimal value) {
+    protected MenuPrice multiply(BigDecimal value) {
         return new MenuPrice(price.multiply(value));
     }
 

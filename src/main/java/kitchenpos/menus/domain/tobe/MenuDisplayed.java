@@ -14,15 +14,15 @@ public class MenuDisplayed {
         this.displayed = displayed;
     }
 
-    public void show() {
+    protected void show() {
         this.displayed = true;
     }
 
-    public void hide() {
+    protected void hide() {
         this.displayed = false;
     }
 
-    public boolean isDisplayed() {
+    protected boolean isDisplayed() {
         return displayed;
     }
 
