@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NameTest {
 
-
     @DisplayName("이름은 null 이거나 empty string 을 가질 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuGroupTest {
 
@@ -14,7 +14,7 @@ class MenuGroupTest {
     void create() {
         String 메뉴_그룹_이름 = "런치 세트 메뉴";
 
-        MenuGroup group = new MenuGroup(메뉴_그룹_이름);
+        MenuGroup group = new MenuGroup(new Name(메뉴_그룹_이름));
 
         assertAll(
                 () -> assertThat(group.getId()).isNotNull(),

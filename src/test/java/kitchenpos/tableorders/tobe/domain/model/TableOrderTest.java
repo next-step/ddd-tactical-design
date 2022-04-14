@@ -1,5 +1,6 @@
 package kitchenpos.tableorders.tobe.domain.model;
 
+import kitchenpos.global.domain.vo.Name;
 import kitchenpos.global.domain.vo.Price;
 import kitchenpos.tableorders.tobe.domain.dto.CreatOrderLineItemCommand;
 import kitchenpos.tableorders.tobe.domain.dto.MenuResponse;
@@ -18,6 +19,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TableOrderTest {
+
+    private static final Name 루프탑_테이블_이름 = new Name("루프탑 테이블");
 
     public OrderLineItems 정상적으로_생성된_주문_라인_아이템;
     public OrderTable 정상적으로_지정된_테이블;
@@ -38,7 +41,7 @@ class TableOrderTest {
                 menus
         );
 
-        정상적으로_지정된_테이블 = new OrderTable("루프탑 테이블");
+        정상적으로_지정된_테이블 = new OrderTable(루프탑_테이블_이름);
         정상적으로_지정된_테이블.assign(2);
 
         정상적으로_생성된_주문 = new TableOrder(정상적으로_지정된_테이블, 정상적으로_생성된_주문_라인_아이템);
@@ -48,7 +51,7 @@ class TableOrderTest {
     @DisplayName("매장 주문(table order) 주문은 지정(assign) 된  주문테이블(order table)을 가진다.")
     @Test
     void create01() {
-        OrderTable 미지정_테이블 = new OrderTable("루프탑 테이블");
+        OrderTable 미지정_테이블 = new OrderTable(루프탑_테이블_이름);
 
         assertThatThrownBy(() -> new TableOrder(미지정_테이블, 정상적으로_생성된_주문_라인_아이템))
                 .isInstanceOf(IllegalArgumentException.class)

@@ -5,11 +5,11 @@ import kitchenpos.global.marker.ValueObject;
 
 import java.util.Objects;
 
-public final class DisplayName implements ValueObject {
+public final class DisplayedName implements ValueObject {
 
     private final Name name;
 
-    public DisplayName(String name, BannedWordCheckClient bannedWordCheckClient) {
+    public DisplayedName(String name, BannedWordCheckClient bannedWordCheckClient) {
         this.name = new Name(name);
         validate(this.name, bannedWordCheckClient);
     }
@@ -24,7 +24,7 @@ public final class DisplayName implements ValueObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DisplayName that = (DisplayName) o;
+        DisplayedName that = (DisplayedName) o;
         return Objects.equals(name, that.name);
     }
 
