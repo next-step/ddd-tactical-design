@@ -22,12 +22,4 @@ public class Quantity {
     public Long value() {
         return value;
     }
-
-    public boolean isBiggerThen(kitchenpos.common.domain.Price price) {
-        return this.value > price.value();
-    }
-
-    public boolean isBiggerThen(long value) {
-        return isBiggerThen(new kitchenpos.common.domain.Price(value));
-    }
 }
