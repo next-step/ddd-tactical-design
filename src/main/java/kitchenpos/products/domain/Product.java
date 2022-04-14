@@ -1,49 +1,44 @@
 package kitchenpos.products.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@Table(name = "product")
 @Entity
 public class Product {
-    @Column(name = "id", columnDefinition = "varbinary(16)")
+
     @Id
+    @Column(name = "id", columnDefinition = "varbinary(16)")
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductPrice price;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductName name;
 
-    public Product() {
+    public Product(ProductPrice price, ProductName name) {
+        this.id = UUID.randomUUID();
+        this.price = price;
+        this.name = name;
+    }
+
+    public void changePrice(BigDecimal changePrice) {
+        this.price = price.changePrice(changePrice);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public ProductName getName() {
+        return name;
     }
 }
