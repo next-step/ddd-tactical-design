@@ -6,8 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EmptySource;
-import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,15 +19,16 @@ class ProductNameTest {
         purgomalumClient = new FakePurgomalumClient();
     }
 
+    @DisplayName("상품 이름을 생성한다")
     @Test
     void create() {
         assertThatCode(() -> new ProductName(purgomalumClient, "짜장면"))
                 .doesNotThrowAnyException();
     }
 
+    @DisplayName("상품 이름은 비어있지 않아야 한다")
     @ParameterizedTest
-    @NullSource
-    @EmptySource
+    @NullAndEmptySource
     void createInvalidName(String name) {
         assertThatThrownBy(() -> new ProductName(purgomalumClient, name))
                 .isInstanceOf(IllegalArgumentException.class)

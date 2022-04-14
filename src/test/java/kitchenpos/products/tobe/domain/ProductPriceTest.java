@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProductPriceTest {
 
+    @DisplayName("0이상의 정수로 상품 가격을 생성한다")
     @ParameterizedTest
     @ValueSource(strings = {"0", "1"})
     void create(BigDecimal price) {
@@ -19,7 +20,7 @@ class ProductPriceTest {
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("가격은 0이상의 정수 이어야 한다")
+    @DisplayName("상품 가격은 0이상의 정수 이어야 한다")
     @ParameterizedTest
     @ValueSource(strings = "-1")
     @NullSource
