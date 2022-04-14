@@ -31,7 +31,7 @@ public class MenuProducts {
 
     private void validItems(List<MenuProduct> items) {
         if (CollectionUtils.isEmpty(items)) {
-            throw new IllegalArgumentException("MenuProduct 목록은 비어있을 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 상품 목록은 비어있을 수 없습니다.");
         }
     }
 

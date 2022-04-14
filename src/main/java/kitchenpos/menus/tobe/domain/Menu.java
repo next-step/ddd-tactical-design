@@ -90,4 +90,28 @@ public class Menu {
     public void hideMenu() {
         this.displayed = false;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Name getName() {
+        return name;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
 }
