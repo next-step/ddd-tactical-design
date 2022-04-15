@@ -42,7 +42,7 @@ class ProductTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     void test5() {
         assertAll(
-            () -> assertDoesNotThrow(() -> 상품.changePrice(CHANGE_PRICE)),
+            () -> assertDoesNotThrow(() -> 상품.changeProductPrice(CHANGE_PRICE)),
             () -> assertThat(상품.getPrice())
                 .isEqualTo(new ProductPrice(CHANGE_PRICE))
         );
@@ -53,7 +53,7 @@ class ProductTest {
     @DisplayName("변경하는 상품의 가격이 음수거나 존재하지 않으면 NullAndNegativePriceException 예외 발생")
     void test6(BigDecimal price) {
         assertThatThrownBy(
-            () -> 상품.changePrice(price)
+            () -> 상품.changeProductPrice(price)
         ).isInstanceOf(NullAndNegativePriceException.class);
     }
 
