@@ -21,9 +21,13 @@ public class ProductPrice extends Value {
     }
 
     private void validate(BigDecimal price) {
-        if (price == null || price.compareTo(ZERO) < 0) {
+        if (isNegativeAndNull(price)) {
             throw new NullAndNegativePriceException();
         }
+    }
+
+    private boolean isNegativeAndNull(BigDecimal price) {
+        return price == null || price.compareTo(ZERO) < 0;
     }
 
 }
