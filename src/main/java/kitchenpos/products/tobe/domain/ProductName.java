@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.exception.ContainProfanityException;
+import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
 import kitchenpos.support.domain.Value;
 
 import javax.persistence.Embeddable;
@@ -19,11 +21,11 @@ public class ProductName extends Value {
 
     private void validate(String name, Profanities profanities) {
         if (Objects.isNull(name) || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
+            throw new ProductNameNullException();
         }
 
         if (profanities.containsProfanity(name)) {
-            throw new IllegalArgumentException("이름에 욕설이 있을 수 없습니다.");
+            throw new ContainProfanityException();
         }
     }
 

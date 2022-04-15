@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.exception.NegativePriceException;
 import kitchenpos.support.domain.Value;
 
 import javax.persistence.Embeddable;
@@ -21,7 +22,7 @@ public class ProductPrice extends Value {
 
     private void validate(BigDecimal price) {
         if (price == null || price.compareTo(ZERO) < 0) {
-            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
+            throw new NegativePriceException();
         }
     }
 
