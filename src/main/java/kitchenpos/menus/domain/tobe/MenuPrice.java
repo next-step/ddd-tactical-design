@@ -44,6 +44,10 @@ public class MenuPrice {
         return multiply(value.price);
     }
 
+    protected MenuPrice multiply(Long value) {
+        return multiply(BigDecimal.valueOf(value));
+    }
+
     protected MenuPrice multiply(BigDecimal value) {
         return new MenuPrice(price.multiply(value));
     }

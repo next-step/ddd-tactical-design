@@ -47,8 +47,8 @@ public class MenuProduct {
         return quantity.getQuantity();
     }
 
-    public MenuPrice getSumProduct() {
-        return new MenuPrice(getPrice().multiply(BigDecimal.valueOf(getQuantity())));
+    public MenuPrice getTotalPrice() {
+        return price.multiply(getQuantity());
     }
 
     @Override

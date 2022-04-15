@@ -29,7 +29,7 @@ public class MenuProducts {
 
     public MenuPrice getTotalPrice() {
         return values.stream()
-                .map(MenuProduct::getSumProduct)
+                .map(MenuProduct::getTotalPrice)
                 .reduce(MenuPrice.valueOf(0), MenuPrice::add);
     }
 
