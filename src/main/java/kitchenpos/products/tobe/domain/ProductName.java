@@ -20,13 +20,8 @@ public class ProductName extends Value {
     }
 
     private void validate(String name, Profanities profanities) {
-        if (isNullOrEmpty(name)) {
-            throw new ProductNameNullException();
-        }
-
-        if (profanities.containsProfanity(name)) {
-            throw new NameContainedProfanityException();
-        }
+        if (isNullOrEmpty(name))  throw new ProductNameNullException();
+        if (profanities.containsProfanity(name)) throw new NameContainedProfanityException();
     }
 
     private boolean isNullOrEmpty(String name) {

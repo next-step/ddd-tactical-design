@@ -10,15 +10,12 @@ import java.util.UUID;
 
 @Entity
 public class Product {
-
     @Id
     @Column(name = "id", columnDefinition = "varbinary(16)")
     private UUID productId;
-
     @Column(name = "name", nullable = false)
     @Embedded
     private ProductName productName;
-
     @Column(name = "price", nullable = false)
     @Embedded
     private ProductPrice productPrice;

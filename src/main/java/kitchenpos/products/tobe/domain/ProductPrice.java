@@ -21,9 +21,7 @@ public class ProductPrice extends Value {
     }
 
     private void validate(BigDecimal price) {
-        if (isNegativeAndNull(price)) {
-            throw new NullAndNegativePriceException();
-        }
+        if (isNegativeAndNull(price)) throw new NullAndNegativePriceException();
     }
 
     private boolean isNegativeAndNull(BigDecimal price) {
