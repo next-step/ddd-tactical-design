@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain.test;
 
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.Profanities;
-import kitchenpos.products.tobe.domain.exception.ContainProfanityException;
+import kitchenpos.products.tobe.domain.exception.NameContainedProfanityException;
 import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
 import kitchenpos.products.tobe.domain.fixture.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class ProductNameTest {
     void test3() {
         assertThatThrownBy(
             () -> new ProductName("욕설", profanities)
-        ).isInstanceOf(ContainProfanityException.class);
+        ).isInstanceOf(NameContainedProfanityException.class);
     }
 
     @Test

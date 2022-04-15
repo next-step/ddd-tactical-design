@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.ContainProfanityException;
+import kitchenpos.products.tobe.domain.exception.NameContainedProfanityException;
 import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
 import kitchenpos.support.domain.Value;
 
@@ -25,7 +25,7 @@ public class ProductName extends Value {
         }
 
         if (profanities.containsProfanity(name)) {
-            throw new ContainProfanityException();
+            throw new NameContainedProfanityException();
         }
     }
 
