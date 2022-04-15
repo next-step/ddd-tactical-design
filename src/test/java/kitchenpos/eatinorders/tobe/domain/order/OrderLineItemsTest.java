@@ -1,12 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import static kitchenpos.eatinorders.tobe.domain.order.fixtures.Fixtures.MENU;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
-import java.util.UUID;
-import kitchenpos.common.domain.Money;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,7 +29,7 @@ class OrderLineItemsTest {
         @DisplayName("비어있지 않다면 생성할 수 있다")
         @Test
         void 비어있지_않다면_생성할_수_있다() {
-            final OrderLineItem orderLineItem = new OrderLineItem(new MenuId(UUID.randomUUID()), new Money(1000), 1);
+            final OrderLineItem orderLineItem = new OrderLineItem(MENU, 1);
 
             assertDoesNotThrow(() -> new OrderLineItems(orderLineItem));
         }

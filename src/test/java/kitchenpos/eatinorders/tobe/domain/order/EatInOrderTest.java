@@ -1,14 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import static kitchenpos.eatinorders.tobe.domain.order.fixtures.Fixtures.MENU;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import kitchenpos.common.domain.Money;
 import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableId;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,11 +22,7 @@ class EatInOrderTest {
 
     private final OrderId id = new OrderId(UUID.randomUUID());
     private final OrderTableId orderTableId = new OrderTableId(UUID.randomUUID());
-    private final OrderLineItem orderLineItem = new OrderLineItem(
-        new MenuId(UUID.randomUUID()),
-        new Money(1000),
-        1
-    );
+    private final OrderLineItem orderLineItem = new OrderLineItem(MENU, 1);
     private final OrderLineItems orderLineItems = new OrderLineItems(orderLineItem);
 
     @DisplayName("등록할 수 있다")
