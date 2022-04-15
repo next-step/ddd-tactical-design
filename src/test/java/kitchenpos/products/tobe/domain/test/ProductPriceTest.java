@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain.test;
 
 import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.exception.NullAndNegativePriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,12 +33,12 @@ public class ProductPriceTest {
     }
 
     @ParameterizedTest
-    @DisplayName("상품의 가격이 비어있거나 음수이면 IllegalArgumentException 예외 발생")
+    @DisplayName("상품의 가격이 비어있거나 음수이면 NegativePriceException 예외 발생")
     @MethodSource("provideBigDecimalForIsNotNullAndMinusValue")
     void test2(BigDecimal price) {
         assertThatThrownBy(
             () -> new ProductPrice(price)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(NullAndNegativePriceException.class);
     }
 
     @Test

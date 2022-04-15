@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain.test;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.products.tobe.domain.exception.NullAndNegativePriceException;
 import kitchenpos.products.tobe.domain.fixture.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,11 +50,11 @@ class ProductTest {
 
     @ParameterizedTest
     @MethodSource("provideBigDecimalForIsNotNullAndMinusValue")
-    @DisplayName("변경하는 상품의 가격이 음수거나 존재하지 않으면 IllegalArgumentException 예외 발생")
+    @DisplayName("변경하는 상품의 가격이 음수거나 존재하지 않으면 NullAndNegativePriceException 예외 발생")
     void test6(BigDecimal price) {
         assertThatThrownBy(
             () -> 상품.changePrice(price)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(NullAndNegativePriceException.class);
     }
 
 }

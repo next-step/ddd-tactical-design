@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain.test;
 
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.products.tobe.domain.exception.ContainProfanityException;
+import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
 import kitchenpos.products.tobe.domain.fixture.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,20 +26,20 @@ class ProductNameTest {
     }
 
     @ParameterizedTest
-    @DisplayName("상품 이름이 존재하지 않으면 IllegalArgumentException 예외 발생")
+    @DisplayName("상품 이름이 존재하지 않으면 ProductNameNullException 예외 발생")
     @NullAndEmptySource
     void test2(String name) {
         assertThatThrownBy(
             () -> new ProductName(name, profanities)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(ProductNameNullException.class);
     }
 
     @Test
-    @DisplayName("상품의 이름에는 비속어가 포함되면 IllegalArgumentException 예외 발생")
+    @DisplayName("상품의 이름에는 비속어가 포함되면 ContainProfanityException 예외 발생")
     void test3() {
         assertThatThrownBy(
             () -> new ProductName("욕설", profanities)
-        ).isInstanceOf(IllegalArgumentException.class);
+        ).isInstanceOf(ContainProfanityException.class);
     }
 
     @Test
