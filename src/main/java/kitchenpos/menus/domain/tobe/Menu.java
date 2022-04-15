@@ -43,24 +43,24 @@ public class Menu {
     private MenuProducts menuProducts;
 
     public Menu(String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
-        this(UUID.randomUUID(), name, banWordFilter, price, menuGroup, displayed, menuProducts);
+        this(UUID.randomUUID(), name, banWordFilter, price, menuGroup, displayed, new MenuProducts(menuProducts));
     }
 
-    public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         validate(menuGroup, price, menuProducts);
         this.id = id;
         this.name = new MenuName(name, banWordFilter);
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
         this.displayed = new MenuDisplayed(displayed);
-        this.menuProducts = new MenuProducts(menuProducts);
+        this.menuProducts = menuProducts;
     }
 
-    private void validate(MenuGroup menuGroup, BigDecimal menuPrice, List<MenuProduct> menuProducts) {
+    private void validate(MenuGroup menuGroup, BigDecimal menuPrice, MenuProducts menuProducts) {
         if (menuGroup == null) {
             throw new IllegalArgumentException(MENU_GROUP_NULL_NOT_ALLOWED);
         }
-        final MenuPrice totalPrice = new MenuProducts(menuProducts).getTotalPrice();
+        final MenuPrice totalPrice = menuProducts.getTotalPrice();
         validateMenuPrice(new MenuPrice(menuPrice), totalPrice);
     }
 
