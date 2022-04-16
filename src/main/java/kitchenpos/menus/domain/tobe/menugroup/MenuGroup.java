@@ -1,5 +1,6 @@
-package kitchenpos.menus.domain.tobe;
+package kitchenpos.menus.domain.tobe.menugroup;
 
+import kitchenpos.menus.domain.tobe.MenuName;
 import kitchenpos.products.domain.tobe.BanWordFilter;
 
 import javax.persistence.Column;

@@ -1,7 +1,7 @@
 package kitchenpos.support;
 
-import kitchenpos.menus.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.tobe.MenuProduct;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 
 import java.math.BigDecimal;
 import java.util.UUID;

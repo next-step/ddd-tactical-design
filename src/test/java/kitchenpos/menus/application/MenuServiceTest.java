@@ -2,8 +2,8 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.tobe.MenuGroupRepository;
 import kitchenpos.menus.domain.tobe.MenuRepository;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.FakeBanWordFilter;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;

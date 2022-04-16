@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static kitchenpos.support.MenuGenerator.createMenuGroup;
 import static kitchenpos.support.MenuGenerator.createMenuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -22,10 +21,10 @@ class MenuTest {
         final List<MenuProduct> givenMenuProducts = Arrays.asList(
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000)));
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final Menu actual = new Menu(
                 "반반치킨", new StubBanWordFilter(false), BigDecimal.valueOf(26000),
-                menuGroup, true, givenMenuProducts
+                givenMenuGroupId, true, givenMenuProducts
         );
 
         assertAll(
@@ -41,13 +40,13 @@ class MenuTest {
         final List<MenuProduct> givenMenuProducts = Arrays.asList(
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000)));
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final BigDecimal invalidPrice = BigDecimal.valueOf(30000);
 
         assertThatCode(() -> {
             new Menu(
                     "반반치킨", new StubBanWordFilter(false), invalidPrice,
-                    menuGroup, true, givenMenuProducts
+                    givenMenuGroupId, true, givenMenuProducts
             );
         }).isInstanceOf(IllegalArgumentException.class);
     }
@@ -58,10 +57,10 @@ class MenuTest {
         final List<MenuProduct> givenMenuProducts = Arrays.asList(
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000)));
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final Menu actual = new Menu(
                 "반반치킨", new StubBanWordFilter(false), BigDecimal.valueOf(26000),
-                menuGroup, false, givenMenuProducts
+                givenMenuGroupId, false, givenMenuProducts
         );
 
         actual.show();
@@ -75,10 +74,10 @@ class MenuTest {
         final List<MenuProduct> givenMenuProducts = Arrays.asList(
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000)));
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final Menu actual = new Menu(
                 "반반치킨", new StubBanWordFilter(false), BigDecimal.valueOf(26000),
-                menuGroup, true, givenMenuProducts
+                givenMenuGroupId, true, givenMenuProducts
         );
 
         actual.hide();
@@ -93,10 +92,10 @@ class MenuTest {
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000))
         );
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final Menu actual = new Menu(
                 "반반치킨", new StubBanWordFilter(false), BigDecimal.valueOf(26000),
-                menuGroup, true, givenMenuProducts
+                givenMenuGroupId, true, givenMenuProducts
         );
         final BigDecimal newPrice = BigDecimal.valueOf(10000);
 
@@ -112,10 +111,10 @@ class MenuTest {
                 createMenuProduct(1L, 1l, BigDecimal.valueOf(16000)),
                 createMenuProduct(2L, 1l, BigDecimal.valueOf(10000))
         );
-        final MenuGroup menuGroup = createMenuGroup("두마리메뉴");
+        final Long givenMenuGroupId = 2L;
         final Menu actual = new Menu(
                 "반반치킨", new StubBanWordFilter(false), BigDecimal.valueOf(26000),
-                menuGroup, true, givenMenuProducts
+                givenMenuGroupId, true, givenMenuProducts
         );
         final BigDecimal newPrice = BigDecimal.valueOf(30000);
 

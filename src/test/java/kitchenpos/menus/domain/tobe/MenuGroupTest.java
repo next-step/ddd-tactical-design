@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe;
 
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.support.StubBanWordFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

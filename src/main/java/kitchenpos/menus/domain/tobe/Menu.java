@@ -5,10 +5,7 @@ import kitchenpos.products.domain.tobe.BanWordFilter;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -28,13 +25,7 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    private Long menuGroupId;
 
     @Embedded
     private MenuDisplayed displayed;
@@ -42,21 +33,21 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    public Menu(String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
-        this(UUID.randomUUID(), name, banWordFilter, price, menuGroup, displayed, new MenuProducts(menuProducts));
+    public Menu(String name, BanWordFilter banWordFilter, BigDecimal price, Long menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
+        this(UUID.randomUUID(), name, banWordFilter, price, menuGroupId, displayed, new MenuProducts(menuProducts));
     }
 
-    public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
-        validate(menuGroup, price, menuProducts);
+    public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, Long menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        validate(menuGroupId, price, menuProducts);
         this.id = id;
         this.name = new MenuName(name, banWordFilter);
         this.price = new MenuPrice(price);
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = new MenuDisplayed(displayed);
         this.menuProducts = menuProducts;
     }
 
-    private void validate(MenuGroup menuGroup, BigDecimal menuPrice, MenuProducts menuProducts) {
+    private void validate(Long menuGroup, BigDecimal menuPrice, MenuProducts menuProducts) {
         if (menuGroup == null) {
             throw new IllegalArgumentException(MENU_GROUP_NULL_NOT_ALLOWED);
         }
