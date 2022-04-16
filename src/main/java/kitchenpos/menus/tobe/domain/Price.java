@@ -8,7 +8,7 @@ public class Price {
 	private final BigDecimal price;
 
 	public static final Price ZERO = new Price(BigDecimal.ZERO);
-	
+
 	public Price(BigDecimal price) {
 		if (price.compareTo(BigDecimal.ZERO) < 0) {
 			throw new IllegalArgumentException("가격은 0원 이상이어야 합니다. price: " + price);
@@ -22,6 +22,10 @@ public class Price {
 
 	public Price multiply(int count) {
 		return new Price(this.price.multiply(BigDecimal.valueOf(count)));
+	}
+
+	public boolean isHigherThan(Price other) {
+		return this.price.compareTo(other.price) > 0;
 	}
 
 	@Override
