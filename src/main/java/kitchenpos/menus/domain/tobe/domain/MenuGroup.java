@@ -15,4 +15,11 @@ public class MenuGroup {
     private UUID id;
 
     private MenuGroupName name;
+
+    protected MenuGroup() {
+    }
+
+    protected MenuGroup(String name) {
+        this.name = new MenuGroupName(name);
+    }
 }
