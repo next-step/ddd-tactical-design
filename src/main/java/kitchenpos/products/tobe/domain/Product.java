@@ -18,14 +18,6 @@ public class Product {
 		this.productPrice = productPrice;
 	}
 
-	public UUID getId() {
-		return id;
-	}
-
-	public ProductName getProductName() {
-		return productName;
-	}
-
 	public ProductPrice getPrice() {
 		return productPrice;
 	}
