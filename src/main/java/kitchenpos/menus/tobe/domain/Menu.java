@@ -32,14 +32,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
@@ -50,7 +44,7 @@ public class Menu {
         this.price = new Price(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     public Menu(PurgomalumClient purgomalumClient, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts) {
@@ -58,7 +52,7 @@ public class Menu {
         this.name = new MenuName(purgomalumClient, name);
         this.price = new Price(price);
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     public UUID getId() {
@@ -82,7 +76,7 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.getMenuProducts();
     }
 
     public void changePrice(Price price) {
