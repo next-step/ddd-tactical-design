@@ -67,8 +67,8 @@ public class MenuProduct {
         return product.getPrice();
     }
 
-    protected void changeProduct(Product product) {
-        this.product = product;
+    public boolean isMadeOf(UUID productId) {
+        return product.getId().equals(productId);
     }
 }
 

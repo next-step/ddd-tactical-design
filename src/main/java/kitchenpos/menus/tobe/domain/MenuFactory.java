@@ -39,7 +39,7 @@ public class MenuFactory {
                 .map(e -> createMenuProduct(e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
 
-        validatePriceNotBiggerThanSumOfProducts(menuProducts, price);
+        validatePriceNotBiggerThanSumOfProducts(MenuProducts.of(menuProducts), price);
 
         return new Menu(profanityFilteredName, price, menuGroup, menuCreationRequest.isDisplayed(), menuProducts);
     }

@@ -36,7 +36,7 @@ public class MenuTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         menuFactory = new MenuFactory(productRepository, menuGroupRepository);
-        product =  productRepository.save(tobe_product("후라이드", 19_000L));
+        product = productRepository.save(tobe_product("후라이드", 19_000L));
         menuGroupId = menuGroupRepository.save(MenuFactory.createMenuGroup("아무메뉴")).getId();
     }
 
@@ -97,23 +97,6 @@ public class MenuTest {
 
         //then
         assertThat(actual.isDisplayed()).isTrue();
-    }
-
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-    @Test
-    void display_when_price_bigger_than_products_sum() {
-        //given
-        MenuCreationRequest menuCreationRequest = new MenuCreationRequest("후라이드+후라이드", BigDecimal.valueOf(19_000L), menuGroupId, false, Collections.singletonMap(this.product.getId(), Quantity.of(1)));
-        final Menu menu = menuRepository.save(MenuFactory.createMenu(menuCreationRequest));
-
-        Product changedProduct = product.changePrice(Price.of(BigDecimal.valueOf(18_000L)));
-        menu.changeProduct(changedProduct);
-
-        //when
-        //then
-        assertThatThrownBy(
-                () -> menu.display()
-        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")

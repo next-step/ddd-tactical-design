@@ -61,7 +61,7 @@ public class MenuFactoryTest {
                 () -> assertThat(actual.getPrice()).isEqualTo(Price.of(BigDecimal.valueOf(19_000L))),
                 () -> assertThat(actual.getMenuGroup().getName()).isEqualTo("아무메뉴"),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(true),
-                () -> assertThat(actual.getMenuProducts()).hasSize(1)
+                () -> assertThat(actual.getMenuProducts().getSize()).isEqualTo(1)
         );
     }
 

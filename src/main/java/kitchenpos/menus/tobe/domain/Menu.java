@@ -52,7 +52,7 @@ public class Menu {
             columnDefinition = "varbinary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> menuProducts;
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -70,7 +70,7 @@ public class Menu {
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = MenuProducts.of(menuProducts);
     }
 
     private Menu(final UUID id,
@@ -78,7 +78,7 @@ public class Menu {
                  final Price price,
                  final MenuGroup menuGroup,
                  final boolean displayed,
-                 final List<MenuProduct> menuProducts) {
+                 final MenuProducts menuProducts) {
         this.id = id;
         this.profanityFilteredName = profanityFilteredName;
         this.price = price;
@@ -107,7 +107,7 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
@@ -140,14 +140,6 @@ public class Menu {
         }
 
         return new Menu(id, profanityFilteredName, price, menuGroup, false, menuProducts);
-    }
-
-    protected void changeProduct(Product product) {
-        MenuProduct menuProduct = menuProducts.stream()
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
-        menuProduct.changeProduct(product);
     }
 
 }
