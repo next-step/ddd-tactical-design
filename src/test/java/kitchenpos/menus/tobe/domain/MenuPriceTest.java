@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import common.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,7 @@ class MenuPriceTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1000, 5000, 10000})
     void createMenuPrice(int price) {
-        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(price));
+        Price menuPrice = new Price(BigDecimal.valueOf(price));
 
         assertAll(
                 () -> assertThat(menuPrice).isNotNull(),
@@ -29,7 +30,7 @@ class MenuPriceTest {
     @Test
     void invalidMenuPrice() {
         assertThatThrownBy(
-                () -> new MenuPrice(null)
+                () -> new Price(null)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -38,7 +39,7 @@ class MenuPriceTest {
     @ValueSource(ints = {-100, -5000, -10000})
     void negativeMenuPrice(int price) {
         assertThatThrownBy(
-                () -> new MenuPrice(BigDecimal.valueOf(price))
+                () -> new Price(BigDecimal.valueOf(price))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 

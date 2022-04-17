@@ -1,11 +1,11 @@
 package kitchenpos.menus.application;
 
+import common.domain.Price;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuPrice;
 import kitchenpos.menus.ui.dto.MenuRequest;
 import kitchenpos.menus.ui.dto.MenuResponse;
 import kitchenpos.products.domain.ProductRepository;
@@ -39,7 +39,7 @@ public class MenuService {
 
     @Transactional
     public MenuResponse create(final MenuRequest request) {
-        MenuPrice menuPrice = new MenuPrice(request.getPrice());
+        Price price = new Price(request.getPrice());
 
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
@@ -74,7 +74,7 @@ public class MenuService {
             menuProducts.add(menuProduct);
         }
 
-        menuPrice.validationTotalPrice(sum);
+        price.validationTotalPrice(sum);
 
         return new MenuResponse(menuRepository.save(request.toEntity(purgomalumClient, menuGroup)));
     }

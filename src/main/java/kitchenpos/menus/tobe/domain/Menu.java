@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import common.domain.Price;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Menu {
     private MenuName name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -46,7 +47,7 @@ public class Menu {
     public Menu(PurgomalumClient purgomalumClient, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = UUID.randomUUID();
         this.name = new MenuName(purgomalumClient, name);
-        this.price = new MenuPrice(price);
+        this.price = new Price(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
@@ -55,7 +56,7 @@ public class Menu {
     public Menu(PurgomalumClient purgomalumClient, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = UUID.randomUUID();
         this.name = new MenuName(purgomalumClient, name);
-        this.price = new MenuPrice(price);
+        this.price = new Price(price);
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
@@ -85,7 +86,7 @@ public class Menu {
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new MenuPrice(price);
+        this.price = new Price(price);
 
         for (final MenuProduct menuProduct : menuProducts) {
             final BigDecimal sum = menuProduct.getProduct()

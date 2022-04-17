@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import common.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,7 @@ class ProductPriceTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1000, 5000, 10000})
     void createProductPrice(int price) {
-        ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
+        Price productPrice = new Price(BigDecimal.valueOf(price));
 
         assertAll(
                 () -> assertThat(productPrice).isNotNull(),
@@ -29,7 +30,7 @@ class ProductPriceTest {
     @Test
     void invalidProductPrice() {
         assertThatThrownBy(
-                () -> new ProductPrice(null)
+                () -> new Price(null)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -38,7 +39,7 @@ class ProductPriceTest {
     @ValueSource(ints = {-100, -5000, -10000})
     void negativeProductPrice(int price) {
         assertThatThrownBy(
-                () -> new ProductPrice(BigDecimal.valueOf(price))
+                () -> new Price(BigDecimal.valueOf(price))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import common.domain.Price;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class Product {
     private ProductName name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product() {
     }
@@ -25,7 +26,7 @@ public class Product {
     public Product(PurgomalumClient purgomalumClient, String name, BigDecimal price) {
         this.id = UUID.randomUUID();
         this.name = new ProductName(purgomalumClient, name);
-        this.price = new ProductPrice(price);
+        this.price = new Price(price);
     }
 
     public UUID getId() {
@@ -41,6 +42,6 @@ public class Product {
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
+        this.price = new Price(price);
     }
 }
