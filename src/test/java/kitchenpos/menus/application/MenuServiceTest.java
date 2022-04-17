@@ -240,9 +240,7 @@ class MenuServiceTest {
     }
 
     private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setProductId(productId);
-        menuProduct.setQuantity(quantity);
+        final MenuProduct menuProduct = new MenuProduct(productId, quantity);
         return menuProduct;
     }
 

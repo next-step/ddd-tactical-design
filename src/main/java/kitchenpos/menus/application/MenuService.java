@@ -68,9 +68,7 @@ public class MenuService {
                     product.getPrice()
                             .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct(menuProductRequest.getProductId(), quantity);
             menuProducts.add(menuProduct);
         }
 
@@ -81,10 +79,16 @@ public class MenuService {
 
     @Transactional
     public MenuResponse changePrice(final UUID menuId, final MenuRequest request) {
-        final BigDecimal price = request.getPrice();
-
+        Price price = new Price(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
+
+        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+            final BigDecimal sum = menuProduct.getProduct()
+                    .getPrice()
+                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
+            price.validationTotalPrice(sum);
+        }
 
         menu.changePrice(price);
         return new MenuResponse(menu);

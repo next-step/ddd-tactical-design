@@ -27,38 +27,39 @@ public class MenuProduct {
     @Transient
     private UUID productId;
 
-    public MenuProduct() {
+    protected MenuProduct() {
+    }
+
+    public MenuProduct(Long seq, UUID productId, long quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public MenuProduct(Long seq, Product product, long quantity) {
+        this.seq = seq;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public MenuProduct(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public Product getProduct() {
         return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

@@ -38,18 +38,12 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
+        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product(), 2L);
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
+        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product, quantity);
         return menuProduct;
     }
 
