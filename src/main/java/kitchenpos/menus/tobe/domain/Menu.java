@@ -41,7 +41,7 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    public Menu() {
+    protected Menu() {
     }
 
     public Menu(PurgomalumClient purgomalumClient, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
@@ -85,18 +85,8 @@ public class Menu {
         return menuProducts;
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = new Price(price);
-
-        for (final MenuProduct menuProduct : menuProducts) {
-            final BigDecimal sum = menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
-            if (price.compareTo(sum) > 0) {
-                throw new IllegalArgumentException("메뉴의 가격은 메뉴에 포함된 상품의 가격 총합보다 작거나 같아야 한다.");
-            }
-        }
-
+    public void changePrice(Price price) {
+        this.price = price;
     }
 
     public void show() {
