@@ -1,5 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.tobe.domain.order.Order;
+import kitchenpos.eatinorders.tobe.domain.order.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.order.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.OrderTableId;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -7,7 +12,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static kitchenpos.Fixtures2.orderLineItem;
-import static kitchenpos.eatinorders.tobe.domain.OrderStatus.*;
+import static kitchenpos.eatinorders.tobe.domain.order.OrderStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -35,14 +40,6 @@ class OrderTest {
         assertThatThrownBy(() -> order(orderTable(), orderLineItems))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문할 메뉴가 존재하지 않습니다.");
-    }
-
-    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
-    @Test
-    void emptyTable() {
-        assertThatThrownBy(() -> order(emtpyOrderTable(), orderLineItem()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("사용할 수 없는 테이블 입니다.");
     }
 
     @DisplayName("주문을 접수한다.")
@@ -112,19 +109,15 @@ class OrderTest {
         return OrderTable.of("1번", 4, false);
     }
 
-    private OrderTable emtpyOrderTable() {
-        return OrderTable.empty("1번");
-    }
-
     private Order order(OrderTable orderTable) {
-        return new Order(orderTable, WAITING, orderLineItem());
+        return new Order(new OrderTableId(orderTable.getId()), WAITING, orderLineItem());
     }
 
     private Order order(OrderTable orderTable, OrderLineItem... orderLineItems) {
-        return new Order(orderTable, WAITING, orderLineItems);
+        return new Order(new OrderTableId(orderTable.getId()), WAITING, orderLineItems);
     }
 
     private Order order(OrderTable orderTable, OrderStatus status) {
-        return new Order(orderTable, status, orderLineItem());
+        return new Order(new OrderTableId(orderTable.getId()), status, orderLineItem());
     }
 }

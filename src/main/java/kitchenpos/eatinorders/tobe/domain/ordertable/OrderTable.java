@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain.ordertable;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -55,5 +55,9 @@ public class OrderTable {
 
     public NumberOfGuests getNumberOfGuests() {
         return numberOfGuests;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }
