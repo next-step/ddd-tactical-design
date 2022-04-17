@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.dots.ProductCommand;
-import kitchenpos.products.domain.dots.ProductInfo;
+import kitchenpos.products.domain.dtos.ProductCommand;
+import kitchenpos.products.domain.dtos.ProductInfo;
 import org.springframework.stereotype.Service;
 
 @Service

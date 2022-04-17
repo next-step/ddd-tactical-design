@@ -2,8 +2,8 @@ package kitchenpos.products.domain;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.products.domain.dots.ProductCommand;
-import kitchenpos.products.domain.dots.ProductInfo;
+import kitchenpos.products.domain.dtos.ProductCommand;
+import kitchenpos.products.domain.dtos.ProductInfo;
 
 public interface ProductService {
 

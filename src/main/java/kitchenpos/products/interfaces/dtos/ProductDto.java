@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-import kitchenpos.products.domain.dots.ProductCommand.ChangePriceCommand;
-import kitchenpos.products.domain.dots.ProductCommand.RegisterProductCommand;
-import kitchenpos.products.domain.dots.ProductInfo;
+import kitchenpos.products.domain.dtos.ProductCommand.ChangePriceCommand;
+import kitchenpos.products.domain.dtos.ProductCommand.RegisterProductCommand;
+import kitchenpos.products.domain.dtos.ProductInfo;
 
 /**
  * create Product dto

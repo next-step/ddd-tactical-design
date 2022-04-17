@@ -3,8 +3,8 @@ package kitchenpos.products.application;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.domain.ProductService;
-import kitchenpos.products.domain.dots.ProductCommand;
-import kitchenpos.products.domain.dots.ProductInfo;
+import kitchenpos.products.domain.dtos.ProductCommand;
+import kitchenpos.products.domain.dtos.ProductInfo;
 import org.springframework.stereotype.Component;
 
 @Component
