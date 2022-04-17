@@ -3,6 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.ui.dto.MenuProductsRequest;
 import kitchenpos.menus.ui.dto.MenuRequest;
 import kitchenpos.menus.ui.dto.MenuResponse;
 import kitchenpos.products.application.FakePurgomalumClient;
@@ -68,7 +69,7 @@ class MenuServiceTest {
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
-    void create(final List<MenuProduct> menuProducts) {
+    void create(final List<MenuProductsRequest> menuProducts) {
         final MenuRequest expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -203,7 +204,7 @@ class MenuServiceTest {
             final long price,
             final UUID menuGroupId,
             final boolean displayed,
-            final MenuProduct... menuProducts
+            final MenuProductsRequest... menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
@@ -213,7 +214,7 @@ class MenuServiceTest {
             final BigDecimal price,
             final UUID menuGroupId,
             final boolean displayed,
-            final MenuProduct... menuProducts
+            final MenuProductsRequest... menuProducts
     ) {
         return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
     }
@@ -223,7 +224,7 @@ class MenuServiceTest {
             final long price,
             final UUID menuGroupId,
             final boolean displayed,
-            final List<MenuProduct> menuProducts
+            final List<MenuProductsRequest> menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
@@ -233,14 +234,14 @@ class MenuServiceTest {
             final BigDecimal price,
             final UUID menuGroupId,
             final boolean displayed,
-            final List<MenuProduct> menuProducts
+            final List<MenuProductsRequest> menuProducts
     ) {
         final MenuRequest menu = new MenuRequest(name, price, menuGroupId, displayed, menuProducts);
         return menu;
     }
 
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct(productId, quantity);
+    private static MenuProductsRequest createMenuProductRequest(final UUID productId, final long quantity) {
+        final MenuProductsRequest menuProduct = new MenuProductsRequest(productId, quantity);
         return menuProduct;
     }
 

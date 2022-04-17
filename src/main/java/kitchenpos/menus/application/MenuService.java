@@ -6,6 +6,7 @@ import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.ui.dto.MenuProductsRequest;
 import kitchenpos.menus.ui.dto.MenuRequest;
 import kitchenpos.menus.ui.dto.MenuResponse;
 import kitchenpos.products.domain.ProductRepository;
@@ -43,13 +44,13 @@ public class MenuService {
 
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<MenuProductsRequest> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
         final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.stream()
-                        .map(MenuProduct::getProductId)
+                        .map(MenuProductsRequest::getProductId)
                         .collect(Collectors.toList())
         );
         if (products.size() != menuProductRequests.size()) {
@@ -57,7 +58,7 @@ public class MenuService {
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
+        for (final MenuProductsRequest menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
