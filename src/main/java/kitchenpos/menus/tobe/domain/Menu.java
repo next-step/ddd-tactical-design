@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.Price;
 import kitchenpos.products.infra.PurgomalumClient;
 
 @Table(name = "menu")
@@ -23,10 +21,10 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private Name name;
+    private MenuName name;
 
     @Column(name = "price", nullable = false)
-    private Price price;
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -43,7 +41,7 @@ public class Menu {
 
     protected Menu() { }
 
-    private Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    private Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         validMenuGroup(menuGroup);
         validPrice(price, menuProducts);
         
@@ -61,18 +59,18 @@ public class Menu {
         }
     }
 
-    private void validPrice(Price price, MenuProducts menuProducts) {
+    private void validPrice(MenuPrice price, MenuProducts menuProducts) {
         if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
         }
     }
 
     public static Menu create(String name, PurgomalumClient purgomalumClient, Long price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
-        return new Menu(UUID.randomUUID(), new Name(name, purgomalumClient), new Price(price), menuGroup, displayed, MenuProducts.from(menuProducts));
+        return new Menu(UUID.randomUUID(), new MenuName(name, purgomalumClient), new MenuPrice(price), menuGroup, displayed, MenuProducts.from(menuProducts));
     }
 
     public void modifyPrice(Long value) {
-        price = new Price(value);
+        price = new MenuPrice(value);
 
         if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
             hideMenu();
@@ -95,12 +93,12 @@ public class Menu {
         return id;
     }
 
-    public Name getName() {
-        return name;
+    public String getName() {
+        return name.value();
     }
 
-    public Price getPrice() {
-        return price;
+    public Long getPrice() {
+        return price.value();
     }
 
     public MenuGroup getMenuGroup() {
