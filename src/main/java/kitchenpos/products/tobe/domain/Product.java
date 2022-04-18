@@ -22,14 +22,14 @@ public class Product {
 
     protected Product() {/*no-op*/}
 
-    public Product(UUID productId, ProductName productName, ProductPrice productPrice) {
+    private Product(UUID productId, ProductName productName, ProductPrice productPrice) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
     }
 
-    public Product(UUID productId, ProductName name, BigDecimal price) {
-        this(productId, name, new ProductPrice(price));
+    public static Product registerProduct(UUID productId, ProductName name, BigDecimal price) {
+        return new Product(productId, name, new ProductPrice(price));
     }
 
     public void changeProductPrice(BigDecimal price) {

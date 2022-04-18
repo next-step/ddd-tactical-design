@@ -6,6 +6,7 @@ import kitchenpos.products.tobe.domain.exception.NameContainedProfanityException
 import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
 import kitchenpos.products.tobe.domain.fixture.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("상품 이름 테스트")
 class ProductNameTest {
     private static final Profanities profanities = new FakeProfanities();
 

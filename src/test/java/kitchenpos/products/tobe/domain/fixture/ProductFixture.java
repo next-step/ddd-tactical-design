@@ -8,6 +8,6 @@ import static kitchenpos.products.tobe.domain.fixture.NameFixture.PRODUCT_NAME;
 import static kitchenpos.products.tobe.domain.fixture.PriceFixture.PRICE;
 
 public class ProductFixture {
-    public static final Product 상품 = new Product(null, PRODUCT_NAME, PRICE);
+    public static final Product 상품 = Product.registerProduct(null, PRODUCT_NAME, PRICE);
 
 }
