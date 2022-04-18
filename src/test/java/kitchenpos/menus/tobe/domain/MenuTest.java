@@ -9,8 +9,7 @@ import org.junit.jupiter.params.provider.NullSource;
 
 import java.math.BigDecimal;
 
-import static kitchenpos.Fixtures2.chicken;
-import static kitchenpos.Fixtures2.frenchFries;
+import static kitchenpos.Fixtures2.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -114,17 +113,5 @@ class MenuTest {
 
     private Menu menu(int price, MenuProduct... menuProducts) {
         return new Menu("치킨 세트", BigDecimal.valueOf(price), menuGroup(), true, new FakePurgomalumClient(), menuProducts);
-    }
-
-    private MenuProduct chickenMenuProduct() {
-        return new MenuProduct(chicken(), 1);
-    }
-
-    private MenuProduct frenchFriesMenuProduct() {
-        return new MenuProduct(frenchFries(), 1);
-    }
-
-    private MenuGroup menuGroup() {
-        return new MenuGroup("오늘의 메뉴");
     }
 }

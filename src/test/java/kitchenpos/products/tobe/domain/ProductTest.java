@@ -37,7 +37,7 @@ class ProductTest {
                 .hasMessage("상품의 가격은 0원 이상이어야 합니다.");
     }
 
-    @DisplayName("상품의 가격은 입력하지 않을 수 없다.")
+    @DisplayName("상품의 이름은 입력하지 않을 수 없다.")
     @ParameterizedTest
     @NullSource
     void nullName(String name) {

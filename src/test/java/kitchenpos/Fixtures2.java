@@ -1,5 +1,8 @@
 package kitchenpos;
 
+import kitchenpos.eatinorders.tobe.domain.order.OrderLineItem;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
@@ -29,5 +32,21 @@ public class Fixtures2 {
 
     public static MenuProduct frenchFriesMenuProductWithQuantity(int quantity) {
         return new MenuProduct(frenchFries(), quantity);
+    }
+
+    public static Menu menu() {
+        return new Menu("치킨 세트", BigDecimal.valueOf(25000), menuGroup(), true, new FakePurgomalumClient(), chickenMenuProduct(), frenchFriesMenuProduct());
+    }
+
+    public static Menu hideMenu() {
+        return new Menu("치킨 세트", BigDecimal.valueOf(25000), menuGroup(), false, new FakePurgomalumClient(), chickenMenuProduct(), frenchFriesMenuProduct());
+    }
+
+    public static MenuGroup menuGroup() {
+        return new MenuGroup("오늘의 메뉴");
+    }
+
+    public static OrderLineItem orderLineItem() {
+        return new OrderLineItem(menu(), 1);
     }
 }

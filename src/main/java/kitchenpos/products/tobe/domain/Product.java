@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
@@ -21,7 +22,7 @@ public class Product {
     }
 
     private void validateName(String name, PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException(INVALID_NAME_MESSAGE);
         }
     }
