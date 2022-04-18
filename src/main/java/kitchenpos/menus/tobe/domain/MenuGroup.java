@@ -5,7 +5,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.common.domain.Name;
 import kitchenpos.products.infra.PurgomalumClient;
 
 @Table(name = "menu_group")
@@ -16,17 +15,17 @@ public class MenuGroup {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private Name name;
+    private MenuGroupName name;
 
     protected MenuGroup() { }
 
-    private MenuGroup(UUID id, Name name) {
+    private MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;
         this.name = name;
     }
 
     public static MenuGroup create(String name, PurgomalumClient purgomalumClient) {
-        return new MenuGroup(UUID.randomUUID(), new Name(name, purgomalumClient));
+        return new MenuGroup(UUID.randomUUID(), new MenuGroupName(name, purgomalumClient));
     }
 
     public UUID getId() {
