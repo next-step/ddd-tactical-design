@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.products.domain.ProductName;
+import kitchenpos.products.domain.ProductPrice;
+import kitchenpos.products.infrastructure.DefaultPurgomalumClient;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -118,10 +121,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
+        ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
+        ProductName productName = new ProductName(name, new DefaultPurgomalumClient());
+        final Product product = new Product(productPrice, productName);
+
         return product;
     }
 }
