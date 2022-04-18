@@ -60,7 +60,7 @@ public class Menu {
     }
 
     private void validPrice(MenuPrice price, MenuProducts menuProducts) {
-        if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
+        if (price.isBiggerThenMenuProductPrices(menuProducts)) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
         }
     }
@@ -72,13 +72,13 @@ public class Menu {
     public void modifyPrice(Long value) {
         price = new MenuPrice(value);
 
-        if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
+        if (price.isBiggerThenMenuProductPrices(menuProducts)) {
             hideMenu();
         }
     }
 
     public void displayMenu() {
-        if (price.isBiggerThen(menuProducts.getSumProductsPrice())) {
+        if (price.isBiggerThenMenuProductPrices(menuProducts)) {
             throw new IllegalStateException("메뉴에 속한 상품 금액의 합이 메뉴의 가격보다 크거나 같아야만 전시 상태로 변경할 수 있습니다.");
         }
 

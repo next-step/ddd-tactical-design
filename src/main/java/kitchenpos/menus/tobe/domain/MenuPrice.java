@@ -24,6 +24,10 @@ public class MenuPrice {
         return value;
     }
 
+    public boolean isBiggerThenMenuProductPrices(MenuProducts menuProducts) {
+        return isBiggerThen(menuProducts.getSumProductsPrice());
+    }
+
     public boolean isBiggerThen(MenuPrice price) {
         return this.value > price.value();
     }
