@@ -5,12 +5,12 @@ import javax.persistence.Embedded;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
 public class MenuProduct {
+    private static final String PRODUCT_ID_NULL_NOT_ALLOWED = "productId가 null 일 수 없습니다";
 
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,6 @@ public class MenuProduct {
 
     private UUID productId;
 
-    @Transient
     private MenuPrice price;
 
     protected MenuProduct() {
@@ -33,6 +32,7 @@ public class MenuProduct {
     }
 
     public MenuProduct(Long seq, Long quantity, UUID productId, BigDecimal price) {
+        validate(productId);
         this.seq = seq;
         this.quantity = new MenuQuantity(quantity);
         this.productId = productId;
@@ -49,6 +49,12 @@ public class MenuProduct {
 
     public MenuPrice getTotalPrice() {
         return price.multiply(getQuantity());
+    }
+
+    private void validate(UUID productId) {
+        if (productId == null) {
+            throw new IllegalArgumentException(PRODUCT_ID_NULL_NOT_ALLOWED);
+        }
     }
 
     @Override
