@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
@@ -7,14 +7,14 @@ import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.util.StringUtils;
 
 @Embeddable
-public class ProductName {
+public class MenuName {
 
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected ProductName() { }
+    protected MenuName() { }
 
-    public ProductName(String value, PurgomalumClient purgomalumClient) {
+    public MenuName(String value, PurgomalumClient purgomalumClient) {
         if (StringUtils.isBlank(value)) {
             throw new IllegalArgumentException("이름은 빈 값이 될 수 없습니다.");
         }
@@ -34,7 +34,7 @@ public class ProductName {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ProductName that = (ProductName) o;
+        MenuName that = (MenuName) o;
         return value.equals(that.value);
     }
 

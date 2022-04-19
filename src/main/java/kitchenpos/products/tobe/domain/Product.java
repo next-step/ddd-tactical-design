@@ -46,11 +46,11 @@ public class Product {
         return id;
     }
 
-    public ProductName getName() {
-        return name;
+    public String getName() {
+        return name.value();
     }
 
-    public ProductPrice getPrice() {
-        return price;
+    public Long getPrice() {
+        return price.value();
     }
 }

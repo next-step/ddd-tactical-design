@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
@@ -132,5 +133,17 @@ public class Fixtures {
 
     public static kitchenpos.products.tobe.domain.Product newProduct(String name, long price) {
         return kitchenpos.products.tobe.domain.Product.of(name, price, purgomalumClient);
+    }
+
+    public static kitchenpos.menus.tobe.domain.MenuProduct newMenuProduct(String name, long price) {
+        return kitchenpos.menus.tobe.domain.MenuProduct.create(newProduct(name, price), 1L);
+    }
+
+    public static MenuProducts menuProducts(kitchenpos.menus.tobe.domain.MenuProduct... menuProducts) {
+        return MenuProducts.from(Arrays.asList(menuProducts));
+    }
+
+    public static kitchenpos.menus.tobe.domain.MenuGroup newMenuGroup(String name) {
+        return kitchenpos.menus.tobe.domain.MenuGroup.create(name, purgomalumClient);
     }
 }

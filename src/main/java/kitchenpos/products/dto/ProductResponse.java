@@ -16,7 +16,7 @@ public class ProductResponse {
     }
 
     public static ProductResponse from(Product saved) {
-        return new ProductResponse(saved.getId().toString(), saved.getName().value(), saved.getPrice().value());
+        return new ProductResponse(saved.getId().toString(), saved.getName(), saved.getPrice());
     }
 
     public String getId() {
