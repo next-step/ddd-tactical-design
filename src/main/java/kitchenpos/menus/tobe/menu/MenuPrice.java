@@ -1,32 +1,31 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.menu;
 
-import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Embeddable
-public class ProductPrice {
-    private BigDecimal value;
+public class MenuPrice {
+    private final BigDecimal value;
 
-    protected ProductPrice() {
-    }
-
-    private ProductPrice(BigDecimal value) {
+    private MenuPrice(BigDecimal value) {
         if (Objects.isNull(value) || value.intValue() < 0) {
-            throw new IllegalArgumentException("상품의 가격은 0원 이상이어야 합니다.");
+            throw new IllegalArgumentException("메뉴의 가격은 0원 이상이어야 합니다.");
         }
         this.value = value;
     }
 
-    public ProductPrice(int value) {
+    public MenuPrice(long value) {
         this(BigDecimal.valueOf(value));
+    }
+
+    public boolean isGreaterThan(long other) {
+        return value.compareTo(BigDecimal.valueOf(other)) > 0;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        MenuPrice that = (MenuPrice) o;
         return Objects.equals(value, that.value);
     }
 

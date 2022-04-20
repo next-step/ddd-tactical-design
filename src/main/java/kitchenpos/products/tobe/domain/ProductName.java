@@ -5,28 +5,24 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
-    private BigDecimal value;
+public class ProductName {
+    private String value;
 
-    protected ProductPrice() {
+    protected ProductName() {
     }
 
-    private ProductPrice(BigDecimal value) {
-        if (Objects.isNull(value) || value.intValue() < 0) {
-            throw new IllegalArgumentException("상품의 가격은 0원 이상이어야 합니다.");
+    public ProductName(String value) {
+        if (Objects.isNull(value) || value.isEmpty() ) {
+            throw new IllegalArgumentException("상품 이름이 공백일 수 없습니다.");
         }
         this.value = value;
-    }
-
-    public ProductPrice(int value) {
-        this(BigDecimal.valueOf(value));
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        ProductName that = (ProductName) o;
         return Objects.equals(value, that.value);
     }
 

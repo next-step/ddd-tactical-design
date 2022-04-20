@@ -15,7 +15,8 @@ public class Product {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Column(name = "price", nullable = false)
     @Embedded
@@ -26,7 +27,7 @@ public class Product {
 
     public Product(UUID id, String name, int price) {
         this.id = id;
-        this.name = name;
+        this.name = new ProductName(name);
         this.price = new ProductPrice(price);
     }
 
@@ -36,13 +37,5 @@ public class Product {
 
     public UUID getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ProductPrice getPrice() {
-        return price;
     }
 }
