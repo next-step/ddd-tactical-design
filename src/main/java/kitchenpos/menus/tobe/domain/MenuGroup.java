@@ -1,34 +1,28 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityFilteredName;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.UUID;
 
-@Table(name = "product")
+@Table(name = "menu_group")
 @Entity
-public class Product {
+public class MenuGroup {
     @Column(name = "id", columnDefinition = "varbinary(16)")
     @Id
     private UUID id;
 
-    @Embedded
-    private Price price;
-
-    @Embedded
+    @Column(name = "name", nullable = false)
     private ProfanityFilteredName profanityFilteredName;
 
-    protected Product() {
+    protected MenuGroup() {
     }
 
-    public Product(UUID id, ProfanityFilteredName profanityFilteredName, Price price) {
-        this.id = id;
-        this.price = price;
+    protected MenuGroup(final ProfanityFilteredName profanityFilteredName) {
+        this.id = UUID.randomUUID();
         this.profanityFilteredName = profanityFilteredName;
     }
 
@@ -36,15 +30,7 @@ public class Product {
         return id;
     }
 
-    public Price getPrice() {
-        return price;
-    }
-
     public String getName() {
         return profanityFilteredName.getValue();
-    }
-
-    public Product changePrice(final Price price) {
-        return new Product(id, profanityFilteredName, price);
     }
 }

@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityFilteredNameFactory;
 import kitchenpos.products.application.FakePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +27,7 @@ public class ProductFactoryTest {
         //given
         final String name = "후라이드";
         final BigDecimal price = BigDecimal.valueOf(16_000L);
-        final kitchenpos.products.tobe.domain.Product product = ProductFactory.createProduct(name, Price.of(price));
+        final kitchenpos.products.tobe.domain.Product product = ProductFactory.createProduct(name, price);
 
         assertThat(product).isNotNull();
         assertAll(
@@ -48,7 +47,7 @@ public class ProductFactoryTest {
         //when
         //then
         assertThatThrownBy(
-                () -> ProductFactory.createProduct("후라이드", Price.of(price))
+                () -> ProductFactory.createProduct("후라이드", price)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -62,7 +61,7 @@ public class ProductFactoryTest {
         //when
         //then
         assertThatThrownBy(
-                () -> ProductFactory.createProduct(name, Price.of(BigDecimal.valueOf(10_000L)))
+                () -> ProductFactory.createProduct(name, BigDecimal.valueOf(10_000L))
         ).isInstanceOf(IllegalArgumentException.class);
     }
 }
