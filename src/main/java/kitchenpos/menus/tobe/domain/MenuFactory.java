@@ -23,7 +23,7 @@ public class MenuFactory {
     private static MenuGroupRepository menuGroupRepository;
 
     @Autowired
-    protected MenuFactory(final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository) {
+    public MenuFactory(final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository) {
         this.productRepository = productRepository;
         this.menuGroupRepository = menuGroupRepository;
     }
