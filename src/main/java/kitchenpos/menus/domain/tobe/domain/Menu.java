@@ -46,7 +46,8 @@ public class Menu {
     public Menu(String name, BigDecimal price, String menuGroupName, List<MenuProduct> menuProducts) {
         this.id = UUID.randomUUID();
         this.name = name;
-        this.price = new MenuPrice(price);
+//        this.price = new MenuPrice(price);
+        this.price = null;
         this.menuGroup = new MenuGroup(menuGroupName);
         this.displayed = false;
         this.menuProducts = menuProducts;

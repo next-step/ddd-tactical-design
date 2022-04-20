@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MenuTest {
 
