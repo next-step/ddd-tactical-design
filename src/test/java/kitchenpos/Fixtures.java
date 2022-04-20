@@ -3,15 +3,19 @@ package kitchenpos;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityFilteredName;
 import kitchenpos.common.domain.ProfanityFilteredNameFactory;
+import kitchenpos.common.domain.Quantity;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuFactory;
+import kitchenpos.menus.tobe.dto.MenuCreationRequest;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
 
@@ -35,6 +39,16 @@ public class Fixtures {
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
+    }
+
+    public static kitchenpos.menus.tobe.domain.Menu tobe_menu(final UUID menuGroupId, final UUID productId) {
+        MenuCreationRequest menuCreationRequest = new MenuCreationRequest("후라이드+후라이드", BigDecimal.valueOf(19_000L), menuGroupId, true, Collections.singletonMap(productId, Quantity.of(1)));
+        return MenuFactory.createMenu(menuCreationRequest);
+    }
+
+    public static kitchenpos.menus.tobe.domain.Menu tobe_menu(final UUID menuGroupId, final UUID productId, final BigDecimal menuPice) {
+        MenuCreationRequest menuCreationRequest = new MenuCreationRequest("후라이드+후라이드", menuPice, menuGroupId, true, Collections.singletonMap(productId, Quantity.of(1)));
+        return MenuFactory.createMenu(menuCreationRequest);
     }
 
     public static MenuGroup menuGroup() {
