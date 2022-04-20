@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import common.domain.Price;
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;

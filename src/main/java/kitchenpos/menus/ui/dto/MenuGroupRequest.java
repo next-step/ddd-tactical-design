@@ -1,6 +1,5 @@
 package kitchenpos.menus.ui.dto;
 
-
 import kitchenpos.menus.tobe.domain.MenuGroup;
 
 public class MenuGroupRequest {

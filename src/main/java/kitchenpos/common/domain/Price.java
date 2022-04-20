@@ -1,4 +1,4 @@
-package common.domain;
+package kitchenpos.common.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -33,9 +33,11 @@ public class Price {
         return price;
     }
 
-    public void validationTotalPrice(BigDecimal sum) {
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException("가격은 메뉴에 포함된 상품의 가격의 총합보다 작거나 같아야한다.");
-        }
+    public boolean validationTotalPrice(Price sum) {
+        return price.compareTo(sum.price) > 0;
+    }
+
+    public static Price add(Price totalPrice, Price addPrice) {
+        return new Price(totalPrice.price.add(addPrice.price));
     }
 }
