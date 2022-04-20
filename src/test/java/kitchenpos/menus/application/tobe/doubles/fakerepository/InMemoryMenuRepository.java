@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.tobe.doubles.fakerepository;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
