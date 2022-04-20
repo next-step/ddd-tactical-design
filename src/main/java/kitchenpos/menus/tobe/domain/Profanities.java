@@ -1,5 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-public interface Properties {
+public interface Profanities {
 	boolean contains(String word);
 }
