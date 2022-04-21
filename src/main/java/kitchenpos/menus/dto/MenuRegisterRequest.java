@@ -4,14 +4,22 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.support.dto.DTO;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.List;
 
 public class MenuRegisterRequest extends DTO {
+    @NotBlank
     private String name;
+    @PositiveOrZero
     private BigDecimal price;
+    @NotNull
     private MenuGroupId menuGroupId;
+    @NotNull
     private List<TobeMenuProduct> menuProducts;
+    @NotBlank
     private boolean displayed;
 
     public MenuRegisterRequest(String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
