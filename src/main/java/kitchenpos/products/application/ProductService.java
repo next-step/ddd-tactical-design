@@ -51,7 +51,7 @@ public class ProductService {
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = menuProduct.getProduct()
+                sum = product
                         .getPrice()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity()));
             }

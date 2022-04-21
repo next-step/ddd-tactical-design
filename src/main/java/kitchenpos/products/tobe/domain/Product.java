@@ -44,4 +44,8 @@ public class Product {
     public void changePrice(BigDecimal price) {
         this.price = new Price(price);
     }
+
+    public boolean isSameProductId(UUID productId) {
+        return id.equals(productId);
+    }
 }
