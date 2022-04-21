@@ -28,7 +28,7 @@ public class Menu {
 		this.displayed = displayed;
 	}
 
-	void changePrice(Price price) {
+	public void changePrice(Price price) {
 		if (price.isHigherThan(menuProducts.calculatePrice())) {
 			throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 작거나 같아야 합니다.");
 		}
