@@ -1,11 +1,11 @@
-package kitchenpos.menus.application.tobe.domain;
+package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import kitchenpos.menus.application.tobe.doubles.fakeclient.InMemoryPurgomalumClient;
+import kitchenpos.menus.doubles.fakeclient.InMemoryPurgomalumClient;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

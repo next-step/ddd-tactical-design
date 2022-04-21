@@ -1,21 +1,27 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import kitchenpos.products.domain.Product;
 
 public class MenuProducts {
-    private List<Product> products = new ArrayList<>();
+    private List<MenuProduct> menuProducts = new ArrayList<>();
 
-    public MenuProducts(List<Product> products) {
-        validateProducts(products);
-        this.products = products;
+    public MenuProducts(List<MenuProduct> menuProducts) {
+        validateProducts(menuProducts);
+        this.menuProducts = menuProducts;
     }
 
-    private void validateProducts(List<Product> products) {
-        if (Objects.isNull(products) || products.isEmpty()) {
+    private void validateProducts(List<MenuProduct> menuProducts) {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public BigDecimal totalPrice() {
+        return menuProducts.stream()
+                .map(menuProduct -> menuProduct.getPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

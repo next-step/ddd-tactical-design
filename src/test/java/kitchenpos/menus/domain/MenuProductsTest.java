@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import kitchenpos.Fixtures;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +21,7 @@ class MenuProductsTest {
     @DisplayName("메뉴 상품 생성")
     @Test
     void create_menu_products() {
-        List<Product> products = Arrays.asList(Fixtures.product());
+        List<MenuProduct> products = Arrays.asList(new MenuProduct(Fixtures.product(), 2L));
         assertAll(
                 () -> assertDoesNotThrow(() -> new MenuProducts(products)),
                 () -> assertThat(new MenuProducts(products)).isInstanceOf(MenuProducts.class)

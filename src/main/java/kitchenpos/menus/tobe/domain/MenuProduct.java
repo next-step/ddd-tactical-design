@@ -29,4 +29,8 @@ public class MenuProduct {
             throw new IllegalArgumentException();
         }
     }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
 }

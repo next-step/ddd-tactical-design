@@ -1,4 +1,4 @@
-package kitchenpos.menus.application.tobe;
+package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
