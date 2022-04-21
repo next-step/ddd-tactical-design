@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import static kitchenpos.menus.domain.tobe.domain.TobeMenu.getSumOfMenuProductAmount;
-
 @Service
 public class ProductPriceChangeService {
     private final TobeProductRepository productRepository;
@@ -29,7 +27,7 @@ public class ProductPriceChangeService {
         product.changePrice(request.getPrice());
         menuRepository.findAllByProductId(product.getId())
                 .stream()
-                .filter(m -> m.getPrice().isGreaterThan(getSumOfMenuProductAmount(m.getMenuProducts())))
+                .filter(m -> m.getPrice().isGreaterThan(m.getMenuProducts().getSumOfMenuProductAmount()))
                 .forEach(TobeMenu::hide);
         return new ProductPriceChangeResponse(product);
     }

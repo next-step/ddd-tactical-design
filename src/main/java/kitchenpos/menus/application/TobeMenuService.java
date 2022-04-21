@@ -40,9 +40,6 @@ public class TobeMenuService {
 
     @Transactional
     public MenuRegisterResponse create(final MenuRegisterRequest request) {
-        if (Objects.isNull(request)) {
-            throw new IllegalArgumentException();
-        }
         TobeMenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         TobeMenu menu = new TobeMenu.Builder()
@@ -57,9 +54,6 @@ public class TobeMenuService {
 
     @Transactional
     public MenuPriceChangeResponse changePrice(final MenuPriceChangeRequest request) {
-        if (Objects.isNull(request)) {
-            throw new IllegalArgumentException();
-        }
         TobeMenu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
         return new MenuPriceChangeResponse(menu.changePrice(new MenuPrice(request.getPrice())));
@@ -67,9 +61,6 @@ public class TobeMenuService {
 
     @Transactional
     public MenuDisplayResponse display(final MenuDisplayRequest request) {
-        if (Objects.isNull(request)) {
-            throw new IllegalArgumentException();
-        }
         TobeMenu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
         return new MenuDisplayResponse(menu.display());
@@ -77,9 +68,6 @@ public class TobeMenuService {
 
     @Transactional
     public MenuHideResponse hide(final MenuHideRequest request) {
-        if (Objects.isNull(request)) {
-            throw new IllegalArgumentException();
-        }
         TobeMenu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
         return new MenuHideResponse(menu.hide());
@@ -87,6 +75,9 @@ public class TobeMenuService {
 
     @Transactional(readOnly = true)
     public List<MenuDto> findAll() {
-        return menuRepository.findAll().stream().map(MenuDto::new).collect(Collectors.toList());
+        return menuRepository.findAll()
+                .stream()
+                .map(MenuDto::new)
+                .collect(Collectors.toList());
     }
 }
