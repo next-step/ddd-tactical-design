@@ -3,11 +3,15 @@ package kitchenpos.menus.ui;
 import kitchenpos.menus.application.TobeMenuService;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import kitchenpos.menus.dto.*;
+import kitchenpos.support.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/menus")
 @RestController
@@ -19,7 +23,12 @@ public class TobeMenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuRegisterResponse> create(@RequestBody final MenuRegisterRequest request) {
+    public ResponseEntity<?> create(@Validated @RequestBody final MenuRegisterRequest request,
+                                    final BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(new ErrorResponse("400","올바르지 않은 메뉴 생성 요청입니다", errors));
+        }
         final MenuRegisterResponse response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getMenuId()))
                 .body(response);
