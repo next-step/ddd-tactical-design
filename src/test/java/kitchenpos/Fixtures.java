@@ -4,6 +4,8 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.ui.dto.MenuProductRequest;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -25,7 +27,7 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu(new FakePurgomalumClient(), "후라이드+후라이드", BigDecimal.valueOf(price), menuGroup(), displayed, Arrays.asList(menuProducts));
+        final Menu menu = new Menu(new FakePurgomalumClient(), UUID.randomUUID(), "후라이드+후라이드", BigDecimal.valueOf(price), menuGroup().getId(), displayed, new MenuProducts(Arrays.asList(menuProducts)));
         return menu;
     }
 
@@ -34,16 +36,17 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        return new MenuGroup(name);
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), name);
+        return menuGroup;
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product(), 2L);
+        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product().getId(), 2L);
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product, quantity);
+        final MenuProduct menuProduct = new MenuProduct(new Random().nextLong(), product.getId(), quantity);
         return menuProduct;
     }
 
@@ -105,5 +108,13 @@ public class Fixtures {
 
     public static Product product(final String name, final long price) {
         return new Product(new FakePurgomalumClient(), name, BigDecimal.valueOf(price));
+    }
+
+    public static MenuProductRequest menuProductRequest() {
+        return menuProductRequest(product().getId(), 1L);
+    }
+
+    public static MenuProductRequest menuProductRequest(UUID productId, long quantity) {
+        return new MenuProductRequest(productId, quantity);
     }
 }

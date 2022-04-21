@@ -2,15 +2,14 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.ui.dto.MenuProductsRequest;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.ui.dto.MenuProductRequest;
 import kitchenpos.menus.ui.dto.MenuRequest;
-import kitchenpos.menus.ui.dto.MenuResponse;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MenuServiceTest {
+public class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
@@ -54,13 +53,13 @@ class MenuServiceTest {
         final MenuRequest expected = createMenuRequest(
                 "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
-        final MenuResponse actual = menuService.create(expected);
+        final Menu actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
                 () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-                () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+                () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                 () -> assertThat(actual.getMenuProducts()).hasSize(1)
         );
@@ -69,7 +68,7 @@ class MenuServiceTest {
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
-    void create(final List<MenuProductsRequest> menuProducts) {
+    void create(final List<MenuProductRequest> menuProducts) {
         final MenuRequest expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -143,7 +142,7 @@ class MenuServiceTest {
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuRequest expected = changePriceRequest(16_000L);
-        final MenuResponse actual = menuService.changePrice(menuId, expected);
+        final Menu actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -171,7 +170,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final MenuResponse actual = menuService.display(menuId);
+        final Menu actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -187,7 +186,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-        final MenuResponse actual = menuService.hide(menuId);
+        final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 
@@ -195,7 +194,7 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<MenuResponse> actual = menuService.findAll();
+        final List<Menu> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 
@@ -204,7 +203,7 @@ class MenuServiceTest {
             final long price,
             final UUID menuGroupId,
             final boolean displayed,
-            final MenuProductsRequest... menuProducts
+            final MenuProductRequest... menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
@@ -214,7 +213,7 @@ class MenuServiceTest {
             final BigDecimal price,
             final UUID menuGroupId,
             final boolean displayed,
-            final MenuProductsRequest... menuProducts
+            final MenuProductRequest... menuProducts
     ) {
         return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
     }
@@ -224,7 +223,7 @@ class MenuServiceTest {
             final long price,
             final UUID menuGroupId,
             final boolean displayed,
-            final List<MenuProductsRequest> menuProducts
+            final List<MenuProductRequest> menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
@@ -234,14 +233,14 @@ class MenuServiceTest {
             final BigDecimal price,
             final UUID menuGroupId,
             final boolean displayed,
-            final List<MenuProductsRequest> menuProducts
+            final List<MenuProductRequest> menuProducts
     ) {
         final MenuRequest menu = new MenuRequest(name, price, menuGroupId, displayed, menuProducts);
         return menu;
     }
 
-    private static MenuProductsRequest createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProductsRequest menuProduct = new MenuProductsRequest(productId, quantity);
+    public static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
+        final MenuProductRequest menuProduct = new MenuProductRequest(productId, quantity);
         return menuProduct;
     }
 
