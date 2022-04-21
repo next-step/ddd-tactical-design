@@ -4,8 +4,6 @@ import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

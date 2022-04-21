@@ -1,5 +1,6 @@
 package kitchenpos.menus.dto;
 
+import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.support.dto.DTO;
@@ -11,18 +12,19 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class MenuRegisterRequest extends DTO {
-    @NotBlank
+    @NotBlank(message = "메뉴의 이름은 필수값 입니다")
     private String name;
-    @PositiveOrZero
+    @NotNull(message = "메뉴의 가격은 0 이상이어야 합니다")
+    @PositiveOrZero(message = "메뉴의 가격은 0 이상이어야 합니다")
     private BigDecimal price;
-    @NotNull
+    @NotNull(message = "메뉴는 반드시 하나의 메뉴그룹에 속해야 합니다")
     private MenuGroupId menuGroupId;
-    @NotNull
-    private List<TobeMenuProduct> menuProducts;
-    @NotBlank
-    private boolean displayed;
+    @NotNull(message = "메뉴는 반드시 하나 이상의 상품을 포함하고 있어야 합니다")
+    private MenuProducts menuProducts;
+    @NotNull(message = "메뉴의 전시상태를 선택해 주세요")
+    private Boolean displayed;
 
-    public MenuRegisterRequest(String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
+    public MenuRegisterRequest(String name, BigDecimal price, MenuGroupId menuGroupId, MenuProducts menuProducts, Boolean displayed) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -57,11 +59,11 @@ public class MenuRegisterRequest extends DTO {
         this.menuGroupId = menuGroupId;
     }
 
-    public List<TobeMenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(List<TobeMenuProduct> menuProducts) {
+    public void setMenuProducts(MenuProducts menuProducts) {
         this.menuProducts = menuProducts;
     }
 

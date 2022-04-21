@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,8 +27,7 @@ public class TobeMenuRestController {
     public ResponseEntity<?> create(@Validated @RequestBody final MenuRegisterRequest request,
                                     final BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(new ErrorResponse("400","올바르지 않은 메뉴 생성 요청입니다", errors));
+            return badRequestOf(bindingResult);
         }
         final MenuRegisterResponse response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getMenuId()))
@@ -35,20 +35,32 @@ public class TobeMenuRestController {
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<MenuPriceChangeResponse> changePrice(@PathVariable final MenuId menuId, @RequestBody final MenuPriceChangeRequest request) {
+    public ResponseEntity<?> changePrice(@PathVariable final MenuId menuId, @Valid @RequestBody final MenuPriceChangeRequest request,
+                                         final BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return badRequestOf(bindingResult);
+        }
         request.setMenuId(menuId);
         final MenuPriceChangeResponse response = menuService.changePrice(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<MenuDisplayResponse> display(@PathVariable final MenuDisplayRequest request) {
+    public ResponseEntity<?> display(@Valid @PathVariable final MenuDisplayRequest request,
+                                     final BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return badRequestOf(bindingResult);
+        }
         final MenuDisplayResponse response = menuService.display(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<MenuHideResponse> hide(@PathVariable final MenuHideRequest request) {
+    public ResponseEntity<?> hide(@Valid @PathVariable final MenuHideRequest request,
+                                  final BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return badRequestOf(bindingResult);
+        }
         final MenuHideResponse response = menuService.hide(request);
         return ResponseEntity.ok(response);
     }
@@ -56,5 +68,10 @@ public class TobeMenuRestController {
     @GetMapping
     public ResponseEntity<List<MenuDto>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
+    }
+
+    private ResponseEntity badRequestOf(final BindingResult bindingResult) {
+        List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+        return ResponseEntity.badRequest().body(new ErrorResponse("400","올바르지 않은 메뉴 생성 요청입니다", errors));
     }
 }

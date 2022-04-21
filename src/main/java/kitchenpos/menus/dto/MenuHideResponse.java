@@ -1,5 +1,6 @@
 package kitchenpos.menus.dto;
 
+import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
@@ -14,13 +15,13 @@ public class MenuHideResponse extends DTO {
     private String name;
     private BigDecimal price;
     private MenuGroupId menuGroupId;
-    private List<TobeMenuProduct> menuProducts;
+    private MenuProducts menuProducts;
     private boolean displayed;
 
     public MenuHideResponse() {
     }
 
-    public MenuHideResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, List<TobeMenuProduct> menuProducts, boolean displayed) {
+    public MenuHideResponse(MenuId menuId, String name, BigDecimal price, MenuGroupId menuGroupId, MenuProducts menuProducts, boolean displayed) {
         this.menuId = menuId;
         this.name = name;
         this.price = price;
@@ -70,11 +71,11 @@ public class MenuHideResponse extends DTO {
         this.menuGroupId = menuGroupId;
     }
 
-    public List<TobeMenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(List<TobeMenuProduct> menuProducts) {
+    public void setMenuProducts(MenuProducts menuProducts) {
         this.menuProducts = menuProducts;
     }
 

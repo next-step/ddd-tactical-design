@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
@@ -39,7 +40,7 @@ class TobeMenuServiceTest {
         TobeProduct product = tobeProduct("굿굿치킨", 16_000L);
         TobeMenuProduct invalid = new TobeMenuProduct.Builder().product(product).quantity(2L).productId(new ProductId(INVALID_ID)).build();
         return Arrays.asList(
-                null,
+                Arguments.of(new MenuProducts(null)),
                 Arguments.of(Collections.emptyList())
         );
     }
@@ -76,14 +77,14 @@ class TobeMenuServiceTest {
                 () -> assertThat(등록된메뉴.getPrice()).isEqualTo(request.getPrice()),
                 () -> assertThat(등록된메뉴.getMenuGroupId()).isEqualTo(request.getMenuGroupId()),
                 () -> assertThat(등록된메뉴.isDisplayed()).isEqualTo(request.isDisplayed()),
-                () -> assertThat(등록된메뉴.getMenuProducts()).hasSize(1)
+                () -> assertThat(등록된메뉴.getMenuProducts().size()).isOne()
         );
     }
 
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
-    void create(final List<TobeMenuProduct> menuProducts) {
+    void create(final MenuProducts menuProducts) {
         final MenuRegisterRequest request = new MenuRegisterRequest(
                 "맛난치킨",
                 BigDecimal.valueOf(15_000L),

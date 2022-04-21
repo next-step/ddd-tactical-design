@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
@@ -155,7 +156,7 @@ public class Fixtures {
         return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
     }
 
-    public static TobeMenu menu(final long price, final boolean displayed, final List<TobeMenuProduct> menuProducts) {
+    public static TobeMenu menu(final long price, final boolean displayed, final MenuProducts menuProducts) {
         final TobeMenu menu = new TobeMenu.Builder()
                 .name(new MenuName("후라이드+후라이드", profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(price)))
@@ -170,7 +171,7 @@ public class Fixtures {
         return new TobeMenuProduct.Builder().product(product).quantity(quantity).productId(product.getId()).build();
     }
 
-    public static List<TobeMenuProduct> tobeMenuProducts(final String name, final long price, final long quantity) {
+    public static MenuProducts tobeMenuProducts(final String name, final long price, final long quantity) {
         List<TobeMenuProduct> menuProducts = new ArrayList<>();
         TobeProduct product = tobeProduct(name, price);
         TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
@@ -179,6 +180,6 @@ public class Fixtures {
                 .productId(product.getId())
                 .build();
         menuProducts.add(menuProduct);
-        return menuProducts;
+        return new MenuProducts(menuProducts);
     }
 }
