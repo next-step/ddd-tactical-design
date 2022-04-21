@@ -1,14 +1,8 @@
 package kitchenpos.menus.ui.dto;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.products.infra.PurgomalumClient;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MenuRequest {
 
@@ -16,22 +10,22 @@ public class MenuRequest {
 
     private BigDecimal price;
 
+    private UUID menuGroupId;
+
     private boolean displayed;
 
-    private List<MenuProductsRequest> menuProducts;
-
-    private UUID menuGroupId;
+    private List<MenuProductRequest> menuProducts;
 
     public MenuRequest(BigDecimal price) {
         this.price = price;
     }
 
-    public MenuRequest(String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductsRequest> menuProducts) {
+    public MenuRequest(String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductRequest> menuProducts) {
         this.name = name;
         this.price = price;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
     }
 
     public String getName() {
@@ -42,22 +36,15 @@ public class MenuRequest {
         return price;
     }
 
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
-    public List<MenuProductsRequest> getMenuProducts() {
-        return menuProducts;
+    public boolean isDisplayed() {
+        return displayed;
     }
 
-    public Menu toEntity(PurgomalumClient purgomalumClient, MenuGroup menuGroup) {
-        List<MenuProduct> menuProducts = this.menuProducts.stream()
-                .map(menuProductsRequest -> menuProductsRequest.toEntity())
-                .collect(Collectors.toList());
-        return new Menu(purgomalumClient, name, price, menuGroup, displayed, menuProducts);
+    public List<MenuProductRequest> getMenuProducts() {
+        return menuProducts;
     }
 }
