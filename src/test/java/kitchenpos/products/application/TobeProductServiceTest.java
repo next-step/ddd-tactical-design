@@ -120,7 +120,7 @@ class TobeProductServiceTest {
     void changePriceInMenu() {
         //given
         final TobeProduct product = productRepository.save(tobeProduct("맛나치킨", 16_000));
-        final TobeMenu menu = menuRepository.save(menu(14_000L, true, tobeMenuProducts("치킨",16_000,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, true, tobeMenuProducts(product,1)));
         final ProductId productId = menu.getMenuProducts().get(0).getProductId();
         final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(productId, BigDecimal.valueOf(13_000L));
 

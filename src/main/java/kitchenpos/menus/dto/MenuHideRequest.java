@@ -6,7 +6,7 @@ import kitchenpos.support.dto.DTO;
 import javax.validation.constraints.NotNull;
 
 public class MenuHideRequest extends DTO {
-    @NotNull
+    @NotNull(message = "메뉴 번호 없이는 메뉴 숨김을 요청할 수 없습니다")
     private MenuId menuId;
 
     public MenuHideRequest() {

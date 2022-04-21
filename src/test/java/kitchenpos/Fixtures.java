@@ -182,4 +182,15 @@ public class Fixtures {
         menuProducts.add(menuProduct);
         return new MenuProducts(menuProducts);
     }
+
+    public static MenuProducts tobeMenuProducts(TobeProduct product, final long quantity) {
+        List<TobeMenuProduct> menuProducts = new ArrayList<>();
+        TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
+                .product(product)
+                .quantity(quantity)
+                .productId(product.getId())
+                .build();
+        menuProducts.add(menuProduct);
+        return new MenuProducts(menuProducts);
+    }
 }

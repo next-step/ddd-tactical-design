@@ -54,7 +54,7 @@ public class TobeMenu {
         if (Objects.isNull(this.price)) {
             throw new IllegalArgumentException();
         }
-        checkPriceIsGreaterThanSumOfMenuProductAmount();
+        checkPriceIsGreaterThanSumOfMenuProductAmount(price);
         this.price = price;
         return this;
     }
@@ -69,9 +69,14 @@ public class TobeMenu {
         this.displayed = new MenuDisplayed(false);
         return this;
     }
+    private void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice menuPrice) {
+        if (menuPrice.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
+            throw new IllegalArgumentException();
+        }
+    }
 
     private void checkPriceIsGreaterThanSumOfMenuProductAmount() {
-        if (price.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
+        if (this.price.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
             throw new IllegalArgumentException();
         }
     }
@@ -147,7 +152,9 @@ public class TobeMenu {
         }
 
         public TobeMenu build() {
-            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || Objects.isNull(menuProducts)) {
+            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || Objects.isNull(menuProducts) ||
+                Objects.isNull(menuProducts.getMenuProducts())||menuProducts.isEmpty()
+            ) {
                 throw new IllegalArgumentException();
             }
             if (displayed.isDisplayed()) {

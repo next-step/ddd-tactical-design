@@ -41,7 +41,7 @@ class TobeMenuServiceTest {
         TobeMenuProduct invalid = new TobeMenuProduct.Builder().product(product).quantity(2L).productId(new ProductId(INVALID_ID)).build();
         return Arrays.asList(
                 Arguments.of(new MenuProducts(null)),
-                Arguments.of(Collections.emptyList())
+                Arguments.of(new MenuProducts(Collections.emptyList()))
         );
     }
 

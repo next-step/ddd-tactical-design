@@ -9,11 +9,15 @@ import java.math.BigDecimal;
 
 public class MenuPriceChangeRequest extends DTO {
     private MenuId menuId;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "변경하려는 메뉴가격은 0원 이상이어야 합니다")
+    @PositiveOrZero(message = "변경하려는 메뉴가격은 0원 이상이어야 합니다")
     private BigDecimal price;
 
     public MenuPriceChangeRequest() {
+    }
+
+    public MenuPriceChangeRequest(BigDecimal price) {
+        this.price = price;
     }
 
     public MenuPriceChangeRequest(MenuId menuId, BigDecimal price) {

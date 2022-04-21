@@ -40,15 +40,6 @@ class MenuRegisterRequestTest {
         factory.close();
     }
 
-    private static List<Arguments> menuProducts() {
-        TobeProduct product = tobeProduct("굿굿치킨", 16_000L);
-        TobeMenuProduct invalid = new TobeMenuProduct.Builder().product(product).quantity(2L).productId(new ProductId(INVALID_ID)).build();
-        return Arrays.asList(
-                Arguments.of(new MenuProducts(null)),
-                Arguments.of(Collections.emptyList())
-        );
-    }
-
     @DisplayName("메뉴 생성을 요청한다")
     @Test
     void create( ) throws Exception {
