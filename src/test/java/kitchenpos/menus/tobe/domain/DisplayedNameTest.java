@@ -13,10 +13,10 @@ class DisplayedNameTest {
 	void create() {
 		// given
 		String name = "이름";
-		Properties properties = new FakeProperties();
+		Profanities profanities = new FakeProfanities();
 
 		// when
-		DisplayedName displayedName = new DisplayedName(name, properties);
+		DisplayedName displayedName = new DisplayedName(name, profanities);
 
 		// then
 		Assertions.assertThat(displayedName).isNotNull();
@@ -24,13 +24,13 @@ class DisplayedNameTest {
 
 	@DisplayName("메뉴이름 생성 시 비속어가 포함된 경우 예외가 발생한다")
 	@Test
-	void properties() {
+	void profanities() {
 		// given
-		String name = FakeProperties.PROPERTY;
-		Properties properties = new FakeProperties();
+		String name = FakeProfanities.PROFANITY;
+		Profanities profanities = new FakeProfanities();
 
 		// when then
-		assertThatThrownBy(() -> new DisplayedName(name, properties))
+		assertThatThrownBy(() -> new DisplayedName(name, profanities))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("메뉴 이름에는 비속어를 포함할 수 없습니다");
 	}

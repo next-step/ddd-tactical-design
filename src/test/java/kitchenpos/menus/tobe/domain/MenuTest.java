@@ -22,7 +22,7 @@ class MenuTest {
 	@BeforeEach
 	void setUp() {
 		dummyMenuGroup = new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹이름"));
-		dummyDisplayedName = new DisplayedName("이름", new FakeProperties());
+		dummyDisplayedName = new DisplayedName("이름", new FakeProfanities());
 	}
 
 	@DisplayName("메뉴를 생성할 수 있다")
