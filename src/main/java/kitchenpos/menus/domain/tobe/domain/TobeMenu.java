@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
+import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.tobe.domain.vo.*;
 
 import javax.persistence.*;
@@ -32,14 +33,8 @@ public class TobeMenu {
     @Column(name = "displayed", nullable = false)
     private MenuDisplayed displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "varbinary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<TobeMenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private MenuGroupId menuGroupId;
@@ -47,7 +42,7 @@ public class TobeMenu {
     protected TobeMenu() {
     }
 
-    private TobeMenu(final MenuId id, final MenuName name, final MenuPrice price, final TobeMenuGroup menuGroup, final MenuDisplayed displayed, final List<TobeMenuProduct> menuProducts) {
+    private TobeMenu(final MenuId id, final MenuName name, final MenuPrice price, final TobeMenuGroup menuGroup, final MenuDisplayed displayed, final MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -57,32 +52,17 @@ public class TobeMenu {
         this.menuGroupId = menuGroup.getId();
     }
 
-    public static BigDecimal getSumOfMenuProductAmount(List<TobeMenuProduct> menuProducts) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (TobeMenuProduct menuProduct : menuProducts) {
-            BigDecimal calculateAmount = menuProduct.calculateAmount();
-            sum = sum.add(calculateAmount);
-        }
-        return sum;
-    }
-
-    private static void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice price, List<TobeMenuProduct> menuProducts) {
-        if (price.isGreaterThan(getSumOfMenuProductAmount(menuProducts))) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     public TobeMenu changePrice(final MenuPrice price) {
         if (Objects.isNull(this.price)) {
             throw new IllegalArgumentException();
         }
-        checkPriceIsGreaterThanSumOfMenuProductAmount(price, this.menuProducts);
+        checkPriceIsGreaterThanSumOfMenuProductAmount();
         this.price = price;
         return this;
     }
 
     public TobeMenu display() {
-        checkPriceIsGreaterThanSumOfMenuProductAmount(this.price, this.menuProducts);
+        checkPriceIsGreaterThanSumOfMenuProductAmount();
         this.displayed = new MenuDisplayed(true);
         return this;
     }
@@ -90,6 +70,12 @@ public class TobeMenu {
     public TobeMenu hide() {
         this.displayed = new MenuDisplayed(false);
         return this;
+    }
+
+    private void checkPriceIsGreaterThanSumOfMenuProductAmount() {
+        if (price.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public MenuId getId() {
@@ -112,7 +98,7 @@ public class TobeMenu {
         return displayed;
     }
 
-    public List<TobeMenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
@@ -126,7 +112,7 @@ public class TobeMenu {
         private MenuPrice price;
         private TobeMenuGroup menuGroup;
         private MenuDisplayed displayed;
-        private List<TobeMenuProduct> menuProducts;
+        private MenuProducts menuProducts;
 
         public Builder() {
             this.menuId = new MenuId(UUID.randomUUID());
@@ -157,17 +143,19 @@ public class TobeMenu {
             return this;
         }
 
-        public Builder menuProducts(final List<TobeMenuProduct> menuProducts) {
+        public Builder menuProducts(final MenuProducts menuProducts) {
             this.menuProducts = menuProducts;
             return this;
         }
 
         public TobeMenu build() {
-            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuProducts) || Objects.isNull(menuProducts)) {
                 throw new IllegalArgumentException();
             }
             if (displayed.isDisplayed()) {
-                checkPriceIsGreaterThanSumOfMenuProductAmount(price, menuProducts);
+                if (price.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
+                    throw new IllegalArgumentException();
+                }
             }
             return new TobeMenu(menuId, name, price, menuGroup, displayed, menuProducts);
         }
