@@ -33,11 +33,12 @@ public class Price {
         return price;
     }
 
-    public boolean validationTotalPrice(Price sum) {
-        return price.compareTo(sum.price) > 0;
-    }
-
     public static Price add(Price totalPrice, Price addPrice) {
         return new Price(totalPrice.price.add(addPrice.price));
     }
+
+    public int compareTo(Price totalPrice) {
+        return price.compareTo(totalPrice.price);
+    }
+
 }

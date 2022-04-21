@@ -2,14 +2,12 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class MenuName {
 
-    @Column(name = "name", nullable = false)
     private String name;
 
     protected MenuName() {
