@@ -1,16 +1,22 @@
 package kitchenpos.products.domain.tobe.domain.vo;
 
+import kitchenpos.support.vo.ValueObject;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class ProductPrice extends ValueObject<ProductPrice> {
 
     @Column(name = "price")
     private BigDecimal price;
 
     public ProductPrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
         this.price = price;
     }
 
@@ -22,18 +28,4 @@ public class ProductPrice {
         return price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductPrice that = (ProductPrice) o;
-
-        return price != null ? price.equals(that.price) : that.price == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return price != null ? price.hashCode() : 0;
-    }
 }

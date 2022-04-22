@@ -2,11 +2,11 @@ package kitchenpos.products.dto;
 
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
-import kitchenpos.products.domain.tobe.domain.vo.ProductName;
+import kitchenpos.support.dto.DTO;
 
 import java.math.BigDecimal;
 
-public class ProductPriceChangeResponse {
+public class ProductPriceChangeResponse extends DTO {
     private ProductId productId;
     private String productName;
     private BigDecimal price;

@@ -1,12 +1,12 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
+import kitchenpos.support.dto.DTO;
 
 import java.math.BigDecimal;
 
-public class ProductDto {
+public class ProductDto extends DTO {
     private ProductId productId;
     private String productName;
     private BigDecimal price;
@@ -48,25 +48,5 @@ public class ProductDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductDto that = (ProductDto) o;
-
-        if (productId != null ? !productId.equals(that.productId) : that.productId != null) return false;
-        if (productName != null ? !productName.equals(that.productName) : that.productName != null) return false;
-        return price != null ? price.equals(that.price) : that.price == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = productId != null ? productId.hashCode() : 0;
-        result = 31 * result + (productName != null ? productName.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        return result;
     }
 }

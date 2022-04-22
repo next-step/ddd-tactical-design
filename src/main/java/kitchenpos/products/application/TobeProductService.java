@@ -1,54 +1,56 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.domain.TobeMenuRepository;
+import kitchenpos.products.domain.tobe.domain.ProductPriceChangeService;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
 import kitchenpos.products.domain.tobe.domain.TobeProductRepository;
-import kitchenpos.products.dto.ProductPriceChangeRequest;
-import kitchenpos.products.dto.ProductRegisterRequest;
+import kitchenpos.products.domain.tobe.domain.vo.ProductName;
+import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.dto.*;
+import kitchenpos.support.infra.profanity.Profanity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TobeProductService {
     private final TobeProductRepository productRepository;
-    private final MenuRepository menuRepository;
+    private final TobeMenuRepository menuRepository;
+    private final Profanity profanity;
+    private final ProductPriceChangeService priceChangeService;
 
-    public TobeProductService(final TobeProductRepository productRepository, final MenuRepository menuRepository) {
+    public TobeProductService(final TobeProductRepository productRepository, final TobeMenuRepository menuRepository, final Profanity profanity, final ProductPriceChangeService priceChangeService) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
+        this.profanity = profanity;
+        this.priceChangeService = priceChangeService;
     }
 
     @Transactional
-    public TobeProduct create(final ProductRegisterRequest request) {
-        if(Objects.isNull(request)) {
+    public ProductRegisterResponse create(final ProductRegisterRequest request) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
-        TobeProduct tobeProduct = new TobeProduct.ProductBuilder()
-                .name(request.getName())
-                .namingRule(request.getProductNamingRule())
-                .price(request.getPrice())
-                .pricingRule(request.getProductPricingRule()).build();
-        return productRepository.save(tobeProduct);
+        TobeProduct tobeProduct = new TobeProduct.Builder()
+                .name(new ProductName(request.getName(), profanity))
+                .price(new ProductPrice(request.getPrice()))
+                .build();
+        return new ProductRegisterResponse(productRepository.save(tobeProduct));
     }
 
     @Transactional
-    public TobeProduct changePrice(final ProductPriceChangeRequest request) {
-        //TODO: 추후 도메인 서비스를 도입하여 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
-        if(Objects.isNull(request)) {
+    public ProductPriceChangeResponse changePrice(final ProductPriceChangeRequest request) {
+        if (Objects.isNull(request)) {
             throw new IllegalArgumentException();
         }
-        TobeProduct tobeProduct = productRepository.findById(request.getProductId())
-                .orElseThrow(NoSuchElementException::new);
-        return tobeProduct
-                .changePrice(request.getPrice(),request.getProductPricingRule());
+        return priceChangeService.priceChange(request);
     }
 
     @Transactional(readOnly = true)
-    public List<TobeProduct> findAll() {
-        return productRepository.findAll();
+    public List<ProductDto> findAll() {
+        return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
     }
 }

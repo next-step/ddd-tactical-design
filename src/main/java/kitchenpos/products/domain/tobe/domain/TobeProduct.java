@@ -1,12 +1,8 @@
 package kitchenpos.products.domain.tobe.domain;
 
-import kitchenpos.products.domain.tobe.domain.policy.ProductNamingRule;
-import kitchenpos.products.domain.tobe.domain.policy.ProductPricingRule;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
-import kitchenpos.products.exception.ProductNamingRuleViolationException;
-import kitchenpos.products.exception.ProductPricingRuleViolationException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -41,8 +37,7 @@ public class TobeProduct {
         this.id = id;
     }
 
-    public TobeProduct changePrice(BigDecimal price, ProductPricingRule rule) {
-        rule.checkRule(price);
+    public TobeProduct changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
         return this;
     }
@@ -59,47 +54,37 @@ public class TobeProduct {
         return price;
     }
 
-    public static class ProductBuilder {
+    public static class Builder {
         private ProductId productId;
-        private java.lang.String name;
-        private ProductNamingRule namingRule;
-        private BigDecimal price;
-        private ProductPricingRule pricingRule;
+        private ProductName name;
+        private ProductPrice price;
 
-        public ProductBuilder() {
+
+        public Builder() {
+            this.productId = new ProductId(UUID.randomUUID());
 
         }
 
-        public ProductBuilder name(java.lang.String name) {
-            this.name=name;
+        public Builder productId(ProductId id) {
+            this.productId = id;
             return this;
         }
 
-        public ProductBuilder namingRule(ProductNamingRule namingRule) {
-            this.namingRule=namingRule;
+        public Builder name(ProductName name) {
+            this.name = name;
             return this;
         }
 
-        public ProductBuilder price(BigDecimal price) {
-            this.price=price;
-            return this;
-        }
-
-        public ProductBuilder pricingRule(ProductPricingRule pricingRule) {
-            this.pricingRule=pricingRule;
+        public Builder price(ProductPrice price) {
+            this.price = price;
             return this;
         }
 
         public TobeProduct build() {
-            if (Objects.isNull(name) || Objects.isNull(namingRule)) {
-                throw new ProductNamingRuleViolationException();
+            if (Objects.isNull(name) || Objects.isNull(price)) {
+                throw new IllegalArgumentException();
             }
-            if (Objects.isNull(price) || Objects.isNull(pricingRule)) {
-                throw new ProductPricingRuleViolationException();
-            }
-            namingRule.checkRule(name);
-            pricingRule.checkRule(price);
-            return new TobeProduct(new ProductId(UUID.randomUUID()),new ProductName(name), new ProductPrice(price));
+            return new TobeProduct(productId, name, price);
         }
     }
 }

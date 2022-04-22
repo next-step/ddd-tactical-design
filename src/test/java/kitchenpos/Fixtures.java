@@ -4,21 +4,29 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuProducts;
+import kitchenpos.menus.domain.tobe.domain.TobeMenu;
+import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
+import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuDisplayed;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuName;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductNamingRule;
-import kitchenpos.products.domain.tobe.policy.FakeSuccessProductPricingRule;
+import kitchenpos.products.domain.tobe.domain.vo.ProductName;
+import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
+import kitchenpos.support.infra.FakePurgomalumClient;
+import kitchenpos.support.infra.profanity.Profanity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
-import static kitchenpos.products.domain.tobe.domain.TobeProduct.*;
+import static kitchenpos.products.domain.tobe.domain.TobeProduct.Builder;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
+    private static final Profanity profanity = new FakePurgomalumClient();
 
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
@@ -131,7 +139,58 @@ public class Fixtures {
     }
 
     public static TobeProduct tobeProduct(final String name, final BigDecimal price) {
-        return new ProductBuilder().name(name).namingRule(new FakeSuccessProductNamingRule())
-                .price(price).pricingRule(new FakeSuccessProductPricingRule()).build();
+        return new Builder()
+                .name(new ProductName(name, profanity))
+                .price(new ProductPrice(price))
+                .build();
+    }
+
+    public static TobeProduct tobeProduct(final String name, final long price) {
+        return new Builder()
+                .name(new ProductName(name, profanity))
+                .price(new ProductPrice(BigDecimal.valueOf(price)))
+                .build();
+    }
+
+    public static TobeMenuGroup tobeMenuGroup(final String name) {
+        return new TobeMenuGroup.MenuGroupBuilder().name(name).build();
+    }
+
+    public static TobeMenu menu(final long price, final boolean displayed, final MenuProducts menuProducts) {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .name(new MenuName("후라이드+후라이드", profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(price)))
+                .displayed(new MenuDisplayed(displayed))
+                .menuProducts(menuProducts)
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenuProduct tobeMenuProduct(final TobeProduct product, final long quantity) {
+        return new TobeMenuProduct.Builder().product(product).quantity(quantity).productId(product.getId()).build();
+    }
+
+    public static MenuProducts tobeMenuProducts(final String name, final long price, final long quantity) {
+        List<TobeMenuProduct> menuProducts = new ArrayList<>();
+        TobeProduct product = tobeProduct(name, price);
+        TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
+                .product(product)
+                .quantity(quantity)
+                .productId(product.getId())
+                .build();
+        menuProducts.add(menuProduct);
+        return new MenuProducts(menuProducts);
+    }
+
+    public static MenuProducts tobeMenuProducts(TobeProduct product, final long quantity) {
+        List<TobeMenuProduct> menuProducts = new ArrayList<>();
+        TobeMenuProduct menuProduct = new TobeMenuProduct.Builder()
+                .product(product)
+                .quantity(quantity)
+                .productId(product.getId())
+                .build();
+        menuProducts.add(menuProduct);
+        return new MenuProducts(menuProducts);
     }
 }
