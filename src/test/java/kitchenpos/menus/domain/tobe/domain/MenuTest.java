@@ -92,4 +92,17 @@ class MenuTest {
         // then
         assertThat(menu.isDisplayed()).isTrue();
     }
+
+    @DisplayName("메뉴를 노출할 때 가격은 메뉴 상품 목록 금액의 합보다 적거나 같아야 한다")
+    @Test
+    void displayLessThanOrEqualPrice() {
+        // given
+        Menu menu = new Menu("탕수육 세트", BigDecimal.valueOf(15_000), "요리 세트", menuProducts);
+        menu.changePrice(BigDecimal.valueOf(21_000));
+
+        // when, then
+        assertThatThrownBy(menu::display)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("메뉴의 가격은 메뉴 상품 목록 금액의 합보다 적거나 같아야 합니다.");
+    }
 }
