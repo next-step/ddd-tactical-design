@@ -32,6 +32,14 @@ public class MenuPrice {
         return price.compareTo(BigDecimal.ZERO) < 0;
     }
 
+    public boolean isValid(BigDecimal totalAmount) {
+        return isBigger(totalAmount);
+    }
+
+    private boolean isBigger(BigDecimal price) {
+        return this.price.compareTo(price) > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
