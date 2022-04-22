@@ -35,7 +35,7 @@ class MenuPriceTest {
     void isBigger(BigDecimal newPrice, Boolean expected) {
         MenuPrice menuPrice = new MenuPrice(newPrice);
 
-        boolean actual = menuPrice.isValid(BigDecimal.valueOf(300));
+        boolean actual = menuPrice.isInvalid(BigDecimal.valueOf(300));
 
         assertThat(actual).isEqualTo(expected);
     }

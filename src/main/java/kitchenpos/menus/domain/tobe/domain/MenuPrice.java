@@ -32,7 +32,7 @@ public class MenuPrice {
         return price.compareTo(BigDecimal.ZERO) < 0;
     }
 
-    public boolean isValid(BigDecimal totalAmount) {
+    public boolean isInvalid(BigDecimal totalAmount) {
         return isBigger(totalAmount);
     }
 
