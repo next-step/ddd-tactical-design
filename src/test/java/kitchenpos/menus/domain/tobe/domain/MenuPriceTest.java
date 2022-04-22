@@ -26,7 +26,7 @@ class MenuPriceTest {
     void createInvalidPrice(BigDecimal price) {
         assertThatThrownBy(() -> new MenuPrice(price))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("가격은 0이상의 정수 이어야 합니다. 입력 값 : " + price);
+                .hasMessage("메뉴 가격은 0이상의 정수 이어야 합니다. 입력 값 : " + price);
     }
 
     @DisplayName("메뉴의 가격은 메뉴 상품 금액의 합보다 작거나 같아야 한다")

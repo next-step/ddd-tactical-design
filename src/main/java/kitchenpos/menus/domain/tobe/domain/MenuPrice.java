@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Embeddable
 public class MenuPrice {
-    private static final String PRICE_MUST_BE_POSITIVE_NUMBER = "가격은 0이상의 정수 이어야 합니다. 입력 값 : %s";
+    private static final String MENU_PRICE_MUST_BE_POSITIVE_NUMBER = "메뉴 가격은 0이상의 정수 이어야 합니다. 입력 값 : %s";
     private final BigDecimal price;
 
     protected MenuPrice() {
@@ -24,7 +24,7 @@ public class MenuPrice {
 
     private void validate(BigDecimal price) {
         if (Objects.isNull(price) || isNegative(price)) {
-            throw new IllegalArgumentException(String.format(PRICE_MUST_BE_POSITIVE_NUMBER, price));
+            throw new IllegalArgumentException(String.format(MENU_PRICE_MUST_BE_POSITIVE_NUMBER, price));
         }
     }
 
