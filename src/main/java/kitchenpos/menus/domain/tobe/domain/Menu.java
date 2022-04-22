@@ -14,8 +14,8 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName name;
 
     @Embedded
     private MenuPrice price;
@@ -45,9 +45,8 @@ public class Menu {
 
     public Menu(String name, BigDecimal price, String menuGroupName, List<MenuProduct> menuProducts) {
         this.id = UUID.randomUUID();
-        this.name = name;
-//        this.price = new MenuPrice(price);
-        this.price = null;
+        this.name = new DisplayedName(name);
+        this.price = new MenuPrice(price);
         this.menuGroup = new MenuGroup(menuGroupName);
         this.displayed = false;
         this.menuProducts = menuProducts;
