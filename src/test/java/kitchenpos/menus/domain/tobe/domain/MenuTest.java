@@ -66,4 +66,30 @@ class MenuTest {
         // then
         assertThat(menu.isDisplayed()).isFalse();
     }
+
+    @DisplayName("메뉴를 숨긴다")
+    @Test
+    void hide() {
+        // given
+        Menu menu = new Menu("탕수육 세트", BigDecimal.valueOf(15_000), "요리 세트", menuProducts);
+
+        // when
+        menu.hide();
+
+        // then
+        assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴를 노출한다")
+    @Test
+    void display() {
+        // given
+        Menu menu = new Menu("탕수육 세트", BigDecimal.valueOf(15_000), "요리 세트", menuProducts);
+
+        // when
+        menu.display();
+
+        // then
+        assertThat(menu.isDisplayed()).isTrue();
+    }
 }

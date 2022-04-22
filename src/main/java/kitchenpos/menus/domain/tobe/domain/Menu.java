@@ -92,7 +92,12 @@ public class Menu {
         return this.price.isInvalid(menuProducts.getTotalAmount());
     }
 
-    private void hide() {
+    public void hide() {
         this.displayed = false;
+    }
+
+    public void display() {
+        validate();
+        this.displayed = true;
     }
 }
