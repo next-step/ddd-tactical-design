@@ -21,6 +21,10 @@ public class MenuName {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     private void validate(String name, BanWordFilter banWordFilter) {
         if (Objects.isNull(name) || banWordFilter.containsProfanity(name)) {
             throw new IllegalArgumentException(INVALID_NAME_INPUT);

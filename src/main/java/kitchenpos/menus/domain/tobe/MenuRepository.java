@@ -11,6 +11,8 @@ public interface MenuRepository {
 
     Optional<Menu> findById(UUID id);
 
+    Optional<kitchenpos.menus.domain.tobe.Menu> findByUUId(UUID id);
+
     List<Menu> findAll();
 
     List<Menu> findAllByIdIn(List<UUID> ids);

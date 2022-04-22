@@ -30,6 +30,14 @@ public class MenuGroup {
         this.name = new MenuName(name, banWordFilter);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name.getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -6,7 +6,6 @@ import kitchenpos.products.domain.tobe.BanWordFilter;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Id;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -25,7 +24,7 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    private Long menuGroupId;
+    private UUID menuGroupId;
 
     @Embedded
     private MenuDisplayed displayed;
@@ -33,26 +32,24 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    public Menu(String name, BanWordFilter banWordFilter, BigDecimal price, Long menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(String name, BanWordFilter banWordFilter, MenuPrice price, UUID menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
         this(UUID.randomUUID(), name, banWordFilter, price, menuGroupId, displayed, new MenuProducts(menuProducts));
     }
 
-    public Menu(UUID id, String name, BanWordFilter banWordFilter, BigDecimal price, Long menuGroupId, boolean displayed, MenuProducts menuProducts) {
-        validate(menuGroupId, price, menuProducts);
+    public Menu(UUID id, String name, BanWordFilter banWordFilter, MenuPrice price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        validate(menuGroupId);
         this.id = id;
         this.name = new MenuName(name, banWordFilter);
-        this.price = new MenuPrice(price);
+        this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = new MenuDisplayed(displayed);
         this.menuProducts = menuProducts;
     }
 
-    private void validate(Long menuGroup, BigDecimal menuPrice, MenuProducts menuProducts) {
-        if (menuGroup == null) {
+    private void validate(UUID menuGroupId) {
+        if (menuGroupId == null) {
             throw new IllegalArgumentException(MENU_GROUP_NULL_NOT_ALLOWED);
         }
-        final MenuPrice totalPrice = menuProducts.getTotalPrice();
-        validateMenuPrice(new MenuPrice(menuPrice), totalPrice);
     }
 
     public void show() {
@@ -63,11 +60,8 @@ public class Menu {
         this.displayed.hide();
     }
 
-    public void changePrice(BigDecimal price) {
-        final MenuPrice menuPrice = this.menuProducts.getTotalPrice();
-        final MenuPrice toChangePrice = new MenuPrice(price);
-        validateMenuPrice(toChangePrice, menuPrice);
-        this.price = toChangePrice;
+    public void changePrice(MenuPrice price) {
+        this.price = price;
     }
 
     public boolean getDisplayed() {
@@ -78,8 +72,16 @@ public class Menu {
         return price;
     }
 
+    public UUID getMenuGroupId() {
+        return menuGroupId;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
     private void validateMenuPrice(MenuPrice menuPrice, MenuPrice menuProductsTotalPrice) {
-        if (menuPrice.isBiggerPrice(menuProductsTotalPrice)) {
+        if (menuPrice.isBiggerThan(menuProductsTotalPrice)) {
             throw new IllegalArgumentException(INVALID_MENU_PRICE);
         }
     }

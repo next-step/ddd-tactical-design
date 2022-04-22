@@ -26,6 +26,11 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
+    public Optional<kitchenpos.menus.domain.tobe.Menu> findByUUId(UUID id) {
+        return Optional.empty();
+    }
+
+    @Override
     public List<Menu> findAll() {
         return new ArrayList<>(menus.values());
     }
@@ -33,7 +38,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
-            .stream()
+                .stream()
             .filter(menu -> ids.contains(menu.getId()))
             .collect(Collectors.toList());
     }

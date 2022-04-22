@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,8 +19,7 @@ class MenuProductTest {
     void create() {
         final Long givenMenuId = 1L;
         final long givenQuantity = 3l;
-        final BigDecimal price = BigDecimal.valueOf(16000);
-        final MenuProduct menuProduct = new MenuProduct(givenMenuId, givenQuantity, UUID.randomUUID(), price);
+        final MenuProduct menuProduct = new MenuProduct(givenMenuId, givenQuantity, UUID.randomUUID());
 
         assertAll(
                 () -> assertThat(menuProduct).extracting("seq").isNotNull(),
@@ -34,7 +32,7 @@ class MenuProductTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, -5, -10})
     void create_with_negative_quantity(long quantity) {
-        assertThatCode(() -> new MenuProduct(1L, quantity, UUID.randomUUID(), BigDecimal.valueOf(16000)))
+        assertThatCode(() -> new MenuProduct(1L, quantity, UUID.randomUUID()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -44,9 +42,8 @@ class MenuProductTest {
     void create_with_no_product_id(UUID productId) {
         final Long givenMenuId = 1L;
         final long givenQuantity = 3l;
-        final BigDecimal price = BigDecimal.valueOf(16000);
 
-        assertThatCode(() -> new MenuProduct(givenMenuId, givenQuantity, productId, price))
+        assertThatCode(() -> new MenuProduct(givenMenuId, givenQuantity, productId))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

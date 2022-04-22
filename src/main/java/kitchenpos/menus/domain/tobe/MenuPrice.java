@@ -52,7 +52,7 @@ public class MenuPrice {
         return new MenuPrice(price.multiply(value));
     }
 
-    public boolean isBiggerPrice(MenuPrice price) {
+    public boolean isBiggerThan(MenuPrice price) {
         return this.price.compareTo(price.price) > 0;
     }
 

@@ -27,12 +27,6 @@ public class MenuProducts {
         this.values = values;
     }
 
-    public MenuPrice getTotalPrice() {
-        return values.stream()
-                .map(MenuProduct::getTotalPrice)
-                .reduce(MenuPrice.valueOf(0), MenuPrice::add);
-    }
-
     private void validate(List<MenuProduct> values) {
         if (values == null || values.isEmpty()) {
             throw new IllegalArgumentException(MENU_PRODUCTS_EMPTY_NOT_ALLOWED);

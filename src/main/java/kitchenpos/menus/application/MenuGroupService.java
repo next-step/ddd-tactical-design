@@ -1,7 +1,9 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
+
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.TobeMenuGroupRepository;
+import kitchenpos.products.infra.DefaultBanWordFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +13,9 @@ import java.util.UUID;
 
 @Service
 public class MenuGroupService {
-    private final MenuGroupRepository menuGroupRepository;
+    private final TobeMenuGroupRepository menuGroupRepository;
 
-    public MenuGroupService(final MenuGroupRepository menuGroupRepository) {
+    public MenuGroupService(final TobeMenuGroupRepository menuGroupRepository) {
         this.menuGroupRepository = menuGroupRepository;
     }
 
@@ -23,9 +25,7 @@ public class MenuGroupService {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), name, new DefaultBanWordFilter());
         return menuGroupRepository.save(menuGroup);
     }
 
