@@ -14,10 +14,10 @@ public class TobeMenu {
     @EmbeddedId
     private MenuId id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private MenuName name;
 
-    @Column(name = "price", nullable = false)
+    @Embedded
     private MenuPrice price;
 
     @ManyToOne(optional = false)
@@ -28,7 +28,7 @@ public class TobeMenu {
     )
     private TobeMenuGroup menuGroup;
 
-    @Column(name = "displayed", nullable = false)
+    @Embedded
     private MenuDisplayed displayed;
 
     @Embedded
