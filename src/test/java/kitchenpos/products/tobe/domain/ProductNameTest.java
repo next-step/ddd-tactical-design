@@ -32,7 +32,7 @@ class ProductNameTest {
     void createInvalidName(String name) {
         assertThatThrownBy(() -> new ProductName(purgomalumClient, name))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이름은 빈 값이 아니어야 합니다. 입력 값 : " + name);
+                .hasMessage("상품 이름은 빈 값이 아니어야 합니다. 입력 값 : " + name);
     }
 
     @DisplayName("상품 이름에는 비속어가 포함되지 않아야 한다")
@@ -40,6 +40,6 @@ class ProductNameTest {
     void createProfanity() {
         assertThatThrownBy(() -> new ProductName(purgomalumClient, "비속어"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이름에는 비속어가 포함되지 않아야 합니다. 입력 값 : 비속어");
+                .hasMessage("상품 이름에는 비속어가 포함되지 않아야 합니다. 입력 값 : 비속어");
     }
 }

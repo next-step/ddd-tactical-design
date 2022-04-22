@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MenuGroupNameTest {
 
@@ -24,6 +23,6 @@ class MenuGroupNameTest {
     void createInvalidName(String name) {
         assertThatThrownBy(() -> new MenuGroupName(name))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이름은 빈 값이 아니어야 합니다. 입력 값 : " + name);
+                .hasMessage("메뉴 그룹 이름은 빈 값이 아니어야 합니다. 입력 값 : " + name);
     }
 }
