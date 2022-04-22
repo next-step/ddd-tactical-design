@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-class QuantityTest {
+class StockTest {
 
     @ParameterizedTest
     @ValueSource(longs = { 0L, -1L, -1000L })
