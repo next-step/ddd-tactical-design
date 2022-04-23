@@ -11,8 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static kitchenpos.Fixtures.newMenuGroup;
-import static kitchenpos.Fixtures.newMenuProduct;
+import static kitchenpos.TobeFixtures.newMenuGroup;
+import static kitchenpos.TobeFixtures.newMenuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;

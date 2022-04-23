@@ -25,8 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static kitchenpos.Fixtures.menu;
 import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.newProduct;
 import static kitchenpos.Fixtures.product;
+import static kitchenpos.TobeFixtures.newProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
