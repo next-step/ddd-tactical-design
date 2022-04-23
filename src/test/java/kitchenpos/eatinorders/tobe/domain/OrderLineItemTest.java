@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static kitchenpos.TobeFixtures.newMenu;
 import static kitchenpos.TobeFixtures.newMenuGroup;
 import static kitchenpos.TobeFixtures.newMenuProduct;
+import static kitchenpos.TobeFixtures.newOrderLineItem;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -37,5 +39,20 @@ class OrderLineItemTest {
         Menu menu = newMenu("메뉴", 1000L, newMenuGroup("메뉴그룹"), Collections.singletonList(newMenuProduct("메뉴상품", 1000L)));
         assertThatCode(() -> OrderLineItem.create(menu, new Stock(5L)))
             .doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("주문 메뉴의 가격은 메뉴의 가격과 재고의 곱을 반환")
+    void getOrderLinePriceTest() {
+        // given
+        OrderLineItem item = newOrderLineItem("name", 1000L, 2L);
+
+        // when
+        long actual = item.getOrderLinePrice();
+
+        // then
+        assertThat(item.getPrice()).isEqualTo(item.getPrice());
+        assertThat(item.getQuantity()).isEqualTo(item.getQuantity());
+        assertThat(item.getOrderLinePrice()).isEqualTo(item.getPrice() * item.getQuantity());
     }
 }

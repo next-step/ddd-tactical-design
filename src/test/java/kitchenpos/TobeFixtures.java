@@ -1,7 +1,10 @@
 package kitchenpos;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
@@ -15,11 +18,11 @@ public class TobeFixtures {
     private static final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
     public static Product newProduct(String name, long price) {
-        return kitchenpos.products.tobe.domain.Product.of(name, price, purgomalumClient);
+        return Product.of(name, price, purgomalumClient);
     }
 
     public static MenuProduct newMenuProduct(String name, long price) {
-        return kitchenpos.menus.tobe.domain.MenuProduct.create(newProduct(name, price), 1L);
+        return MenuProduct.create(newProduct(name, price), 1L);
     }
 
     public static MenuProducts menuProducts(MenuProduct... menuProducts) {
@@ -32,5 +35,13 @@ public class TobeFixtures {
 
     public static Menu newMenu(String name, Long price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
         return Menu.create(name, purgomalumClient, price, menuGroup, true, menuProducts);
+    }
+
+    public static OrderLineItem newOrderLineItem(String name, Long price, Long quantity) {
+        return OrderLineItem.create(newMenu(name, price, newMenuGroup("menuGroup"), Collections.singletonList(newMenuProduct("name", price))), quantity);
+    }
+
+    public static OrderLineItems newOrderLineItems(OrderLineItem... items) {
+        return new OrderLineItems(Arrays.asList(items));
     }
 }

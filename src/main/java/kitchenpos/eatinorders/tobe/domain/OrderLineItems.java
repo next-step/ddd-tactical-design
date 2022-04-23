@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -18,10 +20,19 @@ public class OrderLineItems {
     )
     private List<OrderLineItem> items;
 
-    protected OrderLineItems() {
-    }
+    protected OrderLineItems() { }
 
     public OrderLineItems(final List<OrderLineItem> items) {
-        this.items = items;
+        this.items = Collections.unmodifiableList(new ArrayList<>(items));
+    }
+
+    public long sumOfMenuPrices() {
+        return items.stream()
+                    .mapToLong(OrderLineItem::getOrderLinePrice)
+                    .sum();
+    }
+
+    public List<OrderLineItem> getItems() {
+        return items;
     }
 }

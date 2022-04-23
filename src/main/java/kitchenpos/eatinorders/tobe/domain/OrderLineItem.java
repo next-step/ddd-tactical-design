@@ -69,4 +69,8 @@ public class OrderLineItem {
     public Long getQuantity() {
         return quantity.value();
     }
+
+    public long getOrderLinePrice() {
+        return getPrice() * getQuantity();
+    }
 }
