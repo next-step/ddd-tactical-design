@@ -16,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class MenuTest {
 
-	private MenuGroup dummyMenuGroup;
+	private UUID dummyMenuGroupId;
 	private DisplayedName dummyDisplayedName;
 
 	@BeforeEach
 	void setUp() {
-		dummyMenuGroup = new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹이름"));
+		dummyMenuGroupId = UUID.randomUUID();
 		dummyDisplayedName = new DisplayedName("이름", new FakeProfanities());
 	}
 
@@ -38,7 +38,7 @@ class MenuTest {
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(productPrice, menuProductCount)));
 
 		// when
-		Menu result = Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, menuPrice, menuProducts);
+		Menu result = Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, menuPrice, menuProducts);
 
 		// then
 		assertThat(result).isNotNull();
@@ -57,7 +57,7 @@ class MenuTest {
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(productPrice, menuProductCount)));
 
 		// when then
-		assertThatThrownBy(() -> Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, menuPrice, menuProducts))
+		assertThatThrownBy(() -> Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, menuPrice, menuProducts))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 작거나 같아야 합니다");
 	}
@@ -76,7 +76,7 @@ class MenuTest {
 
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(productPrice, menuProductCount)));
 
-		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, oldMenuPrice, menuProducts);
+		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, oldMenuPrice, menuProducts);
 
 		// when then
 		assertDoesNotThrow(() -> menu.changePrice(newMenuPrice));
@@ -96,7 +96,7 @@ class MenuTest {
 
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(productPrice, menuProductCount)));
 
-		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, oldMenuPrice, menuProducts);
+		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, oldMenuPrice, menuProducts);
 
 		// when then
 		assertThatThrownBy(() -> menu.changePrice(newMenuPrice))
@@ -111,7 +111,7 @@ class MenuTest {
 		Price menuPrice = new Price(BigDecimal.valueOf(1_000));
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(BigDecimal.valueOf(1_000), 2)));
 
-		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, menuPrice, menuProducts);
+		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, menuPrice, menuProducts);
 
 		// when then
 		assertDoesNotThrow(menu::display);
@@ -124,7 +124,7 @@ class MenuTest {
 		Price menuPrice = new Price(BigDecimal.valueOf(1_000));
 		MenuProducts menuProducts = new MenuProducts(Collections.singletonList(createMenuProduct(BigDecimal.valueOf(1_000), 2)));
 
-		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroup, dummyDisplayedName, menuPrice, menuProducts);
+		Menu menu = Menu.create(UUID.randomUUID(), dummyMenuGroupId, dummyDisplayedName, menuPrice, menuProducts);
 
 		// when then
 		assertDoesNotThrow(menu::hide);

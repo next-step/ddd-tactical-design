@@ -5,23 +5,23 @@ import java.util.UUID;
 
 public class Menu {
 	private final UUID id;
-	private final MenuGroup menuGroup;
+	private final UUID menuGroupId;
 	private final DisplayedName displayedName;
 	private Price price;
 	private final MenuProducts menuProducts;
 	private boolean displayed;
 
-	public static Menu create(UUID id, MenuGroup menuGroup, DisplayedName displayedName, Price price, MenuProducts menuProducts) {
-		return new Menu(id, menuGroup, displayedName, price, menuProducts, true);
+	public static Menu create(UUID id, UUID menuGroupId, DisplayedName displayedName, Price price, MenuProducts menuProducts) {
+		return new Menu(id, menuGroupId, displayedName, price, menuProducts, true);
 	}
 	
-	private Menu(UUID id, MenuGroup menuGroup, DisplayedName displayedName, Price price, MenuProducts menuProducts, boolean displayed) {
+	private Menu(UUID id, UUID menuGroupId, DisplayedName displayedName, Price price, MenuProducts menuProducts, boolean displayed) {
 		if (price.isHigherThan(menuProducts.calculatePrice())) {
 			throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 작거나 같아야 합니다.");
 		}
 
 		this.id = id;
-		this.menuGroup = menuGroup;
+		this.menuGroupId= menuGroupId;
 		this.displayedName = displayedName;
 		this.price = price;
 		this.menuProducts = menuProducts;
