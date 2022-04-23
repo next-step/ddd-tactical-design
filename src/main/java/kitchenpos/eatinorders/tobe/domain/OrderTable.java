@@ -45,6 +45,34 @@ public class OrderTable {
         return new OrderTable(OrderTableName.create(name), EMPTY_TABLE_GUESTS, DEFAULT_TABLE_STATUS);
     }
 
+    public void sit() {
+        if (!empty) {
+            throw new IllegalStateException("이미 사용중인 테이블입니다.");
+        }
+
+        empty = false;
+    }
+
+    public void changeNumberOfGuests(int numberOfGuests) {
+        if (numberOfGuests < EMPTY_TABLE_GUESTS) {
+            throw new IllegalArgumentException("손님 수는 0 이상의 정수여야 합니다.");
+        }
+
+        if (empty) {
+            throw new IllegalStateException("비어있는 테이블의 손님 수는 변경할 수 없습니다.");
+        }
+
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public void clear() {
+        if (empty) {
+            throw new IllegalStateException("이미 비어 있는 테이블입니다.");
+        }
+
+        empty = true;
+    }
+
     public String getName() {
         return name.value();
     }
