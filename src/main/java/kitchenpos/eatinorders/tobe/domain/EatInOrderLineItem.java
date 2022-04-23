@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.order;
+package kitchenpos.eatinorders.tobe.domain;
 
 import java.math.BigDecimal;
 import javax.persistence.Entity;

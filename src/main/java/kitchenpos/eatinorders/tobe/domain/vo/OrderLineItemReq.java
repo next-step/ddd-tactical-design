@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.vo;
 
 import java.math.BigDecimal;
-import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.EatInOrderLineItem;
 
 public class OrderLineItemReq {
 

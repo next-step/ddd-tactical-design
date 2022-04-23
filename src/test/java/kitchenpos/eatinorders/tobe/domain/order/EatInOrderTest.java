@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import kitchenpos.eatinorders.tobe.domain.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.vo.MenuRes;
 import kitchenpos.eatinorders.tobe.domain.domainservice.OrderTableDomainService;
 import org.junit.jupiter.api.DisplayName;

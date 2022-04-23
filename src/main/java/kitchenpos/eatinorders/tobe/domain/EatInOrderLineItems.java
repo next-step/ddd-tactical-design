@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.order;
+package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.List;
 import java.util.Map;
