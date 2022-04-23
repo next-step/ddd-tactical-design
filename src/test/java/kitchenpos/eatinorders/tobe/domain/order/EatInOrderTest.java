@@ -125,10 +125,10 @@ class EatInOrderTest {
     OrderTableRelatedService notHasInCompletedOrdersOrderTableSupplyService = new OrderTableRelatedService(false, false);
 
     //when
-    EatInOrder result = servedOrder.complete(notHasInCompletedOrdersOrderTableSupplyService);
+    servedOrder.complete(notHasInCompletedOrdersOrderTableSupplyService);
 
     //then
-    assertThat(result.getOrderStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
+    assertThat(servedOrder.getOrderStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
   }
 
   @DisplayName("주문을 완료할 때 주문 테이블에 속한 주문이 모두 완료 된 상태면 주문 테이블을 비운다.")

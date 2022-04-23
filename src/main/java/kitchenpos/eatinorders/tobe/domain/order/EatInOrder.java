@@ -67,7 +67,7 @@ public class EatInOrder {
     return orderStatus;
   }
 
-  public EatInOrder complete(OrderTableDomainService orderTableDomainService) {
+  public void complete(OrderTableDomainService orderTableDomainService) {
     if (orderStatus != EatInOrderStatus.SERVED) {
       throw new IllegalStateException();
     }
@@ -77,6 +77,5 @@ public class EatInOrder {
     }
 
     this.orderStatus = EatInOrderStatus.COMPLETED;
-    return this;
   }
 }

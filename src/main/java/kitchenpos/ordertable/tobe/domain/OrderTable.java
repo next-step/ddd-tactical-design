@@ -37,25 +37,22 @@ public class OrderTable {
     this.empty = empty;
   }
 
-  public OrderTable toBeUsed() {
+  public void toBeUsed() {
     this.empty = false;
-    return this;
   }
 
-  public OrderTable toBeReleased(OrderTableRelatedOrderStatusCheckService domainService) {
+  public void toBeReleased(OrderTableRelatedOrderStatusCheckService domainService) {
     if (domainService.hasInCompletedOrders(this)) {
       throw new IllegalStateException(INCOMPLETED_ORDER_EXIST);
     }
     this.empty = true;
-    return this;
   }
 
-  public OrderTable changeNumberOfGuests(int number) {
+  public void changeNumberOfGuests(int number) {
     if (empty) {
       throw new IllegalStateException(EMPTY_TABLE_CAN_NOT_CHANGE_NUMBER_OF_GUESTS);
     }
     this.numberOfGuests = new NumberOfGuests(number);
-    return this;
   }
 
   public boolean isEmpty() {

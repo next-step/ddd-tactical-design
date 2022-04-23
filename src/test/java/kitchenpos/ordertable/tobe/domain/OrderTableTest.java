@@ -34,10 +34,10 @@ class OrderTableTest {
     OrderTable releasedTable = buildReleasedTwoGuestsTable();
 
     //when
-    OrderTable result = releasedTable.toBeUsed();
+    releasedTable.toBeUsed();
 
     //then
-    assertThat(result.isEmpty()).isFalse();
+    assertThat(releasedTable.isEmpty()).isFalse();
 
   }
 
@@ -48,10 +48,10 @@ class OrderTableTest {
     OrderTable usedTable = buildUsedTwoGuestsTable();
 
     //when
-    OrderTable result = usedTable.toBeReleased(new RelatedOrderCompletedStatusCheckService());
+    usedTable.toBeReleased(new RelatedOrderCompletedStatusCheckService());
 
     //then
-    assertThat(result.isEmpty()).isTrue();
+    assertThat(usedTable.isEmpty()).isTrue();
 
   }
 
@@ -74,10 +74,10 @@ class OrderTableTest {
     int toChangeNumber = 3;
 
     //when
-    OrderTable result = twoGuestsTable.changeNumberOfGuests(toChangeNumber);
+    twoGuestsTable.changeNumberOfGuests(toChangeNumber);
 
     //then
-    assertThat(result.getNumberOfGuests()).isEqualTo(new NumberOfGuests(toChangeNumber));
+    assertThat(twoGuestsTable.getNumberOfGuests()).isEqualTo(new NumberOfGuests(toChangeNumber));
   }
 
   @DisplayName("비어있는 테이블은 방문한 손님 수를 변경할 수 없다.")

@@ -24,9 +24,8 @@ public class Product {
     return price;
   }
 
-  public Product changePrice(Price price) {
+  public void changePrice(Price price) {
     this.price = price;
-    return this;
   }
 
   @Override

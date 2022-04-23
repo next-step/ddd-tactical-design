@@ -16,10 +16,10 @@ class ProductTest {
     Price toChangePrice = new Price(BigDecimal.valueOf(2000));
 
     //when
-    Product result = givenProduct.changePrice(toChangePrice);
+    givenProduct.changePrice(toChangePrice);
 
     //then
-    assertThat(result.getPrice()).isEqualTo(toChangePrice);
+    assertThat(givenProduct.getPrice()).isEqualTo(toChangePrice);
   }
 
 }
