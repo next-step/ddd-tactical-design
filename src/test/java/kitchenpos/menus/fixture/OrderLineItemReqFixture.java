@@ -1,7 +1,7 @@
 package kitchenpos.menus.fixture;
 
-import kitchenpos.eatinorders.tobe.domain.dto.OrderLineItemReq;
-import kitchenpos.eatinorders.tobe.domain.dto.MenuRes;
+import kitchenpos.eatinorders.tobe.domain.vo.OrderLineItemReq;
+import kitchenpos.eatinorders.tobe.domain.vo.MenuRes;
 
 public class OrderLineItemReqFixture {
 

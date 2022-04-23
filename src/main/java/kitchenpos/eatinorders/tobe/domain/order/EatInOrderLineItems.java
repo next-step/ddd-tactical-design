@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import kitchenpos.eatinorders.tobe.domain.dto.MenuRes;
-import kitchenpos.eatinorders.tobe.domain.dto.OrderLineItemReq;
+import kitchenpos.eatinorders.tobe.domain.vo.MenuRes;
+import kitchenpos.eatinorders.tobe.domain.vo.OrderLineItemReq;
 import kitchenpos.eatinorders.tobe.domain.domainservice.MenuDomainService;
 
 @Embeddable

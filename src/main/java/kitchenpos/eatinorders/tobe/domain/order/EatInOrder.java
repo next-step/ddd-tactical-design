@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.eatinorders.tobe.domain.dto.OrderLineItemReq;
+import kitchenpos.eatinorders.tobe.domain.vo.OrderLineItemReq;
 import kitchenpos.eatinorders.tobe.domain.domainservice.MenuDomainService;
 import kitchenpos.eatinorders.tobe.domain.domainservice.OrderTableDomainService;
 

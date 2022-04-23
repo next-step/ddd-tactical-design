@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.dto;
+package kitchenpos.eatinorders.tobe.domain.vo;
 
 import java.math.BigDecimal;
 import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
