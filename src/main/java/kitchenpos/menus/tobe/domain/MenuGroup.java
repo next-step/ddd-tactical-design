@@ -5,15 +5,13 @@ import java.util.Objects;
 public class MenuGroup {
 
     private String name;
-    private PurgomalumClient purgomalumClient;
 
     public MenuGroup(String name, PurgomalumClient purgomalumClient) {
-        this.purgomalumClient = purgomalumClient;
-        validateName(name);
+        validateName(name, purgomalumClient);
         this.name = name;
     }
 
-    private void validateName(String name) {
+    private void validateName(String name, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException(name);
 
