@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.doubles.fakerepository.InMemoryMenuGroupRepository;
 import kitchenpos.menus.doubles.fakerepository.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;

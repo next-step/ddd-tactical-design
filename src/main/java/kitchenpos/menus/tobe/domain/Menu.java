@@ -1,6 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.util.UUID;
+import javax.persistence.Id;
+
 public class Menu {
+
+    @Id
+    private final UUID id;
 
     private MenuPrice price;
     private MenuName name;
@@ -10,6 +16,7 @@ public class Menu {
 
     public Menu(MenuPrice price, MenuName name, MenuProducts menuProducts, MenuGroup menuGroup) {
         validateMenuPrice(price, menuProducts);
+        this.id = UUID.randomUUID();
         this.price = price;
         this.name = name;
         this.menuProducts = menuProducts;

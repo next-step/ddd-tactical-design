@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import kitchenpos.Fixtures;
+import java.util.UUID;
 import kitchenpos.fakeobject.FakeMenuPurgomalumClient;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
@@ -30,7 +30,7 @@ class MenuTest {
         void menu_price_over_menu_products_price() {
             MenuPrice price = new MenuPrice(BigDecimal.valueOf(10_000_000));
             MenuName name = new MenuName(new FakeMenuPurgomalumClient(), "메뉴 이름");
-            MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(Fixtures.product(), 2L)));
+            MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(UUID.randomUUID(), BigDecimal.TEN, 2L)));
             MenuGroup menuGroup = new MenuGroup("메뉴 그룹 이름", new FakeMenuPurgomalumClient());
 
             assertThatThrownBy(() -> new Menu(price, name, menuProducts, menuGroup))
@@ -42,7 +42,7 @@ class MenuTest {
         void create_menu() {
             MenuPrice price = new MenuPrice(BigDecimal.TEN);
             MenuName name = new MenuName(new FakeMenuPurgomalumClient(), "메뉴 이름");
-            MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(Fixtures.product(), 2L)));
+            MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(UUID.randomUUID(), BigDecimal.TEN, 2L)));
             MenuGroup menuGroup = new MenuGroup("메뉴 그룹 이름", new FakeMenuPurgomalumClient());
 
             assertAll(
@@ -59,7 +59,7 @@ class MenuTest {
         @DisplayName("메뉴에 속한 상품의 총 금액보다 큰 금액으로 메뉴 금액을 변경할 수 없다.")
         @Test
         void change_price_over_menu_products_price() {
-            MenuPrice price = new MenuPrice(BigDecimal.valueOf(10_000));
+            MenuPrice price = new MenuPrice(BigDecimal.TEN);
 
             Menu menu = menuWithPrice(price);
 
@@ -70,7 +70,7 @@ class MenuTest {
         @DisplayName("메뉴에 속한 상품의 총 금액보다 작으면서 0이상의 금액으로 변경할 수 있다.")
         @Test
         void change_price() {
-            MenuPrice price = new MenuPrice(BigDecimal.valueOf(10_000));
+            MenuPrice price = new MenuPrice(BigDecimal.TEN);
 
             Menu menu = menuWithPrice(price);
 
@@ -103,7 +103,7 @@ class MenuTest {
 
     private Menu menuWithPrice(MenuPrice price) {
         MenuName name = new MenuName(new FakeMenuPurgomalumClient(), "메뉴 이름");
-        MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(Fixtures.product(), 2L)));
+        MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(UUID.randomUUID(), BigDecimal.TEN, 2L)));
         MenuGroup menuGroup = new MenuGroup("메뉴 그룹 이름", new FakeMenuPurgomalumClient());
 
         return new Menu(price, name, menuProducts, menuGroup);
@@ -112,7 +112,7 @@ class MenuTest {
     private Menu menu() {
         MenuPrice price = new MenuPrice(BigDecimal.TEN);
         MenuName name = new MenuName(new FakeMenuPurgomalumClient(), "메뉴 이름");
-        MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(Fixtures.product(), 2L)));
+        MenuProducts menuProducts = new MenuProducts(Arrays.asList(new MenuProduct(UUID.randomUUID(), BigDecimal.TEN, 2L)));
         MenuGroup menuGroup = new MenuGroup("메뉴 그룹 이름", new FakeMenuPurgomalumClient());
 
         return new Menu(price, name, menuProducts, menuGroup);

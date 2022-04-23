@@ -2,27 +2,22 @@ package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import kitchenpos.products.domain.Product;
+import java.util.UUID;
 
 public class MenuProduct {
-    private Product product;
+    private UUID productId;
     private BigDecimal price;
     private long quantity;
 
-    public MenuProduct(Product product, long quantity) {
-        validate(product, quantity);
-        this.product = product;
-        this.price = calcPrice(product, quantity);
+    public MenuProduct(UUID productId, BigDecimal price, long quantity) {
+        validatePrice(productId, quantity);
+        this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
     }
 
-    private BigDecimal calcPrice(Product product, long quantity) {
-        BigDecimal price = product.getPrice().getPrice();
-        return price.multiply(BigDecimal.valueOf(quantity));
-    }
-
-    private void validate(Product product, long quantity) {
-        if (Objects.isNull(product)) {
+    private void validatePrice(UUID productId, long quantity) {
+        if (Objects.isNull(productId)) {
             throw new IllegalArgumentException();
         }
         if (quantity < 0) {
