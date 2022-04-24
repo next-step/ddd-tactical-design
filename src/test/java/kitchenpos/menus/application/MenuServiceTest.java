@@ -1,9 +1,9 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.MenuRepository;
+import kitchenpos.menus.domain.tobe.menugroup.TobeMenuGroupRepository;
 import kitchenpos.products.application.FakeBanWordFilter;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
+    private TobeMenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private BanWordFilter banWordFilter;
     private MenuService menuService;

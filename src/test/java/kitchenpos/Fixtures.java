@@ -1,10 +1,15 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.products.domain.Product;
+import kitchenpos.support.StubBanWordFilter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,9 +44,7 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), name, new StubBanWordFilter(false));
         return menuGroup;
     }
 

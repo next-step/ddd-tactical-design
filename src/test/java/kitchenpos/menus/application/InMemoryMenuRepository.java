@@ -1,9 +1,14 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.MenuRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class InMemoryMenuRepository implements MenuRepository {
@@ -21,6 +26,11 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
+    public Optional<kitchenpos.menus.domain.tobe.Menu> findByUUId(UUID id) {
+        return Optional.empty();
+    }
+
+    @Override
     public List<Menu> findAll() {
         return new ArrayList<>(menus.values());
     }
@@ -28,7 +38,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
-            .stream()
+                .stream()
             .filter(menu -> ids.contains(menu.getId()))
             .collect(Collectors.toList());
     }

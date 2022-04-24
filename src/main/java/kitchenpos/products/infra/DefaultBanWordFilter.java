@@ -12,8 +12,12 @@ import java.net.URI;
 public class DefaultBanWordFilter implements BanWordFilter {
     private final RestTemplate restTemplate;
 
-    public DefaultBanWordFilter(final RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public DefaultBanWordFilter() {
+        this.restTemplate = new RestTemplateBuilder().build();
+    }
+
+    public DefaultBanWordFilter(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     @Override

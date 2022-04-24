@@ -1,10 +1,10 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.MenuRepository;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.TobeMenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.tobe.BanWordFilter;
 import kitchenpos.products.domain.tobe.ProductRepository;
@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
+    private final TobeMenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final BanWordFilter banWordFilter;
 
     public MenuService(
             final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
+            final TobeMenuGroupRepository menuGroupRepository,
             final ProductRepository productRepository,
             final BanWordFilter banWordFilter
     ) {

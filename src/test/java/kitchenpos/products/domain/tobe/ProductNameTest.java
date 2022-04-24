@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class ProductNameTest {
 
@@ -18,11 +19,11 @@ class ProductNameTest {
         assertThat(productName.getName()).isEqualTo(name);
     }
 
-    @DisplayName("ProddctName에는 ban word가 포함될 수 없다")
+    @DisplayName("ProductName에는 ban word가 포함될 수 없다")
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설"})
     void ban_words(String name) {
 
-        new ProductName(name, new StubBanWordFilter(true));
+        assertThatCode(() -> new ProductName(name, new StubBanWordFilter(true)));
     }
 }
