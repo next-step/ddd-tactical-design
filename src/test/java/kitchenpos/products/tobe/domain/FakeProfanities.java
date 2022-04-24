@@ -13,8 +13,6 @@ class FakeProfanities implements Profanities {
         return values.stream()
                 .anyMatch(text::contains);
     }
-
-    ;
 }
 
 
