@@ -1,6 +1,10 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.tobe.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.tobe.domain.OrderLineItems;
+import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderLineItem;
+import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderTable;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
@@ -17,6 +21,7 @@ import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
 import kitchenpos.support.infra.FakePurgomalumClient;
 import kitchenpos.support.infra.profanity.Profanity;
+import kitchenpos.support.vo.Quantity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -106,6 +111,16 @@ public class Fixtures {
         return order;
     }
 
+    public static EatInOrder eatInOrder(final TobeOrderTable orderTable) {
+        return EatInOrder.Of(orderLineItems(), orderTable);
+    }
+
+    public static OrderLineItems orderLineItems() {
+        final TobeMenu menu = tobeMenu();
+        final TobeOrderLineItem orderLineItem = new TobeOrderLineItem(menu, menu.getPrice(), Quantity.One());
+        return new OrderLineItems(Arrays.asList(orderLineItem));
+    }
+
     public static OrderLineItem orderLineItem() {
         final OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(new Random().nextLong());
@@ -162,6 +177,17 @@ public class Fixtures {
                 .price(new MenuPrice(BigDecimal.valueOf(price)))
                 .displayed(new MenuDisplayed(displayed))
                 .menuProducts(menuProducts)
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenu tobeMenu() {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .name(new MenuName("후라이드+후라이드", profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(17_000)))
+                .displayed(new MenuDisplayed(true))
+                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();
         return menu;
