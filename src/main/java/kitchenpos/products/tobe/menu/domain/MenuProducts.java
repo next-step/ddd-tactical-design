@@ -1,10 +1,12 @@
 package kitchenpos.products.tobe.menu.domain;
 
+import kitchenpos.products.tobe.support.Value;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Embeddable
-public class MenuProducts {
+public class MenuProducts extends Value<MenuProducts> {
 
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

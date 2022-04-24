@@ -1,12 +1,14 @@
 package kitchenpos.products.tobe.product.domain;
 
+import kitchenpos.products.tobe.support.Value;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class ProductPrice extends Value<ProductPrice> {
 
     private static final String PRODUCT_PRICE_EMPTY_MESSAGE = "상품의 가격은 비어있을 수 없습니다.";
     private static final String PRODUCT_PRICE_NEGATIVE_MESSAGE = "상품의 가격은 음수일 수 없습니다.";
