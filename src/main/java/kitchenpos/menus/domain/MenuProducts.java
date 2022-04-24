@@ -1,9 +1,7 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.products.domain.tobe.domain.vo.ProductId;
-
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -56,7 +54,7 @@ public class MenuProducts {
     }
 
     public List<ProductId> getProductIds() {
-        return  menuProducts.stream()
+        return menuProducts.stream()
                 .map(TobeMenuProduct::getProductId)
                 .collect(Collectors.toList());
     }

@@ -10,12 +10,12 @@ public class OrderTableSitRequest extends DTO {
     @NotNull(message = "변경하려는 테이블을 입력해 주세요.")
     private final UUID uuid;
 
-    public OrderTableId getId() {
-        return new OrderTableId(uuid);
-    }
-
     public OrderTableSitRequest(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public OrderTableId getId() {
+        return new OrderTableId(uuid);
     }
 
     @Override

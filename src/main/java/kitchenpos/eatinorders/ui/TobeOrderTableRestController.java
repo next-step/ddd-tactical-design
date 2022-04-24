@@ -1,16 +1,12 @@
 package kitchenpos.eatinorders.ui;
 
-import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.application.TobeOrderTableService;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/order-tables")

@@ -4,7 +4,6 @@ import kitchenpos.eatinorders.domain.tobe.domain.vo.TableEmptyStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 
 import java.time.LocalDateTime;
@@ -22,7 +21,7 @@ class EatInOrderTest {
     void create() throws Exception {
         //given
         OrderLineItems orderLineItems = orderLineItems();
-        TobeOrderTable table = tobeOrderTable("1번",2, TableEmptyStatus.OCCUPIED);
+        TobeOrderTable table = tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED);
         //when
         EatInOrder order = EatInOrder.Of(orderLineItems, table);
         //then
@@ -52,7 +51,7 @@ class EatInOrderTest {
     void create_fail_orderTable_empty() throws Exception {
         //given
         final OrderLineItems orderLineItems = orderLineItems();
-        final TobeOrderTable table = tobeOrderTable("1번",0, TableEmptyStatus.EMPTY);
+        final TobeOrderTable table = tobeOrderTable("1번", 0, TableEmptyStatus.EMPTY);
         //when&&then
         assertThatThrownBy(() -> EatInOrder.Of(orderLineItems, table))
                 .isInstanceOf(IllegalStateException.class);

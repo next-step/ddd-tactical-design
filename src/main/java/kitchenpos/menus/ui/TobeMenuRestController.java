@@ -26,7 +26,7 @@ public class TobeMenuRestController {
     @PostMapping
     public ResponseEntity<?> create(@Validated @RequestBody final MenuRegisterRequest request,
                                     final BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return badRequestOf(bindingResult);
         }
         final MenuRegisterResponse response = menuService.create(request);
@@ -37,7 +37,7 @@ public class TobeMenuRestController {
     @PutMapping("/{menuId}/price")
     public ResponseEntity<?> changePrice(@PathVariable final MenuId menuId, @Valid @RequestBody final MenuPriceChangeRequest request,
                                          final BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return badRequestOf(bindingResult);
         }
         request.setMenuId(menuId);
@@ -48,7 +48,7 @@ public class TobeMenuRestController {
     @PutMapping("/{menuId}/display")
     public ResponseEntity<?> display(@Valid @PathVariable final MenuDisplayRequest request,
                                      final BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return badRequestOf(bindingResult);
         }
         final MenuDisplayResponse response = menuService.display(request);
@@ -58,7 +58,7 @@ public class TobeMenuRestController {
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<?> hide(@Valid @PathVariable final MenuHideRequest request,
                                   final BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return badRequestOf(bindingResult);
         }
         final MenuHideResponse response = menuService.hide(request);
@@ -72,6 +72,6 @@ public class TobeMenuRestController {
 
     private ResponseEntity badRequestOf(final BindingResult bindingResult) {
         List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
-        return ResponseEntity.badRequest().body(new ErrorResponse("400","올바르지 않은 메뉴 생성 요청입니다", errors));
+        return ResponseEntity.badRequest().body(new ErrorResponse("400", "올바르지 않은 메뉴 생성 요청입니다", errors));
     }
 }

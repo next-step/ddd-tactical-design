@@ -40,7 +40,7 @@ public class EatInOrderService {
 
         TobeOrderTable table = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-        if(table.isEmpty()) {
+        if (table.isEmpty()) {
             throw new IllegalStateException();
         }
 

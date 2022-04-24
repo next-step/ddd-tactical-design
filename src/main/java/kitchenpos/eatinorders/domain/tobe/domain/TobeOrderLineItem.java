@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.domain.tobe.domain;
 
+import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
-import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 
 import javax.persistence.*;
 

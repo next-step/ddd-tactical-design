@@ -48,27 +48,27 @@ public class OrderStatusChangeRequest {
     }
 
     public boolean isWaiting() {
-        return this.status==OrderStatus.WAITING;
+        return this.status == OrderStatus.WAITING;
     }
 
     public boolean isAccepted() {
-        return this.status==OrderStatus.ACCEPTED;
+        return this.status == OrderStatus.ACCEPTED;
     }
 
     public boolean isServed() {
-        return this.status==OrderStatus.SERVED;
+        return this.status == OrderStatus.SERVED;
     }
 
     public boolean isDelivering() {
-        return this.status==OrderStatus.DELIVERING;
+        return this.status == OrderStatus.DELIVERING;
     }
 
     public boolean isDelivered() {
-        return this.status==OrderStatus.DELIVERED;
+        return this.status == OrderStatus.DELIVERED;
     }
 
     public boolean isCompleted() {
-        return this.status==OrderStatus.COMPLETED;
+        return this.status == OrderStatus.COMPLETED;
     }
 
     @Override

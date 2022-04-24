@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.dto;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderLineItem;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderTableId;
 

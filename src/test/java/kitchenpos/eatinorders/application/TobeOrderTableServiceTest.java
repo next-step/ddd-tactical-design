@@ -71,7 +71,7 @@ class TobeOrderTableServiceTest {
     @Test
     void sit() {
         //given
-        final TobeOrderTable table= orderTableRepository.save(
+        final TobeOrderTable table = orderTableRepository.save(
                 TobeOrderTable.Of(new OrderTableName("1번", profanity))
         );
         final OrderTableSitRequest request = new OrderTableSitRequest(table.getId().getValue());
@@ -90,7 +90,7 @@ class TobeOrderTableServiceTest {
     @Test
     void clear() {
         //given
-        final TobeOrderTable table= orderTableRepository.save(
+        final TobeOrderTable table = orderTableRepository.save(
                 TobeOrderTable.Of(new OrderTableName("1번", profanity), new Guests(2), TableEmptyStatus.OCCUPIED)
         );
         final OrderTableClearRequest request = new OrderTableClearRequest(table.getId().getValue());
@@ -115,7 +115,7 @@ class TobeOrderTableServiceTest {
         orderRepository.save(eatInOrder(table));
         final OrderTableClearRequest request = new OrderTableClearRequest(table.getId().getValue());
         //when&&then
-        assertThatThrownBy(() ->  orderTableService.clear(request))
+        assertThatThrownBy(() -> orderTableService.clear(request))
                 .isInstanceOf(IllegalStateException.class);
     }
 

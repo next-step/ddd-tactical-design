@@ -23,8 +23,7 @@ public class TobeOrderTableService {
 
     public TobeOrderTableService(final TobeOrderTableRepository orderTableRepository,
                                  final EatInOrderRepository orderRepository,
-                                 final Profanity profanity)
-    {
+                                 final Profanity profanity) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
         this.profanity = profanity;
@@ -48,7 +47,7 @@ public class TobeOrderTableService {
         TobeOrderTable table = orderTableRepository.findById(request.getId())
                 .orElseThrow(NoSuchElementException::new);
         List<EatInOrder> orders = orderRepository.findAllByOrderTableId(request.getId());
-        if(orders.stream().anyMatch(o -> !o.isCompleted())) {
+        if (orders.stream().anyMatch(o -> !o.isCompleted())) {
             throw new IllegalStateException();
         }
         return new OrderTableResponse(table.clear());

@@ -2,7 +2,6 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryTobeMenuRepository;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
-import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuRepository;
 import kitchenpos.products.domain.tobe.domain.InMemoryTobeProductRepository;
 import kitchenpos.products.domain.tobe.domain.ProductPriceChangeService;
@@ -20,8 +19,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static kitchenpos.Fixtures.*;
@@ -120,7 +117,7 @@ class TobeProductServiceTest {
     void changePriceInMenu() {
         //given
         final TobeProduct product = productRepository.save(tobeProduct("맛나치킨", 16_000));
-        final TobeMenu menu = menuRepository.save(menu(14_000L, true, tobeMenuProducts(product,1)));
+        final TobeMenu menu = menuRepository.save(menu(14_000L, true, tobeMenuProducts(product, 1)));
         final ProductId productId = menu.getMenuProducts().get(0).getProductId();
         final ProductPriceChangeRequest 가격변경요청 = new ProductPriceChangeRequest(productId, BigDecimal.valueOf(13_000L));
 

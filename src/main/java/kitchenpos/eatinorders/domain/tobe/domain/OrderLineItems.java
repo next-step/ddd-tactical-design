@@ -23,7 +23,7 @@ public class OrderLineItems {
     private List<TobeOrderLineItem> orderLineItems;
 
     public OrderLineItems(List<TobeOrderLineItem> orderLineItems) {
-        if(Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
+        if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.orderLineItems = orderLineItems;
@@ -48,16 +48,16 @@ public class OrderLineItems {
     }
 
     public void validateMenus(List<TobeMenu> menus) {
-        if(menus.size() != orderLineItems.size()) {
+        if (menus.size() != orderLineItems.size()) {
             throw new IllegalArgumentException();
         }
-        for(TobeMenu menu : menus) {
-            if(!menu.isDisplayed()) {
+        for (TobeMenu menu : menus) {
+            if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
             TobeOrderLineItem item = getOrderLineItemByMenuId(menu.getId())
                     .orElseThrow(NoSuchElementException::new);
-            if(!item.getPrice().equals(menu.getPrice())) {
+            if (!item.getPrice().equals(menu.getPrice())) {
                 throw new IllegalStateException();
             }
         }
@@ -68,6 +68,6 @@ public class OrderLineItems {
     }
 
     private Optional<TobeOrderLineItem> getOrderLineItemByMenuId(MenuId id) {
-        return orderLineItems.stream().filter(o->o.getMenuId().equals(id)).findFirst();
+        return orderLineItems.stream().filter(o -> o.getMenuId().equals(id)).findFirst();
     }
 }

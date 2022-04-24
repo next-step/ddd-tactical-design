@@ -25,12 +25,12 @@ public class ChangeNumberOfGuestsRequest {
         return new OrderTableId(id);
     }
 
-    public int getNumberOfGuests() {
-        return numberOfGuests;
-    }
-
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests;
     }
 
     public void setNumberOfGuests(int numberOfGuests) {

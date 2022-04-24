@@ -4,26 +4,26 @@ public enum OrderStatus {
     WAITING, ACCEPTED, SERVED, DELIVERING, DELIVERED, COMPLETED;
 
     public boolean isWaiting() {
-        return this==OrderStatus.WAITING;
+        return this == OrderStatus.WAITING;
     }
 
     public boolean isAccepted() {
-        return this==OrderStatus.ACCEPTED;
+        return this == OrderStatus.ACCEPTED;
     }
 
     public boolean isServed() {
-        return this==OrderStatus.SERVED;
+        return this == OrderStatus.SERVED;
     }
 
     public boolean isDelivering() {
-        return this==OrderStatus.DELIVERING;
+        return this == OrderStatus.DELIVERING;
     }
 
     public boolean isDelivered() {
-        return this==OrderStatus.DELIVERED;
+        return this == OrderStatus.DELIVERED;
     }
 
     public boolean isCompleted() {
-        return this==OrderStatus.COMPLETED;
+        return this == OrderStatus.COMPLETED;
     }
 }

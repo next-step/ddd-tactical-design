@@ -1,7 +1,6 @@
 package kitchenpos.menus.dto;
 
 import kitchenpos.menus.domain.MenuProducts;
-import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
 import kitchenpos.support.dto.DTO;
 
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class MenuRegisterRequest extends DTO {
     @NotBlank(message = "메뉴의 이름은 필수값 입니다")

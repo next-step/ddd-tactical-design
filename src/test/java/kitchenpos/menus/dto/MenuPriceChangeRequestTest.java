@@ -1,6 +1,5 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -13,13 +12,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.math.BigDecimal;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MenuPriceChangeRequestTest {
     private static ValidatorFactory factory;
@@ -38,7 +34,7 @@ class MenuPriceChangeRequestTest {
 
     @DisplayName("메뉴가격 변경을 요청한다")
     @Test
-    void create( ) throws Exception {
+    void create() throws Exception {
         //given
         MenuPriceChangeRequest request = new MenuPriceChangeRequest(BigDecimal.valueOf(17_000));
         //when

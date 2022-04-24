@@ -9,7 +9,7 @@ public class Guests {
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
 
-    protected  Guests() {
+    protected Guests() {
 
     }
 

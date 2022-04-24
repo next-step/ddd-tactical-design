@@ -1,16 +1,12 @@
 package kitchenpos.menus.dto;
 
 import kitchenpos.menus.domain.MenuProducts;
-import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuGroupId;
-import kitchenpos.products.domain.tobe.domain.TobeProduct;
-import kitchenpos.products.domain.tobe.domain.vo.ProductId;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -20,9 +16,10 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.tobeMenuProducts;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MenuRegisterRequestTest {
@@ -42,7 +39,7 @@ class MenuRegisterRequestTest {
 
     @DisplayName("메뉴 생성을 요청한다")
     @Test
-    void create( ) throws Exception {
+    void create() throws Exception {
         //given
         MenuGroupId menuGroupId = new MenuGroupId(UUID.randomUUID());
         MenuRegisterRequest request = new MenuRegisterRequest(
@@ -59,7 +56,7 @@ class MenuRegisterRequestTest {
     }
 
     @DisplayName("이름 없는 메뉴는 생성을 요청할 수 없다")
-    @ValueSource( strings = {" "})
+    @ValueSource(strings = {" "})
     @NullAndEmptySource
     @ParameterizedTest
     void create_fail_blank_name(final String name) throws Exception {
@@ -82,7 +79,7 @@ class MenuRegisterRequestTest {
     }
 
     @DisplayName("메뉴의 가격은 0 이상이어야 합니다")
-    @ValueSource( strings = {"-1"})
+    @ValueSource(strings = {"-1"})
     @NullSource
     @ParameterizedTest
     void create_fail_price(final BigDecimal price) throws Exception {

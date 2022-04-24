@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderLineItem;
 import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderTable;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.Guests;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderTableName;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.TableEmptyStatus;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -25,7 +26,6 @@ import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
 import kitchenpos.support.infra.FakePurgomalumClient;
 import kitchenpos.support.infra.profanity.Profanity;
-import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -208,7 +208,7 @@ public class Fixtures {
                 .name(new MenuName("후라이드+후라이드", profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(17_000)))
                 .displayed(new MenuDisplayed(true))
-                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
+                .menuProducts(tobeMenuProducts("후라이드", 1, 17_000))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();
         return menu;
@@ -220,7 +220,7 @@ public class Fixtures {
                 .name(new MenuName(name, profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(price)))
                 .displayed(new MenuDisplayed(true))
-                .menuProducts(tobeMenuProducts("후라이드",1,price))
+                .menuProducts(tobeMenuProducts("후라이드", 1, price))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();
         return menu;
@@ -231,7 +231,7 @@ public class Fixtures {
                 .name(new MenuName(name, profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(price)))
                 .displayed(new MenuDisplayed(true))
-                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
+                .menuProducts(tobeMenuProducts("후라이드", 1, 17_000))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();
         return menu;
@@ -242,7 +242,7 @@ public class Fixtures {
                 .name(new MenuName(name, profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(price)))
                 .displayed(new MenuDisplayed(displayed))
-                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
+                .menuProducts(tobeMenuProducts("후라이드", 1, 17_000))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();
         return menu;

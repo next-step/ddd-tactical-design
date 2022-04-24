@@ -28,9 +28,6 @@ public class MenuPrice extends ValueObject<MenuPrice> {
     }
 
     public boolean isGreaterThan(BigDecimal price) {
-        if(this.price.compareTo(price) > 0) {
-            return true;
-        }
-        return false;
+        return this.price.compareTo(price) > 0;
     }
 }

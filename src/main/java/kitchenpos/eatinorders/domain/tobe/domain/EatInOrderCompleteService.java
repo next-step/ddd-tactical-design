@@ -25,7 +25,7 @@ public class EatInOrderCompleteService {
                 .complete();
         TobeOrderTable table = orderTableRepository.findById(order.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-        if(!orderRepository.existsByOrderTableAndStatusNot(table, OrderStatus.COMPLETED)) {
+        if (!orderRepository.existsByOrderTableAndStatusNot(table, OrderStatus.COMPLETED)) {
             table.changeNumberOfGuests(new Guests(0));
             table.clear();
         }

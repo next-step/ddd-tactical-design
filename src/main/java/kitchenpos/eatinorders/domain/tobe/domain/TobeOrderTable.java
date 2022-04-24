@@ -37,6 +37,20 @@ public class TobeOrderTable {
 
     }
 
+    public static TobeOrderTable Of(OrderTableName name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
+        return new TobeOrderTable(new OrderTableId(UUID.randomUUID()), name, new Guests(0), TableEmptyStatus.EMPTY);
+    }
+
+    public static TobeOrderTable Of(OrderTableName name, Guests guests, TableEmptyStatus emptyStatus) {
+        if (Objects.isNull(name) || Objects.isNull(guests) || Objects.isNull(emptyStatus)) {
+            throw new IllegalArgumentException();
+        }
+        return new TobeOrderTable(new OrderTableId(UUID.randomUUID()), name, guests, emptyStatus);
+    }
+
     public TobeOrderTable sit() {
         this.emptyStatus = TableEmptyStatus.OCCUPIED;
         return this;
@@ -55,20 +69,6 @@ public class TobeOrderTable {
         }
         this.guests = numberOfGuests;
         return this;
-    }
-
-    public static TobeOrderTable Of (OrderTableName name) {
-        if(Objects.isNull(name)) {
-            throw new IllegalArgumentException();
-        }
-        return new TobeOrderTable(new OrderTableId(UUID.randomUUID()), name, new Guests(0), TableEmptyStatus.EMPTY);
-    }
-
-    public static TobeOrderTable Of (OrderTableName name, Guests guests, TableEmptyStatus emptyStatus) {
-        if(Objects.isNull(name)|| Objects.isNull(guests)||Objects.isNull(emptyStatus)) {
-            throw new IllegalArgumentException();
-        }
-        return new TobeOrderTable(new OrderTableId(UUID.randomUUID()), name, guests, emptyStatus);
     }
 
     public OrderTableId getId() {

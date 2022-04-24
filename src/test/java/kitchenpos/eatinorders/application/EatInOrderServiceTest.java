@@ -57,7 +57,7 @@ class EatInOrderServiceTest {
     @Test
     void createEatInOrder() {
         //given
-        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드",17_000));
+        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
         final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
         //when
@@ -87,7 +87,7 @@ class EatInOrderServiceTest {
     @ValueSource(longs = -1L)
     @ParameterizedTest
     void createEatInOrder(final long quantity) {
-        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드",17_000));
+        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
         final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.of(quantity))), table.getId());
         assertDoesNotThrow(() -> orderService.create(request));
@@ -97,7 +97,7 @@ class EatInOrderServiceTest {
     @Test
     void createEmptyTableEatInOrder() {
         //given
-        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드",17_000));
+        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 0, TableEmptyStatus.EMPTY));
         final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
         //when&&then
@@ -109,7 +109,7 @@ class EatInOrderServiceTest {
     @Test
     void createNotDisplayedMenuOrder() {
         //given
-        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드",17_000, false));
+        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000, false));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
         final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
         //when&&then
@@ -121,8 +121,8 @@ class EatInOrderServiceTest {
     @Test
     void createNotMatchedMenuPriceOrder() {
         //given
-        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드",17_000));
-        final TobeMenu menu2 = tobeMenu(menu.getId(),"후라이드",18_000);
+        final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
+        final TobeMenu menu2 = tobeMenu(menu.getId(), "후라이드", 18_000);
 
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
         final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu2, Quantity.One())), table.getId());
@@ -137,7 +137,7 @@ class EatInOrderServiceTest {
         //given
         final OrderLineItems items = orderLineItems();
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
-        EatInOrder order = orderRepository.save(EatInOrder.Of(items,table));
+        EatInOrder order = orderRepository.save(EatInOrder.Of(items, table));
         OrderStatusChangeRequest request = new OrderStatusChangeRequest(order.getId(), OrderStatus.ACCEPTED, OrderType.EAT_IN);
         //when
         EatInOrderResponse response = orderService.accept(request);
@@ -153,7 +153,7 @@ class EatInOrderServiceTest {
         //given
         final OrderLineItems items = orderLineItems();
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
-        EatInOrder order = orderRepository.save(EatInOrder.Of(items,table, status));
+        EatInOrder order = orderRepository.save(EatInOrder.Of(items, table, status));
         OrderStatusChangeRequest request = new OrderStatusChangeRequest(order.getId(), OrderStatus.ACCEPTED, OrderType.EAT_IN);
         //when&&then
         assertThatThrownBy(() -> orderService.accept(request))

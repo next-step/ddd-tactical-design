@@ -1,15 +1,11 @@
 package kitchenpos.eatinorders.domain.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderId;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderTableId;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -53,28 +49,28 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public static EatInOrder Of (OrderLineItems orderLineItems, TobeOrderTable table) {
-        if(Objects.isNull(orderLineItems)||Objects.isNull(orderLineItems.getOrderLineItems())||orderLineItems.isEmpty()||Objects.isNull(table)) {
+    public static EatInOrder Of(OrderLineItems orderLineItems, TobeOrderTable table) {
+        if (Objects.isNull(orderLineItems) || Objects.isNull(orderLineItems.getOrderLineItems()) || orderLineItems.isEmpty() || Objects.isNull(table)) {
             throw new IllegalArgumentException();
         }
-        if(table.isEmpty()) {
+        if (table.isEmpty()) {
             throw new IllegalStateException();
         }
         return new EatInOrder(
-            new OrderId(UUID.randomUUID()),
-            OrderStatus.WAITING,
-            LocalDateTime.now(),
-            orderLineItems,
-            table,
-            table.getId()
+                new OrderId(UUID.randomUUID()),
+                OrderStatus.WAITING,
+                LocalDateTime.now(),
+                orderLineItems,
+                table,
+                table.getId()
         );
     }
 
-    public static EatInOrder Of (OrderLineItems orderLineItems, TobeOrderTable table, OrderStatus status) {
-        if(Objects.isNull(orderLineItems)||Objects.isNull(orderLineItems.getOrderLineItems())||orderLineItems.isEmpty()||Objects.isNull(table) || Objects.isNull(status)) {
+    public static EatInOrder Of(OrderLineItems orderLineItems, TobeOrderTable table, OrderStatus status) {
+        if (Objects.isNull(orderLineItems) || Objects.isNull(orderLineItems.getOrderLineItems()) || orderLineItems.isEmpty() || Objects.isNull(table) || Objects.isNull(status)) {
             throw new IllegalArgumentException();
         }
-        if(table.isEmpty()) {
+        if (table.isEmpty()) {
             throw new IllegalStateException();
         }
         return new EatInOrder(
@@ -88,7 +84,7 @@ public class EatInOrder {
     }
 
     public EatInOrder accept() {
-        if(!this.status.isWaiting()) {
+        if (!this.status.isWaiting()) {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.ACCEPTED;
@@ -96,7 +92,7 @@ public class EatInOrder {
     }
 
     public EatInOrder serve() {
-        if(!this.status.isAccepted()) {
+        if (!this.status.isAccepted()) {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.SERVED;
@@ -104,7 +100,7 @@ public class EatInOrder {
     }
 
     public EatInOrder complete() {
-        if(!this.status.isServed()) {
+        if (!this.status.isServed()) {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.COMPLETED;

@@ -50,8 +50,8 @@ class TobeOrderTableTest {
         table.clear();
         //then
         assertAll(
-            () -> assertThat(table.isEmpty()).isTrue(),
-            () -> assertThat(table.getNumberOfGuests()).isZero()
+                () -> assertThat(table.isEmpty()).isTrue(),
+                () -> assertThat(table.getNumberOfGuests()).isZero()
         );
     }
 

@@ -21,25 +21,6 @@ public class Quantity {
         return new Quantity(quantity);
     }
 
-    public Quantity add(Quantity num) {
-        if(num.isZero()) {
-            return this;
-        }
-        return new Quantity(this.getValue() + num.getValue());
-    }
-
-    public Quantity multiply(Quantity num) {
-        if(num.isOne()) {
-            return this;
-        }
-        return new Quantity(this.getValue() * num.getValue());
-    }
-
-    public long getValue() {
-        return quantity;
-    }
-
-
     public static Quantity Zero() {
         return new Quantity(0);
     }
@@ -50,6 +31,24 @@ public class Quantity {
 
     public static Quantity Two() {
         return new Quantity(2);
+    }
+
+    public Quantity add(Quantity num) {
+        if (num.isZero()) {
+            return this;
+        }
+        return new Quantity(this.getValue() + num.getValue());
+    }
+
+    public Quantity multiply(Quantity num) {
+        if (num.isOne()) {
+            return this;
+        }
+        return new Quantity(this.getValue() * num.getValue());
+    }
+
+    public long getValue() {
+        return quantity;
     }
 
     public boolean isZero() {
