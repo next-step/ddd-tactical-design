@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.product.domain.ProductName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

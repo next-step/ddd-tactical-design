@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.product.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import org.apache.logging.log4j.util.Strings;
