@@ -44,7 +44,7 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final DisplayedName name, final BigDecimal price, final List<MenuProduct> menuProducts) {
+    private Menu(final DisplayedName name, final BigDecimal price, final List<MenuProduct> menuProducts) {
         this(null, name, new MenuPrice(price), menuProducts);
     }
 
