@@ -42,6 +42,8 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
 
     @Override
     public boolean existsByOrderTableAndStatusNot(TobeOrderTable orderTable, OrderStatus status) {
-        return false;
+        return orders.values()
+                .stream()
+                .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
     }
 }

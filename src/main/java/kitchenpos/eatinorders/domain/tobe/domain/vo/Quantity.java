@@ -1,4 +1,4 @@
-package kitchenpos.support.vo;
+package kitchenpos.eatinorders.domain.tobe.domain.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,14 +10,15 @@ public class Quantity {
 
 
     public Quantity(long quantity) {
-        if(quantity < 0) {
-            throw new IllegalArgumentException("수량은 0 이상이어야 합니다.");
-        }
         this.quantity = quantity;
     }
 
     protected Quantity() {
 
+    }
+
+    public static Quantity of(long quantity) {
+        return new Quantity(quantity);
     }
 
     public Quantity add(Quantity num) {

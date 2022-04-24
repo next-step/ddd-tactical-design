@@ -5,6 +5,9 @@ import kitchenpos.eatinorders.domain.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.tobe.domain.OrderLineItems;
 import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderLineItem;
 import kitchenpos.eatinorders.domain.tobe.domain.TobeOrderTable;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.Guests;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderTableName;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.TableEmptyStatus;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
@@ -13,6 +16,7 @@ import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuDisplayed;
+import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuName;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
 import kitchenpos.products.domain.Product;
@@ -21,7 +25,7 @@ import kitchenpos.products.domain.tobe.domain.vo.ProductName;
 import kitchenpos.products.domain.tobe.domain.vo.ProductPrice;
 import kitchenpos.support.infra.FakePurgomalumClient;
 import kitchenpos.support.infra.profanity.Profanity;
-import kitchenpos.support.vo.Quantity;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -115,6 +119,23 @@ public class Fixtures {
         return EatInOrder.Of(orderLineItems(), orderTable);
     }
 
+    public static TobeOrderTable tobeOrderTable(String name) {
+        return TobeOrderTable.Of(new OrderTableName(name, new FakePurgomalumClient()));
+    }
+
+    public static TobeOrderTable tobeOrderTable(String name, int numberOfGuests, TableEmptyStatus status) {
+        return TobeOrderTable.Of(new OrderTableName(name, new FakePurgomalumClient()), new Guests(numberOfGuests), status);
+    }
+
+    public static OrderLineItems orderLineItems(final TobeMenu menu, final Quantity quantity) {
+        final TobeOrderLineItem orderLineItem = new TobeOrderLineItem(menu, menu.getPrice(), quantity);
+        return new OrderLineItems(Arrays.asList(orderLineItem));
+    }
+
+    public static TobeOrderLineItem tobeOrderLineItem(final TobeMenu menu, final Quantity quantity) {
+        return new TobeOrderLineItem(menu, menu.getPrice(), quantity);
+    }
+
     public static OrderLineItems orderLineItems() {
         final TobeMenu menu = tobeMenu();
         final TobeOrderLineItem orderLineItem = new TobeOrderLineItem(menu, menu.getPrice(), Quantity.One());
@@ -187,6 +208,40 @@ public class Fixtures {
                 .name(new MenuName("후라이드+후라이드", profanity))
                 .price(new MenuPrice(BigDecimal.valueOf(17_000)))
                 .displayed(new MenuDisplayed(true))
+                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenu tobeMenu(MenuId id, String name, long price) {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .id(id)
+                .name(new MenuName(name, profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(price)))
+                .displayed(new MenuDisplayed(true))
+                .menuProducts(tobeMenuProducts("후라이드",1,price))
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenu tobeMenu(String name, long price) {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .name(new MenuName(name, profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(price)))
+                .displayed(new MenuDisplayed(true))
+                .menuProducts(tobeMenuProducts("후라이드",1,17_000))
+                .menuGroup(tobeMenuGroup("메뉴그룹"))
+                .build();
+        return menu;
+    }
+
+    public static TobeMenu tobeMenu(String name, long price, boolean displayed) {
+        final TobeMenu menu = new TobeMenu.Builder()
+                .name(new MenuName(name, profanity))
+                .price(new MenuPrice(BigDecimal.valueOf(price)))
+                .displayed(new MenuDisplayed(displayed))
                 .menuProducts(tobeMenuProducts("후라이드",1,17_000))
                 .menuGroup(tobeMenuGroup("메뉴그룹"))
                 .build();

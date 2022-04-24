@@ -69,6 +69,10 @@ public class TobeMenu {
         this.displayed = new MenuDisplayed(false);
         return this;
     }
+
+    public boolean isDisplayed() {
+        return this.displayed.isDisplayed();
+    }
     private void checkPriceIsGreaterThanSumOfMenuProductAmount(MenuPrice menuPrice) {
         if (menuPrice.isGreaterThan(menuProducts.getSumOfMenuProductAmount())) {
             throw new IllegalArgumentException();

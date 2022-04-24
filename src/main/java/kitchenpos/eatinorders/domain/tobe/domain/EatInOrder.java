@@ -54,7 +54,7 @@ public class EatInOrder {
     }
 
     public static EatInOrder Of (OrderLineItems orderLineItems, TobeOrderTable table) {
-        if(Objects.isNull(orderLineItems)||orderLineItems.isEmpty()||Objects.isNull(table)) {
+        if(Objects.isNull(orderLineItems)||Objects.isNull(orderLineItems.getOrderLineItems())||orderLineItems.isEmpty()||Objects.isNull(table)) {
             throw new IllegalArgumentException();
         }
         if(table.isEmpty()) {
@@ -70,6 +70,47 @@ public class EatInOrder {
         );
     }
 
+    public static EatInOrder Of (OrderLineItems orderLineItems, TobeOrderTable table, OrderStatus status) {
+        if(Objects.isNull(orderLineItems)||Objects.isNull(orderLineItems.getOrderLineItems())||orderLineItems.isEmpty()||Objects.isNull(table) || Objects.isNull(status)) {
+            throw new IllegalArgumentException();
+        }
+        if(table.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        return new EatInOrder(
+                new OrderId(UUID.randomUUID()),
+                status,
+                LocalDateTime.now(),
+                orderLineItems,
+                table,
+                table.getId()
+        );
+    }
+
+    public EatInOrder accept() {
+        if(!this.status.isWaiting()) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.ACCEPTED;
+        return this;
+    }
+
+    public EatInOrder serve() {
+        if(!this.status.isAccepted()) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.SERVED;
+        return this;
+    }
+
+    public EatInOrder complete() {
+        if(!this.status.isServed()) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.COMPLETED;
+        return this;
+    }
+
     public OrderStatus getStatus() {
         return status;
     }
@@ -82,7 +123,23 @@ public class EatInOrder {
         return orderTableId;
     }
 
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
+    }
+
+    public TobeOrderTable getOrderTable() {
+        return orderTable;
+    }
+
     public boolean isCompleted() {
         return status.isCompleted();
+    }
+
+    public int size() {
+        return orderLineItems.size();
     }
 }

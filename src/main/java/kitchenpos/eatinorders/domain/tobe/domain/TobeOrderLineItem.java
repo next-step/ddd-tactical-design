@@ -1,14 +1,11 @@
 package kitchenpos.eatinorders.domain.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.tobe.domain.TobeMenu;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuId;
 import kitchenpos.menus.domain.tobe.domain.vo.MenuPrice;
-import kitchenpos.support.vo.Quantity;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.Quantity;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity
