@@ -1,6 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.product.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.support.Value;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.Column;
@@ -8,7 +9,7 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class ProductName extends Value<ProductName> {
 
     private static final String PRODUCT_NAME_EMPTY_MESSAGE = "상품의 이름은 비어있을 수 없습니다.";
     private static final String PRODUCT_NAME_PROFANITY_MESSAGE = "상품의 이름은 비속어가 포함될 수 없습니다.";

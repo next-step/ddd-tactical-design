@@ -1,10 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.product.domain;
 
 
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -39,4 +38,6 @@ public class Product {
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }
+
+
 }
