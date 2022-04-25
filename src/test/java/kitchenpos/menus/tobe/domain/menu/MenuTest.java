@@ -64,10 +64,10 @@ class MenuTest {
     MenuPrice changePrice = new MenuPrice(BigDecimal.valueOf(500L));
 
     //when
-    Menu result = menu.changePrice(changePrice);
+    menu.changePrice(changePrice);
 
     //then
-    assertThat(result.getPriceValue()).isEqualTo(changePrice.value());
+    assertThat(menu.getPriceValue()).isEqualTo(changePrice.value());
   }
 
   @DisplayName("메뉴에 속한 상품 금액의 합보다 크게 메뉴 가격을 변경할 수 없다.")
@@ -87,10 +87,10 @@ class MenuTest {
     Menu hiddenMenu = buildValidHiddenMenu();
 
     //when
-    Menu result = hiddenMenu.show();
+    hiddenMenu.show();
 
     //then
-    assertThat(result.isDisplayed()).isTrue();
+    assertThat(hiddenMenu.isDisplayed()).isTrue();
   }
 
   @DisplayName("메뉴를 숨길 수 있다.")
@@ -100,10 +100,10 @@ class MenuTest {
     Menu validMenu = buildValidMenu();
 
     //when
-    Menu result = validMenu.hide();
+    validMenu.hide();
 
     //then
-    assertThat(result.isDisplayed()).isFalse();
+    assertThat(validMenu.isDisplayed()).isFalse();
   }
 
 

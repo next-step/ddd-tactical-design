@@ -78,21 +78,18 @@ public class Menu {
     return price.compareTo(menuProductsAmountSum) > 0;
   }
 
-  public Menu changePrice(MenuPrice newPrice) {
+  public void changePrice(MenuPrice newPrice) {
     validateMenuPrice(newPrice);
     price = newPrice;
-    return this;
   }
 
-  public Menu show() {
+  public void show() {
     validateMenuPrice(price);
     displayed = true;
-    return this;
   }
 
-  public Menu hide() {
+  public void hide() {
     displayed = false;
-    return this;
   }
 
   public BigDecimal getPriceValue() {
