@@ -49,4 +49,8 @@ public class OrderLineItem {
     public BigDecimal price() {
         return price.multiply(BigDecimal.valueOf(quantity));
     }
+
+    public UUID getMenuId() {
+        return menuId;
+    }
 }
