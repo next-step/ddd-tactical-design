@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Embeddable
 public class OrderLineItems {
 
-    @Embedded
+    @OneToMany
+    @JoinColumn(name = "order_id")
     private List<OrderLineItem> orderLineItems = new ArrayList<>();
 
     public OrderLineItems(List<OrderLineItem> orderLineItems) {
@@ -30,7 +32,7 @@ public class OrderLineItems {
 
     public BigDecimal totalPrice() {
         return orderLineItems.stream()
-                .map(orderLineItem -> orderLineItem.price())
+                .map(OrderLineItem::price)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
