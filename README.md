@@ -101,7 +101,6 @@
 | 비속어 확인 정책       | ProfanityPolicy         | 비속어를 확인 외부 시스템                |
 | 비속어             | Profanity               | 욕설                            |
 | 상품 가격 변경        | ChangeProductPrice      | 상품 가격을 변경한다.                  |
-| 메뉴에 속한 상품 금액의 합 | TotalProductPriceInMenu | 메뉴에 속하는 전체 상품 금액을 함한 값이다.     |
 | 메뉴              | Menu                    | 상품이 들어가는 메뉴                   |
 
 ### 메뉴
