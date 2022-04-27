@@ -34,6 +34,16 @@ class OrderLineItemTest {
     }
 
     @Test
+    @DisplayName("메뉴가 비전시 상태면 주문 메뉴 생성 불가능")
+    void createOrderLineItemFail03() {
+        Menu menu = newMenu("메뉴", 1000L, newMenuGroup("메뉴그룹"), Collections.singletonList(newMenuProduct("메뉴상품", 1000L)));
+        menu.hideMenu();
+
+        assertThatExceptionOfType(InvalidOrderLineException.class)
+            .isThrownBy(() -> OrderLineItem.create(menu, 5L));
+    }
+
+    @Test
     @DisplayName("주문 메뉴 생성 성공")
     void createOrderLineSuccess() {
         Menu menu = newMenu("메뉴", 1000L, newMenuGroup("메뉴그룹"), Collections.singletonList(newMenuProduct("메뉴상품", 1000L)));

@@ -45,8 +45,8 @@ public class OrderLineItem {
     }
 
     private void validMenu(Menu menu) {
-        if (menu == null) {
-            throw new InvalidOrderLineException();
+        if (menu == null || !menu.isDisplayed()) {
+            throw new InvalidOrderLineException("메뉴가 유효하지 않거나 판매중인 메뉴가 아닙니다.");
         }
     }
 
