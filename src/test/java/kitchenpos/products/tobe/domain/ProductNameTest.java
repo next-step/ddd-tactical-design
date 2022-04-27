@@ -1,12 +1,9 @@
-package kitchenpos.products.tobe.domain.test;
+package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.Profanities;
 import kitchenpos.products.tobe.domain.exception.NameContainedProfanityException;
 import kitchenpos.products.tobe.domain.exception.ProductNameNullException;
-import kitchenpos.products.tobe.domain.fixture.FakeProfanities;
+import kitchenpos.products.fixture.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;

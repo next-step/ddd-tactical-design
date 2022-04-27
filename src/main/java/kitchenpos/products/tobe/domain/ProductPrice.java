@@ -4,28 +4,26 @@ import kitchenpos.products.tobe.domain.exception.NullAndNegativePriceException;
 import kitchenpos.support.domain.Value;
 
 import javax.persistence.Embeddable;
-import java.math.BigDecimal;
 
 @Embeddable
 public class ProductPrice extends Value {
+    private static final int ZERO = 0;
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO;
-
-    private BigDecimal price;
+    private int price;
 
     protected ProductPrice() {/*no-op*/}
 
-    public ProductPrice(BigDecimal price) {
+    public ProductPrice(int price) {
         validate(price);
         this.price = price;
     }
 
-    private void validate(BigDecimal price) {
+    private void validate(int price) {
         if (isNegativeAndNull(price)) throw new NullAndNegativePriceException();
     }
 
-    private boolean isNegativeAndNull(BigDecimal price) {
-        return price == null || price.compareTo(ZERO) < 0;
+    private boolean isNegativeAndNull(int price) {
+        return price < ZERO;
     }
 
 }

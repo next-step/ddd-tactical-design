@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.fixture;
+package kitchenpos.products.fixture;
 
 import kitchenpos.products.tobe.domain.Profanities;
 

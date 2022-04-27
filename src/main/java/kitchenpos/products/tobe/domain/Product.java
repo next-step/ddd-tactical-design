@@ -5,46 +5,45 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 public class Product {
     @Id
     @Column(name = "id", columnDefinition = "varbinary(16)")
-    private UUID productId;
+    private UUID id;
     @Column(name = "name", nullable = false)
     @Embedded
-    private ProductName productName;
+    private ProductName name;
     @Column(name = "price", nullable = false)
     @Embedded
-    private ProductPrice productPrice;
+    private ProductPrice price;
 
     protected Product() {/*no-op*/}
 
-    private Product(UUID productId, ProductName productName, ProductPrice productPrice) {
-        this.productId = productId;
-        this.productName = productName;
-        this.productPrice = productPrice;
+    public Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
     }
 
-    public static Product registerProduct(UUID productId, ProductName name, BigDecimal price) {
-        return new Product(productId, name, new ProductPrice(price));
+    public Product(UUID id, ProductName name, int price) {
+        this(id, name, new ProductPrice(price));
     }
 
-    public void changeProductPrice(BigDecimal price) {
-        this.productPrice = new ProductPrice(price);
+    public void changePrice(int price) {
+        this.price = new ProductPrice(price);
     }
 
     public UUID getId() {
-        return productId;
+        return id;
     }
 
     public ProductName getName() {
-        return productName;
+        return name;
     }
 
     public ProductPrice getPrice() {
-        return productPrice;
+        return price;
     }
 }
