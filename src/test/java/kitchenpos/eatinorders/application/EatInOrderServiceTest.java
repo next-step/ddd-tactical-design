@@ -59,7 +59,7 @@ class EatInOrderServiceTest {
         //given
         final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
-        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
+        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.of(1))), table.getId());
         //when
         final EatInOrderResponse response = orderService.create(request);
         //then
@@ -99,7 +99,7 @@ class EatInOrderServiceTest {
         //given
         final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 0, TableEmptyStatus.EMPTY));
-        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
+        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.of(1))), table.getId());
         //when&&then
         assertThatThrownBy(() -> orderService.create(request))
                 .isInstanceOf(IllegalStateException.class);
@@ -111,7 +111,7 @@ class EatInOrderServiceTest {
         //given
         final TobeMenu menu = menuRepository.save(tobeMenu("후라이드", 17_000, false));
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
-        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.One())), table.getId());
+        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu, Quantity.of(1))), table.getId());
         //when&&then
         assertThatThrownBy(() -> orderService.create(request))
                 .isInstanceOf(IllegalStateException.class);
@@ -125,7 +125,7 @@ class EatInOrderServiceTest {
         final TobeMenu menu2 = tobeMenu(menu.getId(), "후라이드", 18_000);
 
         final TobeOrderTable table = orderTableRepository.save(tobeOrderTable("1번", 2, TableEmptyStatus.OCCUPIED));
-        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu2, Quantity.One())), table.getId());
+        final EatInOrderRegisterRequest request = new EatInOrderRegisterRequest(Arrays.asList(tobeOrderLineItem(menu2, Quantity.of(1))), table.getId());
         //when&&then
         assertThatThrownBy(() -> orderService.create(request))
                 .isInstanceOf(IllegalStateException.class);

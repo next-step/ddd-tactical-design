@@ -138,7 +138,7 @@ public class Fixtures {
 
     public static OrderLineItems orderLineItems() {
         final TobeMenu menu = tobeMenu();
-        final TobeOrderLineItem orderLineItem = new TobeOrderLineItem(menu, menu.getPrice(), Quantity.One());
+        final TobeOrderLineItem orderLineItem = new TobeOrderLineItem(menu, menu.getPrice(), Quantity.of(1));
         return new OrderLineItems(Arrays.asList(orderLineItem));
     }
 
