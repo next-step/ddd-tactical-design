@@ -30,18 +30,18 @@ public class OrderLineItem {
     private Menu menu;
 
     @Embedded
-    private Stock quantity;
+    private Quantity quantity;
 
     protected OrderLineItem() { }
 
-    private OrderLineItem(Menu menu, Stock quantity) {
+    private OrderLineItem(Menu menu, Quantity quantity) {
         validMenu(menu);
         this.menu = menu;
         this.quantity = quantity;
     }
 
     private OrderLineItem(Menu menu, Long quantity) {
-        this(menu, new Stock(quantity));
+        this(menu, new Quantity(quantity));
     }
 
     private void validMenu(Menu menu) {
@@ -50,7 +50,7 @@ public class OrderLineItem {
         }
     }
 
-    public static OrderLineItem create(Menu menu, Stock quantity) {
+    public static OrderLineItem create(Menu menu, Quantity quantity) {
         return new OrderLineItem(menu, quantity);
     }
 
