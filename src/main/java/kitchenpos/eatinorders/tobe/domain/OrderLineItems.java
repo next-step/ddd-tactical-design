@@ -37,6 +37,10 @@ public class OrderLineItems {
                     .sum();
     }
 
+    public boolean hasNegativeQuantity() {
+        return items.stream().anyMatch(item -> item.getQuantity() < 0);
+    }
+
     public List<OrderLineItem> getItems() {
         return items;
     }
