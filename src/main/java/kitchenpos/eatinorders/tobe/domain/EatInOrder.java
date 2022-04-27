@@ -16,11 +16,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.util.StringUtils;
 
 @Table(name = "orders")
 @Entity
-public class Order {
+public class EatInOrder {
 
     @Id
     @Column(name = "id", columnDefinition = "varbinary(16)")
@@ -29,7 +28,7 @@ public class Order {
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderType type;
+    private final OrderType type = OrderType.EAT_IN;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -41,9 +40,6 @@ public class Order {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
         name = "order_table_id",
@@ -52,28 +48,19 @@ public class Order {
     )
     private OrderTable orderTable;
 
-    protected Order() { }
+    protected EatInOrder() { }
 
-    public Order(OrderLineItems orderLineItems, String deliveryAddress) {
-        validDeliveryOrder(orderLineItems, deliveryAddress);
-        this.type = OrderType.DELIVERY;
-        this.status = OrderStatus.WAITING;
+    public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
         this.orderLineItems = orderLineItems;
-        this.deliveryAddress = deliveryAddress;
+        this.orderTable = orderTable;
     }
 
-    public static Order createDeliveryOrder(OrderLineItems orderLineItems, String deliveryAddress) {
-        return new Order(orderLineItems, deliveryAddress);
-    }
-
-    private void validDeliveryOrder(OrderLineItems orderLineItems, String deliveryAddress) {
-        if (orderLineItems.hasNegativeQuantity()) {
-            throw new IllegalArgumentException("배달 주문의 각 주문 메뉴당 주문 수량은 최소 0개 이상이어야 합니다.");
+    public void accept() {
+        if (OrderStatus.WAITING != status) {
+            throw new IllegalStateException("대기 상태의 주문만 접수할 수 있습니다.");
         }
 
-        if (StringUtils.isBlank(deliveryAddress)) {
-            throw new IllegalArgumentException("배달 주문엔 배달주소가 반드시 포함되어야 합니다.");
-        }
+        this.status = OrderStatus.ACCEPTED;
     }
 
     public UUID getId() {
@@ -94,10 +81,6 @@ public class Order {
 
     public OrderLineItems getOrderLineItems() {
         return orderLineItems;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
     }
 
     public OrderTable getOrderTable() {
