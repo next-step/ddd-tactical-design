@@ -5,6 +5,9 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Quantity {
+    private final int ZERO = 0;
+    private final int ONE = 1;
+
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
@@ -19,18 +22,6 @@ public class Quantity {
 
     public static Quantity of(long quantity) {
         return new Quantity(quantity);
-    }
-
-    public static Quantity Zero() {
-        return new Quantity(0);
-    }
-
-    public static Quantity One() {
-        return new Quantity(1);
-    }
-
-    public static Quantity Two() {
-        return new Quantity(2);
     }
 
     public Quantity add(Quantity num) {
@@ -52,11 +43,11 @@ public class Quantity {
     }
 
     public boolean isZero() {
-        return this.quantity == 0;
+        return this.quantity == ZERO;
     }
 
     public boolean isOne() {
-        return this.quantity == 1;
+        return this.quantity == ONE;
     }
 
     @Override
