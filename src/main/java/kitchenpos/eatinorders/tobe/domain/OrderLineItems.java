@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import org.springframework.util.CollectionUtils;
 
 @Embeddable
 public class OrderLineItems {
@@ -23,6 +24,10 @@ public class OrderLineItems {
     protected OrderLineItems() { }
 
     public OrderLineItems(final List<OrderLineItem> items) {
+        if (CollectionUtils.isEmpty(items)) {
+            throw new IllegalArgumentException("주문 메뉴는 반드시 1개 이상 포함되어야 합니다.");
+        }
+
         this.items = Collections.unmodifiableList(new ArrayList<>(items));
     }
 
