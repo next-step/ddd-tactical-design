@@ -63,7 +63,7 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrderResponse complete(final OrderStatusChangeRequest request) {
-        return orderCompleteService.complete(request);
+        return new EatInOrderResponse(orderCompleteService.complete(request));
     }
 
     @Transactional(readOnly = true)

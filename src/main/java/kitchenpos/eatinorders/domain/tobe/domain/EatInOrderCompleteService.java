@@ -19,7 +19,7 @@ public class EatInOrderCompleteService {
         this.orderTableRepository = orderTableRepository;
     }
 
-    public EatInOrderResponse complete(OrderStatusChangeRequest request) {
+    public EatInOrder complete(OrderStatusChangeRequest request) {
         EatInOrder order = orderRepository.findById(request.getOrderId())
                 .orElseThrow(NoSuchElementException::new)
                 .complete();
@@ -29,6 +29,6 @@ public class EatInOrderCompleteService {
             table.changeNumberOfGuests(new Guests(0));
             table.clear();
         }
-        return new EatInOrderResponse(order);
+        return order;
     }
 }
