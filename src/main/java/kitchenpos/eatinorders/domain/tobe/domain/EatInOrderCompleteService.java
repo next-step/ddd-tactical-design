@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.domain.tobe.domain;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.tobe.domain.vo.Guests;
+import kitchenpos.eatinorders.domain.tobe.domain.vo.OrderId;
 import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.dto.OrderStatusChangeRequest;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class EatInOrderCompleteService {
         this.orderTableRepository = orderTableRepository;
     }
 
-    public EatInOrder complete(OrderStatusChangeRequest request) {
-        EatInOrder order = orderRepository.findById(request.getOrderId())
+    public EatInOrder complete(OrderId orderId) {
+        EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new)
                 .complete();
         TobeOrderTable table = orderTableRepository.findById(order.getOrderTableId())
