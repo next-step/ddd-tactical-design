@@ -35,14 +35,26 @@ class MenuTest {
 
     @Test
     void Menu_가격이_MenuProducts_금액_합보다_크면_NotDisplayedMenu_된다() {
-
         //given
         //when
         final Menu menu = createMenu(17_000);
 
         //then
         assertThat(menu.isDisplayed()).isFalse();
+    }
 
+    @Test
+    void 메뉴_가격을_변경할수있다() {
+        //given
+        final BigDecimal priceToBeChanged = BigDecimal.valueOf(18_000);
+        final Menu menu = createMenu(17_000);
+
+        //when
+        menu.changePrice(new MenuPrice(priceToBeChanged));
+
+        //then
+        MenuPrice menuPrice = menu.getPrice();
+        assertThat(priceToBeChanged).isEqualTo(menuPrice.getPrice());
     }
 
     private Menu createMenu(final long price) {

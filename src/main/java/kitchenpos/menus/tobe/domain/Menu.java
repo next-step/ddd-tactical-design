@@ -11,7 +11,7 @@ public class Menu {
 
     private final DisplayedName displayedName;
 
-    private final MenuPrice price;
+    private MenuPrice price;
 
     private final MenuGroup menuGroup;
     private final MenuProducts menuProducts;
@@ -32,6 +32,11 @@ public class Menu {
         checkDisplayPossible(price, menuProducts);
     }
 
+    public void changePrice(MenuPrice menuPrice) {
+        checkDisplayPossible(menuPrice, this.menuProducts);
+        this.price = menuPrice;
+    }
+
     private void checkDisplayPossible(final MenuPrice price, final MenuProducts menuProducts) {
         final int menuProductsPriceSum = menuProducts.sum();
 
@@ -43,5 +48,9 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public MenuPrice getPrice() {
+        return price;
     }
 }

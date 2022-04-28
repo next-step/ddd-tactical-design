@@ -21,6 +21,10 @@ public class MenuPrice {
         return this.price.intValue() > menuProductsPriceSum;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
