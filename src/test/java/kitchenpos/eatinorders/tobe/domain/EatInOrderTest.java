@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static kitchenpos.TobeFixtures.newOrder;
@@ -15,6 +16,7 @@ import static kitchenpos.TobeFixtures.newOrderLineItem;
 import static kitchenpos.TobeFixtures.newOrderLineItems;
 import static kitchenpos.TobeFixtures.newOrderTable;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 class EatInOrderTest {
@@ -27,6 +29,12 @@ class EatInOrderTest {
         OrderLineItem item2 = newOrderLineItem("item2", 2000L, 2L);
         OrderLineItem item3 = newOrderLineItem("item3", 2000L, 3L);
         orderLineItems = newOrderLineItems(item1, item2, item3);
+    }
+
+    @Test
+    @DisplayName("주문 테이블 ID가 없으면 생성 실패")
+    void createOrderFail() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new EatInOrder(orderLineItems, null));
     }
 
     @ParameterizedTest
