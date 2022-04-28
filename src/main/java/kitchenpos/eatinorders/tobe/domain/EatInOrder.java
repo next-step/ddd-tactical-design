@@ -53,6 +53,7 @@ public class EatInOrder {
     public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
         this.orderLineItems = orderLineItems;
         this.orderTable = orderTable;
+        this.status = OrderStatus.WAITING;
     }
 
     public void accept() {

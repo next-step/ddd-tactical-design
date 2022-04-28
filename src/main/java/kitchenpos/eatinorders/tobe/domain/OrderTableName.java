@@ -18,7 +18,7 @@ public class OrderTableName {
     }
 
     public static OrderTableName create(String name) {
-        if (StringUtils.isBlank(name )) {
+        if (StringUtils.isBlank(name)) {
             throw new InvalidNameException("주문 메뉴명은 비워둘 수 없습니다.");
         }
 

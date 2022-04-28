@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
@@ -35,6 +36,10 @@ public class TobeFixtures {
 
     public static Menu newMenu(String name, Long price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
         return Menu.create(name, purgomalumClient, price, menuGroup, true, menuProducts);
+    }
+
+    public static OrderTable newOrderTable(String name) {
+        return OrderTable.create(name);
     }
 
     public static OrderLineItem newOrderLineItem(String name, Long price, Long quantity) {
