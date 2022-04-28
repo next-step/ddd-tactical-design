@@ -1,11 +1,16 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "order_table")
@@ -28,6 +33,15 @@ public class OrderTable {
 
     @Column(name = "empty", nullable = false)
     private boolean empty;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "order_table_id",
+            nullable = false,
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+    )
+    private List<EatInOrder> eatInOrders;
 
     protected OrderTable() { }
 
@@ -70,7 +84,16 @@ public class OrderTable {
             throw new IllegalStateException("이미 비어 있는 테이블입니다.");
         }
 
+        numberOfGuests = 0;
         empty = true;
+    }
+
+    public boolean isCompletedAllOrders() {
+        return eatInOrders.stream().allMatch(EatInOrder::isCompletedOrder);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -83,5 +106,9 @@ public class OrderTable {
 
     public boolean isEmpty() {
         return empty;
+    }
+
+    public List<EatInOrder> getEatInOrders() {
+        return eatInOrders;
     }
 }

@@ -7,15 +7,13 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
+import org.springframework.data.annotation.Transient;
 
 @Table(name = "orders")
 @Entity
@@ -40,28 +38,51 @@ public class EatInOrder {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    @Transient
+    private UUID orderTableId;
 
     protected EatInOrder() { }
 
-    public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
+    public EatInOrder(OrderLineItems orderLineItems, UUID orderTableId) {
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
         this.status = OrderStatus.WAITING;
     }
 
     public void accept() {
         if (OrderStatus.WAITING != status) {
-            throw new IllegalStateException("대기 상태의 주문만 접수할 수 있습니다.");
+            throw new IllegalStateException("대기 상태의 주문만 접수 상태로 변경할 수 있습니다.");
         }
 
         this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (OrderStatus.ACCEPTED != status) {
+            throw new IllegalStateException("접수 상태의 주문만 서빙 상태로 변경할 수 있습니다.");
+        }
+
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void complete(OrderTable orderTable) {
+        if (orderTable == null || !orderTableId.equals(orderTable.getId())) {
+            throw new IllegalStateException("유효하지 않은 주문 테이블입니다.");
+        }
+
+        if (status != OrderStatus.SERVED) {
+            throw new IllegalStateException("서빙 상태의 주문만 완료 상태로 변경할 수 있습니다.");
+        }
+
+        status = OrderStatus.COMPLETED;
+
+        if (orderTable.isCompletedAllOrders()) {
+            orderTable.clear();
+        }
+    }
+
+    public boolean isCompletedOrder() {
+        return OrderStatus.COMPLETED == this.status;
     }
 
     public UUID getId() {
@@ -84,8 +105,8 @@ public class EatInOrder {
         return orderLineItems;
     }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
+    public UUID getOrderTableId() {
+        return orderTableId;
     }
 
     @PrePersist

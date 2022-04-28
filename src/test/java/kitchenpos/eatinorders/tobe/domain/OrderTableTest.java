@@ -113,6 +113,10 @@ class OrderTableTest {
         orderTable.sit();
 
         // when
-        assertThatCode(orderTable::clear).doesNotThrowAnyException();
+        orderTable.clear();
+
+        // then
+        assertThat(orderTable.isEmpty()).isTrue();
+        assertThat(orderTable.getNumberOfGuests()).isZero();
     }
 }

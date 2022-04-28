@@ -3,16 +3,18 @@ package kitchenpos;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class TobeFixtures {
 
@@ -26,10 +28,6 @@ public class TobeFixtures {
         return MenuProduct.create(newProduct(name, price), 1L);
     }
 
-    public static MenuProducts menuProducts(MenuProduct... menuProducts) {
-        return MenuProducts.from(Arrays.asList(menuProducts));
-    }
-
     public static MenuGroup newMenuGroup(String name) {
         return MenuGroup.create(name, purgomalumClient);
     }
@@ -39,7 +37,20 @@ public class TobeFixtures {
     }
 
     public static OrderTable newOrderTable(String name) {
-        return OrderTable.create(name);
+        return newOrderTable(name, Collections.emptyList());
+    }
+
+    public static OrderTable newOrderTable(String name, List<EatInOrder> eatInOrders) {
+        OrderTable orderTable = OrderTable.create(name);
+        ReflectionTestUtils.setField(orderTable, "id", UUID.randomUUID());
+
+        eatInOrders.forEach(order -> ReflectionTestUtils.setField(order, "orderTableId", orderTable.getId()));
+
+        ReflectionTestUtils.setField(orderTable, "eatInOrders", eatInOrders);
+
+        orderTable.sit();
+        orderTable.changeNumberOfGuests(5);
+        return orderTable;
     }
 
     public static OrderLineItem newOrderLineItem(String name, Long price, Long quantity) {
@@ -48,5 +59,10 @@ public class TobeFixtures {
 
     public static OrderLineItems newOrderLineItems(OrderLineItem... items) {
         return new OrderLineItems(Arrays.asList(items));
+    }
+
+    public static EatInOrder newOrder() {
+        OrderLineItems orderLineItems = newOrderLineItems(newOrderLineItem("item", 1000L, 1L));
+        return new EatInOrder(orderLineItems, UUID.randomUUID());
     }
 }
