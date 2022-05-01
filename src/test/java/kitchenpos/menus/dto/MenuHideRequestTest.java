@@ -35,7 +35,7 @@ class MenuHideRequestTest {
 
     @DisplayName("메뉴 숨김을 요청한다")
     @Test
-    void create( ) throws Exception {
+    void create() throws Exception {
         //given
         MenuHideRequest request = new MenuHideRequest(new MenuId(UUID.randomUUID()));
         //when

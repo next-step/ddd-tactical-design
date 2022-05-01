@@ -3,7 +3,6 @@ package kitchenpos.menus.dto;
 import kitchenpos.menus.domain.tobe.domain.TobeMenuGroup;
 import kitchenpos.support.dto.DTO;
 
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public class MenuGroupDto extends DTO {

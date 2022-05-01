@@ -25,10 +25,10 @@ public class TobeMenuGroupRestController {
 
     @PostMapping
     public ResponseEntity<?> create(@Validated @RequestBody final MenuGroupRegisterRequest request,
-                                                            BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(new ErrorResponse("400","올바르지 않은 메뉴그룹 생성 요청입니다", errors));
+            return ResponseEntity.badRequest().body(new ErrorResponse("400", "올바르지 않은 메뉴그룹 생성 요청입니다", errors));
         }
         final MenuGroupRegisterResponse response = menuGroupService.create(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))

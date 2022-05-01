@@ -30,9 +30,10 @@ class MenuGroupRegisterRequestTest {
     public static void close() {
         factory.close();
     }
+
     @DisplayName("메뉴그룹 생성을 요청한다")
     @Test
-    void create( ) throws Exception {
+    void create() throws Exception {
         //given
         MenuGroupRegisterRequest request = new MenuGroupRegisterRequest("맛있는치킨들");
         //when
@@ -42,7 +43,7 @@ class MenuGroupRegisterRequestTest {
     }
 
     @DisplayName("이름 없는 메뉴그룹은 생성을 요청할 수 없다")
-    @ValueSource( strings = {" "})
+    @ValueSource(strings = {" "})
     @NullAndEmptySource
     @ParameterizedTest
     void create_fail_blank_name(final String name) throws Exception {

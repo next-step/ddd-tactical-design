@@ -35,7 +35,7 @@ class MenuDisplayRequestTest {
 
     @DisplayName("메뉴 전시를 요청한다")
     @Test
-    void create( ) throws Exception {
+    void create() throws Exception {
         //given
         MenuDisplayRequest request = new MenuDisplayRequest(new MenuId(UUID.randomUUID()));
         //when
