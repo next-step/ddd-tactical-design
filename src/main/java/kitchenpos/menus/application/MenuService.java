@@ -5,8 +5,8 @@ import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuProductDto;
 import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.ui.dto.MenuProductRequest;
 import kitchenpos.menus.ui.dto.MenuProductRequests;
 import kitchenpos.menus.ui.dto.MenuRequest;
 import kitchenpos.products.domain.ProductRepository;
@@ -50,7 +50,7 @@ public class MenuService {
         final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.getMenuProductRequests()
                         .stream()
-                        .map(MenuProductRequest::getProductId)
+                        .map(MenuProductDto::getProductId)
                         .collect(Collectors.toList())
         );
         MenuProducts menuProducts = new MenuProducts(menuProductRequests.getMenuProductRequests(), products, price);

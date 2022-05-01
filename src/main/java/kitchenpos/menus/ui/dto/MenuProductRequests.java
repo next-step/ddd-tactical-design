@@ -1,7 +1,10 @@
 package kitchenpos.menus.ui.dto;
 
+import kitchenpos.menus.tobe.domain.MenuProductDto;
+
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MenuProductRequests {
 
@@ -15,8 +18,10 @@ public class MenuProductRequests {
         this.menuProductRequests = menuProductRequests;
     }
 
-    public List<MenuProductRequest> getMenuProductRequests() {
-        return menuProductRequests;
+    public List<MenuProductDto> getMenuProductRequests() {
+        return menuProductRequests.stream()
+                .map(menuProductRequest -> new MenuProductDto(menuProductRequest.getProductId(), menuProductRequest.getQuantity()))
+                .collect(Collectors.toList());
     }
 
     public int size() {
