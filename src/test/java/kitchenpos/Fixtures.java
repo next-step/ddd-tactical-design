@@ -1,11 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.ui.dto.MenuProductRequest;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -110,11 +106,11 @@ public class Fixtures {
         return new Product(new FakePurgomalumClient(), name, BigDecimal.valueOf(price));
     }
 
-    public static MenuProductRequest menuProductRequest() {
-        return menuProductRequest(product().getId(), 1L);
+    public static MenuProductDto menuProductDto() {
+        return menuProductDto(product().getId(), 1L);
     }
 
-    public static MenuProductRequest menuProductRequest(UUID productId, long quantity) {
-        return new MenuProductRequest(productId, quantity);
+    public static MenuProductDto menuProductDto(UUID productId, long quantity) {
+        return new MenuProductDto(productId, quantity);
     }
 }
