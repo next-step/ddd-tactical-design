@@ -7,7 +7,6 @@ import kitchenpos.products.tobe.domain.Product;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -33,7 +32,7 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    public Menu() {
+    protected Menu() {
     }
 
     public Menu(PurgomalumClient purgomalumClient, UUID id, String name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
@@ -46,20 +45,12 @@ public class Menu {
     }
 
     public Menu(PurgomalumClient purgomalumClient, UUID id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
-        this.id = id;
-        this.name = new MenuName(purgomalumClient, name);
-        this.price = new Price(price);
-        this.menuGroupId = menuGroupId;
-        this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this(purgomalumClient, id, name, new Price(price), menuGroupId, displayed, menuProducts);
     }
 
     public Menu(PurgomalumClient purgomalumClient, String name, BigDecimal price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
-        this.name = new MenuName(purgomalumClient, name);
-        this.price = new Price(price);
-        this.menuGroupId = menuGroupId;
-        this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this(purgomalumClient, null, name, price, menuGroupId, displayed, menuProducts);
+
     }
 
     public UUID getId() {
@@ -87,34 +78,19 @@ public class Menu {
     }
 
     public void changePrice(Price price, List<Product> findProducts) {
-        for (final MenuProduct menuProduct : menuProducts.getMenuProducts()) {
-            BigDecimal productPrice = getMatchedProduct(findProducts, menuProduct).getPrice();
-            final Price sum = new Price(productPrice.multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
-            if (price.compareTo(sum) > 0) {
-                throw new IllegalArgumentException("메뉴의 가격은 상품가격의 총합보다 작거나 같아야합니다.");
-            }
+        if (menuProducts.isExpensiveMenuPrice(price, findProducts)) {
+            throw new IllegalArgumentException("메뉴의 가격은 상품가격의 총합보다 작거나 같아야합니다.");
         }
 
         this.price = price;
     }
 
     public void show(List<Product> findProducts) {
-        for (final MenuProduct menuProduct : menuProducts.getMenuProducts()) {
-            BigDecimal productPrice = getMatchedProduct(findProducts, menuProduct).getPrice();
-            final Price sum = new Price(productPrice.multiply(BigDecimal.valueOf(menuProduct.getQuantity())));
-            if (price.compareTo(sum) > 0) {
-                throw new IllegalStateException("메뉴의 가격이 상품의 가격보다 비쌀경우 메뉴를 노출할수 없습니다.");
-            }
+        if (menuProducts.isExpensiveMenuPrice(price, findProducts)) {
+            throw new IllegalStateException("메뉴의 가격이 상품의 가격보다 비쌀경우 메뉴를 노출할수 없습니다.");
         }
 
         this.displayed = true;
-    }
-
-    private Product getMatchedProduct(List<Product> findProducts, MenuProduct menuProduct) {
-        return findProducts.stream()
-                .filter(product -> product.isSameProductId(menuProduct.getProductId()))
-                .findAny()
-                .orElseThrow(NoSuchElementException::new);
     }
 
     public void hide() {
