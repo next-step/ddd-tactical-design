@@ -33,12 +33,24 @@ public class Price {
         return price;
     }
 
-    public static Price add(Price totalPrice, Price addPrice) {
-        return new Price(totalPrice.price.add(addPrice.price));
+    public Price add(Price addPrice) {
+        return new Price(this.price.add(addPrice.price));
     }
 
     public int compareTo(Price totalPrice) {
         return price.compareTo(totalPrice.price);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price1 = (Price) o;
+        return Objects.equals(price, price1.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(price);
+    }
 }
