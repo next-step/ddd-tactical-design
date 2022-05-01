@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_group")
@@ -15,7 +14,7 @@ public class MenuGroup {
     @Embedded
     private MenuGroupName name;
 
-    public MenuGroup() {
+    protected MenuGroup() {
     }
 
     public MenuGroup(String name) {
@@ -23,16 +22,8 @@ public class MenuGroup {
     }
 
     public MenuGroup(UUID id, String name) {
-        validation(name);
-
         this.id = id;
         this.name = new MenuGroupName(name);
-    }
-
-    private void validation(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException("메뉴그룹의 이름은 Null또는 공백이 될수 없습니다.");
-        }
     }
 
     public UUID getId() {
