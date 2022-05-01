@@ -1,7 +1,8 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.ui.dto.MenuGroupRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,12 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create() {
-        final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
+        final MenuGroupRequest expected = createMenuGroupRequest("두마리메뉴");
         final MenuGroup actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
 
@@ -41,9 +42,9 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
+        final MenuGroupRequest expected = createMenuGroupRequest(name);
         assertThatThrownBy(() -> menuGroupService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -54,9 +55,8 @@ class MenuGroupServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
+    private MenuGroupRequest createMenuGroupRequest(final String name) {
+        final MenuGroupRequest menuGroup = new MenuGroupRequest(name);
         return menuGroup;
     }
 }

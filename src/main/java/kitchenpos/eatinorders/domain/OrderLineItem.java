@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.tobe.domain.Menu;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,9 +16,9 @@ public class OrderLineItem {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "varbinary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
+            name = "menu_id",
+            columnDefinition = "varbinary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
     )
     private Menu menu;
 
