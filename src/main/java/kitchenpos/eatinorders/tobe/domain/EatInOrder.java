@@ -44,13 +44,13 @@ public class EatInOrder {
     protected EatInOrder() { }
 
     public EatInOrder(OrderLineItems orderLineItems, UUID orderTableId) {
+        validCreateOrder(orderTableId);
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
         this.status = OrderStatus.WAITING;
-        validCreateOrder();
     }
 
-    private void validCreateOrder() {
+    private void validCreateOrder(UUID orderTableId) {
         if (orderTableId == null) {
             throw new IllegalArgumentException("주문을 생성하기 위해선 주문 테이블 정보가 필요합니다.");
         }
