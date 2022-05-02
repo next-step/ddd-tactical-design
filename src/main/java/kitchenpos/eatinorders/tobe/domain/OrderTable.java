@@ -80,10 +80,6 @@ public class OrderTable {
     }
 
     public void clear() {
-        if (empty) {
-            throw new IllegalStateException("이미 비어 있는 테이블입니다.");
-        }
-
         numberOfGuests = 0;
         empty = true;
     }

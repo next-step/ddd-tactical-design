@@ -96,21 +96,10 @@ class OrderTableTest {
     }
 
     @Test
-    @DisplayName("사용 중이 아닌 테이블은 정리 불가능")
-    void clearFail() {
-        // given
-        OrderTable orderTable = OrderTable.create("name");
-
-        // when
-        assertThatIllegalStateException().isThrownBy(orderTable::clear);
-    }
-
-    @Test
     @DisplayName("사용 중인 테이블은 정리 가능")
     void clearSuccess() {
         // given
         OrderTable orderTable = OrderTable.create("name");
-        orderTable.sit();
 
         // when
         orderTable.clear();
