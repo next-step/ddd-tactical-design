@@ -17,8 +17,6 @@ import kitchenpos.products.infra.PurgomalumClient;
 
 public class Fixtures {
 
-    private static final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
-
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static Menu menu() {
@@ -129,21 +127,5 @@ public class Fixtures {
         product.setName(name);
         product.setPrice(BigDecimal.valueOf(price));
         return product;
-    }
-
-    public static kitchenpos.products.tobe.domain.Product newProduct(String name, long price) {
-        return kitchenpos.products.tobe.domain.Product.of(name, price, purgomalumClient);
-    }
-
-    public static kitchenpos.menus.tobe.domain.MenuProduct newMenuProduct(String name, long price) {
-        return kitchenpos.menus.tobe.domain.MenuProduct.create(newProduct(name, price), 1L);
-    }
-
-    public static MenuProducts menuProducts(kitchenpos.menus.tobe.domain.MenuProduct... menuProducts) {
-        return MenuProducts.from(Arrays.asList(menuProducts));
-    }
-
-    public static kitchenpos.menus.tobe.domain.MenuGroup newMenuGroup(String name) {
-        return kitchenpos.menus.tobe.domain.MenuGroup.create(name, purgomalumClient);
     }
 }
