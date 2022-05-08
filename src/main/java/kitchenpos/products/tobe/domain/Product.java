@@ -31,6 +31,15 @@ public class Product {
     	this.price = price;
 	}
 
+	public static Product create(Name name, Price price) {
+    	Product product = new Product();
+		product.id = UUID.randomUUID();
+		product.name = name;
+		product.price = price;
+
+		return product;
+	}
+
     public UUID getId() {
         return id;
     }
