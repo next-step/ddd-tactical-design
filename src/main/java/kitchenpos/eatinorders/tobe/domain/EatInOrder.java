@@ -93,21 +93,21 @@ public class EatInOrder {
     }
 
     public void accept() {
-        if (!status.equals(WAITING)) {
+        if (status != WAITING) {
             throw new IllegalStateException(NON_WAITING_ORDERS_CANNOT_BE_ACCEPTED);
         }
         this.status = ACCEPTED;
     }
 
     public void serve() {
-        if (!status.equals(ACCEPTED)) {
+        if (status != ACCEPTED) {
             throw new IllegalStateException(NOT_ACCEPTED_EAT_IN_ORDERS_CANNOT_BE_SERVED);
         }
         this.status = SERVED;
     }
 
     public void complete() {
-        if (!status.equals(SERVED)) {
+        if (status != SERVED) {
             throw new IllegalStateException(NOT_SERVED_EAT_IN_ORDERS_CANNOT_BE_COMPLETED);
         }
         this.status = COMPLETED;
