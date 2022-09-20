@@ -86,7 +86,7 @@ public class OrderService {
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-            if (orderTable.isEmpty()) {
+            if (!orderTable.isOccupied()) {
                 throw new IllegalStateException();
             }
             order.setOrderTable(orderTable);
@@ -171,7 +171,7 @@ public class OrderService {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
                 orderTable.setNumberOfGuests(0);
-                orderTable.setEmpty(true);
+                orderTable.setOccupied(false);
             }
         }
         return order;

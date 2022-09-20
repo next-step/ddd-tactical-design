@@ -101,15 +101,15 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable() {
-        return orderTable(true, 0);
+        return orderTable(false, 0);
     }
 
-    public static OrderTable orderTable(final boolean empty, final int numberOfGuests) {
+    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
         final OrderTable orderTable = new OrderTable();
         orderTable.setId(UUID.randomUUID());
         orderTable.setName("1번");
         orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setEmpty(empty);
+        orderTable.setOccupied(occupied);
         return orderTable;
     }
 
