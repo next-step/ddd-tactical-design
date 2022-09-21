@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -24,5 +25,24 @@ public class DisplayedName {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DisplayedName that = (DisplayedName) o;
+
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }
