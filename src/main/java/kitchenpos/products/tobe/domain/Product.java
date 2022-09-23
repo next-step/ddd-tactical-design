@@ -1,23 +1,21 @@
 package kitchenpos.products.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.vo.ProductName;
+import kitchenpos.products.tobe.domain.vo.ProductNo;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 @Table(name = "tb_product")
 @Entity
 public class Product {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    @EmbeddedId
+    private ProductNo id;
 
     @Embedded
     private ProductName name;
@@ -26,7 +24,7 @@ public class Product {
     private ProductPrice price;
 
     protected Product() {
-        this.id = UUID.randomUUID();
+        this.id = new ProductNo();
     }
 
     public Product(
@@ -39,7 +37,7 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
-    public UUID getId() {
+    public ProductNo getId() {
         return id;
     }
 
