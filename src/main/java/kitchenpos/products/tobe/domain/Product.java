@@ -25,9 +25,13 @@ public class Product {
     }
 
     public Product(String displayedName, BigDecimal price) {
-        this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName(displayedName);
-        this.price = new Price(price);
+        this(UUID.randomUUID(), new DisplayedName(displayedName), new Price(price));
+    }
+
+    public Product(UUID id, DisplayedName displayedName, Price price) {
+        this.id = id;
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public void changePrice(BigDecimal price) {
