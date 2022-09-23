@@ -96,12 +96,19 @@ docker compose -p kitchenpos up -d
 
 ## 용어 사전
 
+### 비속어
+
+| 한글명   | 영문명           | 설명               |
+|-------|---------------|------------------|
+| 비속어   | Profanity    | 부적절한 단어 또는 비속어 |
+
 ### 상품
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명 | 영문명            | 설명                  |
+|-----|----------------|---------------------|
+| 상품  | product        | 메뉴를 관리하는 기준이 되는 데이터 |
+| 가격  | price          | 판매할 상품의 가격 |
+| 이름  | displayed name | 판매할 상품의 이름으로 [비속어](#비속어)를 포함할 수 없다.               |
 
 ### 메뉴
 
@@ -160,7 +167,7 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
+- `Product`는 식별자와 `DisplayedName`, `Price`을 가진다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 
 ### 메뉴
