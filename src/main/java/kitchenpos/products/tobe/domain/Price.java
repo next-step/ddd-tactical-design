@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Price {
     private static final int MINIMUM_PRICE = 0;
 
-    @Column
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     protected Price() {
