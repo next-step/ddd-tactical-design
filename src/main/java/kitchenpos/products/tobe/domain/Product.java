@@ -28,4 +28,16 @@ public class Product {
     public void changePrice(int price) {
         this.price.change(price);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public DisplayedName getDisplayedName() {
+        return displayedName;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
 }
