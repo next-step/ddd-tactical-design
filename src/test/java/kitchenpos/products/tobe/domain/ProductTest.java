@@ -46,8 +46,6 @@ class ProductTest {
     void changePriceWithNegativePrice() {
         Product product = new Product("후라이드 치킨", 20000);
 
-        product.changePrice(10000);
-
         assertThatThrownBy(() -> product.changePrice(-1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
