@@ -104,11 +104,12 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-| 한글명 | 영문명            | 설명                  |
-|-----|----------------|---------------------|
-| 상품  | product        | 메뉴를 관리하는 기준이 되는 데이터 |
-| 가격  | price          | 판매할 상품의 가격 |
-| 이름  | displayed name | 판매할 상품의 이름으로 [비속어](#비속어)를 포함할 수 없다.               |
+| 한글명 | 영문명           | 설명                                  |
+|-----|---------------|-------------------------------------|
+| 상품  | product       | 메뉴를 관리하는 기준이 되는 데이터                 |
+| 식별자 | product no    | 상품을 식별할 수 있는 고유한 값                  |
+| 가격  | product price | 판매할 상품의 가격                          |
+| 이름  | product name  | 판매할 상품의 이름으로 [비속어](#비속어)를 포함할 수 없다. |
 
 ### 메뉴
 
@@ -167,8 +168,9 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, `Price`을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+- `Product`는 반드시 `ProductNo`와 `ProductName`, `ProductPrice`을 가진다.
+  - `ProductName`에는 공백 또는 `Profanity`가 포함될 수 없다.
+  - `ProductPrice`는 0원 이상의 값을 가진다.
 
 ### 메뉴
 
