@@ -1,5 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.vo;
 
+import kitchenpos.products.tobe.vo.DisplayedName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
