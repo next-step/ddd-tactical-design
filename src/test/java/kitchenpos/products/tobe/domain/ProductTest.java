@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.exception.NotEmptyDisplayedNameException;
+import kitchenpos.products.tobe.domain.exception.NotNegativePriceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("상품")
-class BeforeProductTest {
+class ProductTest {
 
     private String displayedName = "강정 치킨";
     private BigDecimal createProductPrice = BigDecimal.valueOf(20000);
@@ -39,15 +41,15 @@ class BeforeProductTest {
     @ParameterizedTest
     void createEmptyNameProduct(String name) {
         assertThatThrownBy(() -> new Product(purgomalumClient, name, createProductPrice))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotEmptyDisplayedNameException.class);
     }
 
-    @DisplayName("가격이 음수인 상품을 생성할 수 없다.")
+    @DisplayName("0원보다 적은 가격으로 상품을 생성할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void createNegativePriceProduct(BigDecimal negativePrice) {
         assertThatThrownBy(() -> new Product(purgomalumClient, displayedName, negativePrice))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotNegativePriceException.class);
     }
 
     @DisplayName("상품의 가격을 변경한다.")
@@ -59,13 +61,13 @@ class BeforeProductTest {
         assertThat(product.getPrice()).isEqualTo(new Price(changePrice));
     }
 
-    @DisplayName("상품의 가격을 음수로 변경할 수 없다.")
+    @DisplayName("상품의 가격을 0원 이하로 변경할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void changeNegativeProductPrice(BigDecimal negativePrice) {
         Product product = new Product(purgomalumClient, displayedName, createProductPrice);
         assertThatThrownBy(() -> product.changePrice(negativePrice))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotNegativePriceException.class);
     }
 
 

@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.exception.NotNegativePriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -20,12 +21,12 @@ class PriceTest {
         assertDoesNotThrow(() -> new Price(price));
     }
 
-    @DisplayName("가격은 음수일 수 없다.")
+    @DisplayName("가격은 0원보다 커야한다.")
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void createNegativePrice(BigDecimal negativePrice) {
         assertThatThrownBy(() -> new Price(negativePrice))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotNegativePriceException.class);
     }
 
     @DisplayName("가격을 변경한다.")
@@ -37,13 +38,13 @@ class PriceTest {
         assertThat(price).isEqualTo(new Price(changePrice));
     }
 
-    @DisplayName("가격을 음수로 변경할 수 없다.")
+    @DisplayName("상품 가격을 0원보다 적은 금액으로 변경할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void changeNegativePrice(BigDecimal changePrice) {
         Price price = new Price(BigDecimal.TEN);
         assertThatThrownBy(() -> price.change(changePrice))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotNegativePriceException.class);
     }
 
 }

@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.exception.NotContainsProfanityException;
+import kitchenpos.products.tobe.domain.exception.NotEmptyDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,14 +37,14 @@ class DisplayedNameTest {
     @ParameterizedTest
     void createEmptyName(String name) {
         assertThatThrownBy(() -> new DisplayedName(purgomalumClient, name))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotEmptyDisplayedNameException.class);
     }
 
     @DisplayName("'비속어'를 포함할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설"})
     void createProfanityName(String profanity) {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(NotContainsProfanityException.class)
                 .isThrownBy(() -> new DisplayedName(purgomalumClient, profanity));
     }
 

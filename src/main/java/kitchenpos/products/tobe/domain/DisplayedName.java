@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.exception.NotContainsProfanityException;
+import kitchenpos.products.tobe.domain.exception.NotEmptyDisplayedNameException;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.Embeddable;
@@ -21,10 +23,10 @@ public class DisplayedName {
 
     private void validate(PurgomalumClient purgomalumClient, String name) {
         if (Strings.isEmpty(name)) {
-            throw new IllegalArgumentException();
+            throw new NotEmptyDisplayedNameException();
         }
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new NotContainsProfanityException();
         }
     }
 
