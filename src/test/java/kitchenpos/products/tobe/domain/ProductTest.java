@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ProductTest {
 
-    PurgomalumClient profanity;
+    private PurgomalumClient profanity;
 
     @BeforeEach
     void setUp() {

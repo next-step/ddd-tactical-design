@@ -17,11 +17,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ProductNameTest {
 
-    PurgomalumClient profanityClient;
+    private PurgomalumClient profanity;
 
     @BeforeEach
     void setUp() {
-        profanityClient = new FakePurgomalumClient();
+        profanity = new FakePurgomalumClient();
     }
 
     @DisplayName("상품의 이름을 생성할 수 있다.")
@@ -35,7 +35,7 @@ class ProductNameTest {
     }
 
     private ProductName createProductName(String name) {
-        return new ProductName(name, profanityClient);
+        return new ProductName(name, profanity);
     }
 
     @DisplayName("상품 이름 예외 케이스")
