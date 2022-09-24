@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @Entity
 public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Embedded
     private DisplayedName displayedName;
@@ -25,7 +25,7 @@ public class Product {
         this.price = new Price(price);
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
