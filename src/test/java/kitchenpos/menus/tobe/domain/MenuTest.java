@@ -1,0 +1,125 @@
+package kitchenpos.menus.tobe.domain;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.List;
+import kitchenpos.TobeFixtures;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+class MenuTest {
+    @Nested
+    class CreateTest {
+        @Nested
+        class SuccessTest {
+            @DisplayName("메뉴 생성 검증")
+            @Test
+            void create() {
+                // given
+                String displayedName = "치킨메뉴";
+                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE);
+                boolean displayed = true;
+
+                // when
+                Menu menu = new Menu(displayedName, price, TobeFixtures.menuGroup(), displayed,
+                    List.of(TobeFixtures.menuProduct(), TobeFixtures.menuProduct()));
+
+                // then
+                assertAll(
+                    () -> assertThat(menu.getId()).isNotNull(),
+                    () -> assertThat(menu.getDisplayedName()).isEqualTo(new DisplayedName(displayedName)),
+                    () -> assertThat(menu.getPrice()).isEqualTo(new Price(price)),
+                    () -> assertThat(menu.isDisplayed()).isTrue()
+                );
+            }
+        }
+
+        @Nested
+        class FailTest {
+            @DisplayName("가격이 메뉴 상품의 금액의 합보다 클 경우 예외 발생")
+            @Test
+            void create() {
+                // given
+                long price = TobeFixtures.MENU_PRICE + 1;
+
+                // when then
+                assertThatIllegalArgumentException().isThrownBy(() -> TobeFixtures.menu(price));
+            }
+        }
+    }
+
+    @Nested
+    class ChangePriceTest {
+        @Nested
+        class SuccessTest {
+            @Test
+            void changePrice() {
+                // given
+                Menu menu = TobeFixtures.menu();
+                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE - 1);
+
+                // when
+                menu.changePrice(price);
+
+                // then
+                assertThat(menu.getPrice().getValue()).isEqualTo(price);
+            }
+        }
+
+        @Nested
+        class FailTest {
+            @DisplayName("가격이 메뉴 상품의 금액의 합보다 클 경우 예외 발생")
+            @Test
+            void changePrice() {
+                // given
+                Menu menu = TobeFixtures.menu();
+                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE + 1);
+
+                // when then
+                assertThatIllegalArgumentException().isThrownBy(() -> menu.changePrice(price));
+            }
+        }
+    }
+
+    @Nested
+    class DisplayTest {
+        @Nested
+        class SuccessTest {
+            @DisplayName("노출 처리")
+            @Test
+            void display() {
+                // given
+                Menu menu = TobeFixtures.menu(false);
+
+                // when
+                menu.display();
+
+                // then
+                assertThat(menu.isDisplayed()).isTrue();
+            }
+        }
+    }
+
+    @Nested
+    class HideTest {
+        @Nested
+        class SuccessTest {
+            @DisplayName("숨김 처리")
+            @Test
+            void hide() {
+                // given
+                Menu menu = TobeFixtures.menu(true);
+
+                // when
+                menu.hide();
+
+                // then
+                assertThat(menu.isDisplayed()).isFalse();
+            }
+        }
+    }
+}
