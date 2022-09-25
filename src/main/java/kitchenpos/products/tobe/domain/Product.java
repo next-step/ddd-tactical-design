@@ -47,6 +47,13 @@ public class Product {
         return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
 
+    public void changePrice(final Long price) {
+        if (Objects.isNull(price) || price < MINIMUM_PRICE) {
+            throw new InvalidProductPriceException();
+        }
+        this.price = BigDecimal.valueOf(price);
+    }
+
     public UUID id() {
         return id;
     }

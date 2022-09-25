@@ -59,4 +59,29 @@ class ProductTest {
                     .isInstanceOf(InvalidProductPriceException.class);
         }
     }
+
+    @DisplayName("상품의 가격을 변경한다.")
+    @Nested
+    class ChangePriceTest {
+
+        @DisplayName("성공")
+        @Test
+        void success() {
+            final Product product = Product.create("치킨", 10_000L, purgomalumClient);
+
+            product.changePrice(20_000L);
+
+            assertThat(product.price()).isEqualTo(BigDecimal.valueOf(20_000L));
+        }
+
+        @ParameterizedTest(name = "상품 가격은 0원 이상이여야 한다. price={0}")
+        @NullSource
+        @ValueSource(longs = {-10_000L, -20_000L})
+        void error_1(final Long price) {
+            final Product product = Product.create("치킨", 10_000L, purgomalumClient);
+
+            assertThatThrownBy(() -> product.changePrice(price))
+                    .isInstanceOf(InvalidProductPriceException.class);
+        }
+    }
 }
