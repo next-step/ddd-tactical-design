@@ -2,11 +2,10 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -28,6 +27,16 @@ class ProductTest {
 
             assertThatThrownBy(() -> Product.create(name, 10_000L, fakePurgomalumClient))
                     .isInstanceOf(InvalidProductNameException.class);
+        }
+
+        @ParameterizedTest(name = "상품 가격은 0원 이상이여야 한다. price={0}")
+        @NullSource
+        @ValueSource(longs = {-10_000L, -20_000L})
+        void error_2(final Long price) {
+            final FakePurgomalumClient fakePurgomalumClient = new FakePurgomalumClient();
+
+            assertThatThrownBy(() -> Product.create("상품", price, fakePurgomalumClient))
+                    .isInstanceOf(InvalidProductPriceException.class);
         }
     }
 }

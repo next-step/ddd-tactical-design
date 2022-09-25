@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @Table(name = "product")
 @Entity
 public class Product {
+
+    private static final int MINIMUM_PRICE = 0;
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -37,6 +40,9 @@ public class Product {
     public static Product create(final String name, final Long price, final PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new InvalidProductNameException();
+        }
+        if (Objects.isNull(price) || price < MINIMUM_PRICE) {
+            throw new InvalidProductPriceException();
         }
         return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
