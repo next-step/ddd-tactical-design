@@ -46,4 +46,16 @@ public class Product {
         }
         return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
+
+    public UUID id() {
+        return id;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public BigDecimal price() {
+        return price;
+    }
 }
