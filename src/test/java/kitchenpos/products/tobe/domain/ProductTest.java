@@ -12,8 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +37,7 @@ class ProductTest {
             assertAll(
                     () -> assertThat(product.id()).isNotNull(),
                     () -> assertThat(product.name()).isEqualTo("치킨"),
-                    () -> assertThat(product.price()).isEqualTo(BigDecimal.valueOf(10_000L))
+                    () -> assertThat(product.price()).isEqualTo(Price.valueOf(10_000L))
             );
         }
 
@@ -51,11 +49,10 @@ class ProductTest {
                     .isInstanceOf(InvalidProductNameException.class);
         }
 
-        @ParameterizedTest(name = "상품 가격은 0원 이상이여야 한다. price={0}")
-        @NullSource
-        @ValueSource(longs = {-10_000L, -20_000L})
-        void error_2(final Long price) {
-            assertThatThrownBy(() -> Product.create("상품", price, purgomalumClient))
+        @DisplayName("가격 정보가 있어야 한다.")
+        @Test
+        void error_2() {
+            assertThatThrownBy(() -> Product.create("상품", null, purgomalumClient))
                     .isInstanceOf(InvalidProductPriceException.class);
         }
     }
@@ -71,16 +68,15 @@ class ProductTest {
 
             product.changePrice(20_000L);
 
-            assertThat(product.price()).isEqualTo(BigDecimal.valueOf(20_000L));
+            assertThat(product.price()).isEqualTo(Price.valueOf(20_000L));
         }
 
-        @ParameterizedTest(name = "상품 가격은 0원 이상이여야 한다. price={0}")
-        @NullSource
-        @ValueSource(longs = {-10_000L, -20_000L})
-        void error_1(final Long price) {
+        @DisplayName("가격 정보가 있어야 한다.")
+        @Test
+        void error_1() {
             final Product product = Product.create("치킨", 10_000L, purgomalumClient);
 
-            assertThatThrownBy(() -> product.changePrice(price))
+            assertThatThrownBy(() -> product.changePrice(null))
                     .isInstanceOf(InvalidProductPriceException.class);
         }
     }
