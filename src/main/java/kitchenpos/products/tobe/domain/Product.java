@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -34,7 +35,7 @@ public class Product {
     }
 
     public static Product create(final String name, final Long price, final PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new InvalidProductNameException();
         }
         return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));

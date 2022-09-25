@@ -5,6 +5,10 @@ import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,14 +20,14 @@ class ProductTest {
     @Nested
     class CreateTest {
 
-        @DisplayName("상품명에는 비속어가 포함되면 안된다.")
-        @Test
-        void create() {
+        @ParameterizedTest(name = "상품명에는 비어있거나, 비속어가 포함되면 안된다. name={0}")
+        @NullSource
+        @ValueSource(strings = {"비속어", "욕설"})
+        void error_1(final String name) {
             final FakePurgomalumClient fakePurgomalumClient = new FakePurgomalumClient();
 
-            assertThatThrownBy(() -> Product.create("비속어", 10_000L, fakePurgomalumClient))
+            assertThatThrownBy(() -> Product.create(name, 10_000L, fakePurgomalumClient))
                     .isInstanceOf(InvalidProductNameException.class);
         }
     }
-
 }
