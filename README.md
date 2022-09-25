@@ -115,6 +115,7 @@ docker compose -p kitchenpos up -d
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴            |
 | 이름     | displayed name     | 메뉴의 이름                     |
 | 가격     | price              | 상품의 이름                     |
+| 수량     | quantity           | 메뉴 상품의 수량                  |
 
 ### 매장 주문
 
@@ -173,8 +174,9 @@ docker compose -p kitchenpos up -d
 - `Menu`는 특정 `MenuGroup`에 속한다.
 - `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
 - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `MenuProduct`는 `Quantity`를 가진다.
 - `Price`는 0원보다 커야 한다.
+- `Quantity`는 0 또는 0보다 커야 한다.
 
 ### 매장 주문
 
