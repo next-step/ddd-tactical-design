@@ -28,7 +28,8 @@ class DisplayedNameTest {
     @DisplayName("상품 이름 생성")
     @Test
     public void createDisplayedName() {
-        assertDoesNotThrow(() -> new DisplayedName(purgomalumClient, "강정 치킨"));
+        boolean isProfanity = false;
+        assertDoesNotThrow(() -> new DisplayedName("강정 치킨", isProfanity));
     }
 
 
@@ -36,16 +37,17 @@ class DisplayedNameTest {
     @NullAndEmptySource
     @ParameterizedTest
     void createEmptyName(String name) {
-        assertThatThrownBy(() -> new DisplayedName(purgomalumClient, name))
+        boolean isProfanity = false;
+        assertThatThrownBy(() -> new DisplayedName(name, isProfanity))
                 .isInstanceOf(NotEmptyDisplayedNameException.class);
     }
 
     @DisplayName("'비속어'를 포함할 수 없다.")
-    @ParameterizedTest
-    @ValueSource(strings = {"비속어", "욕설"})
-    void createProfanityName(String profanity) {
+    @Test
+    void createProfanityName() {
+        boolean isProfanity = true;
         assertThatExceptionOfType(NotContainsProfanityException.class)
-                .isThrownBy(() -> new DisplayedName(purgomalumClient, profanity));
+                .isThrownBy(() -> new DisplayedName("강정 치킨", isProfanity));
     }
 
 }

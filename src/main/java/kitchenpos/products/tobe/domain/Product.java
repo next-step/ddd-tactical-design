@@ -20,9 +20,9 @@ public class Product {
 
     protected Product() {}
 
-    public Product(PurgomalumClient purgomalumClient, String name, BigDecimal price) {
-        this.displayedName = new DisplayedName(purgomalumClient, name);
-        this.price = new Price(price);
+    public Product(DisplayedName displayedName, Price price) {
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public Long getId() {

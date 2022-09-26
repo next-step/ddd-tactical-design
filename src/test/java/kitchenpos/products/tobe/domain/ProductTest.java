@@ -33,14 +33,16 @@ class ProductTest {
     @DisplayName("상품을 생성한다.")
     @Test
     void createProduct() {
-        assertDoesNotThrow(() -> new Product(purgomalumClient, displayedName, createProductPrice));
+        boolean isProfanity = false;
+        assertDoesNotThrow(() -> new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice)));
     }
 
     @DisplayName("이름이 null이거나 빈칸인 상품을 생성할 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest
     void createEmptyNameProduct(String name) {
-        assertThatThrownBy(() -> new Product(purgomalumClient, name, createProductPrice))
+        boolean isProfanity = false;
+        assertThatThrownBy(() -> new Product(new DisplayedName(name, isProfanity), new Price(createProductPrice)))
                 .isInstanceOf(NotEmptyDisplayedNameException.class);
     }
 
@@ -48,7 +50,8 @@ class ProductTest {
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void createNegativePriceProduct(BigDecimal negativePrice) {
-        assertThatThrownBy(() -> new Product(purgomalumClient, displayedName, negativePrice))
+        boolean isProfanity = false;
+        assertThatThrownBy(() -> new Product(new DisplayedName(displayedName, isProfanity), new Price(negativePrice)))
                 .isInstanceOf(NotNegativePriceException.class);
     }
 
@@ -56,7 +59,8 @@ class ProductTest {
     @Test
     void changeProductPrice() {
         BigDecimal changePrice = BigDecimal.valueOf(10000);
-        Product product = new Product(purgomalumClient, displayedName, createProductPrice);
+        boolean isProfanity = false;
+        Product product = new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
         product.changePrice(changePrice);
         assertThat(product.getPrice()).isEqualTo(new Price(changePrice));
     }
@@ -65,10 +69,10 @@ class ProductTest {
     @ParameterizedTest
     @ValueSource(strings = "-1")
     void changeNegativeProductPrice(BigDecimal negativePrice) {
-        Product product = new Product(purgomalumClient, displayedName, createProductPrice);
+        boolean isProfanity = false;
+        Product product = new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
         assertThatThrownBy(() -> product.changePrice(negativePrice))
                 .isInstanceOf(NotNegativePriceException.class);
     }
-
 
 }
