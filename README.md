@@ -113,16 +113,17 @@ docker compose -p kitchenpos up -d
 
 ### 메뉴
 
-| 한글명      | 영문명                      | 설명                                  |
-|----------|--------------------------|-------------------------------------|
-| 메뉴       | menu                     | 메뉴 그룹에 속하는 실제 주문 가능 단위              |
-| 메뉴 번호    | menu no                  | 메뉴를 식별할 수 있는 고유한 값                  |
-| 메뉴 가격    | menu price               | 메뉴에 표시될 가격                          |
-| 메뉴 이름    | menu name                | 메뉴에 표시될 이름으로 [비속어](#비속어)를 포함할 수 없다. |
-| 숨겨진 메뉴   | hidden menu              | 주문할 수 없는 숨겨진 메뉴                     |
-| 전시 메뉴    | displayed menu           | 주문할 수 있는 메뉴                         |
-| 메뉴 상품    | menu product             | 메뉴에 속하는 수량이 있는 상품                   |
-| 메뉴 상품 가격 | menu product quantity    | 메뉴에 등록된 상품의 수량                      |
+| 한글명      | 영문명                   | 설명                                |
+|----------|-----------------------|-----------------------------------|
+| 메뉴       | menu                  | 메뉴 그룹에 속하는 실제 주문 가능 단위            |
+| 메뉴 번호    | menu no               | 메뉴를 식별할 수 있는 고유한 값                |
+| 메뉴 가격    | menu price            | 메뉴에 표시될 가격                        |
+| 메뉴 이름    | menu name             | 메뉴에 표시될 이름으로 [비속어](#비속어)를 포함할 수 없다. |
+| 숨겨진 메뉴   | hidden menu           | 주문할 수 없는 숨겨진 메뉴                   |
+| 전시 메뉴    | displayed menu        | 주문할 수 있는 메뉴                       |
+| 메뉴 상품    | menu product          | 메뉴에 속하는 수량이 있는 상품                 |
+| 메뉴 상품 수량 | menu product quantity | 메뉴에 등록된 상품의 수량                    |
+| 메뉴 상품 가격 | menu product amount   | 메뉴 상품의 금액의 합<br/>상품 가격 * 메뉴 상품 수량 |
 
 ### 메뉴 그룹
 
@@ -191,8 +192,8 @@ docker compose -p kitchenpos up -d
   - `Menu`는 반드시 단 하나의 `MenuGroup`에 속한다.
   - `Menu`는 반드시 한 개 이상의 `MenuProduct`을 가진다.
     - `MenuProductQuantity` 0개 이상이어야 한다.
-- `MenuPrice`은 `MenuProduct`의 금액의 합보다 적거나 같아야 한다.
-- `MenuPrice`가 `MenuProduct`의 금액의 합보다 크면 `HiddenMenu`가 된다.
+- `MenuPrice`은 `MenuProductAmount`보다 적거나 같아야 한다.
+- `MenuPrice`가 `MenuProductAmount`보다 크면 `HiddenMenu`가 된다.
 
 ### 메뉴 그룹
 
