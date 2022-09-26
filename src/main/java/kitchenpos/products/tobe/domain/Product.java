@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 
 import javax.persistence.Column;
@@ -19,8 +18,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName displayedName;
 
     @Embedded
     private Price price;
@@ -28,17 +27,17 @@ public class Product {
     protected Product() {
     }
 
-    private Product(final UUID id, final String name, final Price price) {
+    private Product(final UUID id, final DisplayedName displayedName, final Price price) {
         this.id = id;
-        this.name = name;
+        this.displayedName = displayedName;
         this.price = price;
     }
 
-    public static Product create(final String name, final Long price, final PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+    public static Product create(final DisplayedName displayedName, final Long price) {
+        if (Objects.isNull(displayedName)) {
             throw new InvalidProductNameException();
         }
-        return new Product(UUID.randomUUID(), name, Price.valueOf(price));
+        return new Product(UUID.randomUUID(), displayedName, Price.valueOf(price));
     }
 
     public void changePrice(final Long price) {
@@ -49,8 +48,8 @@ public class Product {
         return id;
     }
 
-    public String name() {
-        return name;
+    public DisplayedName displayedName() {
+        return displayedName;
     }
 
     public Price price() {
