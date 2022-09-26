@@ -88,6 +88,7 @@ public class Menu {
     }
 
     public void display() {
+        validatePrice(price, menuProducts);
         this.displayed = true;
     }
 
@@ -113,5 +114,9 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 }
