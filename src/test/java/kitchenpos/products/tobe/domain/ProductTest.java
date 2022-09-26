@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
 import org.junit.jupiter.api.BeforeEach;

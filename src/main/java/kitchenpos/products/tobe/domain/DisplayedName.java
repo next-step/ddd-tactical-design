@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 
 import javax.persistence.Column;
