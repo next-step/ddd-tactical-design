@@ -2,12 +2,16 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.domain.exception.NotNegativePriceException;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Embeddable
 public class Price {
 
     private BigDecimal price;
+
+    protected Price() {}
 
     public Price(BigDecimal price) {
         validate(price);
