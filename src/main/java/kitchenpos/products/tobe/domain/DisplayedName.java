@@ -12,9 +12,7 @@ public class DisplayedName {
 
     private String name;
 
-    public DisplayedName() {
-
-    }
+    protected DisplayedName() {}
 
     protected DisplayedName(PurgomalumClient purgomalumClient, String name) {
         validate(purgomalumClient, name);

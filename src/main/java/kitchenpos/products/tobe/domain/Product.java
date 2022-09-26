@@ -18,7 +18,7 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product() {}
+    protected Product() {}
 
     public Product(PurgomalumClient purgomalumClient, String name, BigDecimal price) {
         this.displayedName = new DisplayedName(purgomalumClient, name);
