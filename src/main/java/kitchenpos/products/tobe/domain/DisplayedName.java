@@ -19,8 +19,8 @@ public class DisplayedName {
         this.value = value;
     }
 
-    public static DisplayedName valueOf(final String value, final PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(value) || purgomalumClient.containsProfanity(value)) {
+    public static DisplayedName valueOf(final String value, final Profanity profanity) {
+        if (Objects.isNull(value) || profanity.containsProfanity(value)) {
             throw new InvalidProductNameException();
         }
         return new DisplayedName(value);

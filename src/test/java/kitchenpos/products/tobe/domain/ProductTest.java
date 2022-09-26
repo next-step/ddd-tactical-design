@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeProfanity;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
-    private PurgomalumClient purgomalumClient;
+    private Profanity profanity;
     private DisplayedName displayedName;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
-        displayedName = DisplayedName.valueOf("치킨", purgomalumClient);
+        profanity = new FakeProfanity();
+        displayedName = DisplayedName.valueOf("치킨", profanity);
     }
 
     @DisplayName("상품을 생성한다.")

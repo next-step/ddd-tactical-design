@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeProfanity;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,17 +14,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DisplayedNameTest {
 
-    private PurgomalumClient purgomalumClient;
+    private Profanity profanity;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        profanity = new FakeProfanity();
     }
 
     @DisplayName("이름을 생성한다.")
     @Test
     void valueOf() {
-        final DisplayedName displayedName = DisplayedName.valueOf("상품", purgomalumClient);
+        final DisplayedName displayedName = DisplayedName.valueOf("상품", profanity);
 
         assertThat(displayedName.value()).isEqualTo("상품");
     }
@@ -33,7 +33,7 @@ class DisplayedNameTest {
     @NullSource
     @ValueSource(strings = {"비속어", "욕설"})
     void invalid_name(final String name) {
-        assertThatThrownBy(() -> DisplayedName.valueOf(name, purgomalumClient))
+        assertThatThrownBy(() -> DisplayedName.valueOf(name, profanity))
                 .isInstanceOf(InvalidProductNameException.class);
     }
 }
