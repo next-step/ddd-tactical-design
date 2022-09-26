@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.vo.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,7 +40,7 @@ class ProductTest {
 
         product.changePrice(10000);
 
-        assertThat(product.getPrice()).isEqualTo(new Price(10000));
+        assertThat(product.getPrice()).isEqualTo(BigDecimal.valueOf(10000));
     }
 
     @DisplayName("상품의 가격을 음수로 변경할 수 없다.")
