@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.NotContainsProfanityException;
-import kitchenpos.products.tobe.domain.exception.NotEmptyDisplayedNameException;
 import org.apache.logging.log4j.util.Strings;
 
 import javax.persistence.Embeddable;
@@ -20,11 +18,12 @@ public class DisplayedName {
 
     private void validate(String name, boolean isProfanity) {
         if (Strings.isEmpty(name)) {
-            throw new NotEmptyDisplayedNameException();
+            throw new IllegalArgumentException("상품명은 null 이나 공백일 수 없습니다.");
         }
         if (isProfanity) {
-            throw new NotContainsProfanityException();
+            throw new IllegalArgumentException("상품명에 비속어를 포함할 수 없습니다.");
         }
+
     }
 
 }

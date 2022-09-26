@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.NotNegativePriceException;
-
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -25,7 +23,7 @@ public class Price {
 
     private void validate(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new NotNegativePriceException();
+            throw new IllegalArgumentException("상품 가격은 0원보다 커야합니다.");
         }
         this.price = price;
     }

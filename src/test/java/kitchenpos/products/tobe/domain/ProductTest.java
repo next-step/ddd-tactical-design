@@ -1,10 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.exception.NotEmptyDisplayedNameException;
-import kitchenpos.products.tobe.domain.exception.NotNegativePriceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,7 +31,8 @@ class ProductTest {
     void createEmptyNameProduct(String name) {
         boolean isProfanity = false;
         assertThatThrownBy(() -> new Product(new DisplayedName(name, isProfanity), new Price(createProductPrice)))
-                .isInstanceOf(NotEmptyDisplayedNameException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("상품명은 null 이나 공백일 수 없습니다.");
     }
 
     @DisplayName("0원보다 적은 가격으로 상품을 생성할 수 없다.")
@@ -45,7 +41,8 @@ class ProductTest {
     void createNegativePriceProduct(BigDecimal negativePrice) {
         boolean isProfanity = false;
         assertThatThrownBy(() -> new Product(new DisplayedName(displayedName, isProfanity), new Price(negativePrice)))
-                .isInstanceOf(NotNegativePriceException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
     }
 
     @DisplayName("상품의 가격을 변경한다.")
@@ -65,7 +62,8 @@ class ProductTest {
         boolean isProfanity = false;
         Product product = new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
         assertThatThrownBy(() -> product.changePrice(negativePrice))
-                .isInstanceOf(NotNegativePriceException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
     }
 
 }
