@@ -23,13 +23,6 @@ class ProductTest {
     private String displayedName = "강정 치킨";
     private BigDecimal createProductPrice = BigDecimal.valueOf(20000);
 
-    private PurgomalumClient purgomalumClient;
-
-    @BeforeEach
-    void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
-    }
-
     @DisplayName("상품을 생성한다.")
     @Test
     void createProduct() {
