@@ -7,10 +7,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class MenuPricePolicy {
-    public void changePrice(Menu menu, List<Product> products, int price) {
+public class MenuDisplayPolicy {
+    public void decideDisplayed(Menu menu, List<Product> products) {
         BigDecimal productsPrice = calculateTotalPrice(products);
-        menu.changePrice(price);
         if (menu.getPrice().compareTo(productsPrice) >= 0) {
             menu.hide();
         }
