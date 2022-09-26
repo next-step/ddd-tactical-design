@@ -39,7 +39,7 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    protected MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal productPrice) {
+    public MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal productPrice) {
         validate(productId);
         this.productId = productId;
         this.amount = new MenuProductAmount(productPrice, quantity);
