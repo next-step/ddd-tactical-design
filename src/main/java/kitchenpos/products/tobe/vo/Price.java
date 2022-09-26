@@ -20,11 +20,6 @@ public class Price {
         this.price = BigDecimal.valueOf(price);
     }
 
-    public void change(int price) {
-        validate(price);
-        this.price = BigDecimal.valueOf(price);
-    }
-
     private void validate(int price) {
         if (price < MINIMUM_PRICE) {
             throw new IllegalArgumentException("가격은 " + MINIMUM_PRICE + "원 이상이어야 합니다.");
