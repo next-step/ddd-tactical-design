@@ -1,7 +1,8 @@
 package kitchenpos.menus.tobe.domain.vo;
 
 import static java.util.List.of;
-import static kitchenpos.menus.tobe.domain.MenuFixtures.menuProduct;
+import static kitchenpos.global.TobeFixtures.menuProduct;
+import static kitchenpos.global.TobeFixtures.price;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -35,7 +36,7 @@ class MenuProductsTest {
         ));
 
         assertThat(menuProducts.sum())
-                .isEqualTo(BigDecimal.valueOf(3));
+                .isEqualTo(price(BigDecimal.valueOf(3)));
     }
 
     @DisplayName("메뉴 상품 일급 컬렉션은 반드시 하나 이상의 메뉴 상품을 갖는다.")

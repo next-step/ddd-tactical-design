@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -11,10 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.menus.tobe.domain.vo.MenuProductAmount;
-import kitchenpos.menus.tobe.domain.vo.MenuProductQuantity;
+import kitchenpos.global.vo.Price;
+import kitchenpos.global.vo.Quantity;
 
-@Table(name = "menu_product")
+@Table(name = "tb_menu_product")
 @Entity
 public class MenuProduct {
 
@@ -31,19 +30,19 @@ public class MenuProduct {
     private UUID productId;
 
     @Embedded
-    private MenuProductQuantity quantity;
+    private Quantity quantity;
 
     @Transient
-    private MenuProductAmount amount;
+    private Price price;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal productPrice) {
+    public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
         validate(productId);
         this.productId = productId;
-        this.amount = new MenuProductAmount(productPrice, quantity);
         this.quantity = quantity;
+        this.price = productPrice.multiply(quantity);
     }
 
     private void validate(UUID productId) {
@@ -52,7 +51,7 @@ public class MenuProduct {
         }
     }
 
-    public MenuProductAmount getAmount() {
-        return amount;
+    public Price getPrice() {
+        return price;
     }
 }

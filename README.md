@@ -123,7 +123,7 @@ docker compose -p kitchenpos up -d
 | 전시 메뉴    | displayed menu        | 주문할 수 있는 메뉴                       |
 | 메뉴 상품    | menu product          | 메뉴에 속하는 수량이 있는 상품                 |
 | 메뉴 상품 수량 | menu product quantity | 메뉴에 등록된 상품의 수량                    |
-| 메뉴 상품 가격 | menu product amount   | 메뉴 상품의 금액의 합<br/>상품 가격 * 메뉴 상품 수량 |
+| 메뉴 상품 가격 | menu product price    | 메뉴 상품의 금액의 합<br/>상품 가격 * 메뉴 상품 수량 |
 
 ### 메뉴 그룹
 

@@ -9,10 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import kitchenpos.menus.tobe.domain.exception.MaximumMenuPriceException;
-import kitchenpos.menus.tobe.domain.vo.MenuName;
-import kitchenpos.menus.tobe.domain.vo.MenuPrice;
+import kitchenpos.global.vo.Name;
+import kitchenpos.global.vo.Price;
 
 @Table(name = "tb_menu")
 @Entity
@@ -23,10 +21,10 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName name;
+    private Name name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -42,18 +40,15 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     protected Menu() {
         id = UUID.randomUUID();
     }
 
     public Menu(
-            MenuName name,
+            Name name,
             MenuGroup menuGroup,
             MenuProducts menuProducts,
-            MenuPrice price,
+            Price price,
             boolean displayed
     ) {
         this();
@@ -65,18 +60,17 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    protected Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
-            MenuProducts menuProducts, UUID menuGroupId) {
+    public Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed,
+            MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
     }
 
-    public void changePrice(MenuPrice menuPrice) {
+    public void changePrice(Price menuPrice) {
         validMenuPrice(menuPrice, menuProducts);
         this.price = menuPrice;
     }
@@ -87,10 +81,8 @@ public class Menu {
         return this;
     }
 
-    private void validMenuPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
-        if (menuPrice.grateThan(menuProducts.sum())) {
-            throw new MaximumMenuPriceException();
-        }
+    private void validMenuPrice(Price menuPrice, MenuProducts menuProducts) {
+        menuPrice.validateLessThan(menuProducts.sum());
     }
 
     public Menu hidden() {
@@ -98,15 +90,11 @@ public class Menu {
         return this;
     }
 
-    public MenuProducts getMenuProducts() {
-        return menuProducts;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public MenuPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 }

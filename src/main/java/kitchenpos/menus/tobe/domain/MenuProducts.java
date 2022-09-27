@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -9,10 +8,11 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import kitchenpos.menus.tobe.domain.vo.MenuProductAmount;
+import kitchenpos.global.vo.Price;
+import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class MenuProducts implements Serializable {
+public class MenuProducts extends ValueObject {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -37,11 +37,10 @@ public class MenuProducts implements Serializable {
         }
     }
 
-    public BigDecimal sum() {
-        BigDecimal sum = BigDecimal.ZERO;
+    public Price sum() {
+        Price sum = new Price(BigDecimal.ZERO);
         for (MenuProduct menuProduct : values) {
-            MenuProductAmount amount = menuProduct.getAmount();
-            sum = sum.add(amount.getValue());
+            sum = sum.add(menuProduct.getPrice());
         }
 
         return sum;
