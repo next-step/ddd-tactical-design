@@ -32,8 +32,8 @@ public class MenuPrice implements Serializable {
         }
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public boolean grateThan(BigDecimal otherPrice) {
+        return value.compareTo(otherPrice) > 0;
     }
 
     @Override

@@ -19,15 +19,20 @@ class MenuPriceTest {
     @DisplayName("가격을 등록할 수 있다.")
     @Test
     void create() {
-        MenuPrice actual = createMenuPrice(BigDecimal.ZERO);
+        MenuPrice actual = menuPrice(BigDecimal.ZERO);
 
-        assertThat(actual).isEqualTo(createMenuPrice(BigDecimal.ZERO));
-        assertThat(actual.hashCode() == createMenuPrice(BigDecimal.ZERO).hashCode())
+        assertThat(actual).isEqualTo(menuPrice(BigDecimal.ZERO));
+        assertThat(actual.hashCode() == menuPrice(BigDecimal.ZERO).hashCode())
                 .isTrue();
     }
 
-    private MenuPrice createMenuPrice(BigDecimal price) {
-        return menuPrice(price);
+    @DisplayName("지정된 가격보다 큰지 비교한다.")
+    @Test
+    void grateThan() {
+        MenuPrice actual = menuPrice(BigDecimal.ONE);
+
+        assertThat(actual.grateThan(BigDecimal.ZERO)).isTrue();
+        assertThat(actual.grateThan(BigDecimal.TEN)).isFalse();
     }
 
     @DisplayName("메뉴 가격 에러 케이스")
@@ -39,7 +44,7 @@ class MenuPriceTest {
         @NullSource
         void error1(BigDecimal price) {
             assertThatExceptionOfType(NullMenuPriceException.class)
-                    .isThrownBy(() -> createMenuPrice(price));
+                    .isThrownBy(() -> menuPrice(price));
         }
 
         @DisplayName("반드시 0원 이상이어야 한다.")
@@ -47,7 +52,7 @@ class MenuPriceTest {
         @ValueSource(strings = "-1")
         void error2(BigDecimal price) {
             assertThatExceptionOfType(MinimumMenuPriceException.class)
-                    .isThrownBy(() -> createMenuPrice(price));
+                    .isThrownBy(() -> menuPrice(price));
         }
     }
 }
