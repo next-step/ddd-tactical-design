@@ -193,7 +193,6 @@ docker compose -p kitchenpos up -d
   - `Menu`는 반드시 한 개 이상의 `MenuProduct`을 가진다.
     - `MenuProductQuantity` 0개 이상이어야 한다.
 - `MenuPrice`은 `MenuProductAmount`보다 적거나 같아야 한다.
-- `MenuPrice`가 `MenuProductAmount`보다 크면 `HiddenMenu`가 된다.
 
 ### 메뉴 그룹
 

@@ -24,6 +24,19 @@ public final class MenuFixtures {
         );
     }
 
+    public static Menu menu(BigDecimal menuPrice, BigDecimal menuProductAmount) {
+        MenuProduct menuProduct = menuProduct(1, menuProductAmount);
+        return new Menu(
+                UUID.randomUUID(),
+                menuName(" 후라이드+후라이드"),
+                menuPrice(menuPrice),
+                menuGroup("두마리 치킨"),
+                false,
+                menuProducts(menuProduct),
+                UUID.randomUUID()
+        );
+    }
+
     public static Menu menu(
             String name,
             String groupName,
