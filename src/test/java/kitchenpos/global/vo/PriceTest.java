@@ -36,6 +36,15 @@ class PriceTest {
                 .isEqualTo(price(BigDecimal.TEN));
     }
 
+    @DisplayName("가격을 합한다.")
+    @Test
+    void add() {
+        Price price = price(BigDecimal.ZERO);
+
+        assertThat(price.add(price(BigDecimal.TEN)))
+                .isEqualTo(price(BigDecimal.TEN));
+    }
+
     @DisplayName("지정된 가격보다 큰지 비교한다.")
     @Test
     void grateThan() {

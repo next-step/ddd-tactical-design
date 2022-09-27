@@ -50,6 +50,10 @@ public class Price extends ValueObject {
         return new Price(value.multiply(BigDecimal.valueOf(quantity.getValue())));
     }
 
+    public Price add(Price price) {
+        return new Price(value.add(price.value));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
