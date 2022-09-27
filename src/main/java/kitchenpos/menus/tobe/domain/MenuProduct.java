@@ -3,14 +3,10 @@ package kitchenpos.menus.tobe.domain;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import kitchenpos.products.tobe.domain.Product;
 
 @Table(name = "menu_product")
 @Entity
@@ -20,13 +16,8 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private String productId;
 
     @Embedded
     private Quantity quantity;
@@ -34,12 +25,8 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(Product product, Long quantity) {
-        this(product, new Quantity(quantity));
-    }
-
-    public MenuProduct(Product product, Quantity quantity) {
-        this.product = product;
+    public MenuProduct(String productId, Quantity quantity) {
+        this.productId = productId;
         this.quantity = quantity;
     }
 
@@ -47,8 +34,8 @@ public class MenuProduct {
         return seq;
     }
 
-    public Product getProduct() {
-        return product;
+    public String getProductId() {
+        return productId;
     }
 
     public Quantity getQuantity() {

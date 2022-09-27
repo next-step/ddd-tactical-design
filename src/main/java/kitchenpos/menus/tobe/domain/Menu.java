@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import kitchenpos.products.tobe.domain.Product;
 
 @Table(name = "menu")
 @Entity
@@ -69,16 +68,16 @@ public class Menu {
     }
 
     private void validatePrice(Price price, List<MenuProduct> menuProducts) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (MenuProduct menuProduct : menuProducts) {
-            long quantity = menuProduct.getQuantity().getValue();
-            Product product = menuProduct.getProduct();
-            sum = sum.add(product.getPrice().getValue().multiply(BigDecimal.valueOf(quantity)));
-        }
-
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException("가격은 메뉴 상품의 금액의 합보다 클 수 없습니다.");
-        }
+//        BigDecimal sum = BigDecimal.ZERO;
+//        for (MenuProduct menuProduct : menuProducts) {
+//            long quantity = menuProduct.getQuantity().getValue();
+//            Product product = menuProduct.getProduct();
+//            sum = sum.add(product.getPrice().getValue().multiply(BigDecimal.valueOf(quantity)));
+//        }
+//
+//        if (price.compareTo(sum) > 0) {
+//            throw new IllegalArgumentException("가격은 메뉴 상품의 금액의 합보다 클 수 없습니다.");
+//        }
     }
 
     public void changePrice(Price price) {

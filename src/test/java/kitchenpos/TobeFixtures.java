@@ -2,10 +2,12 @@ package kitchenpos;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.Quantity;
 import kitchenpos.products.tobe.domain.Product;
 
 public final class TobeFixtures {
@@ -35,7 +37,7 @@ public final class TobeFixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(product(), MENU_PRODUCT_QUANTITY);
+        return new MenuProduct(UUID.randomUUID().toString(), new Quantity(MENU_PRODUCT_QUANTITY));
     }
 
     public static Product product() {
