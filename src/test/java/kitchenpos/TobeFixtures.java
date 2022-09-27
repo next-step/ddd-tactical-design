@@ -1,12 +1,12 @@
 package kitchenpos;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.Quantity;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -29,7 +29,7 @@ public final class TobeFixtures {
 
     public static Menu menu(long price, boolean displayed) {
         return new Menu("치킨메뉴", BigDecimal.valueOf(price), menuGroup(), displayed,
-            List.of(menuProduct(), menuProduct()));
+            new MenuProducts(menuProduct(), menuProduct()));
     }
 
     public static MenuGroup menuGroup() {

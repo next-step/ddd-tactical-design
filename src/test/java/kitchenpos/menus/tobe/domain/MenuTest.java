@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
-import java.util.List;
 import kitchenpos.TobeFixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,7 +25,7 @@ class MenuTest {
 
                 // when
                 Menu menu = new Menu(displayedName, price, TobeFixtures.menuGroup(), displayed,
-                    List.of(TobeFixtures.menuProduct(), TobeFixtures.menuProduct()));
+                    new MenuProducts(TobeFixtures.menuProduct(), TobeFixtures.menuProduct()));
 
                 // then
                 assertAll(

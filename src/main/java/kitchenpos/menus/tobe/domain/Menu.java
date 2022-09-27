@@ -1,9 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -11,7 +9,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "menu")
@@ -38,26 +35,20 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
 
     public Menu(String displayedName, BigDecimal price, MenuGroup menuGroup, boolean displayed,
-        List<MenuProduct> menuProducts) {
+        MenuProducts menuProducts) {
         this(UUID.randomUUID(), new DisplayedName(displayedName), new Price(price), menuGroup,
             displayed, menuProducts);
     }
 
     protected Menu(UUID id, DisplayedName displayedName, Price price, MenuGroup menuGroup,
-        boolean displayed, List<MenuProduct> menuProducts) {
+        boolean displayed, MenuProducts menuProducts) {
         validatePrice(price, menuProducts);
         this.id = id;
         this.displayedName = displayedName;
@@ -67,7 +58,7 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    private void validatePrice(Price price, List<MenuProduct> menuProducts) {
+    private void validatePrice(Price price, MenuProducts menuProducts) {
 //        BigDecimal sum = BigDecimal.ZERO;
 //        for (MenuProduct menuProduct : menuProducts) {
 //            long quantity = menuProduct.getQuantity().getValue();
@@ -114,7 +105,7 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 }
