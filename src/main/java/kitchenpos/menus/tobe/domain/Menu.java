@@ -57,7 +57,7 @@ public class Menu {
             displayed, menuProducts);
     }
 
-    public Menu(UUID id, DisplayedName displayedName, Price price, MenuGroup menuGroup,
+    protected Menu(UUID id, DisplayedName displayedName, Price price, MenuGroup menuGroup,
         boolean displayed, List<MenuProduct> menuProducts) {
         validatePrice(price, menuProducts);
         this.id = id;

@@ -23,7 +23,7 @@ public class MenuGroup {
         this(UUID.randomUUID(), name);
     }
 
-    public MenuGroup(UUID id, String name) {
+    protected MenuGroup(UUID id, String name) {
         validate(name);
         this.id = id;
         this.name = name;
