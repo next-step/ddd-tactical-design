@@ -1,15 +1,15 @@
 package kitchenpos.menus.tobe.domain.vo;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.global.vo.ValueObject;
 import kitchenpos.menus.tobe.domain.exception.EmptyMenuNameException;
 import kitchenpos.menus.tobe.domain.exception.ProfanityMenuNameException;
 import kitchenpos.products.infra.PurgomalumClient;
 
 @Embeddable
-public class MenuName implements Serializable {
+public class MenuName extends ValueObject {
 
     @Column(name = "name", nullable = false)
     private String value;

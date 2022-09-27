@@ -1,13 +1,13 @@
 package kitchenpos.menus.tobe.domain.vo;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.global.vo.ValueObject;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
-public class MenuProductQuantity implements Serializable {
+public class MenuProductQuantity extends ValueObject {
 
     @Column(name = "quantity", nullable = false)
     @ColumnDefault("0")

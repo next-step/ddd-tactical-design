@@ -1,12 +1,12 @@
 package kitchenpos.menus.tobe.domain.vo;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class MenuGroupName implements Serializable {
+public class MenuGroupName extends ValueObject {
 
     @Column(name = "name", nullable = false)
     private String value;

@@ -1,15 +1,15 @@
 package kitchenpos.menus.tobe.domain.vo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.global.vo.ValueObject;
 import kitchenpos.menus.tobe.domain.exception.MinimumMenuPriceException;
 import kitchenpos.menus.tobe.domain.exception.NullMenuPriceException;
 
 @Embeddable
-public class MenuPrice implements Serializable {
+public class MenuPrice extends ValueObject {
 
     @Column(name = "price", nullable = false)
     private BigDecimal value;

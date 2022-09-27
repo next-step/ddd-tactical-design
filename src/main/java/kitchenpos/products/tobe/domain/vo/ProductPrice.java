@@ -1,16 +1,16 @@
 package kitchenpos.products.tobe.domain.vo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.global.vo.ValueObject;
 import kitchenpos.products.tobe.domain.exception.MinimumProductPriceException;
 import kitchenpos.products.tobe.domain.exception.NullProductPriceException;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
-public class ProductPrice implements Serializable {
+public class ProductPrice extends ValueObject {
 
     @Column(name = "price", nullable = false)
     @ColumnDefault("0")
