@@ -60,13 +60,13 @@ class MenuTest {
             void changePrice() {
                 // given
                 Menu menu = TobeFixtures.menu();
-                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE - 1);
+                Price price = new Price(BigDecimal.valueOf(TobeFixtures.MENU_PRICE - 1));
 
                 // when
                 menu.changePrice(price);
 
                 // then
-                assertThat(menu.getPrice().getValue()).isEqualTo(price);
+                assertThat(menu.getPrice()).isEqualTo(price);
             }
         }
 
@@ -77,7 +77,7 @@ class MenuTest {
             void changePrice() {
                 // given
                 Menu menu = TobeFixtures.menu();
-                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE + 1);
+                Price price = new Price(BigDecimal.valueOf(TobeFixtures.MENU_PRICE + 1));
 
                 // when then
                 assertThatIllegalArgumentException().isThrownBy(() -> menu.changePrice(price));

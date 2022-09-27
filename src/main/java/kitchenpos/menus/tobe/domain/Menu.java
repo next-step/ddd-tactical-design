@@ -81,8 +81,7 @@ public class Menu {
         }
     }
 
-    public void changePrice(BigDecimal value) {
-        Price price = new Price(value);
+    public void changePrice(Price price) {
         validatePrice(price, menuProducts);
         this.price = price;
     }
