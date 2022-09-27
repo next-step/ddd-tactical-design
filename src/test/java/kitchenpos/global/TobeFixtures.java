@@ -84,6 +84,7 @@ public final class TobeFixtures {
     public static MenuProduct menuProduct(long quantity, BigDecimal productPrice) {
         return new MenuProduct(
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 quantity(quantity),
                 price(productPrice)
         );

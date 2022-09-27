@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.util.Objects;
+import static java.util.Objects.isNull;
+
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -23,6 +24,13 @@ public class MenuProduct {
     private Long seq;
 
     @Column(
+            name = "menu_id",
+            columnDefinition = "binary(16)",
+            nullable = false
+    )
+    private UUID menuId;
+
+    @Column(
             name = "product_id",
             columnDefinition = "binary(16)",
             nullable = false
@@ -38,15 +46,20 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
-        validate(productId);
+    public MenuProduct(UUID menuId, UUID productId, Quantity quantity, Price productPrice) {
+        validate(menuId, productId);
+        this.menuId = menuId;
         this.productId = productId;
         this.quantity = quantity;
         this.price = productPrice.multiply(quantity);
     }
 
-    private void validate(UUID productId) {
-        if (Objects.isNull(productId)) {
+    private void validate(UUID menuId, UUID productId) {
+        if (isNull(menuId)) {
+            throw new IllegalArgumentException("메뉴 상품은 반드시 하나의 메뉴를 갖는다.");
+        }
+
+        if (isNull(productId)) {
             throw new IllegalArgumentException("메뉴 상품은 반드시 하나의 상품을 갖는다.");
         }
     }
