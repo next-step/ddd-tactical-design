@@ -1,12 +1,12 @@
 package kitchenpos.menus.tobe.domain.vo;
 
+import static kitchenpos.menus.tobe.domain.MenuFixtures.menuPrice;
+import static kitchenpos.menus.tobe.domain.MenuFixtures.menuProduct;
+import static kitchenpos.menus.tobe.domain.MenuFixtures.menuProducts;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
-import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.exception.MaximumMenuPriceException;
 import kitchenpos.menus.tobe.domain.exception.MinimumMenuPriceException;
@@ -31,25 +31,14 @@ class MenuPriceTest {
     }
 
     private MenuPrice createMenuPrice(BigDecimal price) {
-        return createMenuPrice(price, createMenuProducts());
-    }
-
-    private MenuPrice createMenuPrice(BigDecimal price, MenuProducts menuProducts) {
-        return new MenuPrice(price, menuProducts);
+        return menuPrice(price, createMenuProducts());
     }
 
     private MenuProducts createMenuProducts() {
-        return new MenuProducts(List.of(
-                createMenuProduct(),
-                createMenuProduct()
-        ));
-    }
-
-    private MenuProduct createMenuProduct() {
-        return new MenuProduct(
-                UUID.randomUUID(),
-                new MenuProductQuantity(1),
-                BigDecimal.ONE
+        return menuProducts(
+                menuProduct(1, BigDecimal.ONE),
+                menuProduct(2, BigDecimal.ZERO),
+                menuProduct(3, BigDecimal.ONE)
         );
     }
 
@@ -82,7 +71,7 @@ class MenuPriceTest {
             BigDecimal price = sum.add(BigDecimal.ONE);
 
             assertThatExceptionOfType(MaximumMenuPriceException.class)
-                    .isThrownBy(() -> createMenuPrice(price, menuProducts));
+                    .isThrownBy(() -> menuPrice(price, menuProducts));
         }
     }
 }
