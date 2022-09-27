@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.exception.MaximumMenuPriceException;
 import kitchenpos.menus.tobe.domain.exception.MinimumMenuPriceException;
 import kitchenpos.menus.tobe.domain.exception.NullMenuPriceException;
 
@@ -19,12 +17,12 @@ public class MenuPrice implements Serializable {
     protected MenuPrice() {
     }
 
-    public MenuPrice(BigDecimal value, MenuProducts menuProducts) {
-        validate(value, menuProducts);
+    public MenuPrice(BigDecimal value) {
+        validate(value);
         this.value = value;
     }
 
-    private void validate(BigDecimal price, MenuProducts menuProducts) {
+    private void validate(BigDecimal price) {
         if (Objects.isNull(price)) {
             throw new NullMenuPriceException();
         }
@@ -32,10 +30,10 @@ public class MenuPrice implements Serializable {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new MinimumMenuPriceException();
         }
+    }
 
-        if (price.compareTo(menuProducts.sum()) > 0) {
-            throw new MaximumMenuPriceException();
-        }
+    public BigDecimal getValue() {
+        return value;
     }
 
     @Override

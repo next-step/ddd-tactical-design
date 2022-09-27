@@ -14,6 +14,33 @@ public final class MenuFixtures {
     private MenuFixtures() {
     }
 
+    public static Menu menu(BigDecimal price, MenuProduct... menuProduct) {
+        return menu(
+                "후라이드+후라이드",
+                "두마리 치킨",
+                price,
+                false,
+                menuProduct
+        );
+    }
+
+    public static Menu menu(
+            String name,
+            String groupName,
+            BigDecimal price,
+            boolean displayed,
+            MenuProduct... menuProduct
+    ) {
+        MenuProducts menuProducts = menuProducts(menuProduct);
+        return new Menu(
+                menuName(name),
+                menuGroup(groupName),
+                menuProducts,
+                menuPrice(price),
+                displayed
+        );
+    }
+
     public static MenuGroup menuGroup(String name) {
         return new MenuGroup(new MenuGroupName(name));
     }
@@ -22,8 +49,8 @@ public final class MenuFixtures {
         return new MenuName(name, new FakePurgomalumClient());
     }
 
-    public static MenuPrice menuPrice(BigDecimal price, MenuProducts menuProducts) {
-        return new MenuPrice(price, menuProducts);
+    public static MenuPrice menuPrice(BigDecimal price) {
+        return new MenuPrice(price);
     }
 
     public static MenuProduct menuProduct(long quantity, BigDecimal productPrice) {
