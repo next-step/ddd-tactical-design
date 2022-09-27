@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -20,10 +21,14 @@ public class DisplayedName {
     }
 
     public static DisplayedName valueOf(final String value, final Profanity profanity) {
-        if (Objects.isNull(value) || profanity.containsProfanity(value)) {
+        if (isNullOrEmpty(value) || profanity.containsProfanity(value)) {
             throw new InvalidProductNameException();
         }
         return new DisplayedName(value);
+    }
+
+    private static boolean isNullOrEmpty(final String value) {
+        return !StringUtils.hasText(value);
     }
 
     public String value() {
