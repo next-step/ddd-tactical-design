@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import static kitchenpos.global.utils.CollectionUtils.isEmpty;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +34,7 @@ public class MenuProducts extends ValueObject {
     }
 
     private void validate(List<MenuProduct> values) {
-        if (Objects.isNull(values) || values.isEmpty()) {
+        if (isEmpty(values)) {
             throw new IllegalArgumentException();
         }
     }

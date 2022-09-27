@@ -1,5 +1,7 @@
 package kitchenpos.global.vo;
 
+import static kitchenpos.global.utils.StringUtils.isBlank;
+
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -22,7 +24,7 @@ public class Name extends ValueObject {
     }
 
     private void validate(String name, PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name) || name.isBlank()) {
+        if (isBlank(name)) {
             throw new EmptyNameException();
         }
 
