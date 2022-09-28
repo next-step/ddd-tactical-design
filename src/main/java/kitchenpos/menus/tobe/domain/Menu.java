@@ -13,7 +13,7 @@ import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.Price;
 
 @Table(name = "tb_menu")
-@Entity
+@Entity(name = "tb_menu")
 public class Menu {
 
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -96,5 +96,9 @@ public class Menu {
 
     public Price getPrice() {
         return price;
+    }
+
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
     }
 }

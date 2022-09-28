@@ -10,7 +10,7 @@ import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.Price;
 
 @Table(name = "tb_product")
-@Entity
+@Entity(name = "tb_product")
 public class Product {
 
     @Id

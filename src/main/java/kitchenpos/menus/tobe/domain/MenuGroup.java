@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import kitchenpos.global.vo.Name;
 
 @Table(name = "tb_menu_group")
-@Entity
+@Entity(name = "tb_menu_group")
 public class MenuGroup {
 
     @Id
