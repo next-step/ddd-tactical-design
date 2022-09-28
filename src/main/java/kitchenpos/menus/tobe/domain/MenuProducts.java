@@ -2,19 +2,20 @@ package kitchenpos.menus.tobe.domain;
 
 import static kitchenpos.global.utils.CollectionUtils.isEmpty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import kitchenpos.global.vo.Price;
-import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class MenuProducts extends ValueObject {
+public class MenuProducts implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -23,7 +24,7 @@ public class MenuProducts extends ValueObject {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> values;
+    private List<MenuProduct> values = new ArrayList<>();
 
     protected MenuProducts() {
     }
@@ -48,20 +49,7 @@ public class MenuProducts extends ValueObject {
         return sum;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        MenuProducts that = (MenuProducts) o;
-        return Objects.equals(values, that.values);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(values);
+    public List<MenuProduct> getValues() {
+        return Collections.unmodifiableList(values);
     }
 }
