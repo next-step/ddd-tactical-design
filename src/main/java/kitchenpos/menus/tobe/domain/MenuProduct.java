@@ -38,4 +38,8 @@ public class MenuProduct {
     public BigDecimal getAmount() {
         return price.multiply(quantity);
     }
+
+    protected void changePrice(Price price) {
+        this.price = price;
+    }
 }

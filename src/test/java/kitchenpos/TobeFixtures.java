@@ -38,8 +38,11 @@ public final class TobeFixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(UUID.randomUUID().toString(),
-            new Price(new BigDecimal(MENU_PRODUCT_PRICE)), new Quantity(MENU_PRODUCT_QUANTITY));
+        return menuProduct(MENU_PRODUCT_PRICE, MENU_PRODUCT_QUANTITY);
     }
 
+    public static MenuProduct menuProduct(long price, long quantity) {
+        return new MenuProduct(UUID.randomUUID().toString(),
+            new Price(new BigDecimal(price)), new Quantity(quantity));
+    }
 }

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -58,16 +59,10 @@ public class Menu {
     }
 
     private void validatePrice(Price price, MenuProducts menuProducts) {
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (MenuProduct menuProduct : menuProducts) {
-//            long quantity = menuProduct.getQuantity().getValue();
-//            Product product = menuProduct.getProduct();
-//            sum = sum.add(product.getPrice().getValue().multiply(BigDecimal.valueOf(quantity)));
-//        }
-//
-//        if (price.compareTo(sum) > 0) {
-//            throw new IllegalArgumentException("가격은 메뉴 상품의 금액의 합보다 클 수 없습니다.");
-//        }
+        BigDecimal totalAmount = menuProducts.getTotalAmount();
+        if (price.compareTo(totalAmount) > 0) {
+            throw new IllegalArgumentException("가격은 메뉴 상품의 금액의 합보다 클 수 없습니다.");
+        }
     }
 
     public void changePrice(Price price) {
@@ -102,9 +97,5 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public MenuProducts getMenuProducts() {
-        return menuProducts;
     }
 }
