@@ -2,7 +2,6 @@ package kitchenpos;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 import kitchenpos.menus.tobe.domain.DisplayedName;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
@@ -10,11 +9,10 @@ import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.Price;
 import kitchenpos.menus.tobe.domain.Quantity;
-import kitchenpos.products.tobe.domain.Product;
 
 public final class TobeFixtures {
     public static final long MENU_PRODUCT_QUANTITY = 2;
-    public static final long PRODUCT_PRICE = 10_000;
+    public static final long MENU_PRODUCT_PRICE = 10_000;
     public static final long MENU_PRICE = 40_000;
 
     public static Menu menu() {
@@ -30,7 +28,8 @@ public final class TobeFixtures {
     }
 
     public static Menu menu(long price, boolean displayed) {
-        return new Menu(new DisplayedName("치킨메뉴"), new Price(BigDecimal.valueOf(price)), menuGroup(), displayed,
+        return new Menu(new DisplayedName("치킨메뉴"), new Price(BigDecimal.valueOf(price)),
+            menuGroup(), displayed,
             new MenuProducts(menuProduct(), menuProduct()));
     }
 
@@ -39,14 +38,8 @@ public final class TobeFixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(UUID.randomUUID().toString(), new Quantity(MENU_PRODUCT_QUANTITY));
+        return new MenuProduct(UUID.randomUUID().toString(),
+            new Price(new BigDecimal(MENU_PRODUCT_PRICE)), new Quantity(MENU_PRODUCT_QUANTITY));
     }
 
-    public static Product product() {
-        return new Product(generateName(), BigDecimal.valueOf(PRODUCT_PRICE));
-    }
-
-    private static String generateName() {
-        return "치킨" + ThreadLocalRandom.current().nextInt(1000);
-    }
 }

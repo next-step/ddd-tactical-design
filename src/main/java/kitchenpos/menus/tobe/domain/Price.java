@@ -53,4 +53,8 @@ public class Price {
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
     }
+
+    public BigDecimal multiply(Quantity quantity) {
+        return value.multiply(BigDecimal.valueOf(quantity.getValue()));
+    }
 }

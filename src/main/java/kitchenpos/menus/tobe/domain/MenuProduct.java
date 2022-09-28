@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -20,25 +21,21 @@ public class MenuProduct {
     private String productId;
 
     @Embedded
+    private Price price;
+
+    @Embedded
     private Quantity quantity;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(String productId, Quantity quantity) {
+    public MenuProduct(String productId, Price price, Quantity quantity) {
         this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public Quantity getQuantity() {
-        return quantity;
+    public BigDecimal getAmount() {
+        return price.multiply(quantity);
     }
 }
