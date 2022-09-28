@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
 
-import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.asis.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

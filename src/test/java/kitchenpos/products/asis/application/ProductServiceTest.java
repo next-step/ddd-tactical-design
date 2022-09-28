@@ -1,9 +1,8 @@
-package kitchenpos.products.application;
+package kitchenpos.products.asis.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.asis.application.ProductService;
 import kitchenpos.products.asis.domain.Product;
 import kitchenpos.products.asis.domain.ProductRepository;
 import kitchenpos.products.asis.infra.PurgomalumClient;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.asis.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
