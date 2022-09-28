@@ -236,6 +236,7 @@ docker compose -p kitchenpos up -d
 - [x] `ProductPrice`를 변경할 수 있다.
   - [x] 기존 `Product`가 존재하지 않을 경우 `ProductPrice`를 변경할 수 없다.
   - [x] 변경하려는 `ProductPrice`는 0 이상이어야 한다.
+- [x] 모든 `Product` 목록을 조회할 수 있다.
 
 ### 메뉴
 - `MenuGroup`은 고유식별자와 `MenuGroupName`을 갖는다.

@@ -1,12 +1,13 @@
 package kitchenpos.products.application;
 
-import static kitchenpos.tobe.Fixtures.INVALID_ID;
-import static kitchenpos.tobe.Fixtures.product;
+import static kitchenpos.products.ProductFixtures.INVALID_ID;
+import static kitchenpos.products.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.domain.FakeProductProfanityCheckClient;
 import kitchenpos.products.domain.InMemoryProductRepository;
@@ -89,14 +90,13 @@ public class ProductServiceTest {
     private ProductChangePriceRequest createChangePriceRequest(BigDecimal price) {
         return new ProductChangePriceRequest(price);
     }
-//
-//    @DisplayName("상품의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        productRepository.save(product("후라이드", 16_000L));
-//        productRepository.save(product("양념치킨", 16_000L));
-//        List<Product> actual = productService.findAll();
-//        assertThat(actual).hasSize(2);
-//    }
 
+    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        productRepository.save(product("후라이드", 16_000L));
+        productRepository.save(product("양념치킨", 16_000L));
+        List<ProductResponse> actual = productService.findAll();
+        assertThat(actual).hasSize(2);
+    }
 }

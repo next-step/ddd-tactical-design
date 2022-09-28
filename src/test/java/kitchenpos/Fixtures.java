@@ -1,6 +1,6 @@
-package kitchenpos.asis;
+package kitchenpos;
 
-import static kitchenpos.tobe.Fixtures.product;
+import static kitchenpos.products.ProductFixtures.product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

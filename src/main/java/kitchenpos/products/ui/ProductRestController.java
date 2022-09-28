@@ -1,6 +1,7 @@
 package kitchenpos.products.ui;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.ui.request.ProductChangePriceRequest;
@@ -29,9 +30,9 @@ public class ProductRestController {
     public ResponseEntity<ProductResponse> changePrice(@PathVariable UUID productId, @RequestBody final ProductChangePriceRequest request) {
         return ResponseEntity.ok(productService.changePrice(productId, request));
     }
-//
-//    @GetMapping
-//    public ResponseEntity<List<Product>> findAll() {
-//        return ResponseEntity.ok(productService.findAll());
-//    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductResponse>> findAll() {
+        return ResponseEntity.ok(productService.findAll());
+    }
 }

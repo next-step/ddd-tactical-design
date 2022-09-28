@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import static kitchenpos.asis.Fixtures.*;
-import static kitchenpos.tobe.Fixtures.product;
+import static kitchenpos.Fixtures.*;
+import static kitchenpos.products.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

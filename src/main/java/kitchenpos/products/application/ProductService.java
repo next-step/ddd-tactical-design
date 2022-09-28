@@ -1,5 +1,6 @@
 package kitchenpos.products.application;
 
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.products.domain.ProductProfanityCheckClient;
@@ -46,9 +47,9 @@ public class ProductService {
 
         return ProductResponse.from(product);
     }
-//
-//    @Transactional(readOnly = true)
-//    public List<Product> findAll() {
-//        return productRepository.findAll();
-//    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findAll() {
+        return ProductResponse.of(productRepository.findAll());
+    }
 }
