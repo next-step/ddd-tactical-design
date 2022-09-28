@@ -10,12 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.Quantity;
+import kitchenpos.menus.tobe.domain.vo.Product;
 
 @Table(name = "tb_menu_product")
-@Entity
+@Entity(name = "tb_menu_product")
 public class MenuProduct {
 
     @Column(name = "seq")
@@ -23,27 +23,23 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @Column(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            nullable = false
-    )
-    private UUID productId;
+    @Embedded
+    private Product product;
 
     @Embedded
     private Quantity quantity;
 
-    @Transient
-    private Price price;
-
     protected MenuProduct() {
+    }
+
+    public MenuProduct(UUID productId, Quantity quantity) {
+        this(productId, quantity, null);
     }
 
     public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
         validate(productId);
-        this.productId = productId;
+        this.product = new Product(productId, productPrice);
         this.quantity = quantity;
-        this.price = productPrice.multiply(quantity);
     }
 
     private void validate(UUID productId) {
@@ -52,7 +48,25 @@ public class MenuProduct {
         }
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public MenuProduct withProduct(Product product) {
+        this.product = product;
+        return this;
+    }
+
+    public UUID getProductId() {
+        return product.getId();
+    }
+
     public Price getPrice() {
-        return price;
+        Price productPrice = product.getPrice();
+        return productPrice.multiply(quantity);
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
     }
 }
