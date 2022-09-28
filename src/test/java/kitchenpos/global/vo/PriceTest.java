@@ -1,6 +1,5 @@
 package kitchenpos.global.vo;
 
-import static kitchenpos.global.TobeFixtures.price;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
@@ -83,5 +82,9 @@ class PriceTest {
             assertThatExceptionOfType(MaximumPriceException.class)
                     .isThrownBy(() -> price.validateLessThan(limit));
         }
+    }
+
+    private Price price(BigDecimal price) {
+        return new Price(price);
     }
 }

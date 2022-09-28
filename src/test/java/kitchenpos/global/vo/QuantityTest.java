@@ -1,6 +1,5 @@
 package kitchenpos.global.vo;
 
-import static kitchenpos.global.TobeFixtures.quantity;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -19,6 +18,10 @@ class QuantityTest {
         assertThat(actual).isEqualTo(quantity(0));
         assertThat(actual.hashCode() == quantity(0).hashCode())
                 .isTrue();
+    }
+
+    private Quantity quantity(long quantity) {
+        return new Quantity(quantity);
     }
 
     @DisplayName("수량은 0개 이상이어야 한다.")

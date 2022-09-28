@@ -1,11 +1,11 @@
 package kitchenpos.global.vo;
 
-import static kitchenpos.global.TobeFixtures.name;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import kitchenpos.global.exception.EmptyNameException;
 import kitchenpos.global.exception.ProfanityNameException;
+import kitchenpos.products.application.FakePurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,5 +44,9 @@ class NameTest {
             assertThatExceptionOfType(ProfanityNameException.class)
                     .isThrownBy(() -> name(profanityWord));
         }
+    }
+
+    private Name name(String name) {
+        return new Name(name, new FakePurgomalumClient());
     }
 }
