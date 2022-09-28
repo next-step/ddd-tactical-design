@@ -1,6 +1,8 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.*;
+import kitchenpos.menus.menugroup.domain.MenuGroup;
+import kitchenpos.menus.menugroup.domain.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.Profanity;
