@@ -10,6 +10,7 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.dto.ProductDTO;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -30,12 +31,24 @@ public final class TobeFixtures {
         return new Quantity(value);
     }
 
-    public static Product product(String name) {
-        return product(name, BigDecimal.ZERO);
+    public static Product product() {
+        return product("후라이드", 36_000);
     }
 
-    public static Product product(String name, BigDecimal price) {
-        return new Product(name(name), price(price));
+    public static Product product(String name) {
+        return product(name, 0);
+    }
+
+    public static Product product(String name, long price) {
+        return new Product(name(name), price(BigDecimal.valueOf(price)));
+    }
+
+    public static ProductDTO productDTO(String name, long price) {
+        Product product = product(name, price);
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getPrice());
     }
 
     public static Menu menu(BigDecimal price, MenuProduct... menuProduct) {
@@ -87,6 +100,22 @@ public final class TobeFixtures {
                 quantity(quantity),
                 price(productPrice)
         );
+    }
+
+    public static MenuProduct menuProduct(long quantity, long productPrice) {
+        return new MenuProduct(
+                UUID.randomUUID(),
+                quantity(quantity),
+                price(BigDecimal.valueOf(productPrice))
+        );
+    }
+
+    public static MenuProduct menuProduct(UUID productId, long quantity) {
+        return new MenuProduct(productId, new Quantity(quantity));
+    }
+
+    public static MenuProduct menuProduct(UUID productId, long quantity, Price productPrice) {
+        return new MenuProduct(productId, new Quantity(quantity), productPrice);
     }
 
     public static MenuProducts menuProducts(MenuProduct... menuProducts) {
