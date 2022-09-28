@@ -1,21 +1,48 @@
 package kitchenpos.products.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import kitchenpos.products.domain.FakeProductProfanityCheckClient;
+import kitchenpos.products.domain.InMemoryProductRepository;
+import kitchenpos.products.domain.ProductProfanityCheckClient;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.ui.request.ProductRequest;
+import kitchenpos.products.ui.response.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class ProductServiceTest {
 
-//    private ProductRepository productRepository;
-//    private MenuRepository menuRepository;
-//    private PurgomalumClient purgomalumClient;
-//    private ProductService productService;
-//
-//    @BeforeEach
-//    void setUp() {
-//        productRepository = new InMemoryProductRepository();
-//        menuRepository = new InMemoryMenuRepository();
-//        purgomalumClient = new FakePurgomalumClient();
-//        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
-//    }
+    private ProductService productService;
+    private ProductRepository productRepository;
+    private ProductProfanityCheckClient profanityCheckClient;
+
+    @BeforeEach
+    void setUp() {
+        productRepository = new InMemoryProductRepository();
+        profanityCheckClient = new FakeProductProfanityCheckClient();
+        productService = new ProductService(productRepository, profanityCheckClient);
+    }
+
+    @DisplayName("상품을 등록할 수 있다.")
+    @Test
+    void create() {
+        final ProductRequest request = createProductRequest("후라이드", 16_000L);
+        final ProductResponse response = productService.create(request);
+        assertThat(response).isNotNull();
+        assertAll(
+            () -> assertThat(response.getId()).isNotNull(),
+            () -> assertThat(response.getName()).isEqualTo(request.getName()),
+            () -> assertThat(response.getPrice()).isEqualTo(request.getPrice())
+        );
+    }
+
+    private ProductRequest createProductRequest(String name, long price) {
+        return new ProductRequest(name, BigDecimal.valueOf(price));
+    }
 //
 //    @DisplayName("상품의 가격을 변경할 수 있다.")
 //    @Test
