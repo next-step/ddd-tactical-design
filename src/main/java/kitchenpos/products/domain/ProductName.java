@@ -4,6 +4,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.products.exception.InvalidProductNameException;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 
 @Embeddable
 public class ProductName {
@@ -14,10 +15,10 @@ public class ProductName {
     protected ProductName() {
     }
 
-    public ProductName(String value, ProductProfanityCheckClient productProfanityCheckClient) {
+    public ProductName(String value, ProfanityCheckClient profanityCheckClient) {
         this.value = value;
         validateNull(this.value);
-        validateProfanity(this.value, productProfanityCheckClient);
+        validateProfanity(this.value, profanityCheckClient);
     }
 
     private void validateNull(String value) {
@@ -26,8 +27,8 @@ public class ProductName {
         }
     }
 
-    private void validateProfanity(String value, ProductProfanityCheckClient productProfanityCheckClient) {
-        if (productProfanityCheckClient.containsProfanity(value)) {
+    private void validateProfanity(String value, ProfanityCheckClient profanityCheckClient) {
+        if (profanityCheckClient.containsProfanity(value)) {
             throw new InvalidProductNameException("상품 이름에는 비속어가 포함될 수 없습니다.");
         }
     }

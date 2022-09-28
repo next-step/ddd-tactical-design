@@ -1,9 +1,10 @@
-package kitchenpos.products.domain;
+package kitchenpos.profanity.infra;
 
 import java.util.Arrays;
 import java.util.List;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 
-public class FakeProductProfanityCheckClient implements ProductProfanityCheckClient {
+public class FakeProfanityCheckClient implements ProfanityCheckClient {
     private static final List<String> profanities;
 
     static {

@@ -2,7 +2,7 @@ package kitchenpos.products;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.products.domain.FakeProductProfanityCheckClient;
+import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
@@ -20,7 +20,7 @@ public class ProductFixtures {
     }
 
     public static Product product(UUID id, String name, long price) {
-        ProductName productName = new ProductName(name, new FakeProductProfanityCheckClient());
+        ProductName productName = new ProductName(name, new FakeProfanityCheckClient());
         ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
         return new Product(id, productName, productPrice);
     }

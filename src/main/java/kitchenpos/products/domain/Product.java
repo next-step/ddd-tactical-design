@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 
 @Table(name = "product")
 @Entity
@@ -27,8 +28,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, BigDecimal price, ProductProfanityCheckClient productProfanityCheckClient) {
-        this(new ProductName(name, productProfanityCheckClient), new ProductPrice(price));
+    public Product(String name, BigDecimal price, ProfanityCheckClient profanityCheckClient) {
+        this(new ProductName(name, profanityCheckClient), new ProductPrice(price));
     }
 
     public Product(ProductName name, ProductPrice price) {

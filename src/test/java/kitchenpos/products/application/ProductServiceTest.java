@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.products.domain.FakeProductProfanityCheckClient;
+import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.products.domain.InMemoryProductRepository;
-import kitchenpos.products.domain.ProductProfanityCheckClient;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.exception.InvalidProductPriceException;
 import kitchenpos.products.exception.ProductNotFoundException;
@@ -29,12 +29,12 @@ public class ProductServiceTest {
 
     private ProductService productService;
     private ProductRepository productRepository;
-    private ProductProfanityCheckClient profanityCheckClient;
+    private ProfanityCheckClient profanityCheckClient;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        profanityCheckClient = new FakeProductProfanityCheckClient();
+        profanityCheckClient = new FakeProfanityCheckClient();
         productService = new ProductService(productRepository, profanityCheckClient);
     }
 

@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.domain.ProductPrice;
-import kitchenpos.products.domain.ProductProfanityCheckClient;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.exception.ProductNotFoundException;
@@ -16,11 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductProfanityCheckClient profanityCheckClient;
+    private final ProfanityCheckClient profanityCheckClient;
 
     public ProductService(
         ProductRepository productRepository,
-        ProductProfanityCheckClient profanityCheckClient
+        ProfanityCheckClient profanityCheckClient
     ) {
         this.productRepository = productRepository;
         this.profanityCheckClient = profanityCheckClient;

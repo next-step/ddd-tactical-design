@@ -1,17 +1,16 @@
-package kitchenpos.products.infra;
+package kitchenpos.profanity.infra;
 
 import java.net.URI;
-import kitchenpos.products.domain.ProductProfanityCheckClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class ProductPurgomalumClient implements ProductProfanityCheckClient {
+public class PurgomalumClient implements ProfanityCheckClient {
     private final RestTemplate restTemplate;
 
-    public ProductPurgomalumClient(RestTemplateBuilder restTemplateBuilder) {
+    public PurgomalumClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
