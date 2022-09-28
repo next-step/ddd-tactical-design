@@ -231,7 +231,7 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 [x] `Product`는 고유식별자와 `ProductName`과 `ProductPrice`를 갖는다.
-  [ ] `ProductName`에는 `Profanity`가 포함될 수 없다.
+  [x] `ProductName`에는 `Profanity`가 포함될 수 없다.
   [x] `ProductPrice`는 0 이상이어야 한다.
 [ ] `ProductPrice`를 변경할 수 있다.
 

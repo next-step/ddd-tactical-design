@@ -1,14 +1,17 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.asis.application.FakePurgomalumClient;
-import kitchenpos.products.asis.application.InMemoryProductRepository;
-import kitchenpos.products.asis.domain.Product;
-import kitchenpos.products.asis.domain.ProductRepository;
-import kitchenpos.products.asis.infra.PurgomalumClient;
+import static kitchenpos.asis.Fixtures.*;
+import static kitchenpos.tobe.Fixtures.product;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.*;
+import kitchenpos.menus.domain.*;
+import kitchenpos.products.tobe.domain.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,19 +21,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
-import java.util.*;
-
-import static kitchenpos.asis.Fixtures.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private MenuProfanityCheckClient menuProfanityCheckClient;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -40,8 +35,10 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        menuProfanityCheckClient = new FakeMenuProfanityCheckClient();
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository,
+            menuProfanityCheckClient
+        );
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

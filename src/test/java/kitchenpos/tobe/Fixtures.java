@@ -2,7 +2,9 @@ package kitchenpos.tobe;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.FakeProductProfanityCheckClient;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 
 public class Fixtures {
@@ -16,7 +18,8 @@ public class Fixtures {
     }
 
     public static Product product(UUID id, String name, long price) {
+        ProductName productName = new ProductName(name, new FakeProductProfanityCheckClient());
         ProductPrice productPrice = new ProductPrice(BigDecimal.valueOf(price));
-        return new Product(id, name, productPrice);
+        return new Product(id, productName, productPrice);
     }
 }

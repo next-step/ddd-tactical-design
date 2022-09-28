@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
@@ -17,8 +18,8 @@ public class Product {
     )
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private ProductPrice price;
@@ -26,11 +27,15 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, ProductPrice price) {
+    public Product(String name, BigDecimal price, ProductProfanityCheckClient productProfanityCheckClient) {
+        this(new ProductName(name, productProfanityCheckClient), new ProductPrice(price));
+    }
+
+    public Product(ProductName name, ProductPrice price) {
         this(UUID.randomUUID(), name, price);
     }
 
-    public Product(UUID id, String name, ProductPrice price) {
+    public Product(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -40,12 +45,20 @@ public class Product {
         return id;
     }
 
-    public String getName() {
+    public ProductName getName() {
         return name;
+    }
+
+    public String getNameValue() {
+        return name.getValue();
     }
 
     public ProductPrice getPrice() {
         return price;
+    }
+
+    public BigDecimal getPriceValue() {
+        return price.getValue();
     }
 
     @Override

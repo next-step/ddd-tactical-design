@@ -1,9 +1,8 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.asis.domain.Product;
-
-import javax.persistence.*;
 import java.util.UUID;
+import javax.persistence.*;
+import kitchenpos.products.tobe.domain.Product;
 
 @Table(name = "menu_product")
 @Entity
