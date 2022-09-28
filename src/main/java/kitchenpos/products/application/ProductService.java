@@ -1,9 +1,13 @@
 package kitchenpos.products.application;
 
+import java.util.UUID;
+import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.products.domain.ProductProfanityCheckClient;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.ui.request.ProductRequest;
+import kitchenpos.products.exception.ProductNotFoundException;
+import kitchenpos.products.ui.request.ProductChangePriceRequest;
+import kitchenpos.products.ui.request.ProductCreateRequest;
 import kitchenpos.products.ui.response.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +26,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse create(final ProductRequest request) {
+    public ProductResponse create(final ProductCreateRequest request) {
         Product product = new Product(
             request.getName(),
             request.getPrice(),
@@ -32,31 +36,16 @@ public class ProductService {
         return ProductResponse.from(productRepository.save(product));
     }
 
-//    @Transactional
-//    public Product changePrice(final UUID productId, final Product request) {
-//        final BigDecimal price = request.getPrice();
-//        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        final Product product = productRepository.findById(productId)
-//            .orElseThrow(NoSuchElementException::new);
-//        product.setPrice(price);
-//        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-//        for (final Menu menu : menus) {
-//            BigDecimal sum = BigDecimal.ZERO;
-//            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//                sum = sum.add(
-//                    menuProduct.getProduct()
-//                        .getPrice()
-//                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//                );
-//            }
-//            if (menu.getPrice().compareTo(sum) > 0) {
-//                menu.setDisplayed(false);
-//            }
-//        }
-//        return product;
-//    }
+    @Transactional
+    public ProductResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
+        ProductPrice newPrice = new ProductPrice(request.getPrice());
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new ProductNotFoundException("상품을 찾을 수 없습니다."));
+
+        product.changePrice(newPrice);
+
+        return ProductResponse.from(product);
+    }
 //
 //    @Transactional(readOnly = true)
 //    public List<Product> findAll() {

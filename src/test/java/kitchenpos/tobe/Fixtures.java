@@ -9,6 +9,8 @@ import kitchenpos.products.domain.ProductPrice;
 
 public class Fixtures {
 
+    public static final UUID INVALID_ID = new UUID(0, 0);
+
     public static Product product() {
         return product("후라이드", 16_000L);
     }

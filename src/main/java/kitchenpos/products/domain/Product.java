@@ -41,6 +41,10 @@ public class Product {
         this.price = price;
     }
 
+    public void changePrice(ProductPrice newPrice) {
+        this.price = newPrice;
+    }
+
     public UUID getId() {
         return id;
     }
