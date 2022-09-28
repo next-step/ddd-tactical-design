@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,18 +15,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final MenuProfanityCheckClient menuProfanityCheckClient;
+    private final ProfanityCheckClient profanityCheckClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final MenuProfanityCheckClient menuProfanityCheckClient
+        final ProfanityCheckClient profanityCheckClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.menuProfanityCheckClient = menuProfanityCheckClient;
+        this.profanityCheckClient = profanityCheckClient;
     }
 
     @Transactional
@@ -70,7 +71,7 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || menuProfanityCheckClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || profanityCheckClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu();
