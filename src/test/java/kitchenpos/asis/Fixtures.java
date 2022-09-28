@@ -11,7 +11,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);

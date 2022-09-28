@@ -1,8 +1,8 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.products.tobe.exception.InvalidProductNameException;
+import kitchenpos.products.exception.InvalidProductNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

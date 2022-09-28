@@ -1,8 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.products.tobe.domain.ProductProfanityCheckClient;
 
 public class FakeProductProfanityCheckClient implements ProductProfanityCheckClient {
     private static final List<String> profanities;

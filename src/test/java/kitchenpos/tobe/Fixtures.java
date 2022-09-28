@@ -2,10 +2,10 @@ package kitchenpos.tobe;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.products.tobe.domain.FakeProductProfanityCheckClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.domain.FakeProductProfanityCheckClient;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductName;
+import kitchenpos.products.domain.ProductPrice;
 
 public class Fixtures {
 

@@ -1,10 +1,10 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.tobe.exception.InvalidProductPriceException;
+import kitchenpos.products.exception.InvalidProductPriceException;
 
 @Embeddable
 public class ProductPrice {

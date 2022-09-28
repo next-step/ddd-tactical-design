@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.exception;
+package kitchenpos.products.exception;
 
 public class InvalidProductPriceException extends RuntimeException {
 

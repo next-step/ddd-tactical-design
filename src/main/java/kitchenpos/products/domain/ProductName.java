@@ -1,9 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.tobe.exception.InvalidProductNameException;
+import kitchenpos.products.exception.InvalidProductNameException;
 
 @Embeddable
 public class ProductName {
