@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -41,9 +40,9 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(String displayedName, BigDecimal price, MenuGroup menuGroup, boolean displayed,
+    public Menu(DisplayedName displayedName, Price price, MenuGroup menuGroup, boolean displayed,
         MenuProducts menuProducts) {
-        this(UUID.randomUUID(), new DisplayedName(displayedName), new Price(price), menuGroup,
+        this(UUID.randomUUID(), displayedName, price, menuGroup,
             displayed, menuProducts);
     }
 

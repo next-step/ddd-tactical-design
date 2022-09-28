@@ -19,8 +19,8 @@ class MenuTest {
             @Test
             void create() {
                 // given
-                String displayedName = "치킨메뉴";
-                BigDecimal price = BigDecimal.valueOf(TobeFixtures.MENU_PRICE);
+                DisplayedName displayedName = new DisplayedName("치킨메뉴");
+                Price price = new Price(BigDecimal.valueOf(TobeFixtures.MENU_PRICE));
                 boolean displayed = true;
 
                 // when
@@ -30,8 +30,8 @@ class MenuTest {
                 // then
                 assertAll(
                     () -> assertThat(menu.getId()).isNotNull(),
-                    () -> assertThat(menu.getDisplayedName()).isEqualTo(new DisplayedName(displayedName)),
-                    () -> assertThat(menu.getPrice()).isEqualTo(new Price(price)),
+                    () -> assertThat(menu.getDisplayedName()).isEqualTo(displayedName),
+                    () -> assertThat(menu.getPrice()).isEqualTo(price),
                     () -> assertThat(menu.isDisplayed()).isTrue()
                 );
             }
