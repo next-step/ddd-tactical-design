@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -28,5 +29,11 @@ public class MenuProducts {
 
     public MenuProducts(List<MenuProduct> values) {
         this.values = values;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return values.stream()
+            .map(MenuProduct::getAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
