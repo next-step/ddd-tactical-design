@@ -32,13 +32,9 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, Quantity quantity) {
-        this(productId, quantity, null);
-    }
-
-    public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
-        validate(productId);
-        this.product = new Product(productId, productPrice);
+    public MenuProduct(Product product, Quantity quantity) {
+        validate(product.getId());
+        this.product = product;
         this.quantity = quantity;
     }
 

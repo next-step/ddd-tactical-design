@@ -60,7 +60,7 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed,
+    protected Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed,
             MenuProducts menuProducts) {
         this.id = id;
         this.name = name;

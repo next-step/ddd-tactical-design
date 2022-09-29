@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain.vo;
 
+import static java.util.Objects.isNull;
+
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.AttributeOverride;
@@ -37,18 +39,21 @@ public class Product extends ValueObject {
     protected Product() {
     }
 
-    public Product(UUID productId) {
-        this(productId, null);
-    }
-
-    public Product(UUID productId, Price productPrice) {
-        this(productId, null, productPrice);
+    public Product(UUID id) {
+        validate(id);
+        this.id = id;
     }
 
     public Product(UUID id, Name name, Price price) {
-        this.id = id;
+        this(id);
         this.name = name;
         this.price = price;
+    }
+
+    private void validate(UUID id) {
+        if (isNull(id)) {
+            throw new IllegalArgumentException("상품은 반드시 식별자를 갖는다.");
+        }
     }
 
     public UUID getId() {
