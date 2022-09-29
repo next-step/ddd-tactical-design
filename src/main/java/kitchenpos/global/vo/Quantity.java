@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
-public class Quantity extends ValueObject {
+public class Quantity implements ValueObject {
 
     @Column(name = "quantity", nullable = false)
     @ColumnDefault("0")

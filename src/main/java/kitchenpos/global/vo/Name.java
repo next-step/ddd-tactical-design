@@ -10,7 +10,7 @@ import kitchenpos.global.exception.ProfanityNameException;
 import kitchenpos.products.infra.PurgomalumClient;
 
 @Embeddable
-public class Name extends ValueObject {
+public class Name implements ValueObject {
 
     @Column(name = "name", nullable = false)
     private String value;

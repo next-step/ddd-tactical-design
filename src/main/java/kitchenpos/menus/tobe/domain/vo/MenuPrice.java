@@ -9,7 +9,7 @@ import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class MenuPrice extends ValueObject {
+public class MenuPrice implements ValueObject {
 
     @Embedded
     @AttributeOverride(

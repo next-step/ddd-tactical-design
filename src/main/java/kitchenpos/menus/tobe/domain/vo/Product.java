@@ -13,7 +13,7 @@ import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class Product extends ValueObject {
+public class Product implements ValueObject {
 
     @Column(
             name = "product_id",

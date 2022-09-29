@@ -6,7 +6,7 @@ import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class MenuGroupName extends ValueObject {
+public class MenuGroupName implements ValueObject {
 
     private Name value;
 

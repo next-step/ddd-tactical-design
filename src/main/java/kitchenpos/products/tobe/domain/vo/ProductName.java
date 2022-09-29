@@ -6,7 +6,7 @@ import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class ProductName extends ValueObject {
+public class ProductName implements ValueObject {
 
     private Name name;
 

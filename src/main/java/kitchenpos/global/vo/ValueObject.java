@@ -2,8 +2,8 @@ package kitchenpos.global.vo;
 
 import java.io.Serializable;
 
-public abstract class ValueObject implements Serializable {
+public interface ValueObject extends Serializable {
 
-    public abstract boolean equals(Object o);
-    public abstract int hashCode();
+    boolean equals(Object o);
+    int hashCode();
 }

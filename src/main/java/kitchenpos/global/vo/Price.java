@@ -10,7 +10,7 @@ import kitchenpos.global.exception.NullPriceException;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
-public class Price extends ValueObject {
+public class Price implements ValueObject {
 
     private static final BigDecimal MIN = BigDecimal.ZERO;
 
