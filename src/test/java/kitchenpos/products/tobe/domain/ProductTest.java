@@ -22,4 +22,17 @@ class ProductTest {
     assertThat(product.getPrice()).isEqualTo(Price.from(16_000L));
   }
 
+  @Test
+  @DisplayName("상품의 가격을 변경할 수 있다.")
+  void changePrice() {
+    Product product = new Product(
+        UUID.randomUUID(),
+        DisplayedName.from("후라이드치킨", new FakeDisplayedNameValidator()),
+        Price.from(16_000L)
+    );
+
+    product.changePrice(Price.from(17_000L));
+    assertThat(product.getPrice()).isEqualTo(Price.from(17_000L));
+  }
+
 }

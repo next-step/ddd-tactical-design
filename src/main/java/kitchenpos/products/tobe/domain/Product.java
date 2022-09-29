@@ -46,4 +46,8 @@ public class Product {
   public int hashCode() {
     return Objects.hash(id);
   }
+
+  public void changePrice(Price price) {
+    this.price = price;
+  }
 }
