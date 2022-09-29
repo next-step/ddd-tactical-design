@@ -2,6 +2,7 @@ package kitchenpos.products.application;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 import kitchenpos.products.domain.ProductRepository;
@@ -28,11 +29,9 @@ public class ProductService {
 
     @Transactional
     public ProductResponse create(final ProductCreateRequest request) {
-        Product product = new Product(
-            request.getName(),
-            request.getPrice(),
-            profanityCheckClient
-        );
+        ProductName name = new ProductName(request.getName(), profanityCheckClient);
+        ProductPrice price = new ProductPrice(request.getPrice());
+        Product product = new Product(name, price);
 
         return ProductResponse.from(productRepository.save(product));
     }
