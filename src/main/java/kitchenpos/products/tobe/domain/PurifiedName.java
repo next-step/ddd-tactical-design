@@ -15,6 +15,13 @@ public class PurifiedName {
 
     }
 
+    public PurifiedName(String name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
+        this.name = name;
+    }
+
     public PurifiedName(String name, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
