@@ -33,7 +33,7 @@ class DisplayedNameTest {
   @ValueSource(strings = {"비속어", "욕설"})
   void createName_notProfanity(String value) {
     Assertions.assertThatIllegalArgumentException()
-        .isThrownBy(() -> DisplayedName.from(value));
+        .isThrownBy(() -> DisplayedName.from(value, new FakeDisplayedNameValidator()));
   }
 
 }
