@@ -9,16 +9,19 @@ public class Price {
 
   private final BigDecimal amount;
 
-  private Price(BigDecimal amount) {
-    this.amount = amount;
-  }
-
   public static Price from(long amount) {
     return from(BigDecimal.valueOf(amount));
   }
 
   public static Price from(BigDecimal amount) {
     return new Price(amount);
+  }
+
+  private Price(BigDecimal amount) {
+    if (Objects.isNull(amount) || amount.compareTo(BigDecimal.ZERO) < 0) {
+      throw new IllegalArgumentException();
+    }
+    this.amount = amount;
   }
 
   @Override
