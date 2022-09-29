@@ -1,10 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class DisplayedName {
 
-  private final String name;
+  @Column(name = "name", nullable = false)
+  private String name;
 
   public static DisplayedName from(String name) {
     return new DisplayedName(name);
@@ -14,6 +18,10 @@ public class DisplayedName {
     DisplayedName displayedName = new DisplayedName(name);
     validator.validate(displayedName);
     return displayedName;
+  }
+
+  public DisplayedName() {
+
   }
 
   private DisplayedName(String name) {

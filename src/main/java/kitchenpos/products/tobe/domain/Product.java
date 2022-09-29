@@ -2,15 +2,29 @@ package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "product")
+@Entity
 public class Product {
 
+  @Column(name = "id", columnDefinition = "binary(16)")
+  @Id
   private UUID id;
 
+  @Embedded
   private DisplayedName name;
 
+  @Embedded
   private Price price;
+
+  public Product() {
+
+  }
 
   public Product(UUID id, DisplayedName name, Price price) {
     this.id = id;

@@ -5,9 +5,11 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@Embeddable
 public class Price {
 
-  private final BigDecimal amount;
+  @Column(name = "price", nullable = false)
+  private BigDecimal amount;
 
   public static Price from(long amount) {
     return from(BigDecimal.valueOf(amount));
@@ -15,6 +17,10 @@ public class Price {
 
   public static Price from(BigDecimal amount) {
     return new Price(amount);
+  }
+
+  public Price() {
+
   }
 
   private Price(BigDecimal amount) {
