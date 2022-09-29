@@ -114,7 +114,7 @@ docker compose -p kitchenpos up -d
 | 메뉴 상품  | menu product       | 메뉴에 속하는 수량이 있는 상품          |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴            |
 | 이름     | displayed name     | 메뉴의 이름                     |
-| 가격     | price              | 상품 또는 메슈 상품의 가격            |
+| 가격     | price              | 상품 또는 메뉴 상품의 가격            |
 | 수량     | quantity           | 메뉴 상품의 수량                  |
 
 ### 매장 주문

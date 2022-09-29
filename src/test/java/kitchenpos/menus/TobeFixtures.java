@@ -1,4 +1,4 @@
-package kitchenpos;
+package kitchenpos.menus;
 
 import java.math.BigDecimal;
 import java.util.UUID;
