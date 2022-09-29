@@ -42,4 +42,8 @@ public class OrderLineItems {
         return values.stream()
             .anyMatch(Predicate.not(OrderLineItem::isDisplayed));
     }
+
+    public boolean isEmpty() {
+        return values.isEmpty();
+    }
 }
