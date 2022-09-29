@@ -13,6 +13,10 @@ public class Price {
     this.amount = amount;
   }
 
+  public static Price from(long amount) {
+    return from(BigDecimal.valueOf(amount));
+  }
+
   public static Price from(BigDecimal amount) {
     return new Price(amount);
   }

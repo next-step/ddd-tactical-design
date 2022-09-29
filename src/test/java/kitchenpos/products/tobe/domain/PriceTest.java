@@ -15,7 +15,7 @@ class PriceTest {
   @ValueSource(longs = {0, 16_000L})
   void createPrice(long value) {
     Price price = Price.from(BigDecimal.valueOf(value));
-    assertThat(price).isEqualTo(Price.from(BigDecimal.valueOf(value)));
+    assertThat(price).isEqualTo(Price.from(value));
   }
 
 }
