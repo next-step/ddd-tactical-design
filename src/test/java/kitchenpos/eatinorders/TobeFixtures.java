@@ -15,10 +15,14 @@ public final class TobeFixtures {
     }
 
     public static OrderLineItem orderLineItem() {
+        return orderLineItem(true);
+    }
+
+    public static OrderLineItem orderLineItem(boolean displayed) {
         return new OrderLineItem(
             UUID.randomUUID().toString(),
             new Price(new BigDecimal(ORDER_LINE_ITEM_PRICE)),
             ORDER_LINE_ITEM_QUANTITY,
-            true);
+            displayed);
     }
 }
