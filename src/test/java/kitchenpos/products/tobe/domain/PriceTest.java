@@ -14,8 +14,8 @@ class PriceTest {
   @DisplayName("상품가격을 생성할 수 있다.")
   @ValueSource(longs = {0, 16_000L})
   void createPrice(long value) {
-    Price price = new Price(BigDecimal.valueOf(value));
-    assertThat(price).isEqualTo(new Price(BigDecimal.valueOf(value)));
+    Price price = Price.from(BigDecimal.valueOf(value));
+    assertThat(price).isEqualTo(Price.from(BigDecimal.valueOf(value)));
   }
 
 }

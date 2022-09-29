@@ -9,8 +9,12 @@ public class Price {
 
   private final BigDecimal amount;
 
-  public Price(BigDecimal amount) {
+  private Price(BigDecimal amount) {
     this.amount = amount;
+  }
+
+  public static Price from(BigDecimal amount) {
+    return new Price(amount);
   }
 
   @Override
