@@ -107,7 +107,7 @@ class ProductServiceTest {
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));
         productRepository.save(product("양념치킨", 16_000L));
-        final List<Product> actual = productService.findAll();
+        final List<ProductResponse> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 
