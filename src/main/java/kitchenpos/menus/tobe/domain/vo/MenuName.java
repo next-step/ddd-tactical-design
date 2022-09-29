@@ -1,20 +1,20 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.menus.tobe.domain.vo;
 
 import java.util.Objects;
 import javax.persistence.Embeddable;
-import kitchenpos.global.vo.Price;
+import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class ProductPrice implements ValueObject {
+public class MenuName implements ValueObject {
 
-    private Price price;
+    private Name value;
 
-    protected ProductPrice() {
+    protected MenuName() {
     }
 
-    public ProductPrice(Price price) {
-        this.price = price;
+    public MenuName(Name value) {
+        this.value = value;
     }
 
     @Override
@@ -25,12 +25,12 @@ public class ProductPrice implements ValueObject {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ProductPrice price1 = (ProductPrice) o;
-        return Objects.equals(price, price1.price);
+        MenuName menuName = (MenuName) o;
+        return Objects.equals(value, menuName.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price);
+        return Objects.hash(value);
     }
 }

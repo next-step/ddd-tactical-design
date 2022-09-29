@@ -1,21 +1,21 @@
 package kitchenpos.products.tobe.domain;
 
-import java.math.BigDecimal;
+import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductNo;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 @Table(name = "tb_product")
-@Entity
+@Entity(name = "tb_product")
 public class Product {
 
-    @EmbeddedId
-    private ProductNo id;
+    @Id
+    @Column(name = "id", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Embedded
     private ProductName name;
@@ -24,20 +24,16 @@ public class Product {
     private ProductPrice price;
 
     protected Product() {
-        this.id = new ProductNo();
+        id = UUID.randomUUID();
     }
 
-    public Product(
-            final String name,
-            final PurgomalumClient profanity,
-            final BigDecimal price
-    ) {
+    public Product(ProductName name, ProductPrice price) {
         this();
-        this.name = new ProductName(name, profanity);
-        this.price = new ProductPrice(price);
+        this.name = name;
+        this.price = price;
     }
 
-    public ProductNo getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -49,7 +45,7 @@ public class Product {
         return price;
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
+    public void changePrice(ProductPrice price) {
+        this.price = price;
     }
 }

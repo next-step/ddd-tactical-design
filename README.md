@@ -96,31 +96,45 @@ docker compose -p kitchenpos up -d
 
 ## 용어 사전
 
-### 비속어
+### 공통
 
-| 한글명   | 영문명           | 설명               |
-|-------|---------------|------------------|
-| 비속어   | Profanity    | 부적절한 단어 또는 비속어 |
+| 한글명 | 영문명       | 설명                                |
+|-----|-----------|-----------------------------------|
+| 비속어 | Profanity | 부적절한 단어 또는 비속어                    |
+| 수량  | quantity  | 수량은 0 개 이상을 지닌다.                  |
+| 이름  | name      | 이름으로 공백 또는 [비속어](#비속어)를 포함될 수 없다. |
+| 가격  | price     | 가격은 0원 이상의 값을 가진다.                |
 
 ### 상품
 
-| 한글명 | 영문명           | 설명                                  |
-|-----|---------------|-------------------------------------|
-| 상품  | product       | 메뉴를 관리하는 기준이 되는 데이터                 |
-| 식별자 | product no    | 상품을 식별할 수 있는 고유한 값                  |
-| 가격  | product price | 판매할 상품의 가격                          |
-| 이름  | product name  | 판매할 상품의 이름으로 [비속어](#비속어)를 포함할 수 없다. |
+| 한글명 | 영문명           | 설명                 |
+|-----|---------------|--------------------|
+| 상품  | product       | 메뉴를 관리하는 기준이 되는 데이터 |
+| 식별자 | product no    | 상품을 식별할 수 있는 고유한 값 |
+| 가격  | product price | 판매할 상품의 [가격](#공통)       |
+| 이름  | product name  | 판매할 상품의 [이름](#공통)  |
 
 ### 메뉴
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명      | 영문명                   | 설명                               |
+|----------|-----------------------|----------------------------------|
+| 메뉴       | menu                  | 메뉴 그룹에 속하는 실제 주문 가능 단위           |
+| 메뉴 번호    | menu no               | 메뉴를 식별할 수 있는 고유한 값               |
+| 메뉴 가격    | menu price            | 메뉴에 표시될 [가격](#공통)                     |
+| 메뉴 이름    | menu name             | 메뉴에 표시될 [이름](#공통)                       |
+| 숨겨진 메뉴   | hidden menu           | 주문할 수 없는 숨겨진 메뉴                  |
+| 전시 메뉴    | displayed menu        | 주문할 수 있는 메뉴                      |
+| 메뉴 상품    | menu product          | 메뉴에 속하는 수량이 있는 상품                |
+| 메뉴 상품 수량 | menu product quantity | 메뉴에 등록된 상품의 [수량](#공통)                   |
+| 메뉴 상품 가격 | menu product price    | 메뉴 상품의 금액의 합<br/>상품 가격 * 메뉴 상품 수량 |
+
+### 메뉴 그룹
+
+| 한글명      | 영문명             | 설명            |
+|----------|-----------------|---------------|
+| 메뉴 그룹    | menu group      | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹       |
+| 메뉴 그룹 번호 | nenu group no   | 메뉴 그룹을 식별할 수 있는 고유한 값 |
+| 메뉴 그룹 이름 | nenu group name | 메뉴 그룹에 표시될 [이름](#공통) |
 
 ### 매장 주문
 
@@ -169,17 +183,18 @@ docker compose -p kitchenpos up -d
 ### 상품
 
 - `Product`는 반드시 `ProductNo`와 `ProductName`, `ProductPrice`을 가진다.
-  - `ProductName`에는 공백 또는 `Profanity`가 포함될 수 없다.
-  - `ProductPrice`는 0원 이상의 값을 가진다.
 
 ### 메뉴
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `Menu`는 반드시 `MenuNo`와 `MenuName`, `MenuPrice`를 가진다.
+  - `Menu`는 `HiddenMenu`거나 `DisplayedMenu`여야 한다.
+  - `Menu`는 반드시 단 하나의 `MenuGroup`에 속한다.
+  - `Menu`는 반드시 한 개 이상의 `MenuProduct`을 가진다.
+- `MenuPrice`은 `MenuProductAmount`보다 적거나 같아야 한다.
+
+### 메뉴 그룹
+
+- `MenuGroup`은 반드시 `MenuGroupNo`와 `MenuGroupName`을 가진다.
 
 ### 매장 주문
 
