@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.tobe.domain.MenuProducts;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,14 +31,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -84,12 +80,12 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+    public List<MenuProduct> getMenuProductList() {
+        return menuProducts.getMenuProducts();
     }
 
     public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     public UUID getMenuGroupId() {
@@ -98,5 +94,14 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    public boolean isOverPrice(){
+        BigDecimal sum = menuProducts.price();
+        return price.compareTo(sum) > 0;
+    }
+
+    public void close() {
+        this.displayed = false;
     }
 }
