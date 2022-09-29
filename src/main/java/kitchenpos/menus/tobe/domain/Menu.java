@@ -9,8 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.Price;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 
 @Table(name = "tb_menu")
 @Entity(name = "tb_menu")
@@ -21,10 +22,10 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private MenuName name;
 
     @Embedded
-    private Price price;
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -45,10 +46,10 @@ public class Menu {
     }
 
     public Menu(
-            Name name,
+            MenuName name,
             MenuGroup menuGroup,
             MenuProducts menuProducts,
-            Price price,
+            MenuPrice price,
             boolean displayed
     ) {
         this();
@@ -60,7 +61,7 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    protected Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed,
+    protected Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
             MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
@@ -70,7 +71,7 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public void changePrice(Price menuPrice) {
+    public void changePrice(MenuPrice menuPrice) {
         validMenuPrice(menuPrice, menuProducts);
         this.price = menuPrice;
     }
@@ -81,8 +82,9 @@ public class Menu {
         return this;
     }
 
-    private void validMenuPrice(Price menuPrice, MenuProducts menuProducts) {
-        menuPrice.validateLessThan(menuProducts.sum());
+    private void validMenuPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
+        Price price = menuPrice.getValue();
+        price.validateLessThan(menuProducts.sum());
     }
 
     public Menu hidden() {
@@ -94,7 +96,7 @@ public class Menu {
         return displayed;
     }
 
-    public Price getPrice() {
+    public MenuPrice getPrice() {
         return price;
     }
 

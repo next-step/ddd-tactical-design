@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain;
 
 import static kitchenpos.menus.tobe.MenuFixtures.menu;
 import static kitchenpos.menus.tobe.MenuFixtures.menuGroup;
+import static kitchenpos.menus.tobe.MenuFixtures.menuName;
+import static kitchenpos.menus.tobe.MenuFixtures.menuPrice;
 import static kitchenpos.menus.tobe.MenuFixtures.menuProduct;
 import static kitchenpos.menus.tobe.MenuFixtures.menuProducts;
 import static kitchenpos.menus.tobe.MenuFixtures.price;
@@ -9,11 +11,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.global.exception.MaximumPriceException;
 import kitchenpos.global.vo.Price;
-import kitchenpos.menus.tobe.MenuFixtures;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -64,10 +65,10 @@ class MenuTest {
         @Test
         void changePrice() {
             Menu menu = menu("후라이드+후라이드");
-            Price Price = new Price(BigDecimal.ONE);
-            menu.changePrice(Price);
+            MenuPrice menuPrice = menuPrice(1);
+            menu.changePrice(menuPrice);
 
-            assertThat(menu.getPrice()).isEqualTo(Price);
+            assertThat(menu.getPrice()).isEqualTo(menuPrice);
         }
 
         @DisplayName("메뉴의 가격이 메뉴 상품 가격보다 설정할 수 없다.")
@@ -76,8 +77,8 @@ class MenuTest {
             MenuProduct menuProduct = menuProduct(1, 1_000);
             Menu menu = new Menu(
                     UUID.randomUUID(),
-                    MenuFixtures.name(" 후라이드+후라이드"),
-                    price(0),
+                    menuName(" 후라이드+후라이드"),
+                    menuPrice(0),
                     menuGroup("두마리 치킨"),
                     false,
                     menuProducts(menuProduct)
@@ -85,8 +86,9 @@ class MenuTest {
 
             assertThatExceptionOfType(MaximumPriceException.class)
                     .isThrownBy(() -> {
-                        Price requestPrice = menuProduct.getPrice().add(price(1));
-                        menu.changePrice(requestPrice);
+                        Price menuProductPrice = menuProduct.getPrice();
+                        Price requestPrice = menuProductPrice.add(price(1));
+                        menu.changePrice(new MenuPrice(requestPrice));
                     });
         }
     }
@@ -116,8 +118,8 @@ class MenuTest {
             MenuProduct menuProduct = menuProduct(1, menuProductPrice);
             Menu menu = new Menu(
                     UUID.randomUUID(),
-                    MenuFixtures.name(" 후라이드+후라이드"),
-                    price(price),
+                    menuName(" 후라이드+후라이드"),
+                    menuPrice(price),
                     menuGroup("두마리 치킨"),
                     false,
                     menuProducts(menuProduct)

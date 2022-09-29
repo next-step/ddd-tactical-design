@@ -6,7 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.global.vo.Name;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 
 @Table(name = "tb_menu_group")
 @Entity(name = "tb_menu_group")
@@ -17,13 +17,13 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private MenuGroupName name;
 
     protected MenuGroup() {
         id = UUID.randomUUID();
     }
 
-    public MenuGroup(Name menuGroupName) {
+    public MenuGroup(MenuGroupName menuGroupName) {
         this();
         name = menuGroupName;
     }
@@ -32,7 +32,7 @@ public class MenuGroup {
         return id;
     }
 
-    public Name getName() {
+    public MenuGroupName getName() {
         return name;
     }
 }

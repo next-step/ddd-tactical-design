@@ -11,6 +11,9 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.Product;
 import kitchenpos.menus.tobe.dto.ProductDTO;
 import kitchenpos.products.application.FakePurgomalumClient;
@@ -24,8 +27,20 @@ public final class MenuFixtures {
         return new Name(value, new FakePurgomalumClient());
     }
 
+    public static MenuName menuName(String value) {
+        return new MenuName(name(value));
+    }
+
+    public static MenuGroupName menuGroupName(String value) {
+        return new MenuGroupName(name(value));
+    }
+
     public static Price price(long value) {
         return new Price(BigDecimal.valueOf(value));
+    }
+
+    public static MenuPrice menuPrice(long value) {
+        return new MenuPrice(price(value));
     }
 
     public static Quantity quantity(long value) {
@@ -75,16 +90,16 @@ public final class MenuFixtures {
     ) {
         MenuProducts menuProducts = menuProducts(menuProduct);
         return new Menu(
-                name(name),
+                menuName(name),
                 menuGroup(groupName),
                 menuProducts,
-                price(price),
+                menuPrice(price),
                 displayed
         );
     }
 
     public static MenuGroup menuGroup(String name) {
-        return new MenuGroup(name(name));
+        return new MenuGroup(menuGroupName(name));
     }
 
     public static MenuProduct menuProduct(long quantity, long productPrice) {
