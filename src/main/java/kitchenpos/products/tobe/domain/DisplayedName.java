@@ -11,6 +11,9 @@ public class DisplayedName {
   }
 
   private DisplayedName(String name) {
+    if (Objects.isNull(name) || name.isBlank()) {
+      throw new IllegalArgumentException();
+    }
     this.name = name;
   }
 
