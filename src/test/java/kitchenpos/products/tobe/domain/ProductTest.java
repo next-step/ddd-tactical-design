@@ -1,12 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
-import static kitchenpos.products.tobe.ProductFixtures.name;
-import static kitchenpos.products.tobe.ProductFixtures.price;
 import static kitchenpos.products.tobe.ProductFixtures.product;
+import static kitchenpos.products.tobe.ProductFixtures.productName;
+import static kitchenpos.products.tobe.ProductFixtures.productPrice;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import kitchenpos.global.vo.Price;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +20,8 @@ class ProductTest {
         assertThat(product).isNotNull();
         assertAll(
                 () -> assertThat(product.getId()).isNotNull(),
-                () -> assertThat(product.getName()).isEqualTo(name("후라이드")),
-                () -> assertThat(product.getPrice()).isEqualTo(price(15_000))
+                () -> assertThat(product.getName()).isEqualTo(productName("후라이드")),
+                () -> assertThat(product.getPrice()).isEqualTo(productPrice(15_000))
         );
     }
 
@@ -30,7 +30,7 @@ class ProductTest {
     void changePrice() {
         Product product = product("후라이드", 0);
 
-        Price expected = price(36_000);
+        ProductPrice expected = productPrice(36_000);
         product.changePrice(expected);
 
         assertThat(product.getPrice()).isEqualTo(expected);

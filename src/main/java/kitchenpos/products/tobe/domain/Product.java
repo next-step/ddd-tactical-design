@@ -6,8 +6,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.global.vo.Name;
-import kitchenpos.global.vo.Price;
+import kitchenpos.products.tobe.domain.vo.ProductName;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 @Table(name = "tb_product")
 @Entity(name = "tb_product")
@@ -18,16 +18,16 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private ProductName name;
 
     @Embedded
-    private Price price;
+    private ProductPrice price;
 
     protected Product() {
         id = UUID.randomUUID();
     }
 
-    public Product(Name name, Price price) {
+    public Product(ProductName name, ProductPrice price) {
         this();
         this.name = name;
         this.price = price;
@@ -37,15 +37,15 @@ public class Product {
         return id;
     }
 
-    public Name getName() {
+    public ProductName getName() {
         return name;
     }
 
-    public Price getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 
-    public void changePrice(Price price) {
+    public void changePrice(ProductPrice price) {
         this.price = price;
     }
 }
