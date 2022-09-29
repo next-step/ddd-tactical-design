@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import kitchenpos.core.constant.ExceptionMessages;
+import kitchenpos.core.constant.UbiquitousLanguages;
 import kitchenpos.core.domain.Name;
 import kitchenpos.products.application.FakePurgomalumClient;
 
@@ -46,7 +47,7 @@ class ProductNameSpecificationTest {
 		void constructFailByEmptySource(String name) {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> new Name(name, specification))
-				.withMessage(ExceptionMessages.Product.NAME_IS_EMPTY);
+				.withMessage(String.format(ExceptionMessages.EMPTY_NAME_TEMPLATE, UbiquitousLanguages.PRODUCT));
 		}
 
 		@DisplayName("비속어를 포함할 수 없다.")
@@ -55,7 +56,7 @@ class ProductNameSpecificationTest {
 		void constructFailByProfanity(String name) {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> new Name(name, specification))
-				.withMessage(ExceptionMessages.Product.NAME_IS_PROFANITY);
+				.withMessage(String.format(ExceptionMessages.PROFANITY_NAME_TEMPLATE, UbiquitousLanguages.PRODUCT));
 		}
 	}
 }

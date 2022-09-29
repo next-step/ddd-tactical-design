@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import kitchenpos.core.constant.Specs;
 import kitchenpos.core.specification.NameSpecification;
 import kitchenpos.core.specification.PriceSpecification;
 import kitchenpos.products.application.FakePurgomalumClient;
@@ -24,7 +25,7 @@ class ProductTest {
 	@BeforeEach
 	void setUp() {
 		nameSpecification = new ProductNameSpecification(new FakePurgomalumClient());
-		priceSpecification = new ProductPriceSpecification();
+		priceSpecification = Specs.Product.PRICE;
 	}
 
 	private Product createDefault() {
