@@ -10,7 +10,7 @@ public class VerifiedPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public VerifiedPrice(BigDecimal price) {
+    public VerifiedPrice(final BigDecimal price) {
         checkPrice(price);
         this.price = price;
     }
@@ -19,13 +19,13 @@ public class VerifiedPrice {
 
     }
 
-    private void checkPrice(BigDecimal price) {
+    private void checkPrice(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
     }
 
-    public BigDecimal multiply(long quantity) {
+    public BigDecimal multiply(final long quantity) {
         return price.multiply(BigDecimal.valueOf(quantity));
     }
 

@@ -23,7 +23,7 @@ public class Product {
 
     }
 
-    public Product(UUID id, PurifiedName name, VerifiedPrice price) {
+    public Product(final UUID id, final PurifiedName name, final VerifiedPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -41,7 +41,7 @@ public class Product {
         this.price = price;
     }
 
-    public BigDecimal multiplyPrice(long quantity){
+    public BigDecimal multiplyPrice(final long quantity){
         return price.multiply(quantity);
     }
 
