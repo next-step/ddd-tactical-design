@@ -6,7 +6,11 @@ public class DisplayedName {
 
   private final String name;
 
-  public DisplayedName(String name) {
+  public static DisplayedName from(String name) {
+    return new DisplayedName(name);
+  }
+
+  private DisplayedName(String name) {
     this.name = name;
   }
 

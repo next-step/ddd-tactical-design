@@ -12,8 +12,8 @@ class DisplayedNameTest {
   @DisplayName("상품이름을 생성할 수 있다.")
   @Test
   void createName() {
-    DisplayedName name = new DisplayedName("후라이드 치킨");
-    Assertions.assertThat(name).isEqualTo(new DisplayedName("후라이드 치킨"));
+    DisplayedName name = DisplayedName.from("후라이드 치킨");
+    Assertions.assertThat(name).isEqualTo(DisplayedName.from("후라이드 치킨"));
   }
 
 }
