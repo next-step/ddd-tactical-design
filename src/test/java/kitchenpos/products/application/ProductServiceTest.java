@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.FakeEventPublisher;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.products.domain.InMemoryProductRepository;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
@@ -24,18 +25,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class ProductServiceTest {
 
     private ProductService productService;
     private ProductRepository productRepository;
     private ProfanityCheckClient profanityCheckClient;
+    private ApplicationEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         profanityCheckClient = new FakeProfanityCheckClient();
-        productService = new ProductService(productRepository, profanityCheckClient);
+        publisher = new FakeEventPublisher();
+        productService = new ProductService(
+            productRepository,
+            profanityCheckClient,
+            publisher
+        );
     }
 
     @DisplayName("상품을 등록할 수 있다.")

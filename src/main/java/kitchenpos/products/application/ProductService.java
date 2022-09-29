@@ -2,6 +2,7 @@ package kitchenpos.products.application;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.event.ProductPriceChangedEvent;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
@@ -11,6 +12,7 @@ import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.products.ui.request.ProductChangePriceRequest;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import kitchenpos.products.ui.response.ProductResponse;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProfanityCheckClient profanityCheckClient;
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
         ProductRepository productRepository,
-        ProfanityCheckClient profanityCheckClient
+        ProfanityCheckClient profanityCheckClient,
+        ApplicationEventPublisher publisher
     ) {
         this.productRepository = productRepository;
         this.profanityCheckClient = profanityCheckClient;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -44,7 +49,13 @@ public class ProductService {
 
         product.changePrice(newPrice);
 
+        publishChangePriceEvent(product.getPrice());
         return ProductResponse.from(product);
+    }
+
+    private void publishChangePriceEvent(ProductPrice price) {
+        ProductPriceChangedEvent event = new ProductPriceChangedEvent(price.getValue());
+        publisher.publishEvent(event);
     }
 
     @Transactional(readOnly = true)
