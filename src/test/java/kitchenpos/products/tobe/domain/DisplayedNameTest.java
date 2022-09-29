@@ -2,11 +2,13 @@ package kitchenpos.products.tobe.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import kitchenpos.products.application.FakePurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("상품이름 테스트")
 class DisplayedNameTest {
@@ -22,6 +24,14 @@ class DisplayedNameTest {
   @ParameterizedTest
   @NullAndEmptySource
   void createName_notValidName(String value) {
+    Assertions.assertThatIllegalArgumentException()
+        .isThrownBy(() -> DisplayedName.from(value));
+  }
+
+  @DisplayName("상품이름은 비속어가 포함될 수 없다")
+  @ParameterizedTest
+  @ValueSource(strings = {"비속어", "욕설"})
+  void createName_notProfanity(String value) {
     Assertions.assertThatIllegalArgumentException()
         .isThrownBy(() -> DisplayedName.from(value));
   }
