@@ -37,8 +37,15 @@ public class Product {
         this.id = id;
     }
 
-    public void changePrice(final BigDecimal price) {
-        this.price = new VerifiedPrice(price);
+    public void changePrice(final VerifiedPrice price) {
+        this.price = price;
     }
 
+    public BigDecimal multiplyPrice(long quantity){
+        return price.multiply(quantity);
+    }
+
+    public BigDecimal getPrice() {
+        return price.getPrice();
+    }
 }

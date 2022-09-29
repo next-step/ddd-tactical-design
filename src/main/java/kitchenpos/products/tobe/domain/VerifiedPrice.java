@@ -24,4 +24,12 @@ public class VerifiedPrice {
             throw new IllegalArgumentException();
         }
     }
+
+    public BigDecimal multiply(long quantity) {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
 }
