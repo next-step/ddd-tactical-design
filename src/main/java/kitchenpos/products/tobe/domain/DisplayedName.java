@@ -10,6 +10,12 @@ public class DisplayedName {
     return new DisplayedName(name);
   }
 
+  public static DisplayedName from(String name, DisplayNameValidator validator) {
+    DisplayedName displayedName = new DisplayedName(name);
+    validator.validate(displayedName);
+    return displayedName;
+  }
+
   private DisplayedName(String name) {
     if (Objects.isNull(name) || name.isBlank()) {
       throw new IllegalArgumentException();
