@@ -38,7 +38,7 @@ public class MenuService {
         }
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<MenuProduct> menuProductRequests = request.getMenuProductList();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -94,7 +94,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+        for (final MenuProduct menuProduct : menu.getMenuProductList()) {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
@@ -113,7 +113,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+        for (final MenuProduct menuProduct : menu.getMenuProductList()) {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
