@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import static kitchenpos.global.TobeFixtures.menuGroup;
+import static kitchenpos.menus.tobe.MenuFixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

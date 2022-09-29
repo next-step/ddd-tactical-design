@@ -1,10 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
-import static kitchenpos.global.TobeFixtures.menuProduct;
-import static kitchenpos.global.TobeFixtures.price;
+import static kitchenpos.menus.tobe.MenuFixtures.menuProduct;
+import static kitchenpos.menus.tobe.MenuFixtures.price;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +13,10 @@ class MenuProductTest {
     @Test
     void create() {
         long quantity = 2;
-        BigDecimal productPrice = BigDecimal.ONE;
+        long productPrice = 1;
         MenuProduct menuProduct = menuProduct(quantity, productPrice);
 
         assertThat(menuProduct).isNotNull();
-        assertThat(menuProduct.getPrice()).isEqualTo(price(BigDecimal.valueOf(2)));
+        assertThat(menuProduct.getPrice()).isEqualTo(price(2));
     }
 }
