@@ -1,16 +1,17 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import static kitchenpos.products.ProductFixtures.product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.domain.Product;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -111,17 +112,5 @@ public class Fixtures {
         orderTable.setNumberOfGuests(numberOfGuests);
         orderTable.setOccupied(occupied);
         return orderTable;
-    }
-
-    public static Product product() {
-        return product("후라이드", 16_000L);
-    }
-
-    public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
     }
 }

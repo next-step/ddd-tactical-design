@@ -1,33 +1,32 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import kitchenpos.menus.domain.*;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityCheckClient profanityCheckClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+        final ProfanityCheckClient profanityCheckClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityCheckClient = profanityCheckClient;
     }
 
     @Transactional
@@ -60,7 +59,7 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
-                product.getPrice()
+                product.getPriceValue()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -72,7 +71,7 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || profanityCheckClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu();
@@ -97,7 +96,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
+                    .getPriceValue()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
@@ -116,7 +115,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
+                    .getPriceValue()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
