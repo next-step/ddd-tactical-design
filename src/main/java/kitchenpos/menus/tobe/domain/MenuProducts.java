@@ -43,7 +43,8 @@ public class MenuProducts implements Serializable {
     public Price sum() {
         Price sum = new Price(BigDecimal.ZERO);
         for (MenuProduct menuProduct : values) {
-            sum = sum.add(menuProduct.getPrice());
+            Price menuProductPrice = menuProduct.getPrice();
+            sum = sum.add(menuProductPrice);
         }
 
         return sum;
