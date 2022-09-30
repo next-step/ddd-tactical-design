@@ -30,7 +30,7 @@ public class Order {
     @Embedded
     public OrderLineItems orderLineItems;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(
         name = "order_table_id",
         columnDefinition = "binary(16)",
