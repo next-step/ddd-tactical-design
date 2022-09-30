@@ -5,6 +5,8 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.dto.ProductPriceRequest;
+import kitchenpos.products.domain.dto.ProductRequest;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -32,18 +33,19 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
+    public Product create(final ProductRequest request) {
         final String name = request.getName();
+        final Product product = new Product(UUID.randomUUID(), request.getName(), request.getPrice());
+
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product(UUID.randomUUID(), name, price);
+
         return productRepository.save(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public Product changePrice(final UUID productId, final ProductPriceRequest request) {
         final BigDecimal price = request.getPrice();
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
