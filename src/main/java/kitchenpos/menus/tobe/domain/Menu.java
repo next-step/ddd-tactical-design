@@ -105,6 +105,10 @@ public class Menu {
 		return menuGroup;
 	}
 
+	public MenuProducts getMenuProducts() {
+		return menuProducts;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

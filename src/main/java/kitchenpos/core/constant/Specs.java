@@ -11,29 +11,38 @@ public final class Specs {
 
 	public static final class Menu {
 
-		private Menu() {
-		}
-
 		public static final NameSpecification NAME = () -> UbiquitousLanguages.MENU;
 		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.MENU;
 		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.MENU;
+
+		private Menu() {
+		}
+	}
+
+	public static final class MenuProduct {
+
+		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.MENU_PRODUCT;
+		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.MENU_PRODUCT;
+
+		private MenuProduct() {
+		}
 	}
 
 	public static final class MenuGroup {
 
+		public static final NameSpecification NAME = () -> UbiquitousLanguages.MENU_GROUP;
+
 		private MenuGroup() {
 		}
-
-		public static final NameSpecification NAME = () -> UbiquitousLanguages.MENU_GROUP;
 	}
 
 	public static final class Product {
 
-		private Product() {
-		}
-
 		public static final NameSpecification NAME = () -> UbiquitousLanguages.PRODUCT;
 		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.PRODUCT;
-		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.MENU_PRODUCT;
+		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.PRODUCT;
+
+		private Product() {
+		}
 	}
 }

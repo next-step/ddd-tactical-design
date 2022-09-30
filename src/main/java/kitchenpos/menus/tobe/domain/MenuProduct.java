@@ -55,11 +55,11 @@ public class MenuProduct {
 		return price.multiply(quantity);
 	}
 
-	public void changePrice(Price price) {
+	void changePrice(Price price) {
 		this.price = price;
 	}
 
-	public void changeQuantity(Quantity quantity) {
+	void changeQuantity(Quantity quantity) {
 		this.quantity = quantity;
 	}
 
