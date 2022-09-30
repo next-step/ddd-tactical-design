@@ -2,8 +2,8 @@ package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -17,7 +17,7 @@ import kitchenpos.core.constant.ExceptionMessages;
 import kitchenpos.core.constant.UbiquitousLanguages;
 
 @Embeddable
-public class MenuProducts {
+class MenuProducts {
 
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(
@@ -31,7 +31,7 @@ public class MenuProducts {
 	protected MenuProducts() {
 	}
 
-	public MenuProducts(List<MenuProduct> values) {
+	MenuProducts(List<MenuProduct> values) {
 		validate(values);
 		this.values = values;
 	}
@@ -42,9 +42,16 @@ public class MenuProducts {
 		}
 	}
 
-	public BigDecimal getTotalPrice() {
+	BigDecimal getTotalPrice() {
 		return values.stream()
 			.map(MenuProduct::getTotalPrice)
 			.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
+	MenuProduct getBySeq(Long seq) {
+		return values.stream()
+			.filter(menuProduct -> Objects.equals(menuProduct.getSeq(), seq))
+			.findAny()
+			.orElseThrow(() -> new IllegalArgumentException(String.format(ExceptionMessages.NOT_FOUND_TEMPLATE, UbiquitousLanguages.MENU_PRODUCT)));
 	}
 }
