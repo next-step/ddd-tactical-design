@@ -14,8 +14,8 @@ public class Product {
     @Embedded
     private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     protected Product() {
     }
@@ -23,7 +23,7 @@ public class Product {
     public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
         this.name = new ProductName(name);
-        this.price = price;
+        this.price = new ProductPrice(price);
     }
 
     public UUID getId() {
@@ -35,10 +35,10 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
     public void changePrice(final BigDecimal price) {
-        this.price = price;
+        this.price.changePrice(price);
     }
 }

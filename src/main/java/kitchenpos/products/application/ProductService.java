@@ -34,9 +34,6 @@ public class ProductService {
     @Transactional
     public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final String name = request.getName();
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
@@ -48,12 +45,10 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
+
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
