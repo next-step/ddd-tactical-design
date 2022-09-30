@@ -26,10 +26,10 @@ class OrderTest {
                 OrderStatus orderStatus = OrderStatus.WAITING;
                 LocalDateTime orderDateTime = LocalDateTime.now();
                 OrderLineItems orderLineItems = new OrderLineItems(TobeFixtures.orderLineItem());
-                OrderTable orderTable = TobeFixtures.orderTable(true);
+                String orderTableId = UUID.randomUUID().toString();
 
                 // when
-                Order order = new Order(id, orderStatus, orderDateTime, orderLineItems, orderTable);
+                Order order = new Order(id, orderStatus, orderDateTime, orderLineItems, orderTableId);
 
                 // then
                 assertAll(
@@ -37,7 +37,7 @@ class OrderTest {
                     () -> assertThat(order.getStatus()).isEqualTo(orderStatus),
                     () -> assertThat(order.getOrderDateTime()).isEqualTo(orderDateTime),
                     () -> assertThat(order.getOrderLineItems().isEmpty()).isFalse(),
-                    () -> assertThat(order.getOrderTable().isOccupied()).isTrue()
+                    () -> assertThat(order.getOrderTableId()).isNotNull()
                 );
             }
         }
@@ -52,7 +52,7 @@ class OrderTest {
 
                 // when then
                 assertThatIllegalArgumentException().isThrownBy(
-                    () -> new Order(orderLineItems, TobeFixtures.orderTable(false))
+                    () -> new Order(orderLineItems, UUID.randomUUID().toString())
                 );
             }
 
@@ -67,19 +67,7 @@ class OrderTest {
 
                 // when then
                 assertThatIllegalStateException().isThrownBy(
-                    () -> new Order(orderLineItems, TobeFixtures.orderTable(false))
-                );
-            }
-
-            @DisplayName("빈 테이블일 경우 예외 발생")
-            @Test
-            void create3() {
-                // given
-                OrderTable orderTable = TobeFixtures.orderTable(false);
-
-                // when then
-                assertThatIllegalStateException().isThrownBy(
-                    () -> new Order(new OrderLineItems(TobeFixtures.orderLineItem()), orderTable)
+                    () -> new Order(orderLineItems, UUID.randomUUID().toString())
                 );
             }
         }

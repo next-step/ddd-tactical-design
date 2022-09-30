@@ -7,10 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Table(name = "orders")
@@ -30,30 +27,24 @@ public class Order {
     @Embedded
     public OrderLineItems orderLineItems;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    @Column(name = "order_table_id", nullable = false)
+    private String orderTableId;
 
     protected Order() {
     }
 
-    public Order(OrderLineItems orderLineItems, OrderTable orderTable) {
-        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable);
+    public Order(OrderLineItems orderLineItems, String orderTableId) {
+        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
     }
 
     protected Order(UUID id, OrderStatus status, LocalDateTime orderDateTime,
-        OrderLineItems orderLineItems, OrderTable orderTable) {
+        OrderLineItems orderLineItems, String orderTableId) {
         validateOrderLineItems(orderLineItems);
-        validateOrderTable(orderTable);
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
     private void validateOrderLineItems(OrderLineItems orderLineItems) {
@@ -62,12 +53,6 @@ public class Order {
         }
         if (orderLineItems.isAnyNotDisplayed()) {
             throw new IllegalStateException("숨겨져 있는 주문항목이 있습니다.");
-        }
-    }
-
-    private void validateOrderTable(OrderTable orderTable) {
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException("빈 테이블에는 매장 주문을 등록할 수 없습니다.");
         }
     }
 
@@ -90,7 +75,6 @@ public class Order {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.COMPLETED;
-        this.orderTable.clear();
     }
 
     public UUID getId() {
@@ -109,7 +93,7 @@ public class Order {
         return orderLineItems;
     }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
+    public String getOrderTableId() {
+        return orderTableId;
     }
 }
