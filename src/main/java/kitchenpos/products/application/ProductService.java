@@ -53,7 +53,7 @@ public class ProductService {
         }
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

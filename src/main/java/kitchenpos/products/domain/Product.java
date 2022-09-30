@@ -36,13 +36,12 @@ public class Product {
     public String getName() {
         return name;
     }
-
-
+    
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void changePrice(final BigDecimal price) {
         this.price = price;
     }
 }
