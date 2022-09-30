@@ -1,4 +1,4 @@
-package kitchenpos.fixtures;
+package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,10 +8,6 @@ import kitchenpos.core.constant.Specs;
 import kitchenpos.core.domain.Name;
 import kitchenpos.core.domain.Price;
 import kitchenpos.core.domain.Quantity;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductNameSpecification;
 
@@ -29,6 +25,10 @@ public final class MenuFixtures {
 
 	public static Menu menu() {
 		return menu(true, menuProducts());
+	}
+
+	public static Menu menu(MenuProduct menuProduct) {
+		return menu(true, new MenuProducts(List.of(menuProduct, menuProduct)));
 	}
 
 	public static Menu menu(boolean displayed) {
