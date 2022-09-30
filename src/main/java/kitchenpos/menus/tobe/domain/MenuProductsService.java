@@ -28,11 +28,10 @@ public class MenuProductsService {
             throw new IllegalArgumentException();
         }
 
-        Map<UUID, ProductDTO> mapper = convertToMap(products);
+        Map<UUID, Product> mapper = convertToMap(products);
         for (MenuProduct menuProduct : requestMenuProducts) {
             UUID productId = menuProduct.getProductId();
-            Product product = mapper.get(productId)
-                    .toProduct();
+            Product product = mapper.get(productId);
 
             menuProduct.withProduct(product);
         }
@@ -46,10 +45,11 @@ public class MenuProductsService {
         return productServerClient.findAllByIds(productIds);
     }
 
-    private Map<UUID, ProductDTO> convertToMap(List<ProductDTO> products) {
+    private Map<UUID, Product> convertToMap(List<ProductDTO> products) {
         return products.stream()
+                .map(ProductDTO::toProduct)
                 .collect(collectingAndThen(
-                        toMap(ProductDTO::getId, Function.identity()),
+                        toMap(Product::getId, Function.identity()),
                         Collections::unmodifiableMap)
                 );
     }
