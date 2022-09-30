@@ -138,18 +138,39 @@ docker compose -p kitchenpos up -d
 
 ### 매장 주문
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명               | 영문명             | 설명                                                                                          |
+|-------------------|-----------------|---------------------------------------------------------------------------------------------|
+| 주문 번호             | order no        | 주문을 식별할 수 있는 고유한 값                                                                          |
+| 주문                | order           | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다.                                          |
+| 주문 항목             | order line item | 주문할 수 있는 최소 단위 (메뉴, 수량, 금액)                                                                 |
+| 주문 가격             | order price     | 주문 항목의 가격                                                                                   |
+| 주문 수량             | order quantity  | 주문 항목의 수량                                                                                   |
+| [주문 테이블](#주문-테이블) | order table     | 매장에 배치된 테이블로 매장에서만 주문할 수 있다.                                                                |
+| [주문 상태](#주문-상태)   | order status    | 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. <br/> `매장 주문`은 `대기` → `접수` → `서빙` → `주문 완료` 순서로 진행된다. |
+| 주문 가격             | order price     | 주문 가격                                                                                       |
+| 주문 일자             | order date time | 주문한 일자                                                                                      |
+
+#### 주문 상태
+
+| 한글명   | 영문명        | 설명                  |
+|-------|------------|---------------------|
+| 대기 | waiting    | 주문 접수 상태            |
+| 접수 | accepted   | 주문을 수락한 상태          |
+| 서빙 | served     | 매장에서 주문한 상품을 전달한 상태 |
+| 배달 중  | delivering | 주문한 상품을 배달하고 있는 상태  |
+| 배달 완료 | delivered  | 배달 완료 상태            |
+| 주문 완료 | completed  | 주문 완료 상태            |
+
+#### 주문 테이블
+
+| 한글명    | 영문명              | 설명                                    |
+|--------|------------------|---------------------------------------|
+| 테이블    | order table      | 매장에 배치된 테이블                           |
+| 테이블 번호 | order table no   | 테이블을 식별할 수 있는 고유한 값                   |
+| 테이블 이름  | order table name | 테이블의 이름                               |
+| 빈 테이블  | empty table      | 손님이 없는 테이블, 매장에서 주문을 할 수 없는 테이블       |
+| 완료 테이블 | completed table  | 주문이 완료된 테이블, 빈 테이블로 지정 가능한 테이블        |
+| 손님 수   | number of guests | 테이블에 앉은 손님의 수로 반드시 0명 이상의 수를 갖는다. |
 
 ### 배달 주문
 
@@ -198,14 +219,14 @@ docker compose -p kitchenpos up -d
 
 ### 매장 주문
 
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- `OrderTable`은 반드시 `OrderTableNo`와 `OrderTableName`, `NumberOfGuests`를 가진다.
+  - `OrderQuantity`는 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `OrderTable`이 `CompleatedTable`되면 `EmptyTable`로 지정한다.
+- `EmptyTable`인 경우 `NumberOfGuests`는 0명이며 변경할 수 없다.
+- `Order`는 반드시 `OrderNo`와 `OrderStatus`, `OrderDateTime`, `OrderLineItems`를 가진다.
+- `OrderPrice`는 `DisplayMenu`의 `MenuPrice`와 일치해야 한다.
+- `OrderStatus`는 `Waiting` ➜ `Accepted` ➜ `served` ➜ `completed` 순서로 진행된다.
+- `OrderLineItem`는 `OrderPrice`과 `OrderQuantity`를 가진다.
 
 ### 배달 주문
 
