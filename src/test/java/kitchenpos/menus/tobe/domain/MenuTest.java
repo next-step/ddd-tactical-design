@@ -16,7 +16,6 @@ import kitchenpos.core.constant.ExceptionMessages;
 import kitchenpos.core.constant.Specs;
 import kitchenpos.core.domain.Name;
 import kitchenpos.core.domain.Price;
-import kitchenpos.fixtures.MenuFixtures;
 
 class MenuTest {
 
@@ -89,7 +88,7 @@ class MenuTest {
 
 	@DisplayName("메뉴의 진열 상태 변경 시 ")
 	@Nested
-	class DisplayedMenu {
+	class DisplayTest {
 
 		@DisplayName("메뉴의 가격 조건에 문제 없다면 진열로 변경할 수 있다.")
 		@Test

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import kitchenpos.core.constant.Specs;
 import kitchenpos.core.domain.Price;
 import kitchenpos.core.domain.Quantity;
-import kitchenpos.fixtures.MenuFixtures;
 
 class MenuProductTest {
 

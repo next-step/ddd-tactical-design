@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import kitchenpos.core.constant.ExceptionMessages;
 import kitchenpos.core.constant.UbiquitousLanguages;
-import kitchenpos.fixtures.MenuFixtures;
 
 class MenuProductsTest {
 
