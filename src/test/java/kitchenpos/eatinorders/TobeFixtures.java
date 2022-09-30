@@ -15,12 +15,11 @@ public final class TobeFixtures {
     }
 
     public static OrderTable orderTable(boolean occupied) {
+        OrderTable orderTable = new OrderTable("테이블");
         if (occupied) {
-            OrderTable orderTable = new OrderTable("테이블");
             orderTable.sit();
-            return orderTable;
         }
-        return new OrderTable("테이블");
+        return orderTable;
     }
 
     public static OrderLineItem orderLineItem() {
