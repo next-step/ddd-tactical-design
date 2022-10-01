@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.vo.Menu;
+import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.dto.MenuDTO;
 import kitchenpos.global.vo.Name;
@@ -24,6 +24,13 @@ public final class OrderFixtures {
         return new EatInOrder(items, table);
     }
 
+    public static OrderLineItem orderLineItem(long quantity, DisplayedMenu menu) {
+        return new OrderLineItem(
+                quantity(quantity),
+                menu
+        );
+    }
+
     public static OrderLineItems orderLineItems(OrderLineItem... item) {
         return new OrderLineItems(
                 List.of(item)
@@ -34,8 +41,8 @@ public final class OrderFixtures {
         return OrderTable.create(name(name));
     }
 
-    public static Menu menu(String name, long price) {
-        return new Menu(
+    public static DisplayedMenu menu(String name, long price) {
+        return new DisplayedMenu(
                 UUID.randomUUID(),
                 name(name),
                 price(price)

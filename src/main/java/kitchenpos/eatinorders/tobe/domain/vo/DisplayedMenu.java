@@ -13,7 +13,7 @@ import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.ValueObject;
 
 @Embeddable
-public class Menu implements ValueObject {
+public class DisplayedMenu implements ValueObject {
 
     @Column(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
     private UUID id;
@@ -32,10 +32,10 @@ public class Menu implements ValueObject {
     )
     private Price price;
 
-    protected Menu() {
+    protected DisplayedMenu() {
     }
 
-    public Menu(UUID id, Name name, Price price) {
+    public DisplayedMenu(UUID id, Name name, Price price) {
         validate(id);
         this.id = id;
         this.name = name;
@@ -64,7 +64,7 @@ public class Menu implements ValueObject {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Menu menu = (Menu) o;
+        DisplayedMenu menu = (DisplayedMenu) o;
         return Objects.equals(id, menu.id);
     }
 
