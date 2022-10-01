@@ -1,7 +1,6 @@
 package kitchenpos.products.domain;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -18,8 +17,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
     @Embedded
     private Price price;
@@ -28,19 +27,13 @@ public class Product {
     }
 
     public Product(final String name, final BigDecimal price) {
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
-        }
-
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.name = new Name(name);
         this.price = new Price(price);
     }
 
     public void verifySlang(PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(this.name)) {
-            throw new IllegalArgumentException();
-        }
+        this.name.verifySlang(purgomalumClient);
     }
 
     public void changePrice(final BigDecimal price) {
@@ -55,7 +48,7 @@ public class Product {
         return this.price;
     }
 
-    public String getName() {
+    public Name getName() {
         return this.name;
     }
 }

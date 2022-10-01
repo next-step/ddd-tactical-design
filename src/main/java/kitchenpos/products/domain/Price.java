@@ -22,12 +22,16 @@ public class Price {
 
     private void validateBiggerThanZeroPrice(final BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("price must bigger than zero");
         }
     }
 
     public BigDecimal multiply(final BigDecimal value) {
         return this.value.multiply(value);
+    }
+
+    public BigDecimal value() {
+        return this.value;
     }
 
     @Override
