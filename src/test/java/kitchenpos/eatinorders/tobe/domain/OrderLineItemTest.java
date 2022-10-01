@@ -5,7 +5,6 @@ import static kitchenpos.eatinorders.tobe.OrderFixtures.orderLineItem;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.price;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +25,6 @@ class OrderLineItemTest {
     void create() {
         assertThatCode(() -> orderLineItem(0, menu))
                 .doesNotThrowAnyException();
-    }
-
-    @DisplayName("매장 주문 항목은 0개 이상을 수량은 갖는다.")
-    @Test
-    void error1() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> orderLineItem(-1, menu));
     }
 
     @DisplayName("매장 주문 항목 가격과 지정된 가격이 같은지 검증한다.")

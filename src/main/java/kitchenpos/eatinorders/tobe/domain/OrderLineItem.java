@@ -9,8 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
+import kitchenpos.eatinorders.tobe.domain.vo.EatInOrderQuantity;
 import kitchenpos.global.vo.Price;
-import kitchenpos.global.vo.Quantity;
 
 @Table(name = "tb_order_line_item")
 @Entity(name = "tb_order_line_item")
@@ -22,7 +22,7 @@ public class OrderLineItem {
     private Long seq;
 
     @Embedded
-    private Quantity quantity;
+    private EatInOrderQuantity quantity;
 
     @Embedded
     private DisplayedMenu menu;
@@ -30,7 +30,7 @@ public class OrderLineItem {
     protected OrderLineItem() {
     }
 
-    public OrderLineItem(Quantity quantity, DisplayedMenu menu) {
+    public OrderLineItem(EatInOrderQuantity quantity, DisplayedMenu menu) {
         this.quantity = quantity;
         this.menu = menu;
     }
