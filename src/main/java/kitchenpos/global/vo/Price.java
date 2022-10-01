@@ -43,7 +43,19 @@ public class Price implements ValueObject {
     }
 
     public boolean grateThan(Price otherPrice) {
-        return value.compareTo(otherPrice.value) > 0;
+        return compareTo(otherPrice.value) > 0;
+    }
+
+    public boolean lessThan(Price otherPrice) {
+        return compareTo(otherPrice.value) < 0;
+    }
+
+    public boolean isSame(Price otherPrice) {
+        return compareTo(otherPrice.value) == 0;
+    }
+
+    private int compareTo(BigDecimal otherPrice) {
+        return value.compareTo(otherPrice);
     }
 
     public Price multiply(Quantity quantity) {
