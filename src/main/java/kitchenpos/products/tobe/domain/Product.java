@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.Events;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -44,5 +46,6 @@ public class Product {
 
     public void changePrice(final ProductPrice productPrice) {
         this.price = productPrice;
+        Events.raise(new ProductPriceChangeEventProduct(this.id));
     }
 }

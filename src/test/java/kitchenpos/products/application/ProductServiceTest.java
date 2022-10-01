@@ -1,13 +1,13 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.ProductPriceChangeEventHandler;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.ProductPriceChangeEventProduct;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,12 +32,15 @@ class ProductServiceTest {
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
 
+    private ProductPriceChangeEventHandler productPriceChangeEventHandler;
+
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, purgomalumClient);
+        productPriceChangeEventHandler = new ProductPriceChangeEventHandler(menuRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -99,6 +102,7 @@ class ProductServiceTest {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        productPriceChangeEventHandler.handle(new ProductPriceChangeEventProduct(product.getId()));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 

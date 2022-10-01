@@ -23,16 +23,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
             final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -51,21 +48,6 @@ public class ProductService {
         final ProductPrice productPrice = new ProductPrice(request.getPrice());
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
         product.changePrice(productPrice);
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
         return ProductResponse.convert(product);
     }
 
