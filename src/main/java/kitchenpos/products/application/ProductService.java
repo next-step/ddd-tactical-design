@@ -47,14 +47,11 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+    public ProductResponse changePrice(final UUID productId, final ProductRequest request) {
+        final ProductPrice productPrice = new ProductPrice(request.getPrice());
+        final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
+        product.changePrice(productPrice);
+
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -69,7 +66,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ProductResponse.convert(product);
     }
 
     @Transactional(readOnly = true)

@@ -42,7 +42,7 @@ public class Product {
         return price.getPrice();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = new ProductPrice(price);
+    public void changePrice(final ProductPrice productPrice) {
+        this.price = productPrice;
     }
 }
