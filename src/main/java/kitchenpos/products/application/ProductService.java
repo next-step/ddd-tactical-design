@@ -1,8 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
@@ -13,10 +10,8 @@ import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
