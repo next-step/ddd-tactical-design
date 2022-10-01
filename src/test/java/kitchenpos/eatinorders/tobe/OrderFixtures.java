@@ -20,6 +20,10 @@ public final class OrderFixtures {
     private OrderFixtures() {
     }
 
+    public static EatInOrder eatInOrder(OrderLineItems items) {
+        return eatInOrder(items, orderTable("테이블1"));
+    }
+
     public static EatInOrder eatInOrder(OrderLineItems items, OrderTable table) {
         return new EatInOrder(items, table);
     }
