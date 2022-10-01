@@ -1,11 +1,14 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrder;
+import static kitchenpos.eatinorders.tobe.OrderFixtures.emptyOrderTable;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.numberOfGuests;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +21,7 @@ class OrderTableTest {
 
     @BeforeEach
     void setUp() {
-        table = orderTable("테이블1");
+        table = emptyOrderTable("테이블1");
     }
 
     @DisplayName("주문 테이블을 생성할 수 있다.")
@@ -54,8 +57,7 @@ class OrderTableTest {
 
     @DisplayName("손님 수 변경")
     @Nested
-    class ChangeNumberOfGuests {
-
+    class ChangeNumberOfGuestsTest {
 
         @DisplayName("손님 수를 변경한다.")
         @Test
@@ -74,5 +76,18 @@ class OrderTableTest {
             assertThatExceptionOfType(IllegalStateException.class)
                     .isThrownBy(() -> table.changeNumberOfGuests(numberOfGuests(1)));
         }
+    }
+
+    @DisplayName("모든 주문이 완료 됐는지 검증한다.")
+    @Test
+    void isCompletedAllOrders() {
+        OrderTable orderTable = emptyOrderTable("테이블1");
+        orderTable.sit();
+
+        EatInOrder waited = eatInOrder(OrderStatus.WAITING, orderTable);
+        EatInOrder completed = eatInOrder(OrderStatus.COMPLETED, orderTable);
+
+        assertThat(orderTable(completed).isCompletedAllOrders()).isTrue();
+        assertThat(orderTable(waited).isCompletedAllOrders()).isFalse();
     }
 }
