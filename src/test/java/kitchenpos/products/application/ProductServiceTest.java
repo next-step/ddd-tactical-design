@@ -51,8 +51,8 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()))
+            () -> assertThat(actual.getName().value()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.getPrice().value()).isEqualTo(expected.getPrice())
         );
     }
 

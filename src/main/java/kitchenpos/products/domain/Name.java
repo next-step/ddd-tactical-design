@@ -27,4 +27,8 @@ public class Name {
             throw new IllegalArgumentException("cannot be included slang");
         }
     }
+
+    public String value() {
+        return this.value;
+    }
 }
