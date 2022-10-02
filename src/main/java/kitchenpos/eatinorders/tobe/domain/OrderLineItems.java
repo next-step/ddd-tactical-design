@@ -32,7 +32,7 @@ public class OrderLineItems {
     }
 
     private void validate(List<OrderLineItem> values) {
-        if (values.isEmpty()) {
+        if (values == null || values.isEmpty()) {
             throw new IllegalArgumentException("주문항목 목록은 하나 이상 있어야 합니다.");
         }
     }
