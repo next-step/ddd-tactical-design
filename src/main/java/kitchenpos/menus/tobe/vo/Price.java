@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -16,11 +16,6 @@ public class Price {
     }
 
     public Price(int price) {
-        validate(price);
-        this.price = BigDecimal.valueOf(price);
-    }
-
-    public void change(int price) {
         validate(price);
         this.price = BigDecimal.valueOf(price);
     }
