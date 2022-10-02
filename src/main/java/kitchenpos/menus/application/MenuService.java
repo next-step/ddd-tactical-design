@@ -1,15 +1,22 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -138,5 +145,16 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    public void applyProductPrice(final UUID productId) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+
+        menus.stream()
+            .filter(Menu::isBiggerThanProductPrices)
+            .forEach(menu -> {
+                menu.hide();
+                menuRepository.save(menu);
+            });
     }
 }

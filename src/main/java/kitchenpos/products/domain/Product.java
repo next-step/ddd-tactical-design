@@ -1,49 +1,54 @@
 package kitchenpos.products.domain;
 
+import java.math.BigDecimal;
+import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
-import java.util.UUID;
+import kitchenpos.products.infra.PurgomalumClient;
 
 @Table(name = "product")
 @Entity
 public class Product {
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
-    public Product() {
+    protected Product() {
+    }
+
+    public Product(final String name, final BigDecimal price) {
+        this.id = UUID.randomUUID();
+        this.name = new Name(name);
+        this.price = new Price(price);
+    }
+
+    public void verifySlang(PurgomalumClient purgomalumClient) {
+        this.name.verifySlang(purgomalumClient);
+    }
+
+    public void changePrice(final BigDecimal price) {
+        this.price = new Price(price);
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public Price getPrice() {
+        return this.price;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public Name getName() {
+        return this.name;
     }
 }

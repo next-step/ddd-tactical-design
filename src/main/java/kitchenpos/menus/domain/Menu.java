@@ -1,9 +1,18 @@
 package kitchenpos.menus.domain;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "menu")
 @Entity
@@ -98,5 +107,16 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    public boolean isBiggerThanProductPrices() {
+        final BigDecimal sum = menuProducts.stream()
+            .map(MenuProduct::totalPrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return this.price.compareTo(sum) > 0;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 }
