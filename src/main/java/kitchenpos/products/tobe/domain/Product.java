@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.model.DisplayedName;
+
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
