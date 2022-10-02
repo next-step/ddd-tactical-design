@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.vo.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
+import kitchenpos.products.tobe.domain.vo.Price;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

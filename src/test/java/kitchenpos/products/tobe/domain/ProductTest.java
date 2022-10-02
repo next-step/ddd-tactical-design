@@ -1,8 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.application.FakeProfanity;
-import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.tobe.domain.vo.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.vo.exception.InvalidProductPriceException;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
+import kitchenpos.products.tobe.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

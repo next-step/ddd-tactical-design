@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.vo;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.tobe.domain.vo.exception.InvalidProductPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

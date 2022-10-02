@@ -1,6 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.vo;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import kitchenpos.products.tobe.domain.Profanity;
+import kitchenpos.products.tobe.domain.vo.exception.InvalidProductNameException;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
