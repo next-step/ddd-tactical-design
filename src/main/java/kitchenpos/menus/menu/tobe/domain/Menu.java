@@ -88,6 +88,13 @@ public class Menu {
         }
     }
 
+    public void show() {
+        if (price.isBiggerThan(menuProducts.totalAmount())) {
+            throw new IllegalStateException();
+        }
+        displayed = true;
+    }
+
     public void hide() {
         displayed = false;
     }

@@ -119,6 +119,32 @@ class MenuTest {
         }
     }
 
+    @DisplayName("메뉴를 전시한다.")
+    @Nested
+    class ShowTest {
+
+        @DisplayName("성공")
+        @Test
+        void success() {
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), false, MenuProducts.of(menuProduct));
+
+            menu.show();
+
+            assertThat(menu.isDisplayed()).isTrue();
+        }
+
+        @DisplayName("메뉴 가격이 메뉴 상품의 금액 총합보다 높을 경우 메뉴를 전시할 수 없다.")
+        @Test
+        void error() {
+            final UUID menuProductId = UUID.randomUUID();
+            final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            menu.changeMenuProductPrice(menuProductId, Price.valueOf(8_000L));
+
+            assertThatThrownBy(() -> menu.show()).isInstanceOf(IllegalStateException.class);
+        }
+    }
+
     @DisplayName("메뉴를 숨긴다.")
     @Test
     void hide() {
