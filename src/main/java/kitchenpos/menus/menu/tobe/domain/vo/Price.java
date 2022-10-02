@@ -8,9 +8,10 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price implements Comparable<Price> {
+public class Price {
 
     private static final int MINIMUM_PRICE = 0;
+    private static final int ZERO = 0;
 
     @Column(name = "price", nullable = false)
     private BigDecimal value;
@@ -41,6 +42,14 @@ public class Price implements Comparable<Price> {
         return Price.valueOf(multiply);
     }
 
+    public boolean isLessThan(final Price anotherPrice) {
+        return value.compareTo(anotherPrice.value) < ZERO;
+    }
+
+    public boolean isBiggerThan(final Price anotherPrice) {
+        return value.compareTo(anotherPrice.value) > ZERO;
+    }
+
     public Long toLong() {
         return value.longValue();
     }
@@ -64,10 +73,5 @@ public class Price implements Comparable<Price> {
     @Override
     public int hashCode() {
         return Objects.hash(value);
-    }
-
-    @Override
-    public int compareTo(Price o) {
-        return value.compareTo(o.value);
     }
 }

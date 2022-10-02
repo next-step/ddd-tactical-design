@@ -47,31 +47,28 @@ class PriceTest {
     @Nested
     class CompareToTest {
 
-        @DisplayName("큰 가격과 비교하면 음수을 리턴한다.")
+        @DisplayName("비교 가격보다 크면 True 를 리턴한다.")
         @Test
-        void compareToBigger() {
-            final Price price = Price.valueOf(10_000L);
-            final Price biggerPrice = Price.valueOf(11_000L);
+        void isBiggerThan() {
+            final Price price = Price.valueOf(11_000L);
+            final Price anotherPrice = Price.valueOf(10_000L);
 
-            assertThat(price.compareTo(biggerPrice)).isLessThan(0);
+            assertAll(
+                    () -> assertThat(price.isBiggerThan(anotherPrice)).isTrue(),
+                    () -> assertThat(anotherPrice.isBiggerThan(price)).isFalse()
+            );
         }
 
-        @DisplayName("작은 가격과 비교하면 양수을 리턴한다.")
+        @DisplayName("비교 가격보다 작으면 True 를 리턴한다.")
         @Test
-        void compareToLess() {
-            final Price price = Price.valueOf(10_000L);
-            final Price biggerPrice = Price.valueOf(9_000L);
+        void isLessThan() {
+            final Price price = Price.valueOf(8_000L);
+            final Price anotherPrice = Price.valueOf(10_000L);
 
-            assertThat(price.compareTo(biggerPrice)).isGreaterThan(0);
-        }
-
-        @DisplayName("같은 가격과 비교하면 0을 리턴한다.")
-        @Test
-        void compareToSame() {
-            final Price price = Price.valueOf(10_000L);
-            final Price biggerPrice = Price.valueOf(10_000L);
-
-            assertThat(price.compareTo(biggerPrice)).isZero();
+            assertAll(
+                    () -> assertThat(price.isLessThan(anotherPrice)).isTrue(),
+                    () -> assertThat(anotherPrice.isLessThan(price)).isFalse()
+            );
         }
     }
 }

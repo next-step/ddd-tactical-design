@@ -16,8 +16,6 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
-    private static final int ZERO = 0;
-
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -69,7 +67,7 @@ public class Menu {
     }
 
     private static void validatePrice(final Price price, final Price totalAmount) {
-        if (price.compareTo(totalAmount) <= ZERO) {
+        if (price.isLessThan(totalAmount) || price.equals(totalAmount)) {
             return;
         }
         throw new InvalidMenuException(price.toLong(), totalAmount.toLong());
@@ -85,7 +83,7 @@ public class Menu {
 
     public void changeMenuProductPrice(final UUID productId, final Price price) {
         menuProducts.changePrice(productId, price);
-        if (this.price.compareTo(menuProducts.totalAmount()) > ZERO) {
+        if (this.price.isBiggerThan(menuProducts.totalAmount())) {
             hide();
         }
     }
