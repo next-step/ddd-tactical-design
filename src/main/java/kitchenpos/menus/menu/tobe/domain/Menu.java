@@ -75,6 +75,14 @@ public class Menu {
         throw new InvalidMenuException(price.toLong(), totalAmount.toLong());
     }
 
+    public void changePrice(Price price) {
+        if (Objects.isNull(price)) {
+            throw new IllegalArgumentException("변경할 금액이 필요합니다.");
+        }
+        validatePrice(price, menuProducts.totalAmount());
+        this.price = price;
+    }
+
     public UUID id() {
         return id;
     }

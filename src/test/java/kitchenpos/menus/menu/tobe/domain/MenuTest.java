@@ -17,20 +17,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MenuTest {
 
+    private Profanity profanity;
+    private MenuName menuName;
+    private MenuProduct menuProduct;
+
+    @BeforeEach
+    void setUp() {
+        profanity = new FakeProfanity();
+        menuName = MenuName.valueOf("메뉴", profanity);
+        menuProduct = MenuProduct.create(UUID.randomUUID(), Price.valueOf(10_000L), Quantity.valueOf(1L));
+    }
+
     @DisplayName("메뉴를 생성한다.")
     @Nested
     class CreateTest {
-        private Profanity profanity;
-        private MenuName menuName;
-        private MenuProduct menuProduct;
-
-        @BeforeEach
-        void setUp() {
-            profanity = new FakeProfanity();
-            menuName = MenuName.valueOf("메뉴", profanity);
-            menuProduct = MenuProduct.create(UUID.randomUUID(), Price.valueOf(10_000L), Quantity.valueOf(1L));
-        }
-
         @DisplayName("성공")
         @Test
         void success() {
@@ -82,6 +82,38 @@ class MenuTest {
         @Test
         void error_5() {
             assertThatThrownBy(() -> Menu.create(menuName, Price.valueOf(50_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
+                    .isInstanceOf(InvalidMenuException.class)
+                    .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
+        }
+    }
+
+    @DisplayName("메뉴의 가격을 변경한다.")
+    @Nested
+    class ChangePrice {
+        @DisplayName("성공")
+        @Test
+        void success() {
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+            menu.changePrice(Price.valueOf(8_000L));
+
+            assertThat(menu.price()).isEqualTo(Price.valueOf(8_000L));
+        }
+
+        @DisplayName("변경하려는 가격이 비어있을 수 없다.")
+        @Test
+        void error_1() {
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+            assertThatThrownBy(() -> menu.changePrice(null)).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @DisplayName("변경하려는 가격은 메뉴상품의 금액 총합보다 적거나 같아야한다.")
+        @Test
+        void error_2() {
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+            assertThatThrownBy(() -> menu.changePrice(Price.valueOf(50_000L)))
                     .isInstanceOf(InvalidMenuException.class)
                     .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
         }
