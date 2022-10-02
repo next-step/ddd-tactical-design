@@ -13,7 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class OrderTest {
+class EatInOrderTest {
     @Nested
     class CreateTest {
         @Nested
@@ -29,15 +29,16 @@ class OrderTest {
                 String orderTableId = UUID.randomUUID().toString();
 
                 // when
-                Order order = new Order(id, orderStatus, orderDateTime, orderLineItems, orderTableId);
+                EatInOrder eatInOrder = new EatInOrder(id, orderStatus, orderDateTime,
+                    orderLineItems, orderTableId);
 
                 // then
                 assertAll(
-                    () -> assertThat(order.getId()).isNotNull(),
-                    () -> assertThat(order.getStatus()).isEqualTo(orderStatus),
-                    () -> assertThat(order.getOrderDateTime()).isEqualTo(orderDateTime),
-                    () -> assertThat(order.getOrderLineItems().isEmpty()).isFalse(),
-                    () -> assertThat(order.getOrderTableId()).isNotNull()
+                    () -> assertThat(eatInOrder.getId()).isNotNull(),
+                    () -> assertThat(eatInOrder.getStatus()).isEqualTo(orderStatus),
+                    () -> assertThat(eatInOrder.getOrderDateTime()).isEqualTo(orderDateTime),
+                    () -> assertThat(eatInOrder.getOrderLineItems().isEmpty()).isFalse(),
+                    () -> assertThat(eatInOrder.getOrderTableId()).isNotNull()
                 );
             }
         }
@@ -52,7 +53,7 @@ class OrderTest {
 
                 // when then
                 assertThatIllegalArgumentException().isThrownBy(
-                    () -> new Order(orderLineItems, UUID.randomUUID().toString())
+                    () -> new EatInOrder(orderLineItems, UUID.randomUUID().toString())
                 );
             }
 
@@ -67,7 +68,7 @@ class OrderTest {
 
                 // when then
                 assertThatIllegalStateException().isThrownBy(
-                    () -> new Order(orderLineItems, UUID.randomUUID().toString())
+                    () -> new EatInOrder(orderLineItems, UUID.randomUUID().toString())
                 );
             }
         }

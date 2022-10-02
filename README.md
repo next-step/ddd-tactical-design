@@ -127,10 +127,10 @@ docker compose -p kitchenpos up -d
 | 완료        | completed        | 고객이 모든 식사를 마치고 결제를 완료한 단계                          |
 | 접수        | accepted         | 주문을 받고 음식을 조리하는 단계                                 |
 | 접수 대기     | waiting          | 주문이 생성되어 매장으로 전달된 단계                               |
-| 주문        | order            | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태     | order status     | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다.     |
-| 주문 테이블    | order table      | 매장에서 주문이 발생하는 영역                                   |
-| 주문 항목     | order line item  | 주문에 속하는 수량이 있는 메뉴                                  |
+| 주문        | eatInOrder            | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
+| 주문 상태     | eatInOrder status     | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다.     |
+| 주문 테이블    | eatInOrder table      | 매장에서 주문이 발생하는 영역                                   |
+| 주문 항목     | eatInOrder line item  | 주문에 속하는 수량이 있는 메뉴                                  |
 | 가격        | price            | 주문 항목의 가격                                          |
 | 수량        | quantity         | 주문 항목의 수량                                          |
 | 숨겨진 주문 항목 | not displayed    | 주문할 수 없는 숨겨진 주문 항목                                 |
@@ -146,9 +146,9 @@ docker compose -p kitchenpos up -d
 | 완료 | completed | 배달 및 결제 완료 단계 |
 | 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
 | 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 주문 | eatInOrder | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
+| 주문 상태 | eatInOrder status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
+| 주문 항목 | eatInOrder line item | 주문에 속하는 수량이 있는 메뉴 |
 
 ### 포장 주문
 
@@ -158,9 +158,9 @@ docker compose -p kitchenpos up -d
 | 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
 | 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
 | 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 주문 | eatInOrder | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
+| 주문 상태 | eatInOrder status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
+| 주문 항목 | eatInOrder line item | 주문에 속하는 수량이 있는 메뉴 |
 
 ## 모델링
 
@@ -186,9 +186,9 @@ docker compose -p kitchenpos up -d
 - `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
 - `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
 - `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
+- `EatInOrder`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
 - 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
+- `EatInOrder`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
 - `OrderLineItem`는 `Price`과 `Quantity`를 가진다.
 - `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
 

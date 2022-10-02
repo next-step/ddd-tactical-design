@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Table(name = "orders")
 @Entity
-public class Order {
+public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -30,14 +30,14 @@ public class Order {
     @Column(name = "order_table_id", nullable = false)
     private String orderTableId;
 
-    protected Order() {
+    protected EatInOrder() {
     }
 
-    public Order(OrderLineItems orderLineItems, String orderTableId) {
+    public EatInOrder(OrderLineItems orderLineItems, String orderTableId) {
         this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
     }
 
-    protected Order(UUID id, OrderStatus status, LocalDateTime orderDateTime,
+    protected EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime,
         OrderLineItems orderLineItems, String orderTableId) {
         validateOrderLineItems(orderLineItems);
         this.id = id;
