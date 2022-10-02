@@ -17,6 +17,10 @@ public class ProductPrice {
         this.price = validatePositive(price);
     }
 
+    void change(Long amount) {
+        this.price = validatePositive(amount);
+    }
+
     private BigDecimal validatePositive(Long price) {
         if (price == null || BigDecimal.valueOf(price).compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();

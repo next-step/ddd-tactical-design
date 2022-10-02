@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -10,7 +12,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
@@ -28,6 +30,11 @@ public class Product {
         this.id = id;
         this.name = new DisplayedName(name);
         this.price = new ProductPrice(price);
+    }
+
+    public ProductPriceChangedEvent changePrice(Long amount) {
+        price.change(amount);
+        return registerEvent(new ProductPriceChangedEvent(id, amount));
     }
 
     @Override
