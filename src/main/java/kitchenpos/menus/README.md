@@ -29,12 +29,12 @@
     - `메뉴 가격(menuPrice)`은 `메뉴 상품(menuProduct)`의 `금액(amount)` 총합보다 적거나 같아야 한다.
 - `메뉴(menu)`의 가격을 변경한다.
     - `메뉴 가격(menuPrice)`은 0원 이상이어야 한다.
-    - `메뉴 가격(menuPrice)`은 `메뉴 상품(menuProduct)`의 가격 총합보다 작아야한다.
-    - `메뉴 가격(menuPrice)`을 변경할 때, 변경 후의 `메뉴 가격(menuPrice)`이 `메뉴 상품(menuProduct)`의 `금액(amount)`의 총합보다 크면 `숨겨진다(hide).`
+    - `메뉴 가격(menuPrice)`은 `메뉴 상품(menuProduct)`의 `금액(amount)` 총합보다 적거나 같아야 한다.
 - `메뉴(menu)`를 `전시한다(display).`
-    - `메뉴 가격(menuPrice)`이 `메뉴 상품(menuProduct)`의 가격 총합보다 높을 경우 `메뉴(menu)`를 `전시할 수 없다(display).`
+    - `메뉴 가격(menuPrice)`이 `메뉴 상품(menuProduct)`의 `금액(amount)` 총합보다 높을 경우 `메뉴(menu)`를 `전시할 수 없다(display).`
 - `메뉴(menu)`를 `숨긴다(hide).`
-
+- `메뉴상품(menuProduct)`의 가격을 수정한다.
+  - `메뉴 가격(menuPrice)`이 `메뉴 상품(menuProduct)`의 `금액(amount)` 총합보다 크면 `숨겨진다(hide).`
 
 ### 메뉴 그룹
 
