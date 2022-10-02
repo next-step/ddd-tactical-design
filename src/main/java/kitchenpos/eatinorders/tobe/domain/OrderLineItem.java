@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -26,24 +25,12 @@ public class OrderLineItem {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Column(name = "displayed", nullable = false)
-    private boolean displayed;
-
     protected OrderLineItem() {
     }
 
-    public OrderLineItem(String menuId, Price price, long quantity, boolean displayed) {
+    public OrderLineItem(String menuId, Price price, long quantity) {
         this.menuId = menuId;
         this.price = price;
         this.quantity = quantity;
-        this.displayed = displayed;
-    }
-
-    public BigDecimal getAmount() {
-        return price.multiply(quantity);
-    }
-
-    public boolean isDisplayed() {
-        return displayed;
     }
 }

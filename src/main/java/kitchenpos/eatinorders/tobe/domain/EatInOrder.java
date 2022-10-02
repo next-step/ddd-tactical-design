@@ -39,21 +39,11 @@ public class EatInOrder {
 
     protected EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime,
         OrderLineItems orderLineItems, String orderTableId) {
-        validateOrderLineItems(orderLineItems);
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
-    }
-
-    private void validateOrderLineItems(OrderLineItems orderLineItems) {
-        if (orderLineItems.isEmpty()) {
-            throw new IllegalArgumentException("주문항목 목록은 하나 이상 있어야 합니다.");
-        }
-        if (orderLineItems.isAnyNotDisplayed()) {
-            throw new IllegalStateException("숨겨져 있는 주문항목이 있습니다.");
-        }
     }
 
     public void accept() {

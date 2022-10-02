@@ -1,9 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
@@ -29,21 +27,13 @@ public class OrderLineItems {
     }
 
     public OrderLineItems(List<OrderLineItem> values) {
+        validate(values);
         this.values = values;
     }
 
-    public BigDecimal getTotalAmount() {
-        return values.stream()
-            .map(OrderLineItem::getAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public boolean isAnyNotDisplayed() {
-        return values.stream()
-            .anyMatch(Predicate.not(OrderLineItem::isDisplayed));
-    }
-
-    public boolean isEmpty() {
-        return values.isEmpty();
+    private void validate(List<OrderLineItem> values) {
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException("주문항목 목록은 하나 이상 있어야 합니다.");
+        }
     }
 }
