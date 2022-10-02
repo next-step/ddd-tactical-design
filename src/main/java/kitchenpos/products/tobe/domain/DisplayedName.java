@@ -17,7 +17,7 @@ public class DisplayedName {
 
   public DisplayedName(String value) {
     if (Objects.isNull(value) || value.isBlank()) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("상품 이름을 입력해 주세요.");
     }
     this.value = value;
   }
@@ -25,7 +25,7 @@ public class DisplayedName {
   public DisplayedName(String value, PurgomalumClient purgomalumClient) {
     this(value);
     if (purgomalumClient.containsProfanity(value)) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
     }
   }
 
