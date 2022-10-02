@@ -16,14 +16,14 @@ public class DisplayedName {
     }
 
     DisplayedName(String name) {
-        setName(name);
+        this.name = validateExists(name);
     }
 
-    private void setName(String name) {
+    private String validateExists(String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException();
         }
-        this.name = name;
+        return name;
     }
 
     @Override

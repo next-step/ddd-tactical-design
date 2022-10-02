@@ -14,14 +14,14 @@ public class ProductPrice {
     }
 
     ProductPrice(Long price) {
-        setPrice(price);
+        this.price = validatePositive(price);
     }
 
-    private void setPrice(Long price) {
+    private BigDecimal validatePositive(Long price) {
         if (price == null || BigDecimal.valueOf(price).compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        this.price = BigDecimal.valueOf(price);
+        return BigDecimal.valueOf(price);
     }
 
     @Override
