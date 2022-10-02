@@ -239,13 +239,13 @@ docker compose -p kitchenpos up -d
 - [x] 모든 `Product` 목록을 조회할 수 있다.
 
 ### 메뉴
-- `MenuGroup`은 고유식별자와 `MenuGroupName`을 갖는다.
-  - `MenuGroupName`은 공백일 수 없다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`는 고유식별자와 `MenuName`, `MenuPrice`, `MenuProducts`, `display`를 가진다.
-  - `Menu` 등록시, `MenuPrice`는 `MenuProductPrice`들의 합보다 작거나 같아야 한다.
-  - `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
-- `MenuProduct`는 `MenuProductPrice`와 `MenuProductQuantity`를 가진다.
+- [x] `MenuGroup`은 고유식별자와 `MenuGroupName`을 갖는다.
+  - [x] `MenuGroupName`은 공백일 수 없다.
+- [ ] `Menu`는 특정 `MenuGroup`에 속한다.
+- [ ] `Menu`는 고유식별자와 `MenuName`, `MenuPrice`, `MenuProducts`, `display`를 가진다.
+  - [ ] `Menu` 등록시, `MenuPrice`는 `MenuProductPrice`들의 합보다 작거나 같아야 한다.
+  - [ ] `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
+- [ ] `MenuProduct`는 `MenuProductPrice`와 `MenuProductQuantity`를 가진다.
 
 ### 매장 주문
 - `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
