@@ -27,6 +27,14 @@ class ProductNameTest {
             .isExactlyInstanceOf(InvalidProductNameException.class);
     }
 
+    @DisplayName("상품의 이름은 공백으로 이루어질 수 없다.")
+    @ValueSource(strings = {" ", "  ", "           "})
+    @ParameterizedTest
+    void blankException(String blank) {
+        assertThatThrownBy(() -> new ProductName(blank, profanityCheckClient))
+            .isExactlyInstanceOf(InvalidProductNameException.class);
+    }
+
     @DisplayName("상품의 이름은 비속어를 포함할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설"})
     @ParameterizedTest

@@ -18,12 +18,19 @@ public class ProductName {
     public ProductName(String value, ProfanityCheckClient profanityCheckClient) {
         this.value = value;
         validateNull(this.value);
+        validateBlank(this.value);
         validateProfanity(this.value, profanityCheckClient);
     }
 
     private void validateNull(String value) {
         if (Objects.isNull(value)) {
             throw new InvalidProductNameException("올바르지 않은 상품 이름입니다.");
+        }
+    }
+
+    private void validateBlank(String value) {
+        if (value.isBlank()) {
+            throw new InvalidProductNameException("상품 이름은 공백일 수 없습니다.");
         }
     }
 
