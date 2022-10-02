@@ -19,7 +19,7 @@ public class EatInOrder {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
@@ -34,10 +34,10 @@ public class EatInOrder {
     }
 
     public EatInOrder(OrderLineItems orderLineItems, String orderTableId) {
-        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
+        this(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
     }
 
-    protected EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime,
+    protected EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime,
         OrderLineItems orderLineItems, String orderTableId) {
         this.id = id;
         this.status = status;
@@ -47,31 +47,31 @@ public class EatInOrder {
     }
 
     public void accept() {
-        if (this.status != OrderStatus.WAITING) {
+        if (this.status != EatInOrderStatus.WAITING) {
             throw new IllegalStateException();
         }
-        this.status = OrderStatus.ACCEPTED;
+        this.status = EatInOrderStatus.ACCEPTED;
     }
 
     public void serve() {
-        if (this.status != OrderStatus.ACCEPTED) {
+        if (this.status != EatInOrderStatus.ACCEPTED) {
             throw new IllegalStateException();
         }
-        this.status = OrderStatus.SERVED;
+        this.status = EatInOrderStatus.SERVED;
     }
 
     public void complete() {
-        if (this.status != OrderStatus.SERVED) {
+        if (this.status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException();
         }
-        this.status = OrderStatus.COMPLETED;
+        this.status = EatInOrderStatus.COMPLETED;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public OrderStatus getStatus() {
+    public EatInOrderStatus getStatus() {
         return status;
     }
 
