@@ -65,4 +65,15 @@ class MenuProductTest {
 
         assertThat(menuProduct.amount()).isEqualTo(Price.valueOf(45_000L));
     }
+
+    @DisplayName("가격을 변경한다.")
+    @Test
+    void changePrice() {
+        final UUID productId = UUID.randomUUID();
+        final MenuProduct menuProduct = MenuProduct.create(productId, Price.valueOf(15_000L), Quantity.valueOf(3L));
+
+        menuProduct.changePrice(Price.valueOf(20_000L));
+
+        assertThat(menuProduct.price()).isEqualTo(Price.valueOf(20_000L));
+    }
 }

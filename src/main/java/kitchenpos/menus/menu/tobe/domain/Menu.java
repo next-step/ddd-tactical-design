@@ -83,6 +83,17 @@ public class Menu {
         this.price = price;
     }
 
+    public void changeMenuProductPrice(final UUID productId, final Price price) {
+        menuProducts.changePrice(productId, price);
+        if (this.price.compareTo(menuProducts.totalAmount()) > ZERO) {
+            hide();
+        }
+    }
+
+    public void hide() {
+        displayed = false;
+    }
+
     public UUID id() {
         return id;
     }

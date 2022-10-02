@@ -58,12 +58,19 @@ class ProductTest {
     @Nested
     class ChangePriceTest {
 
+        private PricePolicy pricePolicy;
+
+        @BeforeEach
+        void setUp() {
+            pricePolicy = new DummyPricePolicy();
+        }
+
         @DisplayName("성공")
         @Test
         void success() {
             final Product product = Product.create(displayedName, 10_000L);
 
-            product.changePrice(20_000L);
+            product.changePrice(20_000L, pricePolicy);
 
             assertThat(product.price()).isEqualTo(Price.valueOf(20_000L));
         }
@@ -73,7 +80,7 @@ class ProductTest {
         void error_1() {
             final Product product = Product.create(displayedName, 10_000L);
 
-            assertThatThrownBy(() -> product.changePrice(null))
+            assertThatThrownBy(() -> product.changePrice(null, pricePolicy))
                     .isInstanceOf(InvalidProductPriceException.class);
         }
     }

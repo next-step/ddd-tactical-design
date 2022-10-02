@@ -66,6 +66,10 @@ public class MenuProduct {
         this.menu = menu;
     }
 
+    protected void changePrice(final Price price) {
+        this.price = price;
+    }
+
     public Price amount() {
         return price.multiply(quantity);
     }

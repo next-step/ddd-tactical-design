@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Embeddable
 public class MenuProducts {
@@ -38,6 +39,12 @@ public class MenuProducts {
         for (MenuProduct value : values) {
             value.makeRelation(menu);
         }
+    }
+
+    protected void changePrice(final UUID productId, final Price price) {
+        values.stream().parallel()
+                .filter(menuProduct -> menuProduct.productId().equals(productId))
+                .forEach(menuProduct -> menuProduct.changePrice(price));
     }
 
     public Price totalAmount() {

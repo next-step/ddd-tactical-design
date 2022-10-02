@@ -40,8 +40,9 @@ public class Product {
         return new Product(UUID.randomUUID(), displayedName, Price.valueOf(price));
     }
 
-    public void changePrice(final Long price) {
+    public void changePrice(final Long price, final PricePolicy pricePolicy) {
         this.price = Price.valueOf(price);
+        pricePolicy.changedProductPrice(id, price);
     }
 
     public UUID id() {

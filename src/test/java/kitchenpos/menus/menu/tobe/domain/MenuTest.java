@@ -118,4 +118,46 @@ class MenuTest {
                     .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
         }
     }
+
+    @DisplayName("메뉴를 숨긴다.")
+    @Test
+    void hide() {
+        final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+        menu.hide();
+
+        assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴상품의 가격을 변경한다.")
+    @Nested
+    class ChangeMenuProductPriceTest {
+
+        @DisplayName("성공")
+        @Test
+        void success() {
+            final UUID menuProductId = UUID.randomUUID();
+            final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+            menu.changeMenuProductPrice(menuProductId, Price.valueOf(80_000L));
+
+            assertThat(menu.menuProducts().totalAmount()).isEqualTo(Price.valueOf(80_000L));
+        }
+
+        @DisplayName("메뉴 가격이 메뉴 상품의 금액 총합보다 크면 숨겨진다")
+        @Test
+        void changeMenuProductPrice() {
+            final UUID menuProductId = UUID.randomUUID();
+            final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
+            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+
+            menu.changeMenuProductPrice(menuProductId, Price.valueOf(8_000L));
+
+            assertAll(
+                    () -> assertThat(menu.menuProducts().totalAmount()).isEqualTo(Price.valueOf(8_000L)),
+                    () -> assertThat(menu.isDisplayed()).isFalse()
+            );
+        }
+    }
 }
