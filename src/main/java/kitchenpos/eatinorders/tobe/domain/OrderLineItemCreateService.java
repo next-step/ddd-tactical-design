@@ -16,11 +16,11 @@ import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import kitchenpos.eatinorders.tobe.dto.MenuDTO;
 import kitchenpos.global.vo.Price;
 
-public class OrderLinesService {
+public class OrderLineItemCreateService {
 
     private final MenuServerClient menuServerClient;
 
-    public OrderLinesService(MenuServerClient menuServerClient) {
+    public OrderLineItemCreateService(MenuServerClient menuServerClient) {
         this.menuServerClient = menuServerClient;
     }
 

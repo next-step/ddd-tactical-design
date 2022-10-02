@@ -19,9 +19,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class OrderLinesServiceTest {
+class OrderLineItemCreateServiceTest {
 
-    private OrderLinesService orderLinesService;
+    private OrderLineItemCreateService orderLineItemCreateService;
     private MenuDTO chickenOfFried;
     private MenuDTO chickenOfSpicy;
 
@@ -34,7 +34,7 @@ class OrderLinesServiceTest {
                 chickenOfSpicy
         );
         MenuServerClient menuServerClient = new FakeMenuServerClient(menus);
-        orderLinesService = new OrderLinesService(menuServerClient);
+        orderLineItemCreateService = new OrderLineItemCreateService(menuServerClient);
     }
 
     @DisplayName("주문 항목에 필요한 메뉴 정보를 합친다.")
@@ -47,7 +47,7 @@ class OrderLinesServiceTest {
                 orderLineItem(2, spicy)
         ));
 
-        orderLinesService.syncMenu(request);
+        orderLineItemCreateService.syncMenu(request);
 
         OrderLineItems actual = request.getOrderLineItems();
         assertThat(actual.getValues())
@@ -70,7 +70,7 @@ class OrderLinesServiceTest {
             ));
 
             assertThatExceptionOfType(ConsistencyMenuException.class)
-                    .isThrownBy(() -> orderLinesService.syncMenu(request));
+                    .isThrownBy(() -> orderLineItemCreateService.syncMenu(request));
         }
 
         @DisplayName("요청한 주문 항목의 가격과 "
@@ -86,7 +86,7 @@ class OrderLinesServiceTest {
             ));
 
             assertThatExceptionOfType(InvalidOrderLineItemPrice.class)
-                    .isThrownBy(() -> orderLinesService.syncMenu(request));
+                    .isThrownBy(() -> orderLineItemCreateService.syncMenu(request));
         }
 
         private DisplayedMenu changeMenuPrice(MenuDTO menuDTO, int price) {
