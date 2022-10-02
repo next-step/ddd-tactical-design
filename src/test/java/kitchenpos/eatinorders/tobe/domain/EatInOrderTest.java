@@ -9,10 +9,8 @@ import static kitchenpos.eatinorders.tobe.OrderFixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.NullSource;
 
 class EatInOrderTest {
 
@@ -55,20 +52,6 @@ class EatInOrderTest {
     @DisplayName("매장 주문 생성 예외 케이스")
     @Nested
     class CreateErrorCaseTest {
-
-        @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
-        @ParameterizedTest(name = "{displayName}[{index}] - {arguments}")
-        @NullSource
-        @EnumSource(value = OrderType.class, names = "EAT_IN", mode = EnumSource.Mode.EXCLUDE)
-        void error1(OrderType type) {
-            assumeTrue(OrderType.EAT_IN != type);
-
-            assertThatThrownBy(() -> new EatInOrder(
-                    type,
-                    orderLineItems(orderLineItem(3L, menu)),
-                    orderTable
-            )).isInstanceOf(IllegalArgumentException.class);
-        }
 
         @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
         @Test

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
@@ -34,8 +33,6 @@ public final class OrderFixtures {
 
     public static EatInOrder eatInOrder(OrderStatus status, OrderTable orderTable) {
         return new EatInOrder(
-                UUID.randomUUID(),
-                OrderType.EAT_IN,
                 status,
                 orderLineItems(orderLineItem(1, menu("양념통닭", 16_000))),
                 orderTable

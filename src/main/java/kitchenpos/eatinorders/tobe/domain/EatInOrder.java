@@ -58,36 +58,20 @@ public class EatInOrder {
             OrderTable orderTable
     ) {
         this();
-        validate(type, orderTable);
+        validate(orderTable);
         this.orderLineItems = orderLineItems;
         this.orderTable = orderTable;
     }
 
-    public EatInOrder(OrderType type, OrderLineItems orderLineItems,
-            OrderTable orderTable) {
-        validate(type, orderTable);
-        this.id = UUID.randomUUID();
-        this.status = OrderStatus.WAITING;
-        this.type = type;
-        this.orderDateTime = LocalDateTime.now();
-        this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
-    }
-
-    public EatInOrder(UUID id, OrderType type, OrderStatus status,
+    public EatInOrder(OrderStatus status,
             OrderLineItems orderLineItems, OrderTable orderTable) {
-        this.id = id;
-        this.type = type;
+        this();
         this.status = status;
         this.orderLineItems = orderLineItems;
         this.orderTable = orderTable;
     }
 
-    private void validate(OrderType type, OrderTable orderTable) {
-        if (OrderType.EAT_IN != type) {
-            throw new IllegalArgumentException();
-        }
-
+    private void validate(OrderTable orderTable) {
         if (orderTable.isEmpty()) {
             throw new IllegalStateException();
         }
