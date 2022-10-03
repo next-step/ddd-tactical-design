@@ -23,14 +23,14 @@ public class Product {
   public Product() {
   }
 
-  public Product(String name, boolean isProfanity, BigDecimal price) {
+  public Product(String name, Boolean isProfanity, BigDecimal price) {
     this.id = UUID.randomUUID();
     this.displayedName = new DisplayedName(name, isProfanity);
     this.price = new ProductPrice(price);
   }
 
-  public void changePrice(BigDecimal price) {
-    this.price = new ProductPrice(price);
+  public void changePrice(ProductPrice price) {
+    this.price = price;
   }
 
   public UUID getId() {
@@ -43,5 +43,13 @@ public class Product {
 
   public ProductPrice getPrice() {
     return price;
+  }
+
+  public String getNameValue() {
+    return this.displayedName.getName();
+  }
+
+  public BigDecimal getPriceValue() {
+    return this.price.getPrice();
   }
 }

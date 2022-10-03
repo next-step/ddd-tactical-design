@@ -22,6 +22,10 @@ public class ProductPrice {
     this.price = price;
   }
 
+  public BigDecimal getPrice() {
+    return price;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

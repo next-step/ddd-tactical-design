@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Deprecated(forRemoval = true)
 public interface ProductRepository {
     Product save(Product product);
 
