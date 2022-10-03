@@ -1,7 +1,4 @@
-package kitchenpos.products.domain;
-
-import kitchenpos.products.tobe.domain.PurifiedName;
-import kitchenpos.products.tobe.domain.VerifiedPrice;
+package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,18 +12,22 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private PurifiedName name;
+    private ProductName name;
     @Embedded
-    private VerifiedPrice price;
+    private ProductPrice price;
+
+    public Product(final UUID id, final String name, final BigDecimal price) {
+        this.id = id;
+        this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
+    }
+
+    public Product(final UUID id, final String name, final long price) {
+        this(id,name,BigDecimal.valueOf(price));
+    }
 
     public Product() {
 
-    }
-
-    public Product(final UUID id, final PurifiedName name, final VerifiedPrice price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
     }
 
     public UUID getId() {
@@ -37,8 +38,8 @@ public class Product {
         this.id = id;
     }
 
-    public void changePrice(final VerifiedPrice price) {
-        this.price = price;
+    public void changePrice(final BigDecimal price) {
+        this.price = new ProductPrice(price);
     }
 
     public BigDecimal multiplyPrice(final long quantity){
