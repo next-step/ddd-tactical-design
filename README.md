@@ -273,3 +273,13 @@ docker compose -p kitchenpos up -d
 ---
 
 - [ ] 메뉴 엔티티 우선 구성 후, 가격과 관련된 정책 리팩터링
+1. [ ]   modified:   README.md
+2. [ ]   modified:   src/main/java/kitchenpos/eatinorders/application/OrderService.java
+3. [ ]   modified:   src/main/java/kitchenpos/menus/application/MenuService.java
+4. [ ]   modified:   src/main/java/kitchenpos/menus/domain/Menu.java
+5. [ ]   modified:   src/main/java/kitchenpos/menus/domain/MenuProduct.java
+6. [ ]   modified:   src/test/java/kitchenpos/Fixtures.java
+7. [ ]   modified:   src/test/java/kitchenpos/eatinorders/application/OrderServiceTest.java
+8. [ ]   modified:   src/test/java/kitchenpos/menus/MenuFixtures.java
+9. [ ]   modified:   src/test/java/kitchenpos/menus/application/InMemoryMenuRepository.java
+10. [ ]   modified:   src/test/java/kitchenpos/menus/application/MenuServiceTest.java

@@ -38,7 +38,7 @@ public class MenuService {
         }
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<MenuProduct> menuProductRequests = request.getMenuProductValues();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -95,7 +95,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+        for (final MenuProduct menuProduct : menu.getMenuProductValues()) {
             sum = sum.add(
                 productRepository.findById(menuProduct.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException("ID에 해당하는 상품이 없습니다."))
@@ -115,7 +115,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+        for (final MenuProduct menuProduct : menu.getMenuProductValues()) {
             sum = sum.add(
                 productRepository.findById(menuProduct.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException("ID에 해당하는 상품이 없습니다."))

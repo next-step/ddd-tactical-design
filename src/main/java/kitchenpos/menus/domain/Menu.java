@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -33,9 +32,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
-    private List<MenuProduct> menuProducts = new ArrayList<>();
+    @Embedded
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
@@ -59,16 +57,11 @@ public class Menu {
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
+        this.menuProducts = new MenuProducts();
     }
 
     public void addMenuProduct(MenuProduct menuProduct) {
-        if (isNotContains(menuProduct)) {
-            this.menuProducts.add(menuProduct);
-        }
-    }
-
-    private boolean isNotContains(MenuProduct menuProduct) {
-        return !menuProducts.contains(menuProduct);
+        menuProducts.addMenuProduct(menuProduct);
     }
 
     public UUID getId() {
@@ -111,12 +104,8 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+    public List<MenuProduct> getMenuProductValues() {
+        return menuProducts.getValues();
     }
 
     public UUID getMenuGroupId() {
