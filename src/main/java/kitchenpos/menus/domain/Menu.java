@@ -8,12 +8,18 @@ import java.util.UUID;
 @Table(name = "menu")
 @Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "binary(16)")
+
     @Id
+    @Column(
+        name = "id",
+        length = 16,
+        unique = true,
+        nullable = false
+    )
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -52,12 +58,12 @@ public class Menu {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameValue() {
+        return name.getValue();
     }
 
     public void setName(final String name) {
-        this.name = name;
+
     }
 
     public BigDecimal getPrice() {

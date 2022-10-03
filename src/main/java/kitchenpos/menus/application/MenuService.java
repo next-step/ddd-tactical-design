@@ -70,7 +70,7 @@ public class MenuService {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        final String name = request.getName();
+        final String name = request.getNameValue();
         if (Objects.isNull(name) || profanityCheckClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }

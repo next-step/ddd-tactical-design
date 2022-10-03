@@ -243,6 +243,7 @@ docker compose -p kitchenpos up -d
   - [x] `MenuGroupName`은 공백일 수 없다.
 - [ ] `Menu`는 특정 `MenuGroup`에 속한다.
 - [ ] `Menu`는 고유식별자와 `MenuName`, `MenuPrice`, `MenuProducts`, `display`를 가진다.
+  - [x] `MenutName`에는 `Profanity`가 포함될 수 없다.
   - [ ] `Menu` 등록시, `MenuPrice`는 `MenuProductPrice`들의 합보다 작거나 같아야 한다.
   - [ ] `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
 - [ ] `MenuProduct`는 `MenuProductPrice`와 `MenuProductQuantity`를 가진다.
