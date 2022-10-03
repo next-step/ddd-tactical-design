@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.infra.PurgomalumClient;
