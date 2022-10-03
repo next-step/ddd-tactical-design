@@ -1,10 +1,14 @@
 package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class DisplayState {
 
-    private final boolean displayed;
+    @Column(name = "displayed", nullable = false)
+    private boolean displayed;
 
     public static DisplayState from(boolean displayed) {
         return new DisplayState(displayed);
@@ -16,6 +20,10 @@ public class DisplayState {
 
     public static DisplayState hide() {
         return new DisplayState(false);
+    }
+
+    protected DisplayState() {
+
     }
 
     private DisplayState(boolean displayed) {
