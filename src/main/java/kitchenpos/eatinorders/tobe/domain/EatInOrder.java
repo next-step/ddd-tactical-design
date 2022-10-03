@@ -62,14 +62,6 @@ public class EatInOrder {
         this.orderTable = orderTable;
     }
 
-    public EatInOrder(OrderStatus status,
-            OrderLineItems orderLineItems, OrderTable orderTable) {
-        this();
-        this.status = status;
-        this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
-    }
-
     private void validate(OrderTable orderTable) {
         if (orderTable.isEmpty()) {
             throw new IllegalStateException();

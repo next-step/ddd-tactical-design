@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrder;
+import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrderOfCompleted;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.emptyOrderTable;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.numberOfGuests;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.orderTable;
@@ -83,8 +84,8 @@ class OrderTableTest {
         OrderTable orderTable = emptyOrderTable("테이블1");
         orderTable.sit();
 
-        EatInOrder waited = eatInOrder(OrderStatus.WAITING, orderTable);
-        EatInOrder completed = eatInOrder(OrderStatus.COMPLETED, orderTable);
+        EatInOrder waited = eatInOrder(orderTable);
+        EatInOrder completed = eatInOrderOfCompleted(orderTable);
 
         assertThat(orderTable(completed).isCompletedAllOrders()).isTrue();
         assertThat(orderTable(waited).isCompletedAllOrders()).isFalse();

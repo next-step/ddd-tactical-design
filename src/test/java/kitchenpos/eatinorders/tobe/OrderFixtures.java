@@ -6,7 +6,6 @@ import java.util.UUID;
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
-import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import kitchenpos.eatinorders.tobe.domain.vo.EatInOrderQuantity;
@@ -31,9 +30,29 @@ public final class OrderFixtures {
         );
     }
 
-    public static EatInOrder eatInOrder(OrderStatus status, OrderTable orderTable) {
+    public static EatInOrder eatInOrderOfAccepted(OrderTable orderTable) {
+        EatInOrder order = eatInOrder(
+                orderLineItems(orderLineItem(1, menu("양념치킨", 19_000L))),
+                orderTable
+        );
+        order.accept();
+        return order;
+    }
+
+    public static EatInOrder eatInOrderOfServed(OrderTable orderTable) {
+        EatInOrder order = eatInOrderOfAccepted(orderTable);
+        order.serve();
+        return order;
+    }
+
+    public static EatInOrder eatInOrderOfCompleted(OrderTable orderTable) {
+        EatInOrder order = eatInOrderOfServed(orderTable);
+        order.complete();
+        return order;
+    }
+
+    public static EatInOrder eatInOrder(OrderTable orderTable) {
         return new EatInOrder(
-                status,
                 orderLineItems(orderLineItem(1, menu("양념통닭", 16_000))),
                 orderTable
         );

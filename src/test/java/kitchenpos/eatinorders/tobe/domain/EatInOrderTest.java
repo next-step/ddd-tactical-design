@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrder;
+import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrderOfAccepted;
+import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrderOfServed;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.menu;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.numberOfGuests;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.orderLineItem;
@@ -74,7 +76,7 @@ class EatInOrderTest {
     @DisplayName("주문을 서빙한다.")
     @Test
     void serve() {
-        EatInOrder actual = eatInOrder(OrderStatus.ACCEPTED, orderTable);
+        EatInOrder actual = eatInOrderOfAccepted(orderTable);
 
         actual.serve();
 
@@ -89,7 +91,7 @@ class EatInOrderTest {
                 + "주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
         @Test
         void success() {
-            EatInOrder actual = eatInOrder(OrderStatus.SERVED, orderTable);
+            EatInOrder actual = eatInOrderOfServed(orderTable);
 
             actual.complete();
 
@@ -103,7 +105,7 @@ class EatInOrderTest {
         @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
         @Test
         void completeEatInOrder() {
-            EatInOrder actual = eatInOrder(OrderStatus.SERVED, orderTable);
+            EatInOrder actual = eatInOrderOfServed(orderTable);
 
             actual.complete();
 
