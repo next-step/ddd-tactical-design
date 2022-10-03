@@ -121,6 +121,22 @@ class MenuTest {
         .isThrownBy(() -> createdMenu.changePrice(Price.from(price)));
   }
 
+  @DisplayName("메뉴 가격 변경시 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+  @Test
+  void changePrice_MenuPriceLessThanMenuProductTotalAmount() {
+    Menu createdMenu = createMenu(
+        "후라이드+후라이드",
+        24_000L,
+        true,
+        createMenuGroup("점심특선"),
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createdMenu.changePrice(Price.from(24_001L)));
+  }
+
   @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
   @Test
   void createMenu_haveToMenuGroup() {

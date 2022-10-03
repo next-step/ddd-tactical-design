@@ -30,6 +30,7 @@ public class Menu {
   }
 
   public void changePrice(Price price) {
+    validateMenuPrice(price, menuProducts);
     this.price = price;
   }
 
