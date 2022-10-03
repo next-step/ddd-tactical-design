@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 public class DisplayState {
 
     @Column(name = "displayed", nullable = false)
-    private boolean displayed;
+    private final boolean displayed;
 
     public static DisplayState from(boolean displayed) {
         return new DisplayState(displayed);
@@ -23,7 +23,7 @@ public class DisplayState {
     }
 
     protected DisplayState() {
-
+        this(true);
     }
 
     private DisplayState(boolean displayed) {
