@@ -80,7 +80,7 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public List<MenuProduct> getMenuProductList() {
+    public List<MenuProduct> getMenuProducts() {
         return menuProducts.getMenuProducts();
     }
 
