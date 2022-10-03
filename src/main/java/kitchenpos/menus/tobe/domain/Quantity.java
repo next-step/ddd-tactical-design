@@ -1,13 +1,21 @@
 package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Quantity {
 
-    private final long quantity;
+    @Column(name = "quantity", nullable = false)
+    private long quantity;
 
     public static Quantity from(long quantity) {
         return new Quantity(quantity);
+    }
+
+    protected Quantity() {
+
     }
 
     private Quantity(long quantity) {
