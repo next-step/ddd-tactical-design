@@ -2,6 +2,7 @@ package kitchenpos.menus.domain.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MenuRequest {
@@ -36,6 +37,9 @@ public class MenuRequest {
     }
 
     public List<MenuProductRequest> getMenuProducts() {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         return menuProducts;
     }
 

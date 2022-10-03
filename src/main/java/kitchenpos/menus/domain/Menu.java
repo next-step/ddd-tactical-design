@@ -1,5 +1,8 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.domain.vo.MenuName;
+import kitchenpos.menus.domain.vo.MenuPrice;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,11 +15,9 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -43,8 +44,8 @@ public class Menu {
 
     public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = id;
-        this.name = name;
-        this.price = price;
+        this.name = new MenuName(name);
+        this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
@@ -55,15 +56,15 @@ public class Menu {
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
     public void changePrice(final BigDecimal price) {
-        this.price = price;
+        this.price.changePrice(price);
     }
 
     public MenuGroup getMenuGroup() {
