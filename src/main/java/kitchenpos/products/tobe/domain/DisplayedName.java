@@ -15,12 +15,11 @@ public class DisplayedName {
   }
 
   public static DisplayedName from(String name, DisplayNameValidator validator) {
-    DisplayedName displayedName = new DisplayedName(name);
-    validator.validate(displayedName);
-    return displayedName;
+    validator.validate(name);
+    return new DisplayedName(name);
   }
 
-  public DisplayedName() {
+  protected DisplayedName() {
 
   }
 
