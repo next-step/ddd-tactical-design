@@ -33,7 +33,7 @@ class MenuTest {
         () -> assertThat(menu.getPrice()).isEqualTo(Price.from(19_000L)),
         () -> assertThat(menu.getMenuGroup().getId()).isEqualTo(menuGroup.getId()),
         () -> assertThat(menu.getDisplayState()).isEqualTo(DisplayState.show()),
-        () -> assertThat(menu.getMenuProducts()).hasSize(1)
+        () -> assertThat(menu.getMenuProducts().getMenuProducts()).hasSize(1)
     );
   }
 
@@ -93,7 +93,7 @@ class MenuTest {
         Price.from(price),
         DisplayState.from(displayed),
         menuGroup,
-        menuProducts
+        new MenuProducts(menuProducts)
     );
   }
 

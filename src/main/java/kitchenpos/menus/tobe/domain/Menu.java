@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Menu {
@@ -15,10 +14,10 @@ public class Menu {
 
   private MenuGroup menuGroup;
 
-  private List<MenuProduct> menuProducts;
+  private MenuProducts menuProducts;
 
   public Menu(UUID id, DisplayedName name, Price price, DisplayState displayState,
-      MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+      MenuGroup menuGroup, MenuProducts menuProducts) {
     validateMenuPrice(price, menuProducts);
     this.id = id;
     this.name = name;
@@ -28,12 +27,8 @@ public class Menu {
     this.menuProducts = menuProducts;
   }
 
-  private static void validateMenuPrice(Price price, List<MenuProduct> menuProducts) {
-    Price sum = menuProducts.stream()
-        .map(MenuProduct::amount)
-        .reduce(Price.from(0), Price::plus);
-
-    if (price.isGreaterThan(sum)) {
+  private static void validateMenuPrice(Price price, MenuProducts menuProducts) {
+    if (price.isGreaterThan(menuProducts.totalSum())) {
       throw new IllegalArgumentException();
     }
   }
@@ -58,7 +53,7 @@ public class Menu {
     return menuGroup;
   }
 
-  public List<MenuProduct> getMenuProducts() {
+  public MenuProducts getMenuProducts() {
     return menuProducts;
   }
 }

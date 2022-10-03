@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class Price {
 
+    public static final Price ZERO = Price.from(0L);
+
     private BigDecimal amount;
 
     public static Price from(long amount) {
