@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,33 +23,52 @@ public class Menu {
     @Embedded
     private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
+    @ManyToOne
+    @JoinColumn(name = "menu_group_id", nullable = false, columnDefinition = "binary(16)")
     private MenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @JoinColumn(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
+    private List<MenuProduct> menuProducts = new ArrayList<>();
 
-    @Transient
-    private UUID menuGroupId;
+    protected Menu() {
+    }
 
-    public Menu() {
+    public Menu(
+        MenuName name,
+        MenuPrice price,
+        MenuGroup menuGroup
+    ) {
+        this(UUID.randomUUID(), name, price, menuGroup);
+    }
+
+    public Menu(
+        UUID id,
+        MenuName name,
+        MenuPrice price,
+        MenuGroup menuGroup
+    ) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+    }
+
+    public void addMenuProduct(MenuProduct menuProduct) {
+        if (isNotContains(menuProduct)) {
+            this.menuProducts.add(menuProduct);
+        }
+    }
+
+    private boolean isNotContains(MenuProduct menuProduct) {
+        return !menuProducts.contains(menuProduct);
     }
 
     public UUID getId() {
@@ -66,12 +87,12 @@ public class Menu {
 
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceValue() {
+        return price.getValue();
     }
 
     public void setPrice(final BigDecimal price) {
-        this.price = price;
+
     }
 
     public MenuGroup getMenuGroup() {
@@ -99,10 +120,23 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
-        return menuGroupId;
+        return menuGroup.getId();
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

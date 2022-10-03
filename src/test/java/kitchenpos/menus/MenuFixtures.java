@@ -3,14 +3,10 @@ package kitchenpos.menus;
 import static kitchenpos.products.ProductFixtures.product;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupName;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.menus.domain.*;
+import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 
 public class MenuFixtures {
 
@@ -30,37 +26,28 @@ public class MenuFixtures {
     }
 
     public static Menu menu() {
-        return menu(19_000L, true, menuProduct());
+        return menu(19_000L);
     }
 
-    public static Menu menu(long price, MenuProduct... menuProducts) {
-        return menu(price, false, menuProducts);
+    public static Menu menu(long price) {
+        return new Menu(
+            UUID.randomUUID(),
+            new MenuName("후라이드+후라이드", new FakeProfanityCheckClient()),
+            new MenuPrice(BigDecimal.valueOf(price)),
+            menuGroup()
+        );
     }
 
-    public static Menu menu(long price, boolean displayed, MenuProduct... menuProducts) {
-        Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
+    public static MenuProduct menuProduct(Menu menu) {
+        return menuProduct(menu, product().getId(), 2L);
     }
 
-    public static MenuProduct menuProduct() {
-        MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
-        return menuProduct;
-    }
-
-    public static MenuProduct menuProduct(Product product, long quantity) {
-        MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+    public static MenuProduct menuProduct(Menu menu, UUID productId, long quantity) {
+        return new MenuProduct(
+            new Random().nextLong(),
+            menu,
+            productId,
+            new MenuProductQuantity(quantity)
+        );
     }
 }

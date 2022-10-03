@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.Fixtures.*;
+import static kitchenpos.menus.MenuFixtures.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -37,7 +38,7 @@ class OrderServiceTest {
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
     @Test
     void createDeliveryOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(
             OrderType.DELIVERY, "서울시 송파구 위례성대로 2", createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
@@ -56,7 +57,7 @@ class OrderServiceTest {
     @DisplayName("1개 이상의 등록된 메뉴로 포장 주문을 등록할 수 있다.")
     @Test
     void createTakeoutOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, 3L));
         final Order actual = orderService.create(expected);
         assertThat(actual).isNotNull();
@@ -72,7 +73,7 @@ class OrderServiceTest {
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
     @Test
     void createEatInOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final Order expected = createOrderRequest(OrderType.EAT_IN, orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
         final Order actual = orderService.create(expected);
@@ -91,7 +92,7 @@ class OrderServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final OrderType type) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(type, createOrderLineItemRequest(menuId, 19_000L, 3L));
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -118,7 +119,7 @@ class OrderServiceTest {
     @ValueSource(longs = -1L)
     @ParameterizedTest
     void createEatInOrder(final long quantity) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final Order expected = createOrderRequest(
             OrderType.EAT_IN, orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity)
@@ -130,7 +131,7 @@ class OrderServiceTest {
     @ValueSource(longs = -1L)
     @ParameterizedTest
     void createWithoutEatInOrder(final long quantity) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(
             OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, quantity)
         );
@@ -142,7 +143,7 @@ class OrderServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String deliveryAddress) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(
             OrderType.DELIVERY, deliveryAddress, createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
@@ -153,7 +154,7 @@ class OrderServiceTest {
     @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
     @Test
     void createEmptyTableEatInOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
         final Order expected = createOrderRequest(
             OrderType.EAT_IN, orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
@@ -165,7 +166,7 @@ class OrderServiceTest {
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, 3L));
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalStateException.class);
@@ -174,7 +175,7 @@ class OrderServiceTest {
     @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
     @Test
     void createNotMatchedMenuPriceOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 16_000L, 3L));
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);

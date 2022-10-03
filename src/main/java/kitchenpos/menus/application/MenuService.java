@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class MenuService {
 
     @Transactional
     public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
+        final BigDecimal price = request.getPriceValue();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
@@ -49,10 +50,20 @@ public class MenuService {
         if (products.size() != menuProductRequests.size()) {
             throw new IllegalArgumentException();
         }
+        final String name = request.getNameValue();
+        if (Objects.isNull(name) || profanityCheckClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
+        final Menu menu = new Menu(
+            UUID.randomUUID(),
+            new MenuName(name, profanityCheckClient),
+            new MenuPrice(price),
+            menuGroup
+        );
         final List<MenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
+            final long quantity = menuProductRequest.getQuantityValue();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
@@ -62,31 +73,22 @@ public class MenuService {
                 product.getPriceValue()
                     .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct(
+                menu,
+                product.getId(),
+                new MenuProductQuantity(quantity)
+            );
             menuProducts.add(menuProduct);
         }
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        final String name = request.getNameValue();
-        if (Objects.isNull(name) || profanityCheckClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
         return menuRepository.save(menu);
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
+        final BigDecimal price = request.getPriceValue();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
@@ -95,9 +97,10 @@ public class MenuService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
-                menuProduct.getProduct()
+                productRepository.findById(menuProduct.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException("ID에 해당하는 상품이 없습니다."))
                     .getPriceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(BigDecimal.valueOf(menuProduct.getQuantityValue()))
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -114,12 +117,13 @@ public class MenuService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
-                menuProduct.getProduct()
+                productRepository.findById(menuProduct.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException("ID에 해당하는 상품이 없습니다."))
                     .getPriceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(BigDecimal.valueOf(menuProduct.getQuantityValue()))
             );
         }
-        if (menu.getPrice().compareTo(sum) > 0) {
+        if (menu.getPriceValue().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
         menu.setDisplayed(true);
