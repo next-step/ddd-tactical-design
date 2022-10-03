@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 public class DisplayedName {
@@ -14,7 +14,11 @@ public class DisplayedName {
     return new DisplayedName(name);
   }
 
-  public DisplayedName() {
+  public static DisplayedName from(String name, DisplayNameValidator validator) {
+    validator.validate(name);
+    return new DisplayedName(name);
+  }
+  protected DisplayedName() {
 
   }
 

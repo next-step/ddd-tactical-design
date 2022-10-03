@@ -6,13 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("메뉴 테스트")
 class MenuTest {
+
+  public DisplayNameValidator displayNameValidator;
+
+  @BeforeEach
+  void setUp() {
+    displayNameValidator = new FakeMenuDisplayedNameValidator();
+  }
 
   @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
   @Test
@@ -23,7 +32,8 @@ class MenuTest {
         19_000L,
         true,
         menuGroup,
-        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
     );
 
     assertThat(menu).isNotNull();
@@ -46,7 +56,8 @@ class MenuTest {
             19_000L,
             true,
             createMenuGroup("점심특선"),
-            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, -1))
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, -1)),
+            displayNameValidator
         ));
   }
 
@@ -60,7 +71,8 @@ class MenuTest {
             price,
             true,
             createMenuGroup("점심특선"),
-            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+            displayNameValidator
         ));
   }
 
@@ -71,8 +83,10 @@ class MenuTest {
         .isThrownBy(() -> createMenu(
             "후라이드+후라이드",
             24_001L,
-            true, createMenuGroup("점심특선"),
-            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+            true,
+            createMenuGroup("점심특선"),
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+            displayNameValidator
         ));
   }
 
@@ -85,7 +99,24 @@ class MenuTest {
             24_000L,
             true,
             null,
-            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+            displayNameValidator
+        ));
+  }
+
+  @DisplayName("메뉴의 이름이 올바르지 않으면 등록할 수 없다.")
+  @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
+  @NullSource
+  @ParameterizedTest
+  void create(final String name) {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createMenu(
+            name,
+            24_000L,
+            true,
+            createMenuGroup("점심특선"),
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+            displayNameValidator
         ));
   }
 
@@ -98,11 +129,12 @@ class MenuTest {
       long price,
       boolean displayed,
       MenuGroup menuGroup,
-      List<MenuProduct> menuProducts
+      List<MenuProduct> menuProducts,
+      DisplayNameValidator displayNameValidator
   ) {
     return new Menu(
         UUID.randomUUID(),
-        DisplayedName.from(name),
+        DisplayedName.from(name, displayNameValidator),
         Price.from(price),
         DisplayState.from(displayed),
         menuGroup,
