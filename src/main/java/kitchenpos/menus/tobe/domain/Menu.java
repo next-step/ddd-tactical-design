@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Menu {
@@ -18,6 +19,7 @@ public class Menu {
 
   public Menu(UUID id, DisplayedName name, Price price, DisplayState displayState,
       MenuGroup menuGroup, MenuProducts menuProducts) {
+    validateMenuGroup(menuGroup);
     validateMenuPrice(price, menuProducts);
     this.id = id;
     this.name = name;
@@ -25,6 +27,12 @@ public class Menu {
     this.displayState = displayState;
     this.menuGroup = menuGroup;
     this.menuProducts = menuProducts;
+  }
+
+  private static void validateMenuGroup(MenuGroup menuGroup) {
+    if (Objects.isNull(menuGroup)) {
+      throw new IllegalArgumentException();
+    }
   }
 
   private static void validateMenuPrice(Price price, MenuProducts menuProducts) {

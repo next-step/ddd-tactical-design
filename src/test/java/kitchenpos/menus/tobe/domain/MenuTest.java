@@ -76,6 +76,19 @@ class MenuTest {
         ));
   }
 
+  @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
+  @Test
+  void createMenu_haveToMenuGroup() {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createMenu(
+            "후라이드+후라이드",
+            24_000L,
+            true,
+            null,
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+        ));
+  }
+
   private static MenuGroup createMenuGroup(String name) {
     return new MenuGroup(UUID.randomUUID(), DisplayedName.from(name));
   }
