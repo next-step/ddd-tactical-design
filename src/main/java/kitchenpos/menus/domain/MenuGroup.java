@@ -16,22 +16,20 @@ public class MenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public MenuGroup() {
+    protected MenuGroup() {
+    }
+
+    public MenuGroup(UUID id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
 }
