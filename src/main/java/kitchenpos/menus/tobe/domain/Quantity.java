@@ -8,14 +8,14 @@ import javax.persistence.Embeddable;
 public class Quantity {
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private final long quantity;
 
     public static Quantity from(long quantity) {
         return new Quantity(quantity);
     }
 
     protected Quantity() {
-
+        this(0);
     }
 
     private Quantity(long quantity) {
