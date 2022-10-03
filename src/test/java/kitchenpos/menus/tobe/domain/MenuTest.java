@@ -64,7 +64,17 @@ class MenuTest {
         ));
   }
 
-
+  @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+  @Test
+  void createMenu_MenuPriceLessThanMenuProductTotalAmount() {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createMenu(
+            "후라이드+후라이드",
+            24_001L,
+            true, createMenuGroup("점심특선"),
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+        ));
+  }
 
   private static MenuGroup createMenuGroup(String name) {
     return new MenuGroup(UUID.randomUUID(), DisplayedName.from(name));

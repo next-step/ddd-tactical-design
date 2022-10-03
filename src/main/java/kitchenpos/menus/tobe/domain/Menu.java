@@ -19,12 +19,23 @@ public class Menu {
 
   public Menu(UUID id, DisplayedName name, Price price, DisplayState displayState,
       MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    validateMenuPrice(price, menuProducts);
     this.id = id;
     this.name = name;
     this.price = price;
     this.displayState = displayState;
     this.menuGroup = menuGroup;
     this.menuProducts = menuProducts;
+  }
+
+  private static void validateMenuPrice(Price price, List<MenuProduct> menuProducts) {
+    Price sum = menuProducts.stream()
+        .map(MenuProduct::amount)
+        .reduce(Price.from(0), Price::plus);
+
+    if (price.isGreaterThan(sum)) {
+      throw new IllegalArgumentException();
+    }
   }
 
   public UUID getId() {

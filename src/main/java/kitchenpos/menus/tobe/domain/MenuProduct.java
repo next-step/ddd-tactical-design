@@ -16,4 +16,8 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
+    public Price amount() {
+        return price.times(quantity.quantity());
+    }
+
 }

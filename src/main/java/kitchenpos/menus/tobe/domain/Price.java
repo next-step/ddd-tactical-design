@@ -22,6 +22,18 @@ public class Price {
         this.amount = amount;
     }
 
+    public Price times(long quantity) {
+        return Price.from(this.amount.multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    public Price plus(Price price) {
+        return Price.from(this.amount.add(price.amount));
+    }
+
+    public boolean isGreaterThan(Price price) {
+        return amount.compareTo(price.amount) > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
