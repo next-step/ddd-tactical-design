@@ -90,6 +90,22 @@ class MenuTest {
         ));
   }
 
+  @DisplayName("메뉴의 가격을 변경할 수 있다.")
+  @Test
+  void changePrice() {
+    Menu createdMenu = createMenu(
+        "후라이드+후라이드",
+        24_000L,
+        true,
+        createMenuGroup("점심특선"),
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+
+    createdMenu.changePrice(Price.from(23_000L));
+    assertThat(createdMenu.getPrice()).isEqualTo(Price.from(23_000L));
+  }
+
   @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
   @Test
   void createMenu_haveToMenuGroup() {

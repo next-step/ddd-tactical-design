@@ -29,6 +29,10 @@ public class Menu {
     this.menuProducts = menuProducts;
   }
 
+  public void changePrice(Price price) {
+    this.price = price;
+  }
+
   private static void validateMenuGroup(MenuGroup menuGroup) {
     if (Objects.isNull(menuGroup)) {
       throw new IllegalArgumentException();
