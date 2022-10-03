@@ -2,20 +2,45 @@ package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "menu")
 public class Menu {
 
+  @Column(name = "id", columnDefinition = "binary(16)")
+  @Id
   private UUID id;
 
+  @Embedded
   private DisplayedName name;
 
+  @Embedded
   private Price price;
 
+  @Embedded
   private DisplayState displayState;
 
+  @ManyToOne(optional = false)
+  @JoinColumn(
+      name = "menu_group_id",
+      columnDefinition = "binary(16)",
+      foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+  )
   private MenuGroup menuGroup;
 
   private MenuProducts menuProducts;
+
+  protected Menu() {
+
+  }
 
   public Menu(UUID id, DisplayedName name, Price price, DisplayState displayState,
       MenuGroup menuGroup, MenuProducts menuProducts) {
