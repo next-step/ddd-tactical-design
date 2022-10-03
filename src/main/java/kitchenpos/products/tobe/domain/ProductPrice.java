@@ -6,16 +6,16 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class VerifiedPrice {
+public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public VerifiedPrice(final BigDecimal price) {
+    protected ProductPrice(final BigDecimal price) {
         checkPrice(price);
         this.price = price;
     }
 
-    public VerifiedPrice() {
+    protected ProductPrice() {
 
     }
 

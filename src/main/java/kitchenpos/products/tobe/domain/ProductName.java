@@ -1,29 +1,20 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class PurifiedName {
+public class ProductName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public PurifiedName() {
+    protected ProductName() {
 
     }
 
-    public PurifiedName(final String name) {
+    protected ProductName(final String name) {
         if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
-        }
-        this.name = name;
-    }
-
-    public PurifiedName(final String name, final PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         this.name = name;
