@@ -2,8 +2,8 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuGroupName;
-import kitchenpos.menus.tobe.dto.MenuGroupRequest;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
+import kitchenpos.menus.tobe.dto.menugroup.MenuGroupRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

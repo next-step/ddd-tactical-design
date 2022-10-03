@@ -2,7 +2,7 @@ package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.tobe.dto.MenuGroupRequest;
+import kitchenpos.menus.tobe.dto.menugroup.MenuGroupRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

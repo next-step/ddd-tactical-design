@@ -2,13 +2,12 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuGroupName;
-import kitchenpos.menus.tobe.dto.MenuGroupRequest;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
+import kitchenpos.menus.tobe.dto.menugroup.MenuGroupRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
