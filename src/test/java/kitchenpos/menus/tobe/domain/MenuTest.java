@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("메뉴 테스트")
 class MenuTest {
@@ -47,6 +49,22 @@ class MenuTest {
             List.of(createMenuProduct(UUID.randomUUID(), 12_000L, -1))
         ));
   }
+
+  @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")
+  @ValueSource(strings = "-1")
+  @ParameterizedTest
+  void createMenu_NotValidPrice(final Long price) {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createMenu(
+            "후라이드+후라이드",
+            price,
+            true,
+            createMenuGroup("점심특선"),
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2))
+        ));
+  }
+
+
 
   private static MenuGroup createMenuGroup(String name) {
     return new MenuGroup(UUID.randomUUID(), DisplayedName.from(name));
