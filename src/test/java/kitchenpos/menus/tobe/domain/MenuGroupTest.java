@@ -11,7 +11,7 @@ class MenuGroupTest {
     @Test
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     void createMenuGroup() {
-        MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), "점심특선");
-        Assertions.assertThat(menuGroup.getName()).isEqualTo("점심특선");
+        MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), DisplayedName.from("점심특선"));
+        Assertions.assertThat(menuGroup.getName()).isEqualTo(DisplayedName.from("점심특선"));
     }
 }

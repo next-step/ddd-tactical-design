@@ -1,13 +1,21 @@
 package kitchenpos.menus.tobe.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class DisplayedName {
 
+  @Column(name = "name", nullable = false)
   private String name;
 
   public static DisplayedName from(String name) {
     return new DisplayedName(name);
+  }
+
+  public DisplayedName() {
+
   }
 
   private DisplayedName(String name) {
