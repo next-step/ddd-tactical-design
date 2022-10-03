@@ -1,21 +1,22 @@
 package kitchenpos.products.tobe.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import kitchenpos.common.model.DisplayedName;
+import kitchenpos.products.tobe.vo.ProductName;
+import kitchenpos.products.tobe.vo.ProductPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("상품")
 class ProductTest {
 
-  private DisplayedName name;
+  private ProductName name;
   private ProductPrice price;
 
   @BeforeEach
   void setup() {
-    name = new DisplayedName("후라이드");
+    name = new ProductName("후라이드");
     price = new ProductPrice(20_000);
   }
 

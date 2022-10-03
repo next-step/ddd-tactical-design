@@ -1,14 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.model.DisplayedName;
+import kitchenpos.products.tobe.vo.ProductName;
+import kitchenpos.products.tobe.vo.ProductPrice;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Table(name = "product")
 @Entity
@@ -19,7 +16,7 @@ public class Product {
   private UUID id;
 
   @Embedded
-  private DisplayedName name;
+  private ProductName name;
 
   @Embedded
   private ProductPrice price;
@@ -28,12 +25,12 @@ public class Product {
 
   }
 
-  public Product(DisplayedName name, ProductPrice price) {
+  public Product(ProductName name, ProductPrice price) {
     this.name = name;
     this.price = price;
   }
 
-  public Product(UUID id, DisplayedName name, ProductPrice price) {
+  public Product(UUID id, ProductName name, ProductPrice price) {
     this(name, price);
     this.id = id;
   }
@@ -46,7 +43,7 @@ public class Product {
     return id;
   }
 
-  public DisplayedName getName() {
+  public ProductName getName() {
     return name;
   }
 
