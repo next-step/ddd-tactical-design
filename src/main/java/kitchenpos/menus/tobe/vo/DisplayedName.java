@@ -1,6 +1,4 @@
-package kitchenpos.common.model;
-
-import kitchenpos.products.infra.PurgomalumClient;
+package kitchenpos.menus.tobe.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -18,16 +16,9 @@ public class DisplayedName {
 
     public DisplayedName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
-            throw new IllegalArgumentException("상품 이름을 입력해 주세요.");
+            throw new IllegalArgumentException("이름을 입력해 주세요.");
         }
         this.value = value;
-    }
-
-    public DisplayedName(String value, PurgomalumClient purgomalumClient) {
-        this(value);
-        if (purgomalumClient.containsProfanity(value)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-        }
     }
 
     public String getValue() {
