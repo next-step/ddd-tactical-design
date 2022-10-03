@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
@@ -32,6 +33,19 @@ class MenuTest {
         () -> assertThat(menu.getDisplayState()).isEqualTo(DisplayState.show()),
         () -> assertThat(menu.getMenuProducts()).hasSize(1)
     );
+  }
+
+  @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
+  @Test
+  void createMenu_NotValidQuantity() {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createMenu(
+            "후라이드+후라이드",
+            19_000L,
+            true,
+            createMenuGroup("점심특선"),
+            List.of(createMenuProduct(UUID.randomUUID(), 12_000L, -1))
+        ));
   }
 
   private static MenuGroup createMenuGroup(String name) {
