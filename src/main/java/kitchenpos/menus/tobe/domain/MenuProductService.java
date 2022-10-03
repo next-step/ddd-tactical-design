@@ -3,12 +3,12 @@ package kitchenpos.menus.tobe.domain;
 import java.math.BigDecimal;
 import java.util.function.Consumer;
 
-import kitchenpos.core.annotation.DomainService;
+import kitchenpos.core.annotation.CommandDomainService;
 import kitchenpos.core.constant.ExceptionMessages;
 import kitchenpos.core.domain.Price;
 import kitchenpos.core.domain.Quantity;
 
-@DomainService
+@CommandDomainService
 public class MenuProductService {
 
 	public void changePrice(Menu menu, MenuProduct menuProduct, Price price) {
