@@ -6,6 +6,10 @@ public class DisplayState {
 
     private final boolean displayed;
 
+    public static DisplayState from(boolean displayed) {
+        return new DisplayState(displayed);
+    }
+
     public static DisplayState show() {
         return new DisplayState(true);
     }
