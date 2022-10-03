@@ -137,6 +137,36 @@ class MenuTest {
         .isThrownBy(() -> createdMenu.changePrice(Price.from(24_001L)));
   }
 
+  @DisplayName("메뉴를 숨길 수 있다.")
+  @Test
+  void hide() {
+    Menu createdMenu = createMenu(
+        "후라이드+후라이드",
+        24_000L,
+        true,
+        createMenuGroup("점심특선"),
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+    createdMenu.hide();
+    assertThat(createdMenu.getDisplayState()).isEqualTo(DisplayState.hide());
+  }
+
+  @DisplayName("메뉴를 공개할 수 있다.")
+  @Test
+  void show() {
+    Menu createdMenu = createMenu(
+        "후라이드+후라이드",
+        24_000L,
+        false,
+        createMenuGroup("점심특선"),
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+    createdMenu.show();
+    assertThat(createdMenu.getDisplayState()).isEqualTo(DisplayState.show());
+  }
+
   @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
   @Test
   void createMenu_haveToMenuGroup() {

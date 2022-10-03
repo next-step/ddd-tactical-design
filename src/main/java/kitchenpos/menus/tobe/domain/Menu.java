@@ -34,16 +34,11 @@ public class Menu {
     this.price = price;
   }
 
-  private static void validateMenuGroup(MenuGroup menuGroup) {
-    if (Objects.isNull(menuGroup)) {
-      throw new IllegalArgumentException();
-    }
+  public void show() {
+    this.displayState = DisplayState.show();
   }
-
-  private static void validateMenuPrice(Price price, MenuProducts menuProducts) {
-    if (price.isGreaterThan(menuProducts.totalSum())) {
-      throw new IllegalArgumentException();
-    }
+  public void hide() {
+    this.displayState = DisplayState.hide();
   }
 
   public UUID getId() {
@@ -69,4 +64,17 @@ public class Menu {
   public MenuProducts getMenuProducts() {
     return menuProducts;
   }
+
+  private static void validateMenuGroup(MenuGroup menuGroup) {
+    if (Objects.isNull(menuGroup)) {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  private static void validateMenuPrice(Price price, MenuProducts menuProducts) {
+    if (price.isGreaterThan(menuProducts.totalSum())) {
+      throw new IllegalArgumentException();
+    }
+  }
+
 }
