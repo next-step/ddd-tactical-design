@@ -13,7 +13,6 @@ import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
 import kitchenpos.eatinorders.tobe.dto.MenuDTO;
 import kitchenpos.global.vo.Name;
 import kitchenpos.global.vo.Price;
-import kitchenpos.global.vo.Quantity;
 import kitchenpos.products.application.FakePurgomalumClient;
 
 public final class OrderFixtures {
@@ -120,11 +119,7 @@ public final class OrderFixtures {
     }
 
     public static NumberOfGuests numberOfGuests(long value) {
-        return new NumberOfGuests(quantity(value));
-    }
-
-    private static Quantity quantity(long value) {
-        return new Quantity(value);
+        return new NumberOfGuests(value);
     }
 
     public static Name name(String value) {
