@@ -2,12 +2,11 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.PurifiedName;
-import kitchenpos.products.tobe.domain.VerifiedPrice;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +30,25 @@ public class ProductService {
         this.purgomalumClient = purgomalumClient;
     }
 
-    @Transactional
     public Product create(final ProductDto request) {
+        checkPurifiedName(request.getName());
+        return saveProduct(request);
+    }
+
+    @Transactional
+    Product saveProduct(ProductDto request) {
         final Product product = new Product(
                 UUID.randomUUID(),
-                new PurifiedName(request.getName(), purgomalumClient),
-                new VerifiedPrice(request.getPrice())
+                request.getName(),
+                request.getPrice()
         );
         return productRepository.save(product);
+    }
+
+    private void checkPurifiedName(String name) {
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Transactional
@@ -47,9 +57,7 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
 
-        product.changePrice(
-                new VerifiedPrice(request.getPrice())
-        );
+        product.changePrice(request.getPrice());
 
         menus.stream()
                 .filter(menu -> menu.isOverPrice())
