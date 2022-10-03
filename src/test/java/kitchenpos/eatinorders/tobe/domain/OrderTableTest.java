@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

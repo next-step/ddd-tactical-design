@@ -3,10 +3,10 @@ package kitchenpos.eatinorders.tobe;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import kitchenpos.eatinorders.tobe.domain.vo.EatInOrderQuantity;
@@ -39,10 +39,13 @@ public final class OrderFixtures {
         );
     }
 
-    public static EatInOrder eatInOrder(OrderLineItems items) {
+    public static EatInOrder eatInOrder(OrderLineItem... items) {
         OrderTable table = emptyOrderTable("테이블1");
         table.sit();
-        return eatInOrder(items, table);
+        return eatInOrder(
+                orderLineItems(items),
+                table
+        );
     }
 
     public static EatInOrder eatInOrder(OrderLineItems items, OrderTable table) {

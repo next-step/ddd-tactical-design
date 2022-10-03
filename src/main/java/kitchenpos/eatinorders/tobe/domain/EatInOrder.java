@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
 
 @Table(name = "tb_orders")
@@ -78,30 +77,19 @@ public class EatInOrder {
     }
 
     public void accept() {
-        if (status != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-
-        status = OrderStatus.ACCEPTED;
+        status = status.accept();
     }
 
     public void serve() {
-        if (status != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-
-        status = OrderStatus.SERVED;
+        status = status.serve();
     }
 
     public void complete() {
-        if (status != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
+        status = status.complete();
 
         if (orderTable.isCompletedAllOrders()) {
             orderTable.clear();
         }
-        status = OrderStatus.COMPLETED;
     }
 
     public boolean isCompleted() {

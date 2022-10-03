@@ -3,7 +3,6 @@ package kitchenpos.eatinorders.tobe.domain;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.eatInOrder;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.menuDTO;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.orderLineItem;
-import static kitchenpos.eatinorders.tobe.OrderFixtures.orderLineItems;
 import static kitchenpos.eatinorders.tobe.OrderFixtures.price;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
@@ -42,10 +41,10 @@ class OrderLineItemCreateServiceTest {
     void saveMenu() {
         DisplayedMenu fired = chickenOfFried.toMenu();
         DisplayedMenu spicy = chickenOfSpicy.toMenu();
-        EatInOrder request = eatInOrder(orderLineItems(
+        EatInOrder request = eatInOrder(
                 orderLineItem(1, fired),
                 orderLineItem(2, spicy)
-        ));
+        );
 
         orderLineItemCreateService.saveMenu(request);
 
@@ -65,9 +64,9 @@ class OrderLineItemCreateServiceTest {
         @Test
         void error1() {
             DisplayedMenu fired = chickenOfFried.toMenu();
-            EatInOrder request = eatInOrder(orderLineItems(
+            EatInOrder request = eatInOrder(
                     orderLineItem(1, fired)
-            ));
+            );
 
             assertThatExceptionOfType(ConsistencyMenuException.class)
                     .isThrownBy(() -> orderLineItemCreateService.saveMenu(request));
@@ -80,10 +79,10 @@ class OrderLineItemCreateServiceTest {
             DisplayedMenu fired = chickenOfFried.toMenu();
             DisplayedMenu spicy = changeMenuPrice(chickenOfSpicy, 16_000);
 
-            EatInOrder request = eatInOrder(orderLineItems(
+            EatInOrder request = eatInOrder(
                     orderLineItem(1, fired),
                     orderLineItem(1, spicy)
-            ));
+            );
 
             assertThatExceptionOfType(InvalidOrderLineItemPrice.class)
                     .isThrownBy(() -> orderLineItemCreateService.saveMenu(request));

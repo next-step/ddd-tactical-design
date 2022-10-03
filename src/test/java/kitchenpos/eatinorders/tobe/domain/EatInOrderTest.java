@@ -10,14 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.vo.DisplayedMenu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 
 class EatInOrderTest {
 
@@ -64,55 +61,24 @@ class EatInOrderTest {
             ).isInstanceOf(IllegalStateException.class);
         }
     }
+    @DisplayName("주문을 접수한다.")
+    @Test
+    void accept() {
+        EatInOrder actual = eatInOrder(orderLineItem(1, menu));
 
-    @DisplayName("접수 상태 변경")
-    @Nested
-    class AcceptTest {
+        actual.accept();
 
-        @DisplayName("주문을 접수한다.")
-        @Test
-        void success() {
-            EatInOrder actual = eatInOrder(OrderStatus.WAITING, orderTable);
-
-            actual.accept();
-
-            assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
-        }
-
-        @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
-        @ParameterizedTest(name = "{displayName}[{index}] - {arguments}")
-        @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
-        void error(OrderStatus status) {
-            EatInOrder actual = eatInOrder(status, orderTable);
-
-            assertThatThrownBy(() -> actual.accept())
-                    .isInstanceOf(IllegalStateException.class);
-        }
+        assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
-    @DisplayName("서빙 상태 변경")
-    @Nested
-    class ServeTest {
+    @DisplayName("주문을 서빙한다.")
+    @Test
+    void serve() {
+        EatInOrder actual = eatInOrder(OrderStatus.ACCEPTED, orderTable);
 
-        @DisplayName("주문을 서빙한다.")
-        @Test
-        void success() {
-            EatInOrder actual = eatInOrder(OrderStatus.ACCEPTED, orderTable);
+        actual.serve();
 
-            actual.serve();
-
-            assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
-        }
-
-        @DisplayName("접수된 주문만 서빙할 수 있다.")
-        @ParameterizedTest(name = "{displayName}[{index}] - {arguments}")
-        @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
-        void error(OrderStatus status) {
-            EatInOrder actual = eatInOrder(status, orderTable);
-
-            assertThatThrownBy(() -> actual.serve())
-                    .isInstanceOf(IllegalStateException.class);
-        }
+        assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
     @DisplayName("주문 완료 상태 변경")
@@ -132,16 +98,6 @@ class EatInOrderTest {
                     () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
                     () -> assertThat(actual.getOrderTable().isEmpty()).isTrue()
             );
-        }
-
-        @DisplayName("서빙된 주문만 완료할 수 있다.")
-        @ParameterizedTest(name = "{displayName}[{index}] - {arguments}")
-        @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
-        void error(final OrderStatus status) {
-            EatInOrder actual = eatInOrder(status, orderTable);
-
-            assertThatThrownBy(() -> actual.complete())
-                    .isInstanceOf(IllegalStateException.class);
         }
 
         @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
