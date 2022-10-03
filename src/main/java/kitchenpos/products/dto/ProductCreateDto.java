@@ -2,6 +2,7 @@ package kitchenpos.products.dto;
 
 import java.math.BigDecimal;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.infra.PurgomalumClient;
 
 public class ProductCreateDto {
 
@@ -13,8 +14,8 @@ public class ProductCreateDto {
         this.price = price;
     }
 
-    public Product toProduct() {
-        return new Product(name, price);
+    public Product toProduct(final PurgomalumClient purgomalumClient) {
+        return new Product(name, price, purgomalumClient);
     }
 
     public String getName() {

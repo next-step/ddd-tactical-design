@@ -23,7 +23,7 @@ class NameTest {
     @Test
     @DisplayName("이름 생성")
     void constructor() {
-        final Name expected = new Name("product Name");
+        final Name expected = new Name("product Name", purgomalumClient);
         assertThat(expected).isNotNull();
     }
 
@@ -31,15 +31,14 @@ class NameTest {
     @DisplayName("이름은 필수이다")
     @NullSource
     void create_with_null(final String name) {
-        assertThatThrownBy(() -> new Name(name))
+        assertThatThrownBy(() -> new Name(name, purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("비속어를 포함 할 수 없다")
     void slang_test() {
-        final Name expected = new Name("비속어");
-        assertThatThrownBy(() -> expected.verifySlang(purgomalumClient))
+        assertThatThrownBy(() -> new Name("비속어", purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -30,10 +30,7 @@ public class ProductService {
 
     @Transactional
     public Product create(final ProductCreateDto productCreateDto) {
-        final Product product = productCreateDto.toProduct();
-        product.verifySlang(purgomalumClient);
-
-        return productRepository.save(product);
+        return productRepository.save(productCreateDto.toProduct(purgomalumClient));
     }
 
     @Transactional
