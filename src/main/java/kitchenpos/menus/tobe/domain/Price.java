@@ -2,11 +2,15 @@ package kitchenpos.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Price {
 
     public static final Price ZERO = Price.from(0L);
 
+    @Column(name = "price", nullable = false)
     private BigDecimal amount;
 
     public static Price from(long amount) {
@@ -15,6 +19,10 @@ public class Price {
 
     public static Price from(BigDecimal amount) {
         return new Price(amount);
+    }
+
+    protected Price() {
+
     }
 
     private Price(BigDecimal amount) {

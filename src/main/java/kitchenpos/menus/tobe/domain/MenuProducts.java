@@ -14,7 +14,7 @@ public class MenuProducts {
   public Price totalSum() {
     return menuProducts.stream()
         .map(MenuProduct::amount)
-        .reduce(Price.from(0), Price::plus);
+        .reduce(Price.ZERO, Price::plus);
   }
 
   public List<MenuProduct> getMenuProducts() {
