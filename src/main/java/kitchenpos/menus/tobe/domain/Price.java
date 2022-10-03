@@ -11,7 +11,7 @@ public class Price {
     public static final Price ZERO = Price.from(0L);
 
     @Column(name = "price", nullable = false)
-    private BigDecimal amount;
+    private final BigDecimal amount;
 
     public static Price from(long amount) {
         return from(BigDecimal.valueOf(amount));
@@ -22,7 +22,7 @@ public class Price {
     }
 
     protected Price() {
-
+        this(BigDecimal.ZERO);
     }
 
     private Price(BigDecimal amount) {
