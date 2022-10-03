@@ -106,6 +106,21 @@ class MenuTest {
     assertThat(createdMenu.getPrice()).isEqualTo(Price.from(23_000L));
   }
 
+  @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
+  @ValueSource(longs = -1)
+  @ParameterizedTest
+  void changePrice_NotValidPrice(final long price) {
+    Menu createdMenu = createMenu(
+        "후라이드+후라이드",
+        24_000L,
+        true,      createMenuGroup("점심특선"),
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> createdMenu.changePrice(Price.from(price)));
+  }
+
   @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
   @Test
   void createMenu_haveToMenuGroup() {
