@@ -39,7 +39,7 @@ class OrderLineItemCreateServiceTest {
 
     @DisplayName("주문 항목에 필요한 메뉴 정보를 합친다.")
     @Test
-    void syncMenu() {
+    void saveMenu() {
         DisplayedMenu fired = chickenOfFried.toMenu();
         DisplayedMenu spicy = chickenOfSpicy.toMenu();
         EatInOrder request = eatInOrder(orderLineItems(
@@ -47,7 +47,7 @@ class OrderLineItemCreateServiceTest {
                 orderLineItem(2, spicy)
         ));
 
-        orderLineItemCreateService.syncMenu(request);
+        orderLineItemCreateService.saveMenu(request);
 
         OrderLineItems actual = request.getOrderLineItems();
         assertThat(actual.getValues())
@@ -70,7 +70,7 @@ class OrderLineItemCreateServiceTest {
             ));
 
             assertThatExceptionOfType(ConsistencyMenuException.class)
-                    .isThrownBy(() -> orderLineItemCreateService.syncMenu(request));
+                    .isThrownBy(() -> orderLineItemCreateService.saveMenu(request));
         }
 
         @DisplayName("요청한 주문 항목의 가격과 "
@@ -86,7 +86,7 @@ class OrderLineItemCreateServiceTest {
             ));
 
             assertThatExceptionOfType(InvalidOrderLineItemPrice.class)
-                    .isThrownBy(() -> orderLineItemCreateService.syncMenu(request));
+                    .isThrownBy(() -> orderLineItemCreateService.saveMenu(request));
         }
 
         private DisplayedMenu changeMenuPrice(MenuDTO menuDTO, int price) {

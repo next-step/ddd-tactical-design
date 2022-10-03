@@ -24,7 +24,7 @@ public class OrderLineItemCreateService {
         this.menuServerClient = menuServerClient;
     }
 
-    public void syncMenu(EatInOrder order) {
+    public void saveMenu(EatInOrder order) {
         OrderLineItems items = order.getOrderLineItems();
         List<OrderLineItem> requestItems = items.getValues();
         List<MenuDTO> menus = findAllByIds(requestItems);
