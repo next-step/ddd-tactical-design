@@ -1,6 +1,7 @@
 package kitchenpos.menus.application;
 
 import static kitchenpos.Fixtures.*;
+import static kitchenpos.menus.MenuFixtures.menuGroup;
 import static kitchenpos.products.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

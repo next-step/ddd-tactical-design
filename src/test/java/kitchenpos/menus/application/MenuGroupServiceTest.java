@@ -1,19 +1,15 @@
 package kitchenpos.menus.application;
 
+import static kitchenpos.menus.MenuFixtures.menuGroup;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import java.util.List;
-
-import static kitchenpos.Fixtures.menuGroup;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository;
@@ -33,17 +29,8 @@ class MenuGroupServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+            () -> assertThat(actual.getNameValue()).isEqualTo(expected.getNameValue())
         );
-    }
-
-    @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
-    @NullAndEmptySource
-    @ParameterizedTest
-    void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -55,8 +42,6 @@ class MenuGroupServiceTest {
     }
 
     private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        return menuGroup(name);
     }
 }

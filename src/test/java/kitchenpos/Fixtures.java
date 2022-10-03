@@ -1,5 +1,6 @@
 package kitchenpos;
 
+import static kitchenpos.menus.MenuFixtures.menuGroup;
 import static kitchenpos.products.ProductFixtures.product;
 
 import java.math.BigDecimal;
@@ -9,7 +10,6 @@ import java.util.Random;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 
@@ -33,17 +33,6 @@ public class Fixtures {
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
-    }
-
-    public static MenuGroup menuGroup() {
-        return menuGroup("두마리메뉴");
-    }
-
-    public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
     }
 
     public static MenuProduct menuProduct() {

@@ -1,37 +1,59 @@
 package kitchenpos.menus.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Objects;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "menu_group")
 @Entity
 public class MenuGroup {
-    @Column(name = "id", columnDefinition = "binary(16)")
+
     @Id
+    @Column(
+        name = "id",
+        length = 16,
+        unique = true,
+        nullable = false
+    )
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuGroupName name;
 
-    public MenuGroup() {
+    protected MenuGroup() {
+    }
+
+    public MenuGroup(MenuGroupName name) {
+        this(UUID.randomUUID(), name);
+    }
+
+    public MenuGroup(UUID id, MenuGroupName name) {
+        this.id = id;
+        this.name = name;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public String getNameValue() {
+        return this.name.getValue();
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuGroup menuGroup = (MenuGroup) o;
+        return Objects.equals(id, menuGroup.id);
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
