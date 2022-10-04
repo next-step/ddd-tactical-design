@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import java.util.Objects;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,12 @@ public class DefaultDisplayNameValidator implements DisplayNameValidator {
   }
 
   @Override
-  public void validate(DisplayedName displayedName) {
-    if (purgomalumClient.containsProfanity(displayedName.getName())) {
+  public void validate(String name) {
+    if (Objects.isNull(name) || name.isBlank()) {
+      throw new IllegalArgumentException();
+    }
+
+    if (purgomalumClient.containsProfanity(name)) {
       throw new IllegalArgumentException();
     }
   }

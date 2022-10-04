@@ -1,8 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.products.tobe.domain.DisplayNameValidator;
 
 @Embeddable
 public class DisplayedName {
@@ -18,7 +19,6 @@ public class DisplayedName {
     validator.validate(name);
     return new DisplayedName(name);
   }
-
   protected DisplayedName() {
 
   }
@@ -28,10 +28,6 @@ public class DisplayedName {
       throw new IllegalArgumentException();
     }
     this.name = name;
-  }
-
-  public String getName() {
-    return name;
   }
 
   @Override
