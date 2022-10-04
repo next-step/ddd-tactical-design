@@ -21,19 +21,17 @@ public class Price {
 	}
 
 	public Price(BigDecimal value, PriceSpecification priceSpecification) {
-		if (isValid(value, priceSpecification)) {
+		if (priceSpecification.isSatisfiedBy(value)) {
 			this.value = value;
 		}
 	}
 
-	public void change(BigDecimal price, PriceSpecification priceSpecification) {
-		if (isValid(price, priceSpecification)) {
-			this.value = price;
-		}
+	public BigDecimal multiply(Quantity quantity) {
+		return value.multiply(BigDecimal.valueOf(quantity.getValue()));
 	}
 
-	private boolean isValid(BigDecimal price, PriceSpecification priceSpecification) {
-		return priceSpecification.isSatisfiedBy(price);
+	public boolean isBiggerThan(BigDecimal other) {
+		return value.compareTo(other) > 0;
 	}
 
 	public BigDecimal getValue() {

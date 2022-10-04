@@ -13,15 +13,18 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import kitchenpos.core.constant.ExceptionMessages;
+import kitchenpos.core.constant.Specs;
+import kitchenpos.core.constant.UbiquitousLanguages;
 import kitchenpos.core.domain.Price;
+import kitchenpos.core.specification.PriceSpecification;
 
 class ProductPriceSpecificationTest {
 
-	private ProductPriceSpecification specification;
+	private PriceSpecification specification;
 
 	@BeforeEach
 	void setUp() {
-		specification = new ProductPriceSpecification();
+		specification = Specs.Product.PRICE;
 	}
 
 	@DisplayName("상품 가격 생성 시 ")
@@ -47,7 +50,7 @@ class ProductPriceSpecificationTest {
 		void constructFailByEmptySource(BigDecimal value) {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> new Price(value, specification))
-				.withMessage(ExceptionMessages.Product.PRICE_IS_EMPTY);
+				.withMessage(String.format(ExceptionMessages.EMPTY_PRICE_TEMPLATE, UbiquitousLanguages.PRODUCT));
 		}
 
 		@DisplayName("0보다 작은 값을 가질 수 없다.")
@@ -60,7 +63,7 @@ class ProductPriceSpecificationTest {
 			// then
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> new Price(value, specification))
-				.withMessage(ExceptionMessages.Product.PRICE_IS_NEGATIVE);
+				.withMessage(String.format(ExceptionMessages.NEGATIVE_PRICE_TEMPLATE, UbiquitousLanguages.PRODUCT));
 		}
 	}
 }
