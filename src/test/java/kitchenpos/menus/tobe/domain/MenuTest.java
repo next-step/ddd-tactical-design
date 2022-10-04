@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.DisplayNameValidator;
+import kitchenpos.products.tobe.domain.FakeDisplayedNameValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ class MenuTest {
 
   @BeforeEach
   void setUp() {
-    displayNameValidator = new FakeMenuDisplayedNameValidator();
+    displayNameValidator = new FakeDisplayedNameValidator();
   }
 
   @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

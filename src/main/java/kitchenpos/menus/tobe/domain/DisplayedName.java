@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.products.tobe.domain.DisplayNameValidator;
 
 @Embeddable
 public class DisplayedName {
