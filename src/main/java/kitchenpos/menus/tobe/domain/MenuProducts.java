@@ -19,10 +19,10 @@ public class MenuProducts {
       columnDefinition = "binary(16)",
       foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
   )
-  private final List<MenuProduct> menuProducts;
+  private List<MenuProduct> menuProducts = new ArrayList<>();
 
-  public MenuProducts() {
-    this(new ArrayList<>());
+  protected MenuProducts() {
+
   }
 
   public MenuProducts(List<MenuProduct> menuProducts) {
