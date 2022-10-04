@@ -14,7 +14,7 @@ class MenuGroupTest {
 	@Test
 	void create() {
 		// given
-		Name name = new Name("아이리쉬 위스키", Specs.Product.NAME);
+		Name name = new Name("아이리쉬 위스키", Specs.MenuGroup.NAME);
 
 		// when
 		assertDoesNotThrow(() -> new MenuGroup(name));
