@@ -38,11 +38,37 @@ public final class Specs {
 
 	public static final class Product {
 
-		public static final NameSpecification NAME = () -> UbiquitousLanguages.PRODUCT;
 		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.PRODUCT;
 		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.PRODUCT;
 
 		private Product() {
+		}
+	}
+
+	public static final class Order {
+
+		public static final NameSpecification NAME = () -> UbiquitousLanguages.ORDER;
+		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.ORDER;
+		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.ORDER;
+
+		private Order() {
+		}
+	}
+
+	public static final class OrderTable {
+
+		public static final NameSpecification NAME = () -> UbiquitousLanguages.ORDER_TABLE;
+
+		private OrderTable() {
+		}
+	}
+
+	public static final class OrderLineItem {
+
+		public static final PriceSpecification PRICE = () -> UbiquitousLanguages.ORDER_LINE_ITEM;
+		public static final QuantitySpecification QUANTITY = () -> UbiquitousLanguages.ORDER_LINE_ITEM;
+
+		private OrderLineItem() {
 		}
 	}
 }
