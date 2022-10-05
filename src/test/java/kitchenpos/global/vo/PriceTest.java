@@ -1,7 +1,6 @@
-package kitchenpos.menus.tobe.vo;
+package kitchenpos.global.vo;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -14,11 +13,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class PriceTest {
 
     @DisplayName("가격 생성")
-    @Test
-    void createPrice() {
-        Price price = new Price(20_000);
+    @ValueSource(longs = {0, 20_000})
+    @ParameterizedTest
+    void createPrice(long value) {
+        Price price = new Price(value);
 
-        assertThat(price.getValue()).isEqualTo(BigDecimal.valueOf(20_000));
+        assertThat(price.getValue()).isEqualTo(BigDecimal.valueOf(value));
     }
 
     @DisplayName("상품 가격이 0보다 작으면 에러")

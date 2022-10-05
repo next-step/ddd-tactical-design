@@ -1,26 +1,27 @@
 package kitchenpos.products.tobe.vo;
 
+import kitchenpos.global.vo.DisplayedName;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 public class ProductName {
 
     @Column(name = "name", nullable = false)
-    private String value;
+    private DisplayedName value;
 
     protected ProductName() {
 
     }
 
-    public ProductName(String value) {
-        if (Objects.isNull(value) || value.isBlank()) {
-            throw new IllegalArgumentException("이름을 입력해 주세요.");
-        }
+    public ProductName(DisplayedName value) {
         this.value = value;
+    }
+
+    public ProductName(String value) {
+        this(new DisplayedName(value));
     }
 
     public ProductName(String value, PurgomalumClient purgomalumClient) {
@@ -31,7 +32,7 @@ public class ProductName {
     }
 
     public String getValue() {
-        return value;
+        return value.getValue();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.tobe.vo.Price;
+import kitchenpos.global.vo.Price;
 import kitchenpos.menus.tobe.vo.Quantity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

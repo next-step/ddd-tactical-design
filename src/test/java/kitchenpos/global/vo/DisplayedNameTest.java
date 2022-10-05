@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.vo;
+package kitchenpos.global.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("메뉴 CONTEXT 이름")
+@DisplayName("이름")
 class DisplayedNameTest {
 
     @DisplayName("이름 생성")

@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.tobe.vo.Price;
+import kitchenpos.global.vo.Price;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -26,7 +26,7 @@ public class MenuProducts {
 
     public MenuProducts(List<MenuProduct> menuProducts) {
         if (CollectionUtils.isEmpty(menuProducts)) {
-            throw new IllegalArgumentException("메뉴 상품을 확인 하세요.");
+            throw new IllegalArgumentException("메뉴 상품은 비어있을 수 없습니다.");
         }
         this.menuProducts = menuProducts;
     }

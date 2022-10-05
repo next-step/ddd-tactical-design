@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.global.vo.Price;
 import kitchenpos.products.tobe.vo.ProductName;
-import kitchenpos.products.tobe.vo.ProductPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductTest {
 
   private ProductName name;
-  private ProductPrice price;
+  private Price price;
 
   @BeforeEach
   void setup() {
     name = new ProductName("후라이드");
-    price = new ProductPrice(20_000);
+    price = new Price(20_000);
   }
 
   @DisplayName("상품 생성")
@@ -34,7 +34,7 @@ class ProductTest {
   void changeProductPrice() {
     Product product = new Product(name, price);
 
-    ProductPrice changePrice = new ProductPrice(25_000);
+    Price changePrice = new Price(25_000);
     product.changePrice(changePrice);
 
     assertThat(product.getPrice()).isEqualTo(changePrice);

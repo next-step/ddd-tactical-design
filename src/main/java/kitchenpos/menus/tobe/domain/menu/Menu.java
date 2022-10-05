@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.vo.DisplayedName;
-import kitchenpos.menus.tobe.vo.Price;
+import kitchenpos.global.vo.DisplayedName;
+import kitchenpos.global.vo.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
