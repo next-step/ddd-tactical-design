@@ -19,8 +19,15 @@ public class MenuPricePolicy implements PricePolicy {
     @Override
     public void changedProductPrice(final UUID productId, final Long price) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (Menu menu : menus) {
-            menu.changeMenuProductPrice(productId, Price.valueOf(price));
+        for (final Menu menu : menus) {
+            changeMenuProductPrice(menu, productId, price);
+        }
+    }
+
+    private void changeMenuProductPrice(final Menu menu, final UUID productId, final Long price) {
+        menu.changeMenuProductPrice(productId, Price.valueOf(price));
+        if (menu.hasBiggerPriceThanTotalAmount()) {
+            menu.hide();
         }
     }
 }

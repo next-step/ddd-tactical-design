@@ -71,9 +71,10 @@ public class Menu {
 
     public void changeMenuProductPrice(final UUID productId, final Price price) {
         menuProducts.changePrice(productId, price);
-        if (this.price.isBiggerThan(menuProducts.totalAmount())) {
-            hide();
-        }
+    }
+
+    public boolean hasBiggerPriceThanTotalAmount() {
+        return price.isBiggerThan(menuProducts.totalAmount());
     }
 
     public void show() {
