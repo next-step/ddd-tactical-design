@@ -22,10 +22,7 @@ public class OrderTable {
   }
 
   public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
-    this.id = id;
-    this.name = name;
-    this.numberOfGuests = NumberOfGuest.from(numberOfGuests);
-    this.occupied = occupied;
+    this(id, name, NumberOfGuest.from(numberOfGuests), occupied);
   }
 
   public OrderTable(UUID id, OrderTableName name, NumberOfGuest numberOfGuests, boolean occupied) {
