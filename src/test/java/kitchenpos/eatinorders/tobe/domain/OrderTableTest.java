@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
@@ -26,5 +27,12 @@ class OrderTableTest {
         .isThrownBy(() -> new OrderTable(UUID.randomUUID(), name, 5));
   }
 
+  @DisplayName("빈 테이블을 해지할 수 있다.")
+  @Test
+  void sit() {
+    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번");
+    orderTable.sit();
+    assertThat(orderTable.isOccupied()).isTrue();
+  }
 
 }
