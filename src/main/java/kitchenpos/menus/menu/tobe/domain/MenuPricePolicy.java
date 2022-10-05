@@ -1,13 +1,13 @@
 package kitchenpos.menus.menu.tobe.domain;
 
+import kitchenpos.common.annotation.DomainService;
 import kitchenpos.common.domain.vo.Price;
 import kitchenpos.products.tobe.domain.PricePolicy;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@DomainService
 public class MenuPricePolicy implements PricePolicy {
 
     private final MenuRepository menuRepository;
