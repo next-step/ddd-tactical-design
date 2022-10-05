@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderTableTest {
 
@@ -50,6 +51,15 @@ class OrderTableTest {
     OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
     orderTable.changeNumberOfGuests(4);
     assertThat(orderTable.getNumberOfGuests()).isEqualTo(4);
+  }
+
+  @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
+  @ValueSource(ints = -1)
+  @ParameterizedTest
+  void changeNumberOfGuests(final int numberOfGuests) {
+    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests));
   }
 
 }
