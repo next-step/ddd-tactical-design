@@ -44,4 +44,12 @@ class OrderTableTest {
     assertThat(orderTable.getNumberOfGuests()).isEqualTo(OrderTable.EMPTY_GUEST);
   }
 
+  @DisplayName("방문한 손님 수를 변경할 수 있다.")
+  @Test
+  void changeNumberOfGuests() {
+    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
+    orderTable.changeNumberOfGuests(4);
+    assertThat(orderTable.getNumberOfGuests()).isEqualTo(4);
+  }
+
 }

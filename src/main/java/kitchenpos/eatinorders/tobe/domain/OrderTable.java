@@ -38,6 +38,10 @@ public class OrderTable {
     this.numberOfGuests = EMPTY_GUEST;
   }
 
+  public void changeNumberOfGuests(int numberOfGuests) {
+    this.numberOfGuests = numberOfGuests;
+  }
+
   public boolean isOccupied() {
     return occupied;
   }
