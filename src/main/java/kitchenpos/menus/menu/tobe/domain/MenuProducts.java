@@ -1,6 +1,6 @@
 package kitchenpos.menus.menu.tobe.domain;
 
-import kitchenpos.menus.menu.tobe.domain.vo.Price;
+import kitchenpos.common.domain.vo.Price;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

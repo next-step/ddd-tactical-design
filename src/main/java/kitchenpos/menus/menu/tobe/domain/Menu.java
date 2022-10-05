@@ -1,8 +1,8 @@
 package kitchenpos.menus.menu.tobe.domain;
 
 import kitchenpos.common.domain.vo.DisplayedName;
+import kitchenpos.common.domain.vo.Price;
 import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuException;
-import kitchenpos.menus.menu.tobe.domain.vo.Price;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

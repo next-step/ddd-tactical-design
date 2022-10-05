@@ -1,6 +1,6 @@
-package kitchenpos.menus.menu.tobe.domain.vo;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.menus.menu.tobe.domain.vo.exception.InvalidPriceException;
+import kitchenpos.common.domain.vo.exception.InvalidPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -37,8 +37,8 @@ public class Price {
         return new Price(value);
     }
 
-    public Price multiply(final Quantity quantity) {
-        final BigDecimal multiply = value.multiply(quantity.toBigDecimal());
+    public Price multiply(final Long quantity) {
+        final BigDecimal multiply = value.multiply(BigDecimal.valueOf(quantity));
         return Price.valueOf(multiply);
     }
 

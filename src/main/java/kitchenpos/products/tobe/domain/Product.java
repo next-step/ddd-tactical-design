@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
-import kitchenpos.products.tobe.domain.vo.Price;
+import kitchenpos.common.domain.vo.Price;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

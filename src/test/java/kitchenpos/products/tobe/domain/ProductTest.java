@@ -4,8 +4,8 @@ import kitchenpos.common.domain.FakeProfanity;
 import kitchenpos.common.domain.Profanity;
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
-import kitchenpos.products.tobe.domain.vo.exception.InvalidProductPriceException;
-import kitchenpos.products.tobe.domain.vo.Price;
+import kitchenpos.common.domain.vo.exception.InvalidPriceException;
+import kitchenpos.common.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -53,7 +53,7 @@ class ProductTest {
         @Test
         void error_2() {
             assertThatThrownBy(() -> Product.create(displayedName, null))
-                    .isInstanceOf(InvalidProductPriceException.class);
+                    .isInstanceOf(InvalidPriceException.class);
         }
     }
 
@@ -84,7 +84,7 @@ class ProductTest {
             final Product product = Product.create(displayedName, 10_000L);
 
             assertThatThrownBy(() -> product.changePrice(null, pricePolicy))
-                    .isInstanceOf(InvalidProductPriceException.class);
+                    .isInstanceOf(InvalidPriceException.class);
         }
     }
 }

@@ -1,7 +1,7 @@
 package kitchenpos.menus.menu.tobe.domain;
 
+import kitchenpos.common.domain.vo.Price;
 import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuProductException;
-import kitchenpos.menus.menu.tobe.domain.vo.Price;
 import kitchenpos.menus.menu.tobe.domain.vo.Quantity;
 
 import javax.persistence.Column;
@@ -71,7 +71,7 @@ public class MenuProduct {
     }
 
     public Price amount() {
-        return price.multiply(quantity);
+        return price.multiply(quantity.value());
     }
 
     public UUID productId() {

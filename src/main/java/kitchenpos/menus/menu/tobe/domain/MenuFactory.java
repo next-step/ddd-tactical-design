@@ -2,9 +2,9 @@ package kitchenpos.menus.menu.tobe.domain;
 
 import kitchenpos.common.domain.Profanity;
 import kitchenpos.common.domain.vo.DisplayedName;
+import kitchenpos.common.domain.vo.Price;
 import kitchenpos.menus.menu.dto.MenuDto;
 import kitchenpos.menus.menu.dto.MenuProductDto;
-import kitchenpos.menus.menu.tobe.domain.vo.Price;
 import kitchenpos.menus.menugroup.domain.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;

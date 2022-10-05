@@ -1,6 +1,6 @@
-package kitchenpos.menus.menu.tobe.domain.vo;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.menus.menu.tobe.domain.vo.exception.InvalidPriceException;
+import kitchenpos.common.domain.vo.exception.InvalidPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PriceTest {
 
@@ -39,8 +39,9 @@ class PriceTest {
     @Test
     void multiply() {
         final Price price = Price.valueOf(10_000L);
+        final Long quantity = 3L;
 
-        assertThat(price.multiply(Quantity.valueOf(3L))).isEqualTo(Price.valueOf(30_000L));
+        assertThat(price.multiply(quantity)).isEqualTo(Price.valueOf(30_000L));
     }
 
     @DisplayName("가격을 비교한다.")
