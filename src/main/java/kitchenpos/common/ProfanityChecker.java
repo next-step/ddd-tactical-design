@@ -1,5 +1,5 @@
 package kitchenpos.common;
 
-public interface PurgomalumClient {
+public interface ProfanityChecker {
     boolean containsProfanity(String text);
 }

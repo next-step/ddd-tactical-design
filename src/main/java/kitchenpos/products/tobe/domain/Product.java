@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "tobe_product")
 public class Product extends AbstractAggregateRoot<Product> {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
