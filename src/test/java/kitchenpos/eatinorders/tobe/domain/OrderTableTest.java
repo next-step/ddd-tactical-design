@@ -42,24 +42,15 @@ class OrderTableTest {
     OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
     orderTable.clear();
     assertThat(orderTable.isOccupied()).isFalse();
-    assertThat(orderTable.getNumberOfGuests()).isEqualTo(OrderTable.EMPTY_GUEST);
+    assertThat(orderTable.getNumberOfGuests()).isEqualTo(NumberOfGuest.EMPTY);
   }
 
   @DisplayName("방문한 손님 수를 변경할 수 있다.")
   @Test
   void changeNumberOfGuests() {
     OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
-    orderTable.changeNumberOfGuests(4);
-    assertThat(orderTable.getNumberOfGuests()).isEqualTo(4);
-  }
-
-  @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
-  @ValueSource(ints = -1)
-  @ParameterizedTest
-  void changeNumberOfGuests(final int numberOfGuests) {
-    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
-    assertThatIllegalArgumentException()
-        .isThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests));
+    orderTable.changeNumberOfGuests(NumberOfGuest.from(4));
+    assertThat(orderTable.getNumberOfGuests()).isEqualTo(NumberOfGuest.from(4));
   }
 
 }

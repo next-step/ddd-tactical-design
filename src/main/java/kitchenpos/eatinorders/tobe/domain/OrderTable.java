@@ -4,15 +4,13 @@ import java.util.UUID;
 
 public class OrderTable {
 
-  public static final int EMPTY_GUEST = 0;
-
   private final UUID id;
   private final OrderTableName name;
-  private int numberOfGuests;
+  private NumberOfGuest numberOfGuests;
   private boolean occupied;
 
   public OrderTable(UUID id, String name) {
-    this(id, OrderTableName.from(name), EMPTY_GUEST, false);
+    this(id, OrderTableName.from(name), NumberOfGuest.EMPTY, false);
   }
 
   public OrderTable(UUID id, String name, int numberOfGuests) {
@@ -26,7 +24,15 @@ public class OrderTable {
   public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
     this.id = id;
     this.name = name;
+    this.numberOfGuests = NumberOfGuest.from(numberOfGuests);
+    this.occupied = occupied;
+  }
+
+  public OrderTable(UUID id, OrderTableName name, NumberOfGuest numberOfGuests, boolean occupied) {
+    this.id = id;
+    this.name = name;
     this.numberOfGuests = numberOfGuests;
+    this.occupied = occupied;
   }
 
   public void sit() {
@@ -35,13 +41,10 @@ public class OrderTable {
 
   public void clear() {
     this.occupied = false;
-    this.numberOfGuests = EMPTY_GUEST;
+    this.numberOfGuests = NumberOfGuest.EMPTY;
   }
 
-  public void changeNumberOfGuests(int numberOfGuests) {
-    if (numberOfGuests < 0) {
-      throw new IllegalArgumentException();
-    }
+  public void changeNumberOfGuests(NumberOfGuest numberOfGuests) {
     this.numberOfGuests = numberOfGuests;
   }
 
@@ -49,7 +52,7 @@ public class OrderTable {
     return occupied;
   }
 
-  public int getNumberOfGuests() {
+  public NumberOfGuest getNumberOfGuests() {
     return numberOfGuests;
   }
 }
