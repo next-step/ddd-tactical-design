@@ -1,4 +1,4 @@
-package kitchenpos.menus.menu.tobe.domain;
+package kitchenpos.common.domain;
 
 import java.util.Arrays;
 import java.util.List;

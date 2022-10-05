@@ -1,4 +1,4 @@
-package kitchenpos.menus.menu.tobe.domain;
+package kitchenpos.common.domain;
 
 public interface Profanity {
     boolean containsProfanity(String text);

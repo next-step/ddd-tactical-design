@@ -1,7 +1,7 @@
 package kitchenpos.menus.menu.tobe.domain;
 
+import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuException;
-import kitchenpos.menus.menu.tobe.domain.vo.MenuName;
 import kitchenpos.menus.menu.tobe.domain.vo.Price;
 
 import javax.persistence.Column;
@@ -21,7 +21,7 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName menuName;
+    private DisplayedName displayedName;
 
     @Embedded
     private Price price;
@@ -38,17 +38,17 @@ public class Menu {
     protected Menu() {
     }
 
-    private Menu(UUID id, MenuName menuName, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+    private Menu(UUID id, DisplayedName displayedName, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
         this.id = id;
-        this.menuName = menuName;
+        this.displayedName = displayedName;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
-    protected static Menu create(final MenuName menuName, final Price price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts) {
-        if (Objects.isNull(menuName)) {
+    protected static Menu create(final DisplayedName displayedName, final Price price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts) {
+        if (Objects.isNull(displayedName)) {
             throw new InvalidMenuException(InvalidMenuException.MENU_NAME_MESSAGE);
         }
         if (Objects.isNull(price)) {
@@ -61,7 +61,7 @@ public class Menu {
             throw new InvalidMenuException(InvalidMenuException.MENU_PRODUCTS_MESSAGE);
         }
         validatePrice(price, menuProducts.totalAmount());
-        final Menu menu = new Menu(UUID.randomUUID(), menuName, price, menuGroupId, displayed, menuProducts);
+        final Menu menu = new Menu(UUID.randomUUID(), displayedName, price, menuGroupId, displayed, menuProducts);
         menu.menuProducts.makeRelation(menu);
         return menu;
     }
@@ -103,8 +103,8 @@ public class Menu {
         return id;
     }
 
-    public MenuName menuName() {
-        return menuName;
+    public DisplayedName displayedName() {
+        return displayedName;
     }
 
     public Price price() {

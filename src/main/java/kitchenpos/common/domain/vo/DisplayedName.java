@@ -1,7 +1,7 @@
-package kitchenpos.menus.menu.tobe.domain.vo;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.menus.menu.tobe.domain.Profanity;
-import kitchenpos.menus.menu.tobe.domain.vo.exception.InvalidMenuNameException;
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
@@ -9,23 +9,23 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuName {
+public class DisplayedName {
 
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuName() {
+    protected DisplayedName() {
     }
 
-    private MenuName(final String value) {
+    private DisplayedName(final String value) {
         this.value = value;
     }
 
-    public static MenuName valueOf(final String value, final Profanity profanity) {
+    public static DisplayedName valueOf(final String value, final Profanity profanity) {
         if (isNullOrEmpty(value) || profanity.containsProfanity(value)) {
-            throw new InvalidMenuNameException();
+            throw new InvalidDisplayedNameException();
         }
-        return new MenuName(value);
+        return new DisplayedName(value);
     }
 
     private static boolean isNullOrEmpty(final String value) {
@@ -44,8 +44,8 @@ public class MenuName {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MenuName menuName = (MenuName) o;
-        return Objects.equals(value, menuName.value);
+        DisplayedName that = (DisplayedName) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override

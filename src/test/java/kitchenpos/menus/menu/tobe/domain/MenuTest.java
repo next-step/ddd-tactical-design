@@ -1,7 +1,9 @@
 package kitchenpos.menus.menu.tobe.domain;
 
+import kitchenpos.common.domain.FakeProfanity;
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuException;
-import kitchenpos.menus.menu.tobe.domain.vo.MenuName;
 import kitchenpos.menus.menu.tobe.domain.vo.Price;
 import kitchenpos.menus.menu.tobe.domain.vo.Quantity;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class MenuTest {
 
     private Profanity profanity;
-    private MenuName menuName;
     private MenuProduct menuProduct;
+    private DisplayedName displayedName;
 
     @BeforeEach
     void setUp() {
         profanity = new FakeProfanity();
-        menuName = MenuName.valueOf("메뉴", profanity);
+        displayedName = DisplayedName.valueOf("메뉴", profanity);
         menuProduct = MenuProduct.create(UUID.randomUUID(), Price.valueOf(10_000L), Quantity.valueOf(1L));
     }
 
@@ -34,11 +36,11 @@ class MenuTest {
         @DisplayName("성공")
         @Test
         void success() {
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             assertAll(
                     () -> assertThat(menu.id()).isNotNull(),
-                    () -> assertThat(menu.menuName().value()).isEqualTo("메뉴"),
+                    () -> assertThat(menu.displayedName().value()).isEqualTo("메뉴"),
                     () -> assertThat(menu.price()).isEqualTo(Price.valueOf(10_000L)),
                     () -> assertThat(menu.menuGroupId()).isNotNull(),
                     () -> assertThat(menu.isDisplayed()).isTrue(),
@@ -49,7 +51,7 @@ class MenuTest {
         @DisplayName("메뉴그룹에 포함되어야 한다.")
         @Test
         void error_1() {
-            assertThatThrownBy(() -> Menu.create(menuName, Price.valueOf(10_000L), null, true, MenuProducts.of(menuProduct)))
+            assertThatThrownBy(() -> Menu.create(displayedName, Price.valueOf(10_000L), null, true, MenuProducts.of(menuProduct)))
                     .isInstanceOf(InvalidMenuException.class)
                     .hasMessage("메뉴그룹 정보가 있어야 합니다.");
         }
@@ -65,7 +67,7 @@ class MenuTest {
         @DisplayName("가격정보가 있어야 한다.")
         @Test
         void error_3() {
-            assertThatThrownBy(() -> Menu.create(menuName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
+            assertThatThrownBy(() -> Menu.create(displayedName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
                     .isInstanceOf(InvalidMenuException.class)
                     .hasMessage("가격정보가 있어야 합니다.");
         }
@@ -73,7 +75,7 @@ class MenuTest {
         @DisplayName("메뉴상품 목록 정보가 있어야 합니다.")
         @Test
         void error_4() {
-            assertThatThrownBy(() -> Menu.create(menuName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
+            assertThatThrownBy(() -> Menu.create(displayedName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
                     .isInstanceOf(InvalidMenuException.class)
                     .hasMessage("가격정보가 있어야 합니다.");
         }
@@ -81,7 +83,7 @@ class MenuTest {
         @DisplayName("가격은 메뉴상품의 금액 총합보다 적거나 같아야한다.")
         @Test
         void error_5() {
-            assertThatThrownBy(() -> Menu.create(menuName, Price.valueOf(50_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
+            assertThatThrownBy(() -> Menu.create(displayedName, Price.valueOf(50_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
                     .isInstanceOf(InvalidMenuException.class)
                     .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
         }
@@ -93,7 +95,7 @@ class MenuTest {
         @DisplayName("성공")
         @Test
         void success() {
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             menu.changePrice(Price.valueOf(8_000L));
 
@@ -103,7 +105,7 @@ class MenuTest {
         @DisplayName("변경하려는 가격이 비어있을 수 없다.")
         @Test
         void error_1() {
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             assertThatThrownBy(() -> menu.changePrice(null)).isInstanceOf(IllegalArgumentException.class);
         }
@@ -111,7 +113,7 @@ class MenuTest {
         @DisplayName("변경하려는 가격은 메뉴상품의 금액 총합보다 적거나 같아야한다.")
         @Test
         void error_2() {
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             assertThatThrownBy(() -> menu.changePrice(Price.valueOf(50_000L)))
                     .isInstanceOf(InvalidMenuException.class)
@@ -126,7 +128,7 @@ class MenuTest {
         @DisplayName("성공")
         @Test
         void success() {
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), false, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), false, MenuProducts.of(menuProduct));
 
             menu.show();
 
@@ -138,7 +140,7 @@ class MenuTest {
         void error() {
             final UUID menuProductId = UUID.randomUUID();
             final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
             menu.changeMenuProductPrice(menuProductId, Price.valueOf(8_000L));
 
             assertThatThrownBy(() -> menu.show()).isInstanceOf(IllegalStateException.class);
@@ -148,7 +150,7 @@ class MenuTest {
     @DisplayName("메뉴를 숨긴다.")
     @Test
     void hide() {
-        final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+        final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
         menu.hide();
 
@@ -164,7 +166,7 @@ class MenuTest {
         void success() {
             final UUID menuProductId = UUID.randomUUID();
             final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             menu.changeMenuProductPrice(menuProductId, Price.valueOf(80_000L));
 
@@ -176,7 +178,7 @@ class MenuTest {
         void changeMenuProductPrice() {
             final UUID menuProductId = UUID.randomUUID();
             final MenuProduct menuProduct = MenuProduct.create(menuProductId, Price.valueOf(10_000L), Quantity.valueOf(1L));
-            final Menu menu = Menu.create(menuName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
+            final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             menu.changeMenuProductPrice(menuProductId, Price.valueOf(8_000L));
 

@@ -1,5 +1,6 @@
 package kitchenpos.menus.menu.application;
 
+import kitchenpos.common.domain.Profanity;
 import kitchenpos.menus.menu.domain.Menu;
 import kitchenpos.menus.menu.domain.MenuProduct;
 import kitchenpos.menus.menu.domain.MenuRepository;
@@ -7,7 +8,6 @@ import kitchenpos.menus.menugroup.domain.MenuGroup;
 import kitchenpos.menus.menugroup.domain.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.Profanity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

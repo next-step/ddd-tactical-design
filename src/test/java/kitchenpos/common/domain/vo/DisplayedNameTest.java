@@ -1,8 +1,8 @@
-package kitchenpos.menus.menu.tobe.domain.vo;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.menus.menu.tobe.domain.FakeProfanity;
-import kitchenpos.menus.menu.tobe.domain.Profanity;
-import kitchenpos.menus.menu.tobe.domain.vo.exception.InvalidMenuNameException;
+import kitchenpos.common.domain.FakeProfanity;
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class MenuNameTest {
+class DisplayedNameTest {
 
     private Profanity profanity;
 
@@ -25,7 +25,7 @@ class MenuNameTest {
     @DisplayName("이름을 생성한다.")
     @Test
     void valueOf() {
-        final MenuName displayedName = MenuName.valueOf("상품", profanity);
+        final DisplayedName displayedName = DisplayedName.valueOf("상품", profanity);
 
         assertThat(displayedName.value()).isEqualTo("상품");
     }
@@ -34,8 +34,8 @@ class MenuNameTest {
     @NullAndEmptySource
     @ValueSource(strings = {"비속어", "욕설"})
     void invalid_name(final String name) {
-        assertThatThrownBy(() -> MenuName.valueOf(name, profanity))
-                .isInstanceOf(InvalidMenuNameException.class);
+        assertThatThrownBy(() -> DisplayedName.valueOf(name, profanity))
+                .isInstanceOf(InvalidDisplayedNameException.class);
     }
 
 }

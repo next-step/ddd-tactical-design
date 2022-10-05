@@ -1,8 +1,9 @@
 package kitchenpos.menus.menu.tobe.domain;
 
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.menus.menu.dto.MenuDto;
 import kitchenpos.menus.menu.dto.MenuProductDto;
-import kitchenpos.menus.menu.tobe.domain.vo.MenuName;
 import kitchenpos.menus.menu.tobe.domain.vo.Price;
 import kitchenpos.menus.menugroup.domain.MenuGroupRepository;
 import kitchenpos.products.domain.Product;
@@ -19,7 +20,7 @@ public class MenuFactory {
         validateMenuGroup(menuDto, menuGroupRepository);
 
         final List<MenuProduct> menuProducts = new ArrayList<>();
-        final MenuName menuName = MenuName.valueOf(menuDto.getName(), profanity);
+        final DisplayedName displayedName = DisplayedName.valueOf(menuDto.getName(), profanity);
         for (final MenuProductDto menuProductDto : menuDto.getMenuProducts()) {
             final Product product = productRepository.findById(menuProductDto.getProductId())
                     .orElseThrow(IllegalArgumentException::new);
@@ -27,7 +28,7 @@ public class MenuFactory {
             menuProducts.add(menuProduct);
         }
         return Menu.create(
-                menuName,
+                displayedName,
                 Price.valueOf(menuDto.getPrice()),
                 menuDto.getMenuGroupId(),
                 menuDto.getDisplayed(),

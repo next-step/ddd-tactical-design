@@ -1,9 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProfanity;
-import kitchenpos.products.tobe.domain.vo.exception.InvalidProductNameException;
+import kitchenpos.common.domain.FakeProfanity;
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.DisplayedName;
+import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
 import kitchenpos.products.tobe.domain.vo.exception.InvalidProductPriceException;
-import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +46,7 @@ class ProductTest {
         @Test
         void error_1() {
             assertThatThrownBy(() -> Product.create(null, 10_000L))
-                    .isInstanceOf(InvalidProductNameException.class);
+                    .isInstanceOf(InvalidDisplayedNameException.class);
         }
 
         @DisplayName("가격 정보가 있어야 한다.")
