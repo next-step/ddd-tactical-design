@@ -30,8 +30,8 @@ class MenuProductsTest {
         menuIdSecond = UUID.randomUUID();
         productIdSecond = UUID.randomUUID();
 
-        menuProductFirst = new MenuProduct(menuIdFirst, productIdFirst, new Quantity(2), new Price(20_000));
-        menuProductSecond = new MenuProduct(menuIdSecond, productIdSecond, new Quantity(1), new Price(10_000));
+        menuProductFirst = new MenuProduct(productIdFirst, new Quantity(2), new Price(20_000));
+        menuProductSecond = new MenuProduct(productIdSecond, new Quantity(1), new Price(10_000));
     }
 
     @DisplayName("메뉴 상품 리스트 생성")

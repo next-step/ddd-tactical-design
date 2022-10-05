@@ -16,8 +16,9 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @Column(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
-    private UUID menuId;
+    @ManyToOne
+    @JoinColumn(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
+    private Menu menu;
 
     @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
@@ -32,11 +33,14 @@ public class MenuProduct {
 
     }
 
-    public MenuProduct(UUID menuId, UUID productId, Quantity quantity, Price price) {
-        this.menuId = menuId;
+    public MenuProduct(UUID productId, Quantity quantity, Price price) {
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public void makeRelation(Menu menu) {
+        this.menu = menu;
     }
 
     public BigDecimal totalPrice() {
@@ -51,8 +55,8 @@ public class MenuProduct {
         return seq;
     }
 
-    public UUID getMenuId() {
-        return menuId;
+    public Menu getMenuId() {
+        return menu;
     }
 
     public UUID getProductId() {
@@ -75,15 +79,19 @@ public class MenuProduct {
         MenuProduct that = (MenuProduct) o;
 
         if (seq != null ? !seq.equals(that.seq) : that.seq != null) return false;
+        if (menu != null ? !menu.equals(that.menu) : that.menu != null) return false;
         if (productId != null ? !productId.equals(that.productId) : that.productId != null) return false;
-        return quantity != null ? quantity.equals(that.quantity) : that.quantity == null;
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        return price != null ? price.equals(that.price) : that.price == null;
     }
 
     @Override
     public int hashCode() {
         int result = seq != null ? seq.hashCode() : 0;
+        result = 31 * result + (menu != null ? menu.hashCode() : 0);
         result = 31 * result + (productId != null ? productId.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
 }

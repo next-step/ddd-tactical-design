@@ -40,8 +40,8 @@ class MenuTest {
 
         menuGroup = new MenuGroup(new DisplayedName("두마리메뉴"));
 
-        menuProductFirst = new MenuProduct(menuIdFirst, productIdFirst, new Quantity(2), new Price(20_000));
-        menuProductSecond = new MenuProduct(menuIdSecond, productIdSecond, new Quantity(1), new Price(10_000));
+        menuProductFirst = new MenuProduct(productIdFirst, new Quantity(2), new Price(20_000));
+        menuProductSecond = new MenuProduct(productIdSecond, new Quantity(1), new Price(10_000));
 
         menuProducts = new MenuProducts(List.of(menuProductFirst, menuProductSecond));
     }
