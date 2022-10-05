@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.util.UUID;
@@ -51,6 +52,14 @@ class OrderTableTest {
     OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
     orderTable.changeNumberOfGuests(NumberOfGuest.from(4));
     assertThat(orderTable.getNumberOfGuests()).isEqualTo(NumberOfGuest.from(4));
+  }
+
+  @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
+  @Test
+  void changeNumberOfGuestsInEmptyTable() {
+    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번");
+    assertThatIllegalStateException()
+        .isThrownBy(() -> orderTable.changeNumberOfGuests(NumberOfGuest.from(4)));
   }
 
 }

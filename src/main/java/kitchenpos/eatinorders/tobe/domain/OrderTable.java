@@ -45,6 +45,9 @@ public class OrderTable {
   }
 
   public void changeNumberOfGuests(NumberOfGuest numberOfGuests) {
+    if (!isOccupied()) {
+      throw new IllegalStateException();
+    }
     this.numberOfGuests = numberOfGuests;
   }
 
