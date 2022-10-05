@@ -5,9 +5,9 @@ import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.Price;
 import kitchenpos.menus.menu.dto.MenuDto;
 import kitchenpos.menus.menu.dto.MenuProductDto;
-import kitchenpos.menus.menugroup.domain.MenuGroupRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.menus.menugroup.tobe.domain.MenuGroupRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class MenuFactory {
         for (final MenuProductDto menuProductDto : menuDto.getMenuProducts()) {
             final Product product = productRepository.findById(menuProductDto.getProductId())
                     .orElseThrow(IllegalArgumentException::new);
-            final MenuProduct menuProduct = MenuProduct.create(product.getId(), Price.valueOf(product.getPrice()), menuProductDto.toQuantity());
+            final MenuProduct menuProduct = MenuProduct.create(product.id(), product.price(), menuProductDto.toQuantity());
             menuProducts.add(menuProduct);
         }
         return Menu.create(

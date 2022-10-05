@@ -4,7 +4,7 @@ import kitchenpos.common.domain.FakeProfanity;
 import kitchenpos.common.domain.Profanity;
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.Price;
-import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuException;
+import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuPriceException;
 import kitchenpos.menus.menu.tobe.domain.vo.Quantity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,43 +48,11 @@ class MenuTest {
             );
         }
 
-        @DisplayName("메뉴그룹에 포함되어야 한다.")
-        @Test
-        void error_1() {
-            assertThatThrownBy(() -> Menu.create(displayedName, Price.valueOf(10_000L), null, true, MenuProducts.of(menuProduct)))
-                    .isInstanceOf(InvalidMenuException.class)
-                    .hasMessage("메뉴그룹 정보가 있어야 합니다.");
-        }
-
-        @DisplayName("메뉴명 정보가 있어야 한다.")
-        @Test
-        void error_2() {
-            assertThatThrownBy(() -> Menu.create(null, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
-                    .isInstanceOf(InvalidMenuException.class)
-                    .hasMessage("메뉴명 정보가 있어야 합니다.");
-        }
-
-        @DisplayName("가격정보가 있어야 한다.")
-        @Test
-        void error_3() {
-            assertThatThrownBy(() -> Menu.create(displayedName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
-                    .isInstanceOf(InvalidMenuException.class)
-                    .hasMessage("가격정보가 있어야 합니다.");
-        }
-
-        @DisplayName("메뉴상품 목록 정보가 있어야 합니다.")
-        @Test
-        void error_4() {
-            assertThatThrownBy(() -> Menu.create(displayedName, null, UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
-                    .isInstanceOf(InvalidMenuException.class)
-                    .hasMessage("가격정보가 있어야 합니다.");
-        }
-
         @DisplayName("가격은 메뉴상품의 금액 총합보다 적거나 같아야한다.")
         @Test
         void error_5() {
             assertThatThrownBy(() -> Menu.create(displayedName, Price.valueOf(50_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct)))
-                    .isInstanceOf(InvalidMenuException.class)
+                    .isInstanceOf(InvalidMenuPriceException.class)
                     .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
         }
     }
@@ -116,7 +84,7 @@ class MenuTest {
             final Menu menu = Menu.create(displayedName, Price.valueOf(10_000L), UUID.randomUUID(), true, MenuProducts.of(menuProduct));
 
             assertThatThrownBy(() -> menu.changePrice(Price.valueOf(50_000L)))
-                    .isInstanceOf(InvalidMenuException.class)
+                    .isInstanceOf(InvalidMenuPriceException.class)
                     .hasMessage("가격 정보는 메뉴상품 금액의 총합보다 적거나 같아야합니다. price=50000, totalAmount=10000");
         }
     }

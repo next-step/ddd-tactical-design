@@ -2,7 +2,7 @@ package kitchenpos.menus.menu.tobe.domain;
 
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.Price;
-import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuException;
+import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -48,18 +48,6 @@ public class Menu {
     }
 
     protected static Menu create(final DisplayedName displayedName, final Price price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts) {
-        if (Objects.isNull(displayedName)) {
-            throw new InvalidMenuException(InvalidMenuException.MENU_NAME_MESSAGE);
-        }
-        if (Objects.isNull(price)) {
-            throw new InvalidMenuException(InvalidMenuException.PRICE_MESSAGE);
-        }
-        if (Objects.isNull(menuGroupId)) {
-            throw new InvalidMenuException(InvalidMenuException.MENU_GROUP_ID_MESSAGE);
-        }
-        if (Objects.isNull(menuProducts)) {
-            throw new InvalidMenuException(InvalidMenuException.MENU_PRODUCTS_MESSAGE);
-        }
         validatePrice(price, menuProducts.totalAmount());
         final Menu menu = new Menu(UUID.randomUUID(), displayedName, price, menuGroupId, displayed, menuProducts);
         menu.menuProducts.makeRelation(menu);
@@ -70,7 +58,7 @@ public class Menu {
         if (price.isLessThan(totalAmount) || price.equals(totalAmount)) {
             return;
         }
-        throw new InvalidMenuException(price.toLong(), totalAmount.toLong());
+        throw new InvalidMenuPriceException(price.toLong(), totalAmount.toLong());
     }
 
     public void changePrice(Price price) {
