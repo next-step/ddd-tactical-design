@@ -1,7 +1,6 @@
 package kitchenpos.menus.menu.tobe.domain;
 
 import kitchenpos.common.domain.vo.Price;
-import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuProductException;
 import kitchenpos.menus.menu.tobe.domain.vo.Quantity;
 
 import javax.persistence.Column;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -49,16 +47,6 @@ public class MenuProduct {
     }
 
     protected static MenuProduct create(final UUID productId, final Price price, final Quantity quantity) {
-        if (Objects.isNull(productId)) {
-            throw new InvalidMenuProductException(InvalidMenuProductException.PRODUCT_ID_MESSAGE);
-        }
-        if (Objects.isNull(price)) {
-            throw new InvalidMenuProductException(InvalidMenuProductException.PRICE_MESSAGE);
-        }
-        if (Objects.isNull(quantity)) {
-            throw new InvalidMenuProductException(InvalidMenuProductException.QUANTITY_MESSAGE);
-        }
-
         return new MenuProduct(productId, price, quantity);
     }
 

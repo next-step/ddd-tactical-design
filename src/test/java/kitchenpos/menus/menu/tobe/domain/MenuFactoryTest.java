@@ -8,7 +8,7 @@ import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
 import kitchenpos.common.domain.vo.exception.InvalidPriceException;
 import kitchenpos.menus.menu.dto.MenuDto;
 import kitchenpos.menus.menu.dto.MenuProductDto;
-import kitchenpos.menus.menu.tobe.domain.exception.InvalidMenuPriceException;
+import kitchenpos.menus.menu.tobe.domain.vo.exception.InvalidQuantityException;
 import kitchenpos.menus.menugroup.tobe.domain.InMemoryMenuGroupRepository;
 import kitchenpos.menus.menugroup.tobe.domain.MenuGroup;
 import kitchenpos.menus.menugroup.tobe.domain.MenuGroupRepository;
@@ -134,6 +134,16 @@ class MenuFactoryTest {
 
             assertThatThrownBy(() -> menuFactory.create(menuDto, menuGroupRepository, productRepository, profanity))
                     .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @DisplayName("메뉴상품의 수량 정보가 있어야 합니다.")
+        @Test
+        void error_7() {
+            final MenuProductDto menuProductDto = new MenuProductDto(product.id(), null);
+            final MenuDto menuDto = new MenuDto("치킨메뉴", 15_000L, menuGroup.id(), true, List.of(menuProductDto));
+
+            assertThatThrownBy(() -> menuFactory.create(menuDto, menuGroupRepository, productRepository, profanity))
+                    .isInstanceOf(InvalidQuantityException.class);
         }
     }
 }
