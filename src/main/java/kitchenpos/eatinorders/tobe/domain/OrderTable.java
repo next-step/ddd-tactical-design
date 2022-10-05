@@ -12,14 +12,18 @@ public class OrderTable {
   private boolean occupied;
 
   public OrderTable(UUID id, String name) {
-    this(id, OrderTableName.from(name), EMPTY_GUEST);
+    this(id, OrderTableName.from(name), EMPTY_GUEST, false);
   }
 
   public OrderTable(UUID id, String name, int numberOfGuests) {
-    this(id, OrderTableName.from(name), numberOfGuests);
+    this(id, OrderTableName.from(name), numberOfGuests, false);
   }
 
-  public OrderTable(UUID id, OrderTableName name, int numberOfGuests) {
+  public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+    this(id, OrderTableName.from(name), numberOfGuests, occupied);
+  }
+
+  public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
     this.id = id;
     this.name = name;
     this.numberOfGuests = numberOfGuests;
@@ -29,7 +33,16 @@ public class OrderTable {
     this.occupied = true;
   }
 
+  public void clear() {
+    this.occupied = false;
+    this.numberOfGuests = EMPTY_GUEST;
+  }
+
   public boolean isOccupied() {
     return occupied;
+  }
+
+  public int getNumberOfGuests() {
+    return numberOfGuests;
   }
 }

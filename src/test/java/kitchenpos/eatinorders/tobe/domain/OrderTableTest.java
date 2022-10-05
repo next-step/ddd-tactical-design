@@ -35,4 +35,13 @@ class OrderTableTest {
     assertThat(orderTable.isOccupied()).isTrue();
   }
 
+  @DisplayName("빈 테이블로 설정할 수 있다.")
+  @Test
+  void clear() {
+    OrderTable orderTable = new OrderTable(UUID.randomUUID(), "9번", 5, true);
+    orderTable.clear();
+    assertThat(orderTable.isOccupied()).isFalse();
+    assertThat(orderTable.getNumberOfGuests()).isEqualTo(OrderTable.EMPTY_GUEST);
+  }
+
 }
