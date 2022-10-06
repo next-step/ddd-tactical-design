@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.math.BigDecimal;
@@ -19,6 +20,16 @@ class OrderTest {
             UUID.randomUUID(),
             List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
         ));
+  }
 
+  @DisplayName("메뉴가 없으면 등록할 수 없다.")
+  @Test
+  void createOrderMenuNotValid() {
+    assertThatIllegalArgumentException()
+        .isThrownBy(() -> new Order(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            List.of(new OrderLineItem(null, BigDecimal.valueOf(16_000L), 3))
+        ));
   }
 }
