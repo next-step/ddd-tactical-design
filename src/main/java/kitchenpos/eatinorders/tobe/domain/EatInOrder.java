@@ -104,8 +104,4 @@ public class EatInOrder {
 	public OrderLineItems getOrderLineItems() {
 		return orderLineItems;
 	}
-
-	public OrderTable getOrderTable() {
-		return orderTable;
-	}
 }
