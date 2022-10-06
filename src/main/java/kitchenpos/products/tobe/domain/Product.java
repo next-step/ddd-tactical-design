@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
+import kitchenpos.common.domain.vo.DisplayedName;
+import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
+import kitchenpos.common.domain.vo.Price;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -35,13 +37,14 @@ public class Product {
 
     public static Product create(final DisplayedName displayedName, final Long price) {
         if (Objects.isNull(displayedName)) {
-            throw new InvalidProductNameException();
+            throw new InvalidDisplayedNameException();
         }
         return new Product(UUID.randomUUID(), displayedName, Price.valueOf(price));
     }
 
-    public void changePrice(final Long price) {
+    public void changePrice(final Long price, final PricePolicy pricePolicy) {
         this.price = Price.valueOf(price);
+        pricePolicy.changedProductPrice(id, price);
     }
 
     public UUID id() {

@@ -96,17 +96,6 @@ docker compose -p kitchenpos up -d
 
 ## 용어 사전
 
-### 메뉴
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
-
 ### 매장 주문
 
 | 한글명 | 영문명 | 설명 |
@@ -150,15 +139,6 @@ docker compose -p kitchenpos up -d
 | 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
 
 ## 모델링
-
-### 메뉴
-
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
 
 ### 매장 주문
 

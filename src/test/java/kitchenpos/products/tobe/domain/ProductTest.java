@@ -1,8 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProfanity;
-import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.common.domain.FakeProfanity;
+import kitchenpos.common.domain.Profanity;
+import kitchenpos.common.domain.vo.DisplayedName;
+import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
+import kitchenpos.common.domain.vo.exception.InvalidPriceException;
+import kitchenpos.common.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,14 +46,14 @@ class ProductTest {
         @Test
         void error_1() {
             assertThatThrownBy(() -> Product.create(null, 10_000L))
-                    .isInstanceOf(InvalidProductNameException.class);
+                    .isInstanceOf(InvalidDisplayedNameException.class);
         }
 
         @DisplayName("가격 정보가 있어야 한다.")
         @Test
         void error_2() {
             assertThatThrownBy(() -> Product.create(displayedName, null))
-                    .isInstanceOf(InvalidProductPriceException.class);
+                    .isInstanceOf(InvalidPriceException.class);
         }
     }
 
@@ -58,12 +61,19 @@ class ProductTest {
     @Nested
     class ChangePriceTest {
 
+        private PricePolicy pricePolicy;
+
+        @BeforeEach
+        void setUp() {
+            pricePolicy = new DummyPricePolicy();
+        }
+
         @DisplayName("성공")
         @Test
         void success() {
             final Product product = Product.create(displayedName, 10_000L);
 
-            product.changePrice(20_000L);
+            product.changePrice(20_000L, pricePolicy);
 
             assertThat(product.price()).isEqualTo(Price.valueOf(20_000L));
         }
@@ -73,8 +83,8 @@ class ProductTest {
         void error_1() {
             final Product product = Product.create(displayedName, 10_000L);
 
-            assertThatThrownBy(() -> product.changePrice(null))
-                    .isInstanceOf(InvalidProductPriceException.class);
+            assertThatThrownBy(() -> product.changePrice(null, pricePolicy))
+                    .isInstanceOf(InvalidPriceException.class);
         }
     }
 }
