@@ -1,12 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
-import java.util.Objects;
+import kitchenpos.global.vo.Price;
+import kitchenpos.products.tobe.vo.ProductName;
+
+import javax.persistence.*;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Table(name = "product")
 @Entity
@@ -17,26 +15,26 @@ public class Product {
   private UUID id;
 
   @Embedded
-  private DisplayedName name;
+  private ProductName name;
 
   @Embedded
-  private ProductPrice price;
+  private Price price;
 
   protected Product() {
 
   }
 
-  public Product(DisplayedName name, ProductPrice price) {
+  public Product(ProductName name, Price price) {
     this.name = name;
     this.price = price;
   }
 
-  public Product(UUID id, DisplayedName name, ProductPrice price) {
+  public Product(UUID id, ProductName name, Price price) {
     this(name, price);
     this.id = id;
   }
 
-  public void changePrice(ProductPrice price) {
+  public void changePrice(Price price) {
     this.price = price;
   }
 
@@ -44,32 +42,24 @@ public class Product {
     return id;
   }
 
-  public DisplayedName getName() {
+  public ProductName getName() {
     return name;
   }
 
-  public ProductPrice getPrice() {
+  public Price getPrice() {
     return price;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
     Product product = (Product) o;
 
-    if (!Objects.equals(id, product.id)) {
-      return false;
-    }
-    if (!Objects.equals(name, product.name)) {
-      return false;
-    }
-    return Objects.equals(price, product.price);
+    if (id != null ? !id.equals(product.id) : product.id != null) return false;
+    if (name != null ? !name.equals(product.name) : product.name != null) return false;
+    return price != null ? price.equals(product.price) : product.price == null;
   }
 
   @Override
