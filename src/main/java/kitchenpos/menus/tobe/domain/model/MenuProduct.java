@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "TobeMenuProduct")
 public class MenuProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
