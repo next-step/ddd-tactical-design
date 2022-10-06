@@ -14,7 +14,7 @@ public class MenuGroupName {
     protected MenuGroupName() {
     }
 
-    MenuGroupName(Profanity profanity, String name) {
+    public MenuGroupName(Profanity profanity, String name) {
         validateName(profanity, name);
         this.name = name;
     }

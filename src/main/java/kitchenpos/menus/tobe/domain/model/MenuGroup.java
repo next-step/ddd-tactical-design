@@ -21,7 +21,11 @@ public class MenuGroup {
     }
 
     public MenuGroup(Profanity profanity, String name) {
-        this.name = new MenuGroupName(profanity, name);
+        this(new MenuGroupName(profanity, name));
+    }
+
+    public MenuGroup(MenuGroupName name) {
+        this.name = name;
     }
 
     @Override
