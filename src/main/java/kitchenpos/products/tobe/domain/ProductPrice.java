@@ -12,7 +12,7 @@ public class ProductPrice {
 
     public ProductPrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격이 존재하지 않거나, 가격이 0원 미만입니다.");
         }
         this.price = price;
     }
