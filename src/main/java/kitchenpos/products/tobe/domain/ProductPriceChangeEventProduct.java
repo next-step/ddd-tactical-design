@@ -1,13 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.ProductDomainEvent;
-
 import java.util.UUID;
 
-public class ProductPriceChangeEventProduct extends ProductDomainEvent {
+public class ProductPriceChangeEventProduct {
     private UUID id;
 
-    public ProductPriceChangeEventProduct(UUID id) {
+    public ProductPriceChangeEventProduct( UUID id) {
         this.id = id;
     }
 

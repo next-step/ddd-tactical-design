@@ -1,13 +1,7 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.ProductPriceChangeEventHandler;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPriceChangeEventProduct;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,19 +22,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
-
-    private ProductPriceChangeEventHandler productPriceChangeEventHandler;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
         productService = new ProductService(productRepository, purgomalumClient);
-        productPriceChangeEventHandler = new ProductPriceChangeEventHandler(menuRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -92,19 +81,11 @@ class ProductServiceTest {
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductRequest expected = changePriceRequest(price);
+
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-    @Test
-    void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-        productPriceChangeEventHandler.handle(new ProductPriceChangeEventProduct(product.getId()));
-        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test

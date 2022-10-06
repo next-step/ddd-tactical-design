@@ -4,25 +4,25 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.ProductPriceChangeEventProduct;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class ProductPriceChangeEventHandler {
+public class ProductPriceChangeListener {
     private final MenuRepository menuRepository;
 
-    public ProductPriceChangeEventHandler(MenuRepository menuRepository) {
+    public ProductPriceChangeListener(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
     @Transactional
-    @TransactionalEventListener
-    public void handle(ProductPriceChangeEventProduct productPriceChangeEvent) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productPriceChangeEvent.getId());
+    @EventListener
+    public void listen(ProductPriceChangeEventProduct event) {
+        final List<Menu> menus = menuRepository.findAllByProductId(event.getId());
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {

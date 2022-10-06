@@ -43,6 +43,7 @@ public class ProductService {
         final ProductPrice productPrice = new ProductPrice(request.getPrice());
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
         product.changePrice(productPrice);
+        productRepository.save(product);
         return ProductResponse.convert(product);
     }
 

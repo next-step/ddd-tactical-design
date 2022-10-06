@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.Events;
+
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -46,6 +47,6 @@ public class Product {
 
     public void changePrice(final ProductPrice productPrice) {
         this.price = productPrice;
-        Events.raise(new ProductPriceChangeEventProduct(this.id));
+        registerEvent(new ProductPriceChangeEventProduct(this.id));
     }
 }
