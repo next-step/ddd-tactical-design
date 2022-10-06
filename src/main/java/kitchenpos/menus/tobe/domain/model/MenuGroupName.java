@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.menus.tobe.domain.exception.ProfaneNameException;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
@@ -13,7 +14,7 @@ public class MenuGroupName {
     protected MenuGroupName() {
     }
 
-    public MenuGroupName(Profanity profanity, String name) {
+    MenuGroupName(Profanity profanity, String name) {
         validateName(profanity, name);
         this.name = name;
     }

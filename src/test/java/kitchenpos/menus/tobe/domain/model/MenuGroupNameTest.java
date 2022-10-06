@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.menus.tobe.domain.exception.ProfaneNameException;
 import kitchenpos.menus.tobe.doubles.FakeProfanity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
