@@ -13,6 +13,10 @@ public class MenuPrice {
         this.value = price;
     }
 
+    public BigDecimal value() {
+        return this.value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
