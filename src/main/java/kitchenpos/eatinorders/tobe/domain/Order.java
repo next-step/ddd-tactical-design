@@ -23,4 +23,8 @@ public class Order {
     this.orderTableId = orderTableId;
     this.orderLineItems = orderLineItems;
   }
+
+  public void accept() {
+    this.status = OrderStatus.ACCEPTED;
+  }
 }
