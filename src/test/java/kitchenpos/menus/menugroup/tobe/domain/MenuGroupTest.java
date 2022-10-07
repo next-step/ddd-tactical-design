@@ -1,6 +1,6 @@
 package kitchenpos.menus.menugroup.tobe.domain;
 
-import kitchenpos.menus.menugroup.tobe.domain.exception.InvalidMenuGroupNameException;
+import kitchenpos.common.domain.vo.exception.InvalidNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class MenuGroupTest {
 
             assertAll(
                     () -> assertThat(menuGroup.id()).isNotNull(),
-                    () -> assertThat(menuGroup.menuGroupName().value()).isEqualTo("인기메뉴")
+                    () -> assertThat(menuGroup.name().value()).isEqualTo("인기메뉴")
             );
         }
 
@@ -30,7 +30,7 @@ class MenuGroupTest {
         @Test
         void error() {
             assertThatThrownBy(() -> MenuGroup.create(null))
-                    .isInstanceOf(InvalidMenuGroupNameException.class);
+                    .isInstanceOf(InvalidNameException.class);
         }
     }
 }

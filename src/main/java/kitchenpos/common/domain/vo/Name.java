@@ -1,29 +1,29 @@
-package kitchenpos.menus.menugroup.tobe.domain;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.menus.menugroup.tobe.domain.exception.InvalidMenuGroupNameException;
+import kitchenpos.common.domain.vo.exception.InvalidNameException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuGroupName {
+public class Name {
 
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuGroupName() {
+    protected Name() {
     }
 
-    private MenuGroupName(final String value) {
+    private Name(final String value) {
         this.value = value;
     }
 
-    public static MenuGroupName valueOf(final String value) {
+    public static Name valueOf(final String value) {
         if (Objects.isNull(value) || value.isEmpty()) {
-            throw new InvalidMenuGroupNameException();
+            throw new InvalidNameException();
         }
-        return new MenuGroupName(value);
+        return new Name(value);
     }
 
     public String value() {
@@ -38,7 +38,7 @@ public class MenuGroupName {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MenuGroupName that = (MenuGroupName) o;
+        Name that = (Name) o;
         return Objects.equals(value, that.value);
     }
 
