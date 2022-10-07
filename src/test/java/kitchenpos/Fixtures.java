@@ -1,6 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 import kitchenpos.menus.menu.domain.Menu;
 import kitchenpos.menus.menugroup.domain.MenuGroup;
 import kitchenpos.menus.menu.domain.MenuProduct;
