@@ -27,4 +27,8 @@ public class MenuGroup {
         this.id = id;
         this.name = new DisplayedName(name);
     }
+
+    public Long getId() {
+        return id;
+    }
 }

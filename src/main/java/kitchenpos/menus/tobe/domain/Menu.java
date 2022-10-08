@@ -36,6 +36,11 @@ public class Menu {
     }
 
     public Menu(String name, int price, Long menuGroupId, List<MenuProduct> menuProducts) {
+        this(null, name, price, menuGroupId, menuProducts);
+    }
+
+    public Menu(Long id, String name, int price, Long menuGroupId, List<MenuProduct> menuProducts) {
+        this.id = id;
         this.displayedName = new DisplayedName(name);
         this.price = new Price(price);
         this.menuGroupId = menuGroupId;
@@ -77,5 +82,9 @@ public class Menu {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts.getMenuProducts();
+    }
+
+    public Long getId() {
+        return id;
     }
 }
