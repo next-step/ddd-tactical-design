@@ -20,7 +20,7 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
+    MenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;
     }
 
@@ -37,5 +37,10 @@ public class MenuProducts {
                 .orElseThrow(() -> new IllegalStateException("메뉴에 존재하지 않는 상품입니다."));
 
         menuProduct.updatePrice(changedPrice);
+    }
+
+    boolean containsProduct(UUID productId) {
+        return menuProducts.stream()
+                .anyMatch(it -> it.matchProductId(productId));
     }
 }

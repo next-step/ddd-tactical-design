@@ -79,4 +79,12 @@ public class Menu {
     public boolean isDisplayed() {
         return displayed;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public boolean containsProduct(UUID productId) {
+        return menuProducts.containsProduct(productId);
+    }
 }
