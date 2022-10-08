@@ -71,8 +71,8 @@ public class Menu {
         }
     }
 
-    public void addMenuProduct(MenuProduct menuProduct) {
-        menuProducts.addMenuProduct(menuProduct);
+    public void hide() {
+        displayed = false;
     }
 
     public UUID getId() {

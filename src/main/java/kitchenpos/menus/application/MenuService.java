@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menus.domain.*;
 import kitchenpos.menus.exception.MenuGroupNotFoundException;
+import kitchenpos.menus.exception.MenuNotFoundException;
 import kitchenpos.menus.ui.request.MenuCreateRequest;
 import kitchenpos.menus.ui.request.MenuProductCreateRequest;
 import kitchenpos.menus.ui.response.MenuResponse;
@@ -81,8 +82,7 @@ public class MenuService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+        final Menu menu = findMenuById(menuId);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProductValues()) {
             sum = sum.add(
@@ -101,8 +101,7 @@ public class MenuService {
 
     @Transactional
     public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+        final Menu menu = findMenuById(menuId);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProductValues()) {
             sum = sum.add(
@@ -120,11 +119,15 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
-        return menu;
+    public MenuResponse hide(final UUID menuId) {
+        final Menu menu = findMenuById(menuId);
+        menu.hide();
+        return MenuResponse.from(menu);
+    }
+
+    private Menu findMenuById(UUID menuId) {
+        return menuRepository.findById(menuId)
+            .orElseThrow(() -> new MenuNotFoundException("ID 에 해당하는 메뉴가 없습니다."));
     }
 
     @Transactional(readOnly = true)

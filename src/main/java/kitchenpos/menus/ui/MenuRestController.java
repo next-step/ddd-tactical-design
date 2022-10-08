@@ -37,7 +37,7 @@ public class MenuRestController {
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuResponse> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
     }
 

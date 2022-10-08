@@ -205,8 +205,8 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L)).getId();
-        final Menu actual = menuService.hide(menuId);
-        assertThat(actual.isDisplayed()).isFalse();
+        final MenuResponse response = menuService.hide(menuId);
+        assertThat(response.isDisplayed()).isFalse();
     }
 
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
