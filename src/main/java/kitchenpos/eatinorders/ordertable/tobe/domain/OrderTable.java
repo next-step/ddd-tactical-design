@@ -12,6 +12,7 @@ import java.util.UUID;
 public class OrderTable {
 
     private static final boolean EMPTY_TABLE = false;
+    private static final boolean USED_TABLE = true;
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -38,6 +39,10 @@ public class OrderTable {
 
     public static OrderTable createEmptyTable(final String name) {
         return new OrderTable(UUID.randomUUID(), Name.valueOf(name), GuestOfNumbers.ZERO, EMPTY_TABLE);
+    }
+
+    public void use() {
+        occupied = USED_TABLE;
     }
 
     public UUID id() {

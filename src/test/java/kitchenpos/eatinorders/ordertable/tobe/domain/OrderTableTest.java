@@ -22,4 +22,14 @@ class OrderTableTest {
                 () -> assertThat(emptyTable.isEmptyTable()).isTrue()
         );
     }
+
+    @DisplayName("주문테이블을 사용하면 사용중으로 변경된다.")
+    @Test
+    void use() {
+        final OrderTable orderTable = OrderTable.createEmptyTable("1번 테이블");
+
+        orderTable.use();
+
+        assertThat(orderTable.isEmptyTable()).isFalse();
+    }
 }
