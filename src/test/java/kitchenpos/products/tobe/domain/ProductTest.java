@@ -1,6 +1,5 @@
-package kitchenpos.products.application.tobe.domain;
+package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +9,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
-- 상품을 등록할 수 있다.
-- 상품의 가격이 올바르지 않으면 등록할 수 없다.
+- [x] 상품을 등록할 수 있다.
+- [x] 상품의 가격이 올바르지 않으면 등록할 수 없다.
   - 상품의 가격은 0원 이상이어야 한다.
-- 상품의 이름이 올바르지 않으면 등록할 수 없다.
+- [x] 상품의 이름이 올바르지 않으면 등록할 수 없다.
   - 상품의 이름에는 비속어가 포함될 수 없다.
 - 상품의 가격을 변경할 수 있다.
 - 상품의 가격이 올바르지 않으면 변경할 수 없다.
@@ -22,23 +21,39 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 - 상품의 목록을 조회할 수 있다.
  */
 class ProductTest {
+    private final Profanity profanity = new FakeProfanity();
+
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void register() {
         final BigDecimal price = BigDecimal.TEN;
         final String name = "chicken";
 
-        assertThatCode(() -> new Product(price, name))
+        assertThatCode(() -> new Product(price, name, profanity))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("상품의 가격은 0보다 크거나 같아야 한다.")
     @Test
     void registerWithLessThanZero() {
+        final String INVALID_PRICE_MESSAGE = "상품 가격은 0보다 크거다 같아야 합니다.";
         final BigDecimal price = BigDecimal.valueOf(-1L);
         final String name = "chicken";
 
-        assertThatThrownBy(() -> new Product(price, name))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new Product(price, name, profanity))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(INVALID_PRICE_MESSAGE);
+    }
+
+    @DisplayName("상품 이름에 비속어가 포함될 수 없다.")
+    @Test
+    void registerWithProfanity() {
+        final String CONTAIN_PROFANITY_MESSAGE = "상품 이름에 비속어가 포함될 수 없습니다.";
+        final BigDecimal price = BigDecimal.TEN;
+        final String name = "damn";
+
+        assertThatThrownBy(() -> new Product(price, name, profanity))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(CONTAIN_PROFANITY_MESSAGE);
     }
 }
