@@ -61,7 +61,6 @@ public class Menu {
         this.displayed = true;
         this.price = price;
         this.menuProducts = menuProducts;
-        this.menuProducts.enrollMenu(this);
         validateMenuPrice(this.price, this.menuProducts);
     }
 

@@ -9,13 +9,11 @@ import kitchenpos.menus.domain.MenuProduct;
 public class MenuProductResponse {
 
     private final Long seq;
-    private final UUID menuId;
     private final UUID productId;
     private final long quantity;
 
-    public MenuProductResponse(Long seq, UUID menuId, UUID productId, long quantity) {
+    public MenuProductResponse(Long seq, UUID productId, long quantity) {
         this.seq = seq;
-        this.menuId = menuId;
         this.productId = productId;
         this.quantity = quantity;
     }
@@ -29,7 +27,6 @@ public class MenuProductResponse {
     public static MenuProductResponse from(MenuProduct menuProduct) {
         return new MenuProductResponse(
             menuProduct.getSeq(),
-            menuProduct.getMenuId(),
             menuProduct.getProductId(),
             menuProduct.getQuantityValue()
         );
@@ -37,10 +34,6 @@ public class MenuProductResponse {
 
     public Long getSeq() {
         return seq;
-    }
-
-    public UUID getMenuId() {
-        return menuId;
     }
 
     public UUID getProductId() {

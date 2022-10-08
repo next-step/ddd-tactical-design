@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.menus.exception.AlreadyEnrollMenuException;
 
 @Table(name = "menu_product")
 @Entity
@@ -17,10 +16,6 @@ public class MenuProduct {
         nullable = false
     )
     private Long seq;
-
-    @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
-    private Menu menu;
 
     @Column(name = "product_id", length = 16, nullable = false, columnDefinition = "binary(16)")
     private UUID productId;
@@ -49,20 +44,8 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public void enrollMenu(Menu menu) {
-        if (this.menu != null) {
-            throw new AlreadyEnrollMenuException("이미 다른 메뉴와 연결된 메뉴의 상품입니다.");
-        }
-
-        this.menu = menu;
-    }
-
     public Long getSeq() {
         return seq;
-    }
-
-    public UUID getMenuId() {
-        return menu.getId();
     }
 
     public UUID getProductId() {

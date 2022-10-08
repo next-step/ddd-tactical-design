@@ -25,7 +25,6 @@ import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
-import kitchenpos.profanity.infra.ProfanityCheckClient;
 import kitchenpos.reader.ProductPriceReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,18 +42,16 @@ class MenuServiceTest {
 
     @BeforeEach
     void setUp() {
-        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         ProductRepository productRepository = new InMemoryProductRepository();
-        ProfanityCheckClient profanityCheckClient = new FakeProfanityCheckClient();
-        ProductPriceReader productPriceReader = new ProductPriceReader(new InMemoryProductRepository());
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         menuRepository = new InMemoryMenuRepository();
         menuService = new MenuService(
             menuRepository,
             menuGroupRepository,
-            profanityCheckClient,
-            productPriceReader
+            new FakeProfanityCheckClient(),
+            new ProductPriceReader(productRepository)
         );
     }
 
