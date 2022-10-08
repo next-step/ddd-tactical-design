@@ -24,14 +24,7 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
+        return new Menu(UUID.randomUUID(), "후라이드+후라이드", BigDecimal.valueOf(price), menuGroup(), displayed, Arrays.asList(menuProducts));
     }
 
     public static MenuGroup menuGroup() {
@@ -39,25 +32,19 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(UUID.randomUUID(), name);
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
+        Product product = product();
+        MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), 2L);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
+        MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), quantity);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 

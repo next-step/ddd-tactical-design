@@ -1,5 +1,8 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.domain.vo.MenuName;
+import kitchenpos.menus.domain.vo.MenuPrice;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,17 +15,17 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
@@ -31,56 +34,50 @@ public class Menu {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
+    protected Menu() {
+    }
 
-    public Menu() {
+    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+        this.id = id;
+        this.name = new MenuName(name);
+        this.price = new MenuPrice(price);
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.getName();
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(final BigDecimal price) {
+        this.price.changePrice(price);
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
+    public void changeDisplay(final boolean displayed) {
         this.displayed = displayed;
     }
 
@@ -88,15 +85,10 @@ public class Menu {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+    public BigDecimal calculateMenuProductsPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::calculatePrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
 }

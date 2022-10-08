@@ -35,7 +35,7 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price.getPrice();
+        return price.getValue();
     }
 
     public void changePrice(final BigDecimal price) {

@@ -1,8 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.dto.ProductPriceRequest;
@@ -19,16 +16,16 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
+    private final ProductPriceChangeEventPublisher productPriceChangeEventPublisher;
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
+            final ProductPriceChangeEventPublisher productPriceChangeEventPublisher,
             final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
+        this.productPriceChangeEventPublisher = productPriceChangeEventPublisher;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -50,21 +47,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        productPriceChangeEventPublisher.publishEvent(price, productId);
         return product;
     }
 
