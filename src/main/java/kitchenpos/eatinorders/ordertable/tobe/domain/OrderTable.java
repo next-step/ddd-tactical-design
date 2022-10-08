@@ -46,6 +46,11 @@ public class OrderTable {
         occupied = USED_TABLE;
     }
 
+    void clear() {
+        guestOfNumbers = GuestOfNumbers.ZERO;
+        occupied = EMPTY_TABLE;
+    }
+
     public void changeGuestOfNumbers(final GuestOfNumbers guestOfNumbers) {
         if (isEmptyTable()) {
             throw new NoUsedOrderTableException();

@@ -36,6 +36,21 @@ class OrderTableTest {
         assertThat(orderTable.isEmptyTable()).isFalse();
     }
 
+    @DisplayName("주문테이블을 치우면 빈테이블이 되고 인원수가 0이 된다.")
+    @Test
+    void clear() {
+        final OrderTable orderTable = OrderTable.createEmptyTable("1번 테이블");
+        orderTable.use();
+        orderTable.changeGuestOfNumbers(GuestOfNumbers.valueOf(5));
+
+        orderTable.clear();
+
+        assertAll(
+                () -> assertThat(orderTable.isEmptyTable()).isTrue(),
+                () -> assertThat(orderTable.guestOfNumbers()).isEqualTo(GuestOfNumbers.ZERO)
+        );
+    }
+
     @DisplayName("주문 테이블의 손님 수를 변경한다")
     @Nested
     class ChangeGuestOfNumbersTest {
