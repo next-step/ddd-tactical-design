@@ -51,7 +51,6 @@ public class TestConfig {
     }
 
     @Bean
-
     MenuGroupRepository menuGroupRepository() {
         return new MemoryMenuGroupRepository();
     }

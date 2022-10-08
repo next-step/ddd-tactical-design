@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface MenuRepository {
-    Menu save(Menu menu);
+    <S extends Menu> S save(S entity);
 
     Optional<Menu> findById(UUID id);
 

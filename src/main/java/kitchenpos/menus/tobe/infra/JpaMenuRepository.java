@@ -12,7 +12,12 @@ import java.util.UUID;
 
 @Repository("Tobe_MenuRepository")
 public interface JpaMenuRepository extends JpaRepository<Menu, UUID>, MenuRepository {
-    @Query("select m from Menu m join m.menuProducts mp where mp.product.id = :productId")
+
     @Override
+    @Query(value = "" +
+            "select * " +
+            "from menu m " +
+            "join menu_product mp on mp.menu_id = m.id and mp.product_id = :productId",
+            nativeQuery = true)
     List<Menu> findAllByProductId(@Param("productId") UUID productId);
 }
