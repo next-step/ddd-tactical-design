@@ -37,16 +37,12 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
     public void setSeq(final Long seq) {
         this.seq = seq;
     }
 
     public BigDecimal getPrice() {
-        return price.getPrice();
+        return price.getValue();
     }
 
     public void changePrice(final BigDecimal price) {
@@ -57,16 +53,12 @@ public class MenuProduct {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
-
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+    public BigDecimal calculatePrice() {
+        return price.getValue().multiply(BigDecimal.valueOf(quantity));
     }
 
 }

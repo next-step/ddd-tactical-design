@@ -26,7 +26,7 @@ public class ProductPrice {
         }
     }
 
-    public BigDecimal getPrice() {
+    public BigDecimal getValue() {
         return price;
     }
 

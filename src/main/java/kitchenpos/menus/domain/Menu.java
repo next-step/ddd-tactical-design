@@ -83,4 +83,10 @@ public class Menu {
         return menuProducts;
     }
 
+    public BigDecimal calculateMenuProductsPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::calculatePrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
 }
