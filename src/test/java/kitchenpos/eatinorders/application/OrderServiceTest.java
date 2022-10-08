@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -163,6 +164,7 @@ class OrderServiceTest {
             .isInstanceOf(IllegalStateException.class);
     }
 
+    @Disabled
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
