@@ -16,6 +16,14 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
+    public MenuProducts(final MenuProduct... menuProducts) {
+        if (Objects.isNull(menuProducts) || menuProducts.length == 0) {
+            throw new IllegalArgumentException("menuProducts is required");
+        }
+
+        this.menuProducts = List.of(menuProducts);
+    }
+
     public BigDecimal totalPrice() {
         return this.menuProducts.stream()
             .map(MenuProduct::totalPrice)

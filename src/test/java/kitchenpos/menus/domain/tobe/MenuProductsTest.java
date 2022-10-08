@@ -19,7 +19,7 @@ class MenuProductsTest {
     @Test
     @DisplayName("메뉴 상품 묶음 생성이 가능하다")
     void constructor() {
-        final MenuProducts menuProducts = new MenuProducts(List.of(new MenuProduct(1L, product(), 1)));
+        final MenuProducts menuProducts = new MenuProducts(new MenuProduct(1L, product(), 1));
         assertThat(menuProducts).isNotNull();
     }
 
