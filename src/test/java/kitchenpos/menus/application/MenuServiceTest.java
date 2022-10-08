@@ -189,8 +189,8 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L)).getId();
-        final Menu actual = menuService.display(menuId);
-        assertThat(actual.isDisplayed()).isTrue();
+        final MenuResponse response = menuService.display(menuId);
+        assertThat(response.isDisplayed()).isTrue();
     }
 
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")

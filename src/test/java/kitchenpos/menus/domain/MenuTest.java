@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain;
 
 import static kitchenpos.menus.MenuFixtures.menu;
+import static kitchenpos.menus.MenuFixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -12,6 +13,7 @@ import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class MenuTest {
@@ -47,5 +49,30 @@ class MenuTest {
         Menu menu = menu();
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴 전시")
+    @Nested
+    class Display {
+
+        @DisplayName("메뉴를 전시할 수 있다.")
+        @Test
+        void display() {
+            Menu menu = menu();
+            menu.display();
+            assertThat(menu.isDisplayed()).isTrue();
+        }
+
+        @DisplayName("메뉴의 가격이 올바르지 않을 경우 전시할 수 없다.")
+        @Test
+        void invalidMenuPriceException() {
+            Menu menu = menu(
+                10_000,
+                menuProduct(5_000, 2)
+            );
+            menu.setPrice(BigDecimal.valueOf(12_000));
+            assertThatThrownBy(menu::display)
+                .isExactlyInstanceOf(InvalidMenuPriceException.class);
+        }
     }
 }

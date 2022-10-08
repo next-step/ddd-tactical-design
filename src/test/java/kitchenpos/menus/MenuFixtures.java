@@ -28,20 +28,28 @@ public class MenuFixtures {
     }
 
     public static Menu menu(long price) {
+        return menu(price, menuProduct());
+    }
+
+    public static Menu menu(long price, MenuProduct... menuProducts) {
         return new Menu(
             UUID.randomUUID(),
             new MenuName("후라이드+후라이드", new FakeProfanityCheckClient()),
             new MenuPrice(BigDecimal.valueOf(price)),
             menuGroup(),
-            new MenuProducts(List.of(menuProduct()))
+            new MenuProducts(List.of(menuProducts))
         );
     }
 
     public static MenuProduct menuProduct() {
+        return menuProduct(20_000, 1);
+    }
+
+    public static MenuProduct menuProduct(long price, long quantity) {
         return new MenuProduct(
             UUID.randomUUID(),
-            new MenuProductPrice(BigDecimal.valueOf(20_000L)),
-            new MenuProductQuantity(1)
+            new MenuProductPrice(BigDecimal.valueOf(price)),
+            new MenuProductQuantity(quantity)
         );
     }
 }

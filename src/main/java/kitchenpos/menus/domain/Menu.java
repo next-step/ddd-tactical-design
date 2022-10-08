@@ -75,6 +75,14 @@ public class Menu {
         displayed = false;
     }
 
+    public void display() {
+        if (price.isBiggerThan(menuProducts.getSumOfPrice())) {
+            throw new InvalidMenuPriceException("메뉴의 가격이 상품보다 높아 전시상태를 변경할 수 없습니다.");
+        }
+
+        displayed = true;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -96,7 +104,7 @@ public class Menu {
     }
 
     public void setPrice(final BigDecimal price) {
-
+        this.price = new MenuPrice(price);
     }
 
     public MenuGroup getMenuGroup() {

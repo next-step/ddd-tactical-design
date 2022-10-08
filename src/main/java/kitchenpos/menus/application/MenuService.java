@@ -100,27 +100,15 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
-        final Menu menu = findMenuById(menuId);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProductValues()) {
-            sum = sum.add(
-                productRepository.findById(menuProduct.getProductId())
-                    .orElseThrow(() -> new ProductNotFoundException("ID에 해당하는 상품이 없습니다."))
-                    .getPriceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantityValue()))
-            );
-        }
-        if (menu.getPriceValue().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.setDisplayed(true);
-        return menu;
+    public MenuResponse display(final UUID menuId) {
+        Menu menu = findMenuById(menuId);
+        menu.display();
+        return MenuResponse.from(menu);
     }
 
     @Transactional
     public MenuResponse hide(final UUID menuId) {
-        final Menu menu = findMenuById(menuId);
+        Menu menu = findMenuById(menuId);
         menu.hide();
         return MenuResponse.from(menu);
     }
