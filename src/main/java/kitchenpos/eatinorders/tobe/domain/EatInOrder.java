@@ -8,10 +8,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import kitchenpos.core.constant.ExceptionMessages;
@@ -24,6 +21,9 @@ public class EatInOrder {
 	@Column(name = "id", columnDefinition = "binary(16)")
 	private UUID id;
 
+	@Column(name = "order_table_id", columnDefinition = "binary(16)", nullable = false)
+	private UUID orderTableId;
+
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
@@ -34,40 +34,23 @@ public class EatInOrder {
 	@Embedded
 	private OrderLineItems orderLineItems;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(
-		name = "order_table_id",
-		columnDefinition = "binary(16)",
-		foreignKey = @ForeignKey(name = "fk_orders_to_order_table"),
-		insertable = false, updatable = false
-	)
-	private OrderTable orderTable;
-
 	protected EatInOrder() {
 	}
 
-	public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-		this(OrderStatus.WAITING, orderLineItems, orderTable);
+	EatInOrder(OrderLineItems orderLineItems, UUID orderTableId) {
+		this(OrderStatus.WAITING, orderLineItems, orderTableId);
 	}
 
 	EatInOrder(
 		OrderStatus status,
 		OrderLineItems orderLineItems,
-		OrderTable orderTable
+		UUID orderTableId
 	) {
-		validate(orderTable);
-
 		this.id = UUID.randomUUID();
 		this.orderDateTime = LocalDateTime.now();
 		this.status = status;
 		this.orderLineItems = orderLineItems;
-		this.orderTable = orderTable;
-	}
-
-	private void validate(OrderTable orderTable) {
-		if (orderTable.isUnoccupied()) {
-			throw new IllegalArgumentException(ExceptionMessages.Order.EMPTY_ORDER_TABLE);
-		}
+		this.orderTableId = orderTableId;
 	}
 
 	public void accept() {
@@ -87,6 +70,10 @@ public class EatInOrder {
 			throw new IllegalStateException(ExceptionMessages.Order.INVALID_ORDER_STATUS);
 		}
 		status = next;
+	}
+
+	public boolean isCompleted() {
+		return status == OrderStatus.COMPLETED;
 	}
 
 	public UUID getId() {
