@@ -1,11 +1,14 @@
 package kitchenpos.eatinorders.ordertable.tobe.domain;
 
 import kitchenpos.common.domain.vo.Name;
+import kitchenpos.eatinorders.ordertable.tobe.domain.exception.NoUsedOrderTableException;
 import kitchenpos.eatinorders.ordertable.tobe.domain.vo.GuestOfNumbers;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableTest {
@@ -31,5 +34,30 @@ class OrderTableTest {
         orderTable.use();
 
         assertThat(orderTable.isEmptyTable()).isFalse();
+    }
+
+    @DisplayName("주문 테이블의 손님 수를 변경한다")
+    @Nested
+    class ChangeGuestOfNumbersTest {
+
+        @DisplayName("성공")
+        @Test
+        void success() {
+            final OrderTable orderTable = OrderTable.createEmptyTable("1번 테이블");
+            orderTable.use();
+
+            orderTable.changeGuestOfNumbers(GuestOfNumbers.valueOf(5));
+
+            assertThat(orderTable.guestOfNumbers()).isEqualTo(GuestOfNumbers.valueOf(5));
+        }
+
+        @DisplayName("비어있는 주문 테이블의 손님 수를 변경할 수 없다.")
+        @Test
+        void error() {
+            final OrderTable emptyTable = OrderTable.createEmptyTable("1번 테이블");
+
+            assertThatThrownBy(() -> emptyTable.changeGuestOfNumbers(GuestOfNumbers.valueOf(5)))
+                    .isInstanceOf(NoUsedOrderTableException.class);
+        }
     }
 }

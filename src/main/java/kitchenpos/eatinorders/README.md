@@ -74,5 +74,4 @@
       - `주문 테이블(orderTable)`을 치우면 `손님 수(numberOfGuests)`는 0이 된다.
       - `주문 테이블(orderTable)`을 `치우면(clear)` `사용 가능` 상태가 된다.
   - `주문 테이블(orderTable)`의 `손님 수(numberOfGuests)`를 `변경한다(changeNumberOfGuests).`
-      - 변경하려는 `손님 수(numberOfGuests)`는 0명 이상이어야 한다.
-      - `사용 중`이 아닌 `주문 테이블(orderTable)`의 `손님 수(numberOfGuests)`를 변경할 수 없다.
+      - 비어있는 `주문 테이블(orderTable)`의 `손님 수(numberOfGuests)`를 변경할 수 없다.

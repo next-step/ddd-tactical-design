@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.ordertable.tobe.domain;
 
 import kitchenpos.common.domain.vo.Name;
+import kitchenpos.eatinorders.ordertable.tobe.domain.exception.NoUsedOrderTableException;
 import kitchenpos.eatinorders.ordertable.tobe.domain.vo.GuestOfNumbers;
 
 import javax.persistence.Column;
@@ -43,6 +44,13 @@ public class OrderTable {
 
     public void use() {
         occupied = USED_TABLE;
+    }
+
+    public void changeGuestOfNumbers(final GuestOfNumbers guestOfNumbers) {
+        if (isEmptyTable()) {
+            throw new NoUsedOrderTableException();
+        }
+        this.guestOfNumbers = guestOfNumbers;
     }
 
     public UUID id() {
