@@ -57,10 +57,11 @@ public class Menu {
     ) {
         this.id = id;
         this.name = name;
-        this.price = price;
         this.menuGroup = menuGroup;
-        this.menuProducts = menuProducts;
         this.displayed = true;
+        this.price = price;
+        this.menuProducts = menuProducts;
+        this.menuProducts.enrollMenu(this);
         validateMenuPrice(this.price, this.menuProducts);
     }
 

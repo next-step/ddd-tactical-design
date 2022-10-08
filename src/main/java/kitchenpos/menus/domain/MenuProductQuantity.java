@@ -21,7 +21,7 @@ public class MenuProductQuantity {
 
     private void validateNegative(long value) {
         if (value < 0) {
-            throw new InvalidMenuProductQuantityException("메뉴의 상품 수량은 0 아싱어야 합니다.");
+            throw new InvalidMenuProductQuantityException("메뉴의 상품 수량은 0 이상어야 합니다.");
         }
     }
 

@@ -37,7 +37,7 @@ public class MenuFixtures {
         );
     }
 
-    private static MenuProduct menuProduct() {
+    public static MenuProduct menuProduct() {
         return new MenuProduct(
             UUID.randomUUID(),
             new MenuProductPrice(BigDecimal.valueOf(20_000L)),

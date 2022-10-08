@@ -30,6 +30,10 @@ public class MenuProducts {
         }
     }
 
+    public void enrollMenu(Menu menu) {
+        values.forEach(it -> it.enrollMenu(menu));
+    }
+
     public long getSumOfPrice() {
         return values.stream()
             .map(MenuProduct::getQuantityMultipliedPrice)
