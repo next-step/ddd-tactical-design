@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
-- 상품의 이름이 올바르지 않으면 등록할 수 없다.
-- 상품의 이름에는 비속어가 포함될 수 없다.
+- [x] 상품의 이름이 올바르지 않으면 등록할 수 없다.
+- [x] 상품의 이름에는 비속어가 포함될 수 없다.
 */
 class DisplayedNameTest {
     @DisplayName("상품 이름에 비속어가 포함될 수 없다.")
