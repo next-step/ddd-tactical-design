@@ -1,8 +1,9 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPrice;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -13,21 +14,27 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID productId;
+
+    @Embedded
+    private ProductPrice price;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID productId;
+    protected MenuProduct() {
+    }
 
-    public MenuProduct() {
+    public MenuProduct(UUID productId, BigDecimal price, long quantity) {
+        this(null, productId, price, quantity);
+    }
+
+    private MenuProduct(Long seq, UUID productId, BigDecimal price, long quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.price = new ProductPrice(price);
+        this.quantity = quantity;
     }
 
     public Long getSeq() {
@@ -38,12 +45,20 @@ public class MenuProduct {
         this.seq = seq;
     }
 
-    public Product getProduct() {
-        return product;
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
+    public void changePrice(final BigDecimal price) {
+        this.price.changePrice(price);
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public void setProductId(final UUID productId) {
+        this.productId = productId;
     }
 
     public long getQuantity() {
@@ -54,11 +69,4 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
 }

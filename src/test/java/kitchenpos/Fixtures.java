@@ -36,18 +36,15 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
+        Product product = product();
+        MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), 2L);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
+        MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), quantity);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
