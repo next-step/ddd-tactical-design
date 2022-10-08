@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.ui.request.MenuCreateRequest;
+import kitchenpos.menus.ui.request.MenuPriceChangeRequest;
 import kitchenpos.menus.ui.response.MenuResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class MenuRestController {
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<MenuResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuPriceChangeRequest request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 

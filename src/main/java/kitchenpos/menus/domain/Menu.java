@@ -83,52 +83,43 @@ public class Menu {
         displayed = true;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getNameValue() {
-        return name.getValue();
-    }
-
-    public void setName(final String name) {
-
-    }
-
-    public BigDecimal getPriceValue() {
-        return price.getValue();
+    public void changePrice(MenuPrice newPrice) {
+        this.price = newPrice;
+        if (this.price.isBiggerThan(menuProducts.getSumOfPrice())) {
+            displayed = false;
+        }
     }
 
     public void setPrice(final BigDecimal price) {
         this.price = new MenuPrice(price);
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
+    public UUID getId() {
+        return id;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
+    public String getNameValue() {
+        return name.getValue();
+    }
+
+    public BigDecimal getPriceValue() {
+        return price.getValue();
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProductValues() {
-        return menuProducts.getValues();
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
     }
 
     public UUID getMenuGroupId() {
         return menuGroup.getId();
+    }
+
+    public List<MenuProduct> getMenuProductValues() {
+        return menuProducts.getValues();
     }
 
     @Override

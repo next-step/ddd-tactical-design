@@ -36,12 +36,12 @@ docker compose -p kitchenpos up -d
 - [x] 메뉴는 특정 메뉴 그룹에 속해야 한다.
 - [x] 메뉴의 이름이 올바르지 않으면 등록할 수 없다.
   - [x] 메뉴의 이름에는 비속어가 포함될 수 없다.
-- [ ] 메뉴의 가격을 변경할 수 있다.
-- [ ] 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
-  - [ ] 메뉴의 가격은 0원 이상이어야 한다.
-- [ ] 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
+- [x] 메뉴의 가격을 변경할 수 있다.
+- [x] 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
+  - [x] 메뉴의 가격은 0원 이상이어야 한다.
+- [x] 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
 - [x] 메뉴를 노출할 수 있다.
-- [ ] 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
+- [x] 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
 - [x] 메뉴를 숨길 수 있다.
 - [x] 메뉴의 목록을 조회할 수 있다.
 
@@ -245,7 +245,7 @@ docker compose -p kitchenpos up -d
 - [x] `Menu`는 고유식별자와 `MenuName`, `MenuPrice`, `MenuProducts`, `display`를 가진다.
   - [x] `MenutName`에는 `Profanity`가 포함될 수 없다.
   - [x] `Menu` 등록시, `MenuPrice`는 `MenuProductPrice`들의 합보다 작거나 같아야 한다.
-  - [ ] `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
+  - [x] `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
 - [x] `MenuProduct`는 `Menu`와 `productId`와 `MenuProductPrice`, `MenuProductQuantity`를 가진다.
 
 ### 매장 주문
@@ -269,17 +269,3 @@ docker compose -p kitchenpos up -d
 - `TakeoutOrder`가 등록될 때 `Menu`는 `display` 중이어야하고, `MenuPrice`와 `TakeoutOrderLineItemPrice`가 일치 해야한다.
 - `TakeoutOrderStatus`는 `waiting`-`accepted`-`served`-`completed` 순으로 진행된다.
 - `TakeoutOrderLineItem`은 고유식별자와 `TakeoutOrderLineItemPrice`, `TakeoutOrderLineItemQuantity`를 갖는다.
-
----
-
-- [ ] 메뉴 엔티티 우선 구성 후, 가격과 관련된 정책 리팩터링
-1. [ ]   modified:   README.md
-2. [ ]   modified:   src/main/java/kitchenpos/eatinorders/application/OrderService.java
-3. [ ]   modified:   src/main/java/kitchenpos/menus/application/MenuService.java
-4. [ ]   modified:   src/main/java/kitchenpos/menus/domain/Menu.java
-5. [ ]   modified:   src/main/java/kitchenpos/menus/domain/MenuProduct.java
-6. [ ]   modified:   src/test/java/kitchenpos/Fixtures.java
-7. [ ]   modified:   src/test/java/kitchenpos/eatinorders/application/OrderServiceTest.java
-8. [ ]   modified:   src/test/java/kitchenpos/menus/MenuFixtures.java
-9. [ ]   modified:   src/test/java/kitchenpos/menus/application/InMemoryMenuRepository.java
-10. [ ]   modified:   src/test/java/kitchenpos/menus/application/MenuServiceTest.java

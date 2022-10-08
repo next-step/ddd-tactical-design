@@ -70,9 +70,33 @@ class MenuTest {
                 10_000,
                 menuProduct(5_000, 2)
             );
-            menu.setPrice(BigDecimal.valueOf(12_000));
+            menu.changePrice(new MenuPrice(BigDecimal.valueOf(15_000)));
+            assertThat(menu.isDisplayed()).isFalse();
             assertThatThrownBy(menu::display)
                 .isExactlyInstanceOf(InvalidMenuPriceException.class);
+        }
+    }
+
+    @DisplayName("메뉴 가격 변경")
+    @Nested
+    class ChangePrice {
+
+        @DisplayName("메뉴의 가격을 변경할 수 있다.")
+        @Test
+        void changePrice() {
+            Menu menu = menu();
+            menu.changePrice(new MenuPrice(BigDecimal.valueOf(10_000)));
+            assertThat(menu.getPriceValue()).isEqualTo(BigDecimal.valueOf(10_000));
+            assertThat(menu.isDisplayed()).isTrue();
+        }
+
+        @DisplayName("메뉴의 가격이 메뉴 상품 가격들의 합보다 큰 경우 메뉴가 숨겨진다.")
+        @Test
+        void changePriceAndHide() {
+            Menu menu = menu();
+            menu.changePrice(new MenuPrice(BigDecimal.valueOf(100_000)));
+            assertThat(menu.getPriceValue()).isEqualTo(BigDecimal.valueOf(100_000));
+            assertThat(menu.isDisplayed()).isFalse();
         }
     }
 }
