@@ -3,8 +3,11 @@ package kitchenpos.menus.tobe.domain.listener;
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +21,9 @@ public class ProductPriceChangedListener {
         this.menuRepository = menuRepository;
     }
 
-    @EventListener(ProductPriceChangedEvent.class)
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
     public void handleProductPriceChange(ProductPriceChangedEvent evt) {
         UUID productId = evt.getProductId();
         Long changedPrice = evt.getChangedPrice();
