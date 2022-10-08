@@ -22,7 +22,7 @@ class DisplayedNameTest {
         profanity = new FakeProfanity();
     }
 
-    @DisplayName("이름을 생성한다.")
+    @DisplayName("DisplayedName 을 생성한다.")
     @Test
     void valueOf() {
         final DisplayedName displayedName = DisplayedName.valueOf("상품", profanity);
@@ -30,7 +30,7 @@ class DisplayedNameTest {
         assertThat(displayedName.value()).isEqualTo("상품");
     }
 
-    @ParameterizedTest(name = "상품명에는 비어있거나, 비속어가 포함되면 안된다. name={0}")
+    @ParameterizedTest(name = "DisplayedName 은 비어있거나, 비속어가 포함되면 안된다. name={0}")
     @NullAndEmptySource
     @ValueSource(strings = {"비속어", "욕설"})
     void invalid_name(final String name) {
