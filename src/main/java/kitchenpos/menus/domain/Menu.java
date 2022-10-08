@@ -1,10 +1,12 @@
 package kitchenpos.menus.domain;
 
-import java.util.Objects;
-import javax.persistence.*;
+import static java.util.Collections.singletonList;
+
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.*;
 
 @Table(name = "menu")
 @Entity
@@ -33,7 +35,7 @@ public class Menu {
     private boolean displayed;
 
     @Embedded
-    private MenuProducts menuProducts;
+    private MenuProducts menuProducts = new MenuProducts();
 
     protected Menu() {
     }
@@ -56,8 +58,7 @@ public class Menu {
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
-        this.displayed = displayed;
-        this.menuProducts = new MenuProducts();
+        this.displayed = true;
     }
 
     public void addMenuProduct(MenuProduct menuProduct) {

@@ -40,7 +40,7 @@ docker compose -p kitchenpos up -d
 - [ ] 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
   - [ ] 메뉴의 가격은 0원 이상이어야 한다.
 - [ ] 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
-- [ ] 메뉴를 노출할 수 있다.
+- [x] 메뉴를 노출할 수 있다.
 - [ ] 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
 - [ ] 메뉴를 숨길 수 있다.
 - [ ] 메뉴의 목록을 조회할 수 있다.
@@ -246,7 +246,7 @@ docker compose -p kitchenpos up -d
   - [x] `MenutName`에는 `Profanity`가 포함될 수 없다.
   - [ ] `Menu` 등록시, `MenuPrice`는 `MenuProductPrice`들의 합보다 작거나 같아야 한다.
   - [ ] `ProductPrice` 변경시, `MenuPrice`가 `MenuProductPrice`들의 합보다 크면 `Menu`의 `display` 속성이 변하여(`hide`) 노출되지 않는다.
-- [x] `MenuProduct`는 `Menu`와 `productId`와 `MenuProductQuantity`를 가진다.
+- [x] `MenuProduct`는 `Menu`와 `productId`와 `MenuProductPrice`, `MenuProductQuantity`를 가진다.
 
 ### 매장 주문
 - `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.

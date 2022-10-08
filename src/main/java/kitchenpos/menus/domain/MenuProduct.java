@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
@@ -24,25 +25,51 @@ public class MenuProduct {
     private UUID productId;
 
     @Embedded
+    private MenuProductPrice price;
+
+    @Embedded
     private MenuProductQuantity quantity;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(Menu menu, UUID productId, MenuProductQuantity quantity) {
-        this(null, menu, productId, quantity);
+    public MenuProduct(
+        Menu menu,
+        UUID productId,
+        MenuProductPrice price,
+        MenuProductQuantity quantity
+    ) {
+        this(null, menu, productId, price, quantity);
     }
 
-    public MenuProduct(Long seq, Menu menu, UUID productId, MenuProductQuantity quantity) {
+    public MenuProduct(Long seq, Menu menu, UUID productId, MenuProductPrice price, MenuProductQuantity quantity) {
         this.seq = seq;
         this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
         this.menu = menu;
         this.menu.addMenuProduct(this);
     }
 
+    public Long getSeq() {
+        return seq;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public UUID getMenuId() {
+        return menu.getId();
+    }
+
     public UUID getProductId() {
         return productId;
+    }
+
+    public BigDecimal getQuantityMultipliedPrice() {
+        return price.getValue()
+            .multiply(BigDecimal.valueOf(quantity.getValue()));
     }
 
     public long getQuantityValue() {
