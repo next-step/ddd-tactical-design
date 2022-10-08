@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.application.tobe.domain;
 
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
 - 상품을 등록할 수 있다.
@@ -29,5 +30,15 @@ class ProductTest {
 
         assertThatCode(() -> new Product(price, name))
                 .doesNotThrowAnyException();
+    }
+
+    @DisplayName("상품의 가격은 0보다 크거나 같아야 한다.")
+    @Test
+    void registerWithLessThanZero() {
+        final BigDecimal price = BigDecimal.valueOf(-1L);
+        final String name = "chicken";
+
+        assertThatThrownBy(() -> new Product(price, name))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
