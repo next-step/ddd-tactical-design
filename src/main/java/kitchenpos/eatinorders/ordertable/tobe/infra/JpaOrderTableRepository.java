@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ordertable.infra;
+package kitchenpos.eatinorders.ordertable.tobe.infra;
 
 import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableRepository;
