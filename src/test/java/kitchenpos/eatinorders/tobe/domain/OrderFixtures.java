@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import java.util.UUID;
+
 import kitchenpos.core.CoreFixtures;
 import kitchenpos.core.constant.Specs;
 import kitchenpos.core.domain.Name;
@@ -21,7 +23,7 @@ public final class OrderFixtures {
 	}
 
 	public static EatInOrder eatInOrder(OrderStatus status) {
-		return new EatInOrder(status, orderLineItems(), occupiedOrderTable(NUMBER_OF_GUESTS));
+		return new EatInOrder(status, orderLineItems(), UUID.randomUUID());
 	}
 
 	public static OrderLineItem orderLineItem() {
