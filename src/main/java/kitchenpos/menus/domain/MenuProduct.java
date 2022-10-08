@@ -61,10 +61,6 @@ public class MenuProduct {
         return seq;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
-
     public UUID getMenuId() {
         return menu.getId();
     }

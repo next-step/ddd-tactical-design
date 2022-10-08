@@ -41,21 +41,7 @@ public class MenuProducts {
             .sum();
     }
 
-    public void addMenuProduct(MenuProduct menuProduct) {
-        if (isNotContains(menuProduct)) {
-            values.add(menuProduct);
-        }
-    }
-
-    private boolean isNotContains(MenuProduct menuProduct) {
-        return !values.contains(menuProduct);
-    }
-
     public List<MenuProduct> getValues() {
         return values;
-    }
-
-    public int size() {
-        return values.size();
     }
 }

@@ -90,10 +90,6 @@ public class Menu {
         }
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = new MenuPrice(price);
-    }
-
     public UUID getId() {
         return id;
     }
