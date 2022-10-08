@@ -49,25 +49,20 @@ public class MenuService {
                         .map(MenuProductRequest::getProductId)
                         .collect(Collectors.toList())
         );
+
         if (products.size() != menuProductRequests.size()) {
             throw new IllegalArgumentException();
         }
-        BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProductRequest menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                     .orElseThrow(NoSuchElementException::new);
 
-            sum = sum.add(
-                    product.getPrice()
-                            .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), quantity);
+            final MenuProduct menuProduct = new MenuProduct(product.getId(), product.getPrice(), menuProductRequest.getQuantity());
             menuProducts.add(menuProduct);
         }
+
+        BigDecimal sum = menu.calculateMenuProductsPrice();
+
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }

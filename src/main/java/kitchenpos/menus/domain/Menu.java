@@ -15,8 +15,10 @@ public class Menu {
     @Id
     private UUID id;
 
+    @Embedded
     private MenuName name;
 
+    @Embedded
     private MenuPrice price;
 
     @ManyToOne(optional = false)

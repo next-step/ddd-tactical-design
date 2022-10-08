@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.domain.vo.Quantity;
 import kitchenpos.products.domain.ProductPrice;
 
 import javax.persistence.*;
@@ -20,8 +21,8 @@ public class MenuProduct {
     @Embedded
     private ProductPrice price;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private Quantity quantity;
 
     protected MenuProduct() {
     }
@@ -34,7 +35,7 @@ public class MenuProduct {
         this.seq = seq;
         this.productId = productId;
         this.price = new ProductPrice(price);
-        this.quantity = quantity;
+        this.quantity = new Quantity(quantity);
     }
 
     public void setSeq(final Long seq) {
@@ -54,11 +55,11 @@ public class MenuProduct {
     }
 
     public long getQuantity() {
-        return quantity;
+        return quantity.getValue();
     }
 
     public BigDecimal calculatePrice() {
-        return price.getValue().multiply(BigDecimal.valueOf(quantity));
+        return price.getValue().multiply(BigDecimal.valueOf(quantity.getValue()));
     }
 
 }
