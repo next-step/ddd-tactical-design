@@ -17,7 +17,8 @@ class GuestOfNumbersTest {
 
         assertAll(
                 () -> assertThat(guestOfNumbers.value()).isEqualTo(1),
-                () -> assertThat(guestOfNumbers).isEqualTo(GuestOfNumbers.valueOf(1))
+                () -> assertThat(guestOfNumbers).isEqualTo(GuestOfNumbers.valueOf(1)),
+                () -> assertThat(guestOfNumbers == GuestOfNumbers.valueOf(1)).isTrue()
         );
     }
 
