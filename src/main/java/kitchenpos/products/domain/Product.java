@@ -26,14 +26,10 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final String name, final BigDecimal price) {
+    public Product(final String name, final BigDecimal price, final PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
-        this.name = new Name(name);
+        this.name = new Name(name, purgomalumClient);
         this.price = new Price(price);
-    }
-
-    public void verifySlang(PurgomalumClient purgomalumClient) {
-        this.name.verifySlang(purgomalumClient);
     }
 
     public void changePrice(final BigDecimal price) {

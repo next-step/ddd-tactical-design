@@ -13,20 +13,14 @@ public class Name {
     @Column(name = "name", nullable = false)
     private String value;
 
-    public Name(final String name) {
-        if (Objects.isNull(name)) {
+    public Name(final String name, final PurgomalumClient purgomalumClient) {
+        if (Objects.isNull(purgomalumClient)) {
             throw new IllegalArgumentException();
         }
         this.value = name;
     }
 
     protected Name() {}
-
-    public void verifySlang(PurgomalumClient purgomalumClient) {
-        if (purgomalumClient.containsProfanity(this.value)) {
-            throw new IllegalArgumentException("cannot be included slang");
-        }
-    }
 
     public String value() {
         return this.value;

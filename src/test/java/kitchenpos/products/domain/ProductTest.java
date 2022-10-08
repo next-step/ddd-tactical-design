@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
+import kitchenpos.Fixtures;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ class ProductTest {
     @Test
     @DisplayName("상품 생성")
     void constructor() {
-        final Product expected = new Product("상품", BigDecimal.ONE);
+        final Product expected = Fixtures.product();
         assertThat(expected).isNotNull();
     }
 
@@ -33,7 +34,7 @@ class ProductTest {
     @DisplayName("상품의 이름은 필수이다")
     @NullSource
     void constructor_with_null_name(final String name) {
-        assertThatThrownBy(() -> new Product(name, BigDecimal.ONE))
+        assertThatThrownBy(() -> new Product(name, BigDecimal.ONE, purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -41,8 +42,7 @@ class ProductTest {
     @DisplayName("상품의 이름은 비속어를 포함할 수 없다")
     @ValueSource(strings = {"비속어", "욕설"})
     void verify_name(final String name) {
-        final Product expected = new Product(name, BigDecimal.ONE);
-        assertThatThrownBy(() -> expected.verifySlang(purgomalumClient))
+        assertThatThrownBy(() -> new Product(name, BigDecimal.ONE, purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -50,7 +50,7 @@ class ProductTest {
     @DisplayName("상품의 가격은 필수이다")
     @NullSource
     void constructor_with_null_price(final BigDecimal value) {
-        assertThatThrownBy(() -> new Product("상품", value))
+        assertThatThrownBy(() -> new Product("상품", value, purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -58,14 +58,14 @@ class ProductTest {
     @DisplayName("상품의 가격은 0보다 커야한다")
     @ValueSource(longs = { -1 })
     void constructor_with_null_price(final Long value) {
-        assertThatThrownBy(() -> new Product("상품", BigDecimal.valueOf(value)))
+        assertThatThrownBy(() -> new Product("상품", BigDecimal.valueOf(value), purgomalumClient))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("상품의 가격 변경이 가능하다")
     void change_price() {
-        final Product expected = new Product("상품", BigDecimal.ONE);
+        final Product expected = new Product("상품", BigDecimal.ONE, purgomalumClient);
 
         final BigDecimal changePrice = BigDecimal.TEN;
         expected.changePrice(changePrice);
@@ -77,7 +77,7 @@ class ProductTest {
     @DisplayName("가격을 변경할때 가격은 음수가 될 수 없다")
     @ValueSource(longs = { -1 })
     void change_price_with_negative_value(final Long value) {
-        final Product expected = new Product("상품", BigDecimal.TEN);
+        final Product expected = new Product("상품", BigDecimal.TEN, purgomalumClient);
 
         assertThatThrownBy(() -> expected.changePrice(BigDecimal.valueOf(value)))
             .isInstanceOf(IllegalArgumentException.class);

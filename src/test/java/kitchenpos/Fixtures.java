@@ -13,9 +13,13 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.infra.PurgomalumClient;
 
 public class Fixtures {
+    public static final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static Menu menu() {
@@ -121,6 +125,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(name, BigDecimal.valueOf(price));
+        return new Product(name, BigDecimal.valueOf(price), purgomalumClient);
     }
 }
