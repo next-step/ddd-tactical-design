@@ -32,12 +32,4 @@ public class InMemoryMenuRepository implements MenuRepository {
             .filter(menu -> ids.contains(menu.getId()))
             .collect(Collectors.toList());
     }
-
-    @Override
-    public List<Menu> findAllByProductId(final UUID productId) {
-        return menus.values()
-            .stream()
-            .filter(menu -> menu.getMenuProductValues().stream().anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
-            .collect(Collectors.toList());
-    }
 }

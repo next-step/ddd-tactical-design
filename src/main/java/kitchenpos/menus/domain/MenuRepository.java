@@ -12,7 +12,4 @@ public interface MenuRepository {
     List<Menu> findAll();
 
     List<Menu> findAllByIdIn(List<UUID> ids);
-
-    List<Menu> findAllByProductId(UUID productId);
 }
-
