@@ -3,6 +3,8 @@ package kitchenpos.eatinorders.tobe.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,7 @@ class EatInOrderTest {
 		@Test
 		void create() {
 			// given
-			EatInOrder eatInOrder = new EatInOrder(OrderFixtures.orderLineItems(), OrderFixtures.occupiedOrderTable(1));
+			EatInOrder eatInOrder = new EatInOrder(OrderFixtures.orderLineItems(), UUID.randomUUID());
 
 			// then
 			assertAll(
@@ -37,7 +39,7 @@ class EatInOrderTest {
 		void createFailByEmptyOrderTable() {
 			// given
 			assertThatExceptionOfType(IllegalArgumentException.class)
-				.isThrownBy(() -> new EatInOrder(OrderFixtures.orderLineItems(), OrderFixtures.unoccupiedOrderTable()))
+				.isThrownBy(() -> new EatInOrder(OrderFixtures.orderLineItems(), UUID.randomUUID()))
 				.withMessage(ExceptionMessages.Order.EMPTY_ORDER_TABLE);
 		}
 	}
