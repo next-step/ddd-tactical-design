@@ -1,12 +1,11 @@
 package kitchenpos.menus.domain;
 
-import static java.util.Collections.singletonList;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
+import kitchenpos.menus.exception.InvalidMenuPriceException;
 
 @Table(name = "menu")
 @Entity
@@ -35,7 +34,7 @@ public class Menu {
     private boolean displayed;
 
     @Embedded
-    private MenuProducts menuProducts = new MenuProducts();
+    private MenuProducts menuProducts;
 
     protected Menu() {
     }
@@ -43,22 +42,32 @@ public class Menu {
     public Menu(
         MenuName name,
         MenuPrice price,
-        MenuGroup menuGroup
+        MenuGroup menuGroup,
+        MenuProducts menuProducts
     ) {
-        this(UUID.randomUUID(), name, price, menuGroup);
+        this(UUID.randomUUID(), name, price, menuGroup, menuProducts);
     }
 
     public Menu(
         UUID id,
         MenuName name,
         MenuPrice price,
-        MenuGroup menuGroup
+        MenuGroup menuGroup,
+        MenuProducts menuProducts
     ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
+        this.menuProducts = menuProducts;
         this.displayed = true;
+        validateMenuPrice(this.price, this.menuProducts);
+    }
+
+    private void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
+        if (price.isBiggerThan(menuProducts.getSumOfPrice())) {
+            throw new InvalidMenuPriceException("메뉴의 가격은 상품 가격들의 합보다 클 수 없습니다.");
+        }
     }
 
     public void addMenuProduct(MenuProduct menuProduct) {

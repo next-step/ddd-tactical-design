@@ -14,7 +14,6 @@ class MenuProductTest {
     @Test
     void quantityMultipliedPrice() {
         MenuProduct menuProduct = new MenuProduct(
-            menu(3_000),
             UUID.randomUUID(),
             new MenuProductPrice(BigDecimal.valueOf(5_000)),
             new MenuProductQuantity(5)

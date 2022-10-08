@@ -1,12 +1,8 @@
 package kitchenpos.menus.ui.request;
 
-import static java.util.stream.Collectors.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 
 public class MenuCreateRequest {
 
@@ -28,12 +24,6 @@ public class MenuCreateRequest {
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.menuProductCreateRequests = menuProductCreateRequests;
-    }
-
-    public List<MenuProduct> toMenuProducts(Menu menu) {
-        return menuProductCreateRequests.stream()
-            .map(it -> it.toMenuProduct(menu))
-            .collect(toList());
     }
 
     public String getName() {

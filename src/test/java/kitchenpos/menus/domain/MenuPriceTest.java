@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
@@ -24,5 +25,15 @@ class MenuPriceTest {
     void negativeException(BigDecimal negativePrice) {
         assertThatThrownBy(() -> new MenuPrice(negativePrice))
             .isExactlyInstanceOf(InvalidMenuPriceException.class);
+    }
+
+    @DisplayName("주어진 값보다 메뉴 가격이 큰지 비교할 수 있다.")
+    @Test
+    void isBiggerThan() {
+        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(3));
+
+        assertThat(menuPrice.isBiggerThan(2)).isTrue();
+        assertThat(menuPrice.isBiggerThan(3)).isFalse();
+        assertThat(menuPrice.isBiggerThan(4)).isFalse();
     }
 }

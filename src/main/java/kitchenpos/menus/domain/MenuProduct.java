@@ -34,21 +34,18 @@ public class MenuProduct {
     }
 
     public MenuProduct(
-        Menu menu,
         UUID productId,
         MenuProductPrice price,
         MenuProductQuantity quantity
     ) {
-        this(null, menu, productId, price, quantity);
+        this(null, productId, price, quantity);
     }
 
-    public MenuProduct(Long seq, Menu menu, UUID productId, MenuProductPrice price, MenuProductQuantity quantity) {
+    public MenuProduct(Long seq, UUID productId, MenuProductPrice price, MenuProductQuantity quantity) {
         this.seq = seq;
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
-        this.menu = menu;
-        this.menu.addMenuProduct(this);
     }
 
     public Long getSeq() {

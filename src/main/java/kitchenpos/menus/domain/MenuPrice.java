@@ -33,6 +33,10 @@ public class MenuPrice {
         }
     }
 
+    public boolean isBiggerThan(long otherLongValue) {
+        return value.longValue() > otherLongValue;
+    }
+
     public BigDecimal getValue() {
         return value;
     }

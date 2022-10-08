@@ -1,9 +1,7 @@
 package kitchenpos.menus;
 
-import static kitchenpos.products.ProductFixtures.product;
-
 import java.math.BigDecimal;
-import java.util.Random;
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.domain.*;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
@@ -34,20 +32,16 @@ public class MenuFixtures {
             UUID.randomUUID(),
             new MenuName("후라이드+후라이드", new FakeProfanityCheckClient()),
             new MenuPrice(BigDecimal.valueOf(price)),
-            menuGroup()
+            menuGroup(),
+            new MenuProducts(List.of(menuProduct()))
         );
     }
 
-    public static MenuProduct menuProduct(Menu menu) {
-        return menuProduct(menu, product().getId(), 2L);
-    }
-
-    public static MenuProduct menuProduct(Menu menu, UUID productId, long quantity) {
+    private static MenuProduct menuProduct() {
         return new MenuProduct(
-            new Random().nextLong(),
-            menu,
-            productId,
-            new MenuProductQuantity(quantity)
+            UUID.randomUUID(),
+            new MenuProductPrice(BigDecimal.valueOf(20_000L)),
+            new MenuProductQuantity(1)
         );
     }
 }
