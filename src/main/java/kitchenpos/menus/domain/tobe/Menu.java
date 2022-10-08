@@ -5,15 +5,22 @@ import java.util.UUID;
 import kitchenpos.menus.domain.tobe.MenuGroup;
 
 public class Menu {
-    private final UUID id;
+    private MenuID id;
     private MenuName name;
     private MenuPrice price;
     private MenuGroup menuGroup;
     private boolean displayed;
     private MenuProducts menuProducts;
 
-    public Menu(final MenuName menuName, final MenuPrice menuPrice, final MenuGroup menuGroup, final boolean displayed, final MenuProducts menuProducts) {
-        this.id = UUID.randomUUID();
+    public Menu(
+        final MenuID menuID,
+        final MenuName menuName,
+        final MenuPrice menuPrice,
+        final MenuGroup menuGroup,
+        final boolean displayed,
+        final MenuProducts menuProducts
+    ) {
+        this.id = menuID;
         this.name = menuName;
         priceLessThanMenuProductsPrice(menuPrice, menuProducts);
         this.price = menuPrice;
