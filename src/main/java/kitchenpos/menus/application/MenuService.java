@@ -128,7 +128,7 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        return MenuResponse.of(menuRepository.findAll());
     }
 }

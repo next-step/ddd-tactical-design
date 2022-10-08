@@ -1,5 +1,7 @@
 package kitchenpos.menus.ui.response;
 
+import static java.util.stream.Collectors.toList;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +41,12 @@ public class MenuResponse {
             menu.isDisplayed(),
             MenuProductResponse.of(menu.getMenuProductValues())
         );
+    }
+
+    public static List<MenuResponse> of(List<Menu> menus) {
+        return menus.stream()
+            .map(MenuResponse::from)
+            .collect(toList());
     }
 
     public UUID getId() {

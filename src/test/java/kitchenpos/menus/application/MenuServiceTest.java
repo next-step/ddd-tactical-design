@@ -213,8 +213,8 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L));
-        final List<Menu> actual = menuService.findAll();
-        assertThat(actual).hasSize(1);
+        final List<MenuResponse> responses = menuService.findAll();
+        assertThat(responses).hasSize(1);
     }
 
     private MenuCreateRequest createMenuRequest(
