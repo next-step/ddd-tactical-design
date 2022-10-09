@@ -59,6 +59,13 @@ public class EatInOrder {
         status = EatInOrderStatus.ACCEPTED;
     }
 
+    public void serve() {
+        if (status != EatInOrderStatus.ACCEPTED) {
+            throw new IllegalStateException("주문 상태가 수락일 때만 가능합니다.");
+        }
+        status = EatInOrderStatus.SERVED;
+    }
+
     public UUID id() {
         return id;
     }
