@@ -1,5 +1,7 @@
 package kitchenpos.global.vo;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -19,6 +21,13 @@ public class DisplayedName {
             throw new IllegalArgumentException("이름을 입력해 주세요.");
         }
         this.value = value;
+    }
+
+    public DisplayedName(String value, PurgomalumClient purgomalumClient) {
+        this(value);
+        if (purgomalumClient.containsProfanity(value)) {
+            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
+        }
     }
 
     public String getValue() {

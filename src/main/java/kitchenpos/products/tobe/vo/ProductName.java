@@ -25,10 +25,7 @@ public class ProductName {
     }
 
     public ProductName(String value, PurgomalumClient purgomalumClient) {
-        this(value);
-        if (purgomalumClient.containsProfanity(value)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-        }
+        this(new DisplayedName(value, purgomalumClient));
     }
 
     public String getValue() {
