@@ -49,12 +49,15 @@ public class ProductService {
 
         product.changePrice(newPrice);
 
-        publishChangePriceEvent(product.getPrice());
+        publishChangePriceEvent(product);
         return ProductResponse.from(product);
     }
 
-    private void publishChangePriceEvent(ProductPrice price) {
-        ProductPriceChangedEvent event = new ProductPriceChangedEvent(price.getValue());
+    private void publishChangePriceEvent(Product product) {
+        ProductPriceChangedEvent event = new ProductPriceChangedEvent(
+            product.getId(),
+            product.getPriceValue()
+        );
         publisher.publishEvent(event);
     }
 

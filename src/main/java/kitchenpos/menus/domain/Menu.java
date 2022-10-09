@@ -61,6 +61,7 @@ public class Menu {
         this.displayed = true;
         this.price = price;
         this.menuProducts = menuProducts;
+        this.menuProducts.enrollMenu(this);
         validateMenuPrice(this.price, this.menuProducts);
     }
 
@@ -85,6 +86,12 @@ public class Menu {
     public void changePrice(MenuPrice newPrice) {
         this.price = newPrice;
         if (this.price.isBiggerThan(menuProducts.getSumOfPrice())) {
+            displayed = false;
+        }
+    }
+
+    public void updateDisplayByProductPrice() {
+        if (price.isBiggerThan(menuProducts.getSumOfPrice())) {
             displayed = false;
         }
     }

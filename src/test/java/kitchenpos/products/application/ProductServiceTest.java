@@ -78,8 +78,7 @@ public class ProductServiceTest {
         ProductResponse response = productService.changePrice(productId, request);
 
         assertThat(response.getPrice()).isEqualTo(request.getPrice());
-        // ProductPriceChangedEvent 에 동등성이 부여되지 않아 검증이 까다로움
-        // verify(publisher).publishEvent();
+        verify(publisher).publishEvent(new ProductPriceChangedEvent(productId, BigDecimal.valueOf(15_000)));
     }
 
     @DisplayName("상품이 존재하지 않으면 상품의 가격을 변경할 수 없다.")

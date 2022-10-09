@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import kitchenpos.menus.exception.InvalidMenuProductsException;
 
 @Embeddable
 public class MenuProducts {
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
+    @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<MenuProduct> values = new ArrayList<>();
 
     protected MenuProducts() {
@@ -28,6 +26,14 @@ public class MenuProducts {
         if (values.isEmpty()) {
             throw new InvalidMenuProductsException("메뉴의 상품은 1개 이상이어야 합니다.");
         }
+    }
+
+    public void enrollMenu(Menu menu) {
+        values.forEach(it -> it.enrollMenu(menu));
+    }
+
+    public void updatePrice(MenuProductPrice newPrice) {
+        values.forEach(it -> it.updatePrice(newPrice));
     }
 
     public long getSumOfPrice() {
