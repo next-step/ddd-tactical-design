@@ -66,6 +66,16 @@ public class EatInOrder {
         status = EatInOrderStatus.SERVED;
     }
 
+    public void complete(final EatInOrderCompletePolicy completePolicy) {
+        if (status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException("주문 상태가 서빙완료일 때만 가능합니다.");
+        }
+        status = EatInOrderStatus.COMPLETED;
+        if (completePolicy.isClearOrderTableCondition(orderTableId)) {
+            completePolicy.clearOrderTable(orderTableId);
+        }
+    }
+
     public UUID id() {
         return id;
     }
