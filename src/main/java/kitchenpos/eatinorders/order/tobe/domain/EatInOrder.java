@@ -52,6 +52,13 @@ public class EatInOrder {
         return eatInOrder;
     }
 
+    public void accept() {
+        if (status != EatInOrderStatus.WAITING) {
+            throw new IllegalStateException("주문 상태가 대기일 때만 가능합니다.");
+        }
+        status = EatInOrderStatus.ACCEPTED;
+    }
+
     public UUID id() {
         return id;
     }
