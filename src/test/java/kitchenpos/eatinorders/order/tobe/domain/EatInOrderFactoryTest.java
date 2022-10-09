@@ -5,12 +5,14 @@ import kitchenpos.common.domain.Profanity;
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.eatinorders.order.tobe.domain.vo.OrderLineItem;
 import kitchenpos.eatinorders.order.tobe.infra.MenuContextRepositoryClient;
-import kitchenpos.menus.menu.dto.MenuDto;
-import kitchenpos.menus.menu.dto.MenuProductDto;
 import kitchenpos.menus.menu.tobe.domain.InMemoryMenuRepository;
 import kitchenpos.menus.menu.tobe.domain.Menu;
 import kitchenpos.menus.menu.tobe.domain.MenuFactory;
 import kitchenpos.menus.menu.tobe.domain.MenuRepository;
+import kitchenpos.menus.menu.tobe.domain.ProductContextClient;
+import kitchenpos.menus.menu.tobe.domain.vo.MenuProductSpecification;
+import kitchenpos.menus.menu.tobe.domain.vo.MenuSpecification;
+import kitchenpos.menus.menu.tobe.infra.ProductContextRepositoryClient;
 import kitchenpos.menus.menugroup.tobe.domain.InMemoryMenuGroupRepository;
 import kitchenpos.menus.menugroup.tobe.domain.MenuGroup;
 import kitchenpos.menus.menugroup.tobe.domain.MenuGroupRepository;
@@ -36,6 +38,7 @@ class EatInOrderFactoryTest {
     private MenuRepository menuRepository;
     private Profanity profanity;
     private MenuContextClient menuContextClient;
+    private ProductContextClient productContextClient;
 
     private Menu menu;
     private MenuGroup menuGroup;
@@ -43,12 +46,13 @@ class EatInOrderFactoryTest {
 
     @BeforeEach
     void setUp() {
-        menuFactory = new MenuFactory();
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         profanity = new FakeProfanity();
+        productContextClient = new ProductContextRepositoryClient(productRepository);
         menuContextClient = new MenuContextRepositoryClient(menuRepository);
+        menuFactory = new MenuFactory(productContextClient, menuGroupRepository, profanity);
 
         menuGroup = MenuGroup.create("추천메뉴");
         menuGroupRepository.save(menuGroup);
@@ -57,9 +61,11 @@ class EatInOrderFactoryTest {
         product = Product.create(productName, 15_000L);
         productRepository.save(product);
 
-        final MenuProductDto menuProductDto = new MenuProductDto(product.id(), 1L);
-        final MenuDto menuDto = new MenuDto("치킨메뉴", 15_000L, menuGroup.id(), true, List.of(menuProductDto));
-        menu = menuFactory.create(menuDto, menuGroupRepository, productRepository, profanity);
+        final MenuProductSpecification menuProductSpecification = new MenuProductSpecification(product.id(), 1L);
+        final MenuSpecification menuSpecification
+                = new MenuSpecification("치킨메뉴", 15_000L, menuGroup.id(), true, List.of(menuProductSpecification));
+        menu = menuFactory.create(menuSpecification);
+
         menuRepository.save(menu);
     }
 
