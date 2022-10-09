@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.order.tobe.infra;
 
 import kitchenpos.eatinorders.order.tobe.domain.MenuContextClient;
-import kitchenpos.eatinorders.order.tobe.domain.vo.EatInOrderMenu;
+import kitchenpos.eatinorders.order.tobe.domain.vo.MenuSpecification;
 import kitchenpos.menus.menu.tobe.domain.Menu;
 import kitchenpos.menus.menu.tobe.domain.MenuRepository;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,8 @@ public class MenuContextRepositoryClient implements MenuContextClient {
     }
 
     @Override
-    public EatInOrderMenu findOrderMenuItemById(final UUID id) {
+    public MenuSpecification findOrderMenuItemById(final UUID id) {
         final Menu menu = menuRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        return new EatInOrderMenu(menu.id(), menu.price(), menu.isDisplayed());
+        return new MenuSpecification(menu.id(), menu.price(), menu.isDisplayed());
     }
 }

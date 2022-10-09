@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.order.tobe.domain;
 import kitchenpos.common.domain.FakeProfanity;
 import kitchenpos.common.domain.Profanity;
 import kitchenpos.common.domain.vo.DisplayedName;
-import kitchenpos.eatinorders.order.tobe.domain.vo.OrderLineItem;
+import kitchenpos.eatinorders.order.tobe.domain.vo.OrderLineItemSpecification;
 import kitchenpos.eatinorders.order.tobe.infra.MenuContextRepositoryClient;
 import kitchenpos.menus.menu.tobe.domain.InMemoryMenuRepository;
 import kitchenpos.menus.menu.tobe.domain.Menu;
@@ -75,10 +75,10 @@ class EatInOrderFactoryTest {
 
         @Test
         void success() {
-            final OrderLineItem orderLineItem = new OrderLineItem(menu.id(), 15_000L, 2);
+            final OrderLineItemSpecification orderLineItemSpecification = new OrderLineItemSpecification(menu.id(), 15_000L, 2);
             final EatInOrderFactory eatInOrderFactory = new EatInOrderFactory(menuContextClient, (orderTableId) -> false);
 
-            final EatInOrder eatInOrder = eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItem));
+            final EatInOrder eatInOrder = eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItemSpecification));
 
             assertThat(eatInOrder).isNotNull();
         }
@@ -86,10 +86,10 @@ class EatInOrderFactoryTest {
         @DisplayName("사용중인 주문테이블만 매장 주문 생성이 가능합니다.")
         @Test
         void error_1() {
-            final OrderLineItem orderLineItem = new OrderLineItem(menu.id(), 15_000L, 2);
+            final OrderLineItemSpecification orderLineItemSpecification = new OrderLineItemSpecification(menu.id(), 15_000L, 2);
             final EatInOrderFactory eatInOrderFactory = new EatInOrderFactory(menuContextClient, (orderTableId) -> true);
 
-            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItem)))
+            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItemSpecification)))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessage("사용중인 주문테이블만 매장 주문이 가능합니다.");
         }
@@ -99,10 +99,10 @@ class EatInOrderFactoryTest {
         void error_2() {
             final Menu findMenu = menuRepository.findById(menu.id()).get();
             findMenu.hide();
-            final OrderLineItem orderLineItem = new OrderLineItem(findMenu.id(), 15_000L, 2);
+            final OrderLineItemSpecification orderLineItemSpecification = new OrderLineItemSpecification(findMenu.id(), 15_000L, 2);
             final EatInOrderFactory eatInOrderFactory = new EatInOrderFactory(menuContextClient, (orderTableId) -> false);
 
-            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItem)))
+            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItemSpecification)))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessage("전시 중인 메뉴만 주문이 가능합니다.");
         }
@@ -110,10 +110,10 @@ class EatInOrderFactoryTest {
         @DisplayName("주문상품의 가격은 메뉴 가격과 동일해야 한다.")
         @Test
         void error_3() {
-            final OrderLineItem orderLineItem = new OrderLineItem(menu.id(), 25_000L, 2);
+            final OrderLineItemSpecification orderLineItemSpecification = new OrderLineItemSpecification(menu.id(), 25_000L, 2);
             final EatInOrderFactory eatInOrderFactory = new EatInOrderFactory(menuContextClient, (orderTableId) -> false);
 
-            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItem)))
+            assertThatThrownBy(() -> eatInOrderFactory.create(UUID.randomUUID(), List.of(orderLineItemSpecification)))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("주문상품의 가격은 메뉴 가격과 동일해야 합니다.");
         }

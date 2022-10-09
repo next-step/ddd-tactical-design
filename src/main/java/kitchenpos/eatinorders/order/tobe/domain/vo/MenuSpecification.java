@@ -5,13 +5,13 @@ import kitchenpos.common.domain.vo.Price;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EatInOrderMenu {
+public class MenuSpecification {
 
     private final UUID id;
     private final Price price;
     private final boolean displayed;
 
-    public EatInOrderMenu(UUID id, Price price, boolean displayed) {
+    public MenuSpecification(UUID id, Price price, boolean displayed) {
         this.id = id;
         this.price = price;
         this.displayed = displayed;
@@ -33,7 +33,7 @@ public class EatInOrderMenu {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EatInOrderMenu that = (EatInOrderMenu) o;
+        MenuSpecification that = (MenuSpecification) o;
         return displayed == that.displayed && Objects.equals(id, that.id) && Objects.equals(price, that.price);
     }
 
