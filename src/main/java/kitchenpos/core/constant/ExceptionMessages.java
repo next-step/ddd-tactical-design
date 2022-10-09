@@ -20,6 +20,14 @@ public final class ExceptionMessages {
 
 		private Menu() {
 		}
+	}
 
+	public static final class Order {
+
+		public static final String INVALID_ORDER_STATUS = "현재 주문 상태에서 수행할 수 없습니다.";
+		public static final String EMPTY_ORDER_TABLE = "빈 주문 테이블에서는 주문할 수 없습니다.";
+
+		private Order() {
+		}
 	}
 }
