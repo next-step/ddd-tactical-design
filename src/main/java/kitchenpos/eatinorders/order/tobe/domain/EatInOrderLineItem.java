@@ -5,9 +5,12 @@ import kitchenpos.common.domain.vo.Price;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,6 +26,10 @@ public class EatInOrderLineItem {
 
     @Column(name = "menu_id")
     private UUID menuId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private EatInOrder eatInOrder;
 
     @Embedded
     private Price price;
@@ -45,6 +52,10 @@ public class EatInOrderLineItem {
 
     static EatInOrderLineItem create(final UUID menuId, final Price price, final int quantity) {
         return new EatInOrderLineItem(menuId, price, quantity);
+    }
+
+    void makeRelation(final EatInOrder eatInOrder) {
+        this.eatInOrder = eatInOrder;
     }
 
     public UUID menuId() {
