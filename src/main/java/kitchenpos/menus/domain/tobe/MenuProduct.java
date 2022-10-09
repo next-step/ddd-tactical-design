@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain.tobe;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -10,17 +9,15 @@ public class MenuProduct {
     private Long seq;
     private UUID productId;
     private BigDecimal price;
-    private String name;
     private long quantity;
 
-    public MenuProduct(final Long seq, final Product product, final long quantity) {
+    public MenuProduct(final Long seq, final UUID productId, final BigDecimal price, final long quantity) {
         this.seq = seq;
-        if (Objects.isNull(product)) {
+        if (Objects.isNull(productId)) {
             throw new IllegalArgumentException("product is required");
         }
-        this.productId = product.getId();
-        this.name = product.getName().value();
-        this.price = product.getPrice().value();
+        this.productId = productId;
+        this.price = price;
         if (quantity < 0) {
             throw new IllegalArgumentException("quantity must bigger than or equals 0");
         }
@@ -33,7 +30,6 @@ public class MenuProduct {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) {
             return true;
         }
@@ -52,10 +48,7 @@ public class MenuProduct {
         if (!Objects.equals(productId, that.productId)) {
             return false;
         }
-        if (!Objects.equals(price, that.price)) {
-            return false;
-        }
-        return Objects.equals(name, that.name);
+        return Objects.equals(price, that.price);
     }
 
     @Override
@@ -63,7 +56,6 @@ public class MenuProduct {
         int result = seq != null ? seq.hashCode() : 0;
         result = 31 * result + (productId != null ? productId.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (int) (quantity ^ (quantity >>> 32));
         return result;
     }

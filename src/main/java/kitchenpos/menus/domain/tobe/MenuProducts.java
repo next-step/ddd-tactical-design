@@ -17,11 +17,7 @@ public class MenuProducts {
     }
 
     public MenuProducts(final MenuProduct... menuProducts) {
-        if (Objects.isNull(menuProducts) || menuProducts.length == 0) {
-            throw new IllegalArgumentException("menuProducts is required");
-        }
-
-        this.menuProducts = List.of(menuProducts);
+        this(List.of(menuProducts));
     }
 
     public BigDecimal totalPrice() {
