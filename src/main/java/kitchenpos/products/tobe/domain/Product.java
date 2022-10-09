@@ -18,7 +18,7 @@ public class Product {
   private DisplayedName displayedName;
 
   @Embedded
-  private ProductPrice price;
+  private ProductPrice productPrice;
 
   public Product() {
   }
@@ -26,11 +26,11 @@ public class Product {
   public Product(String name, Boolean isProfanity, BigDecimal price) {
     this.id = UUID.randomUUID();
     this.displayedName = new DisplayedName(name, isProfanity);
-    this.price = new ProductPrice(price);
+    this.productPrice = new ProductPrice(price);
   }
 
-  public void changePrice(ProductPrice price) {
-    this.price = price;
+  public void changePrice(BigDecimal price) {
+    this.productPrice = new ProductPrice(price);
   }
 
   public UUID getId() {
@@ -41,15 +41,7 @@ public class Product {
     return displayedName;
   }
 
-  public ProductPrice getPrice() {
-    return price;
-  }
-
-  public String getNameValue() {
-    return this.displayedName.getName();
-  }
-
-  public BigDecimal getPriceValue() {
-    return this.price.getPrice();
+  public ProductPrice getProductPrice() {
+    return productPrice;
   }
 }

@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain.dto;
 
+import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -17,7 +19,9 @@ public class ProductDto {
   }
 
   public static ProductDto of(Product product) {
-    return new ProductDto(product.getId(), product.getNameValue(), product.getPriceValue());
+    DisplayedName displayedName = product.getDisplayedName();
+    ProductPrice productPrice = product.getProductPrice();
+    return new ProductDto(product.getId(), displayedName.getName(), productPrice.getPrice());
   }
 
   public UUID getId() {

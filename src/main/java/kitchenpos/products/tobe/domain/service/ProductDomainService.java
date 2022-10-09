@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain.service;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.dto.ProductChangePriceDto;
 import kitchenpos.products.tobe.domain.dto.ProductCreateDto;
 import kitchenpos.products.tobe.domain.dto.ProductDto;
@@ -33,9 +32,8 @@ public class ProductDomainService {
 
   @Transactional
   public ProductDto changePrice(final ProductChangePriceDto request) {
-    ProductPrice productPrice = request.getProductPrice();
     Product product = findOne(request.getId());
-    product.changePrice(productPrice);
+    product.changePrice(request.getPrice());
 
     return ProductDto.of(product);
   }

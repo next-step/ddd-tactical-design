@@ -56,14 +56,15 @@ class ProductTest {
     @Test
     void changePrice() {
       //given
-      ProductPrice expected = new ProductPrice(new BigDecimal(15_000L));
+//      ProductPrice expected = new ProductPrice(new BigDecimal(15_000L));
+      BigDecimal expected = new BigDecimal(15_000L);
 
 
       //when
       product.changePrice(expected);
 
       //then
-      assertThat(product.getPriceValue()).isEqualTo(expected);
+      assertThat(product.getProductPrice().getPrice()).isEqualTo(expected);
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -71,7 +72,7 @@ class ProductTest {
     @NullSource
     @ParameterizedTest
     void changePrice(BigDecimal price) {
-      assertThatThrownBy(() -> product.changePrice(new ProductPrice(price)))
+      assertThatThrownBy(() -> product.changePrice(price))
           .isInstanceOf(IllegalArgumentException.class);
     }
   }

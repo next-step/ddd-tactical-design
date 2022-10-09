@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain.dto;
 
-import kitchenpos.products.tobe.domain.ProductPrice;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -14,11 +12,11 @@ public class ProductChangePriceDto {
     this.price = price;
   }
 
-  public ProductPrice getProductPrice() {
-    return new ProductPrice(this.price);
-  }
-
   public UUID getId() {
     return id;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
   }
 }
