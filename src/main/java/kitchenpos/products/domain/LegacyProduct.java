@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class LegacyProduct {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -20,7 +20,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Product() {
+    public LegacyProduct() {
     }
 
     public UUID getId() {

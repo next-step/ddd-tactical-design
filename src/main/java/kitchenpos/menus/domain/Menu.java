@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.products.tobe.domain.Price;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -98,5 +100,18 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    // TOOD 다음 미션 리팩토링 대상
+    public Price getPrice2() {
+        return new Price(price);
+    }
+
+    public Price calculateProductPrice() {
+        Price sum = new Price(BigDecimal.ZERO);
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = sum.add(menuProduct.calculatePrice());
+        }
+        return sum;
     }
 }

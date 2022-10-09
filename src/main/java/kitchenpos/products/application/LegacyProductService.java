@@ -3,8 +3,8 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.LegacyProductRepository;
+import kitchenpos.products.domain.LegacyProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,14 +15,15 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
+@Deprecated(forRemoval = true)
 @Service
-public class ProductService {
-    private final ProductRepository productRepository;
+public class LegacyProductService {
+    private final LegacyProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public ProductService(
-        final ProductRepository productRepository,
+    public LegacyProductService(
+        final LegacyProductRepository productRepository,
         final MenuRepository menuRepository,
         final PurgomalumClient purgomalumClient
     ) {
@@ -32,7 +33,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
+    public LegacyProduct create(final LegacyProduct request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -41,7 +42,7 @@ public class ProductService {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product();
+        final LegacyProduct product = new LegacyProduct();
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(price);
@@ -49,12 +50,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public LegacyProduct changePrice(final UUID productId, final LegacyProduct request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final Product product = productRepository.findById(productId)
+        final LegacyProduct product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
@@ -64,7 +65,7 @@ public class ProductService {
                 sum = sum.add(
                     menuProduct.getProduct()
                         .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        .multiply(menuProduct.getQuantity()).getPrice()
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
@@ -75,7 +76,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
+    public List<LegacyProduct> findAll() {
         return productRepository.findAll();
     }
 }

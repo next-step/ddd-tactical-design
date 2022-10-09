@@ -13,10 +13,15 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    public DisplayedName(String name) {
+    public DisplayedName(String name, Profanity profanity) {
         if(StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("이름이 비어 있습니다.");
         }
+
+        if(profanity.containsProfanity(name)) {
+            throw new IllegalArgumentException("상품의 이름에는 비속어가 포함될 수 없습니다.");
+        }
+
         this.name = name;
     }
 

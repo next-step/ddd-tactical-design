@@ -1,8 +1,8 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +61,7 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
+                    .multiply(BigDecimal.valueOf(quantity)).getPrice()
             );
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
@@ -98,7 +98,7 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity())).getPrice()
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -117,7 +117,7 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity())).getPrice()
             );
         }
         if (menu.getPrice().compareTo(sum) > 0) {

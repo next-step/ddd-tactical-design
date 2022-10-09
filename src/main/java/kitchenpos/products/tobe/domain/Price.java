@@ -16,10 +16,38 @@ public class Price {
         this(BigDecimal.valueOf(price));
     }
 
+    public Price(Price price) {
+        this(price.price);
+    }
+
     public Price(BigDecimal price) {
-        if(BigDecimal.ZERO.compareTo(price) > 0) {
+        if(price == null || BigDecimal.ZERO.compareTo(price) > 0) {
             throw new IllegalArgumentException();
         }
+        this.price = price;
+    }
+
+    public Price add(BigDecimal price) {
+        return new Price(this.price.add(price));
+    }
+
+    public Price add(Price price) {
+        return price.add(this.price);
+    }
+
+    public Price multiply(long quantity) {
+        return multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public Price multiply(BigDecimal quantity) {
+        return new Price(this.price.multiply(quantity));
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -36,5 +64,10 @@ public class Price {
     @Override
     public int hashCode() {
         return price != null ? price.hashCode() : 0;
+    }
+
+
+    public int compareTo(Price price) {
+        return price.price.compareTo(this.price);
     }
 }

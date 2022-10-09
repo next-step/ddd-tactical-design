@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Price;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -60,5 +61,11 @@ public class MenuProduct {
 
     public void setProductId(final UUID productId) {
         this.productId = productId;
+    }
+
+    public Price calculatePrice() {
+        Price price = new Price(product.getPrice());
+
+        return price.multiply(quantity);
     }
 }
