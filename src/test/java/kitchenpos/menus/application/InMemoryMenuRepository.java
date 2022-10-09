@@ -1,10 +1,9 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
-
 import java.util.*;
 import java.util.stream.Collectors;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 
 public class InMemoryMenuRepository implements MenuRepository {
     private final Map<UUID, Menu> menus = new HashMap<>();

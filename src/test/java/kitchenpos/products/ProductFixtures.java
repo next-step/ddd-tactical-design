@@ -2,10 +2,10 @@ package kitchenpos.products;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
+import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 
 public class ProductFixtures {
 

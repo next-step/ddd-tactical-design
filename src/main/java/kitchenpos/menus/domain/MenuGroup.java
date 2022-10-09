@@ -1,8 +1,8 @@
 package kitchenpos.menus.domain;
 
 import java.util.Objects;
-import javax.persistence.*;
 import java.util.UUID;
+import javax.persistence.*;
 
 @Table(name = "menu_group")
 @Entity

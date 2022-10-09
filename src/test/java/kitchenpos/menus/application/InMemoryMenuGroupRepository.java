@@ -1,9 +1,8 @@
 package kitchenpos.menus.application;
 
+import java.util.*;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
-
-import java.util.*;
 
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {
     private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();

@@ -1,10 +1,10 @@
 package kitchenpos.eatinorders.domain;
 
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity

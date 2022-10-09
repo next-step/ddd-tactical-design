@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.ui.request.MenuCreateRequest;
 import kitchenpos.menus.ui.request.MenuPriceChangeRequest;
 import kitchenpos.menus.ui.response.MenuResponse;

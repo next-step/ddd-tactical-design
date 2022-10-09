@@ -1,5 +1,14 @@
 package kitchenpos.eatinorders.application;
 
+import static kitchenpos.Fixtures.*;
+import static kitchenpos.menus.MenuFixtures.menu;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+import java.math.BigDecimal;
+import java.util.*;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
@@ -9,16 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import java.math.BigDecimal;
-import java.util.*;
-
-import static kitchenpos.Fixtures.*;
-import static kitchenpos.menus.MenuFixtures.menu;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OrderServiceTest {
     private OrderRepository orderRepository;

@@ -3,12 +3,10 @@ package kitchenpos.menus.application;
 import static kitchenpos.menus.MenuFixtures.menuGroup;
 import static kitchenpos.products.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.event.ProductPriceChangedEvent;
 import kitchenpos.menus.domain.*;
 import kitchenpos.menus.exception.MenuNotFoundException;
 import kitchenpos.products.application.ProductService;
