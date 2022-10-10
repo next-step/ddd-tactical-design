@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
+import kitchenpos.menus.domain.InMemoryMenuGroupRepository;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.ui.request.MenuGroupCreateRequest;
 import kitchenpos.menus.ui.response.MenuGroupResponse;

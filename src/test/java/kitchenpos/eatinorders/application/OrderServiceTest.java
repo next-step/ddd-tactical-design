@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.*;
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.domain.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
