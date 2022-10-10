@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Profanity;
-
 import java.util.Objects;
 
 class DisplayedName {
