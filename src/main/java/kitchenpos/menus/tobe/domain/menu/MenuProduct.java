@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.global.vo.Price;
-import kitchenpos.menus.tobe.vo.Quantity;
+import kitchenpos.global.vo.Quantity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

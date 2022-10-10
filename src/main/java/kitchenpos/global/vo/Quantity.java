@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.vo;
+package kitchenpos.global.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
