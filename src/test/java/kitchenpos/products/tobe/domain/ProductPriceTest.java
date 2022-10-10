@@ -7,10 +7,6 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/*
-- [x] 상품의 가격이 올바르지 않으면 등록할 수 없다.
-- [x] 상품의 가격은 0원 이상이어야 한다.
- */
 class ProductPriceTest {
     @DisplayName("상품의 가격은 0보다 크거나 같아야 한다.")
     @Test
