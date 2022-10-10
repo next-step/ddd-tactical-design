@@ -8,7 +8,7 @@ public class Profanity {
     private final Set<String> profanitys;
 
     public Profanity(Set<String> profanitys) {
-        if (ObjectUtils.isEmpty(profanitys)) {
+        if (profanitys == null) {
             throw new IllegalArgumentException("비어 있을 수 없습니다.");
         }
         this.profanitys = profanitys;
