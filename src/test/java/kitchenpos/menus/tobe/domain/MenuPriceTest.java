@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 
 import java.math.BigDecimal;
 
@@ -9,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
 - [x] 메뉴의 가격은 0보다 크거나 같아야 한다.
-- 메뉴의 가격이 올바르지 않으면 등록할 수 없다. (Null, Empty)
+- [x] 메뉴의 가격이 올바르지 않으면 등록할 수 없다. (Null)
  */
 class MenuPriceTest {
     @DisplayName("메뉴의 가격은 0보다 크거나 같아야 한다.")
@@ -21,5 +23,16 @@ class MenuPriceTest {
         assertThatThrownBy(() -> new MenuPrice(price))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(INVALID_PRICE_MESSAGE);
+    }
+
+    @DisplayName("메뉴 가격은 비어있을 수 없다.")
+    @NullSource
+    @ParameterizedTest
+    void registerWithEmptyName(final BigDecimal price) {
+        final String EMPTY_NAME_MESSAGE = "메뉴 가격은 비어있을 수 없습니다.";
+
+        assertThatThrownBy(() -> new MenuPrice(price))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(EMPTY_NAME_MESSAGE);
     }
 }
