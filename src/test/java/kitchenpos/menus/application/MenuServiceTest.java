@@ -25,7 +25,6 @@ import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
-import kitchenpos.reader.ProductPriceReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class MenuServiceTest {
             menuRepository,
             menuGroupRepository,
             new FakeProfanityCheckClient(),
-            new ProductPriceReader(productRepository)
+            new FakeProductPriceReader(productRepository)
         );
     }
 
