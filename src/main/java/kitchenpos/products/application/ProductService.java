@@ -1,13 +1,13 @@
 package kitchenpos.products.application;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.event.ProductPriceChangedEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.products.ui.request.ProductChangePriceRequest;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import kitchenpos.products.ui.response.ProductResponse;
@@ -45,7 +45,7 @@ public class ProductService {
     public ProductResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         ProductPrice newPrice = new ProductPrice(request.getPrice());
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException("상품을 찾을 수 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다."));
 
         product.changePrice(newPrice);
 

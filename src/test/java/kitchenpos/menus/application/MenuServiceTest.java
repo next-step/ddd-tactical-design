@@ -20,7 +20,6 @@ import kitchenpos.menus.ui.response.MenuResponse;
 import kitchenpos.products.domain.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -95,7 +94,8 @@ class MenuServiceTest {
             createMenuProductRequest(INVALID_ID, 2L)
         );
         assertThatThrownBy(() -> menuService.create(request))
-            .isExactlyInstanceOf(ProductNotFoundException.class);
+            .isExactlyInstanceOf(NoSuchElementException.class)
+            .hasMessage("ID 에 해당하는 상품을 찾을 수 없습니다.");
     }
 
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")

@@ -1,10 +1,10 @@
 package kitchenpos.products.application;
 
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.reader.ProductPriceReader;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,6 @@ public class ProductPriceReaderImpl implements ProductPriceReader {
 
     private Product findProductById(UUID productId) {
         return productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException("ID 에 해당하는 상품을 찾을 수 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 상품을 찾을 수 없습니다."));
     }
 }

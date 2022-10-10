@@ -3,7 +3,6 @@ package kitchenpos.products.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.exception.InvalidProductNameException;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 
 @Embeddable
@@ -24,19 +23,19 @@ public class ProductName {
 
     private void validateNull(String value) {
         if (Objects.isNull(value)) {
-            throw new InvalidProductNameException("올바르지 않은 상품 이름입니다.");
+            throw new IllegalArgumentException("올바르지 않은 상품 이름입니다.");
         }
     }
 
     private void validateBlank(String value) {
         if (value.isBlank()) {
-            throw new InvalidProductNameException("상품 이름은 공백일 수 없습니다.");
+            throw new IllegalArgumentException("상품 이름은 공백일 수 없습니다.");
         }
     }
 
     private void validateProfanity(String value, ProfanityCheckClient profanityCheckClient) {
         if (profanityCheckClient.containsProfanity(value)) {
-            throw new InvalidProductNameException("상품 이름에는 비속어가 포함될 수 없습니다.");
+            throw new IllegalArgumentException("상품 이름에는 비속어가 포함될 수 없습니다.");
         }
     }
 
