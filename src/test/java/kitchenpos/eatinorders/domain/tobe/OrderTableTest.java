@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.domain.tobe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.registerCustomDateFormat;
 
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;

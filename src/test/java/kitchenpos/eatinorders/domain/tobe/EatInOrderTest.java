@@ -7,11 +7,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 
 class EatInOrderTest {
 
