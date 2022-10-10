@@ -199,3 +199,9 @@ docker compose -p kitchenpos up -d
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
 - `OrderLineItem`는 가격과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.
+
+
+#### 미션 요구사항
+* 상품 CONTEXT의 도메인 계층 구현
+* 용어 사전과 모델링을 맞춰 나가면서 리팩토링
+* 모델에 맞게 클래스, 메서드, 모듈의 이름을 변경한다.
