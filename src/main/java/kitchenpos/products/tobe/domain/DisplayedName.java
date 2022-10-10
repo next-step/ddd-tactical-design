@@ -10,11 +10,16 @@ public class DisplayedName {
     @Column(name = "displayedName", nullable = false)
     private String displayedName;
 
-    protected DisplayedName() {}
+    protected DisplayedName() {
+    }
 
-    public DisplayedName(String displayedName, Profanity profanity) {
+    private DisplayedName(String displayedName, Profanity profanity) {
         validate(displayedName, profanity);
         this.displayedName = displayedName;
+    }
+
+    public static DisplayedName of(String displayedName, Profanity profanity) {
+        return new DisplayedName(displayedName, profanity);
     }
 
     private void validate(String displayedName, Profanity profanity) {
@@ -33,5 +38,22 @@ public class DisplayedName {
 
     public String getDisplayedName() {
         return displayedName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DisplayedName that = (DisplayedName) o;
+        return Objects.equals(getDisplayedName(), that.getDisplayedName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDisplayedName());
     }
 }

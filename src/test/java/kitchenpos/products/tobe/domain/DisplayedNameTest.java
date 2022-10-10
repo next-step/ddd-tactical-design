@@ -20,21 +20,21 @@ public class DisplayedNameTest {
     @DisplayName("이름이 비어있을 수는 없다.")
     void name_is_not_null() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new DisplayedName(null, profanity));
+                .isThrownBy(() -> DisplayedName.of(null, profanity));
     }
 
     @Test
     @DisplayName("비속어는 비어있을 수는 없다.")
     void profanity_is_not_null() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new DisplayedName("이름", null));
+                .isThrownBy(() -> DisplayedName.of("이름", null));
     }
 
     @Test
     @DisplayName("욕설이 포함될수 없다.")
     void name_is_has_no_profanitys() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new DisplayedName("비속어", profanity));
+                .isThrownBy(() -> DisplayedName.of("비속어", profanity));
     }
 
 }

@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 
 class PriceTest {
 
-    @DisplayName("가격은 0원 미만이면 안된다.")
+    @DisplayName("가격은 0원 이상이어야 한다")
     @Test
     void price() {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> new Price(-3)
+                .isThrownBy(() -> Price.from(-3)
         );
     }
 }
