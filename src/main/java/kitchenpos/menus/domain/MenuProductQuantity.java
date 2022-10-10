@@ -3,7 +3,6 @@ package kitchenpos.menus.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.menus.exception.InvalidMenuProductQuantityException;
 
 @Embeddable
 public class MenuProductQuantity {
@@ -21,7 +20,7 @@ public class MenuProductQuantity {
 
     private void validateNegative(long value) {
         if (value < 0) {
-            throw new InvalidMenuProductQuantityException("메뉴의 상품 수량은 0 이상어야 합니다.");
+            throw new IllegalArgumentException("메뉴의 상품 수량은 0 이상어야 합니다.");
         }
     }
 

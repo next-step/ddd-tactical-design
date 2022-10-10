@@ -3,7 +3,6 @@ package kitchenpos.menus.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.menus.exception.InvalidMenuGroupNameException;
 
 @Embeddable
 public class MenuGroupName {
@@ -22,13 +21,13 @@ public class MenuGroupName {
 
     private void validateNull(String value) {
         if (Objects.isNull(value)) {
-            throw new InvalidMenuGroupNameException("올바르지 않은 메뉴그룹 이름입니다.");
+            throw new IllegalArgumentException("올바르지 않은 메뉴그룹 이름입니다.");
         }
     }
 
     private void validateBlank(String value) {
         if (value.isBlank()) {
-            throw new InvalidMenuGroupNameException("메뉴그룹 이름은 공백일 수 없습니다.");
+            throw new IllegalArgumentException("메뉴그룹 이름은 공백일 수 없습니다.");
         }
     }
 

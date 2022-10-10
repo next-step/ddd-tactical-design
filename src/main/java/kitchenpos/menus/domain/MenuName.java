@@ -3,7 +3,6 @@ package kitchenpos.menus.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.menus.exception.InvalidMenuNameException;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 
 @Embeddable
@@ -24,19 +23,19 @@ public class MenuName {
 
     private void validateNull(String value) {
         if (Objects.isNull(value)) {
-            throw new InvalidMenuNameException("올바르지 않은 메뉴 이름입니다.");
+            throw new IllegalArgumentException("올바르지 않은 메뉴 이름입니다.");
         }
     }
 
     private void validateBlank(String value) {
         if (value.isBlank()) {
-            throw new InvalidMenuNameException("메뉴 이름은 공백일 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 이름은 공백일 수 없습니다.");
         }
     }
 
     private void validateProfanity(String value, ProfanityCheckClient profanityCheckClient) {
         if (profanityCheckClient.containsProfanity(value)) {
-            throw new InvalidMenuNameException("메뉴 이름에는 비속어가 포함될 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 이름에는 비속어가 포함될 수 없습니다.");
         }
     }
 

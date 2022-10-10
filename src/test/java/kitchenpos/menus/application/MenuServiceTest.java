@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.*;
 import kitchenpos.menus.domain.*;
-import kitchenpos.menus.exception.InvalidMenuPriceException;
-import kitchenpos.menus.exception.InvalidMenuProductsException;
 import kitchenpos.menus.ui.request.MenuCreateRequest;
 import kitchenpos.menus.ui.request.MenuPriceChangeRequest;
 import kitchenpos.menus.ui.request.MenuProductCreateRequest;
@@ -81,7 +79,8 @@ class MenuServiceTest {
             new ArrayList<>()
         );
         assertThatThrownBy(() -> menuService.create(request))
-            .isExactlyInstanceOf(InvalidMenuProductsException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 상품은 1개 이상이어야 합니다.");
     }
 
     @DisplayName("ID에 해당하는 상품이 없으면 등록할 수 없다.")
@@ -187,7 +186,8 @@ class MenuServiceTest {
         Menu menu = menuRepository.save(menu());
         menu.changePrice(new MenuPrice(BigDecimal.valueOf(33_000L)));
         assertThatThrownBy(() -> menuService.display(menu.getId()))
-            .isExactlyInstanceOf(InvalidMenuPriceException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 가격이 상품보다 높아 전시상태를 변경할 수 없습니다.");
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")

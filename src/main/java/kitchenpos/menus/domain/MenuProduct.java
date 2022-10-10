@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.menus.exception.AlreadyEnrollMenuException;
 
 @Table(name = "menu_product")
 @Entity
@@ -51,7 +50,7 @@ public class MenuProduct {
 
     public void enrollMenu(Menu menu) {
         if (this.menu != null) {
-            throw new AlreadyEnrollMenuException("이미 다른 메뉴와 연결된 메뉴의 상품입니다.");
+            throw new IllegalStateException("이미 다른 메뉴와 연결된 메뉴의 상품입니다.");
         }
 
         this.menu = menu;

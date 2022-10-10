@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
-import kitchenpos.menus.exception.InvalidMenuPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +15,8 @@ class MenuPriceTest {
     @Test
     void nullException() {
         assertThatThrownBy(() -> new MenuPrice(null))
-            .isExactlyInstanceOf(InvalidMenuPriceException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("올바르지 않은 메뉴 가격입니다.");
     }
 
     @DisplayName("메뉴의 가격은 0보다 작을 수 없다.")
@@ -24,7 +24,8 @@ class MenuPriceTest {
     @ParameterizedTest
     void negativeException(BigDecimal negativePrice) {
         assertThatThrownBy(() -> new MenuPrice(negativePrice))
-            .isExactlyInstanceOf(InvalidMenuPriceException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴 가격은 0보다 작을 수 없습니다.");
     }
 
     @DisplayName("주어진 값보다 메뉴 가격이 큰지 비교할 수 있다.")

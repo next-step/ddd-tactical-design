@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.menus.exception.InvalidMenuProductPriceException;
 
 @Embeddable
 public class MenuProductPrice {
@@ -23,13 +22,13 @@ public class MenuProductPrice {
 
     private void validateNull(BigDecimal value) {
         if (Objects.isNull(value)) {
-            throw new InvalidMenuProductPriceException("올바르지 않은 메뉴의 상품 가격입니다.");
+            throw new IllegalArgumentException("올바르지 않은 메뉴의 상품 가격입니다.");
         }
     }
 
     private void validateNegative(BigDecimal value) {
         if (value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidMenuProductPriceException("메뉴의 상품 가격은 0보다 작을 수 없습니다.");
+            throw new IllegalArgumentException("메뉴의 상품 가격은 0보다 작을 수 없습니다.");
         }
     }
 

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import kitchenpos.menus.exception.InvalidMenuProductsException;
 
 @Embeddable
 public class MenuProducts {
@@ -24,7 +23,7 @@ public class MenuProducts {
 
     private void validateEmpty(List<MenuProduct> values) {
         if (values.isEmpty()) {
-            throw new InvalidMenuProductsException("메뉴의 상품은 1개 이상이어야 합니다.");
+            throw new IllegalArgumentException("메뉴의 상품은 1개 이상이어야 합니다.");
         }
     }
 

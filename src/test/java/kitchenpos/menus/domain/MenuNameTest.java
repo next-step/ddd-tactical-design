@@ -2,7 +2,6 @@ package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.menus.exception.InvalidMenuNameException;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,8 @@ class MenuNameTest {
     @Test
     void nullException() {
         assertThatThrownBy(() -> new MenuName(null, profanityCheckClient))
-            .isExactlyInstanceOf(InvalidMenuNameException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("올바르지 않은 메뉴 이름입니다.");
     }
 
     @DisplayName("메뉴의 이름은 공백으로 이루어질 수 없다.")
@@ -32,7 +32,8 @@ class MenuNameTest {
     @ParameterizedTest
     void blankException(String blank) {
         assertThatThrownBy(() -> new MenuName(blank, profanityCheckClient))
-            .isExactlyInstanceOf(InvalidMenuNameException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴 이름은 공백일 수 없습니다.");
     }
 
     @DisplayName("메뉴의 이름은 비속어를 포함할 수 없다.")
@@ -40,6 +41,7 @@ class MenuNameTest {
     @ParameterizedTest
     void profanityException(String profanity) {
         assertThatThrownBy(() -> new MenuName(profanity, profanityCheckClient))
-            .isExactlyInstanceOf(InvalidMenuNameException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴 이름에는 비속어가 포함될 수 없습니다.");
     }
 }

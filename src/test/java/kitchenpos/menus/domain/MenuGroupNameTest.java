@@ -2,7 +2,6 @@ package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.menus.exception.InvalidMenuGroupNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +13,8 @@ class MenuGroupNameTest {
     @Test
     void nullException() {
         assertThatThrownBy(() -> new MenuGroupName(null))
-            .isExactlyInstanceOf(InvalidMenuGroupNameException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("올바르지 않은 메뉴그룹 이름입니다.");
     }
 
     @DisplayName("메뉴그룹의 이름은 공백으로 이루어질 수 없다.")
@@ -22,6 +22,7 @@ class MenuGroupNameTest {
     @ParameterizedTest
     void blankException(String blank) {
         assertThatThrownBy(() -> new MenuGroupName(blank))
-            .isExactlyInstanceOf(InvalidMenuGroupNameException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴그룹 이름은 공백일 수 없습니다.");
     }
 }

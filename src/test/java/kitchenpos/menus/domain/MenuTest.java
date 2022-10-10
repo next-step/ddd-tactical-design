@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.UUID;
-import kitchenpos.menus.exception.InvalidMenuPriceException;
 import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +39,8 @@ class MenuTest {
                 new MenuGroup(new MenuGroupName("치킨")),
                 new MenuProducts(Collections.singletonList(menuProduct))
             )
-        ).isExactlyInstanceOf(InvalidMenuPriceException.class);
+        ).isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 가격은 상품 가격들의 합보다 클 수 없습니다.");
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")
@@ -73,7 +73,8 @@ class MenuTest {
             menu.changePrice(new MenuPrice(BigDecimal.valueOf(15_000)));
             assertThat(menu.isDisplayed()).isFalse();
             assertThatThrownBy(menu::display)
-                .isExactlyInstanceOf(InvalidMenuPriceException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessage("메뉴의 가격이 상품보다 높아 전시상태를 변경할 수 없습니다.");
         }
     }
 

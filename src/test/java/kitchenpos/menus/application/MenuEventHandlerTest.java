@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menus.domain.*;
-import kitchenpos.menus.exception.MenuNotFoundException;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -72,6 +72,6 @@ class MenuEventHandlerTest {
 
     private Menu findMenuById(UUID menuId) {
         return menuRepository.findById(menuId)
-            .orElseThrow(() -> new MenuNotFoundException("ID 에 해당하는 메뉴를 찾을 수 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 메뉴를 찾을 수 없습니다."));
     }
 }

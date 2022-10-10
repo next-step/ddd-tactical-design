@@ -2,7 +2,6 @@ package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import kitchenpos.menus.exception.InvalidMenuProductQuantityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,6 +13,7 @@ class MenuProductQuantityTest {
     @ParameterizedTest
     void negativeException(long negativePrice) {
         assertThatThrownBy(() -> new MenuProductQuantity(negativePrice))
-            .isExactlyInstanceOf(InvalidMenuProductQuantityException.class);
+            .isExactlyInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 상품 수량은 0 이상어야 합니다.");
     }
 }

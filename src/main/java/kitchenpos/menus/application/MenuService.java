@@ -1,11 +1,10 @@
 package kitchenpos.menus.application;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menus.domain.*;
-import kitchenpos.menus.exception.MenuGroupNotFoundException;
-import kitchenpos.menus.exception.MenuNotFoundException;
 import kitchenpos.menus.ui.request.MenuCreateRequest;
 import kitchenpos.menus.ui.request.MenuPriceChangeRequest;
 import kitchenpos.menus.ui.request.MenuProductCreateRequest;
@@ -48,7 +47,7 @@ public class MenuService {
 
     private MenuGroup findMenuGroupById(UUID menuGroupId) {
         return menuGroupRepository.findById(menuGroupId)
-            .orElseThrow(() -> new MenuGroupNotFoundException("ID 에 해당하는 메뉴그룹이 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 메뉴그룹이 없습니다."));
     }
 
     private MenuProducts mapToMenuProducts(List<MenuProductCreateRequest> requests) {
@@ -93,7 +92,7 @@ public class MenuService {
 
     private Menu findMenuById(UUID menuId) {
         return menuRepository.findById(menuId)
-            .orElseThrow(() -> new MenuNotFoundException("ID 에 해당하는 메뉴가 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 메뉴가 없습니다."));
     }
 
     @Transactional(readOnly = true)

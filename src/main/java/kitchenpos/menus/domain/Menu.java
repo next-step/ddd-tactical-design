@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.menus.exception.InvalidMenuPriceException;
 
 @Table(name = "menu")
 @Entity
@@ -67,7 +66,7 @@ public class Menu {
 
     private void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
         if (price.isBiggerThan(menuProducts.getSumOfPrice())) {
-            throw new InvalidMenuPriceException("메뉴의 가격은 상품 가격들의 합보다 클 수 없습니다.");
+            throw new IllegalArgumentException("메뉴의 가격은 상품 가격들의 합보다 클 수 없습니다.");
         }
     }
 
@@ -77,7 +76,7 @@ public class Menu {
 
     public void display() {
         if (price.isBiggerThan(menuProducts.getSumOfPrice())) {
-            throw new InvalidMenuPriceException("메뉴의 가격이 상품보다 높아 전시상태를 변경할 수 없습니다.");
+            throw new IllegalArgumentException("메뉴의 가격이 상품보다 높아 전시상태를 변경할 수 없습니다.");
         }
 
         displayed = true;
