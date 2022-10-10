@@ -8,8 +8,6 @@ import kitchenpos.profanity.infra.FakeProfanityCheckClient;
 
 public class MenuFixtures {
 
-    public static UUID INVALID_ID = new UUID(0, 0);
-
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }
