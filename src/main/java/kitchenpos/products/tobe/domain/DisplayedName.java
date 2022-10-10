@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
 
-public class DisplayedName {
+class DisplayedName {
     private static final String EMPTY_NAME_MESSAGE = "상품 이름은 비어있을 수 없습니다.";
     private static final String CONTAIN_PROFANITY_MESSAGE = "상품 이름에 비속어가 포함될 수 없습니다.";
 
