@@ -1,63 +1,97 @@
 package kitchenpos.menus.domain;
 
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.products.domain.Product;
 
 @Table(name = "menu_product")
 @Entity
 public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(
+        name = "seq",
+        unique = true,
+        nullable = false
+    )
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @ManyToOne
+    @JoinColumn(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
+    private Menu menu;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
+    @Column(name = "product_id", length = 16, nullable = false, columnDefinition = "binary(16)")
     private UUID productId;
 
-    public MenuProduct() {
+    @Embedded
+    private MenuProductPrice price;
+
+    @Embedded
+    private MenuProductQuantity quantity;
+
+    protected MenuProduct() {
+    }
+
+    public MenuProduct(
+        UUID productId,
+        MenuProductPrice price,
+        MenuProductQuantity quantity
+    ) {
+        this(null, productId, price, quantity);
+    }
+
+    public MenuProduct(Long seq, UUID productId, MenuProductPrice price, MenuProductQuantity quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public void enrollMenu(Menu menu) {
+        if (this.menu != null) {
+            throw new IllegalStateException("이미 다른 메뉴와 연결된 메뉴의 상품입니다.");
+        }
+
+        this.menu = menu;
+    }
+
+    public void updatePrice(MenuProductPrice newPrice) {
+        price = newPrice;
+        menu.updateDisplayByProductPrice();
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public BigDecimal getQuantityMultipliedPrice() {
+        return price.getValue()
+            .multiply(BigDecimal.valueOf(quantity.getValue()));
+    }
+
+    public long getQuantityValue() {
+        return quantity.getValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuProduct that = (MenuProduct) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq);
     }
 }

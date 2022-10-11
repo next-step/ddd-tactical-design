@@ -1,6 +1,6 @@
 package kitchenpos.products.ui.response;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 import java.math.BigDecimal;
 import java.util.List;

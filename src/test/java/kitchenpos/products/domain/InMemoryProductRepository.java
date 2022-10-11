@@ -1,7 +1,6 @@
 package kitchenpos.products.domain;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new HashMap<>();
@@ -22,11 +21,4 @@ public class InMemoryProductRepository implements ProductRepository {
         return new ArrayList<>(products.values());
     }
 
-    @Override
-    public List<Product> findAllByIdIn(final List<UUID> ids) {
-        return products.values()
-            .stream()
-            .filter(product -> ids.contains(product.getId()))
-            .collect(Collectors.toList());
-    }
 }

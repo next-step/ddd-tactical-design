@@ -1,10 +1,9 @@
-package kitchenpos.menus.application;
-
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+package kitchenpos.menus.domain;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 
 public class InMemoryMenuRepository implements MenuRepository {
     private final Map<UUID, Menu> menus = new HashMap<>();
@@ -30,14 +29,6 @@ public class InMemoryMenuRepository implements MenuRepository {
         return menus.values()
             .stream()
             .filter(menu -> ids.contains(menu.getId()))
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Menu> findAllByProductId(final UUID productId) {
-        return menus.values()
-            .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
             .collect(Collectors.toList());
     }
 }

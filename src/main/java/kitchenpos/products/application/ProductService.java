@@ -1,17 +1,17 @@
 package kitchenpos.products.application;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.event.ProductPriceChangedEvent;
+import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
-import kitchenpos.profanity.infra.ProfanityCheckClient;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.exception.ProductNotFoundException;
 import kitchenpos.products.ui.request.ProductChangePriceRequest;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import kitchenpos.products.ui.response.ProductResponse;
+import kitchenpos.profanity.infra.ProfanityCheckClient;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,16 +45,19 @@ public class ProductService {
     public ProductResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         ProductPrice newPrice = new ProductPrice(request.getPrice());
         Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException("상품을 찾을 수 없습니다."));
+            .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다."));
 
         product.changePrice(newPrice);
 
-        publishChangePriceEvent(product.getPrice());
+        publishChangePriceEvent(product);
         return ProductResponse.from(product);
     }
 
-    private void publishChangePriceEvent(ProductPrice price) {
-        ProductPriceChangedEvent event = new ProductPriceChangedEvent(price.getValue());
+    private void publishChangePriceEvent(Product product) {
+        ProductPriceChangedEvent event = new ProductPriceChangedEvent(
+            product.getId(),
+            product.getPriceValue()
+        );
         publisher.publishEvent(event);
     }
 
