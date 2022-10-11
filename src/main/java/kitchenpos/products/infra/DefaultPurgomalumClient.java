@@ -1,5 +1,6 @@
 package kitchenpos.products.infra;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,10 @@ public class DefaultPurgomalumClient implements PurgomalumClient {
 
     @Override
     public boolean containsProfanity(final String text) {
+        if (StringUtils.isBlank(text)) {
+            return false;
+        }
+
         final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
             .queryParam("text", text)
             .build()

@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Deprecated(forRemoval = true)
 @Table(name = "product")
 @Entity
 public class Product {

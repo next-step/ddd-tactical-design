@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
+@Deprecated(forRemoval = true)
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
