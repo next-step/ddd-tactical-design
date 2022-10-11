@@ -11,7 +11,7 @@ public class DisplayedName {
 
     protected DisplayedName() {}
 
-    protected DisplayedName(String name, boolean isProfanity) {
+    public DisplayedName(String name, boolean isProfanity) {
         validate(name, isProfanity);
         this.name = name;
     }

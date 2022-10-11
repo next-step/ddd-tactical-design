@@ -41,4 +41,8 @@ public class Price {
         return Objects.hash(price);
     }
 
+    public BigDecimal price() {
+        return price;
+    }
+
 }

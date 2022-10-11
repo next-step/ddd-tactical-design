@@ -31,7 +31,11 @@ public class Product {
     }
 
     public Price getPrice() {
-        return price;
+        return this.price;
+    }
+
+    public BigDecimal price() {
+        return this.price.price();
     }
 
 }
