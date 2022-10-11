@@ -17,4 +17,8 @@ public class Quantity {
     public BigDecimal quantity() {
         return this.quantity;
     }
+
+    public boolean greaterThanZero() {
+        return this.quantity.compareTo(BigDecimal.ZERO) > 0;
+    }
 }

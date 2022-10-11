@@ -30,8 +30,15 @@ public class MenuProduct {
     }
 
     public MenuProduct(Product product, Quantity quantity) {
+        validate(quantity);
         this.quantity = quantity;
         this.product = product;
+    }
+
+    private void validate(Quantity quantity) {
+        if (!quantity.greaterThanZero()) {
+            throw new IllegalArgumentException("메뉴에 속한 상품의 수량은 0이상 이어야 합니다.");
+        }
     }
 
     public BigDecimal sum() {
