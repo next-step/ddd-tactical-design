@@ -73,6 +73,7 @@ class EatInOrderFactoryTest {
     @Nested
     class CreateTest {
 
+        @DisplayName("성공")
         @Test
         void success() {
             final OrderLineItemSpecification orderLineItemSpecification = new OrderLineItemSpecification(menu.id(), 15_000L, 2);

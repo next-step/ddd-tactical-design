@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EatInOrderLineItemsTest {
 
+    @DisplayName("주문항목 목록을 생성한다.")
     @Nested
     class CreateTest {
 
