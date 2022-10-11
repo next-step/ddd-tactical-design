@@ -2,11 +2,16 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.products.tobe.domain.Price;
 
+import javax.persistence.Column;
+
 public class Menu {
 
 
     private final MenuProducts menuProducts;
     private final Price price;
+
+    @Column(name = "displayed", nullable = false)
+    private boolean displayed;
 
     public Menu(Price price, MenuProducts menuProducts) {
         this.price = price;
@@ -29,5 +34,13 @@ public class Menu {
         if (menuProducts.size() < 1) {
             throw new IllegalArgumentException("메뉴 상품을 등록해주세요.");
         }
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
     }
 }
