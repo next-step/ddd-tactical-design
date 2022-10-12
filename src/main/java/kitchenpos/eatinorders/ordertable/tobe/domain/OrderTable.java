@@ -31,15 +31,15 @@ public class OrderTable {
     protected OrderTable() {
     }
 
-    private OrderTable(final UUID id, final Name name, final GuestOfNumbers guestOfNumbers, final boolean occupied) {
-        this.id = id;
+    private OrderTable(final Name name, final GuestOfNumbers guestOfNumbers, final boolean occupied) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.guestOfNumbers = guestOfNumbers;
         this.occupied = occupied;
     }
 
     public static OrderTable createEmptyTable(final String name) {
-        return new OrderTable(UUID.randomUUID(), Name.valueOf(name), GuestOfNumbers.ZERO, EMPTY_TABLE);
+        return new OrderTable(Name.valueOf(name), GuestOfNumbers.ZERO, EMPTY_TABLE);
     }
 
     public void use() {

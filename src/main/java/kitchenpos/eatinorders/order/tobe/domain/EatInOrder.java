@@ -35,12 +35,11 @@ public class EatInOrder {
     protected EatInOrder() {
     }
 
-    private EatInOrder(final UUID id,
-                       final UUID orderTableId,
+    private EatInOrder(final UUID orderTableId,
                        final LocalDateTime orderDateTime,
                        final EatInOrderStatus status,
                        final EatInOrderLineItems eatInOrderLineItems) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.orderTableId = orderTableId;
         this.orderDateTime = orderDateTime;
         this.status = status;
@@ -48,7 +47,7 @@ public class EatInOrder {
     }
 
     static EatInOrder create(final UUID orderTableId, final EatInOrderLineItems eatInOrderLineItems) {
-        final EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), orderTableId, LocalDateTime.now(), EatInOrderStatus.WAITING, eatInOrderLineItems);
+        final EatInOrder eatInOrder = new EatInOrder(orderTableId, LocalDateTime.now(), EatInOrderStatus.WAITING, eatInOrderLineItems);
         eatInOrder.eatInOrderLineItems.makeRelations(eatInOrder);
         return eatInOrder;
     }
