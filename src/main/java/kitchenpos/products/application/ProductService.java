@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -56,7 +55,7 @@ public class ProductService {
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                     menuProduct.getProduct()
-                        .price()
+                        .priceValue()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }

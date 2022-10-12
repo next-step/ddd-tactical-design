@@ -20,7 +20,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private ProductPrice price;
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(UUID id, ProductName displayedName, ProductPrice price) {
@@ -45,12 +45,20 @@ public class Product {
         return displayedName.name();
     }
 
-    public ProductPrice productPrice() {
+    public ProductPrice price() {
         return price;
     }
 
-    public BigDecimal price() {
+    public BigDecimal priceValue() {
         return price.price();
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
+    public void changePrice(ProductPrice price) {
+        this.price = price;
     }
 
     @Override
@@ -64,13 +72,5 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, displayedName, price);
-    }
-
-    public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
-    }
-
-    public void changePrice(ProductPrice price) {
-        this.price = price;
     }
 }
