@@ -1,7 +1,7 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(final Product product) {
-        products.put(product.getId(), product);
+        products.put(product.id(), product);
         return product;
     }
 
@@ -29,7 +29,7 @@ public class InMemoryProductRepository implements ProductRepository {
     public List<Product> findAllByIdIn(final List<UUID> ids) {
         return products.values()
             .stream()
-            .filter(product -> ids.contains(product.getId()))
+            .filter(product -> ids.contains(product.id()))
             .collect(Collectors.toList());
     }
 }
