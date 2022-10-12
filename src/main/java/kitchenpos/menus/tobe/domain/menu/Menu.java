@@ -13,7 +13,7 @@ public class Menu {
 
 
     private final MenuProducts menuProducts;
-    private final Price price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -66,5 +66,13 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public void changePrice(Price price) {
+        this.price = price;
+    }
+
+    public Price price() {
+        return this.price;
     }
 }

@@ -56,4 +56,15 @@ class MenuTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴는 특정 메뉴 그룹에 속해야 한다.");
     }
+
+    @DisplayName("메뉴의 가격을 변경할 수 있다.")
+    @Test
+    void changePrice() {
+        MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴 그룹명"));
+        MenuProducts menuProducts = new MenuProducts();
+        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        Menu menu = new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, menuGroup);
+        menu.changePrice(new Price(BigDecimal.valueOf(7000)));
+        assertThat(menu.price()).isEqualTo(new Price(BigDecimal.valueOf(7000)));
+    }
 }
