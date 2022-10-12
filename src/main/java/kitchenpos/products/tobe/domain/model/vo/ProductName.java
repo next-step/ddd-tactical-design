@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.domain.model.vo;
 
-import java.util.Objects;
 import kitchenpos.global.domain.client.ProfanityCheckClient;
+import kitchenpos.global.domain.vo.ValueObject;
 import org.springframework.util.Assert;
 
-public class ProductName {
+public class ProductName extends ValueObject {
 
     private final String name;
 
@@ -14,22 +14,5 @@ public class ProductName {
             String.format("상품 이름에는 비속어가 포함될 수 없습니다. [name: %s]", name)
         );
         this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ProductName that = (ProductName) o;
-        return Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 }
