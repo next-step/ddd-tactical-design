@@ -1,8 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.vo.NumberOfGuests;
-import kitchenpos.global.vo.DisplayedName;
 import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.Quantity;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("매장 주문")
 class EatInOrderTest {
@@ -22,7 +19,7 @@ class EatInOrderTest {
     private UUID menuId1;
     private UUID menuId2;
     private OrderLineItems orderLineItems;
-    private OrderTable orderTable;
+    private UUID orderTableId;
 
     @BeforeEach
     void setUp() {
@@ -34,32 +31,24 @@ class EatInOrderTest {
                 new OrderLineItem(menuId2, new Quantity(1), new Price(20_000))
         ));
 
-        orderTable = new OrderTable(new DisplayedName("1번"), new NumberOfGuests(2), true);
+        orderTableId = UUID.randomUUID();
     }
 
     @DisplayName("매장 주문 생성")
     @Test
     void createEatInOrder() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
 
         assertAll(
                 () -> assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(eatInOrder.getOrderTable()).isEqualTo(orderTable)
+                () -> assertThat(eatInOrder.getOrderTableId()).isEqualTo(orderTableId)
         );
-    }
-
-    @DisplayName("매장 주문 빈 테이블이 아니면 에러")
-    @Test
-    void eatInOrderEmptyOrderTable() {
-        orderTable.tableClear();
-
-        assertThatThrownBy(() -> new EatInOrder(orderLineItems, orderTable)).isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("매장 주문 주문 수락")
     @Test
     void eatInOrderAccept() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
         eatInOrder.accepted();
 
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
@@ -68,7 +57,7 @@ class EatInOrderTest {
     @DisplayName("접수 대기 상태의 주문만 수락")
     @Test
     void eatInOrderAcceptFail() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
         eatInOrder.accepted();
 
         assertThatThrownBy(() -> eatInOrder.accepted()).isInstanceOf(IllegalStateException.class);
@@ -77,7 +66,7 @@ class EatInOrderTest {
     @DisplayName("매장 주문 주문 서빙")
     @Test
     void eatInOrderServed() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
         eatInOrder.accepted();
         eatInOrder.served();
 
@@ -87,7 +76,7 @@ class EatInOrderTest {
     @DisplayName("접수 상태의 주문만 서빙")
     @Test
     void eatInOrderServedFail() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
 
         assertThatThrownBy(() -> eatInOrder.served()).isInstanceOf(IllegalStateException.class);
     }
@@ -95,7 +84,7 @@ class EatInOrderTest {
     @DisplayName("매장 주문 주문 완료")
     @Test
     void eatInOrderCompleted() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
         eatInOrder.accepted();
         eatInOrder.served();
         eatInOrder.completed();
@@ -106,7 +95,7 @@ class EatInOrderTest {
     @DisplayName("서빙 완료 상태의 주문만 완료")
     @Test
     void eatInOrderCompletedFail() {
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTableId);
 
         assertThatThrownBy(() -> eatInOrder.completed()).isInstanceOf(IllegalStateException.class);
     }
