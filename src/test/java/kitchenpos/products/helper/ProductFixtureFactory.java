@@ -9,10 +9,11 @@ public class ProductFixtureFactory {
 
     private static final ProfanityCheckClient profanityCheckClient = text -> false;
 
-    public static Product create(String name, int price) {
-        return new Product(
-            new ProductName(name, profanityCheckClient),
-            new ProductPrice(price)
-        );
+    public static Product createProduct(String name, int price) {
+        return new Product(createProductName(name), new ProductPrice(price));
+    }
+
+    public static ProductName createProductName(String name) {
+        return new ProductName(name, profanityCheckClient);
     }
 }

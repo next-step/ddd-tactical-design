@@ -3,7 +3,6 @@ package kitchenpos.products.tobe.infra;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import kitchenpos.global.helper.InMemoryRepository;
 import kitchenpos.products.tobe.domain.model.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -32,10 +31,4 @@ public class InMemoryProductRepository implements ProductRepository {
         return repository.findAll();
     }
 
-    @Override
-    public List<Product> findAllByIdIn(List<UUID> ids) {
-        return findAll().stream()
-            .filter(product -> ids.contains(product.getId()))
-            .collect(Collectors.toUnmodifiableList());
-    }
 }

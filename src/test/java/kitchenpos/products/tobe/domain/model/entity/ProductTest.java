@@ -33,7 +33,7 @@ class ProductTest {
     @Test
     void 상품의_가격을_변경_할_수_있다() {
         // given
-        Product product = ProductFixtureFactory.create("후라이드 치킨", 6000);
+        Product product = ProductFixtureFactory.createProduct("후라이드 치킨", 6000);
         var newPrice = new ProductPrice(5000);
 
         // when

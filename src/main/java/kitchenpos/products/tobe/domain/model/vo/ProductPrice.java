@@ -12,4 +12,8 @@ public class ProductPrice extends ValueObject {
         Assert.isTrue(price >= 0, "상품 가격은 0원 미만일 수 없습니다.");
         this.price = BigDecimal.valueOf(price);
     }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
 }

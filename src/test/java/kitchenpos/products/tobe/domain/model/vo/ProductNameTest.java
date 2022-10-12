@@ -31,4 +31,16 @@ class ProductNameTest {
         assertThat(name1).isEqualTo(name2);
         assertThat(name1).isNotEqualTo(name3);
     }
+
+    @Test
+    void toStringTest() {
+        // given
+        var name = new ProductName("후라이드 치킨", profanityCheckClient);
+
+        // when
+        String actual = name.toString();
+
+        // then
+        assertThat(actual).isEqualTo("후라이드 치킨");
+    }
 }

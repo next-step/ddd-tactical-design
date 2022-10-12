@@ -15,4 +15,9 @@ public class ProductName extends ValueObject {
         );
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
