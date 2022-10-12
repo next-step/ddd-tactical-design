@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.listener;
+package kitchenpos.menus.tobe.domain.events;
 
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.model.MenuName;
