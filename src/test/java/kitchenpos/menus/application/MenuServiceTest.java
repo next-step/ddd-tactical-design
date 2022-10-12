@@ -8,7 +8,7 @@ import kitchenpos.products.application.FakeProfanityCheckClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.global.domain.ProfanityCheckClient;
+import kitchenpos.global.domain.client.ProfanityCheckClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

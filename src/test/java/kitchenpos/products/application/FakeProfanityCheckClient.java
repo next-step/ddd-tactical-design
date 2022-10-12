@@ -2,7 +2,7 @@ package kitchenpos.products.application;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.global.domain.ProfanityCheckClient;
+import kitchenpos.global.domain.client.ProfanityCheckClient;
 
 public class FakeProfanityCheckClient implements ProfanityCheckClient {
     private static final List<String> profanities;

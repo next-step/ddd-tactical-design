@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain.model.vo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-import kitchenpos.global.domain.ProfanityCheckClient;
+import kitchenpos.global.domain.client.ProfanityCheckClient;
 import kitchenpos.products.application.FakeProfanityCheckClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
