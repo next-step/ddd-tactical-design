@@ -10,13 +10,13 @@ public class OrderLineItem {
 
   private final Price price;
 
-  private final long quantity;
+  private final Quantity quantity;
 
   public OrderLineItem(UUID menuId, BigDecimal price, long quantity) {
-    this(menuId, Price.from(price), quantity);
+    this(menuId, Price.from(price), Quantity.from(quantity));
   }
 
-  public OrderLineItem(UUID menuId, Price price, long quantity) {
+  public OrderLineItem(UUID menuId, Price price, Quantity quantity) {
     if (Objects.isNull(menuId)) {
       throw new IllegalArgumentException();
     }
