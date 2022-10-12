@@ -1,10 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
-import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "eat_in_orders")
@@ -25,37 +22,25 @@ public class EatInOrder {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    @Column(name = "order_table_id", columnDefinition = "binary(16)")
+    private UUID orderTableId;
 
     protected EatInOrder() {}
 
-    public EatInOrder(OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, OrderTable orderTable) {
-        if (Objects.isNull(orderTable)) {
-            throw new IllegalArgumentException("테이블을 선택해주세요.");
-        }
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException("빈 테이블이 아닙니다. 빈 테이블을 선택해주세요.");
-        }
-
+    public EatInOrder(OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
-    public EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, OrderTable orderTable) {
-        this(status, orderDateTime, orderLineItems, orderTable);
+    public EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
+        this(status, orderDateTime, orderLineItems, orderTableId);
         this.id = id;
     }
 
-    public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable);
+    public EatInOrder(OrderLineItems orderLineItems, UUID orderTableId) {
+        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
     }
 
     public void accepted() {
@@ -95,7 +80,7 @@ public class EatInOrder {
         return orderLineItems;
     }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
+    public UUID getOrderTableId() {
+        return orderTableId;
     }
 }
