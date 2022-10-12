@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.Events;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
+import kitchenpos.products.tobe.domain.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,9 +31,11 @@ class ProductTest {
     @Autowired
     private ApplicationContext eventPublisher;
 
+    ProductPriceChangedPublisher publisher;
+
     @BeforeEach
     void setUp() {
-        Events.setPublisher(eventPublisher);
+        publisher = new ProductPriceChangedPublisher(eventPublisher);
     }
 
     @DisplayName("가격은 0원 이상으로만 변경할 수 있다.")
@@ -39,7 +43,7 @@ class ProductTest {
     void changePrice_Exception() {
         Product product = new Product(UUID.randomUUID(), "후라이드 치킨", 9_000L);
 
-        assertThatThrownBy(() -> product.changePrice(-1000L))
+        assertThatThrownBy(() -> product.changePrice(-1000L, publisher))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -51,7 +55,7 @@ class ProductTest {
         Product product = new Product(productId, "후라이드 치킨", 9_000L);
 
         // when
-        product.changePrice(10_000L);
+        product.changePrice(10_000L, publisher);
 
         // then
         List<ProductPriceChangedEvent> events = applicationEvents

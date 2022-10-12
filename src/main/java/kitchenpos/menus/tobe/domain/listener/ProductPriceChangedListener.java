@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain.listener;
 
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
