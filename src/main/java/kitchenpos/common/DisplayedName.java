@@ -1,20 +1,21 @@
-package kitchenpos.menus.tobe.domain.model;
+package kitchenpos.common;
 
 import kitchenpos.menus.tobe.domain.exception.ProfaneNameException;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuName {
-
+public class DisplayedName {
+    @Column(name = "name", nullable = false)
     private String name;
 
-    protected MenuName() {
+    protected DisplayedName() {
     }
 
-    public MenuName(Profanity profanity, String name) {
+    public DisplayedName(Profanity profanity, String name) {
         validateName(profanity, name);
         this.name = name;
     }
@@ -28,12 +29,13 @@ public class MenuName {
         }
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuName menuName = (MenuName) o;
-        return name.equals(menuName.name);
+        DisplayedName that = (DisplayedName) o;
+        return Objects.equals(name, that.name);
     }
 
     @Override

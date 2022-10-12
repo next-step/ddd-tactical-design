@@ -1,5 +1,8 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.common.DisplayedName;
+import kitchenpos.common.Profanity;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,16 +18,16 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    private MenuGroupName name;
+    private DisplayedName name;
 
     protected MenuGroup() {
     }
 
     public MenuGroup(Profanity profanity, String name) {
-        this(new MenuGroupName(profanity, name));
+        this(new DisplayedName(profanity, name));
     }
 
-    public MenuGroup(MenuGroupName name) {
+    public MenuGroup(DisplayedName name) {
         this.name = name;
     }
 

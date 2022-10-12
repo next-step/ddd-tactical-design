@@ -1,8 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
-import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
+import kitchenpos.common.Profanity;
+import kitchenpos.doubles.FakeProfanity;
 import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
-import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @RecordApplicationEvents
 @ExtendWith(SpringExtension.class)
 class ProductTest {
+    private static final Profanity FAKE_PROFANITY = new FakeProfanity();
 
     @Autowired
     private ApplicationEvents applicationEvents;
@@ -31,7 +33,8 @@ class ProductTest {
     @Autowired
     private ApplicationContext eventPublisher;
 
-    ProductPriceChangedPublisher publisher;
+    private ProductPriceChangedPublisher publisher;
+
 
     @BeforeEach
     void setUp() {
@@ -41,7 +44,7 @@ class ProductTest {
     @DisplayName("가격은 0원 이상으로만 변경할 수 있다.")
     @Test
     void changePrice_Exception() {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", 9_000L);
+        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", 9_000L, FAKE_PROFANITY);
 
         assertThatThrownBy(() -> product.changePrice(-1000L, publisher))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -52,7 +55,7 @@ class ProductTest {
     void changePrice() {
         // given
         UUID productId = UUID.randomUUID();
-        Product product = new Product(productId, "후라이드 치킨", 9_000L);
+        Product product = new Product(productId, "후라이드 치킨", 9_000L, FAKE_PROFANITY);
 
         // when
         product.changePrice(10_000L, publisher);
@@ -74,7 +77,7 @@ class ProductTest {
     void equals() {
         UUID id = UUID.randomUUID();
 
-        assertThat(new Product(id, "후라이드 치킨", 9_000L))
-                .isEqualTo(new Product(id, "Fried Chicken", 9_000L));
+        assertThat(new Product(id, "후라이드 치킨", 9_000L, FAKE_PROFANITY))
+                .isEqualTo(new Product(id, "Fried Chicken", 9_000L, FAKE_PROFANITY));
     }
 }

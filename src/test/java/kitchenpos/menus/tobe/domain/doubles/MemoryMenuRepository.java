@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.doubles;
+package kitchenpos.menus.tobe.domain.doubles;
 
 import kitchenpos.menus.tobe.domain.model.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;

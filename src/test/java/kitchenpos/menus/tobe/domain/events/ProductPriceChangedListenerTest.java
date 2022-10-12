@@ -1,10 +1,10 @@
 package kitchenpos.menus.tobe.domain.events;
 
+import kitchenpos.common.DisplayedName;
+import kitchenpos.menus.tobe.domain.doubles.MemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.model.Menu;
-import kitchenpos.menus.tobe.domain.model.MenuName;
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
-import kitchenpos.menus.tobe.doubles.FakeProfanity;
-import kitchenpos.menus.tobe.doubles.MemoryMenuRepository;
+import kitchenpos.doubles.FakeProfanity;
 import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class ProductPriceChangedListenerTest {
         // given
         UUID productId = UUID.randomUUID();
 
-        MenuName name = new MenuName(new FakeProfanity(), "호호치킨");
+        DisplayedName name = new DisplayedName(new FakeProfanity(), "호호치킨");
         MenuProduct menuProduct = new MenuProduct(productId, 1, 100_000L);
         Menu menu = new Menu(UUID.randomUUID(), name, 90_000L, 1L, true, menuProduct);
 

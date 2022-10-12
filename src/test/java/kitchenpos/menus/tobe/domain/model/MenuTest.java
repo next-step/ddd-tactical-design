@@ -1,7 +1,9 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.common.DisplayedName;
+import kitchenpos.common.Profanity;
 import kitchenpos.menus.tobe.domain.exception.IllegalMenuPriceException;
-import kitchenpos.menus.tobe.doubles.FakeProfanity;
+import kitchenpos.doubles.FakeProfanity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MenuTest {
 
     private final Profanity profanity = new FakeProfanity();
-    private final MenuName menuName = new MenuName(profanity, "치킨");
+    private final DisplayedName menuName = new DisplayedName(profanity, "치킨");
 
     @DisplayName("가격 정책에 안 맞는 메뉴 생성하면 예외")
     @Test

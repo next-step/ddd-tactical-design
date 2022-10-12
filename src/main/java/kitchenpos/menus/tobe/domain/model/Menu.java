@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.common.DisplayedName;
 import kitchenpos.menus.tobe.domain.exception.IllegalMenuPriceException;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ public class Menu {
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
     @Embedded
-    private MenuName name;
+    private DisplayedName name;
     @Embedded
     private MenuPrice price;
     private Long menuGroupId;
@@ -27,13 +28,13 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(UUID id, MenuName name, long price, Long menuGroupId, boolean displayed, MenuProduct... menuProducts) {
+    public Menu(UUID id, DisplayedName name, long price, Long menuGroupId, boolean displayed, MenuProduct... menuProducts) {
         this(id, name, new MenuPrice(price), menuGroupId, displayed, new MenuProducts(Arrays.asList(menuProducts)));
     }
 
     public Menu(
         UUID id,
-        MenuName name,
+        DisplayedName name,
         MenuPrice price,
         Long menuGroupId,
         boolean displayed,

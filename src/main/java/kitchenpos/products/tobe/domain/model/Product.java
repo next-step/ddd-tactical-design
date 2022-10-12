@@ -1,7 +1,9 @@
 package kitchenpos.products.tobe.domain.model;
 
-import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
+import kitchenpos.common.DisplayedName;
+import kitchenpos.common.Profanity;
 import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -27,9 +29,9 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String name, Long price) {
+    public Product(UUID id, String name, Long price, Profanity profanity) {
         this.id = id;
-        this.name = new DisplayedName(name);
+        this.name = new DisplayedName(profanity, name);
         this.price = new ProductPrice(price);
     }
 

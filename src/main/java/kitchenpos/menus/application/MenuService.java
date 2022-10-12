@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.ProfanityChecker;
+import kitchenpos.common.Profanity;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
@@ -24,13 +24,13 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final ProfanityChecker purgomalumClient;
+    private final Profanity purgomalumClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final ProfanityChecker purgomalumClient
+        final Profanity purgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
@@ -80,7 +80,7 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || purgomalumClient.contains(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu();

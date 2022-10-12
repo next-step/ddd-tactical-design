@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
 import kitchenpos.products.tobe.domain.model.ProductPrice;
 import org.junit.jupiter.api.DisplayName;

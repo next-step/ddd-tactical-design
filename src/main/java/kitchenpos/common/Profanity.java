@@ -1,6 +1,5 @@
-package kitchenpos.menus.tobe.domain.model;
+package kitchenpos.common;
 
-@FunctionalInterface
 public interface Profanity {
     boolean contains(String text);
 }

@@ -1,6 +1,6 @@
 package kitchenpos.unit;
 
-import kitchenpos.common.ProfanityChecker;
+import kitchenpos.common.Profanity;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
@@ -40,7 +40,7 @@ class ProductServiceTest {
     MenuRepository menuRepository;
 
     @Mock
-    ProfanityChecker profanityChecker;
+    Profanity profanity;
 
     @InjectMocks
     ProductService productService;
@@ -74,7 +74,7 @@ class ProductServiceTest {
         // given
         Product request = aProduct(source, 10_000);
 
-        when(profanityChecker.containsProfanity("바보")).thenReturn(true);
+        when(profanity.contains("바보")).thenReturn(true);
 
         // when + then
         assertThatThrownBy(() -> productService.create(request))
@@ -88,7 +88,7 @@ class ProductServiceTest {
         Product request = aChickenProduct(10_000);
 
         when(productRepository.save(any())).then(i -> i.getArgument(0, Product.class));
-        when(profanityChecker.containsProfanity(any())).thenReturn(false);
+        when(profanity.contains(any())).thenReturn(false);
 
         // when
         Product saved = productService.create(request);

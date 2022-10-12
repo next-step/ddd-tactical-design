@@ -1,12 +1,12 @@
 package kitchenpos.integration;
 
-import kitchenpos.common.ProfanityChecker;
+import kitchenpos.common.Profanity;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
+import kitchenpos.doubles.FakeProfanity;
 import kitchenpos.eatinorders.application.OrderService;
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
-import kitchenpos.integration.doubles.FakeProfanityChecker;
 import kitchenpos.integration.doubles.FakeRidersClient;
 import kitchenpos.integration.doubles.MemoryMenuGroupRepository;
 import kitchenpos.integration.doubles.MemoryMenuRepository;
@@ -76,8 +76,8 @@ public class TestConfig {
     }
 
     @Bean
-    ProfanityChecker profanityChecker() {
-        return new FakeProfanityChecker();
+    Profanity profanityChecker() {
+        return new FakeProfanity();
     }
 
     @Bean

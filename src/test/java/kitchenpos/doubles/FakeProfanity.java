@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.doubles;
+package kitchenpos.doubles;
 
-import kitchenpos.menus.tobe.domain.model.Profanity;
+import kitchenpos.common.Profanity;
 
 import java.util.List;
 
