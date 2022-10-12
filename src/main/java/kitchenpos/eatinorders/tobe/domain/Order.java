@@ -3,21 +3,41 @@ package kitchenpos.eatinorders.tobe.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "orders")
+@Entity
 public class Order {
 
-  private final UUID id;
+  @Column(name = "id", columnDefinition = "binary(16)")
+  @Id
+  private UUID id;
 
+  @Column(name = "type", nullable = false)
+  @Enumerated(EnumType.STRING)
   private OrderStatus status;
 
-  private final LocalDateTime orderDateTime;
+  @Column(name = "order_date_time", nullable = false)
+  private LocalDateTime orderDateTime;
 
-  private final UUID orderTableId;
+  @Column(name = "order_table_id", nullable = false)
+  private UUID orderTableId;
 
-  private final OrderLineItems orderLineItems;
+  @Embedded
+  private OrderLineItems orderLineItems;
 
   public Order(UUID id, UUID orderTableId, List<OrderLineItem> orderLineItems) {
     this(id, orderTableId, OrderStatus.WAITING, new OrderLineItems(orderLineItems));
+  }
+
+  protected Order() {
+
   }
 
   public Order(UUID id, UUID orderTableId, OrderStatus status, List<OrderLineItem> orderLineItems) {
@@ -29,7 +49,7 @@ public class Order {
     this.status = status;
     this.orderDateTime = LocalDateTime.now();
     this.orderTableId = orderTableId;
-    this.orderLineItems = orderLineItems;;
+    this.orderLineItems = orderLineItems;
   }
 
   public void accept() {

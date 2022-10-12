@@ -1,13 +1,21 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class OrderTableName {
 
-  private final String name;
+  @Column(name = "name", nullable = false)
+  private String name;
 
   public static OrderTableName from(String name) {
     return new OrderTableName(name);
+  }
+
+  protected OrderTableName() {
+
   }
 
   private OrderTableName(String name) {

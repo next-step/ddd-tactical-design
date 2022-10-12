@@ -1,13 +1,32 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "order_table")
+@Entity
 public class OrderTable {
 
-  private final UUID id;
-  private final OrderTableName name;
+  @Column(name = "id", columnDefinition = "binary(16)")
+  @Id
+  private UUID id;
+
+  @Embedded
+  private OrderTableName name;
+
+  @Embedded
   private NumberOfGuest numberOfGuests;
+
+  @Column(name = "occupied", nullable = false)
   private boolean occupied;
+
+  protected OrderTable() {
+
+  }
 
   public OrderTable(UUID id, String name) {
     this(id, OrderTableName.from(name), NumberOfGuest.EMPTY, false);

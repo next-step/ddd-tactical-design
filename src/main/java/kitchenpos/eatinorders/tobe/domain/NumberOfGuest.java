@@ -1,15 +1,23 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class NumberOfGuest {
 
   public static final NumberOfGuest EMPTY = NumberOfGuest.from(0);
 
-  private final int number;
+  @Column(name = "number_of_guests", nullable = false)
+  private int number;
 
   public static NumberOfGuest from(int number) {
     return new NumberOfGuest(number);
+  }
+
+  protected NumberOfGuest() {
+
   }
 
   private NumberOfGuest(int number) {
