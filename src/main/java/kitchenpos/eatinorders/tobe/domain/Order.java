@@ -17,14 +17,21 @@ public class Order {
   private final List<OrderLineItem> orderLineItems;
 
   public Order(UUID id, UUID orderTableId, List<OrderLineItem> orderLineItems) {
+    this(id, orderTableId, OrderStatus.WAITING, orderLineItems);
+  }
+
+  public Order(UUID id, UUID orderTableId, OrderStatus status, List<OrderLineItem> orderLineItems) {
     this.id = id;
-    this.status = OrderStatus.WAITING;
+    this.status = status;
     this.orderDateTime = LocalDateTime.now();
     this.orderTableId = orderTableId;
     this.orderLineItems = orderLineItems;
   }
 
   public void accept() {
+    if (status != OrderStatus.WAITING) {
+      throw new IllegalStateException();
+    }
     this.status = OrderStatus.ACCEPTED;
   }
 }

@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderTest {
@@ -56,5 +58,20 @@ class OrderTest {
         List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
     );
     order.accept();
+  }
+
+  @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
+  @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
+  @ParameterizedTest
+  void accept_OnlyWaitingStateOrder(final OrderStatus status) {
+    Order order = new Order(
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        status,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+
+    assertThatIllegalStateException()
+        .isThrownBy(order::accept);
   }
 }
