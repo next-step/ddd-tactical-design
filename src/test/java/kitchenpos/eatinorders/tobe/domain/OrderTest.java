@@ -86,4 +86,32 @@ class OrderTest {
     );
     order.serve();
   }
+
+  @DisplayName("접수된 주문만 서빙할 수 있다.")
+  @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
+  @ParameterizedTest
+  void serve_OnlyAcceptedOrder(final OrderStatus status) {
+    Order order = new Order(
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        status,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+
+    assertThatIllegalStateException()
+        .isThrownBy(order::serve);
+  }
+
+  @DisplayName("주문을 완료한다.")
+  @Test
+  void complete() {
+    Order order = new Order(
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        OrderStatus.SERVED,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+    order.complete();
+  }
+
 }

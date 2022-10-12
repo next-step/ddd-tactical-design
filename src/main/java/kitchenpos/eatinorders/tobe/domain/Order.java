@@ -36,6 +36,13 @@ public class Order {
   }
 
   public void serve() {
+    if (status != OrderStatus.ACCEPTED) {
+      throw new IllegalStateException();
+    }
     this.status = OrderStatus.SERVED;
+  }
+
+  public void complete() {
+    this.status = OrderStatus.COMPLETED;
   }
 }
