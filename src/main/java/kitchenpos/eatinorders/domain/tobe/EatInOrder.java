@@ -3,13 +3,10 @@ package kitchenpos.eatinorders.domain.tobe;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
 
 public class EatInOrder {
 
     private final EatInOrderId id;
-
-    private final OrderType type = OrderType.EAT_IN;
 
     private OrderStatus status = OrderStatus.WAITING;
 
