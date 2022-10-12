@@ -34,4 +34,8 @@ public class Order {
     }
     this.status = OrderStatus.ACCEPTED;
   }
+
+  public void serve() {
+    this.status = OrderStatus.SERVED;
+  }
 }

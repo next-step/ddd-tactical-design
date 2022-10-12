@@ -74,4 +74,16 @@ class OrderTest {
     assertThatIllegalStateException()
         .isThrownBy(order::accept);
   }
+
+  @DisplayName("주문을 서빙한다.")
+  @Test
+  void serve() {
+    Order order = new Order(
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        OrderStatus.ACCEPTED,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+    order.serve();
+  }
 }
