@@ -114,4 +114,18 @@ class OrderTest {
     order.complete();
   }
 
+  @DisplayName("서빙된 주문만 완료할 수 있다.")
+  @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
+  @ParameterizedTest
+  void serve_OnlyServedOrder(final OrderStatus status) {
+    Order order = new Order(
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        status,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+
+    assertThatIllegalStateException()
+        .isThrownBy(order::complete);
+  }
 }

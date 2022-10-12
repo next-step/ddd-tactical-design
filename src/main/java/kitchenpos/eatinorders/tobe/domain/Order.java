@@ -29,20 +29,23 @@ public class Order {
   }
 
   public void accept() {
-    if (status != OrderStatus.WAITING) {
+    if (!status.isWaiting()) {
       throw new IllegalStateException();
     }
     this.status = OrderStatus.ACCEPTED;
   }
 
   public void serve() {
-    if (status != OrderStatus.ACCEPTED) {
+    if (!status.isAccepted()) {
       throw new IllegalStateException();
     }
     this.status = OrderStatus.SERVED;
   }
 
   public void complete() {
+    if (!status.isServed()) {
+      throw new IllegalStateException();
+    }
     this.status = OrderStatus.COMPLETED;
   }
 }
