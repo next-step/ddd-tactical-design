@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.repository;
 
 import kitchenpos.products.domain.Product;
 

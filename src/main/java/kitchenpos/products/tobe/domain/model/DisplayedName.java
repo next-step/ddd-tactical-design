@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
 import org.springframework.util.StringUtils;
 
@@ -15,7 +15,7 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    DisplayedName(String name) {
+    public DisplayedName(String name) {
         this.name = validateExists(name);
     }
 

@@ -5,7 +5,7 @@ import kitchenpos.menus.tobe.domain.model.MenuName;
 import kitchenpos.menus.tobe.domain.model.MenuProduct;
 import kitchenpos.menus.tobe.doubles.FakeProfanity;
 import kitchenpos.menus.tobe.doubles.MemoryMenuRepository;
-import kitchenpos.products.tobe.domain.ProductPriceChangedEvent;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

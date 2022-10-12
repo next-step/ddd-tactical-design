@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,7 +13,7 @@ public class ProductPrice {
     protected ProductPrice() {
     }
 
-    ProductPrice(Long price) {
+    public ProductPrice(Long price) {
         this.price = validatePositive(price);
     }
 

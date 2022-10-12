@@ -1,6 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.model;
 
-import kitchenpos.common.Events;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedPublisher;
+import kitchenpos.products.tobe.domain.events.ProductPriceChangedEvent;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -32,9 +33,9 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
-    public void changePrice(Long amount) {
+    public void changePrice(Long amount, ProductPriceChangedPublisher publisher) {
         price.change(amount);
-        Events.raise(new ProductPriceChangedEvent(id, amount));
+        publisher.publish(new ProductPriceChangedEvent(id, amount));
     }
 
     @Override
