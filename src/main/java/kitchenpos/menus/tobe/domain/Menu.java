@@ -6,14 +6,16 @@ public class Menu {
     private Price price;
     private DisplayedName name;
     private MenuProduct menuProduct;
+    private MenuGroup menuGroup;
 
-    public Menu(final Price price, final DisplayedName name, final MenuProduct menuProduct) {
+    public Menu(final Price price, final DisplayedName name, final MenuProduct menuProduct, final MenuGroup menuGroup) {
         if (menuProduct.getSumOfPrice().compareTo(price) < 0) {
             throw new IllegalArgumentException(PRICE_INVALID_MESSAGE);
         }
         this.price = price;
         this.name = name;
         this.menuProduct = menuProduct;
+        this.menuGroup = menuGroup;
     }
 
     public Price getPrice() {
