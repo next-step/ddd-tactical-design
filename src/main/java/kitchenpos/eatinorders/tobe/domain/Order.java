@@ -32,12 +32,12 @@ public class Order {
   @Embedded
   private OrderLineItems orderLineItems;
 
-  public Order(UUID id, UUID orderTableId, List<OrderLineItem> orderLineItems) {
-    this(id, orderTableId, OrderStatus.WAITING, new OrderLineItems(orderLineItems));
-  }
-
   protected Order() {
 
+  }
+
+  public Order(UUID id, UUID orderTableId, List<OrderLineItem> orderLineItems) {
+    this(id, orderTableId, OrderStatus.WAITING, new OrderLineItems(orderLineItems));
   }
 
   public Order(UUID id, UUID orderTableId, OrderStatus status, List<OrderLineItem> orderLineItems) {
@@ -50,6 +50,10 @@ public class Order {
     this.orderDateTime = LocalDateTime.now();
     this.orderTableId = orderTableId;
     this.orderLineItems = orderLineItems;
+  }
+
+  public void place(OrderValidator validator) {
+    validator.validate(this);
   }
 
   public void accept() {
@@ -71,5 +75,9 @@ public class Order {
       throw new IllegalStateException();
     }
     this.status = OrderStatus.COMPLETED;
+  }
+
+  public List<OrderLineItem> getOrderLineItems() {
+    return orderLineItems.getOrderLineItems();
   }
 }

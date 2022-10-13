@@ -1,40 +1,77 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import static kitchenpos.Fixtures.INVALID_ID;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderTest {
+
+  private OrderValidator orderValidator;
+
+  @BeforeEach
+  void setUp() {
+    orderValidator = new FakeOrderValidator(
+        new InMemoryMenuRepository(),
+        new InMemoryOrderRepository(),
+        new InMemoryOrderTableRepository()
+    );
+  }
 
   @DisplayName("매장 테이블과 1개 이상 등록된 메뉴로 매장 주문을 등록할 수 있다.")
   @Test
   void createEatInOrder() {
     assertThatNoException()
         .isThrownBy(() -> new Order(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
-        ));
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+            ).place(orderValidator)
+        );
   }
 
   @DisplayName("매장 주문은 메뉴가 없으면 등록할 수 없다.")
-  @Test
-  void createOrderMenuNotValid() {
+  @MethodSource("orderLineItems")
+  @ParameterizedTest
+  void createOrderMenuNotValid(final List<OrderLineItem> orderLineItems) {
     assertThatIllegalArgumentException()
         .isThrownBy(() -> new Order(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            List.of(new OrderLineItem(null, BigDecimal.valueOf(16_000L), 3))
-        ));
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                orderLineItems
+            ).place(orderValidator)
+        );
+  }
+
+  private static List<Arguments> orderLineItems() {
+    return Arrays.asList(
+        null,
+        Arguments.of(Collections.emptyList()),
+        Arguments.of(
+            List.of(
+                new OrderLineItem(
+                    INVALID_ID,
+                    Price.from(16_000L),
+                    Quantity.from(3)
+                )
+            )
+        )
+    );
   }
 
   @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
