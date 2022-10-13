@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
 - [x] 메뉴의 가격을 변경할 수 있다.
@@ -16,8 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 - [x] 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
 - [x] 메뉴는 특정 메뉴 그룹에 속해야 한다.
 - [x] 메뉴의 전시상태를 변경할 수 있다. (노출, 숨김)
-- 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
-- 메뉴의 목록을 조회할 수 있다.
+- [x] 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
  */
 class MenuTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
@@ -71,5 +71,30 @@ class MenuTest {
 
         menu.displayOn();
         assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    void displayOffWithInvalidPrice() {
+        String message = "메뉴의 가격은 상품 가격의 합보다 작다면 전시할 수 없습니다.";
+
+        final Price menuPrice = new Price(BigDecimal.TEN);
+        final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
+        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(4L)));
+        final MenuGroup menuGroup = new MenuGroup();
+
+        final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);
+        assertThat(menu.isDisplayed()).isFalse();
+
+        assertThatThrownBy(() -> menu.displayOn())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(message);
+
+        menu.changePrice(new Price(BigDecimal.valueOf(8L)));
+        menu.displayOn();
+        assertThat(menu.isDisplayed()).isTrue();
+
+        menu.changePrice(new Price(BigDecimal.TEN));
+        assertThat(menu.isDisplayed()).isFalse();
     }
 }
