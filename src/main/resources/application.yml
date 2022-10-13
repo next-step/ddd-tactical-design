@@ -1,0 +1,30 @@
+spring:
+  flyway:
+    enabled: true
+
+  profiles:
+    active: local
+
+  datasource:
+    url: jdbc:mysql://localhost:33306/kitchenpos
+    username: user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: INFO
