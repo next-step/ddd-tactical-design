@@ -3,9 +3,11 @@ package kitchenpos.eatinorders.tobe.domain;
 import static kitchenpos.Fixtures.INVALID_ID;
 import static kitchenpos.Fixtures.menu;
 import static kitchenpos.Fixtures.menuProduct;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -197,5 +199,23 @@ class OrderTest {
         .isThrownBy(() -> order.complete(orderTableCleaner));
   }
 
-  
+  @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
+  @Test
+  void completeEatInOrder() {
+    OrderTable orderTable = orderTableRepository.save(new OrderTable(UUID.randomUUID(), "9번", 5));
+    Order order = new Order(
+        UUID.randomUUID(),
+        orderTable.getId(),
+        OrderStatus.SERVED,
+        List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+    );
+    order.complete(orderTableCleaner);
+    OrderTable actual = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
+    assertAll(
+        () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+        () -> assertThat(actual.isOccupied()).isFalse(),
+        () -> assertThat(actual.getNumberOfGuests()).isEqualTo(NumberOfGuest.EMPTY)
+    );
+  }
+
 }

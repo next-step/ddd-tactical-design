@@ -86,7 +86,7 @@ public class Order {
     return this.id;
   }
 
-  public Object getOrderTableId() {
+  public UUID getOrderTableId() {
     return this.orderTableId;
   }
 
