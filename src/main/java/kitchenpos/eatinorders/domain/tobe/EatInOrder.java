@@ -14,23 +14,20 @@ public class EatInOrder {
 
     private OrderLineItems orderLineItems;
 
-    private final OrderTable orderTable;
+    private final OrderTableId orderTableId;
 
     public EatInOrder(
         final EatInOrderId id,
         final OrderLineItems orderLineItems,
-        final OrderTable orderTable
+        final OrderTableId orderTableId
     ) {
         this.id = id;
         this.orderDateTime = LocalDateTime.now();
         this.orderLineItems = orderLineItems;
-        if (Objects.isNull(orderTable)) {
-            throw new IllegalArgumentException("orderTable is required");
+        if (Objects.isNull(orderTableId)) {
+            throw new IllegalArgumentException("orderTableId is required");
         }
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException("if orderTable is occupied, can not create order");
-        }
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
     public void accept() {
@@ -52,14 +49,13 @@ public class EatInOrder {
             throw new IllegalStateException("");
         }
         this.status = OrderStatus.COMPLETED;
-        orderTable.clear();
     }
 
     public OrderStatus status() {
         return this.status;
     }
 
-    public OrderTable orderTable() {
-        return this.orderTable;
+    public OrderTableId orderTableId() {
+        return this.orderTableId;
     }
 }

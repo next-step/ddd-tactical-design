@@ -36,4 +36,8 @@ public class OrderTable {
     public GuestCount guestCount() {
         return this.guestCount;
     }
+
+    public OrderTableId getId() {
+        return this.id;
+    }
 }
