@@ -102,4 +102,7 @@ public class Menu {
     }
   }
 
+  public boolean isDisplayed() {
+    return displayState.isDisplayed();
+  }
 }

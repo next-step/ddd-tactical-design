@@ -3,19 +3,20 @@ package kitchenpos.eatinorders.tobe.domain;
 import java.util.NoSuchElementException;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultOrderValidator implements OrderValidator {
 
-  private final OrderRepository orderRepository;
   private final MenuRepository menuRepository;
+  private final OrderRepository orderRepository;
   private final OrderTableRepository orderTableRepository;
 
   public DefaultOrderValidator(
-      OrderRepository orderRepository,
       MenuRepository menuRepository,
+      OrderRepository orderRepository,
       OrderTableRepository orderTableRepository
   ) {
     this.orderRepository = orderRepository;
@@ -26,9 +27,16 @@ public class DefaultOrderValidator implements OrderValidator {
   @Override
   public void validate(Order order) {
     order.getOrderLineItems()
-        .forEach(orderLineItem -> menuRepository.findById(orderLineItem.getMenuId())
-            .orElseThrow(NoSuchElementException::new)
-        );
+        .forEach(this::orderLineItemValidate);
+  }
+
+  private void orderLineItemValidate(OrderLineItem orderLineItem) {
+    Menu menu = menuRepository.findById(orderLineItem.getMenuId())
+        .orElseThrow(NoSuchElementException::new);
+
+    if (!menu.isDisplayed()) {
+      throw new IllegalStateException();
+    }
   }
 
 }

@@ -1,7 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import static kitchenpos.Fixtures.INVALID_ID;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static kitchenpos.Fixtures.menu;
+import static kitchenpos.Fixtures.menuProduct;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
@@ -23,24 +25,32 @@ import org.junit.jupiter.params.provider.ValueSource;
 class OrderTest {
 
   private OrderValidator orderValidator;
+  private InMemoryMenuRepository menuRepository;
+  private InMemoryOrderRepository orderRepository;
+  private InMemoryOrderTableRepository orderTableRepository;
 
   @BeforeEach
   void setUp() {
-    orderValidator = new FakeOrderValidator(
-        new InMemoryMenuRepository(),
-        new InMemoryOrderRepository(),
-        new InMemoryOrderTableRepository()
+    menuRepository = new InMemoryMenuRepository();
+    orderRepository = new InMemoryOrderRepository();
+    orderTableRepository = new InMemoryOrderTableRepository();
+    orderValidator = new DefaultOrderValidator(
+        menuRepository,
+        orderRepository,
+        orderTableRepository
     );
   }
 
   @DisplayName("매장 테이블과 1개 이상 등록된 메뉴로 매장 주문을 등록할 수 있다.")
   @Test
   void createEatInOrder() {
+    final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+
     assertThatNoException()
         .isThrownBy(() -> new Order(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
-                List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
+                List.of(new OrderLineItem(menuId, BigDecimal.valueOf(16_000L), 3))
             ).place(orderValidator)
         );
   }
@@ -49,7 +59,7 @@ class OrderTest {
   @MethodSource("orderLineItems")
   @ParameterizedTest
   void createOrderMenuNotValid(final List<OrderLineItem> orderLineItems) {
-    assertThatIllegalArgumentException()
+    assertThatExceptionOfType(RuntimeException.class)
         .isThrownBy(() -> new Order(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
@@ -72,6 +82,19 @@ class OrderTest {
             )
         )
     );
+  }
+
+  @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+  @Test
+  void createNotDisplayedMenuOrder() {
+    final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
+    assertThatIllegalStateException()
+        .isThrownBy(() -> new Order(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                List.of(new OrderLineItem(menuId, BigDecimal.valueOf(16_000L), 3))
+            ).place(orderValidator)
+        );
   }
 
   @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
