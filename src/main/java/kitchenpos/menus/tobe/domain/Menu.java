@@ -7,6 +7,7 @@ public class Menu {
     private DisplayedName name;
     private MenuProduct menuProduct;
     private MenuGroup menuGroup;
+    private boolean displayed;
 
     public Menu(final Price price, final DisplayedName name, final MenuProduct menuProduct, final MenuGroup menuGroup) {
         if (menuProduct.getSumOfPrice().compareTo(price) < 0) {
@@ -16,6 +17,7 @@ public class Menu {
         this.name = name;
         this.menuProduct = menuProduct;
         this.menuGroup = menuGroup;
+        this.displayed = true;
     }
 
     public Price getPrice() {
@@ -24,5 +26,16 @@ public class Menu {
 
     public void changePrice(final Price price) {
         this.price = price;
+    }
+
+    public boolean isDisplayed() {
+        return this.displayed;
+    }
+    public void displayOff() {
+        this.displayed = false;
+    }
+
+    public void displayOn() {
+        this.displayed = true;
     }
 }

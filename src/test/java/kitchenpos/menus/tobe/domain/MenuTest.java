@@ -15,9 +15,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 - [x] 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
 - [x] 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
 - [x] 메뉴는 특정 메뉴 그룹에 속해야 한다.
-- 메뉴를 노출할 수 있다.
+- [x] 메뉴의 전시상태를 변경할 수 있다. (노출, 숨김)
 - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
-- 메뉴를 숨길 수 있다.
 - 메뉴의 목록을 조회할 수 있다.
  */
 class MenuTest {
@@ -56,5 +55,21 @@ class MenuTest {
 
         assertThatCode(() -> new Menu(menuPrice, name, menuProduct, menuGroup))
                 .doesNotThrowAnyException();
+    }
+
+    @DisplayName("메뉴의 전시상태를 변경할 수 있다.")
+    @Test
+    void displayed() {
+        final Price menuPrice = new Price(BigDecimal.TEN);
+        final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
+        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(6L)));
+        final MenuGroup menuGroup = new MenuGroup();
+
+        final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);
+        menu.displayOff();
+        assertThat(menu.isDisplayed()).isFalse();
+
+        menu.displayOn();
+        assertThat(menu.isDisplayed()).isTrue();
     }
 }
