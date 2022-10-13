@@ -1,11 +1,12 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class MenuPrice {
-
+    @Column(name = "price", nullable = false)
     private long price;
 
     protected MenuPrice() {

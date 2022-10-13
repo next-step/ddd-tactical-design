@@ -7,10 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.UUID;
 
 @Entity(name = "TobeMenu")
+@Table(name = "menu")
 public class Menu {
 
     @Id
@@ -20,7 +22,9 @@ public class Menu {
     private DisplayedName name;
     @Embedded
     private MenuPrice price;
-    private Long menuGroupId;
+    @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuGroupId;
+    @Column(name = "displayed", nullable = false)
     private boolean displayed;
     @Embedded
     private MenuProducts menuProducts;

@@ -14,6 +14,7 @@ public class OrderTable {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
+    @Column(name = "name", nullable = false)
     private String name;
     @Embedded
     private OrderTableStatus orderTableStatus;

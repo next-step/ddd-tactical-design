@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.model;
 
 import kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderTableStatusException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
@@ -12,7 +13,9 @@ public class OrderTableStatus {
     private static final OrderTableStatus EMPTY_STATUS = new OrderTableStatus(0, false);
     private static final OrderTableStatus OCCUPIED_STATUS_WITH_ZERO_GUESTS = new OrderTableStatus(0, true);
 
+    @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
+    @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
     public static OrderTableStatus ofEmpty() {
