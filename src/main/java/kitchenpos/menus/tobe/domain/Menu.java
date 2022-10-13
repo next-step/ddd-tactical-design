@@ -22,11 +22,11 @@ package kitchenpos.menus.tobe.domain;
 
 public class Menu {
 
-    private final String name;
+    private final DisplayName name;
     private final int price;
     private final Long menuGroupId;
 
-    public Menu(String name, int price, Long menuGroupId) {
+    public Menu(DisplayName name, int price, Long menuGroupId) {
         if(price < 0) {
             throw new IllegalArgumentException("메뉴의 가격은 0원 이상이어야 한다.");
         }
