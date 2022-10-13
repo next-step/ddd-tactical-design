@@ -27,6 +27,9 @@ public class Menu {
     private final Long menuGroupId;
 
     public Menu(String name, int price, Long menuGroupId) {
+        if(price < 0) {
+            throw new IllegalArgumentException("메뉴의 가격은 0원 이상이어야 한다.");
+        }
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
