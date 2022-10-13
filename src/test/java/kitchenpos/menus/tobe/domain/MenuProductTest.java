@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 /*
@@ -14,7 +16,7 @@ class MenuProductTest {
     @ParameterizedTest
     @ValueSource(longs = {0L, 1L})
     void moreThanZeroAndEqualsQuantity(final long quantity) {
-        assertThatCode(() -> new MenuProduct(quantity))
+        assertThatCode(() -> new MenuProduct(quantity, new DisplayedName("양념치킨", new FakeProfanity()), BigDecimal.ZERO))
                 .doesNotThrowAnyException();
     }
 }
