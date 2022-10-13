@@ -35,7 +35,7 @@ class ProductPriceChangedListenerTest {
 
         DisplayedName name = new DisplayedName(new FakeProfanity(), "호호치킨");
         MenuProduct menuProduct = new MenuProduct(productId, 1, 100_000L);
-        Menu menu = new Menu(UUID.randomUUID(), name, 90_000L, 1L, true, menuProduct);
+        Menu menu = new Menu(UUID.randomUUID(), name, 90_000L, UUID.randomUUID(), true, menuProduct);
 
         menuRepository.save(menu);
 

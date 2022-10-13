@@ -25,7 +25,7 @@ class MenuTest {
         long tooMuchPrice = 900_000L;
 
         // expected
-        assertThatThrownBy(() -> new Menu(UUID.randomUUID(), menuName, tooMuchPrice, 1L, true, menuProduct))
+        assertThatThrownBy(() -> new Menu(UUID.randomUUID(), menuName, tooMuchPrice, UUID.randomUUID(), true, menuProduct))
                 .isInstanceOf(IllegalMenuPriceException.class);
     }
 
@@ -34,7 +34,7 @@ class MenuTest {
     void changePrice() {
         // given
         MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), 3, 5000L);
-        Menu menu = new Menu(UUID.randomUUID(), menuName, 14_000L, 1L, true, menuProduct);
+        Menu menu = new Menu(UUID.randomUUID(), menuName, 14_000L, UUID.randomUUID(), true, menuProduct);
 
         // expected
         assertThatThrownBy(() -> menu.changePrice(new MenuPrice(900_000L)))
@@ -47,7 +47,7 @@ class MenuTest {
         // given
         UUID productId = UUID.randomUUID();
         MenuProduct menuProduct = new MenuProduct(productId, 3, 5000L);
-        Menu menu = new Menu(UUID.randomUUID(), menuName, 14_000L, 1L, true, menuProduct);
+        Menu menu = new Menu(UUID.randomUUID(), menuName, 14_000L, UUID.randomUUID(), true, menuProduct);
 
         // when
         assertThat(menu.isDisplayed()).isTrue();

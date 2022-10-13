@@ -28,7 +28,7 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(UUID id, DisplayedName name, long price, Long menuGroupId, boolean displayed, MenuProduct... menuProducts) {
+    public Menu(UUID id, DisplayedName name, long price, UUID menuGroupId, boolean displayed, MenuProduct... menuProducts) {
         this(id, name, new MenuPrice(price), menuGroupId, displayed, new MenuProducts(Arrays.asList(menuProducts)));
     }
 
@@ -36,7 +36,7 @@ public class Menu {
         UUID id,
         DisplayedName name,
         MenuPrice price,
-        Long menuGroupId,
+        UUID menuGroupId,
         boolean displayed,
         MenuProducts menuProducts
     ) {
