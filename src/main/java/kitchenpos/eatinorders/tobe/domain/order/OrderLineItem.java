@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.menu;
+package kitchenpos.eatinorders.tobe.domain.order;
 
 import kitchenpos.global.vo.Price;
 import kitchenpos.global.vo.Quantity;
@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "menu_product")
+@Table(name = "order_line_item")
 @Entity
-public class MenuProduct {
+public class OrderLineItem {
 
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,11 @@ public class MenuProduct {
     private Long seq;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
-    private Menu menu;
+    @JoinColumn(name = "order_id", columnDefinition = "binary(16)", nullable = false)
+    private EatInOrder order;
 
-    @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
-    private UUID productId;
+    @Column(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuId;
 
     @Embedded
     private Quantity quantity;
@@ -29,38 +29,33 @@ public class MenuProduct {
     @Embedded
     private Price price;
 
-    protected MenuProduct() {
+    protected OrderLineItem() {}
 
-    }
-
-    public MenuProduct(UUID productId, Quantity quantity, Price price) {
-        this.productId = productId;
+    public OrderLineItem(UUID menuId, Quantity quantity, Price price) {
+        this.menuId = menuId;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public void makeRelation(Menu menu) {
-        this.menu = menu;
+    public OrderLineItem(Long seq, UUID menuId, Quantity quantity, Price price) {
+        this(menuId, quantity, price);
+        this.seq = seq;
+    }
+
+    public void makeRelation(EatInOrder order) {
+        this.order = order;
     }
 
     public BigDecimal totalPrice() {
         return price.getValue().multiply(quantity.toBigDecimal());
     }
 
-    public void changePrice(Price price) {
-        this.price = price;
-    }
-
     public Long getSeq() {
         return seq;
     }
 
-    public Menu getMenuId() {
-        return menu;
-    }
-
-    public UUID getProductId() {
-        return productId;
+    public UUID getMenuId() {
+        return menuId;
     }
 
     public Quantity getQuantity() {
@@ -76,11 +71,11 @@ public class MenuProduct {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuProduct that = (MenuProduct) o;
+        OrderLineItem that = (OrderLineItem) o;
 
         if (seq != null ? !seq.equals(that.seq) : that.seq != null) return false;
-        if (menu != null ? !menu.equals(that.menu) : that.menu != null) return false;
-        if (productId != null ? !productId.equals(that.productId) : that.productId != null) return false;
+        if (order != null ? !order.equals(that.order) : that.order != null) return false;
+        if (menuId != null ? !menuId.equals(that.menuId) : that.menuId != null) return false;
         if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
         return price != null ? price.equals(that.price) : that.price == null;
     }
@@ -88,8 +83,8 @@ public class MenuProduct {
     @Override
     public int hashCode() {
         int result = seq != null ? seq.hashCode() : 0;
-        result = 31 * result + (menu != null ? menu.hashCode() : 0);
-        result = 31 * result + (productId != null ? productId.hashCode() : 0);
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (menuId != null ? menuId.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
