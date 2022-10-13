@@ -70,14 +70,27 @@ public class Order {
     this.status = OrderStatus.SERVED;
   }
 
-  public void complete() {
+  public void complete(OrderTableCleaner orderTableCleaner) {
     if (!status.isServed()) {
       throw new IllegalStateException();
     }
     this.status = OrderStatus.COMPLETED;
+    orderTableCleaner.clear(this.orderTableId);
   }
 
   public List<OrderLineItem> getOrderLineItems() {
     return orderLineItems.getOrderLineItems();
+  }
+
+  public UUID getId() {
+    return this.id;
+  }
+
+  public Object getOrderTableId() {
+    return this.orderTableId;
+  }
+
+  public OrderStatus getStatus() {
+    return this.status;
   }
 }

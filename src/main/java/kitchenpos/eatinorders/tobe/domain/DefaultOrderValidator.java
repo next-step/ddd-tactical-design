@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import java.util.NoSuchElementException;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Component;

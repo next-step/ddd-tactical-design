@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 class OrderTest {
 
   private OrderValidator orderValidator;
-  private InMemoryMenuRepository menuRepository;
-  private InMemoryOrderRepository orderRepository;
-  private InMemoryOrderTableRepository orderTableRepository;
+  private MenuRepository menuRepository;
+  private OrderRepository orderRepository;
+  private OrderTableRepository orderTableRepository;
+  private OrderTableCleaner orderTableCleaner;
 
   @BeforeEach
   void setUp() {
@@ -36,6 +38,10 @@ class OrderTest {
     orderTableRepository = new InMemoryOrderTableRepository();
     orderValidator = new DefaultOrderValidator(
         menuRepository,
+        orderRepository,
+        orderTableRepository
+    );
+    orderTableCleaner = new OrderTableCleaner(
         orderRepository,
         orderTableRepository
     );
@@ -165,27 +171,31 @@ class OrderTest {
   @DisplayName("주문을 완료한다.")
   @Test
   void complete() {
+    OrderTable orderTable = orderTableRepository.save(new OrderTable(UUID.randomUUID(), "9번", 5));
     Order order = new Order(
         UUID.randomUUID(),
-        UUID.randomUUID(),
+        orderTable.getId(),
         OrderStatus.SERVED,
         List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
     );
-    order.complete();
+    order.complete(orderTableCleaner);
   }
 
   @DisplayName("서빙된 주문만 완료할 수 있다.")
   @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
   @ParameterizedTest
   void serve_OnlyServedOrder(final OrderStatus status) {
+    OrderTable orderTable = orderTableRepository.save(new OrderTable(UUID.randomUUID(), "9번", 5));
     Order order = new Order(
         UUID.randomUUID(),
-        UUID.randomUUID(),
+        orderTable.getId(),
         status,
         List.of(new OrderLineItem(UUID.randomUUID(), BigDecimal.valueOf(16_000L), 3))
     );
 
     assertThatIllegalStateException()
-        .isThrownBy(order::complete);
+        .isThrownBy(() -> order.complete(orderTableCleaner));
   }
+
+  
 }

@@ -74,4 +74,8 @@ public class OrderTable {
   public NumberOfGuest getNumberOfGuests() {
     return numberOfGuests;
   }
+
+  public UUID getId() {
+    return id;
+  }
 }
