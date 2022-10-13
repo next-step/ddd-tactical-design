@@ -3,12 +3,12 @@ package kitchenpos.menus.tobe.domain;
 import java.util.Objects;
 
 class DisplayedName {
-    private static final String EMPTY_NAME_MESSAGE = "메뉴 이름은 비어있을 수 없습니다.";
-    private static final String CONTAIN_PROFANITY_MESSAGE = "메뉴 이름에 비속어가 포함될 수 없습니다.";
+    private static final String EMPTY_NAME_MESSAGE = "이름은 비어있을 수 없습니다.";
+    private static final String CONTAIN_PROFANITY_MESSAGE = "이름에 비속어가 포함될 수 없습니다.";
 
     private final String name;
 
-    public DisplayedName(final String name, final Profanity profanity) {
+     DisplayedName(final String name, final Profanity profanity) {
         if (null == name || name.isBlank()) {
             throw new IllegalArgumentException(EMPTY_NAME_MESSAGE);
         }

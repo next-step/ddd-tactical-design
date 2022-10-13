@@ -16,7 +16,7 @@ class DisplayedNameTest {
     @NullAndEmptySource
     @ParameterizedTest
     void emptyName(final String name) {
-        final String EMPTY_NAME_MESSAGE = "메뉴 이름은 비어있을 수 없습니다.";
+        final String EMPTY_NAME_MESSAGE = "이름은 비어있을 수 없습니다.";
 
         assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanity()))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -26,7 +26,7 @@ class DisplayedNameTest {
     @DisplayName("메뉴 이름에 비속어가 포함될 수 없다.")
     @Test
     void registerWithProfanity() {
-        final String CONTAIN_PROFANITY_MESSAGE = "메뉴 이름에 비속어가 포함될 수 없습니다.";
+        final String CONTAIN_PROFANITY_MESSAGE = "이름에 비속어가 포함될 수 없습니다.";
         final String name = "damn";
 
         assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanity()))
