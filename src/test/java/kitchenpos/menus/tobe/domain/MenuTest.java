@@ -19,7 +19,7 @@ public class MenuTest {
     @Test
     void 메뉴_생성() {
         final DisplayName name = new DisplayName("치킨", profanities);
-        final int price = 20000;
+        final Price price = new Price(20000);
         final Long menuGroupId = 1L;
 
         assertDoesNotThrow(() -> new Menu(name, price, menuGroupId));
