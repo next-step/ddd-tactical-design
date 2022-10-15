@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-import kitchenpos.products.domain.Profanity;
+import kitchenpos.products.tobe.fake.FakeProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 @DisplayName("상품 테스트")
 class ProductTest {
 
-    private Profanity profanity;
+    private FakeProfanityValidator profanity;
 
     @BeforeEach
     void setUp() {
-        profanity = Profanity.from("비속어");
+        profanity = FakeProfanityValidator.from("비속어");
     }
 
     @DisplayName("상품의 이름은 비어 있지 않아야 한다")

@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.domain.Profanity;
+import kitchenpos.products.domain.ProfanityValidator;
 
 @Embeddable
 public class DisplayedName {
@@ -13,16 +13,16 @@ public class DisplayedName {
     protected DisplayedName() {
     }
 
-    private DisplayedName(String displayedName, Profanity profanity) {
+    private DisplayedName(String displayedName, ProfanityValidator profanity) {
         validate(displayedName, profanity);
         this.displayedName = displayedName;
     }
 
-    public static DisplayedName of(String displayedName, Profanity profanity) {
+    public static DisplayedName of(String displayedName, ProfanityValidator profanity) {
         return new DisplayedName(displayedName, profanity);
     }
 
-    private void validate(String displayedName, Profanity profanity) {
+    private void validate(String displayedName, ProfanityValidator profanity) {
         if (Objects.isNull(displayedName)) {
             throw new IllegalArgumentException("이름은 비어 있을 수 없습니다.");
         }

@@ -1,13 +1,14 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.tobe.fake;
 
 import java.util.HashSet;
 import java.util.Set;
+import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.util.ObjectUtils;
 
-public class Profanity {
+public class FakeProfanityValidator implements ProfanityValidator {
     private final Set<String> profanitys;
 
-    public Profanity(Set<String> profanitys) {
+    public FakeProfanityValidator(Set<String> profanitys) {
         if (profanitys == null) {
             throw new IllegalArgumentException("비어 있을 수 없습니다.");
         }
@@ -21,8 +22,8 @@ public class Profanity {
         profanitys.add(word);
     }
 
-    public static Profanity from(String profanity) {
-        final Profanity profanitys = new Profanity(new HashSet<>());
+    public static FakeProfanityValidator from(String profanity) {
+        final FakeProfanityValidator profanitys = new FakeProfanityValidator(new HashSet<>());
         profanitys.add(profanity);
         return profanitys;
     }

@@ -2,18 +2,19 @@ package kitchenpos.products.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-import kitchenpos.products.domain.Profanity;
+import kitchenpos.products.domain.ProfanityValidator;
+import kitchenpos.products.tobe.fake.FakeProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class DisplayedNameTest {
 
-    private Profanity profanity;
+    private ProfanityValidator profanity;
 
     @BeforeEach
     void setUp() {
-        profanity = Profanity.from("비속어");
+        profanity = FakeProfanityValidator.from("비속어");
     }
 
     @Test
