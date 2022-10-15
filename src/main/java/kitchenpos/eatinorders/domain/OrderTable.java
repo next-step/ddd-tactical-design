@@ -1,20 +1,23 @@
 package kitchenpos.eatinorders.domain;
 
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table(name = "order_table")
 @Entity
 public class OrderTable {
-    @Column(name = "id", columnDefinition = "binary(16)")
+
     @Id
+    @Column(
+        name = "id",
+        length = 16,
+        unique = true,
+        nullable = false
+    )
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private OrderTableName name;
 
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
@@ -22,7 +25,18 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    protected OrderTable() {
+    }
+
+    public OrderTable(OrderTableName name, int numberOfGuests, boolean occupied) {
+        this(null, name, numberOfGuests, occupied);
+    }
+
+    public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
+        this.id = id;
+        this.name = name;
+        this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
     }
 
     public UUID getId() {
@@ -33,12 +47,8 @@ public class OrderTable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+    public String getNameValue() {
+        return name.getValue();
     }
 
     public int getNumberOfGuests() {

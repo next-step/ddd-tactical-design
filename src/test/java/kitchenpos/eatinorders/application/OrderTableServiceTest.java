@@ -8,10 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,19 +36,10 @@ class OrderTableServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.getNameValue()).isEqualTo(expected.getNameValue()),
             () -> assertThat(actual.getNumberOfGuests()).isZero(),
             () -> assertThat(actual.isOccupied()).isFalse()
         );
-    }
-
-    @DisplayName("주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.")
-    @NullAndEmptySource
-    @ParameterizedTest
-    void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
-        assertThatThrownBy(() -> orderTableService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("빈 테이블을 해지할 수 있다.")
@@ -120,14 +108,18 @@ class OrderTableServiceTest {
     }
 
     private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+        return new OrderTable(
+            new OrderTableName(name),
+            4,
+            false
+        );
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        return new OrderTable(
+            new OrderTableName("1번"),
+            4,
+            false
+        );
     }
 }
