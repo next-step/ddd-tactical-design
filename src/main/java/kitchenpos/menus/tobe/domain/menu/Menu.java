@@ -3,15 +3,17 @@ package kitchenpos.menus.tobe.domain.menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.products.tobe.domain.Price;
 
-import javax.persistence.Column;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
+@Table(name = "menu")
+@Entity
 public class Menu {
 
-
+    @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
+    private UUID id;
     private final MenuProducts menuProducts;
     private Price price;
 
@@ -85,5 +87,9 @@ public class Menu {
         if (!isMenuPriceOverMenuProductsSum(this.price, this.menuProducts)) {
             this.displayed = true;
         }
+    }
+
+    public UUID getId() {
+        return this.id;
     }
 }

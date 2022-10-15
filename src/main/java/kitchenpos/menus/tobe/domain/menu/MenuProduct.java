@@ -25,9 +25,7 @@ public class MenuProduct {
     @Embedded
     private Quantity quantity;
 
-    public MenuProduct() {
-
-    }
+    protected MenuProduct() {}
 
     public MenuProduct(Product product, Quantity quantity) {
         validate(quantity);
