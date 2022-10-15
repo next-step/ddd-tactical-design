@@ -29,7 +29,7 @@ public class Price {
         return Objects.hash(price);
     }
 
-    public boolean isExpensive(int amountPrice) {
-        return price > amountPrice;
+    public boolean isExpensive(int total) {
+        return price > total;
     }
 }
