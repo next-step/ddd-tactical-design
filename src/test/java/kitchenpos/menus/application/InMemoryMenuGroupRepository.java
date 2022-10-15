@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 
 import java.util.*;
 
@@ -10,7 +10,7 @@ public class InMemoryMenuGroupRepository implements MenuGroupRepository {
 
     @Override
     public MenuGroup save(final MenuGroup menuGroup) {
-        menuGroups.put(menuGroup.getId(), menuGroup);
+        menuGroups.put(menuGroup.id(), menuGroup);
         return menuGroup;
     }
 
