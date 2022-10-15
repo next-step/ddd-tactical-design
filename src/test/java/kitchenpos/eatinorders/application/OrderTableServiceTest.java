@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderTableServiceTest {
@@ -37,7 +36,7 @@ class OrderTableServiceTest {
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getNameValue()).isEqualTo(expected.getNameValue()),
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
+            () -> assertThat(actual.getNumberOfGuestsValue()).isZero(),
             () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
@@ -56,7 +55,7 @@ class OrderTableServiceTest {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final OrderTable actual = orderTableService.clear(orderTableId);
         assertAll(
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
+            () -> assertThat(actual.getNumberOfGuestsValue()).isZero(),
             () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
@@ -77,7 +76,7 @@ class OrderTableServiceTest {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
         final OrderTable expected = changeNumberOfGuestsRequest(4);
         final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
-        assertThat(actual.getNumberOfGuests()).isEqualTo(4);
+        assertThat(actual.getNumberOfGuestsValue()).isEqualTo(4);
     }
 
     @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
@@ -108,18 +107,10 @@ class OrderTableServiceTest {
     }
 
     private OrderTable createOrderTableRequest(final String name) {
-        return new OrderTable(
-            new OrderTableName(name),
-            4,
-            false
-        );
+        return new OrderTable(name, 4, false);
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        return new OrderTable(
-            new OrderTableName("1번"),
-            4,
-            false
-        );
+        return new OrderTable("1번", numberOfGuests, false);
     }
 }

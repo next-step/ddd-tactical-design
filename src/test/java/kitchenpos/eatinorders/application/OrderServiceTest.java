@@ -305,7 +305,7 @@ class OrderServiceTest {
         assertAll(
             () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
             () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuestsValue()).isEqualTo(0)
         );
     }
 
@@ -319,7 +319,7 @@ class OrderServiceTest {
         assertAll(
             () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
             () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isTrue(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuestsValue()).isEqualTo(4)
         );
     }
 

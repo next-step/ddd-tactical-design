@@ -58,7 +58,7 @@ public class Fixtures {
         return new OrderTable(
             UUID.randomUUID(),
             new OrderTableName("1번"),
-            numberOfGuests,
+            new NumberOfGuests(numberOfGuests),
             occupied
         );
     }

@@ -27,7 +27,7 @@ public class OrderTableService {
         final OrderTable orderTable = new OrderTable(
             UUID.randomUUID(),
             new OrderTableName(name),
-            0,
+            new NumberOfGuests(0),
             false
         );
         return orderTableRepository.save(orderTable);
@@ -55,7 +55,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
+        final int numberOfGuests = request.getNumberOfGuestsValue();
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
