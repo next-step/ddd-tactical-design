@@ -20,10 +20,11 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProfanityValidator profanityValidator;
     private final ApplicationEventPublisher applicationEventPublisher;
+
     public ProductService(
-        final ProductRepository productRepository,
-        final ProfanityValidator profanityValidator,
-        final ApplicationEventPublisher applicationEventPublisher
+            final ProductRepository productRepository,
+            final ProfanityValidator profanityValidator,
+            final ApplicationEventPublisher applicationEventPublisher
     ) {
         this.productRepository = productRepository;
         this.applicationEventPublisher = applicationEventPublisher;
@@ -41,7 +42,7 @@ public class ProductService {
     public Product changePrice(final UUID productId, final ProductChangeRequest request) {
         final Price changePrice = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
 
         product.changePrice(changePrice);
         applicationEventPublisher.publishEvent(new ChangeProductPriceEvent(productId));
