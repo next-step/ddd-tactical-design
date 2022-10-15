@@ -15,7 +15,7 @@ public class Menu {
     @Id
     private UUID id;
     private final MenuProducts menuProducts;
-    private Price price;
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -28,14 +28,14 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    public Menu(Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    public Menu(MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
         this.menuGroup = menuGroup;
         this.price = price;
         this.menuProducts = menuProducts;
         validate(price, menuProducts, menuGroup);
     }
 
-    private void validate(Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    private void validate(MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
         validateMenuProductsSize(menuProducts);
         validatePrice(price, menuProducts);
         validateMenuGroup(menuGroup);
@@ -47,7 +47,7 @@ public class Menu {
         }
     }
 
-    private void validatePrice(Price price, MenuProducts menuProducts) {
+    private void validatePrice(MenuPrice price, MenuProducts menuProducts) {
         if (isMenuPriceOverMenuProductsSum(price, menuProducts)) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
         }
@@ -56,7 +56,7 @@ public class Menu {
         }
     }
 
-    private boolean isMenuPriceOverMenuProductsSum(Price price, MenuProducts menuProducts) {
+    private boolean isMenuPriceOverMenuProductsSum(MenuPrice price, MenuProducts menuProducts) {
         return price.price().compareTo(menuProducts.sum()) > 0;
     }
 
@@ -74,12 +74,12 @@ public class Menu {
         return displayed;
     }
 
-    public void changePrice(Price price) {
+    public void changePrice(MenuPrice price) {
         validatePrice(price, this.menuProducts);
         this.price = price;
     }
 
-    public Price price() {
+    public MenuPrice price() {
         return this.price;
     }
 

@@ -22,7 +22,7 @@ class MenuTest {
     @Test
     void createMenu() {
         MenuProducts menuProducts = new MenuProducts();
-        assertThatThrownBy(() -> new Menu(new Price(BigDecimal.valueOf(10000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹"))))
+        assertThatThrownBy(() -> new Menu(new MenuPrice(BigDecimal.valueOf(10000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹"))))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴 상품을 등록해주세요.");
     }
@@ -31,8 +31,8 @@ class MenuTest {
     @Test
     void menuPrice() {
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        assertThatThrownBy(() -> new Menu(new Price(BigDecimal.valueOf(10000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹"))))
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        assertThatThrownBy(() -> new Menu(new MenuPrice(BigDecimal.valueOf(10000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹"))))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
     }
@@ -41,8 +41,8 @@ class MenuTest {
     @Test
     void hideMenu() {
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        Menu menu = new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        Menu menu = new Menu(new MenuPrice(BigDecimal.valueOf(8000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
     }
@@ -51,8 +51,8 @@ class MenuTest {
     @Test
     void belongToMenuGroup() {
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        assertThatThrownBy(() -> new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, null))
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        assertThatThrownBy(() -> new Menu(new MenuPrice(BigDecimal.valueOf(8000)), menuProducts, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴는 특정 메뉴 그룹에 속해야 한다.");
     }
@@ -62,10 +62,10 @@ class MenuTest {
     void changePrice() {
         MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴 그룹명"));
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        Menu menu = new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, menuGroup);
-        menu.changePrice(new Price(BigDecimal.valueOf(7000)));
-        assertThat(menu.price()).isEqualTo(new Price(BigDecimal.valueOf(7000)));
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        Menu menu = new Menu(new MenuPrice(BigDecimal.valueOf(8000)), menuProducts, menuGroup);
+        menu.changePrice(new MenuPrice(BigDecimal.valueOf(7000)));
+        assertThat(menu.price()).isEqualTo(new MenuPrice(BigDecimal.valueOf(7000)));
     }
 
     @DisplayName("메뉴를 노출할 수 있다.")
@@ -73,8 +73,8 @@ class MenuTest {
     void displayManu() {
         MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴 그룹명"));
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        Menu menu = new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, menuGroup);
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        Menu menu = new Menu(new MenuPrice(BigDecimal.valueOf(8000)), menuProducts, menuGroup);
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
         menu.display();
@@ -85,11 +85,11 @@ class MenuTest {
     @Test
     void displayManuva() {
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(new MenuProduct(new Product(new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
-        Menu menu = new Menu(new Price(BigDecimal.valueOf(8000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
+        menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName("후라이드 치킨", false), new Price(BigDecimal.valueOf(8000))), new Quantity(BigDecimal.ONE)));
+        Menu menu = new Menu(new MenuPrice(BigDecimal.valueOf(8000)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
-        assertThatThrownBy(() -> menu.changePrice(new Price(BigDecimal.valueOf(8001))))
+        assertThatThrownBy(() -> menu.changePrice(new MenuPrice(BigDecimal.valueOf(8001))))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
     }

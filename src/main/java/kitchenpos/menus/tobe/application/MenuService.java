@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.application;
 
 
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuCreateRequest;
@@ -42,7 +43,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangePriceRequest request) {
         final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
-        menu.changePrice(new Price(request.price()));
+        menu.changePrice(new MenuPrice(request.price()));
         return menu;
     }
 
@@ -51,6 +52,6 @@ public class MenuService {
         for (MenuProductRequest menuProductRequest : request.getMenuProducts()) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
         }
-        return new Menu(null, null, null);
+        return new Menu(new MenuPrice(request.getPrice()), null, null);
     }
 }

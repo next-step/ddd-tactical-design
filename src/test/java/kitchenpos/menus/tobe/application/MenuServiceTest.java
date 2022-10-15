@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.ToBeFixtures.menu;
-import static kitchenpos.ToBeFixtures.menuProduct;
+import static kitchenpos.ToBeFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("메뉴 서비스")
 class MenuServiceTest {
 
     private MenuRepository menuRepository;
@@ -37,7 +37,7 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         menuService = new MenuService(menuRepository, productRepository);
-        product = productRepository.save(ToBeFixtures.product("후라이드", 16_000L));
+        product = productRepository.save(product("후라이드", 16_000L));
     }
 
     @DisplayName("메뉴를 노출할 수 있다.")
@@ -73,9 +73,20 @@ class MenuServiceTest {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID())));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(BigDecimal.valueOf(10), menuProductRequests)))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("해당하는 상품이 업습니다.");
+    }
+
+    @DisplayName("메뉴의 가격은 0원 이상이어야 한다.")
+    @Test
+    void createMenuProductSize() {
+        List<MenuProductRequest> menuProductRequests = new ArrayList<>();
+        menuProductRequests.add(new MenuProductRequest(new ProductRequest(product.getId())));
+        BigDecimal price = BigDecimal.valueOf(-1);
+        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(price, menuProductRequests)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("메뉴 가격은 0원 이하일 수 없습니다.");
     }
 
 }

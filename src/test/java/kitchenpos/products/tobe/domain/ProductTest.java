@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,7 +23,7 @@ class ProductTest {
     @Test
     void createProduct() {
         boolean isProfanity = false;
-        assertDoesNotThrow(() -> new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice)));
+        assertDoesNotThrow(() -> new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity), new Price(createProductPrice)));
     }
 
     @DisplayName("이름이 null이거나 빈칸인 상품을 생성할 수 없다.")
@@ -30,7 +31,7 @@ class ProductTest {
     @ParameterizedTest
     void createEmptyNameProduct(String name) {
         boolean isProfanity = false;
-        assertThatThrownBy(() -> new Product(new DisplayedName(name, isProfanity), new Price(createProductPrice)))
+        assertThatThrownBy(() -> new Product(UUID.randomUUID(), new DisplayedName(name, isProfanity), new Price(createProductPrice)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("상품명은 null 이나 공백일 수 없습니다.");
     }
@@ -40,7 +41,7 @@ class ProductTest {
     @ValueSource(strings = "-1")
     void createNegativePriceProduct(BigDecimal negativePrice) {
         boolean isProfanity = false;
-        assertThatThrownBy(() -> new Product(new DisplayedName(displayedName, isProfanity), new Price(negativePrice)))
+        assertThatThrownBy(() -> new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity), new Price(negativePrice)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
     }
@@ -50,7 +51,7 @@ class ProductTest {
     void changeProductPrice() {
         BigDecimal changePrice = BigDecimal.valueOf(10000);
         boolean isProfanity = false;
-        Product product = new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
+        Product product = new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
         product.changePrice(changePrice);
         assertThat(product.getPrice()).isEqualTo(new Price(changePrice));
     }
@@ -60,7 +61,7 @@ class ProductTest {
     @ValueSource(strings = "-1")
     void changeNegativeProductPrice(BigDecimal negativePrice) {
         boolean isProfanity = false;
-        Product product = new Product(new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
+        Product product = new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity), new Price(createProductPrice));
         assertThatThrownBy(() -> product.changePrice(negativePrice))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("상품 가격은 0원보다 커야합니다.");

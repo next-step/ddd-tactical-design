@@ -18,7 +18,8 @@ public class Product {
 
     protected Product() {}
 
-    public Product(DisplayedName displayedName, Price price) {
+    public Product(UUID id, DisplayedName displayedName, Price price) {
+        this.id = id;
         this.displayedName = displayedName;
         this.price = price;
     }
