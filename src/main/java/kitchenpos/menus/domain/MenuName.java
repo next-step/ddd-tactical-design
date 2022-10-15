@@ -1,17 +1,19 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
+
+import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuGroupName {
+public class MenuName {
     private String name;
 
-    protected MenuGroupName() {
+    protected MenuName() {
     }
 
-    public MenuGroupName(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
+    public MenuName(String name, PurgomalumClient client) {
+        if (Objects.isNull(name) || client.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         this.name = name;
@@ -25,8 +27,8 @@ public class MenuGroupName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuGroupName that = (MenuGroupName) o;
-        return Objects.equals(name, that.name);
+        MenuName menuName = (MenuName) o;
+        return Objects.equals(name, menuName.name);
     }
 
     @Override

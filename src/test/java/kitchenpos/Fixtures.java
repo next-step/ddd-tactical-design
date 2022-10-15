@@ -1,8 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.*;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
