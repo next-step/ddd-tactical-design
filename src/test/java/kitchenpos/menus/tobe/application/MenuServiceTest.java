@@ -4,6 +4,9 @@ import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
+import kitchenpos.menus.tobe.dto.menu.MenuCreateRequest;
+import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
+import kitchenpos.menus.tobe.dto.menu.ProductRequest;
 import kitchenpos.products.tobe.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -12,6 +15,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static kitchenpos.ToBeFixtures.menu;
@@ -30,7 +36,7 @@ class MenuServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        menuService = new MenuService(menuRepository);
+        menuService = new MenuService(menuRepository, productRepository);
         product = productRepository.save(ToBeFixtures.product("후라이드", 16_000L));
     }
 
@@ -59,6 +65,17 @@ class MenuServiceTest {
         BigDecimal price = BigDecimal.valueOf(-1);
         assertThatThrownBy(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("상품이 없으면 등록할 수 없다.")
+    @Test
+    void createEmptyProductMenu() {
+        menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        List<MenuProductRequest> menuProductRequests = new ArrayList<>();
+        menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID())));
+        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuProductRequests)))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("해당하는 상품이 업습니다.");
     }
 
 }
