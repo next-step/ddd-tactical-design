@@ -28,6 +28,10 @@ public class OrderTable {
     protected OrderTable() {
     }
 
+    public OrderTable(UUID id, String name) {
+        this(id, new OrderTableName(name), new NumberOfGuests(0), false);
+    }
+
     public OrderTable(String name, int numberOfGuests, boolean occupied) {
         this(null, new OrderTableName(name), new NumberOfGuests(numberOfGuests), occupied);
     }

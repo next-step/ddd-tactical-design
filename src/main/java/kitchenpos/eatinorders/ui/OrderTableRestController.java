@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.ui.response.OrderTableResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class OrderTableRestController {
     private final OrderTableService orderTableService;
 
-    public OrderTableRestController(final OrderTableService orderTableService) {
+    public OrderTableRestController(OrderTableService orderTableService) {
         this.orderTableService = orderTableService;
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final OrderTable request) {
-        final OrderTable response = orderTableService.create(request);
+    public ResponseEntity<OrderTableResponse> create(@RequestBody OrderTableCreateRequest request) {
+        final OrderTableResponse response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
             .body(response);
     }

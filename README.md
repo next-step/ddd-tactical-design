@@ -47,7 +47,7 @@ docker compose -p kitchenpos up -d
 
 ### 주문 테이블
 
-1. [ ] 주문 테이블을 등록할 수 있다.
+1. [x] 주문 테이블을 등록할 수 있다.
 2. [x] 주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.
   - [x] 주문 테이블의 이름은 비워 둘 수 없다.
 3. [ ] 착석여부를 참으로 설정할 수 있다.
@@ -249,7 +249,7 @@ docker compose -p kitchenpos up -d
 - [x] `MenuProduct`는 `Menu`와 `productId`와 `MenuProductPrice`, `MenuProductQuantity`를 가진다.
 
 ### 매장 주문
-- [ ] `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
+- [x] `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
 - [ ] `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
 - [ ] `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
 - [ ] `EatInOrder`는 고유식별자와 `EatInOrderStatus`, `EatInOrderDateTime`, `EatInOrderLineItem` 목록을 가진다.

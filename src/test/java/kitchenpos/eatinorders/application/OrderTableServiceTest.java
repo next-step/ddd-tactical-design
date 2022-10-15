@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.ui.response.OrderTableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,14 +32,14 @@ class OrderTableServiceTest {
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
-        final OrderTable expected = createOrderTableRequest("1번");
-        final OrderTable actual = orderTableService.create(expected);
-        assertThat(actual).isNotNull();
+        OrderTableCreateRequest request = new OrderTableCreateRequest("1번");
+        OrderTableResponse response = orderTableService.create(request);
+        assertThat(response).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getNameValue()).isEqualTo(expected.getNameValue()),
-            () -> assertThat(actual.getNumberOfGuestsValue()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(response.getId()).isNotNull(),
+            () -> assertThat(response.getName()).isEqualTo("1번"),
+            () -> assertThat(response.getNumberOfGuests()).isZero(),
+            () -> assertThat(response.isOccupied()).isFalse()
         );
     }
 
@@ -104,10 +106,6 @@ class OrderTableServiceTest {
         orderTableRepository.save(orderTable());
         final List<OrderTable> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
-    }
-
-    private OrderTable createOrderTableRequest(final String name) {
-        return new OrderTable(name, 4, false);
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {

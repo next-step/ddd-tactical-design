@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.ui.response.OrderTableResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,24 +15,15 @@ public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
     private final OrderRepository orderRepository;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(OrderTableRepository orderTableRepository, OrderRepository orderRepository) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getNameValue();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable(
-            UUID.randomUUID(),
-            new OrderTableName(name),
-            new NumberOfGuests(0),
-            false
-        );
-        return orderTableRepository.save(orderTable);
+    public OrderTableResponse create(OrderTableCreateRequest request) {
+        OrderTable orderTable = new OrderTable(UUID.randomUUID(), request.getName());
+        return OrderTableResponse.from(orderTableRepository.save(orderTable));
     }
 
     @Transactional
