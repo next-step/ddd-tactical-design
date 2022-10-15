@@ -52,6 +52,14 @@ public class OrderTable {
         this.occupied = true;
     }
 
+    public void changeNumberOfGuests(int numberOfGuests) {
+        if (isNotOccupied()) {
+            throw new IllegalStateException("착석중이지 않아 손님 수를 변경할 수 없습니다.");
+        }
+
+        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -64,11 +72,11 @@ public class OrderTable {
         return numberOfGuests.getValue();
     }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
-    }
-
     public boolean isOccupied() {
         return occupied;
+    }
+
+    private boolean isNotOccupied() {
+        return !isOccupied();
     }
 }

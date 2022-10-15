@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.ui.request.OrderTableChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
 import kitchenpos.eatinorders.ui.response.OrderTableResponse;
 import org.springframework.stereotype.Service;
@@ -47,17 +48,10 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuestsValue();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
+    public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final OrderTableChangeNumberOfGuestsRequest request) {
         final OrderTable orderTable = findOrderTableById(orderTableId);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        orderTable.changeNumberOfGuests(request.getNumberOfGuests());
+        return OrderTableResponse.from(orderTable);
     }
 
     @Transactional(readOnly = true)

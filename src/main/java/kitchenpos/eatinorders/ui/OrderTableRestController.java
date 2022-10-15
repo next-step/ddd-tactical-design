@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.ui.request.OrderTableChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
 import kitchenpos.eatinorders.ui.response.OrderTableResponse;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +38,9 @@ public class OrderTableRestController {
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<OrderTable> changeNumberOfGuests(
-        @PathVariable final UUID orderTableId,
-        @RequestBody final OrderTable request
+    public ResponseEntity<OrderTableResponse> changeNumberOfGuests(
+        @PathVariable UUID orderTableId,
+        @RequestBody OrderTableChangeNumberOfGuestsRequest request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
