@@ -24,4 +24,11 @@ public class MenuService {
         menu.hide();
         return menu;
     }
+
+    @Transactional
+    public Menu display(final UUID menuId) {
+        final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
+        menu.display();
+        return menu;
+    }
 }

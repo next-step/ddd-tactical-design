@@ -31,6 +31,15 @@ class MenuServiceTest {
         product = productRepository.save(ToBeFixtures.product("후라이드", 16_000L));
     }
 
+    @DisplayName("메뉴를 노출할 수 있다.")
+    @Test
+    void display() {
+        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        final Menu actual = menuService.hide(menuId);
+        assertThat(actual.isDisplayed()).isFalse();
+        menuService.display(menuId);
+        assertThat(actual.isDisplayed()).isTrue();
+    }
 
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
