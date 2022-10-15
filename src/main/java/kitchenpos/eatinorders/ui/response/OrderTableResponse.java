@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.ui.response;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.OrderTable;
 
@@ -24,6 +27,12 @@ public class OrderTableResponse {
             orderTable.getNumberOfGuestsValue(),
             orderTable.isOccupied()
         );
+    }
+
+    public static List<OrderTableResponse> of(List<OrderTable> orderTables) {
+        return orderTables.stream()
+            .map(OrderTableResponse::from)
+            .collect(toList());
     }
 
     public UUID getId() {

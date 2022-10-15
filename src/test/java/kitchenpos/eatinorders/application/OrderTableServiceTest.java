@@ -105,7 +105,7 @@ class OrderTableServiceTest {
     @Test
     void findAll() {
         orderTableRepository.save(orderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
-        assertThat(actual).hasSize(1);
+        final List<OrderTableResponse> responses = orderTableService.findAll();
+        assertThat(responses).hasSize(1);
     }
 }

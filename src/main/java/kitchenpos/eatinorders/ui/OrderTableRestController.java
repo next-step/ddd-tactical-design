@@ -46,7 +46,7 @@ public class OrderTableRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderTable>> findAll() {
+    public ResponseEntity<List<OrderTableResponse>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());
     }
 }

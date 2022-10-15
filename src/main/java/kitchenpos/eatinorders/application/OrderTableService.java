@@ -55,8 +55,8 @@ public class OrderTableService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableResponse> findAll() {
+        return OrderTableResponse.of(orderTableRepository.findAll());
     }
 
     private OrderTable findOrderTableById(UUID orderTableId) {
