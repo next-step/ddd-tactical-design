@@ -28,17 +28,17 @@ public class MenuRestController {
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<MenuModel> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request.priceValue()));
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuModel> display(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuModel> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
     }
 

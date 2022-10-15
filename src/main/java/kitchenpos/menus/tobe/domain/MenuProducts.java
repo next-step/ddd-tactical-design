@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.domain.MenuProduct;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +28,17 @@ public class MenuProducts {
 
     public List<MenuProduct> menuProducts() {
         return menuProducts;
+    }
+
+    public BigDecimal menuProductPriceSum() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = sum.add(
+                    menuProduct.productPriceValue()
+                            .multiply(BigDecimal.valueOf(menuProduct.quantityValue()))
+            );
+        }
+        return sum;
     }
 
     private void validateMenuProducts(List<MenuProduct> menuProducts) {

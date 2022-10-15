@@ -151,8 +151,8 @@ class MenuServiceTest {
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).id();
         final BigDecimal expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.priceValue()).isEqualTo(expected);
+        final MenuModel actual = menuService.changePrice(menuId, expected);
+        assertThat(actual.price()).isEqualTo(expected);
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -178,7 +178,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).id();
-        final Menu actual = menuService.display(menuId);
+        final MenuModel actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -194,7 +194,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).id();
-        final Menu actual = menuService.hide(menuId);
+        final MenuModel actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 

@@ -66,52 +66,30 @@ public class MenuService {
         return createMenuModel(menuRepository.save(menu));
     }
     @Transactional
-    public Menu changePrice(final UUID menuId, final BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public MenuModel changePrice(final UUID menuId, final BigDecimal price) {
+        MenuPrice menuPrice = new MenuPrice(price);
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.menuProducts().menuProducts()) {
-            sum = sum.add(
-                menuProduct.product()
-                    .priceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.quantity().quantity()))
-            );
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        menu.setPrice(new MenuPrice(price));
-        return menu;
+        menuPrice.compareProductsPrice(menu.menuProductPriceSum());
+        menu.updatePrice(new MenuPrice(price));
+        return createMenuModel(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public MenuModel display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.menuProducts().menuProducts()) {
-            sum = sum.add(
-                menuProduct.product()
-                    .priceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.quantity().quantity()))
-            );
-        }
-        if (menu.priceValue().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
+        menu.displayAvailabilityCheck(menu.menuProductPriceSum());
         menu.setDisplayed(true);
-        return menu;
+        return createMenuModel(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public MenuModel hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
-        return menu;
+        return createMenuModel(menu);
     }
 
     @Transactional(readOnly = true)

@@ -52,20 +52,12 @@ public class Menu {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public MenuName name() {
         return name;
     }
 
     public String nameValue() {
         return name.name();
-    }
-
-    public void setName(MenuName name) {
-        this.name = name;
     }
 
     public MenuPrice price() {
@@ -76,16 +68,8 @@ public class Menu {
         return price.price();
     }
 
-    public void setPrice(MenuPrice price) {
-        this.price = price;
-    }
-
     public MenuGroup menuGroup() {
         return menuGroup;
-    }
-
-    public void setMenuGroup(MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
     }
 
     public boolean isDisplayed() {
@@ -100,15 +84,21 @@ public class Menu {
         return menuProducts;
     }
 
-    public void setMenuProducts(MenuProducts menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID menuGroupId() {
         return menuGroupId;
     }
 
-    public void setMenuGroupId(UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    public BigDecimal menuProductPriceSum() {
+        return menuProducts.menuProductPriceSum();
+    }
+
+    public void updatePrice(MenuPrice menuPrice) {
+        this.price = menuPrice;
+    }
+
+    public void displayAvailabilityCheck(BigDecimal sum) {
+        if (priceValue().compareTo(sum) > 0) {
+            throw new IllegalStateException();
+        }
     }
 }
