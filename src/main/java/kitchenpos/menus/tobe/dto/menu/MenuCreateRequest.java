@@ -6,9 +6,11 @@ import java.util.List;
 public class MenuCreateRequest {
 
     private final BigDecimal price;
+    private String menuName;
     private List<MenuProductRequest> menuProducts;
 
-    public MenuCreateRequest(BigDecimal price, List<MenuProductRequest> menuProducts) {
+    public MenuCreateRequest(String menuName, BigDecimal price, List<MenuProductRequest> menuProducts) {
+        this.menuName = menuName;
         this.price = price;
         this.menuProducts = menuProducts;
     }
@@ -19,5 +21,9 @@ public class MenuCreateRequest {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public String getMenuName() {
+        return this.menuName;
     }
 }

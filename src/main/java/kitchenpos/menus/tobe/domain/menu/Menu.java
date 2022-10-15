@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.products.tobe.domain.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +10,7 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
+    private final MenuName menuName;
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -28,7 +28,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    public Menu(MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    public Menu(MenuName menuName, MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
+        this.menuName = menuName;
         this.menuGroup = menuGroup;
         this.price = price;
         this.menuProducts = menuProducts;

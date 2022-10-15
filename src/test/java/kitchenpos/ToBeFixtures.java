@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class ToBeFixtures {
 
-    public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProduct) {
+    public static Menu menu(final String menuName, final long price, final boolean displayed, final MenuProduct... menuProduct) {
         MenuProducts menuProducts = new MenuProducts();
         Arrays.stream(menuProduct).forEach(menuProducts::add);
-        return new Menu(new MenuPrice(BigDecimal.valueOf(price)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
+        return new Menu(new MenuName(menuName, false), new MenuPrice(BigDecimal.valueOf(price)), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName("메뉴그룹")));
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
