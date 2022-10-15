@@ -25,4 +25,17 @@ public class MenuProductQuantity {
     public long quantity() {
         return quantity;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProductQuantity that = (MenuProductQuantity) o;
+        return quantity == that.quantity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(quantity);
+    }
 }
