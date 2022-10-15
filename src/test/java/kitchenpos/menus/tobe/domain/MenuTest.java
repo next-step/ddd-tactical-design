@@ -18,7 +18,7 @@ public class MenuTest {
 
     @Test
     void 메뉴_생성() {
-        final DisplayName name = new DisplayName("치킨", profanities);
+        final DisplayedName name = new DisplayedName("치킨", profanities);
         final Price price = new Price(20000);
         final Long menuGroupId = 1L;
 
@@ -27,10 +27,21 @@ public class MenuTest {
 
     @Test
     void 메뉴의_가격은_0원_이상() {
-        final DisplayName name = new DisplayName("치킨", profanities);
+        final DisplayedName name = new DisplayedName("치킨", profanities);
         final int price = -20000;
         final Long menuGroupId = 1L;
 
         assertThrows(IllegalArgumentException.class, () -> new Menu(name, price, menuGroupId));
+    }
+
+    @org.junit.jupiter.api.DisplayName("")
+    public void price() {
+
+    }
+
+    @Test
+    @org.junit.jupiter.api.DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
+    void name() {
+
     }
 }

@@ -2,10 +2,10 @@ package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
 
-public class DisplayName {
+public class DisplayedName {
     private final String name;
 
-    public DisplayName(String name, Profanities profanities) {
+    public DisplayedName(String name, Profanities profanities) {
         if (profanities.contains(name)) {
             throw new IllegalArgumentException("메뉴의 이름에는 비속어가 포함될 수 없다.");
         }
@@ -16,7 +16,7 @@ public class DisplayName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DisplayName that = (DisplayName) o;
+        DisplayedName that = (DisplayedName) o;
         return Objects.equals(name, that.name);
     }
 

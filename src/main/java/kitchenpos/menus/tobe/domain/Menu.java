@@ -22,15 +22,15 @@ package kitchenpos.menus.tobe.domain;
 
 public class Menu {
 
-    private final DisplayName name;
+    private final DisplayedName name;
     private final Price price;
     private final Long menuGroupId;
 
-    public Menu(DisplayName name, int price, Long menuGroupId) {
+    public Menu(DisplayedName name, int price, Long menuGroupId) {
         this(name, new Price(price), menuGroupId);
     }
 
-    public Menu(DisplayName name, Price price, Long menuGroupId) {
+    public Menu(DisplayedName name, Price price, Long menuGroupId) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;

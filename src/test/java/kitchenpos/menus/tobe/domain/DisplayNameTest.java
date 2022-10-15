@@ -25,14 +25,14 @@ public class DisplayNameTest {
     void 욕설이_포함된_이름(final String name) {
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new DisplayName(name, profanities)
+                () -> new DisplayedName(name, profanities)
         );
     }
 
     @Test
     void 동등성() {
-        final DisplayName equalName1 = new DisplayName("치킨", profanities);
-        final DisplayName equalName2 = new DisplayName("치킨", profanities);
+        final DisplayedName equalName1 = new DisplayedName("치킨", profanities);
+        final DisplayedName equalName2 = new DisplayedName("치킨", profanities);
         assertEquals(equalName1, equalName2);
     }
 }
