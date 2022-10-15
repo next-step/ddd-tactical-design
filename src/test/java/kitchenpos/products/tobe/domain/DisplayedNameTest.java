@@ -7,6 +7,8 @@ import kitchenpos.products.tobe.fake.FakeProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 public class DisplayedNameTest {
 
@@ -17,15 +19,16 @@ public class DisplayedNameTest {
         profanity = FakeProfanityValidator.from("비속어");
     }
 
-    @Test
     @DisplayName("이름이 비어있을 수는 없다.")
-    void name_is_not_null() {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void name_is_not_null(String name) {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> DisplayedName.of(null, profanity));
+                .isThrownBy(() -> DisplayedName.of(name, profanity));
     }
 
     @Test
-    @DisplayName("비속어는 비어있을 수는 없다.")
+    @DisplayName("비속어 검증은 비어있을 수는 없다.")
     void profanity_is_not_null() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> DisplayedName.of("이름", null));

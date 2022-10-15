@@ -4,6 +4,7 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import kitchenpos.products.domain.ProfanityValidator;
+import org.springframework.util.ObjectUtils;
 
 @Embeddable
 public class DisplayedName {
@@ -23,12 +24,12 @@ public class DisplayedName {
     }
 
     private void validate(String displayedName, ProfanityValidator profanity) {
-        if (Objects.isNull(displayedName)) {
+        if (ObjectUtils.isEmpty(displayedName)) {
             throw new IllegalArgumentException("이름은 비어 있을 수 없습니다.");
         }
 
         if (Objects.isNull(profanity)) {
-            throw new IllegalArgumentException("비속어가 비어 있을 수 없습니다.");
+            throw new IllegalArgumentException("비속어 검증이 비어 있을 수 없습니다.");
         }
 
         if (profanity.isHas(displayedName)) {
