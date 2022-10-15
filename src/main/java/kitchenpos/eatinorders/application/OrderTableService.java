@@ -27,17 +27,15 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+    public OrderTableResponse sit(final UUID orderTableId) {
+        OrderTable orderTable = findOrderTableById(orderTableId);
         orderTable.setOccupied(true);
-        return orderTable;
+        return OrderTableResponse.from(orderTable);
     }
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = findOrderTableById(orderTableId);
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
@@ -52,8 +50,7 @@ public class OrderTableService {
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = findOrderTableById(orderTableId);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
@@ -64,5 +61,10 @@ public class OrderTableService {
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
         return orderTableRepository.findAll();
+    }
+
+    private OrderTable findOrderTableById(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+            .orElseThrow(NoSuchElementException::new);
     }
 }

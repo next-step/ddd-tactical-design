@@ -47,8 +47,8 @@ class OrderTableServiceTest {
     @Test
     void sit() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
-        assertThat(actual.isOccupied()).isTrue();
+        final OrderTableResponse response = orderTableService.sit(orderTableId);
+        assertThat(response.isOccupied()).isTrue();
     }
 
     @DisplayName("빈 테이블로 설정할 수 있다.")

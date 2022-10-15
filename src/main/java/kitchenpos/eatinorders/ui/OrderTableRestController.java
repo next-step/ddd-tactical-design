@@ -27,7 +27,7 @@ public class OrderTableRestController {
     }
 
     @PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<OrderTable> sit(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<OrderTableResponse> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
