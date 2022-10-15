@@ -1,0 +1,26 @@
+###
+POST {{host}}/api/eat-in-orders
+Content-Type: application/json
+
+{
+  "eatInOrderTableId": "8d710043-29b6-420e-8452-233f5a035520",
+  "eatInOrderLineItems": [
+    {
+      "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
+      "price": 16000,
+      "quantity": 3
+    }
+  ]
+}
+
+###
+PUT {{host}}/api/eat-in-orders/69d78f38-3bff-457c-bb72-26319c985fd8/accept
+
+###
+PUT {{host}}/api/eat-in-orders/69d78f38-3bff-457c-bb72-26319c985fd8/serve
+
+###
+PUT {{host}}/api/eat-in-orders/69d78f38-3bff-457c-bb72-26319c985fd8/complete
+
+###
+GET {{host}}/api/eat-in-orders
