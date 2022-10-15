@@ -43,12 +43,17 @@ public class OrderTable {
         this.occupied = occupied;
     }
 
-    public UUID getId() {
-        return id;
+    public void clear() {
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.occupied = false;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public void sit() {
+        this.occupied = true;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getNameValue() {
@@ -65,9 +70,5 @@ public class OrderTable {
 
     public boolean isOccupied() {
         return occupied;
-    }
-
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
     }
 }

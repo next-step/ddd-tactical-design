@@ -55,10 +55,10 @@ class OrderTableServiceTest {
     @Test
     void clear() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
+        final OrderTableResponse response = orderTableService.clear(orderTableId);
         assertAll(
-            () -> assertThat(actual.getNumberOfGuestsValue()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(response.getNumberOfGuests()).isZero(),
+            () -> assertThat(response.isOccupied()).isFalse()
         );
     }
 

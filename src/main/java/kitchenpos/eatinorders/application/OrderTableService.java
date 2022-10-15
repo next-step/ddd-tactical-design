@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
@@ -29,19 +28,22 @@ public class OrderTableService {
     @Transactional
     public OrderTableResponse sit(final UUID orderTableId) {
         OrderTable orderTable = findOrderTableById(orderTableId);
-        orderTable.setOccupied(true);
+        orderTable.sit();
         return OrderTableResponse.from(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = findOrderTableById(orderTableId);
+    public OrderTableResponse clear(final UUID orderTableId) {
+        OrderTable orderTable = findOrderTableById(orderTableId);
+        validateOrderCompleted(orderTable);
+        orderTable.clear();
+        return OrderTableResponse.from(orderTable);
+    }
+
+    private void validateOrderCompleted(OrderTable orderTable) {
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("주문이 완료되지 않아 테이블을 정리할 수 없습니다.");
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
     }
 
     @Transactional

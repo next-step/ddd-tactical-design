@@ -51,7 +51,7 @@ docker compose -p kitchenpos up -d
 2. [x] 주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.
   - [x] 주문 테이블의 이름은 비워 둘 수 없다.
 3. [x] 착석여부를 참으로 설정할 수 있다.
-4. [ ] 착석여부를 거짓으로 설정할 수 있다.
+4. [x] 착석여부를 거짓으로 설정할 수 있다.
 5. [ ] 완료되지 않은 주문이 있는 주문 테이블은 정리 할 수 없다.
 6. [ ] 방문한 손님 수를 변경할 수 있다.
 7. [x] 방문한 손님 수가 올바르지 않으면 변경할 수 없다.
@@ -251,7 +251,7 @@ docker compose -p kitchenpos up -d
 ### 매장 주문
 - [x] `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
 - [ ] `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
-- [ ] `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
+- [x] `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
 - [ ] `EatInOrder`는 고유식별자와 `EatInOrderStatus`, `EatInOrderDateTime`, `EatInOrderLineItem` 목록을 가진다.
 - [ ] `EatInOrder`가 등록될 때 `Menu`는 `display` 중이어야하고, `MenuPrice`와 `EatInOrderLineItemPrice`가 일치 해야한다.
 - [ ] `EatInOrderStatus`는 `waiting`-`accepted`-`served`-`completed` 순으로 진행된다.
