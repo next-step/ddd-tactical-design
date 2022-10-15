@@ -1,4 +1,4 @@
-package kitchenpos;
+package kitchenpos.eatinorders;
 
 import static kitchenpos.menus.MenuFixtures.menu;
 
@@ -8,27 +8,31 @@ import java.util.Random;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
 
-public class Fixtures {
+public class OrderFixtures {
+
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static Order deliveryOrder(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
+    public static OrderTable orderTable() {
+        return orderTable(false, 0);
     }
 
-    public static Order takeoutOrder(final OrderStatus status) {
+    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+        return new OrderTable(
+            UUID.randomUUID(),
+            new OrderTableName("1번"),
+            new NumberOfGuests(numberOfGuests),
+            occupied
+        );
+    }
+
+    public static Order eatInOrder(final OrderStatus status, final OrderTable orderTable) {
         final Order order = new Order();
         order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
+        order.setType(OrderType.EAT_IN);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
         order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderTable(orderTable);
         return order;
     }
 

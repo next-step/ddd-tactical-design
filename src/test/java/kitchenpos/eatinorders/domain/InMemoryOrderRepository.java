@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.domain;
 
 import java.util.*;
 import kitchenpos.eatinorders.domain.Order;

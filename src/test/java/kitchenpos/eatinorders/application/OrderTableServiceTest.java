@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.application;
 
-import static kitchenpos.Fixtures.order;
-import static kitchenpos.Fixtures.orderTable;
+import static kitchenpos.eatinorders.OrderFixtures.eatInOrder;
+import static kitchenpos.eatinorders.OrderFixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -68,7 +68,7 @@ class OrderTableServiceTest {
     void clearWithUncompletedOrders() {
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         final UUID orderTableId = orderTable.getId();
-        orderRepository.save(order(OrderStatus.ACCEPTED, orderTable));
+        orderRepository.save(eatInOrder(OrderStatus.ACCEPTED, orderTable));
         assertThatThrownBy(() -> orderTableService.clear(orderTableId))
             .isInstanceOf(IllegalStateException.class);
     }

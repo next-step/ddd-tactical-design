@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.domain;
 
-import static kitchenpos.Fixtures.orderTable;
+import static kitchenpos.eatinorders.OrderFixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
