@@ -3,7 +3,6 @@ package kitchenpos.products.tobe.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.util.ObjectUtils;
 
 @Embeddable

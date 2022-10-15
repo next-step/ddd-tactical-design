@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.tobe.fake.FakeProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
