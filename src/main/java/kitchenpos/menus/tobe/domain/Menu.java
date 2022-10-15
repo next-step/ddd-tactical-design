@@ -20,19 +20,32 @@ package kitchenpos.menus.tobe.domain;
     - 메뉴의 목록을 조회할 수 있다.
  */
 
+import java.util.Collections;
+import java.util.List;
+
 public class Menu {
 
     private final DisplayedName name;
     private final Price price;
     private final Long menuGroupId;
+    private final List<MenuProduct> menuProducts;
 
-    public Menu(DisplayedName name, int price, Long menuGroupId) {
-        this(name, new Price(price), menuGroupId);
-    }
+    public Menu(DisplayedName name, Price price, Long menuGroupId, List<MenuProduct> menuProducts) {
+        if(menuProducts.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
 
-    public Menu(DisplayedName name, Price price, Long menuGroupId) {
+        final int amountPrice = menuProducts.stream()
+                .mapToInt(it -> it.amount())
+                .sum();
+
+        if (price.isExpensive(amountPrice)) {
+            throw new IllegalArgumentException("메뉴의 가격은 상품의 금액의 합보다 작아야 합니다.");
+        }
+
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
+        this.menuProducts = menuProducts;
     }
 }
