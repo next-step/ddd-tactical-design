@@ -10,6 +10,10 @@ public class OrderTableId {
         this.value = id;
     }
 
+    public UUID value() {
+        return this.value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
