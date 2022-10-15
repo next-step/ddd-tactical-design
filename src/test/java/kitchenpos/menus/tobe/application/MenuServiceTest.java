@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.application;
 import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
 import kitchenpos.products.tobe.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -10,11 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static kitchenpos.ToBeFixtures.menu;
 import static kitchenpos.ToBeFixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuServiceTest {
 
@@ -47,6 +50,15 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
+    @Test
+    void changeNegativeMenuPrice() {
+        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        BigDecimal price = BigDecimal.valueOf(-1);
+        assertThatThrownBy(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }
