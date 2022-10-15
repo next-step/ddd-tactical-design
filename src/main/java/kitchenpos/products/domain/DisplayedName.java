@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import java.util.Objects;
 import javax.persistence.Column;
@@ -36,7 +36,7 @@ public class DisplayedName {
         }
     }
 
-    public String getDisplayedName() {
+    public String value() {
         return displayedName;
     }
 
@@ -49,11 +49,11 @@ public class DisplayedName {
             return false;
         }
         DisplayedName that = (DisplayedName) o;
-        return Objects.equals(getDisplayedName(), that.getDisplayedName());
+        return Objects.equals(value(), that.value());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDisplayedName());
+        return Objects.hash(value());
     }
 }

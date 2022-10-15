@@ -1,8 +1,8 @@
-package kitchenpos.products.tobe.fake;
+package kitchenpos.products.fake;
 
 import java.util.HashSet;
 import java.util.Set;
-import kitchenpos.products.tobe.domain.ProfanityValidator;
+import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.util.ObjectUtils;
 
 public class FakeProfanityValidator implements ProfanityValidator {

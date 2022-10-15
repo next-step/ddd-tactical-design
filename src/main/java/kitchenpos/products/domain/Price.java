@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -13,8 +13,13 @@ public class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
+    protected Price() {
+
+    }
+
     public Price(BigDecimal price) {
         validate(price);
+        this.price = price;
     }
 
     public static Price from(long price) {
@@ -22,6 +27,10 @@ public class Price {
     }
 
     private void validate(BigDecimal price) {
+        if (Objects.isNull(price)) {
+            throw new IllegalArgumentException("가격은 비어 있을수 없습니다.");
+        }
+
         if (isLess(price)) {
             throw new IllegalArgumentException("가격은 0원 이상이어야 한다");
         }
@@ -29,6 +38,11 @@ public class Price {
 
     private boolean isLess(BigDecimal price) {
         return MIN_PRICE.compareTo(price) > LESS_CONDITION;
+    }
+
+
+    public BigDecimal value() {
+        return price;
     }
 
     @Override

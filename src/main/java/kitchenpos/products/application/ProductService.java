@@ -1,76 +1,65 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.global.event.ChangeProductPriceEvent;
+import kitchenpos.products.domain.DisplayedName;
+import kitchenpos.products.domain.Price;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.ProfanityValidator;
+import kitchenpos.products.dto.ProductChangeRequest;
+import kitchenpos.products.dto.ProductCreateRequest;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
-
+    private final ProfanityValidator profanityValidator;
+    private final ApplicationEventPublisher applicationEventPublisher;
     public ProductService(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final ProfanityValidator profanityValidator,
+        final ApplicationEventPublisher applicationEventPublisher
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.profanityValidator = profanityValidator;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public Product create(final ProductCreateRequest request) {
+        return productRepository.save(
+                new Product(DisplayedName.of(request.getName(), profanityValidator), new Price(request.getPrice()))
+        );
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Product changePrice(final UUID productId, final ProductChangeRequest request) {
+        final Price changePrice = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+
+        product.changePrice(changePrice);
+        applicationEventPublisher.publishEvent(new ChangeProductPriceEvent(productId));
+        // 추후 메뉴 리펙토링 시 참조 주석
+//        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+//        for (final Menu menu : menus) {
+//            BigDecimal sum = BigDecimal.ZERO;
+//            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+//                sum = sum.add(
+//                    menuProduct.getProduct()
+//                        .getPrice()
+//                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+//                );
+//            }
+//            if (menu.getPrice().compareTo(sum) > 0) {
+//                menu.setDisplayed(false);
+//            }
+//        }
         return product;
     }
 

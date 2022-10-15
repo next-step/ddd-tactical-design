@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.global.event;
 
 import java.util.UUID;
 

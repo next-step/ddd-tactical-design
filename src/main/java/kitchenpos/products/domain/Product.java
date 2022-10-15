@@ -1,49 +1,65 @@
 package kitchenpos.products.domain;
 
+import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
-import java.util.UUID;
+import org.springframework.util.ObjectUtils;
 
-@Table(name = "product")
+
 @Entity
+@Table(name = "product")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName displayedName;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
-    public Product() {
+    protected Product() {
+
+    }
+
+    public Product(UUID id, DisplayedName name, Price price) {
+        this(name, price);
+        this.id = id;
+    }
+
+    public Product(DisplayedName displayedName, Price price) {
+        validate(displayedName, price);
+        this.displayedName = displayedName;
+        this.price = price;
+    }
+
+    private void validate(DisplayedName displayedName, Price price) {
+        if (ObjectUtils.isEmpty(displayedName)) {
+            throw new IllegalArgumentException("이름은 필수 입니다.");
+        }
+        if (ObjectUtils.isEmpty(price)) {
+            throw new IllegalArgumentException("가격은 필수 입니다.");
+        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public DisplayedName getDisplayedName() {
+        return displayedName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void changePrice(Price price) {
         this.price = price;
     }
 }
+
