@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.ToBeFixtures.menuGroup;
-import static kitchenpos.ToBeFixtures.product;
+import static kitchenpos.ToBeFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -38,6 +37,7 @@ class MenuServiceTest {
     private MenuService menuService;
     private Product product;
     private MenuGroup menuGroup;
+    private Menu menu;
     private ProductRepository productRepository;
     private MenuGroupRepository menuGroupRepository;
 
@@ -49,12 +49,13 @@ class MenuServiceTest {
         menuService = new MenuService(menuRepository, productRepository, menuGroupRepository);
         product = productRepository.save(product("후라이드", 16_000L));
         menuGroup = menuGroupRepository.save(menuGroup("메뉴그룹"));
+        menu = menuRepository.save(menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L)));
     }
 
     @DisplayName("메뉴를 노출할 수 있다.")
     @Test
     void display() {
-        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
+        final UUID menuId = menu.getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
         menuService.display(menuId);
@@ -64,7 +65,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
     void hide() {
-        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
+        final UUID menuId = menu.getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
@@ -72,7 +73,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
     @Test
     void changeNegativeMenuPrice() {
-        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
+        final UUID menuId = menu.getId();
         BigDecimal price = BigDecimal.valueOf(-1);
         assertThatThrownBy(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -82,10 +83,9 @@ class MenuServiceTest {
     @Test
     void createEmptyProductMenu() {
         String menuName = "후라이드치킨";
-        menuRepository.save(ToBeFixtures.menu(menuName, 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID(), "상품명", BigDecimal.ONE), BigDecimal.ONE));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(10), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(10), menuProductRequests)))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("해당하는 상품이 업습니다.");
     }
@@ -98,7 +98,7 @@ class MenuServiceTest {
         BigDecimal productPrice = BigDecimal.ONE;
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(product.getId(), "상품명", productPrice), BigDecimal.ONE));
         BigDecimal menuPrice = BigDecimal.valueOf(-1);
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), menuName, menuPrice, menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), menuName, menuPrice, menuProductRequests)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴 가격은 0원 이하일 수 없습니다.");
     }
@@ -109,7 +109,7 @@ class MenuServiceTest {
     void createMenuProductSize(String menuName) {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(product.getId(), "상품명", BigDecimal.ONE), BigDecimal.ONE));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), menuName, BigDecimal.valueOf(3000), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), menuName, BigDecimal.valueOf(3000), menuProductRequests)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴명은 null 이나 공백일 수 없습니다.");
     }
@@ -119,7 +119,7 @@ class MenuServiceTest {
     void validateSum() {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(product.getId(), "상품명", BigDecimal.ONE), BigDecimal.ONE));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
     }
@@ -129,7 +129,7 @@ class MenuServiceTest {
     void createMenuNotProduct() {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID(), "상품명", BigDecimal.valueOf(3002)), BigDecimal.ONE));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("해당하는 상품이 업습니다.");
     }
@@ -139,7 +139,7 @@ class MenuServiceTest {
     void createMenuQuantity() {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID(), "상품명", BigDecimal.valueOf(3002)), BigDecimal.ONE));
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(UUID.randomUUID(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(UUID.randomUUID(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("해당하는 메뉴 그룹이 업습니다.");
     }
@@ -147,7 +147,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changeMenuPrice() {
-        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
+        final UUID menuId = menu.getId();
         BigDecimal price = BigDecimal.valueOf(300);
         assertDoesNotThrow(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)));
     }
@@ -155,7 +155,6 @@ class MenuServiceTest {
     @DisplayName("메뉴의 목록을 조회할 수 있다.")
     @Test
     void findMenus() {
-        menuRepository.save(ToBeFixtures.menu("후라이드 치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L)));
         final List<Menu> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
@@ -164,9 +163,13 @@ class MenuServiceTest {
     @Test
     void createMenuProductSizeOverOne() {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
-        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+        assertThatThrownBy(() -> menuService.create(createMenuProductRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴 상품을 등록해주세요.");
+    }
+
+    private MenuCreateRequest createMenuProductRequest(UUID menuGroupId, String menuName, BigDecimal price, List<MenuProductRequest> menuProductRequests) {
+        return new MenuCreateRequest(menuGroupId, menuName, price, menuProductRequests);
     }
 
 }
