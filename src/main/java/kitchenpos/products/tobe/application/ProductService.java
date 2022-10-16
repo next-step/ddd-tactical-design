@@ -2,12 +2,11 @@ package kitchenpos.products.tobe.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.Profanity;
+import kitchenpos.products.tobe.domain.ProfanityClient;
 import kitchenpos.products.ui.dto.ChangePriceRequest;
 import kitchenpos.products.ui.dto.CreateProductRequest;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final Profanity profanityClient;
+    private final ProfanityClient profanityClient;
 
-    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, Profanity profanityClient) {
+    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, ProfanityClient profanityClient) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.profanityClient = profanityClient;

@@ -9,13 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DisplayedNameTest {
-    private final Profanity profanity = new FakePurgomalumClient();
+    private final ProfanityClient profanityClient = new FakePurgomalumClient();
 
     @Test
     @DisplayName("이름을 지을수 있다.")
     void name() {
-        DisplayedName displayedName1 = new DisplayedName("상점 제목", profanity);
-        DisplayedName displayedName2 = new DisplayedName("상점 제목", profanity);
+        DisplayedName displayedName1 = new DisplayedName("상점 제목", profanityClient);
+        DisplayedName displayedName2 = new DisplayedName("상점 제목", profanityClient);
 
         assertThat(displayedName1).isEqualTo(displayedName2);
     }
@@ -23,7 +23,7 @@ class DisplayedNameTest {
     @Test
     @DisplayName("이름은 비어있을 수 없다.")
     void name_empty() {
-        assertThatThrownBy(() -> new DisplayedName("", profanity))
+        assertThatThrownBy(() -> new DisplayedName("", profanityClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -32,7 +32,7 @@ class DisplayedNameTest {
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @DisplayName("이름이 비속어가 포함될 수 없다.")
     void name_profanity(String name) {
-        assertThatThrownBy(() -> new DisplayedName(name, profanity))
+        assertThatThrownBy(() -> new DisplayedName(name, profanityClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

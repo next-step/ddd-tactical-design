@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain;
 import java.util.Arrays;
 import java.util.List;
 
-public class FakePurgomalumClient implements Profanity {
+public class FakePurgomalumClient implements ProfanityClient {
     private static final List<String> profanities;
 
     static {
