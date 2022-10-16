@@ -8,6 +8,7 @@ public class MenuCreateRequest {
     private final BigDecimal price;
     private String menuName;
     private List<MenuProductRequest> menuProducts;
+    private BigDecimal quantity;
 
     public MenuCreateRequest(String menuName, BigDecimal price, List<MenuProductRequest> menuProducts) {
         this.menuName = menuName;
@@ -25,5 +26,9 @@ public class MenuCreateRequest {
 
     public String getMenuName() {
         return this.menuName;
+    }
+
+    public BigDecimal getQuantity() {
+        return this.quantity;
     }
 }

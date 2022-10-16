@@ -1,14 +1,13 @@
 package kitchenpos.menus.tobe.application;
 
 
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuName;
-import kitchenpos.menus.tobe.domain.menu.MenuPrice;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuCreateRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
+import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,9 +49,11 @@ public class MenuService {
 
     @Transactional
     public Menu create(final MenuCreateRequest request) {
+        MenuProducts menuProducts = new MenuProducts();
         for (MenuProductRequest menuProductRequest : request.getMenuProducts()) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
+            menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false), new Price(menuProductRequest.getProductRequest().getProductPrice())), new Quantity(menuProductRequest.getQuantity())));
         }
-        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), null, null);
+        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, null);
     }
 }
