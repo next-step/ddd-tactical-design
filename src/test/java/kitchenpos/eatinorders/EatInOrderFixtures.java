@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders;
 
-import static kitchenpos.menus.MenuFixtures.menu;
-
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
@@ -28,7 +27,6 @@ public class EatInOrderFixtures {
     public static EatInOrder eatInOrder(final EatInOrderStatus status, final EatInOrderTable eatInOrderTable) {
         final EatInOrder eatInOrder = new EatInOrder();
         eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setType(OrderType.EAT_IN);
         eatInOrder.setStatus(status);
         eatInOrder.setEatInOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
         eatInOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
@@ -37,9 +35,11 @@ public class EatInOrderFixtures {
     }
 
     public static EatInOrderLineItem orderLineItem() {
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
-        eatInOrderLineItem.setSeq(new Random().nextLong());
-        eatInOrderLineItem.setMenu(menu());
-        return eatInOrderLineItem;
+        return new EatInOrderLineItem(
+            new Random().nextLong(),
+            UUID.randomUUID(),
+            1,
+            new EatInOrderLineItemPrice(BigDecimal.valueOf(19_000))
+        );
     }
 }

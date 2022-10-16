@@ -1,17 +1,17 @@
 package kitchenpos.eatinorders.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.menus.domain.Menu;
 
 @Table(name = "eat_in_order_line_item")
 @Entity
 public class EatInOrderLineItem {
 
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seq")
     private Long seq;
 
     @Column(name = "menu_id", length = 16, nullable = false, columnDefinition = "binary(16)")
@@ -23,46 +23,50 @@ public class EatInOrderLineItem {
     @Embedded
     private EatInOrderLineItemPrice price;
 
-    public EatInOrderLineItem() {
+    protected EatInOrderLineItem() {
+    }
+
+    public EatInOrderLineItem(UUID menuId, long quantity, BigDecimal price) {
+        this(null, menuId, quantity, new EatInOrderLineItemPrice(price));
+    }
+
+    public EatInOrderLineItem(Long seq, UUID menuId, long quantity, EatInOrderLineItemPrice price) {
+        this.seq = seq;
+        this.menuId = menuId;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return null;
-    }
-
-    public void setMenu(final Menu menu) {
-
+    public UUID getMenuId() {
+        return menuId;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPriceValue() {
         return price.getValue();
     }
 
-    public void setPrice(final BigDecimal price) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        EatInOrderLineItem that = (EatInOrderLineItem) o;
+        return Objects.equals(seq, that.seq);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq);
     }
 }

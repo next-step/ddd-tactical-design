@@ -63,9 +63,11 @@ public class EatInOrderService {
             if (menu.getPriceValue().compareTo(eatInOrderLineItemCreateRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
-            final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
-            eatInOrderLineItem.setMenu(menu);
-            eatInOrderLineItem.setQuantity(quantity);
+            final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(
+                menu.getId(),
+                quantity,
+                menu.getPriceValue()
+            );
             eatInOrderLineItems.add(eatInOrderLineItem);
         }
         EatInOrder eatInOrder = new EatInOrder();
@@ -90,15 +92,6 @@ public class EatInOrderService {
             .orElseThrow(NoSuchElementException::new);
         if (eatInOrder.getStatus() != EatInOrderStatus.WAITING) {
             throw new IllegalStateException();
-        }
-        if (eatInOrder.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final EatInOrderLineItem eatInOrderLineItem : eatInOrder.getEatInOrderLineItems()) {
-                sum = eatInOrderLineItem.getMenu()
-                    .getPriceValue()
-                    .multiply(BigDecimal.valueOf(eatInOrderLineItem.getQuantity()));
-            }
-            kitchenridersClient.requestDelivery(orderId, sum, eatInOrder.getDeliveryAddress());
         }
         eatInOrder.setStatus(EatInOrderStatus.ACCEPTED);
         return eatInOrder;

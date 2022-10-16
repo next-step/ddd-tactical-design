@@ -84,14 +84,6 @@ public class EatInOrder {
         this.eatInOrderLineItems = eatInOrderLineItems;
     }
 
-    public String getDeliveryAddress() {
-        return null;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-
-    }
-
     public EatInOrderTable getOrderTable() {
         return eatInOrderTable;
     }
