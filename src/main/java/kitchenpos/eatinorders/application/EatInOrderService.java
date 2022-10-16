@@ -6,7 +6,6 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.reader.application.MenuPriceReader;
 import kitchenpos.reader.domain.MenuPriceAndDisplayed;
 import org.springframework.stereotype.Service;
@@ -72,31 +71,22 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder accept(final UUID orderId) {
-        final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.ACCEPTED);
-        return eatInOrder;
+    public EatInOrderResponse accept(UUID orderId) {
+        EatInOrder eatInOrder = findOrderById(orderId);
+        eatInOrder.accept();
+        return EatInOrderResponse.from(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder serve(final UUID orderId) {
-        final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.SERVED);
-        return eatInOrder;
+    public EatInOrderResponse serve(UUID orderId) {
+        EatInOrder eatInOrder = findOrderById(orderId);
+        eatInOrder.serve();
+        return EatInOrderResponse.from(eatInOrder);
     }
 
     @Transactional
     public EatInOrder complete(final UUID orderId) {
-        final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+        final EatInOrder eatInOrder = findOrderById(orderId);
         final EatInOrderStatus status = eatInOrder.getStatus();
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException();
@@ -107,6 +97,11 @@ public class EatInOrderService {
             eatInOrderTable.clear();
         }
         return eatInOrder;
+    }
+
+    private EatInOrder findOrderById(UUID orderId) {
+        return eatInOrderRepository.findById(orderId)
+            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 주문을 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)

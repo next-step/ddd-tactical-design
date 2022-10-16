@@ -27,12 +27,12 @@ public class EatInOrderRestController {
     }
 
     @PutMapping("/{eatInOrderId}/accept")
-    public ResponseEntity<EatInOrder> accept(@PathVariable final UUID eatInOrderId) {
+    public ResponseEntity<EatInOrderResponse> accept(@PathVariable final UUID eatInOrderId) {
         return ResponseEntity.ok(eatInOrderService.accept(eatInOrderId));
     }
 
     @PutMapping("/{eatInOrderId}/serve")
-    public ResponseEntity<EatInOrder> serve(@PathVariable final UUID eatInOrderId) {
+    public ResponseEntity<EatInOrderResponse> serve(@PathVariable final UUID eatInOrderId) {
         return ResponseEntity.ok(eatInOrderService.serve(eatInOrderId));
     }
 

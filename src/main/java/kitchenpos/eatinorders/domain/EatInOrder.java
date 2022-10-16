@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
+import static kitchenpos.eatinorders.domain.EatInOrderStatus.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +47,7 @@ public class EatInOrder {
         EatInOrderLineItems eatInOrderLineItems,
         EatInOrderTable eatInOrderTable
     ) {
-        this(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        this(UUID.randomUUID(), WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
     }
 
     public EatInOrder(
@@ -60,6 +62,20 @@ public class EatInOrder {
         this.eatInOrderDateTime = eatInOrderDateTime;
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.eatInOrderTable = eatInOrderTable;
+    }
+
+    public void accept() {
+        if (status != WAITING) {
+            throw new IllegalStateException("주문상태가 '대기중'이 아니라 '접수됨'으로 변경할 수 없습니다.");
+        }
+        this.status = ACCEPTED;
+    }
+
+    public void serve() {
+        if (status != ACCEPTED) {
+            throw new IllegalStateException("주문상태가 '접수됨'이 아니라 '서빙됨'으로 변경할 수 없습니다.");
+        }
+        this.status = SERVED;
     }
 
     public UUID getId() {

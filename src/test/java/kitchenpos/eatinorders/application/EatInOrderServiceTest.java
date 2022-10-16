@@ -104,45 +104,6 @@ class EatInOrderServiceTest {
             .hasMessage("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
     }
 
-    @DisplayName("주문을 접수한다.")
-    @Test
-    void accept() {
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(EatInOrderStatus.WAITING, eatInOrderTable(true, 4))).getId();
-        final EatInOrder actual = eatInOrderService.accept(orderId);
-        assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);
-    }
-
-    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
-    @EnumSource(value = EatInOrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void accept(final EatInOrderStatus status) {
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(status, eatInOrderTable(true, 4))).getId();
-        assertThatThrownBy(() -> eatInOrderService.accept(orderId))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
-    @DisplayName("주문을 서빙한다.")
-    @Test
-    void serve() {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(
-            EatInOrderStatus.ACCEPTED,
-            eatInOrderTable
-        )).getId();
-        final EatInOrder actual = eatInOrderService.serve(orderId);
-        assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.SERVED);
-    }
-
-    @DisplayName("접수된 주문만 서빙할 수 있다.")
-    @EnumSource(value = EatInOrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void serve(final EatInOrderStatus status) {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(status, eatInOrderTable)).getId();
-        assertThatThrownBy(() -> eatInOrderService.serve(orderId))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
     @DisplayName("주문을 완료한다.")
     @Test
     void complete() {
