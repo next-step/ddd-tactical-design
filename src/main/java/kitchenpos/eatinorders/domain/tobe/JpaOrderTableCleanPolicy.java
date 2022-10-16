@@ -2,10 +2,10 @@ package kitchenpos.eatinorders.domain.tobe;
 
 import java.util.NoSuchElementException;
 
-public class InMemoryOrderTableClient implements OrderTableClient {
+public class JpaOrderTableCleanPolicy implements OrderTableCleanPolicy {
     private final OrderTableRepository orderTableRepository;
 
-    public InMemoryOrderTableClient(final OrderTableRepository orderTableRepository) {
+    public JpaOrderTableCleanPolicy(final OrderTableRepository orderTableRepository) {
         this.orderTableRepository = orderTableRepository;
     }
 
@@ -15,13 +15,5 @@ public class InMemoryOrderTableClient implements OrderTableClient {
             .orElseThrow(NoSuchElementException::new);
 
         orderTable.clear();
-    }
-
-    @Override
-    public boolean isEmptyOrderTable(OrderTableId orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId.value())
-            .orElseThrow(NoSuchElementException::new);
-
-        return !orderTable.isOccupied();
     }
 }

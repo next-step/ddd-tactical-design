@@ -20,7 +20,7 @@ public class EatInOrder {
         final EatInOrderId id,
         final OrderLineItems orderLineItems,
         final OrderTableId orderTableId,
-        final OrderTableClient orderTableClient
+        final EatInOrderCreatePolicy eatInOrderCreatePolicy
     ) {
         this.id = id;
         this.orderDateTime = LocalDateTime.now();
@@ -28,7 +28,7 @@ public class EatInOrder {
         if (Objects.isNull(orderTableId)) {
             throw new IllegalArgumentException("orderTableId is required");
         }
-        if (orderTableClient.isEmptyOrderTable(orderTableId)) {
+        if (eatInOrderCreatePolicy.isOccupiedOrderTable(orderTableId)) {
             throw new IllegalStateException("orderTable cannot be empty");
         }
         this.orderTableId = orderTableId;
@@ -48,12 +48,12 @@ public class EatInOrder {
         this.status = OrderStatus.SERVED;
     }
 
-    public void complete(OrderTableClient orderTableClient) {
+    public void complete(OrderTableCleanPolicy orderTableCleanPolicy) {
         if (this.status != OrderStatus.SERVED) {
             throw new IllegalStateException("");
         }
         this.status = OrderStatus.COMPLETED;
-        orderTableClient.clear(orderTableId);
+        orderTableCleanPolicy.clear(orderTableId);
     }
 
     public OrderStatus status() {

@@ -3,9 +3,8 @@ package kitchenpos.eatinorders.domain.tobe;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
-public class FakeOrderTableClient implements OrderTableClient {
+public class InMemoryOrderTableCleanPolicy implements OrderTableCleanPolicy {
     private Map<OrderTableId, OrderTable> orderTables = new HashMap<>();
 
     public void save(final OrderTable orderTable) {
@@ -23,14 +22,5 @@ public class FakeOrderTableClient implements OrderTableClient {
         }
 
         orderTables.get(orderTableId).clear();
-    }
-
-    @Override
-    public boolean isEmptyOrderTable(OrderTableId orderTableId) {
-        if (!orderTables.containsKey(orderTableId)) {
-            throw new NoSuchElementException();
-        }
-
-        return !orderTables.get(orderTableId).isOccupied();
     }
 }
