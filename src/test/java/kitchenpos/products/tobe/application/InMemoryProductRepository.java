@@ -1,9 +1,14 @@
-package kitchenpos.products.application;
+package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class InMemoryProductRepository implements ProductRepository {
@@ -26,10 +31,10 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAllByIdIn(final List<UUID> ids) {
+    public List<Product> findAllByIdIn(List<UUID> ids) {
         return products.values()
-            .stream()
-            .filter(product -> ids.contains(product.getId()))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(product -> ids.contains(product.getId()))
+                .collect(Collectors.toList());
     }
 }
