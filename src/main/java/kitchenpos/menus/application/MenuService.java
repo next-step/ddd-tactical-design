@@ -10,7 +10,7 @@ import kitchenpos.menus.ui.request.MenuPriceChangeRequest;
 import kitchenpos.menus.ui.request.MenuProductCreateRequest;
 import kitchenpos.menus.ui.response.MenuResponse;
 import kitchenpos.profanity.infra.ProfanityCheckClient;
-import kitchenpos.reader.ProductPriceReader;
+import kitchenpos.reader.application.ProductPriceReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

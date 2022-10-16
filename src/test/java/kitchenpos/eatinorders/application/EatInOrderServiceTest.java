@@ -7,22 +7,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
 import kitchenpos.menus.domain.InMemoryMenuRepository;
+import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-class EatInEatInOrderServiceTest {
+class EatInOrderServiceTest {
     private EatInOrderRepository eatInOrderRepository;
     private MenuRepository menuRepository;
     private EatInOrderTableRepository eatInOrderTableRepository;
@@ -33,7 +35,8 @@ class EatInEatInOrderServiceTest {
         eatInOrderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         eatInOrderTableRepository = new InMemoryEatInOrderTableRepository();
-        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, eatInOrderTableRepository);
+        FakeMenuPriceReader menuPriceReader = new FakeMenuPriceReader(menuRepository);
+        eatInOrderService = new EatInOrderService(eatInOrderRepository, eatInOrderTableRepository, menuPriceReader);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -41,7 +44,7 @@ class EatInEatInOrderServiceTest {
     void createEatInOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID eatInOrderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 4)).getId();
-        final EatInOrderCreateRequest request = createOrderRequest(eatInOrderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
+        final EatInOrderCreateRequest request = createOrderRequest(eatInOrderTableId, createOrderLineItemRequest(menuId, 3L));
         final EatInOrderResponse response = eatInOrderService.create(request);
         assertThat(response).isNotNull();
         assertAll(
@@ -56,11 +59,12 @@ class EatInEatInOrderServiceTest {
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     @Test
     void create() {
-        final EatInOrderLineItemCreateRequest orderLineItemRequest = createOrderLineItemRequest(INVALID_ID, 19_000L, 1);
+        final EatInOrderLineItemCreateRequest orderLineItemRequest = createOrderLineItemRequest(INVALID_ID, 1);
         final UUID eatInOrderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 4)).getId();
         final EatInOrderCreateRequest request = createOrderRequest(eatInOrderTableId, orderLineItemRequest);
         assertThatThrownBy(() -> eatInOrderService.create(request))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessage("ID 에 해당하는 메뉴를 찾을 수 없습니다.");
     }
 
     @DisplayName("주문 항목의 수량이 0 미만일 수 있다.")
@@ -69,41 +73,35 @@ class EatInEatInOrderServiceTest {
     void createEatInOrder(final long quantity) {
         final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 4)).getId();
-        final EatInOrderCreateRequest request = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity));
+        final EatInOrderCreateRequest request = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, quantity));
         assertDoesNotThrow(() -> eatInOrderService.create(request));
     }
 
-    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
+    @DisplayName("빈 테이블에는 주문을 등록할 수 없다.")
     @Test
     void createEmptyTableEatInOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L)).getId();
         final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(false, 0)).getId();
         final EatInOrderCreateRequest request = createOrderRequest(
-            orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
+            orderTableId, createOrderLineItemRequest(menuId, 3L)
         );
         assertThatThrownBy(() -> eatInOrderService.create(request))
             .isInstanceOf(IllegalStateException.class);
     }
 
-    @Disabled
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
-        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(false, 0)).getId();
-        final EatInOrderCreateRequest request = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
+        Menu menu = menu(19_000L);
+        menu.hide();
+        final UUID menuId = menuRepository.save(menu).getId();
+        EatInOrderTable eatInOrderTable = eatInOrderTable(false, 0);
+        eatInOrderTable.sit();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable).getId();
+        final EatInOrderCreateRequest request = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 3L));
         assertThatThrownBy(() -> eatInOrderService.create(request))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
-    @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
-    @Test
-    void createNotMatchedMenuPriceOrder() {
-        final UUID menuId = menuRepository.save(menu(19_000L)).getId();
-        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(false, 0)).getId();
-        final EatInOrderCreateRequest request = createOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 16_000L, 3L));
-        assertThatThrownBy(() -> eatInOrderService.create(request))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
     }
 
     @DisplayName("주문을 접수한다.")
@@ -224,7 +222,7 @@ class EatInEatInOrderServiceTest {
         return new EatInOrderCreateRequest(eatInOrderTableId, eatInOrderLineItemCreateRequests);
     }
 
-    private static EatInOrderLineItemCreateRequest createOrderLineItemRequest(UUID menuId, long price, long quantity) {
-        return new EatInOrderLineItemCreateRequest(menuId, BigDecimal.valueOf(price), quantity);
+    private static EatInOrderLineItemCreateRequest createOrderLineItemRequest(UUID menuId, long quantity) {
+        return new EatInOrderLineItemCreateRequest(menuId, quantity);
     }
 }

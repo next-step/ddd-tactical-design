@@ -1,4 +1,4 @@
-package kitchenpos.reader;
+package kitchenpos.reader.application;
 
 import java.math.BigDecimal;
 import java.util.UUID;

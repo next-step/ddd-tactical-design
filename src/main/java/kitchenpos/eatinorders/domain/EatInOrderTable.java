@@ -76,7 +76,7 @@ public class EatInOrderTable {
         return occupied;
     }
 
-    private boolean isNotOccupied() {
+    public boolean isNotOccupied() {
         return !isOccupied();
     }
 }

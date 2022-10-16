@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class EatInEatInOrderTableNameTest {
+class EatInOrderTableNameTest {
 
     @DisplayName("주문 테이블 이름은 Null 일 수 없다.")
     @Test

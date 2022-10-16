@@ -33,7 +33,7 @@ public class EatInOrderResponse {
             eatInOrder.getId(),
             eatInOrder.getStatus(),
             eatInOrder.getEatInOrderDateTime(),
-            EatInOrderLineItemResponse.of(eatInOrder.getEatInOrderLineItems()),
+            EatInOrderLineItemResponse.of(eatInOrder.getEatInOrderLineItemValues()),
             EatInOrderTableResponse.from(eatInOrder.getOrderTable())
         );
     }

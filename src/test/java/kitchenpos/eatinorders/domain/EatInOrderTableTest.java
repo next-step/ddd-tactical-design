@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.EatInOrderFixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class EatInEatInOrderTableTest {
+class EatInOrderTableTest {
 
     @DisplayName("테이블이 착석 상태가 아닐 경우 손님 수를 변경할 수 없다.")
     @Test

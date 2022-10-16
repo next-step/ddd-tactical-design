@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.reader.ProductPriceReader;
+import kitchenpos.reader.application.ProductPriceReader;
 
 public class FakeProductPriceReader implements ProductPriceReader {
 
