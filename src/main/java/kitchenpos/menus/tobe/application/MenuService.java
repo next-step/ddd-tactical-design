@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.application;
 
 
 import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuCreateRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
@@ -53,14 +54,17 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         MenuProducts menuProducts = new MenuProducts();
-        menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
+        MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
+        if (request.getMenuProducts().size() < 1) {
+            throw new IllegalArgumentException("메뉴 상품을 등록해주세요.");
+        }
         for (MenuProductRequest menuProductRequest : request.getMenuProducts()) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
             DisplayedName displayedName = new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false);
             Price productPrice = new Price(menuProductRequest.getProductRequest().getProductPrice());
             menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), displayedName, productPrice), new Quantity(menuProductRequest.getQuantity())));
         }
-        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, null);
+        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, menuGroup);
     }
 
     @Transactional(readOnly = true)

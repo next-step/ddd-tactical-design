@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.dto.menu;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ public class MenuCreateRequest {
     private final UUID menuGroupId;
     private final BigDecimal price;
     private String menuName;
-    private List<MenuProductRequest> menuProducts;
+    private List<MenuProductRequest> menuProducts = new ArrayList<>();
 
     public MenuCreateRequest(UUID menuGroupId, String menuName, BigDecimal price, List<MenuProductRequest> menuProducts) {
         this.menuGroupId = menuGroupId;

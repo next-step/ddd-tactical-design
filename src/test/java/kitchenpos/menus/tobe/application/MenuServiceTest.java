@@ -160,4 +160,13 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
+    @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
+    @Test
+    void createMenuProductSizeOverOne() {
+        List<MenuProductRequest> menuProductRequests = new ArrayList<>();
+        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("메뉴 상품을 등록해주세요.");
+    }
+
 }
