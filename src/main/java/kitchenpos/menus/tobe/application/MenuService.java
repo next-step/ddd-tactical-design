@@ -53,18 +53,37 @@ public class MenuService {
 
     @Transactional
     public Menu create(final CreateMenuRequest request) {
-        MenuProducts menuProducts = new MenuProducts();
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
+        validateMenuProductSize(request);
+        validateExistProduct(request.getMenuProducts());
+        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), createMenuProducts(request), menuGroup);
+    }
+
+    private MenuProducts createMenuProducts(CreateMenuRequest request) {
+        MenuProducts menuProducts = new MenuProducts();
+        request.getMenuProducts().stream().map(MenuService::createMenuProduct).forEach(menuProducts::add);
+        return menuProducts;
+    }
+
+    private static void validateMenuProductSize(CreateMenuRequest request) {
         if (request.getMenuProducts().size() < 1) {
             throw new IllegalArgumentException("메뉴 상품을 등록해주세요.");
         }
-        for (MenuProductRequest menuProductRequest : request.getMenuProducts()) {
+    }
+
+    private void validateExistProduct(List<MenuProductRequest> menuProducts) {
+        for (MenuProductRequest menuProductRequest : menuProducts) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
-            DisplayedName displayedName = new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false);
-            Price productPrice = new Price(menuProductRequest.getProductRequest().getProductPrice());
-            menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), displayedName, productPrice), new Quantity(menuProductRequest.getQuantity())));
         }
-        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, menuGroup);
+    }
+
+    private static MenuProduct createMenuProduct(MenuProductRequest menuProductRequest) {
+        return new MenuProduct(createProduct(menuProductRequest), new Quantity(menuProductRequest.getQuantity()));
+    }
+
+    private static Product createProduct(MenuProductRequest menuProductRequest) {
+        return new Product(UUID.randomUUID(), new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false),
+                new Price(menuProductRequest.getProductRequest().getProductPrice()));
     }
 
     @Transactional(readOnly = true)
