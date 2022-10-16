@@ -16,22 +16,17 @@ public class EatInOrderFixtures {
     }
 
     public static EatInOrderTable eatInOrderTable(final boolean occupied, final int numberOfGuests) {
-        return new EatInOrderTable(
-            UUID.randomUUID(),
-            new EatInOrderTableName("1번"),
-            new NumberOfGuests(numberOfGuests),
-            occupied
-        );
+        return new EatInOrderTable("1번", numberOfGuests, occupied);
     }
 
     public static EatInOrder eatInOrder(final EatInOrderStatus status, final EatInOrderTable eatInOrderTable) {
-        final EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(status);
-        eatInOrder.setEatInOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        eatInOrder.setOrderLineItems(Arrays.asList(orderLineItem()));
-        eatInOrder.setOrderTable(eatInOrderTable);
-        return eatInOrder;
+        return new EatInOrder(
+            UUID.randomUUID(),
+            status,
+            LocalDateTime.of(2020, 1, 1, 12, 0),
+            Arrays.asList(orderLineItem()),
+            eatInOrderTable
+        );
     }
 
     public static EatInOrderLineItem orderLineItem() {

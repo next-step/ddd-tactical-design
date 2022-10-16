@@ -33,7 +33,7 @@ public class EatInOrderTable {
     }
 
     public EatInOrderTable(String name, int numberOfGuests, boolean occupied) {
-        this(null, new EatInOrderTableName(name), new NumberOfGuests(numberOfGuests), occupied);
+        this(UUID.randomUUID(), new EatInOrderTableName(name), new NumberOfGuests(numberOfGuests), occupied);
     }
 
     public EatInOrderTable(UUID id, EatInOrderTableName name, NumberOfGuests numberOfGuests, boolean occupied) {

@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
 
@@ -41,23 +42,32 @@ public class EatInOrder {
     )
     private EatInOrderTable eatInOrderTable;
 
-    public EatInOrder() {
+    protected EatInOrder() {
+    }
+
+    public EatInOrder(
+        List<EatInOrderLineItem> eatInOrderLineItems,
+        EatInOrderTable eatInOrderTable
+    ) {
+        this(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+    }
+
+    public EatInOrder(
+        UUID id,
+        EatInOrderStatus status,
+        LocalDateTime eatInOrderDateTime,
+        List<EatInOrderLineItem> eatInOrderLineItems,
+        EatInOrderTable eatInOrderTable
+    ) {
+        this.id = id;
+        this.status = status;
+        this.eatInOrderDateTime = eatInOrderDateTime;
+        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.eatInOrderTable = eatInOrderTable;
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public OrderType getType() {
-        return OrderType.EAT_IN;
-    }
-
-    public void setType(final OrderType type) {
-
     }
 
     public EatInOrderStatus getStatus() {
@@ -72,23 +82,28 @@ public class EatInOrder {
         return eatInOrderDateTime;
     }
 
-    public void setEatInOrderDateTime(final LocalDateTime eatInOrderDateTime) {
-        this.eatInOrderDateTime = eatInOrderDateTime;
-    }
-
     public List<EatInOrderLineItem> getEatInOrderLineItems() {
         return eatInOrderLineItems;
-    }
-
-    public void setOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItems) {
-        this.eatInOrderLineItems = eatInOrderLineItems;
     }
 
     public EatInOrderTable getOrderTable() {
         return eatInOrderTable;
     }
 
-    public void setOrderTable(final EatInOrderTable eatInOrderTable) {
-        this.eatInOrderTable = eatInOrderTable;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        EatInOrder that = (EatInOrder) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

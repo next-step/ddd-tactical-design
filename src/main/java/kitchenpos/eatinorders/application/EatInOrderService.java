@@ -70,19 +70,12 @@ public class EatInOrderService {
             );
             eatInOrderLineItems.add(eatInOrderLineItem);
         }
-        EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(EatInOrderStatus.WAITING);
-        eatInOrder.setEatInOrderDateTime(LocalDateTime.now());
-        eatInOrder.setOrderLineItems(eatInOrderLineItems);
-
         final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.findById(request.getEatInOrderTableId())
             .orElseThrow(NoSuchElementException::new);
         if (!eatInOrderTable.isOccupied()) {
             throw new IllegalStateException();
         }
-        eatInOrder.setOrderTable(eatInOrderTable);
-
+        EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderTable);
         return EatInOrderResponse.from(eatInOrderRepository.save(eatInOrder));
     }
 
@@ -112,19 +105,14 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
-        final OrderType type = eatInOrder.getType();
         final EatInOrderStatus status = eatInOrder.getStatus();
-        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-            if (status != EatInOrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
+        if (status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException();
         }
         eatInOrder.setStatus(EatInOrderStatus.COMPLETED);
-        if (type == OrderType.EAT_IN) {
-            final EatInOrderTable eatInOrderTable = eatInOrder.getOrderTable();
-            if (!eatInOrderRepository.existsByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
-                eatInOrderTable.clear();
-            }
+        final EatInOrderTable eatInOrderTable = eatInOrder.getOrderTable();
+        if (!eatInOrderRepository.existsByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
+            eatInOrderTable.clear();
         }
         return eatInOrder;
     }
