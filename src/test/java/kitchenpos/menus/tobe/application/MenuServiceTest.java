@@ -114,4 +114,14 @@ class MenuServiceTest {
                 .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
     }
 
+    @DisplayName("상품이 없으면 등록할 수 없다.")
+    @Test
+    void createMenuNotProduct() {
+        List<MenuProductRequest> menuProductRequests = new ArrayList<>();
+        menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID(), "상품명", BigDecimal.valueOf(3002)), BigDecimal.ONE));
+        assertThatThrownBy(() -> menuService.create(new MenuCreateRequest("메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("해당하는 상품이 업습니다.");
+    }
+
 }
