@@ -19,11 +19,13 @@ import java.util.UUID;
 public class MenuService {
 
     private final MenuRepository menuRepository;
+    private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
 
-    public MenuService(final MenuRepository menuRepository, final ProductRepository productRepository) {
+    public MenuService(final MenuRepository menuRepository, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository) {
         this.menuRepository = menuRepository;
         this.productRepository = productRepository;
+        this.menuGroupRepository = menuGroupRepository;
     }
 
     @Transactional
@@ -50,9 +52,12 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         MenuProducts menuProducts = new MenuProducts();
+        menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
         for (MenuProductRequest menuProductRequest : request.getMenuProducts()) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
-            menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false), new Price(menuProductRequest.getProductRequest().getProductPrice())), new Quantity(menuProductRequest.getQuantity())));
+            DisplayedName displayedName = new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false);
+            Price productPrice = new Price(menuProductRequest.getProductRequest().getProductPrice());
+            menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), displayedName, productPrice), new Quantity(menuProductRequest.getQuantity())));
         }
         return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, null);
     }

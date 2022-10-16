@@ -1,8 +1,8 @@
 package kitchenpos;
 
 
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
@@ -26,6 +26,10 @@ public class ToBeFixtures {
 
     public static Product product(final String name, final long price) {
         return new Product(UUID.randomUUID(), new DisplayedName(name, false), new Price(BigDecimal.valueOf(price)));
+    }
+
+    public static MenuGroup menuGroup(final String name) {
+        return new MenuGroup(UUID.randomUUID(), new MenuGroupName(name));
     }
 
 }

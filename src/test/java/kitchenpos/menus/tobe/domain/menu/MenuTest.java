@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
