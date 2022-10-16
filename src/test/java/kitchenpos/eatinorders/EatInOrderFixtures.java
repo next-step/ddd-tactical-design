@@ -12,11 +12,11 @@ public class EatInOrderFixtures {
 
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static EatInOrderTable orderTable() {
-        return orderTable(false, 0);
+    public static EatInOrderTable eatInOrderTable() {
+        return eatInOrderTable(false, 0);
     }
 
-    public static EatInOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+    public static EatInOrderTable eatInOrderTable(final boolean occupied, final int numberOfGuests) {
         return new EatInOrderTable(
             UUID.randomUUID(),
             new EatInOrderTableName("1번"),

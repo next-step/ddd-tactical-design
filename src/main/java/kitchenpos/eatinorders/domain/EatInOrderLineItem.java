@@ -8,27 +8,20 @@ import kitchenpos.menus.domain.Menu;
 @Table(name = "eat_in_order_line_item")
 @Entity
 public class EatInOrderLineItem {
+
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_menu")
-    )
-    private Menu menu;
+    @Column(name = "menu_id", length = 16, nullable = false, columnDefinition = "binary(16)")
+    private UUID menuId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID menuId;
-
-    @Transient
-    private BigDecimal price;
+    @Embedded
+    private EatInOrderLineItemPrice price;
 
     public EatInOrderLineItem() {
     }
@@ -42,11 +35,11 @@ public class EatInOrderLineItem {
     }
 
     public Menu getMenu() {
-        return menu;
+        return null;
     }
 
     public void setMenu(final Menu menu) {
-        this.menu = menu;
+
     }
 
     public long getQuantity() {
@@ -65,11 +58,11 @@ public class EatInOrderLineItem {
         this.menuId = menuId;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceValue() {
+        return price.getValue();
     }
 
     public void setPrice(final BigDecimal price) {
-        this.price = price;
+
     }
 }

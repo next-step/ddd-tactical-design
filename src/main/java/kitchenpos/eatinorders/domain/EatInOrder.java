@@ -8,39 +8,38 @@ import javax.persistence.*;
 @Table(name = "eat_in_order")
 @Entity
 public class EatInOrder {
-    @Column(name = "id", columnDefinition = "binary(16)")
+
     @Id
+    @Column(
+        name = "id",
+        length = 16,
+        unique = true,
+        nullable = false
+    )
     private UUID id;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
-    @Column(name = "order_date_time", nullable = false)
-    private LocalDateTime orderDateTime;
+    @Column(name = "eat_in_order_date_time", nullable = false)
+    private LocalDateTime eatInOrderDateTime;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
         name = "order_id",
         nullable = false,
-        columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_eat_in_order")
     )
     private List<EatInOrderLineItem> eatInOrderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
         name = "eat_in_order_table_id",
-        columnDefinition = "binary(16)",
+        nullable = false,
         foreignKey = @ForeignKey(name = "fk_eat_in_order_to_eat_in_order_table")
     )
     private EatInOrderTable eatInOrderTable;
-
-    @Transient
-    private UUID orderTableId;
 
     public EatInOrder() {
     }
@@ -61,23 +60,23 @@ public class EatInOrder {
 
     }
 
-    public OrderStatus getStatus() {
+    public EatInOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
+    public void setStatus(final EatInOrderStatus status) {
         this.status = status;
     }
 
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
+    public LocalDateTime getEatInOrderDateTime() {
+        return eatInOrderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
+    public void setEatInOrderDateTime(final LocalDateTime eatInOrderDateTime) {
+        this.eatInOrderDateTime = eatInOrderDateTime;
     }
 
-    public List<EatInOrderLineItem> getOrderLineItems() {
+    public List<EatInOrderLineItem> getEatInOrderLineItems() {
         return eatInOrderLineItems;
     }
 
@@ -86,11 +85,11 @@ public class EatInOrder {
     }
 
     public String getDeliveryAddress() {
-        return deliveryAddress;
+        return null;
     }
 
     public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+
     }
 
     public EatInOrderTable getOrderTable() {
@@ -99,13 +98,5 @@ public class EatInOrder {
 
     public void setOrderTable(final EatInOrderTable eatInOrderTable) {
         this.eatInOrderTable = eatInOrderTable;
-    }
-
-    public UUID getOrderTableId() {
-        return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }

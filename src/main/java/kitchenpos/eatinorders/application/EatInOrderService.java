@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
+import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
 import kitchenpos.orders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
@@ -31,37 +34,33 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
-        final List<EatInOrderLineItem> eatInOrderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(eatInOrderLineItemRequests) || eatInOrderLineItemRequests.isEmpty()) {
+    public EatInOrderResponse create(final EatInOrderCreateRequest request) {
+        final List<EatInOrderLineItemCreateRequest> eatInOrderLineItemCreateRequests = request.getEatInOrderLineItems();
+        if (Objects.isNull(eatInOrderLineItemCreateRequests) || eatInOrderLineItemCreateRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
         final List<Menu> menus = menuRepository.findAllByIdIn(
-            eatInOrderLineItemRequests.stream()
-                .map(EatInOrderLineItem::getMenuId)
+            eatInOrderLineItemCreateRequests.stream()
+                .map(EatInOrderLineItemCreateRequest::getMenuId)
                 .collect(Collectors.toList())
         );
-        if (menus.size() != eatInOrderLineItemRequests.size()) {
+        if (menus.size() != eatInOrderLineItemCreateRequests.size()) {
             throw new IllegalArgumentException();
         }
         final List<EatInOrderLineItem> eatInOrderLineItems = new ArrayList<>();
-        for (final EatInOrderLineItem eatInOrderLineItemRequest : eatInOrderLineItemRequests) {
-            final long quantity = eatInOrderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-            }
-            final Menu menu = menuRepository.findById(eatInOrderLineItemRequest.getMenuId())
+        for (final EatInOrderLineItemCreateRequest eatInOrderLineItemCreateRequest : eatInOrderLineItemCreateRequests) {
+            final long quantity = eatInOrderLineItemCreateRequest.getQuantity();
+//            if (type != OrderType.EAT_IN) {
+//                if (quantity < 0) {
+//                    throw new IllegalArgumentException();
+//                }
+//            }
+            final Menu menu = menuRepository.findById(eatInOrderLineItemCreateRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPriceValue().compareTo(eatInOrderLineItemRequest.getPrice()) != 0) {
+            if (menu.getPriceValue().compareTo(eatInOrderLineItemCreateRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
@@ -71,26 +70,18 @@ public class EatInOrderService {
         }
         EatInOrder eatInOrder = new EatInOrder();
         eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setType(type);
         eatInOrder.setStatus(EatInOrderStatus.WAITING);
         eatInOrder.setEatInOrderDateTime(LocalDateTime.now());
         eatInOrder.setOrderLineItems(eatInOrderLineItems);
-        if (type == OrderType.DELIVERY) {
-            final String deliveryAddress = request.getDeliveryAddress();
-            if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-            eatInOrder.setDeliveryAddress(deliveryAddress);
+
+        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.findById(request.getEatInOrderTableId())
+            .orElseThrow(NoSuchElementException::new);
+        if (!eatInOrderTable.isOccupied()) {
+            throw new IllegalStateException();
         }
-        if (type == OrderType.EAT_IN) {
-            final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!eatInOrderTable.isOccupied()) {
-                throw new IllegalStateException();
-            }
-            eatInOrder.setOrderTable(eatInOrderTable);
-        }
-        return eatInOrderRepository.save(eatInOrder);
+        eatInOrder.setOrderTable(eatInOrderTable);
+
+        return EatInOrderResponse.from(eatInOrderRepository.save(eatInOrder));
     }
 
     @Transactional
@@ -102,7 +93,7 @@ public class EatInOrderService {
         }
         if (eatInOrder.getType() == OrderType.DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final EatInOrderLineItem eatInOrderLineItem : eatInOrder.getOrderLineItems()) {
+            for (final EatInOrderLineItem eatInOrderLineItem : eatInOrder.getEatInOrderLineItems()) {
                 sum = eatInOrderLineItem.getMenu()
                     .getPriceValue()
                     .multiply(BigDecimal.valueOf(eatInOrderLineItem.getQuantity()));
@@ -125,41 +116,11 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder startDelivery(final UUID orderId) {
-        final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getType() != OrderType.DELIVERY) {
-            throw new IllegalStateException();
-        }
-        if (eatInOrder.getStatus() != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.DELIVERING);
-        return eatInOrder;
-    }
-
-    @Transactional
-    public EatInOrder completeDelivery(final UUID orderId) {
-        final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.DELIVERING) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.DELIVERED);
-        return eatInOrder;
-    }
-
-    @Transactional
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         final OrderType type = eatInOrder.getType();
         final EatInOrderStatus status = eatInOrder.getStatus();
-        if (type == OrderType.DELIVERY) {
-            if (status != EatInOrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
-        }
         if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
             if (status != EatInOrderStatus.SERVED) {
                 throw new IllegalStateException();

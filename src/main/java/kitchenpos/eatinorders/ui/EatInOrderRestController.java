@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.application.EatInOrderService;
 import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +20,8 @@ public class EatInOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<EatInOrder> create(@RequestBody final EatInOrder request) {
-        final EatInOrder response = eatInOrderService.create(request);
+    public ResponseEntity<EatInOrderResponse> create(@RequestBody final EatInOrderCreateRequest request) {
+        final EatInOrderResponse response = eatInOrderService.create(request);
         return ResponseEntity.created(URI.create("/api/eat-in-orders/" + response.getId()))
             .body(response);
     }
@@ -32,16 +34,6 @@ public class EatInOrderRestController {
     @PutMapping("/{eatInOrderId}/serve")
     public ResponseEntity<EatInOrder> serve(@PathVariable final UUID eatInOrderId) {
         return ResponseEntity.ok(eatInOrderService.serve(eatInOrderId));
-    }
-
-    @PutMapping("/{eatInOrderId}/start-delivery")
-    public ResponseEntity<EatInOrder> startDelivery(@PathVariable final UUID eatInOrderId) {
-        return ResponseEntity.ok(eatInOrderService.startDelivery(eatInOrderId));
-    }
-
-    @PutMapping("/{eatInOrderId}/complete-delivery")
-    public ResponseEntity<EatInOrder> completeDelivery(@PathVariable final UUID eatInOrderId) {
-        return ResponseEntity.ok(eatInOrderService.completeDelivery(eatInOrderId));
     }
 
     @PutMapping("/{eatInOrderId}/complete")
