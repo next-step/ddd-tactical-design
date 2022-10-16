@@ -3,9 +3,9 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,13 +39,14 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        BigDecimal price = BigDecimal.valueOf(16_000L);
+        String name = "후라이드";
+        final Product actual = productService.create(price, name);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+            () -> assertThat(actual.getName().getName()).isEqualTo(name),
+            () -> assertThat(actual.getPrice().getPrice()).isEqualTo(price)
         );
     }
 
@@ -54,8 +55,8 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Product expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> productService.create(expected))
+        String name = "후라이드";
+        assertThatThrownBy(() -> productService.create(price, name))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -64,8 +65,8 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
+        BigDecimal price = BigDecimal.valueOf(16_000L);
+        assertThatThrownBy(() -> productService.create(price, name))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -73,9 +74,9 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+        BigDecimal price = BigDecimal.valueOf(15_000L);
+        final Product actual = productService.changePrice(productId, price);
+        assertThat(actual.getPrice().getPrice()).isEqualTo(price);
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -84,8 +85,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
+        assertThatThrownBy(() -> productService.changePrice(productId, price))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -94,7 +94,8 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        BigDecimal price = BigDecimal.valueOf(8_000L);
+        productService.changePrice(product.getId(), price);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -105,26 +106,5 @@ class ProductServiceTest {
         productRepository.save(product("양념치킨", 16_000L));
         final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
-    }
-
-    private Product createProductRequest(final String name, final long price) {
-        return createProductRequest(name, BigDecimal.valueOf(price));
-    }
-
-    private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
-    }
-
-    private Product changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
     }
 }
