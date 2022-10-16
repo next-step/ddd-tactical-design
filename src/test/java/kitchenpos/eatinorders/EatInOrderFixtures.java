@@ -2,7 +2,7 @@ package kitchenpos.eatinorders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
@@ -24,7 +24,7 @@ public class EatInOrderFixtures {
             UUID.randomUUID(),
             status,
             LocalDateTime.of(2020, 1, 1, 12, 0),
-            Arrays.asList(orderLineItem()),
+            new EatInOrderLineItems(List.of(orderLineItem())),
             eatInOrderTable
         );
     }

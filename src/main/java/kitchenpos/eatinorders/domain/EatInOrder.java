@@ -26,13 +26,9 @@ public class EatInOrder {
     @Column(name = "eat_in_order_date_time", nullable = false)
     private LocalDateTime eatInOrderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_eat_in_order")
-    )
-    private List<EatInOrderLineItem> eatInOrderLineItems;
+
+    @Embedded
+    private EatInOrderLineItems eatInOrderLineItems;
 
     @ManyToOne
     @JoinColumn(
@@ -46,7 +42,7 @@ public class EatInOrder {
     }
 
     public EatInOrder(
-        List<EatInOrderLineItem> eatInOrderLineItems,
+        EatInOrderLineItems eatInOrderLineItems,
         EatInOrderTable eatInOrderTable
     ) {
         this(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
@@ -56,7 +52,7 @@ public class EatInOrder {
         UUID id,
         EatInOrderStatus status,
         LocalDateTime eatInOrderDateTime,
-        List<EatInOrderLineItem> eatInOrderLineItems,
+        EatInOrderLineItems eatInOrderLineItems,
         EatInOrderTable eatInOrderTable
     ) {
         this.id = id;
@@ -82,8 +78,8 @@ public class EatInOrder {
         return eatInOrderDateTime;
     }
 
-    public List<EatInOrderLineItem> getEatInOrderLineItems() {
-        return eatInOrderLineItems;
+    public List<EatInOrderLineItem> getEatInOrderLineItemValues() {
+        return eatInOrderLineItems.getValues();
     }
 
     public EatInOrderTable getOrderTable() {
