@@ -19,18 +19,15 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuRepository menuRepository;
     private final EatInOrderTableRepository eatInOrderTableRepository;
-    private final KitchenridersClient kitchenridersClient;
 
     public EatInOrderService(
         final EatInOrderRepository eatInOrderRepository,
         final MenuRepository menuRepository,
-        final EatInOrderTableRepository eatInOrderTableRepository,
-        final KitchenridersClient kitchenridersClient
+        final EatInOrderTableRepository eatInOrderTableRepository
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuRepository = menuRepository;
         this.eatInOrderTableRepository = eatInOrderTableRepository;
-        this.kitchenridersClient = kitchenridersClient;
     }
 
     @Transactional
