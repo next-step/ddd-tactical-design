@@ -42,7 +42,7 @@ public class EatInOrderRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EatInOrder>> findAll() {
+    public ResponseEntity<List<EatInOrderResponse>> findAll() {
         return ResponseEntity.ok(eatInOrderService.findAll());
     }
 }

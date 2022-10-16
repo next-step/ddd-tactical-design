@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.ui.response;
 
+import static java.util.stream.Collectors.toList;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +38,12 @@ public class EatInOrderResponse {
             EatInOrderLineItemResponse.of(eatInOrder.getEatInOrderLineItemValues()),
             EatInOrderTableResponse.from(eatInOrder.getOrderTable())
         );
+    }
+
+    public static List<EatInOrderResponse> of(List<EatInOrder> eatInOrders) {
+        return eatInOrders.stream()
+            .map(EatInOrderResponse::from)
+            .collect(toList());
     }
 
     public UUID getId() {

@@ -104,7 +104,7 @@ public class EatInOrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<EatInOrder> findAll() {
-        return eatInOrderRepository.findAll();
+    public List<EatInOrderResponse> findAll() {
+        return EatInOrderResponse.of(eatInOrderRepository.findAll());
     }
 }

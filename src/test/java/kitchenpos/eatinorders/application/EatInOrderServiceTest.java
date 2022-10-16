@@ -143,8 +143,8 @@ class EatInOrderServiceTest {
         final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
         eatInOrderRepository.save(eatInOrder(EatInOrderStatus.SERVED, eatInOrderTable));
         eatInOrderRepository.save(eatInOrder(EatInOrderStatus.COMPLETED, eatInOrderTable));
-        final List<EatInOrder> actual = eatInOrderService.findAll();
-        assertThat(actual).hasSize(2);
+        final List<EatInOrderResponse> responses = eatInOrderService.findAll();
+        assertThat(responses).hasSize(2);
     }
 
     private EatInOrderCreateRequest createOrderRequest(
