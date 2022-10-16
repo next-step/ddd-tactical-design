@@ -4,10 +4,7 @@ package kitchenpos.menus.tobe.application;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryMenuRepository implements MenuRepository {
     private final Map<UUID, Menu> menus = new HashMap<>();
@@ -22,4 +19,10 @@ public class InMemoryMenuRepository implements MenuRepository {
     public Optional<Menu> findById(final UUID id) {
         return Optional.ofNullable(menus.get(id));
     }
+
+    @Override
+    public List<Menu> findAll() {
+        return new ArrayList<>(menus.values());
+    }
+
 }

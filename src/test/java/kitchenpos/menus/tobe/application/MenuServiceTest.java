@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.application;
 
 
+import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -24,7 +25,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.ToBeFixtures.*;
+import static kitchenpos.ToBeFixtures.menuGroup;
+import static kitchenpos.ToBeFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -52,7 +54,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 노출할 수 있다.")
     @Test
     void display() {
-        final UUID menuId = menuRepository.save(menu("후라이드치킨", 19_000L, true, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
         menuService.display(menuId);
@@ -62,7 +64,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
     void hide() {
-        final UUID menuId = menuRepository.save(menu("후라이드치킨", 19_000L, true, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
@@ -70,7 +72,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
     @Test
     void changeNegativeMenuPrice() {
-        final UUID menuId = menuRepository.save(menu("후라이드치킨", 19_000L, true, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         BigDecimal price = BigDecimal.valueOf(-1);
         assertThatThrownBy(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -80,7 +82,7 @@ class MenuServiceTest {
     @Test
     void createEmptyProductMenu() {
         String menuName = "후라이드치킨";
-        menuRepository.save(menu(menuName, 19_000L, true, menuProduct(product, 2L))).getId();
+        menuRepository.save(ToBeFixtures.menu(menuName, 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(new MenuProductRequest(new ProductRequest(UUID.randomUUID(), "상품명", BigDecimal.ONE), BigDecimal.ONE));
         assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(menuGroup.getId(), "메뉴명", BigDecimal.valueOf(10), menuProductRequests)))
@@ -145,9 +147,17 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changeMenuPrice() {
-        final UUID menuId = menuRepository.save(menu("후라이드치킨", 19_000L, true, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.save(ToBeFixtures.menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L))).getId();
         BigDecimal price = BigDecimal.valueOf(300);
         assertDoesNotThrow(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)));
+    }
+
+    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    @Test
+    void findMenus() {
+        menuRepository.save(ToBeFixtures.menu("후라이드 치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L)));
+        final List<Menu> actual = menuService.findAll();
+        assertThat(actual).hasSize(1);
     }
 
 }

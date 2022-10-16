@@ -12,6 +12,7 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -60,5 +61,10 @@ public class MenuService {
             menuProducts.add(new MenuProduct(new Product(UUID.randomUUID(), displayedName, productPrice), new Quantity(menuProductRequest.getQuantity())));
         }
         return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), menuProducts, null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Menu> findAll() {
+        return menuRepository.findAll();
     }
 }
