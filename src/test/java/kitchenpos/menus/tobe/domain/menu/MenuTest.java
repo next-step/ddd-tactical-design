@@ -22,7 +22,7 @@ class MenuTest {
     @DisplayName("상품이 없으면 등록 할 수 없다.")
     @ParameterizedTest
     @CsvSource({"후라이드그룹, 후라이드메뉴, 8000, 후라이드상품, false"})
-    void createMenu(String menuGroupName, String menuName, BigDecimal menuPrice, boolean isProfanity) {
+    void existProduct(String menuGroupName, String menuName, BigDecimal menuPrice, boolean isProfanity) {
         MenuProducts menuProducts = new MenuProducts();
         assertThatThrownBy(() -> menu(menuGroupName, menuName, menuPrice, isProfanity, menuProducts))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -32,7 +32,7 @@ class MenuTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없다.")
     @ParameterizedTest
     @CsvSource({"후라이드그룹, 후라이드메뉴, 10000, 후라이드상품, false, 8000, 1"})
-    void menuPrice(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
+    void sumMenuProducts(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
         assertThatThrownBy(() -> menu(menuGroupName, menuName, menuPrice, isProfanity, menuProducts(displayedName, isProfanity, productPrice, quantity)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
@@ -50,7 +50,7 @@ class MenuTest {
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 8000, 후라이드상품, false, 8000, 1"})
-    void belongToMenuGroup(String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
+    void checkMenuGroup(String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
         assertThatThrownBy(() -> new Menu(new MenuName(menuName, isProfanity), new MenuPrice(menuPrice), menuProducts(displayedName, isProfanity, productPrice, quantity), null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴는 특정 메뉴 그룹에 속해야 한다.");
@@ -68,7 +68,7 @@ class MenuTest {
     @DisplayName("메뉴를 노출할 수 있다.")
     @ParameterizedTest
     @CsvSource({"후라이드그룹, 후라이드메뉴, 8000, 후라이드상품, false, 8000, 1"})
-    void displayManu(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
+    void displayMenu(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
         Menu menu = menu(menuGroupName, menuName, menuPrice, false, menuProducts(displayedName, isProfanity, productPrice, quantity));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
@@ -79,7 +79,7 @@ class MenuTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @ParameterizedTest
     @CsvSource({"후라이드그룹, 후라이드메뉴, 8000, 후라이드상품, false, 8000, 1, 9000"})
-    void displayManuva(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity, BigDecimal changeMenuPrice) {
+    void displayLimitPrice(String menuGroupName, String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity, BigDecimal changeMenuPrice) {
         Menu menu = menu(menuGroupName, menuName, menuPrice, isProfanity, menuProducts(displayedName, isProfanity, productPrice, quantity));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
@@ -90,11 +90,11 @@ class MenuTest {
 
     private static MenuProducts menuProducts(String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
         MenuProducts menuProducts = new MenuProducts();
-        menuProducts.add(createMenuProduct(displayedName, isProfanity, quantity, productPrice));
+        menuProducts.add(menuProduct(displayedName, isProfanity, quantity, productPrice));
         return menuProducts;
     }
 
-    private static MenuProduct createMenuProduct(String displayedName, boolean isProfanity, BigDecimal quantity, BigDecimal productPrice) {
+    private static MenuProduct menuProduct(String displayedName, boolean isProfanity, BigDecimal quantity, BigDecimal productPrice) {
         return new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity),
                 new Price(productPrice)), new Quantity(quantity));
     }
