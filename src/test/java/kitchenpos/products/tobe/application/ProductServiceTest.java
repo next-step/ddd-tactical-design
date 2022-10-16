@@ -126,10 +126,7 @@ class ProductServiceTest {
     }
 
     private CreateProductRequest createProductRequest(final String name, final BigDecimal price) {
-        final CreateProductRequest request = new CreateProductRequest();
-        request.setName(name);
-        request.setPrice(price);
-        return request;
+        return new CreateProductRequest(name, price);
     }
 
     private ChangePriceRequest changePriceRequest(final long price) {
@@ -137,9 +134,6 @@ class ProductServiceTest {
     }
 
     private ChangePriceRequest changePriceRequest(final BigDecimal price) {
-        ChangePriceRequest request = new ChangePriceRequest();
-        request.setPrice(price);
-
-        return request;
+        return new ChangePriceRequest(price);
     }
 }

@@ -9,11 +9,11 @@ public class ChangePriceRequest {
     public ChangePriceRequest() {
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public ChangePriceRequest(BigDecimal price) {
+        this.price = price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public BigDecimal getPrice() {
+        return price;
     }
 }
