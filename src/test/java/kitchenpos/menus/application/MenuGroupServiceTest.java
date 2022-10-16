@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.model.MenuGroupModel;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,12 +30,12 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create() {
-        final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
-        final MenuGroup actual = menuGroupService.create(expected);
+        final MenuGroupModel expected = createMenuGroupRequest("두마리메뉴");
+        final MenuGroupModel actual = menuGroupService.create("두마리메뉴");
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+            () -> assertThat(actual.id()).isNotNull(),
+            () -> assertThat(actual.name()).isEqualTo(expected.name())
         );
     }
 
@@ -41,8 +43,7 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
+        assertThatThrownBy(() -> menuGroupService.create(name))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -54,9 +55,7 @@ class MenuGroupServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+    private MenuGroupModel createMenuGroupRequest(final String name) {
+        return new MenuGroupModel(UUID.randomUUID(), name);
     }
 }

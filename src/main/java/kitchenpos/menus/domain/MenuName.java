@@ -1,24 +1,21 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
-import static kitchenpos.menus.util.NameValidator.*;
+import static kitchenpos.menus.util.NameValidator.validateContainsProfanity;
+import static kitchenpos.menus.util.NameValidator.validateNameEmpty;
 
 @Embeddable
-public class ProductName {
+public class MenuName {
     private String name;
 
-    protected ProductName() {
+    protected MenuName() {
     }
 
-    public ProductName(String name) {
-        this.name = name;
-    }
-
-    public ProductName(String name, PurgomalumClient client) {
+    public MenuName(String name, PurgomalumClient client) {
         validateNameEmpty(name);
         validateContainsProfanity(name, client);
         this.name = name;
@@ -32,8 +29,8 @@ public class ProductName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
-        return Objects.equals(name, that.name);
+        MenuName menuName = (MenuName) o;
+        return Objects.equals(name, menuName.name);
     }
 
     @Override

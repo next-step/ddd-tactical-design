@@ -52,14 +52,14 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+            for (final MenuProduct menuProduct : menu.menuProducts().menuProducts()) {
                 sum = sum.add(
-                    menuProduct.getProduct()
+                    menuProduct.product()
                         .priceValue()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        .multiply(BigDecimal.valueOf(menuProduct.quantity().quantity()))
                 );
             }
-            if (menu.getPrice().compareTo(sum) > 0) {
+            if (menu.priceValue().compareTo(sum) > 0) {
                 menu.setDisplayed(false);
             }
         }

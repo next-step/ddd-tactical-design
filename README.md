@@ -202,6 +202,9 @@ docker compose -p kitchenpos up -d
 
 
 #### 미션 요구사항
+##### Step1
 * 상품 CONTEXT의 도메인 계층 구현
 * 용어 사전과 모델링을 맞춰 나가면서 리팩토링
 * 모델에 맞게 클래스, 메서드, 모듈의 이름을 변경한다.
+##### Step2
+* 메뉴 CONTEXT 리팩터링
