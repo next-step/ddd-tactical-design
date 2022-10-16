@@ -2,11 +2,11 @@ package kitchenpos.menus.tobe.dto.menu;
 
 import java.math.BigDecimal;
 
-public class ChangePriceRequest {
+public class ChangeMenuPriceRequest {
 
     private BigDecimal price;
 
-    public ChangePriceRequest(BigDecimal price) {
+    public ChangeMenuPriceRequest(BigDecimal price) {
         this.price = price;
     }
 

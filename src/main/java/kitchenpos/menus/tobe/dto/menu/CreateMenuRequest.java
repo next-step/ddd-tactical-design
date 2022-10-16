@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class MenuCreateRequest {
+public class CreateMenuRequest {
     private final UUID menuGroupId;
     private final BigDecimal price;
     private String menuName;
     private List<MenuProductRequest> menuProducts = new ArrayList<>();
 
-    public MenuCreateRequest(UUID menuGroupId, String menuName, BigDecimal price, List<MenuProductRequest> menuProducts) {
+    public CreateMenuRequest(UUID menuGroupId, String menuName, BigDecimal price, List<MenuProductRequest> menuProducts) {
         this.menuGroupId = menuGroupId;
         this.menuName = menuName;
         this.price = price;

@@ -3,8 +3,8 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.dto.menu.ChangePriceRequest;
-import kitchenpos.menus.tobe.dto.menu.MenuCreateRequest;
+import kitchenpos.menus.tobe.dto.menu.ChangeMenuPriceRequest;
+import kitchenpos.menus.tobe.dto.menu.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
@@ -45,14 +45,14 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final ChangePriceRequest request) {
+    public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
         menu.changePrice(new MenuPrice(request.price()));
         return menu;
     }
 
     @Transactional
-    public Menu create(final MenuCreateRequest request) {
+    public Menu create(final CreateMenuRequest request) {
         MenuProducts menuProducts = new MenuProducts();
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
         if (request.getMenuProducts().size() < 1) {
