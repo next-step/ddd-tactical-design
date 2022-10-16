@@ -27,6 +27,7 @@ import java.util.UUID;
 import static kitchenpos.ToBeFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("메뉴 서비스")
 class MenuServiceTest {
@@ -139,6 +140,14 @@ class MenuServiceTest {
         assertThatThrownBy(() -> menuService.create(new MenuCreateRequest(UUID.randomUUID(), "메뉴명", BigDecimal.valueOf(3001), menuProductRequests)))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("해당하는 메뉴 그룹이 업습니다.");
+    }
+
+    @DisplayName("메뉴의 가격을 변경할 수 있다.")
+    @Test
+    void changeMenuPrice() {
+        final UUID menuId = menuRepository.save(menu("후라이드치킨", 19_000L, true, menuProduct(product, 2L))).getId();
+        BigDecimal price = BigDecimal.valueOf(300);
+        assertDoesNotThrow(() -> menuService.changePrice(menuId, new ChangePriceRequest(price)));
     }
 
 }
