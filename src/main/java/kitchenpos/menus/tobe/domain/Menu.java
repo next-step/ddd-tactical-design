@@ -25,19 +25,42 @@ import java.util.List;
 public class Menu {
 
     private final DisplayedName name;
-    private final Price price;
+    private Price price;
     private final Long menuGroupId;
     private final MenuProducts menuProducts;
+    private boolean displayed;
 
     public Menu(DisplayedName name, Price price, Long menuGroupId, List<MenuProduct> menuProducts) {
         MenuProducts createMenuProducts = new MenuProducts(menuProducts);
-        if (price.isExpensive(createMenuProducts.total())) {
-            throw new IllegalArgumentException("메뉴의 가격은 상품의 금액의 합보다 작아야 합니다.");
-        }
+        checkExpensive(price, createMenuProducts);
+        this.displayed = true;
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.menuProducts = createMenuProducts;
+    }
+
+    private void checkExpensive(Price price, MenuProducts menuProducts) {
+        if (price.isExpensive(menuProducts.total())) {
+            throw new IllegalArgumentException("메뉴의 가격은 상품의 금액의 합보다 작아야 합니다.");
+        }
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public void display() {
+        checkExpensive(price, this.menuProducts);
+        this.displayed = true;
+    }
+
+    public void changePrice(Price price) {
+        this.price = price;
     }
 }
 
