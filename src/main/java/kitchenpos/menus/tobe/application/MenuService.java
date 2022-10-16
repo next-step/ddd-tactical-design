@@ -3,9 +3,11 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menus.tobe.dto.menu.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.menu.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,11 +26,13 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
+    private final PurgomalumClient purgomalumClient;
 
-    public MenuService(final MenuRepository menuRepository, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository) {
+    public MenuService(final MenuRepository menuRepository, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository, final PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.productRepository = productRepository;
         this.menuGroupRepository = menuGroupRepository;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
@@ -56,7 +61,8 @@ public class MenuService {
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
         validateMenuProductSize(request);
         validateExistProduct(request.getMenuProducts());
-        return new Menu(new MenuName(request.getMenuName(), false), new MenuPrice(request.getPrice()), createMenuProducts(request), menuGroup);
+        boolean isProfanity = !Objects.isNull(request.getMenuName()) && purgomalumClient.containsProfanity(request.getMenuName());
+        return new Menu(new MenuName(request.getMenuName(), isProfanity), new MenuPrice(request.getPrice()), createMenuProducts(request), menuGroup);
     }
 
     private MenuProducts createMenuProducts(CreateMenuRequest request) {

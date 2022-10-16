@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

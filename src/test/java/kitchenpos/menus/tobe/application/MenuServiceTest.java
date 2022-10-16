@@ -3,13 +3,15 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menus.tobe.dto.menu.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.menu.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
 import kitchenpos.menus.tobe.dto.menu.ProductRequest;
+import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -41,13 +43,15 @@ class MenuServiceTest {
     private Menu menu;
     private ProductRepository productRepository;
     private MenuGroupRepository menuGroupRepository;
+    private PurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        menuService = new MenuService(menuRepository, productRepository, menuGroupRepository);
+        purgomalumClient = new FakePurgomalumClient();
+        menuService = new MenuService(menuRepository, productRepository, menuGroupRepository, purgomalumClient);
         product = productRepository.save(product("후라이드", 16_000L));
         menuGroup = menuGroupRepository.save(menuGroup("메뉴그룹"));
         menu = menuRepository.save(menu("후라이드치킨", 19_000L, true, ToBeFixtures.menuProduct(product, 2L)));
