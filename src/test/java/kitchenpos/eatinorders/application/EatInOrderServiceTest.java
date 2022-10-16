@@ -104,28 +104,6 @@ class EatInOrderServiceTest {
             .hasMessage("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
     }
 
-    @DisplayName("주문을 완료한다.")
-    @Test
-    void complete() {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
-        final EatInOrder expected = eatInOrderRepository.save(eatInOrder(
-            EatInOrderStatus.SERVED,
-            eatInOrderTable
-        ));
-        final EatInOrder actual = eatInOrderService.complete(expected.getId());
-        assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
-    }
-
-    @DisplayName("매장 주문의 경우 서빙된 주문만 완료할 수 있다.")
-    @EnumSource(value = EatInOrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void completeTakeoutAndEatInOrder(final EatInOrderStatus status) {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
-        final UUID orderId = eatInOrderRepository.save(eatInOrder(status, eatInOrderTable)).getId();
-        assertThatThrownBy(() -> eatInOrderService.complete(orderId))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
     @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
     @Test
     void completeEatInOrder() {
@@ -134,11 +112,11 @@ class EatInOrderServiceTest {
             EatInOrderStatus.SERVED,
             eatInOrderTable
         ));
-        final EatInOrder actual = eatInOrderService.complete(expected.getId());
+        final EatInOrderResponse response = eatInOrderService.complete(expected.getId());
         assertAll(
-            () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
-            () -> assertThat(eatInOrderTableRepository.findById(eatInOrderTable.getId()).get().isOccupied()).isFalse(),
-            () -> assertThat(eatInOrderTableRepository.findById(eatInOrderTable.getId()).get().getNumberOfGuestsValue()).isEqualTo(0)
+            () -> assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
+            () -> assertThat(response.getEatInOrderTable().isOccupied()).isFalse(),
+            () -> assertThat(response.getEatInOrderTable().getNumberOfGuests()).isEqualTo(0)
         );
     }
 
@@ -151,11 +129,11 @@ class EatInOrderServiceTest {
             EatInOrderStatus.SERVED,
             eatInOrderTable
         ));
-        final EatInOrder actual = eatInOrderService.complete(expected.getId());
+        final EatInOrderResponse response = eatInOrderService.complete(expected.getId());
         assertAll(
-            () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
-            () -> assertThat(eatInOrderTableRepository.findById(eatInOrderTable.getId()).get().isOccupied()).isTrue(),
-            () -> assertThat(eatInOrderTableRepository.findById(eatInOrderTable.getId()).get().getNumberOfGuestsValue()).isEqualTo(4)
+            () -> assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
+            () -> assertThat(response.getEatInOrderTable().isOccupied()).isTrue(),
+            () -> assertThat(response.getEatInOrderTable().getNumberOfGuests()).isEqualTo(4)
         );
     }
 

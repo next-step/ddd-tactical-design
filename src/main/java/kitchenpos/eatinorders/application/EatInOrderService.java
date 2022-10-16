@@ -85,18 +85,17 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder complete(final UUID orderId) {
-        final EatInOrder eatInOrder = findOrderById(orderId);
-        final EatInOrderStatus status = eatInOrder.getStatus();
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.COMPLETED);
-        final EatInOrderTable eatInOrderTable = eatInOrder.getOrderTable();
-        if (!eatInOrderRepository.existsByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
+    public EatInOrderResponse complete(UUID orderId) {
+        EatInOrder eatInOrder = findOrderById(orderId);
+        eatInOrder.complete();
+        clearTableIfAllOrdersCompleted(eatInOrder.getOrderTable());
+        return EatInOrderResponse.from(eatInOrder);
+    }
+
+    private void clearTableIfAllOrdersCompleted(EatInOrderTable eatInOrderTable) {
+        if (eatInOrderRepository.existsNotByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
             eatInOrderTable.clear();
         }
-        return eatInOrder;
     }
 
     private EatInOrder findOrderById(UUID orderId) {

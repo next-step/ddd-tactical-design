@@ -27,4 +27,14 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
             .stream()
             .anyMatch(order -> order.getOrderTable().equals(eatInOrderTable) && order.getStatus() != status);
     }
+
+    @Override
+    public boolean existsNotByEatInOrderTableAndStatusNot(
+        EatInOrderTable eatInOrderTable,
+        EatInOrderStatus status
+    ) {
+        return orders.values()
+            .stream()
+            .noneMatch(order -> order.getOrderTable().equals(eatInOrderTable) && order.getStatus() != status);
+    }
 }

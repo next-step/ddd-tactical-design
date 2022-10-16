@@ -71,10 +71,10 @@ docker compose -p kitchenpos up -d
 8. [x] 접수 대기 중인 주문만 접수할 수 있다.
 9. [x] 주문을 서빙한다.
 10. [x] 접수된 주문만 서빙할 수 있다.
-11. [ ] 주문을 완료한다.
-12. [ ] 서빙된 주문만 완료할 수 있다.
-13. [ ] 주문 테이블의 모든 매장 주문이 완료되면 착석여부를 거짓으로 설정한다.
-14. [ ] 완료되지 않은 매장 주문이 있는 주문 테이블은 착석여부를 거짓으로 설정하지 않는다.
+11. [x] 주문을 완료한다.
+12. [x] 서빙된 주문만 완료할 수 있다.
+13. [x] 주문 테이블의 모든 매장 주문이 완료되면 착석여부를 거짓으로 설정한다.
+14. [x] 완료되지 않은 매장 주문이 있는 주문 테이블은 착석여부를 거짓으로 설정하지 않는다.
 15. [ ] 주문 목록을 조회할 수 있다.
 
 ### 배달 주문
@@ -249,7 +249,7 @@ docker compose -p kitchenpos up -d
 
 ### 매장 주문
 - [x] `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
-- [ ] `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
+- [x] `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
 - [x] `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
 - [x] `EatInOrder`는 고유식별자와 `EatInOrderStatus`, `EatInOrderDateTime`, `EatInOrderTable`, `EatInOrderLineItem` 목록을 가진다.
 - [x] `EatInOrder`가 등록될 때 `Menu`는 `display` 중이어야하고, `MenuPrice`와 `EatInOrderLineItemPrice`가 일치 해야한다.

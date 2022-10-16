@@ -65,17 +65,24 @@ public class EatInOrder {
     }
 
     public void accept() {
-        if (status != WAITING) {
+        if (this.status != WAITING) {
             throw new IllegalStateException("주문상태가 '대기중'이 아니라 '접수됨'으로 변경할 수 없습니다.");
         }
         this.status = ACCEPTED;
     }
 
     public void serve() {
-        if (status != ACCEPTED) {
+        if (this.status != ACCEPTED) {
             throw new IllegalStateException("주문상태가 '접수됨'이 아니라 '서빙됨'으로 변경할 수 없습니다.");
         }
         this.status = SERVED;
+    }
+
+    public void complete() {
+        if (this.status != SERVED) {
+            throw new IllegalStateException("주문상태가 '서빙됨'이 아니라 '완료'로 변경할 수 없습니다.");
+        }
+        this.status = COMPLETED;
     }
 
     public UUID getId() {
@@ -84,10 +91,6 @@ public class EatInOrder {
 
     public EatInOrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final EatInOrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getEatInOrderDateTime() {
