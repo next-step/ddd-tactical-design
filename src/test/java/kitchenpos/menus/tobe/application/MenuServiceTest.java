@@ -94,7 +94,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격은 0원 이상이어야 한다.")
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 후라이드상품, 1, 1, -1"})
-    void createMenuProductSize(String menuName, String productName, BigDecimal productPrice, BigDecimal quantity, BigDecimal menuPrice) {
+    void menuPriceOverZero(String menuName, String productName, BigDecimal productPrice, BigDecimal quantity, BigDecimal menuPrice) {
         List<MenuProductRequest> menuProductRequests = new ArrayList<>();
         menuProductRequests.add(menuProductRequest(product.getId(), productName, productPrice, quantity));
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, menuPrice, menuProductRequests)))
@@ -105,7 +105,7 @@ class MenuServiceTest {
     @DisplayName("메뉴명은 null 이나 공백일 수 없습니다.")
     @ParameterizedTest
     @NullAndEmptySource
-    void createMenuProductSize(String menuName) {
+    void createEmptyMenuName(String menuName) {
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, BigDecimal.valueOf(3000),
                 menuProductRequests(product.getId(), "후라이드", BigDecimal.ONE, BigDecimal.ONE))))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -115,7 +115,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 3001, 후라이드상품, 1, 1"})
-    void validateSum(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
+    void validateMenuProductsPriceSum(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, menuPrice,
                 menuProductRequests(product.getId(), productName, productPrice, quantity))))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -125,7 +125,7 @@ class MenuServiceTest {
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 3001, 후라이드상품, 3003, 1"})
-    void createMenuNotProduct(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
+    void existProduct(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, menuPrice,
                 menuProductRequests(UUID.randomUUID(), productName, productPrice, quantity))))
                 .isInstanceOf(NoSuchElementException.class)
@@ -135,7 +135,7 @@ class MenuServiceTest {
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 3001, 후라이드상품, 1, 1"})
-    void createMenuQuantity(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
+    void existMenuGroup(String menuName, BigDecimal menuPrice, String productName, BigDecimal productPrice, BigDecimal quantity) {
         assertThatThrownBy(() -> menuService.create(createMenuRequest(UUID.randomUUID(), menuName, menuPrice,
                 menuProductRequests(UUID.randomUUID(), productName, productPrice, quantity))))
                 .isInstanceOf(NoSuchElementException.class)
