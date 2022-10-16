@@ -1,8 +1,15 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.tobe.domain.Price;
-
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -102,13 +109,8 @@ public class Menu {
         this.menuGroupId = menuGroupId;
     }
 
-    // TOOD 다음 미션 리팩토링 대상
-    public Price getPrice2() {
-        return new Price(price);
-    }
-
-    public Price calculateProductPrice() {
-        Price sum = new Price(BigDecimal.ZERO);
+    public BigDecimal calculateProductPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menuProducts) {
             sum = sum.add(menuProduct.calculatePrice());
         }

@@ -70,4 +70,8 @@ public class Price {
     public int compareTo(Price price) {
         return price.price.compareTo(this.price);
     }
+
+    public BigDecimal value() {
+        return price;
+    }
 }

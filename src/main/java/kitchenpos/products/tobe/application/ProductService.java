@@ -44,8 +44,8 @@ public class ProductService {
 
         List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
-            Price sum = menu.calculateProductPrice();
-            if (menu.getPrice2().compareTo(sum) > 0) {
+            Price sum = new Price(menu.calculateProductPrice());
+            if (new Price(menu.getPrice()).compareTo(sum) > 0) {
                 menu.setDisplayed(false);
             }
         }
