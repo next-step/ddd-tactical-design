@@ -5,6 +5,9 @@ import kitchenpos.products.infra.PurgomalumClient;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
+import static kitchenpos.menus.util.NameValidator.validateContainsProfanity;
+import static kitchenpos.menus.util.NameValidator.validateNameEmpty;
+
 @Embeddable
 public class MenuName {
     private String name;
@@ -13,9 +16,8 @@ public class MenuName {
     }
 
     public MenuName(String name, PurgomalumClient client) {
-        if (Objects.isNull(name) || client.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+        validateNameEmpty(name);
+        validateContainsProfanity(name, client);
         this.name = name;
     }
 

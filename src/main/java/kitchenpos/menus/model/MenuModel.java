@@ -1,8 +1,11 @@
 package kitchenpos.menus.model;
 
+import kitchenpos.menus.domain.Menu;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MenuModel {
     private UUID id;
@@ -21,6 +24,22 @@ public class MenuModel {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
+    }
+
+    public MenuModel(Menu menu) {
+        MenuGroupModel menuGroupModel = new MenuGroupModel(menu.menuGroup().id(), menu.menuGroup().nameValue());
+        List<MenuProductModel> menuProductModels = menu.menuProducts()
+                .menuProducts().stream()
+                .map(menuProduct -> new MenuProductModel(menuProduct.seq(), menuProduct.quantityValue(), menuProduct.productId()))
+                .collect(Collectors.toList());
+
+        this.id = menu.id();
+        this.name = menu.nameValue();
+        this.price = menu.priceValue();
+        this.menuGroup = menuGroupModel;
+        this.displayed = menu.isDisplayed();
+        this.menuProducts = menuProductModels;
+        this.menuGroupId = menu.menuGroupId();
     }
 
     public UUID id() {

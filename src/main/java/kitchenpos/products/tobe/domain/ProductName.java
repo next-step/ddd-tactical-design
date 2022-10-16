@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
+
+import static kitchenpos.menus.util.NameValidator.*;
 
 @Embeddable
 public class ProductName {
@@ -18,9 +19,8 @@ public class ProductName {
     }
 
     public ProductName(String name, PurgomalumClient client) {
-        if (Objects.isNull(name) || client.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+        validateNameEmpty(name);
+        validateContainsProfanity(name, client);
         this.name = name;
     }
 

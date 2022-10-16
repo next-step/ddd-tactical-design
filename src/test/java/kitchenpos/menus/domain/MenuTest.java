@@ -33,7 +33,7 @@ public class MenuTest {
         groupName = "메뉴 그룹 이름";
         menuName = new MenuName(name, purgomalumClient);
         menuGroupName = new MenuGroupName(groupName);
-        menuPrice = new MenuPrice(BigDecimal.valueOf(15000));
+        menuPrice = new MenuPrice(BigDecimal.valueOf(15000), BigDecimal.valueOf(15000));
         menuProducts = new MenuProducts(List.of(menuProduct()));
     }
 

@@ -3,6 +3,8 @@ package kitchenpos.menus.domain;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
+import static kitchenpos.menus.util.NameValidator.validateNameEmpty;
+
 @Embeddable
 public class MenuGroupName {
     private String name;
@@ -11,9 +13,7 @@ public class MenuGroupName {
     }
 
     public MenuGroupName(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+        validateNameEmpty(name);
         this.name = name;
     }
 

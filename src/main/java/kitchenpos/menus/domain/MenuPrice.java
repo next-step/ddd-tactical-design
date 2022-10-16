@@ -12,13 +12,20 @@ public class MenuPrice {
     protected MenuPrice() {
     }
 
-    public MenuPrice(BigDecimal price) {
+    public MenuPrice(BigDecimal price, BigDecimal productsPriceSum) {
         validatePrice(price);
+        compareProductsPrice(price, productsPriceSum);
         this.price = price;
     }
 
     private void validatePrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void compareProductsPrice(BigDecimal price, BigDecimal productsPriceSum) {
+        if (price.compareTo(productsPriceSum) > 0) {
             throw new IllegalArgumentException();
         }
     }
@@ -38,11 +45,5 @@ public class MenuPrice {
     @Override
     public int hashCode() {
         return Objects.hash(price);
-    }
-
-    public void compareProductsPrice(BigDecimal productsPriceSum) {
-        if (price.compareTo(productsPriceSum) > 0) {
-            throw new IllegalArgumentException();
-        }
     }
 }

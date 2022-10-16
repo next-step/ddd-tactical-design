@@ -28,7 +28,7 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        return new Menu(new MenuName("후라이드+후라이드", client), new MenuPrice(BigDecimal.valueOf(price)), menuGroup(),displayed, new MenuProducts(Arrays.asList(menuProducts)));
+        return new Menu(new MenuName("후라이드+후라이드", client), new MenuPrice(BigDecimal.valueOf(price), BigDecimal.valueOf(price)), menuGroup(),displayed, new MenuProducts(Arrays.asList(menuProducts)));
     }
 
     public static MenuGroup menuGroup() {

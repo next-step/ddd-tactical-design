@@ -47,43 +47,29 @@ public class MenuService {
 
         validateProductRequests(menuProductRequests);
 
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProductRequest menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.quantity();
-            MenuProductQuantity menuProductQuantity = new MenuProductQuantity(quantity);
-            final Product product = productRepository.findById(menuProductRequest.productId())
-                .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.priceValue()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
-            menuProducts.add(new MenuProduct(product, menuProductQuantity));
-        }
-
-        MenuPrice menuPrice = new MenuPrice(price);
-        menuPrice.compareProductsPrice(sum);
+        MenuProducts menuProducts = createMenuProducts(menuProductRequests);
+        MenuPrice menuPrice = new MenuPrice(price, menuProducts.menuProductPriceSum());
         MenuName menuName = new MenuName(name, purgomalumClient);
-        final Menu menu = new Menu(menuName, menuPrice, menuGroup, isDisplayed, new MenuProducts(menuProducts));
-        return createMenuModel(menuRepository.save(menu));
+        final Menu menu = new Menu(menuName, menuPrice, menuGroup, isDisplayed, menuProducts);
+        return new MenuModel(menuRepository.save(menu));
     }
+
     @Transactional
     public MenuModel changePrice(final UUID menuId, final BigDecimal price) {
-        MenuPrice menuPrice = new MenuPrice(price);
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menuPrice.compareProductsPrice(menu.menuProductPriceSum());
-        menu.updatePrice(new MenuPrice(price));
-        return createMenuModel(menu);
+        BigDecimal productsPriceSum = menu.menuProductPriceSum();
+        MenuPrice menuPrice = new MenuPrice(price, productsPriceSum);
+        menu.updatePrice(menuPrice);
+        return new MenuModel(menu);
     }
-
     @Transactional
     public MenuModel display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.displayAvailabilityCheck(menu.menuProductPriceSum());
         menu.setDisplayed(true);
-        return createMenuModel(menu);
+        return new MenuModel(menu);
     }
 
     @Transactional
@@ -91,7 +77,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
-        return createMenuModel(menu);
+        return new MenuModel(menu);
     }
 
     @Transactional(readOnly = true)
@@ -116,12 +102,15 @@ public class MenuService {
         }
     }
 
-    private MenuModel createMenuModel(Menu menu) {
-        MenuGroupModel menuGroupModel = new MenuGroupModel(menu.menuGroup().id(), menu.menuGroup().nameValue());
-        List<MenuProductModel> menuProductModels = menu.menuProducts()
-                .menuProducts().stream()
-                .map(menuProduct -> new MenuProductModel(menuProduct.seq(), menuProduct.quantityValue(), menuProduct.productId()))
-                .collect(Collectors.toList());
-        return new MenuModel(menu.id(), menu.nameValue(), menu.priceValue(), menuGroupModel, menu.isDisplayed(), menuProductModels, menu.menuGroupId());
+    private MenuProducts createMenuProducts(final List<MenuProductRequest> menuProductRequests) {
+        final List<MenuProduct> menuProducts = new ArrayList<>();
+        for (final MenuProductRequest menuProductRequest : menuProductRequests) {
+            MenuProductQuantity menuProductQuantity = new MenuProductQuantity(menuProductRequest.quantity());
+            final Product product = productRepository.findById(menuProductRequest.productId())
+                    .orElseThrow(NoSuchElementException::new);
+            menuProducts.add(new MenuProduct(product, menuProductQuantity));
+        }
+
+        return new MenuProducts(menuProducts);
     }
 }

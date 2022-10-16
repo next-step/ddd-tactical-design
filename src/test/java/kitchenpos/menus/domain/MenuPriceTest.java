@@ -12,6 +12,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MenuPriceTest {
 
+    private final BigDecimal menuProductPriceSum = BigDecimal.valueOf(15000);
+
     @Test
     @DisplayName("메뉴가격을 생성한다.")
     void createMenuPrice() {
@@ -19,10 +21,10 @@ public class MenuPriceTest {
         BigDecimal priceValue = BigDecimal.valueOf(15000);
 
         // when
-        MenuPrice price = new MenuPrice(priceValue);
+        MenuPrice price = new MenuPrice(priceValue, menuProductPriceSum);
 
         // then
-        assertThat(price).isEqualTo(new MenuPrice(priceValue));
+        assertThat(price).isEqualTo(new MenuPrice(priceValue, menuProductPriceSum));
     }
 
     @ParameterizedTest
@@ -34,7 +36,7 @@ public class MenuPriceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new MenuPrice(priceValue))
+        assertThatThrownBy(() -> new MenuPrice(priceValue, menuProductPriceSum))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -45,10 +47,8 @@ public class MenuPriceTest {
         BigDecimal priceValue = BigDecimal.valueOf(15000);
 
         // when
-        MenuPrice price = new MenuPrice(priceValue);
-
         // then
-        assertThatThrownBy(() -> price.compareProductsPrice(BigDecimal.valueOf(14000)))
+        assertThatThrownBy(() -> new MenuPrice(priceValue, BigDecimal.valueOf(14000)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
