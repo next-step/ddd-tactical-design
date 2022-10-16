@@ -24,12 +24,12 @@ public class ToBeFixtures {
         return new MenuProduct(product, new Quantity(BigDecimal.valueOf(quantity)));
     }
 
-    public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), new DisplayedName(name, false), new Price(BigDecimal.valueOf(price)));
-    }
-
     public static MenuGroup menuGroup(final String name) {
         return new MenuGroup(UUID.randomUUID(), new MenuGroupName(name));
+    }
+
+    public static Product product(final String name, final long price) {
+        return new Product(UUID.randomUUID(), new DisplayedName(name, false), new Price(BigDecimal.valueOf(price)));
     }
 
 }
