@@ -20,12 +20,18 @@ public class Product {
     @Embedded
     private DisplayedName name;
 
+    public Product(final UUID id, final ProductPrice price, final DisplayedName name) {
+        this.id = id;
+        this.price = price;
+        this.name = name;
+    }
+
     public Product(final ProductPrice price, final DisplayedName name) {
         this.price = price;
         this.name = name;
     }
 
-    protected Product() {
+    public Product() {
     }
 
     public UUID getId() {
@@ -38,6 +44,18 @@ public class Product {
 
     public DisplayedName getName() {
         return name;
+    }
+
+    public void setId(final UUID id) {
+        this.id = id;
+    }
+
+    public void setPrice(final ProductPrice price) {
+        this.price = price;
+    }
+
+    public void setName(final DisplayedName name) {
+        this.name = name;
     }
 
     public void changePrice(final ProductPrice price) {

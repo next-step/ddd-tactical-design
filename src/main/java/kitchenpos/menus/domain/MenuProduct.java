@@ -1,8 +1,18 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
 
-import javax.persistence.*;
+import kitchenpos.products.tobe.domain.Product;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -15,9 +25,9 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
