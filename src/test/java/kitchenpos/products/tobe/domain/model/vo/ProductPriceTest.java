@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain.model.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,9 @@ class ProductPriceTest {
         var price3 = new ProductPrice(2);
 
         // when & then
-        assertThat(price1).isEqualTo(price2);
-        assertThat(price1).isNotEqualTo(price3);
+        assertAll(
+            () -> assertThat(price1).isEqualTo(price2),
+            () -> assertThat(price1).isNotEqualTo(price3)
+        );
     }
 }

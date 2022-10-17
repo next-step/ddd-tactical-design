@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain.model.vo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import kitchenpos.global.domain.client.ProfanityCheckClient;
 import kitchenpos.products.application.FakeProfanityCheckClient;
@@ -28,8 +29,10 @@ class ProductNameTest {
         var name3 =new ProductName("b", profanityCheckClient);
 
         // when & then
-        assertThat(name1).isEqualTo(name2);
-        assertThat(name1).isNotEqualTo(name3);
+        assertAll(
+            () -> assertThat(name1).isEqualTo(name2),
+            () -> assertThat(name1).isNotEqualTo(name3)
+        );
     }
 
     @Test
