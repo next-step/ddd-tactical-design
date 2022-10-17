@@ -32,6 +32,14 @@ public class Product {
         return id;
     }
 
+    public ProductPrice getPrice() {
+        return price;
+    }
+
+    public DisplayedName getName() {
+        return name;
+    }
+
     public void changePrice(final ProductPrice price) {
         this.price = price;
     }

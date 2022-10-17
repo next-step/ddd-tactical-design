@@ -3,9 +3,12 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.infra.Profanities;
+import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +22,12 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities purgomalumClient;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final ProductRepository productRepository,
+            final MenuRepository menuRepository,
+            final Profanities purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
@@ -32,19 +35,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+    public Product create(final ProductRequest request) {
+        final Product product = new Product(
+                new ProductPrice(request.getPrice()), new DisplayedName(request.getName(), purgomalumClient));
         return productRepository.save(product);
     }
 
@@ -55,16 +48,16 @@ public class ProductService {
             throw new IllegalArgumentException();
         }
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
