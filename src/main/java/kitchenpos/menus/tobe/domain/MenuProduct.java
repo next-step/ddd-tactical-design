@@ -19,4 +19,11 @@ public class MenuProduct {
     public Price getSumOfPrice() {
         return product.getPrice().multiply(quantity);
     }
+
+    public boolean lessThan(final Price price) {
+        if (this.getSumOfPrice().compareTo(price) < 0) {
+            return true;
+        }
+        return false;
+    }
 }

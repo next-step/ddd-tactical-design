@@ -39,7 +39,7 @@ public class Menu {
     }
 
     private void decideDisplay(final MenuProduct menuProduct, final Price price) {
-        if (menuProduct.getSumOfPrice().compareTo(price) < 0) {
+        if (menuProduct.lessThan(price)) {
             this.displayed = false;
             return;
         }
@@ -47,7 +47,7 @@ public class Menu {
     }
 
     private void validateDisplay() {
-        if (menuProduct.getSumOfPrice().compareTo(price) < 0) {
+        if (menuProduct.lessThan(price)) {
             throw new IllegalArgumentException(CAN_NOT_DISPLAY_MESSAGE);
         }
     }
