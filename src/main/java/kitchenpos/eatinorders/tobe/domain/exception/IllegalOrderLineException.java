@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.exception;
 
-public class IllegalOrderLineException extends IllegalStateException {
+public class IllegalOrderLineException extends IllegalArgumentException {
 
     public static final String NO_MENU = "존재하지 않는 메뉴입니다.";
     public static final String NOT_DISPLAYED = "진열 메뉴가 아닙니다.";

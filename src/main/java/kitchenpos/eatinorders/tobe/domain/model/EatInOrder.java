@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus.WAITING;
+
 @Entity
 @DiscriminatorValue("EAT_IN")
 public class EatInOrder extends AbstractOrder {
@@ -29,7 +31,7 @@ public class EatInOrder extends AbstractOrder {
 
     public EatInOrder(OrderPolicy orderPolicy, OrderTable orderTable, OrderLineItem... orderLineItems) {
         super(LocalDateTime.now());
-        this.status = EatInOrderStatus.WAITING;
+        this.status = WAITING;
         occupyTable(orderTable);
         addOrderLineItems(orderPolicy, orderLineItems);
     }
@@ -42,6 +44,18 @@ public class EatInOrder extends AbstractOrder {
     private void addOrderLineItems(OrderPolicy orderPolicy, OrderLineItem... orderLineItems) {
         orderPolicy.validateOlis(List.of(orderLineItems));
         addOrderLineItems(orderLineItems);
+    }
+
+    public void accept() {
+        status = status.accept();
+    }
+
+    public void serve() {
+        status = status.serve();
+    }
+
+    public void complete() {
+        status = status.complete();
     }
 
     public boolean orderTableEq(UUID orderTableId) {

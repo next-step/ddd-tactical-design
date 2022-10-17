@@ -42,8 +42,4 @@ public class OrderLineItem {
     public UUID getMenuId() {
         return menuId;
     }
-
-    public long getMenuPrice() {
-        return menuPrice;
-    }
 }
