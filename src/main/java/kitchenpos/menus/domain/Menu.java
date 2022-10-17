@@ -2,6 +2,7 @@ package kitchenpos.menus.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -82,6 +83,10 @@ public class Menu {
 
     public MenuProducts menuProducts() {
         return menuProducts;
+    }
+
+    public List<MenuProduct> menuProductList() {
+        return menuProducts.menuProducts();
     }
 
     public UUID menuGroupId() {
