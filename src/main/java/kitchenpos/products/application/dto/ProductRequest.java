@@ -13,4 +13,12 @@ public class ProductRequest {
     public String getName() {
         return name;
     }
+
+    public void setPrice(final BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
 }
