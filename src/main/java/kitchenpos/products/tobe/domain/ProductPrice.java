@@ -23,6 +23,10 @@ public class ProductPrice {
         this.price = null;
     }
 
+    public BigDecimal multiply(BigDecimal price) {
+        return this.price.multiply(price);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
