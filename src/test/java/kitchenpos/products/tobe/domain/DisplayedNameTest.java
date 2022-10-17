@@ -14,7 +14,7 @@ class DisplayedNameTest {
     void emptyName(final String name) {
         final String EMPTY_NAME_MESSAGE = "상품 이름은 비어있을 수 없습니다.";
 
-        assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanity()))
+        assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanities()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(EMPTY_NAME_MESSAGE);
     }
@@ -25,7 +25,7 @@ class DisplayedNameTest {
         final String CONTAIN_PROFANITY_MESSAGE = "상품 이름에 비속어가 포함될 수 없습니다.";
         final String name = "damn";
 
-        assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanity()))
+        assertThatThrownBy(() -> new DisplayedName(name, new FakeProfanities()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(CONTAIN_PROFANITY_MESSAGE);
     }

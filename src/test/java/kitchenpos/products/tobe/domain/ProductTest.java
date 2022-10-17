@@ -12,7 +12,7 @@ class ProductTest {
     @Test
     void register() {
         final ProductPrice price = new ProductPrice(BigDecimal.TEN);
-        final DisplayedName name = new DisplayedName("chicken", new FakeProfanity());
+        final DisplayedName name = new DisplayedName("chicken", new FakeProfanities());
 
         assertThatCode(() -> new Product(price, name))
                 .doesNotThrowAnyException();
@@ -22,7 +22,7 @@ class ProductTest {
     @Test
     void changePrice() {
         final ProductPrice price = new ProductPrice(BigDecimal.TEN);
-        final DisplayedName name = new DisplayedName("chicken", new FakeProfanity());
+        final DisplayedName name = new DisplayedName("chicken", new FakeProfanities());
 
         Product product = new Product(price, name);
         product.changePrice(new ProductPrice(BigDecimal.ONE));
