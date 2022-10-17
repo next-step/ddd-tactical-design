@@ -1,11 +1,11 @@
 package kitchenpos.menus.domain.tobe;
 
-import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class MenuProductsTest {
     @Test
     @DisplayName("메뉴 상품 묶음 생성이 가능하다")
     void constructor() {
-        final MenuProducts menuProducts = new MenuProducts(new MenuProduct(1L, product(), 1));
+        final MenuProducts menuProducts = new MenuProducts(new MenuProduct(1L, UUID.randomUUID(), BigDecimal.ONE, 1));
         assertThat(menuProducts).isNotNull();
     }
 
@@ -41,8 +41,8 @@ class MenuProductsTest {
 
     private static Stream<Arguments> provideMenuProductsAndTotalPrice() {
         return Stream.of(
-            Arguments.of(List.of(new MenuProduct(1L, product("오원", 5L), 5L)), BigDecimal.valueOf(25)),
-            Arguments.of(List.of(new MenuProduct(1L, product("오원", 5L), 5L), new MenuProduct(1L, product("천원", 1000L), 5L)), BigDecimal.valueOf(5025))
+            Arguments.of(List.of(new MenuProduct(1L, UUID.randomUUID(), BigDecimal.valueOf(5L), 5L)), BigDecimal.valueOf(25L)),
+            Arguments.of(List.of(new MenuProduct(1L, UUID.randomUUID(), BigDecimal.valueOf(5L), 5L), new MenuProduct(1L, UUID.randomUUID(), BigDecimal.valueOf(1000L), 5L)), BigDecimal.valueOf(5025L))
         );
     }
 }

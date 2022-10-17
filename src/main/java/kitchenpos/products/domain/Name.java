@@ -14,7 +14,10 @@ public class Name {
     private String value;
 
     public Name(final String name, final PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(purgomalumClient)) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
+        if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         this.value = name;

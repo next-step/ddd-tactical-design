@@ -1,11 +1,11 @@
 package kitchenpos.menus.domain.tobe;
 
-import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ class MenuTest {
         this.menuID = new MenuID();
         this.menuName = new MenuName("메뉴", purgomalumClient);
         this.menuPrice = new MenuPrice(BigDecimal.TEN);
-        this.menuProducts = new MenuProducts(List.of(new MenuProduct(1L, product(), 1L)));
+        this.menuProducts = new MenuProducts(List.of(new MenuProduct(1L, UUID.randomUUID(),BigDecimal.valueOf(16_000L), 1L)));
         this.menuGroup = new MenuGroup(new MenuGroupName("메뉴 그룹"));
     }
 
