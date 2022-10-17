@@ -22,10 +22,25 @@ public class EatInOrder extends Order {
     protected EatInOrder() {
     }
 
-    public EatInOrder(UUID orderTableId) {
+    public EatInOrder(OrderTable orderTable) {
+        this(null, orderTable);
+    }
+
+    public EatInOrder(OrderPolicy orderPolicy, OrderTable orderTable, OrderLineItem... orderLineItems) {
         super(LocalDateTime.now());
         this.status = EatInOrderStatus.WAITING;
-        this.orderTableId = orderTableId;
+        occupyTable(orderTable);
+        addOrderLineItems(orderPolicy, orderLineItems);
+    }
+
+    private void occupyTable(OrderTable orderTable) {
+        orderTable.occupy();
+        this.orderTableId = orderTable.getId();
+    }
+
+    private void addOrderLineItems(OrderPolicy orderPolicy, OrderLineItem... orderLineItems) {
+        orderPolicy.validateOlis(List.of(orderLineItems));
+        addOrderLineItems(orderLineItems);
     }
 
     public boolean orderTableEq(UUID orderTableId) {

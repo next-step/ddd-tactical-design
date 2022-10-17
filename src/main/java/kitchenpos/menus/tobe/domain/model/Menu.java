@@ -85,11 +85,15 @@ public class Menu {
         return displayed;
     }
 
+    public boolean containsProduct(UUID productId) {
+        return menuProducts.containsProduct(productId);
+    }
+
     public UUID getId() {
         return id;
     }
 
-    public boolean containsProduct(UUID productId) {
-        return menuProducts.containsProduct(productId);
+    public long getPrice() {
+        return price.getPrice();
     }
 }
