@@ -25,10 +25,6 @@ public class EatInOrder extends AbstractOrder {
     protected EatInOrder() {
     }
 
-    public EatInOrder(OrderTable orderTable) {
-        this(null, orderTable);
-    }
-
     public EatInOrder(OrderPolicy orderPolicy, OrderTable orderTable, OrderLineItem... orderLineItems) {
         super(LocalDateTime.now());
         this.status = WAITING;

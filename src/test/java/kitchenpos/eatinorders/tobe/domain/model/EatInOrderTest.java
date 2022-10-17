@@ -26,7 +26,7 @@ class EatInOrderTest {
         OrderTable orderTable = new OrderTable();
         orderTable.occupy();
 
-        assertThatThrownBy(() -> new EatInOrder(orderTable))
+        assertThatThrownBy(() -> new EatInOrder(orderPolicy, orderTable))
                 .isInstanceOf(IllegalOrderTableStatusException.class)
                 .hasMessage(ALREADY_OCCUPIED);
     }
