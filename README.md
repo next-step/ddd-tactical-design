@@ -165,8 +165,8 @@ docker compose -p kitchenpos up -d
 
 ###### 속성
 
-- `Product`는 `ProducName`과 `ProductPrice`를 갖는다.
-  - `ProducName`에는 `Profanity`가 포함될 수 없다.
+- `Product`는 `ProductName`과 `ProductPrice`를 갖는다.
+  - `ProductName`에는 `Profanity`가 포함될 수 없다.
   - `ProductPrice`은 0원 이상이다.
 
 ###### 행위
