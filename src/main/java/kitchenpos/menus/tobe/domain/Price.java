@@ -1,12 +1,16 @@
 package kitchenpos.menus.tobe.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-class Price implements Comparable<Price> {
+@Embeddable
+public class Price implements Comparable<Price> {
     private static final String EMPTY_NAME_MESSAGE = "가격은 비어있을 수 없습니다.";
     private static final String INVALID_PRICE_MESSAGE = "가격은 0보다 크거다 같아야 합니다.";
 
+    @Column(name = "price", nullable = false)
     private final BigDecimal price;
 
      Price(final BigDecimal price) {
@@ -17,6 +21,10 @@ class Price implements Comparable<Price> {
             throw new IllegalArgumentException(INVALID_PRICE_MESSAGE);
         }
         this.price = price;
+    }
+
+    protected Price() {
+         this.price = null;
     }
 
     public Price multiply(long quantity) {
