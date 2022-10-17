@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +27,7 @@ class MenuTest {
     void construct() {
         final Price price = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(6L)));
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
         final Menu menu = new Menu(price, name, menuProduct, new MenuGroup());
 
         menu.changePrice(new Price(BigDecimal.ONE));
@@ -39,7 +41,7 @@ class MenuTest {
     void greaterThanAndEqualsMenuProductPriceSum(final long productPrice) {
         final Price menuPrice = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(productPrice)));
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(productPrice)));
 
         assertThatCode(() -> new Menu(menuPrice, name, menuProduct, new MenuGroup()))
                 .doesNotThrowAnyException();
@@ -50,7 +52,7 @@ class MenuTest {
     void consistOfMenuGroup() {
         final Price menuPrice = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(6L)));
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
         final MenuGroup menuGroup = new MenuGroup();
 
         assertThatCode(() -> new Menu(menuPrice, name, menuProduct, menuGroup))
@@ -62,7 +64,7 @@ class MenuTest {
     void displayed() {
         final Price menuPrice = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(6L)));
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
         final MenuGroup menuGroup = new MenuGroup();
 
         final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);
@@ -80,7 +82,7 @@ class MenuTest {
 
         final Price menuPrice = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new DisplayedName("양념치킨", new FakeProfanity()), new Product(BigDecimal.valueOf(4L)));
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(4L)));
         final MenuGroup menuGroup = new MenuGroup();
 
         final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);

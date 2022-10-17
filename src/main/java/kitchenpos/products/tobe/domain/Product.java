@@ -5,6 +5,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -31,7 +32,15 @@ public class Product {
         this.name = name;
     }
 
-    public Product() {
+    public Product(final ProductPrice price) {
+        this.price = price;
+    }
+
+    public Product(BigDecimal price) {
+        this(new ProductPrice(price));
+    }
+
+    protected Product() {
     }
 
     public UUID getId() {

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,7 +20,7 @@ class MenuProductTest {
     @ValueSource(longs = {0L, 1L})
     void moreThanZeroAndEqualsQuantity(final long quantity) {
         final Product product = new Product(BigDecimal.ONE);
-        assertThatCode(() -> new MenuProduct(quantity, new DisplayedName("양념치킨", new FakeProfanity()), product))
+        assertThatCode(() -> new MenuProduct(quantity, product))
                 .doesNotThrowAnyException();
     }
 }
