@@ -15,7 +15,7 @@ public interface JpaEatInOrderRepository extends JpaRepository<EatInOrder, UUID>
             "   select 1 " +
             "   from orders o " +
             "   where o.order_table_id = :tableId " +
-            "       and o.status != COMPLETED) ",
+            "       and o.status != 'COMPLETED') ",
             nativeQuery = true)
     boolean hasOngoingOrder(@Param("tableId") UUID tableId);
 }

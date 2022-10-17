@@ -24,7 +24,7 @@ import static javax.persistence.FetchType.EAGER;
 @Table(name = "orders")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class Order {
+public abstract class AbstractOrder {
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -42,11 +42,15 @@ public abstract class Order {
     )
     private List<OrderLineItem> orderLineItems = new ArrayList<>();
 
-    protected Order() {
+    protected AbstractOrder() {
     }
 
-    protected Order(LocalDateTime orderDateTime) {
+    protected AbstractOrder(LocalDateTime orderDateTime) {
         this.orderDateTime = orderDateTime;
+    }
+
+    protected void addOrderLineItems(OrderLineItem... orderLineItems) {
+        this.orderLineItems.addAll(List.of(orderLineItems));
     }
 
     public UUID getId() {

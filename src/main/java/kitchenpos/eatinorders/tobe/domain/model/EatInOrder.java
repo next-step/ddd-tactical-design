@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.model;
 
-import kitchenpos.common.Order;
+import kitchenpos.common.AbstractOrder;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -8,11 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @DiscriminatorValue("EAT_IN")
-public class EatInOrder extends Order {
+public class EatInOrder extends AbstractOrder {
 
     @Enumerated(EnumType.STRING)
     private EatInOrderStatus status;

@@ -1,6 +1,6 @@
 package kitchenpos.deliveryorders;
 
-import kitchenpos.common.Order;
+import kitchenpos.common.AbstractOrder;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -10,7 +10,7 @@ import javax.persistence.Enumerated;
 
 @Entity
 @DiscriminatorValue("DELIVERY")
-public class DeliveryOrder extends Order {
+public class DeliveryOrder extends AbstractOrder {
 
     @Enumerated(EnumType.STRING)
     private DeliveryOrderStatus status;

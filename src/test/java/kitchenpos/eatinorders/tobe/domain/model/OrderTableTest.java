@@ -30,7 +30,7 @@ class OrderTableTest {
         // given
         OrderTable orderTable = new OrderTable("1번 테이블");
         ReflectionTestUtils.setField(orderTable, "id", UUID.randomUUID());
-        EatInOrder order = new EatInOrder(orderTable.getId());
+        EatInOrder order = new EatInOrder(orderTable);
 
         eatInOrderRepository.save(order);
 
