@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderLineException.NOT_DISPLAYED;
-import static kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderLineException.PRICE_MISMATCH;
+import static kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderLineException.*;
 
 @Component
 public class OrderPolicy {
@@ -27,12 +26,16 @@ public class OrderPolicy {
 
         List<Menu> menus = menuRepository.findAllByIdIn(menuIds);
 
+        if (menus.size() != orderLineItems.size()) {
+            throw new IllegalOrderLineException(NO_MENU);
+        }
+
         menus.forEach(menu -> {
             if (!menu.isDisplayed()) {
                 throw new IllegalOrderLineException(NOT_DISPLAYED);
             }
 
-            if (findMatchingOli(orderLineItems, menu).priceEq(menu)) {
+            if (!findMatchingOli(orderLineItems, menu).priceEq(menu)) {
                 throw new IllegalOrderLineException(PRICE_MISMATCH);
             }
         });

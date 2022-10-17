@@ -20,6 +20,7 @@ public class OrderTable {
     private OrderTableStatus orderTableStatus;
 
     protected OrderTable() {
+        this("");
     }
 
     public OrderTable(String name) {
