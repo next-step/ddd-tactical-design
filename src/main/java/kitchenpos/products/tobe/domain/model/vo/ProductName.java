@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain.model.vo;
 
 import kitchenpos.global.domain.client.ProfanityCheckClient;
 import kitchenpos.global.domain.vo.ValueObject;
-import org.springframework.util.Assert;
+import kitchenpos.global.util.Assert;
 
 public class ProductName extends ValueObject {
 

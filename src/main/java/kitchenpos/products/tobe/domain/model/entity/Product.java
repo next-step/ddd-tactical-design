@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.domain.model.entity;
 
 import java.util.UUID;
+import kitchenpos.global.util.Assert;
 import kitchenpos.products.tobe.domain.model.vo.ProductName;
 import kitchenpos.products.tobe.domain.model.vo.ProductPrice;
-import org.springframework.util.Assert;
 
 public class Product {
 

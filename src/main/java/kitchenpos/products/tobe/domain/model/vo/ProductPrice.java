@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain.model.vo;
 
 import java.math.BigDecimal;
 import kitchenpos.global.domain.vo.ValueObject;
-import org.springframework.util.Assert;
+import kitchenpos.global.util.Assert;
 
 public class ProductPrice extends ValueObject {
 
