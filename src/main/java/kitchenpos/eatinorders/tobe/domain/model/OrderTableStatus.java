@@ -47,6 +47,10 @@ public class OrderTableStatus {
         return OCCUPIED_STATUS_WITH_ZERO_GUESTS;
     }
 
+    OrderTableStatus clear() {
+        return EMPTY_STATUS;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

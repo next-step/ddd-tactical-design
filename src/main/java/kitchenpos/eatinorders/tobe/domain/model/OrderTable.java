@@ -19,12 +19,12 @@ public class OrderTable {
     @Embedded
     private OrderTableStatus orderTableStatus;
 
+    protected OrderTable() {
+    }
+
     public OrderTable(String name) {
         this.name = name;
         this.orderTableStatus = OrderTableStatus.ofEmpty();
-    }
-
-    protected OrderTable() {
     }
 
     public void changeNumberOfGuests(int numberOfGuests) {
@@ -33,5 +33,14 @@ public class OrderTable {
 
     public void occupy() {
         orderTableStatus = orderTableStatus.occupy();
+    }
+
+    public void clear(TablePolicy policy) {
+        policy.validateClearable(this);
+        orderTableStatus = orderTableStatus.clear();
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

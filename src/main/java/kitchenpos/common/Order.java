@@ -28,10 +28,10 @@ public abstract class Order {
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
-    protected UUID id;
+    private UUID id;
 
     @Column(name = "order_date_time", nullable = false)
-    protected LocalDateTime orderDateTime;
+    private LocalDateTime orderDateTime;
 
     @OneToMany(cascade = ALL, orphanRemoval = true, fetch = EAGER)
     @JoinColumn(
@@ -40,5 +40,16 @@ public abstract class Order {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    protected List<OrderLineItem> orderLineItems = new ArrayList<>();
+    private List<OrderLineItem> orderLineItems = new ArrayList<>();
+
+    protected Order() {
+    }
+
+    protected Order(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
+    }
+
+    public UUID getId() {
+        return id;
+    }
 }
