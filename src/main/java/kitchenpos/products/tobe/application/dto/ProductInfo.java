@@ -2,9 +2,14 @@ package kitchenpos.products.tobe.application.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.global.exception.NonInstantiableException;
 import kitchenpos.products.tobe.domain.model.entity.Product;
 
-public class ProductInfo {
+public final class ProductInfo {
+
+    private ProductInfo() {
+        throw new NonInstantiableException();
+    }
 
     public static class Create {
 

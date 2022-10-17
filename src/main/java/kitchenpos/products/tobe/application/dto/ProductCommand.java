@@ -1,8 +1,13 @@
 package kitchenpos.products.tobe.application.dto;
 
 import java.util.UUID;
+import kitchenpos.global.exception.NonInstantiableException;
 
-public class ProductCommand {
+public final class ProductCommand {
+
+    private ProductCommand() {
+        throw new NonInstantiableException();
+    }
 
     public static class Create {
 
