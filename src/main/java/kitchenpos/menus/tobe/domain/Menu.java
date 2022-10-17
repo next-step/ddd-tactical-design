@@ -76,6 +76,10 @@ public class Menu {
         return this.displayed;
     }
 
+    public boolean equalsId(Long id) {
+        return this.id.equals(id);
+    }
+
     public BigDecimal getPrice() {
         return price.getPrice();
     }
