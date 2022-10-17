@@ -52,7 +52,7 @@ public class OrderTable {
         return numberOfGuests.numberOfGuests();
     }
 
-    public boolean occupied() {
+    public boolean isOccupied() {
         return occupied;
     }
 

@@ -37,7 +37,7 @@ public class OrderTableTest {
         orderTable.sit();
 
         // then
-        assertThat(orderTable.occupied()).isEqualTo(true);
+        assertThat(orderTable.isOccupied()).isEqualTo(true);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class OrderTableTest {
         // then
         assertAll(
                 () -> assertThat(orderTable.numberOfGuestsValue()).isEqualTo(0),
-                () -> assertThat(orderTable.occupied()).isEqualTo(false)
+                () -> assertThat(orderTable.isOccupied()).isEqualTo(false)
         );
     }
 
