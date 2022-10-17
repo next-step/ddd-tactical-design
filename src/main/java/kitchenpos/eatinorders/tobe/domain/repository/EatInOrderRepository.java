@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.repository;
 
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrder;
-import kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +14,5 @@ public interface EatInOrderRepository {
 
     List<EatInOrder> findAll();
 
-    boolean existsByOrderTableAndOrderStatusNot(OrderTable orderTable, EatInOrderStatus status);
+    boolean hasOngoingOrder(UUID tableId);
 }

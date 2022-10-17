@@ -5,7 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import org.springframework.stereotype.Component;
 
 import static kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderTableStatusException.CANT_CLEAR;
-import static kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus.*;
 
 @Component
 public class TablePolicy {
@@ -16,7 +15,7 @@ public class TablePolicy {
     }
 
     public void validateClearable(OrderTable orderTable) {
-        if (eatInOrderRepository.existsByOrderTableAndOrderStatusNot(orderTable, COMPLETED)) {
+        if (eatInOrderRepository.hasOngoingOrder(orderTable.getId())) {
             throw new IllegalOrderTableStatusException(CANT_CLEAR);
         }
     }

@@ -1,8 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain.doubles;
 
 import kitchenpos.eatinorders.tobe.domain.model.EatInOrder;
-import kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.domain.model.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -12,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import static kitchenpos.eatinorders.tobe.domain.model.EatInOrderStatus.COMPLETED;
 
 public class MemoryEatInOrderRepository implements EatInOrderRepository {
 
@@ -39,9 +39,9 @@ public class MemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public boolean existsByOrderTableAndOrderStatusNot(OrderTable orderTable, EatInOrderStatus status) {
+    public boolean hasOngoingOrder(UUID tableId) {
         return store.values()
                 .stream()
-                .anyMatch(it -> it.orderTableEq(orderTable) && it.statusNotEq(status));
+                .anyMatch(it -> it.orderTableEq(tableId) && it.statusNotEq(COMPLETED));
     }
 }

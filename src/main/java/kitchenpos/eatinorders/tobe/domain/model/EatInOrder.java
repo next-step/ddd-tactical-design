@@ -28,8 +28,8 @@ public class EatInOrder extends Order {
         this.orderTableId = orderTableId;
     }
 
-    public boolean orderTableEq(OrderTable orderTable) {
-        return orderTableId.equals(orderTable.getId());
+    public boolean orderTableEq(UUID orderTableId) {
+        return this.orderTableId.equals(orderTableId);
     }
 
     public boolean statusNotEq(EatInOrderStatus status) {
