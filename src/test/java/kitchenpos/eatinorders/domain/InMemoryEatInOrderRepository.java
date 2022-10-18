@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.domain;
 
 import java.util.*;
-import kitchenpos.eatinordertables.domain.EatInOrderTable;
 
 public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     private final Map<UUID, EatInOrder> orders = new HashMap<>();
@@ -23,19 +22,12 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public boolean existsByEatInOrderTableAndStatusNot(final EatInOrderTable eatInOrderTable, final EatInOrderStatus status) {
-        return orders.values()
-            .stream()
-            .anyMatch(order -> order.getOrderTable().equals(eatInOrderTable) && order.getStatus() != status);
-    }
-
-    @Override
-    public boolean existsNotByEatInOrderTableAndStatusNot(
-        EatInOrderTable eatInOrderTable,
+    public boolean existsByEatInOrderTableIdAndStatusNot(
+        UUID eatInOrderTableId,
         EatInOrderStatus status
     ) {
         return orders.values()
             .stream()
-            .noneMatch(order -> order.getOrderTable().equals(eatInOrderTable) && order.getStatus() != status);
+            .anyMatch(order -> order.getEatInOrderTableId().equals(eatInOrderTableId) && order.getStatus() != status);
     }
 }

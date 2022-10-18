@@ -2,6 +2,7 @@ package kitchenpos.eatinordertables.domain;
 
 import java.util.UUID;
 import javax.persistence.*;
+import kitchenpos.reader.application.EatInOrderCompletedChecker;
 
 @Table(name = "eat_in_order_table")
 @Entity
@@ -43,13 +44,16 @@ public class EatInOrderTable {
         this.occupied = occupied;
     }
 
-    public void clear() {
-        this.numberOfGuests = new NumberOfGuests(0);
-        this.occupied = false;
-    }
-
     public void sit() {
         this.occupied = true;
+    }
+
+    public void clear(EatInOrderCompletedChecker checker) {
+        if (checker.existsNotCompletedEatInOrder(id)) {
+            throw new IllegalStateException("완료되지 않은 주문이 존재해서 테이블을 비울 수 없습니다.");
+        }
+        this.numberOfGuests = new NumberOfGuests(0);
+        this.occupied = false;
     }
 
     public void changeNumberOfGuests(int numberOfGuests) {

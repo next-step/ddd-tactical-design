@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
-import kitchenpos.eatinordertables.domain.EatInOrderTable;
 
 @Table(name = "eat_in_order")
 @Entity
@@ -32,22 +31,17 @@ public class EatInOrder {
     @Embedded
     private EatInOrderLineItems eatInOrderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "eat_in_order_table_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_eat_in_order_to_eat_in_order_table")
-    )
-    private EatInOrderTable eatInOrderTable;
+    @Column(name = "eat_in_order_table_id", length = 16, nullable = false, columnDefinition = "binary(16)")
+    private UUID eatInOrderTableId;
 
     protected EatInOrder() {
     }
 
     public EatInOrder(
         EatInOrderLineItems eatInOrderLineItems,
-        EatInOrderTable eatInOrderTable
+        UUID eatInOrderTableId
     ) {
-        this(UUID.randomUUID(), WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        this(UUID.randomUUID(), WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTableId);
     }
 
     public EatInOrder(
@@ -55,13 +49,13 @@ public class EatInOrder {
         EatInOrderStatus status,
         LocalDateTime eatInOrderDateTime,
         EatInOrderLineItems eatInOrderLineItems,
-        EatInOrderTable eatInOrderTable
+        UUID eatInOrderTableId
     ) {
         this.id = id;
         this.status = status;
         this.eatInOrderDateTime = eatInOrderDateTime;
         this.eatInOrderLineItems = eatInOrderLineItems;
-        this.eatInOrderTable = eatInOrderTable;
+        this.eatInOrderTableId = eatInOrderTableId;
     }
 
     public void accept() {
@@ -101,8 +95,8 @@ public class EatInOrder {
         return eatInOrderLineItems.getValues();
     }
 
-    public EatInOrderTable getOrderTable() {
-        return eatInOrderTable;
+    public UUID getEatInOrderTableId() {
+        return eatInOrderTableId;
     }
 
     @Override

@@ -1,13 +1,17 @@
 package kitchenpos.eatinorders.application;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.EatInOrderLineItem;
+import kitchenpos.eatinorders.domain.EatInOrderLineItems;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
-import kitchenpos.eatinordertables.domain.EatInOrderTable;
-import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
+import kitchenpos.reader.application.EatInOrderTableOccupiedChecker;
 import kitchenpos.reader.application.MenuPriceReader;
 import kitchenpos.reader.domain.MenuPriceAndDisplayed;
 import org.springframework.stereotype.Service;
@@ -16,31 +20,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
-    private final EatInOrderTableRepository eatInOrderTableRepository;
+    private final EatInOrderTableOccupiedChecker tableOccupiedChecker;
     private final MenuPriceReader menuPriceReader;
 
     public EatInOrderService(
         EatInOrderRepository eatInOrderRepository,
-        EatInOrderTableRepository eatInOrderTableRepository,
+        EatInOrderTableOccupiedChecker tableOccupiedChecker,
         MenuPriceReader menuPriceReader
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
-        this.eatInOrderTableRepository = eatInOrderTableRepository;
+        this.tableOccupiedChecker = tableOccupiedChecker;
         this.menuPriceReader = menuPriceReader;
     }
 
     @Transactional
     public EatInOrderResponse create(EatInOrderCreateRequest request) {
         EatInOrderLineItems eatInOrderLineItems = convertEatInOrderLineItems(request.getEatInOrderLineItems());
-        EatInOrderTable eatInOrderTable = findEatInOrderTableById(request.getEatInOrderTableId());
-        validateTableOccupied(eatInOrderTable);
-        EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, eatInOrderTable);
+        validateTableOccupied(request.getEatInOrderTableId());
+        EatInOrder eatInOrder = new EatInOrder(eatInOrderLineItems, request.getEatInOrderTableId());
         return EatInOrderResponse.from(eatInOrderRepository.save(eatInOrder));
-    }
-
-    private EatInOrderTable findEatInOrderTableById(UUID eatInOrderTableId) {
-        return eatInOrderTableRepository.findById(eatInOrderTableId)
-            .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 주문 테이블을 찾을 수 없습니다."));
     }
 
     private EatInOrderLineItems convertEatInOrderLineItems(List<EatInOrderLineItemCreateRequest> requests) {
@@ -60,14 +58,14 @@ public class EatInOrderService {
         );
     }
 
-    private static void validateMenuDisplayed(MenuPriceAndDisplayed menu) {
+    private void validateMenuDisplayed(MenuPriceAndDisplayed menu) {
         if (menu.isNotDisplayed()) {
             throw new IllegalStateException("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
         }
     }
 
-    private static void validateTableOccupied(EatInOrderTable eatInOrderTable) {
-        if (eatInOrderTable.isNotOccupied()) {
+    private void validateTableOccupied(UUID eatInOrderTableId) {
+        if (tableOccupiedChecker.isEatInOrderTableNotOccupied(eatInOrderTableId)) {
             throw new IllegalStateException("빈 테이블에는 주문을 등록할 수 없습니다.");
         }
     }
@@ -90,14 +88,8 @@ public class EatInOrderService {
     public EatInOrderResponse complete(UUID orderId) {
         EatInOrder eatInOrder = findOrderById(orderId);
         eatInOrder.complete();
-        clearTableIfAllOrdersCompleted(eatInOrder.getOrderTable());
+        // TODO: publish event
         return EatInOrderResponse.from(eatInOrder);
-    }
-
-    private void clearTableIfAllOrdersCompleted(EatInOrderTable eatInOrderTable) {
-        if (eatInOrderRepository.existsNotByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
-            eatInOrderTable.clear();
-        }
     }
 
     private EatInOrder findOrderById(UUID orderId) {

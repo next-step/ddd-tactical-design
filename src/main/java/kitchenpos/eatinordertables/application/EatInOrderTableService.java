@@ -3,23 +3,26 @@ package kitchenpos.eatinordertables.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinordertables.domain.EatInOrderTable;
 import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
 import kitchenpos.eatinordertables.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
 import kitchenpos.eatinordertables.ui.request.EatInOrderTableCreateRequest;
 import kitchenpos.eatinordertables.ui.response.EatInOrderTableResponse;
+import kitchenpos.reader.application.EatInOrderCompletedChecker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EatInOrderTableService {
     private final EatInOrderTableRepository eatInOrderTableRepository;
-    private final EatInOrderRepository eatInOrderRepository;
+    private final EatInOrderCompletedChecker checker;
 
-    public EatInOrderTableService(EatInOrderTableRepository eatInOrderTableRepository, EatInOrderRepository eatInOrderRepository) {
+    public EatInOrderTableService(
+        EatInOrderTableRepository eatInOrderTableRepository,
+        EatInOrderCompletedChecker checker
+    ) {
         this.eatInOrderTableRepository = eatInOrderTableRepository;
-        this.eatInOrderRepository = eatInOrderRepository;
+        this.checker = checker;
     }
 
     @Transactional
@@ -38,15 +41,8 @@ public class EatInOrderTableService {
     @Transactional
     public EatInOrderTableResponse clear(final UUID orderTableId) {
         EatInOrderTable eatInOrderTable = findOrderTableById(orderTableId);
-        validateOrderCompleted(eatInOrderTable);
-        eatInOrderTable.clear();
+        eatInOrderTable.clear(checker);
         return EatInOrderTableResponse.from(eatInOrderTable);
-    }
-
-    private void validateOrderCompleted(EatInOrderTable eatInOrderTable) {
-        if (eatInOrderRepository.existsByEatInOrderTableAndStatusNot(eatInOrderTable, EatInOrderStatus.COMPLETED)) {
-            throw new IllegalStateException("주문이 완료되지 않아 테이블을 정리할 수 없습니다.");
-        }
     }
 
     @Transactional

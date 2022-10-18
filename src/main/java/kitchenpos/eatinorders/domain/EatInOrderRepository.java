@@ -3,7 +3,6 @@ package kitchenpos.eatinorders.domain;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.eatinordertables.domain.EatInOrderTable;
 
 public interface EatInOrderRepository {
     EatInOrder save(EatInOrder eatInOrder);
@@ -12,7 +11,5 @@ public interface EatInOrderRepository {
 
     List<EatInOrder> findAll();
 
-    boolean existsByEatInOrderTableAndStatusNot(EatInOrderTable eatInOrderTable, EatInOrderStatus status);
-
-    boolean existsNotByEatInOrderTableAndStatusNot(EatInOrderTable eatInOrderTable, EatInOrderStatus status);
+    boolean existsByEatInOrderTableIdAndStatusNot(UUID eatInOrderTableId, EatInOrderStatus status);
 }

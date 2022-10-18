@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.eatinorders.application.EatInOrderCompletedCheckerImpl;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.domain.InMemoryEatInOrderRepository;
@@ -32,7 +33,7 @@ class EatInOrderTableServiceTest {
     void setUp() {
         eatInOrderTableRepository = new InMemoryEatInOrderTableRepository();
         eatInOrderRepository = new InMemoryEatInOrderRepository();
-        eatInOrderTableService = new EatInOrderTableService(eatInOrderTableRepository, eatInOrderRepository);
+        eatInOrderTableService = new EatInOrderTableService(eatInOrderTableRepository, new EatInOrderCompletedCheckerImpl(eatInOrderRepository));
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
@@ -73,9 +74,10 @@ class EatInOrderTableServiceTest {
     void clearWithUncompletedOrders() {
         final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
         final UUID orderTableId = eatInOrderTable.getId();
-        eatInOrderRepository.save(eatInOrder(EatInOrderStatus.ACCEPTED, eatInOrderTable));
+        eatInOrderRepository.save(eatInOrder(EatInOrderStatus.ACCEPTED, orderTableId));
         assertThatThrownBy(() -> eatInOrderTableService.clear(orderTableId))
-            .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("완료되지 않은 주문이 존재해서 테이블을 비울 수 없습니다.");
     }
 
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
