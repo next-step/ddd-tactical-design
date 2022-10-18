@@ -1,6 +1,8 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinordertables.domain;
 
 import java.util.*;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
 
 public class InMemoryEatInOrderTableRepository implements EatInOrderTableRepository {
     private final Map<UUID, EatInOrderTable> orderTables = new HashMap<>();

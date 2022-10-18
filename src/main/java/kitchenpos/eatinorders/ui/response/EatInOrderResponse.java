@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.eatinordertables.ui.response.EatInOrderTableResponse;
 
 public class EatInOrderResponse {
 

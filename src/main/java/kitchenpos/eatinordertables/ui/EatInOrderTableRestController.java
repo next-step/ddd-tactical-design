@@ -1,12 +1,12 @@
-package kitchenpos.eatinorders.ui;
+package kitchenpos.eatinordertables.ui;
 
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.application.EatInOrderTableService;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableCreateRequest;
-import kitchenpos.eatinorders.ui.response.EatInOrderTableResponse;
+import kitchenpos.eatinordertables.application.EatInOrderTableService;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableCreateRequest;
+import kitchenpos.eatinordertables.ui.response.EatInOrderTableResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

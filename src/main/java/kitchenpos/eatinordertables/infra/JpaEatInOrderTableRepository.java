@@ -1,8 +1,8 @@
-package kitchenpos.eatinorders.infra;
+package kitchenpos.eatinordertables.infra;
 
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.EatInOrderTable;
-import kitchenpos.eatinorders.domain.EatInOrderTableRepository;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaEatInOrderTableRepository extends EatInOrderTableRepository, JpaRepository<EatInOrderTable, UUID> {

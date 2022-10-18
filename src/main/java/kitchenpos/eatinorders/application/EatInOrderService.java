@@ -6,6 +6,8 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
 import kitchenpos.reader.application.MenuPriceReader;
 import kitchenpos.reader.domain.MenuPriceAndDisplayed;
 import org.springframework.stereotype.Service;

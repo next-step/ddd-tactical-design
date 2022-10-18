@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
 
 @Table(name = "eat_in_order")
 @Entity
@@ -27,7 +28,6 @@ public class EatInOrder {
 
     @Column(name = "eat_in_order_date_time", nullable = false)
     private LocalDateTime eatInOrderDateTime;
-
 
     @Embedded
     private EatInOrderLineItems eatInOrderLineItems;

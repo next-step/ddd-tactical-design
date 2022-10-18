@@ -1,7 +1,8 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinordertables.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import kitchenpos.eatinordertables.domain.NumberOfGuests;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

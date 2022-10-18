@@ -1,10 +1,10 @@
-package kitchenpos.eatinorders.ui.response;
+package kitchenpos.eatinordertables.ui.response;
 
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
 
 public class EatInOrderTableResponse {
 

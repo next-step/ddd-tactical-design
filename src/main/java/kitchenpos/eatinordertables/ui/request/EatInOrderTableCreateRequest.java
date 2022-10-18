@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui.request;
+package kitchenpos.eatinordertables.ui.request;
 
 public class EatInOrderTableCreateRequest {
 

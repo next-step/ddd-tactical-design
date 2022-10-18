@@ -1,10 +1,12 @@
 package kitchenpos.eatinorders.domain;
 
 import static kitchenpos.eatinorders.EatInOrderFixtures.eatInOrder;
-import static kitchenpos.eatinorders.EatInOrderFixtures.eatInOrderTable;
-import static kitchenpos.eatinorders.domain.EatInOrderStatus.*;
+import static kitchenpos.eatinorders.domain.EatInOrderStatus.SERVED;
+import static kitchenpos.eatinorders.domain.EatInOrderStatus.WAITING;
+import static kitchenpos.eatinordertables.EatInOrderTableFixtures.eatInOrderTable;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

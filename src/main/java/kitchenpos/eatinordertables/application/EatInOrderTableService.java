@@ -1,12 +1,14 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinordertables.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableCreateRequest;
-import kitchenpos.eatinorders.ui.response.EatInOrderTableResponse;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableCreateRequest;
+import kitchenpos.eatinordertables.ui.response.EatInOrderTableResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

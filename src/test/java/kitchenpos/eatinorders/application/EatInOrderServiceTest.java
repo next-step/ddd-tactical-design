@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import static kitchenpos.eatinorders.EatInOrderFixtures.*;
+import static kitchenpos.eatinordertables.EatInOrderTableFixtures.eatInOrderTable;
 import static kitchenpos.menus.MenuFixtures.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,6 +15,9 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
+import kitchenpos.eatinordertables.domain.InMemoryEatInOrderTableRepository;
 import kitchenpos.menus.domain.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
@@ -21,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class EatInOrderServiceTest {

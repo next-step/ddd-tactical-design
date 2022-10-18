@@ -1,18 +1,22 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinordertables.application;
 
 import static kitchenpos.eatinorders.EatInOrderFixtures.eatInOrder;
-import static kitchenpos.eatinorders.EatInOrderFixtures.eatInOrderTable;
+import static kitchenpos.eatinordertables.EatInOrderTableFixtures.eatInOrderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.EatInOrderFixtures;
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.ui.request.EatInOrderTableCreateRequest;
-import kitchenpos.eatinorders.ui.response.EatInOrderTableResponse;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.eatinorders.domain.InMemoryEatInOrderRepository;
+import kitchenpos.eatinordertables.domain.EatInOrderTable;
+import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
+import kitchenpos.eatinordertables.domain.InMemoryEatInOrderTableRepository;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableChangeNumberOfGuestsRequest;
+import kitchenpos.eatinordertables.ui.request.EatInOrderTableCreateRequest;
+import kitchenpos.eatinordertables.ui.response.EatInOrderTableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +52,7 @@ class EatInOrderTableServiceTest {
     @DisplayName("빈 테이블을 해지할 수 있다.")
     @Test
     void sit() {
-        final UUID orderTableId = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(false, 0)).getId();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(false, 0)).getId();
         final EatInOrderTableResponse response = eatInOrderTableService.sit(orderTableId);
         assertThat(response.isOccupied()).isTrue();
     }
@@ -56,7 +60,7 @@ class EatInOrderTableServiceTest {
     @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
     void clear() {
-        final UUID orderTableId = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(true, 4)).getId();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 4)).getId();
         final EatInOrderTableResponse response = eatInOrderTableService.clear(orderTableId);
         assertAll(
             () -> assertThat(response.getNumberOfGuests()).isZero(),
@@ -67,7 +71,7 @@ class EatInOrderTableServiceTest {
     @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
     @Test
     void clearWithUncompletedOrders() {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(true, 4));
+        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(true, 4));
         final UUID orderTableId = eatInOrderTable.getId();
         eatInOrderRepository.save(eatInOrder(EatInOrderStatus.ACCEPTED, eatInOrderTable));
         assertThatThrownBy(() -> eatInOrderTableService.clear(orderTableId))
@@ -77,7 +81,7 @@ class EatInOrderTableServiceTest {
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
-        final UUID orderTableId = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(true, 0)).getId();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 0)).getId();
         final EatInOrderTableChangeNumberOfGuestsRequest request = new EatInOrderTableChangeNumberOfGuestsRequest(4);
         final EatInOrderTableResponse response = eatInOrderTableService.changeNumberOfGuests(orderTableId, request);
         assertThat(response.getNumberOfGuests()).isEqualTo(4);
@@ -87,7 +91,7 @@ class EatInOrderTableServiceTest {
     @ValueSource(ints = -1)
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
-        final UUID orderTableId = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(true, 0)).getId();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(true, 0)).getId();
         final EatInOrderTableChangeNumberOfGuestsRequest request = new EatInOrderTableChangeNumberOfGuestsRequest(numberOfGuests);
         assertThatThrownBy(() -> eatInOrderTableService.changeNumberOfGuests(orderTableId, request))
             .isInstanceOf(IllegalArgumentException.class);
@@ -96,7 +100,7 @@ class EatInOrderTableServiceTest {
     @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsInEmptyTable() {
-        final UUID orderTableId = eatInOrderTableRepository.save(EatInOrderFixtures.eatInOrderTable(false, 0)).getId();
+        final UUID orderTableId = eatInOrderTableRepository.save(eatInOrderTable(false, 0)).getId();
         final EatInOrderTableChangeNumberOfGuestsRequest request = new EatInOrderTableChangeNumberOfGuestsRequest(4);
         assertThatThrownBy(() -> eatInOrderTableService.changeNumberOfGuests(orderTableId, request))
             .isInstanceOf(IllegalStateException.class);
