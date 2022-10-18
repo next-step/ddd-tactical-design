@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EatInOrderTableService {
     private final EatInOrderTableRepository eatInOrderTableRepository;
-    private final EatInOrderCompletedChecker checker;
+    private final EatInOrderCompletedChecker eatInOrderCompletedChecker;
 
     public EatInOrderTableService(
         EatInOrderTableRepository eatInOrderTableRepository,
-        EatInOrderCompletedChecker checker
+        EatInOrderCompletedChecker eatInOrderCompletedChecker
     ) {
         this.eatInOrderTableRepository = eatInOrderTableRepository;
-        this.checker = checker;
+        this.eatInOrderCompletedChecker = eatInOrderCompletedChecker;
     }
 
     @Transactional
@@ -41,7 +41,7 @@ public class EatInOrderTableService {
     @Transactional
     public EatInOrderTableResponse clear(final UUID orderTableId) {
         EatInOrderTable eatInOrderTable = findOrderTableById(orderTableId);
-        eatInOrderTable.clear(checker);
+        eatInOrderTable.clear(eatInOrderCompletedChecker);
         return EatInOrderTableResponse.from(eatInOrderTable);
     }
 

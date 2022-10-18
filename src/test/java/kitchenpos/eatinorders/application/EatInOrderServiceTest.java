@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,21 +20,32 @@ import kitchenpos.eatinordertables.application.EatInOrderTableOccupiedCheckerImp
 import kitchenpos.eatinordertables.domain.EatInOrderTable;
 import kitchenpos.eatinordertables.domain.EatInOrderTableRepository;
 import kitchenpos.eatinordertables.domain.InMemoryEatInOrderTableRepository;
+import kitchenpos.event.EatInOrderCompletedEvent;
 import kitchenpos.menus.domain.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.reader.application.EatInOrderTableOccupiedChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
 
+@SpringBootTest
 class EatInOrderServiceTest {
 
+    @InjectMocks
+    private EatInOrderService eatInOrderService;
     private EatInOrderRepository eatInOrderRepository;
     private MenuRepository menuRepository;
     private EatInOrderTableRepository eatInOrderTableRepository;
-    private EatInOrderService eatInOrderService;
+
+    @Spy
+    private ApplicationEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
@@ -41,10 +53,12 @@ class EatInOrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         eatInOrderTableRepository = new InMemoryEatInOrderTableRepository();
         FakeMenuPriceReader menuPriceReader = new FakeMenuPriceReader(menuRepository);
+        EatInOrderTableOccupiedChecker tableOccupiedChecker = new EatInOrderTableOccupiedCheckerImpl(eatInOrderTableRepository);
         eatInOrderService = new EatInOrderService(
             eatInOrderRepository,
-            new EatInOrderTableOccupiedCheckerImpl(eatInOrderTableRepository),
-            menuPriceReader
+            tableOccupiedChecker,
+            menuPriceReader,
+            publisher
         );
     }
 
@@ -130,42 +144,21 @@ class EatInOrderServiceTest {
             .hasMessage("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
     }
 
-
-    // TODO: publish event 테스트
-    @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
+    @DisplayName("매장 주문이 완료되면 빈 테이블 설정시도 이벤트를 발행한다.")
     @Test
     void completeEatInOrder() {
         final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(
             true,
             4
         ));
-        final EatInOrder expected = eatInOrderRepository.save(eatInOrder(
+        final EatInOrder eatInOrder = eatInOrderRepository.save(eatInOrder(
             EatInOrderStatus.SERVED,
             eatInOrderTable.getId()
         ));
-        final EatInOrderResponse response = eatInOrderService.complete(expected.getId());
-        assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED)
-        );
-    }
+        final EatInOrderResponse response = eatInOrderService.complete(eatInOrder.getId());
 
-    // TODO: publish event 테스트
-    @DisplayName("완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.")
-    @Test
-    void completeNotTable() {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(
-            true,
-            4
-        ));
-        eatInOrderRepository.save(eatInOrder(EatInOrderStatus.ACCEPTED, eatInOrderTable.getId()));
-        final EatInOrder expected = eatInOrderRepository.save(eatInOrder(
-            EatInOrderStatus.SERVED,
-            eatInOrderTable.getId()
-        ));
-        final EatInOrderResponse response = eatInOrderService.complete(expected.getId());
-        assertAll(
-            () -> assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED)
-        );
+        assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
+        verify(publisher).publishEvent(new EatInOrderCompletedEvent(eatInOrderTable.getId()));
     }
 
     @DisplayName("주문의 목록을 조회할 수 있다.")

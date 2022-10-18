@@ -11,9 +11,11 @@ import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
+import kitchenpos.event.EatInOrderCompletedEvent;
 import kitchenpos.reader.application.EatInOrderTableOccupiedChecker;
 import kitchenpos.reader.application.MenuPriceReader;
 import kitchenpos.reader.domain.MenuPriceAndDisplayed;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +24,18 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final EatInOrderTableOccupiedChecker tableOccupiedChecker;
     private final MenuPriceReader menuPriceReader;
+    private final ApplicationEventPublisher publisher;
 
     public EatInOrderService(
         EatInOrderRepository eatInOrderRepository,
         EatInOrderTableOccupiedChecker tableOccupiedChecker,
-        MenuPriceReader menuPriceReader
+        MenuPriceReader menuPriceReader,
+        ApplicationEventPublisher publisher
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.tableOccupiedChecker = tableOccupiedChecker;
         this.menuPriceReader = menuPriceReader;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -88,8 +93,13 @@ public class EatInOrderService {
     public EatInOrderResponse complete(UUID orderId) {
         EatInOrder eatInOrder = findOrderById(orderId);
         eatInOrder.complete();
-        // TODO: publish event
+        publishCompletedEvent(eatInOrder);
         return EatInOrderResponse.from(eatInOrder);
+    }
+
+    private void publishCompletedEvent(EatInOrder eatInOrder) {
+        EatInOrderCompletedEvent event = new EatInOrderCompletedEvent(eatInOrder.getEatInOrderTableId());
+        publisher.publishEvent(event);
     }
 
     private EatInOrder findOrderById(UUID orderId) {
