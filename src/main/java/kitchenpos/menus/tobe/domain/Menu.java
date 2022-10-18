@@ -56,18 +56,7 @@ public class Menu {
     }
 
     public Menu(MenuDisplayedName name, MenuGroup menuGroup, MenuPrice price, List<MenuProduct> menuProducts) {
-        if(menuProducts == null || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException("상품은 1개 이상 등록해야 합니다.");
-        }
-
-        if(Objects.isNull(menuGroup)) {
-            throw new IllegalArgumentException("메뉴는 메뉴 그룹에 속해야 합니다 ");
-        }
-
-        BigDecimal menuProductsPrice = menuProducts.stream().map(MenuProduct::calculatePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-        if(price.value().compareTo(menuProductsPrice) > 0) {
-            throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
-        }
+        validate(menuGroup, price, menuProducts);
 
         this.id = UUID.randomUUID();
         this.name = name;
@@ -77,6 +66,36 @@ public class Menu {
         this.menuProducts = menuProducts;
         this.displayed = new MenuDisplayed(Boolean.TRUE);
     }
+
+    private void validate(MenuGroup menuGroup, MenuPrice price, List<MenuProduct> menuProducts) {
+        validateMenuProducts(menuProducts);
+        validateMenuGroup(menuGroup);
+        validateMenuPrice(price, menuProducts);
+    }
+
+
+    private void validateMenuProducts(List<MenuProduct> menuProducts) {
+        if(menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("상품은 1개 이상 등록해야 합니다.");
+        }
+    }
+
+    private void validateMenuGroup(MenuGroup menuGroup) {
+        if(Objects.isNull(menuGroup)) {
+            throw new IllegalArgumentException("메뉴는 메뉴 그룹에 속해야 합니다 ");
+        }
+    }
+
+    private void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
+        BigDecimal menuProductsPrice = menuProducts.stream()
+                .map(MenuProduct::calculatePrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        if(price.value().compareTo(menuProductsPrice) > 0) {
+            throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
+        }
+    }
+
 
     public UUID getId() {
         return id;
@@ -115,7 +134,10 @@ public class Menu {
     }
 
     public void changePrice(long price) {
-        this.changePrice(new MenuPrice(price));
+        MenuPrice menuPrice = new MenuPrice(price);
+        validateMenuPrice(menuPrice, menuProducts);
+
+        this.changePrice(menuPrice);
     }
 
     public void changePrice(MenuPrice price) {
@@ -127,10 +149,7 @@ public class Menu {
     }
 
     public void display() {
-        BigDecimal menuProductsPrice = menuProducts.stream().map(MenuProduct::calculatePrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-        if(price.value().compareTo(menuProductsPrice) > 0) {
-            throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
-        }
+        validateMenuPrice(price, menuProducts);
 
         this.displayed.display();
     }

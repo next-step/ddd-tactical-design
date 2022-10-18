@@ -192,7 +192,7 @@ class MenuTest {
                 Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
-        assertThatThrownBy(() -> menu.changePrice(-1L) )
+        assertThatThrownBy(() -> menu.changePrice(20000L) )
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -213,29 +213,10 @@ class MenuTest {
         assertThat(menu.getDisplayed()).isEqualTo(new MenuDisplayed(Boolean.TRUE));
     }
 
-
-
-    @Test
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-    void name13() {
-
-        UUID productId1 = UUID.randomUUID();
-        UUID productId2 = UUID.randomUUID();
-        UUID menuGroupId = UUID.randomUUID();
-
-        Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
-                        createMenuProduct(productId2, 3000L, 3)));
-
-        menu.changePrice(20000L);
-
-        assertThatThrownBy(menu::display)
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
     @Test
     @DisplayName("메뉴를 숨길 수 있다.")
     void name14() {
+
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
         UUID menuGroupId = UUID.randomUUID();
