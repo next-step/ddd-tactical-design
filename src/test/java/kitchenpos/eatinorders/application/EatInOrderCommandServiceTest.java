@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.application;
 
-import static kitchenpos.eatinorders.EatInOrderFixtures.*;
+import static kitchenpos.eatinorders.EatInOrderFixtures.INVALID_ID;
+import static kitchenpos.eatinorders.EatInOrderFixtures.eatInOrder;
 import static kitchenpos.eatinordertables.EatInOrderTableFixtures.eatInOrderTable;
 import static kitchenpos.menus.MenuFixtures.menu;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +13,10 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.eatinorders.domain.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.ui.request.EatInOrderLineItemCreateRequest;
 import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
@@ -36,10 +40,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 
 @SpringBootTest
-class EatInOrderServiceTest {
+class EatInOrderCommandServiceTest {
 
     @InjectMocks
-    private EatInOrderService eatInOrderService;
+    private EatInOrderCommandService eatInOrderCommandService;
     private EatInOrderRepository eatInOrderRepository;
     private MenuRepository menuRepository;
     private EatInOrderTableRepository eatInOrderTableRepository;
@@ -54,7 +58,7 @@ class EatInOrderServiceTest {
         eatInOrderTableRepository = new InMemoryEatInOrderTableRepository();
         FakeMenuPriceReader menuPriceReader = new FakeMenuPriceReader(menuRepository);
         EatInOrderTableOccupiedChecker tableOccupiedChecker = new EatInOrderTableOccupiedCheckerImpl(eatInOrderTableRepository);
-        eatInOrderService = new EatInOrderService(
+        eatInOrderCommandService = new EatInOrderCommandService(
             eatInOrderRepository,
             tableOccupiedChecker,
             menuPriceReader,
@@ -72,7 +76,7 @@ class EatInOrderServiceTest {
             eatInOrderTableId,
             createOrderLineItemRequest(menuId, 3L)
         );
-        final EatInOrderResponse response = eatInOrderService.create(request);
+        final EatInOrderResponse response = eatInOrderCommandService.create(request);
         assertThat(response).isNotNull();
         assertAll(
             () -> assertThat(response.getId()).isNotNull(),
@@ -96,7 +100,7 @@ class EatInOrderServiceTest {
             eatInOrderTableId,
             orderLineItemRequest
         );
-        assertThatThrownBy(() -> eatInOrderService.create(request))
+        assertThatThrownBy(() -> eatInOrderCommandService.create(request))
             .isInstanceOf(NoSuchElementException.class)
             .hasMessage("ID 에 해당하는 메뉴를 찾을 수 없습니다.");
     }
@@ -111,7 +115,7 @@ class EatInOrderServiceTest {
             orderTableId,
             createOrderLineItemRequest(menuId, quantity)
         );
-        assertDoesNotThrow(() -> eatInOrderService.create(request));
+        assertDoesNotThrow(() -> eatInOrderCommandService.create(request));
     }
 
     @DisplayName("빈 테이블에는 주문을 등록할 수 없다.")
@@ -122,7 +126,7 @@ class EatInOrderServiceTest {
         final EatInOrderCreateRequest request = createOrderRequest(
             orderTableId, createOrderLineItemRequest(menuId, 3L)
         );
-        assertThatThrownBy(() -> eatInOrderService.create(request))
+        assertThatThrownBy(() -> eatInOrderCommandService.create(request))
             .isInstanceOf(IllegalStateException.class);
     }
 
@@ -139,7 +143,7 @@ class EatInOrderServiceTest {
             orderTableId,
             createOrderLineItemRequest(menuId, 3L)
         );
-        assertThatThrownBy(() -> eatInOrderService.create(request))
+        assertThatThrownBy(() -> eatInOrderCommandService.create(request))
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("메뉴가 전시중이지 않아 주문을 진행할 수 없습니다.");
     }
@@ -155,23 +159,10 @@ class EatInOrderServiceTest {
             EatInOrderStatus.SERVED,
             eatInOrderTable.getId()
         ));
-        final EatInOrderResponse response = eatInOrderService.complete(eatInOrder.getId());
+        final EatInOrderResponse response = eatInOrderCommandService.complete(eatInOrder.getId());
 
         assertThat(response.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED);
         verify(publisher).publishEvent(new EatInOrderCompletedEvent(eatInOrderTable.getId()));
-    }
-
-    @DisplayName("주문의 목록을 조회할 수 있다.")
-    @Test
-    void findAll() {
-        final EatInOrderTable eatInOrderTable = eatInOrderTableRepository.save(eatInOrderTable(
-            true,
-            4
-        ));
-        eatInOrderRepository.save(eatInOrder(EatInOrderStatus.SERVED, eatInOrderTable.getId()));
-        eatInOrderRepository.save(eatInOrder(EatInOrderStatus.COMPLETED, eatInOrderTable.getId()));
-        final List<EatInOrderResponse> responses = eatInOrderService.findAll();
-        assertThat(responses).hasSize(2);
     }
 
     private EatInOrderCreateRequest createOrderRequest(

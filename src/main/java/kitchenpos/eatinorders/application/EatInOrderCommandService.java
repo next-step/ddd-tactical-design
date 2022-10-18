@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.EatInOrderLineItems;
@@ -17,16 +18,16 @@ import kitchenpos.reader.application.MenuPriceReader;
 import kitchenpos.reader.domain.MenuPriceAndDisplayed;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
-public class EatInOrderService {
+public class EatInOrderCommandService {
     private final EatInOrderRepository eatInOrderRepository;
     private final EatInOrderTableOccupiedChecker tableOccupiedChecker;
     private final MenuPriceReader menuPriceReader;
     private final ApplicationEventPublisher publisher;
 
-    public EatInOrderService(
+    public EatInOrderCommandService(
         EatInOrderRepository eatInOrderRepository,
         EatInOrderTableOccupiedChecker tableOccupiedChecker,
         MenuPriceReader menuPriceReader,
@@ -38,7 +39,6 @@ public class EatInOrderService {
         this.publisher = publisher;
     }
 
-    @Transactional
     public EatInOrderResponse create(EatInOrderCreateRequest request) {
         EatInOrderLineItems eatInOrderLineItems = convertEatInOrderLineItems(request.getEatInOrderLineItems());
         validateTableOccupied(request.getEatInOrderTableId());
@@ -75,21 +75,18 @@ public class EatInOrderService {
         }
     }
 
-    @Transactional
     public EatInOrderResponse accept(UUID orderId) {
         EatInOrder eatInOrder = findOrderById(orderId);
         eatInOrder.accept();
         return EatInOrderResponse.from(eatInOrder);
     }
 
-    @Transactional
     public EatInOrderResponse serve(UUID orderId) {
         EatInOrder eatInOrder = findOrderById(orderId);
         eatInOrder.serve();
         return EatInOrderResponse.from(eatInOrder);
     }
 
-    @Transactional
     public EatInOrderResponse complete(UUID orderId) {
         EatInOrder eatInOrder = findOrderById(orderId);
         eatInOrder.complete();
@@ -105,10 +102,5 @@ public class EatInOrderService {
     private EatInOrder findOrderById(UUID orderId) {
         return eatInOrderRepository.findById(orderId)
             .orElseThrow(() -> new NoSuchElementException("ID 에 해당하는 주문을 찾을 수 없습니다."));
-    }
-
-    @Transactional(readOnly = true)
-    public List<EatInOrderResponse> findAll() {
-        return EatInOrderResponse.of(eatInOrderRepository.findAll());
     }
 }

@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.eatinorders.application.EatInOrderService;
+import kitchenpos.eatinorders.application.EatInOrderCommandService;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinordertables.domain.EatInOrderTable;
@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class EatInOrderTableEventHandlerTest {
 
     @Autowired
-    private EatInOrderService eatInOrderService;
+    private EatInOrderCommandService eatInOrderCommandService;
 
     @Autowired
     private EatInOrderRepository eatInOrderRepository;
@@ -37,7 +37,7 @@ class EatInOrderTableEventHandlerTest {
         EatInOrder order = eatInOrderRepository.save(eatInOrder(SERVED, table.getId()));
 
         // when
-        eatInOrderService.complete(order.getId());
+        eatInOrderCommandService.complete(order.getId());
 
         // then
         EatInOrderTable found = findEatInOrderTableById(table.getId());
