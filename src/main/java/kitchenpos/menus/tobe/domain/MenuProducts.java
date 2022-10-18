@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
@@ -37,5 +38,10 @@ public class MenuProducts {
 
   public List<MenuProduct> getMenuProducts() {
     return Collections.unmodifiableList(menuProducts);
+  }
+
+  public boolean hasProduct(UUID productId) {
+    return menuProducts.stream()
+        .anyMatch(menuProduct -> menuProduct.satisfyProduct(productId));
   }
 }

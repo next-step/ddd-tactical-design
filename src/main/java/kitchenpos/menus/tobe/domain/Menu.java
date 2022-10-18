@@ -105,4 +105,13 @@ public class Menu {
   public boolean isDisplayed() {
     return displayState.isDisplayed();
   }
+
+  public boolean isHidden() {
+    return displayState.isDisplayed();
+  }
+
+  public boolean hasProduct(UUID productId) {
+    return menuProducts.hasProduct(productId);
+  }
+
 }

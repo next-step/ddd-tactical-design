@@ -1,8 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import static kitchenpos.Fixtures.INVALID_ID;
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.TobeFixtures.createMenu;
+import static kitchenpos.TobeFixtures.createMenuGroup;
+import static kitchenpos.TobeFixtures.createMenuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
@@ -14,8 +15,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.DisplayNameValidator;
+import kitchenpos.products.tobe.domain.FakeDisplayedNameValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +37,7 @@ class OrderTest {
   private OrderRepository orderRepository;
   private OrderTableRepository orderTableRepository;
   private OrderTableCleaner orderTableCleaner;
+  public DisplayNameValidator displayNameValidator;
 
   @BeforeEach
   void setUp() {
@@ -43,12 +49,23 @@ class OrderTest {
         orderRepository,
         orderTableRepository
     );
+    displayNameValidator = new FakeDisplayedNameValidator();
   }
 
   @DisplayName("매장 테이블과 1개 이상 등록된 메뉴로 매장 주문을 등록할 수 있다.")
   @Test
   void createEatInOrder() {
-    final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
+    MenuGroup menuGroup = createMenuGroup("점심특선");
+    Menu menu = createMenu(
+        "후라이드+후라이드",
+        19_000L,
+        true,
+        menuGroup,
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+
+    final UUID menuId = menuRepository.save(menu).getId();
 
     assertThatNoException()
         .isThrownBy(() -> new Order(
@@ -91,7 +108,17 @@ class OrderTest {
   @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
   @Test
   void createNotDisplayedMenuOrder() {
-    final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
+    MenuGroup menuGroup = createMenuGroup("점심특선");
+    Menu menu = createMenu(
+        "후라이드+후라이드",
+        19_000L,
+        false,
+        menuGroup,
+        List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
+        displayNameValidator
+    );
+    final UUID menuId = menuRepository.save(menu).getId();
+
     assertThatIllegalStateException()
         .isThrownBy(() -> new Order(
                 UUID.randomUUID(),
