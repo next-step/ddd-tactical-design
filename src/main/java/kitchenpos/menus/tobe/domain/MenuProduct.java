@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -39,6 +40,10 @@ public class MenuProduct {
 
     public Price amount() {
         return price.times(quantity.quantity());
+    }
+
+    public boolean satisfyProduct(UUID productId) {
+        return Objects.equals(this.productId, productId);
     }
 
 }

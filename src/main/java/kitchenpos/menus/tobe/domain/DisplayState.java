@@ -30,6 +30,10 @@ public class DisplayState {
         this.displayed = displayed;
     }
 
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

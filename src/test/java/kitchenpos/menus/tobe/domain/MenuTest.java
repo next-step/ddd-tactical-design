@@ -1,5 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
+import static kitchenpos.TobeFixtures.createMenu;
+import static kitchenpos.TobeFixtures.createMenuGroup;
+import static kitchenpos.TobeFixtures.createMenuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -197,36 +200,6 @@ class MenuTest {
             List.of(createMenuProduct(UUID.randomUUID(), 12_000L, 2)),
             displayNameValidator
         ));
-  }
-
-  private static MenuGroup createMenuGroup(String name) {
-    return new MenuGroup(UUID.randomUUID(), DisplayedName.from(name));
-  }
-
-  private static Menu createMenu(
-      String name,
-      long price,
-      boolean displayed,
-      MenuGroup menuGroup,
-      List<MenuProduct> menuProducts,
-      DisplayNameValidator displayNameValidator
-  ) {
-    return new Menu(
-        UUID.randomUUID(),
-        DisplayedName.from(name, displayNameValidator),
-        Price.from(price),
-        DisplayState.from(displayed),
-        menuGroup,
-        new MenuProducts(menuProducts)
-    );
-  }
-
-  private static MenuProduct createMenuProduct(
-      UUID productId,
-      long price,
-      long quantity
-  ) {
-    return new MenuProduct(productId, Price.from(price), Quantity.from(quantity));
   }
 
 }
