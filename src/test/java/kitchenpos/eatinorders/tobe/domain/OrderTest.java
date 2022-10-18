@@ -38,11 +38,7 @@ class OrderTest {
     menuRepository = new InMemoryMenuRepository();
     orderRepository = new InMemoryOrderRepository();
     orderTableRepository = new InMemoryOrderTableRepository();
-    orderValidator = new DefaultOrderValidator(
-        menuRepository,
-        orderRepository,
-        orderTableRepository
-    );
+    orderValidator = new OrderValidator(menuRepository);
     orderTableCleaner = new OrderTableCleaner(
         orderRepository,
         orderTableRepository
