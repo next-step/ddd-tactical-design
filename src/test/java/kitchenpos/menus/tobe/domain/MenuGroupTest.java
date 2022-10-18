@@ -17,7 +17,7 @@ class MenuGroupTest {
     @DisplayName("이름을 입력하여 메뉴 그룹을 만들 수 있다.")
     void menu_group() {
         MenuGroup menuGroup = new MenuGroup("메뉴 그룹 이름", profanityClient);
-        MenuDisplayedName menuDisplayedName = new MenuDisplayedName("메뉴 그룹 이름", profanityClient);
+        MenuGroupDisplayedName menuDisplayedName = new MenuGroupDisplayedName("메뉴 그룹 이름", profanityClient);
 
         assertThat(menuGroup.getId()).isNotNull();
         assertThat(menuGroup.getName()).isEqualTo(menuDisplayedName);
