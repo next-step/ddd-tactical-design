@@ -38,9 +38,6 @@ public class Order {
     )
     private List<OrderLineItem> orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
         name = "order_table_id",
@@ -49,26 +46,21 @@ public class Order {
     )
     private OrderTable orderTable;
 
-    @Transient
-    private UUID orderTableId;
-
     public Order() {
     }
 
-    public Order(OrderType type, OrderStatus status, List<OrderLineItem> orderLineItems, String deliveryAddress, OrderTable orderTable) {
+    public Order(OrderType type, OrderStatus status, List<OrderLineItem> orderLineItems, OrderTable orderTable) {
         validateOrderType(type);
         validateOrderLineItems(orderLineItems);
         validateOrderTable(orderTable);
+
         this.id = UUID.randomUUID();
         this.type = type;
         this.status = status;
         this.orderDateTime = LocalDateTime.now();
         this.orderLineItems = orderLineItems;
-        this.deliveryAddress = deliveryAddress;
         this.orderTable = orderTable;
-        this.orderTableId = orderTable.id();
     }
-
 
     public UUID id() {
         return id;
@@ -90,16 +82,8 @@ public class Order {
         return orderLineItems;
     }
 
-    public String deliveryAddress() {
-        return deliveryAddress;
-    }
-
     public OrderTable orderTable() {
         return orderTable;
-    }
-
-    public UUID orderTableId() {
-        return orderTableId;
     }
 
     public void accept() {
@@ -125,9 +109,7 @@ public class Order {
 
     private void validateOrderLineItems(List<OrderLineItem> orderLineItems) {
         for (OrderLineItem orderLineItem : orderLineItems) {
-            if (!orderLineItem.menuIsDisplayed()) {
-                throw new IllegalStateException();
-            }
+            validateMenuIsDisplayed(orderLineItem);
         }
     }
 
@@ -155,16 +137,22 @@ public class Order {
         }
     }
 
+    private void validateMenuIsDisplayed(OrderLineItem orderLineItem) {
+        if (!orderLineItem.menuIsDisplayed()) {
+            throw new IllegalStateException();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(id, order.id) && type == order.type && status == order.status && Objects.equals(orderDateTime, order.orderDateTime) && Objects.equals(orderLineItems, order.orderLineItems) && Objects.equals(deliveryAddress, order.deliveryAddress) && Objects.equals(orderTable, order.orderTable) && Objects.equals(orderTableId, order.orderTableId);
+        return Objects.equals(id, order.id) && type == order.type && status == order.status && Objects.equals(orderDateTime, order.orderDateTime) && Objects.equals(orderLineItems, order.orderLineItems) && Objects.equals(orderTable, order.orderTable);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, status, orderDateTime, orderLineItems, deliveryAddress, orderTable, orderTableId);
+        return Objects.hash(id, type, status, orderDateTime, orderLineItems, orderTable);
     }
 }

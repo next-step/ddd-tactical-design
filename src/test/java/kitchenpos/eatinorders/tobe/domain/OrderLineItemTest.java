@@ -48,9 +48,9 @@ public class OrderLineItemTest {
     @ValueSource(ints = {-1, 0, 1})
     void createMenuPrice(int quantity) {
         // when
-        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity, price);
+        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity, menu.priceValue());
 
         // then
-        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity, price));
+        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity, menu.priceValue()));
     }
 }

@@ -52,18 +52,12 @@ public class TobeFixtures {
         return new MenuProduct(new Random().nextLong(), product, new MenuProductQuantity(quantity));
     }
 
-    public static Order order(final OrderStatus status, final String deliveryAddress) {
-        return new Order(OrderType.DELIVERY, status, List.of(orderLineItem()), deliveryAddress, orderTable());
-    }
-
     public static Order order(final OrderStatus status) {
-        return new Order(OrderType.DELIVERY, status, List.of(orderLineItem()), "", orderTable());
-
+        return new Order(OrderType.DELIVERY, status, List.of(orderLineItem()), orderTable());
     }
 
     public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        return new Order(OrderType.DELIVERY, status, List.of(orderLineItem()), "", orderTable);
-
+        return new Order(OrderType.DELIVERY, status, List.of(orderLineItem()), orderTable);
     }
 
     public static OrderLineItem orderLineItem() {

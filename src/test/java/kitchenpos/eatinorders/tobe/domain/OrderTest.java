@@ -26,7 +26,7 @@ public class OrderTest {
     void setup() {
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(orderLineItem());
-        createOrder = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, "", TobeFixtures.orderTable());
+        createOrder = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class OrderTest {
         orderLineItems.add(orderLineItem());
 
         // when
-        Order order = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, "", TobeFixtures.orderTable());
+        Order order = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable());
 
         // then
         assertAll(
@@ -57,7 +57,7 @@ public class OrderTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new Order(orderType, OrderStatus.WAITING, orderLineItems, "", TobeFixtures.orderTable()))
+        assertThatThrownBy(() -> new Order(orderType, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -70,7 +70,7 @@ public class OrderTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, "", TobeFixtures.orderTable()))
+        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable()))
                 .isInstanceOf(IllegalStateException.class);
     }
 
@@ -85,7 +85,7 @@ public class OrderTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, "", orderTable))
+        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, orderTable))
                 .isInstanceOf(IllegalStateException.class);
     }
 
