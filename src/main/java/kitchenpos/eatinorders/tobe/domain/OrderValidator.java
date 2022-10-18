@@ -23,7 +23,7 @@ public class OrderValidator {
     Menu menu = menuRepository.findById(orderLineItem.getMenuId())
         .orElseThrow(NoSuchElementException::new);
 
-    if (!menu.isDisplayed()) {
+    if (menu.isHidden()) {
       throw new IllegalStateException();
     }
   }
