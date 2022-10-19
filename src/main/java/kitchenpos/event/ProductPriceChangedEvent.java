@@ -22,7 +22,6 @@ public class ProductPriceChangedEvent {
         return productPrice;
     }
 
-    // ProductServiceTest.java "상품의 가격을 변경할 수 있다." 를 위해 동등성을 부여하는게 맞는건가...
     @Override
     public boolean equals(Object o) {
         if (this == o) {

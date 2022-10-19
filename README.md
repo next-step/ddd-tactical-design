@@ -47,36 +47,35 @@ docker compose -p kitchenpos up -d
 
 ### 주문 테이블
 
-- 주문 테이블을 등록할 수 있다.
-- 주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.
-  - 주문 테이블의 이름은 비워 둘 수 없다.
-- 착석여부를 참으로 설정할 수 있다.
-- 착석여부를 거짓으로 설정할 수 있다.
-- 완료되지 않은 주문이 있는 주문 테이블은 정리 할 수 없다.
-- 방문한 손님 수를 변경할 수 있다.
-- 방문한 손님 수가 올바르지 않으면 변경할 수 없다.
-  - 방문한 손님 수는 0 이상이어야 한다.
-- 착석여부가 거짓인 테이블은 방문한 손님 수를 변경할 수 없다.
-- 주문 테이블의 목록을 조회할 수 있다.
+1. [x] 주문 테이블을 등록할 수 있다.
+2. [x] 주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.
+   1. [x] 주문 테이블의 이름은 비워 둘 수 없다.
+3. [x] 착석여부를 참으로 설정할 수 있다.
+4. [x] 착석여부를 거짓으로 설정할 수 있다.
+5. [x] 완료되지 않은 주문이 있는 주문 테이블은 정리 할 수 없다.
+6. [x] 방문한 손님 수를 변경할 수 있다.
+7. [x] 방문한 손님 수가 올바르지 않으면 변경할 수 없다.
+   1. [x] 방문한 손님 수는 0 이상이어야 한다.
+8. [x] 착석여부가 거짓인 테이블은 방문한 손님 수를 변경할 수 없다.
+9. [x] 주문 테이블의 목록을 조회할 수 있다.
 
 ### 매장 주문
 
-- 1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.
-- 주문 유형이 올바르지 않으면 등록할 수 없다.
-- 메뉴가 없으면 등록할 수 없다.
-- 매장 주문은 주문 항목의 수량이 0 미만일 수 있다.
-- 착석여부가 거짓인 테이블에는 매장 주문을 등록할 수 없다.
-- 숨겨진 메뉴는 주문할 수 없다.
-- 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
-- 주문을 접수한다.
-- 접수 대기 중인 주문만 접수할 수 있다.
-- 주문을 서빙한다.
-- 접수된 주문만 서빙할 수 있다.
-- 주문을 완료한다.
-- 서빙된 주문만 완료할 수 있다.
-- 주문 테이블의 모든 매장 주문이 완료되면 착석여부를 거짓으로 설정한다.
-- 완료되지 않은 매장 주문이 있는 주문 테이블은 착석여부를 거짓으로 설정하지 않는다.
-- 주문 목록을 조회할 수 있다.
+1. [x] 1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.
+2. [x] 메뉴가 없으면 등록할 수 없다.
+3. [x] 매장 주문은 주문 항목의 수량이 0 미만일 수 있다.
+4. [x] 착석여부가 거짓인 테이블에는 매장 주문을 등록할 수 없다.
+5. [x] 숨겨진 메뉴는 주문할 수 없다.
+6. [x] 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
+7. [x] 주문을 접수한다.
+8. [x] 접수 대기 중인 주문만 접수할 수 있다.
+9. [x] 주문을 서빙한다.
+10. [x] 접수된 주문만 서빙할 수 있다.
+11. [x] 주문을 완료한다.
+12. [x] 서빙된 주문만 완료할 수 있다.
+13. [x] 주문 테이블의 모든 매장 주문이 완료되면 착석여부를 거짓으로 설정한다.
+14. [x] 완료되지 않은 매장 주문이 있는 주문 테이블은 착석여부를 거짓으로 설정하지 않는다.
+15. [x] 주문 목록을 조회할 수 있다.
 
 ### 배달 주문
 
@@ -249,13 +248,13 @@ docker compose -p kitchenpos up -d
 - [x] `MenuProduct`는 `Menu`와 `productId`와 `MenuProductPrice`, `MenuProductQuantity`를 가진다.
 
 ### 매장 주문
-- `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
-- `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
-- `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
-- `EatInOrder`는 고유식별자와 `EatInOrderStatus`, `EatInOrderDateTime`, `EatInOrderLineItem` 목록을 가진다.
-- `EatInOrder`가 등록될 때 `Menu`는 `display` 중이어야하고, `MenuPrice`와 `EatInOrderLineItemPrice`가 일치 해야한다.
-- `EatInOrderStatus`는 `waiting`-`accepted`-`served`-`completed` 순으로 진행된다.
-- `EatInOrderLineItem`은 고유식별자와 `EatInOrderLineItemPrice`, `EatInOrderLineItemQuantity`를 갖는다.
+- [x] `OrderTable`은 고유식별자와 `OrderTableName`, `NumberOfGuests`, `Occupied`를 갖는다.
+- [x] `OrderTable`의 모든 `EatInOrder`가 `completed`가 되면, `clear` 한다.
+- [x] `clear`를 하면, `Occupied`가 false가 되고 `NumberOfGuests`가 0이 된다.
+- [x] `EatInOrder`는 고유식별자와 `EatInOrderStatus`, `EatInOrderDateTime`, `EatInOrderTable`, `EatInOrderLineItem` 목록을 가진다.
+- [x] `EatInOrder`가 등록될 때 `Menu`는 `display` 중이어야하고, `MenuPrice`와 `EatInOrderLineItemPrice`가 일치 해야한다.
+- [x] `EatInOrderStatus`는 `waiting`-`accepted`-`served`-`completed` 순으로 진행된다.
+- [x] `EatInOrderLineItem`은 고유식별자와 `menuId`, `EatInOrderLineItemPrice`, `quantity`를 갖는다.
 
 ### 배달 주문
 - `DeliveryOrder`는 고유식별자와 `DeliveryOrderStatus`, `DeliveryOrderDateTime`, `DeliveryOrderLineItem` 목록을 가진다.
