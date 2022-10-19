@@ -7,15 +7,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.entity.Product;
+import kitchenpos.product.tobe.domain.repository.ProductRepository;
 
 public class InMemoryProductRepository implements ProductRepository {
+
     private final Map<UUID, Product> products = new HashMap<>();
 
     @Override
     public Product save(final Product product) {
-        products.put(product.getId(), product);
+        products.put(product.id, product);
         return product;
     }
 
@@ -33,7 +34,7 @@ public class InMemoryProductRepository implements ProductRepository {
     public List<Product> findAllByIdIn(final List<UUID> ids) {
         return products.values()
             .stream()
-            .filter(product -> ids.contains(product.getId()))
+            .filter(product -> ids.contains(product.id))
             .collect(Collectors.toList());
     }
 }
