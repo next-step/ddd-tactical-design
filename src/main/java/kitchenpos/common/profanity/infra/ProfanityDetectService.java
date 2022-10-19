@@ -1,4 +1,4 @@
-package kitchenpos.common.profanitydetect.infra;
+package kitchenpos.common.profanity.infra;
 
 public interface ProfanityDetectService {
 

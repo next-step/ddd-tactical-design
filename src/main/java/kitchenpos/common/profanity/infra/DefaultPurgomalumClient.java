@@ -1,4 +1,4 @@
-package kitchenpos.common.profanitydetect.infra;
+package kitchenpos.common.profanity.infra;
 
 import java.net.URI;
 import org.springframework.boot.web.client.RestTemplateBuilder;

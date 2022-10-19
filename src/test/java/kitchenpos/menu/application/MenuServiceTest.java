@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.profanity.FakeProfanityDetectService;
-import kitchenpos.common.profanitydetect.infra.ProfanityDetectService;
+import kitchenpos.common.profanity.infra.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuGroupRepository;
 import kitchenpos.menu.InMemoryMenuRepository;
 import kitchenpos.menu.domain.Menu;
