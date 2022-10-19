@@ -1,26 +1,29 @@
-package kitchenpos.eatinorders.feedback.infra;
+package kitchenpos.eatinorders.feedback.listener;
 
 import kitchenpos.eatinorders.feedback.domain.OrderTable;
 import kitchenpos.eatinorders.feedback.domain.OrderTableRepository;
-import kitchenpos.eatinorders.feedback.domain.OrderTableClearPolicy;
-import kitchenpos.eatinorders.feedback.event.OrderCompleteEvent;
-import org.springframework.context.event.EventListener;
+import kitchenpos.eatinorders.feedback.domain.OrderTableClearPolicyImpl;
+import kitchenpos.eatinorders.feedback.domain.OrderCompletedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class OrderTableEventListener {
-    private final OrderTableClearPolicy orderTableClearPolicy;
+    private final OrderTableClearPolicyImpl orderTableClearPolicy;
     private final OrderTableRepository orderTableRepository;
 
-    public OrderTableEventListener(OrderTableClearPolicy orderTableClearPolicy, OrderTableRepository orderTableRepository) {
+    public OrderTableEventListener(OrderTableClearPolicyImpl orderTableClearPolicy, OrderTableRepository orderTableRepository) {
         this.orderTableClearPolicy = orderTableClearPolicy;
         this.orderTableRepository = orderTableRepository;
     }
 
     @Async
-    @EventListener
-    public void handle(OrderCompleteEvent event) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
+    public void handle(OrderCompletedEvent event) {
         OrderTable orderTable = findById(event.getOrderTableId());
         orderTable.clear(orderTableClearPolicy);
     }
