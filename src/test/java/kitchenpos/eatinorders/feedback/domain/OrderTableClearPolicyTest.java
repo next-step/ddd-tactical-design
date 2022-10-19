@@ -29,8 +29,8 @@ class OrderTableClearPolicyTest {
 
     @BeforeEach
     void setUp() {
-        orderTableClearPolicy = new OrderTableClearPolicy(eatInOrderRepository);
-        orderCreatePolicy = new OrderCreatePolicy(orderTableRepository, menuRepository);
+        orderTableClearPolicy = new OrderTableClearPolicyImpl(eatInOrderRepository);
+        orderCreatePolicy = new OrderCreatePolicyImpl(orderTableRepository, menuRepository);
 
         orderTable = new OrderTable(1L, "1번 테이블");
         orderTableRepository.save(orderTable);

@@ -73,7 +73,7 @@ class OrderTableTest {
     @DisplayName("주문 테이블을 치운다.")
     @Test
     void clear() {
-        OrderTableClearPolicy orderTableClearPolicy = new OrderTableClearPolicy(new InMemoryEatInOrderRepository());
+        OrderTableClearPolicy orderTableClearPolicy = new OrderTableClearPolicyImpl(new InMemoryEatInOrderRepository());
         OrderTable orderTable = new OrderTable(1L, "1번 테이블");
         orderTable.use();
 
