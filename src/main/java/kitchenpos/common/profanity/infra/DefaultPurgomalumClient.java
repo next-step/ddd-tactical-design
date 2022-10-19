@@ -9,6 +9,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 public class DefaultPurgomalumClient implements ProfanityDetectService {
+
+    private static final String PURGOMALUM_ENDPOINT = "https://www.purgomalum.com/service/containsprofanity";
+
     private final RestTemplate restTemplate;
 
     public DefaultPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
@@ -17,10 +20,11 @@ public class DefaultPurgomalumClient implements ProfanityDetectService {
 
     @Override
     public boolean profanityIn(final String text) {
-        final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
+        final URI url = UriComponentsBuilder.fromUriString(PURGOMALUM_ENDPOINT)
             .queryParam("text", text)
             .build()
             .toUri();
-        return Boolean.parseBoolean(restTemplate.getForObject(url, String.class));
+        final String result = restTemplate.getForObject(url, String.class);
+        return Boolean.parseBoolean(result);
     }
 }
