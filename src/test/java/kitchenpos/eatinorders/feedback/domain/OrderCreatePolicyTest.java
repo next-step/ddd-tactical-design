@@ -16,9 +16,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OrderCreatePolicyTest {
-    private OrderTableRepository orderTableRepository;
-    private MenuRepository menuRepository;
-    private OrderCreatePolicy orderCreatePolicy;
+    private OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
+    private MenuRepository menuRepository = new InMemoryMenuRepository();
+    private OrderCreatePolicy orderCreatePolicy = new OrderCreatePolicyImpl(orderTableRepository, menuRepository);
 
     private Menu 후라이드_두마리_메뉴;
     private Menu 양념_두마리_메뉴;
@@ -26,10 +26,6 @@ class OrderCreatePolicyTest {
 
     @BeforeEach
     void setUp() {
-        orderTableRepository = new InMemoryOrderTableRepository();
-        menuRepository = new InMemoryMenuRepository();
-        orderCreatePolicy = new OrderCreatePolicy(orderTableRepository, menuRepository);
-
         후라이드_두마리_메뉴 = new Menu(1L, "후라이드 두마리", 20000, 1L, List.of(new MenuProduct(1L, 2)));
         양념_두마리_메뉴 = new Menu(2L, "양념 두마리", 22000, 1L, List.of(new MenuProduct(2L, 2)));
         menuRepository.save(후라이드_두마리_메뉴);
@@ -55,7 +51,6 @@ class OrderCreatePolicyTest {
     @Test
     void createWithWrongPrice() {
         일번테이블.use();
-
         List<OrderLineItem> orderLineItems = List.of(
                 new OrderLineItem(1L, BigDecimal.valueOf(20000), 2),
                 new OrderLineItem(2L, BigDecimal.valueOf(50000), 2)
