@@ -5,6 +5,7 @@ import java.util.List;
 import kitchenpos.common.profanitydetect.infra.ProfanityDetectService;
 
 public class FakeProfanityDetectService implements ProfanityDetectService {
+
     private static final List<String> profanities;
 
     static {
@@ -14,6 +15,6 @@ public class FakeProfanityDetectService implements ProfanityDetectService {
     @Override
     public boolean profanityIn(final String text) {
         return profanities.stream()
-            .anyMatch(profanity -> text.contains(profanity));
+            .anyMatch(text::contains);
     }
 }
