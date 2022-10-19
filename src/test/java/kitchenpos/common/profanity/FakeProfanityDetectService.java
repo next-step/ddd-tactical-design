@@ -2,7 +2,7 @@ package kitchenpos.common.profanity;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.common.profanity.infra.ProfanityDetectService;
+import kitchenpos.common.profanity.domain.ProfanityDetectService;
 
 public class FakeProfanityDetectService implements ProfanityDetectService {
 

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.common.profanity.FakeProfanityDetectService;
-import kitchenpos.common.profanity.infra.ProfanityDetectService;
+import kitchenpos.common.profanity.domain.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuRepository;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
