@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.common.profanity.FakePurgomalumClient;
-import kitchenpos.common.profanitydetect.infra.PurgomalumClient;
+import kitchenpos.common.profanity.FakeProfanityDetectService;
+import kitchenpos.common.profanitydetect.infra.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuRepository;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
@@ -28,15 +28,19 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityDetectService profanityDetectService;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        profanityDetectService = new FakeProfanityDetectService();
+        productService = new ProductService(
+            productRepository,
+            menuRepository,
+            profanityDetectService
+        );
     }
 
     @DisplayName("상품을 등록할 수 있다.")

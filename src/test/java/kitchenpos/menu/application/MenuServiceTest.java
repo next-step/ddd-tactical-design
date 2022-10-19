@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.common.profanity.FakePurgomalumClient;
-import kitchenpos.common.profanitydetect.infra.PurgomalumClient;
+import kitchenpos.common.profanity.FakeProfanityDetectService;
+import kitchenpos.common.profanitydetect.infra.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuGroupRepository;
 import kitchenpos.menu.InMemoryMenuRepository;
 import kitchenpos.menu.domain.Menu;
@@ -39,7 +39,7 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityDetectService profanityDetectService;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -49,12 +49,12 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        profanityDetectService = new FakeProfanityDetectService();
         menuService = new MenuService(
             menuRepository,
             menuGroupRepository,
             productRepository,
-            purgomalumClient
+            profanityDetectService
         );
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));

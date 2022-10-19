@@ -2,9 +2,9 @@ package kitchenpos.common.profanity;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.common.profanitydetect.infra.PurgomalumClient;
+import kitchenpos.common.profanitydetect.infra.ProfanityDetectService;
 
-public class FakePurgomalumClient implements PurgomalumClient {
+public class FakeProfanityDetectService implements ProfanityDetectService {
     private static final List<String> profanities;
 
     static {
@@ -12,7 +12,7 @@ public class FakePurgomalumClient implements PurgomalumClient {
     }
 
     @Override
-    public boolean containsProfanity(final String text) {
+    public boolean profanityIn(final String text) {
         return profanities.stream()
             .anyMatch(profanity -> text.contains(profanity));
     }
