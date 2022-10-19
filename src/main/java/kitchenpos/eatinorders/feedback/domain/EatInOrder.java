@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.feedback.domain;
 
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "eat_in_order")
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,6 +57,7 @@ public class EatInOrder {
             throw new IllegalStateException("서빙 완료 상태의 주문만 완료할 수 있습니다.");
         }
         this.orderStatus = OrderStatus.COMPLETED;
+        registerEvent(new OrderCompletedEvent(this, id, orderTableId));
     }
 
     public Long getId() {
