@@ -11,17 +11,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EatInOrderCompletePolicyTest {
+class OrderTableCleanUpPolicyTest {
 
     private EatInOrderRepository eatInOrderRepository;
-    private CleanUp cleanUp;
     private UUID orderTableId;
 
     @BeforeEach
     void setUp() {
         eatInOrderRepository = new InMemoryEatInOrderRepository();
-        cleanUp = new DummyCleanUp();
-
         orderTableId = UUID.randomUUID();
     }
 
@@ -34,9 +31,9 @@ class EatInOrderCompletePolicyTest {
         void isClearOrderTableCondition_true() {
             final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTableId, EatInOrderStatus.COMPLETED);
             eatInOrderRepository.save(eatInOrder);
-            final EatInOrderCompletePolicy eatInOrderCompletePolicy = new EatInOrderCompletePolicy(eatInOrderRepository, cleanUp);
+            final OrderTableCleanUpPolicy orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
 
-            assertThat(eatInOrderCompletePolicy.isClearOrderTableCondition(orderTableId)).isTrue();
+            assertThat(orderTableCleanUpPolicy.isCleanUpCondition(orderTableId)).isTrue();
         }
 
         @ParameterizedTest(name = "주문테이블의 모든 주문이 완료상태가 아닐 경우 False 를 반환한다. status={0}")
@@ -47,9 +44,9 @@ class EatInOrderCompletePolicyTest {
         void isClearOrderTableCondition_false(final EatInOrderStatus status) {
             final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTableId, status);
             eatInOrderRepository.save(eatInOrder);
-            final EatInOrderCompletePolicy eatInOrderCompletePolicy = new EatInOrderCompletePolicy(eatInOrderRepository, cleanUp);
+            final OrderTableCleanUpPolicy orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
 
-            assertThat(eatInOrderCompletePolicy.isClearOrderTableCondition(orderTableId)).isFalse();
+            assertThat(orderTableCleanUpPolicy.isCleanUpCondition(orderTableId)).isFalse();
         }
     }
 }

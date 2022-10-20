@@ -4,6 +4,8 @@ import kitchenpos.common.annotation.DomainService;
 import kitchenpos.common.domain.vo.Price;
 import kitchenpos.eatinorders.order.tobe.domain.vo.MenuSpecification;
 import kitchenpos.eatinorders.order.tobe.domain.vo.OrderLineItemSpecification;
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,15 +15,16 @@ import java.util.stream.Collectors;
 public class EatInOrderFactory {
 
     private final MenuContextClient menuContextClient;
-    private final OrderTableManager orderTableManager;
+    private final OrderTableRepository orderTableRepository;
 
-    public EatInOrderFactory(MenuContextClient menuContextClient, OrderTableManager orderTableManager) {
+    public EatInOrderFactory(final MenuContextClient menuContextClient, final OrderTableRepository orderTableRepository) {
         this.menuContextClient = menuContextClient;
-        this.orderTableManager = orderTableManager;
+        this.orderTableRepository = orderTableRepository;
     }
 
     public EatInOrder create(final UUID orderTableId, final List<OrderLineItemSpecification> orderLineItemSpecifications) {
-        if (orderTableManager.isEmptyTable(orderTableId)) {
+        final OrderTable orderTable = orderTableRepository.findById(orderTableId).orElseThrow(IllegalArgumentException::new);
+        if (orderTable.isEmptyTable()) {
             throw new IllegalStateException("사용중인 주문테이블만 매장 주문이 가능합니다.");
         }
         final List<EatInOrderLineItem> eatInOrderItems = createEatInOrderItems(orderLineItemSpecifications);

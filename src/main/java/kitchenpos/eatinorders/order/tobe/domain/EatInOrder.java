@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.order.tobe.domain;
 
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableCleanUp;
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,7 +16,7 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -66,13 +69,13 @@ public class EatInOrder {
         status = EatInOrderStatus.SERVED;
     }
 
-    public void complete(final EatInOrderCompletePolicy completePolicy) {
+    public void complete(final OrderTableCleanUpPolicy completePolicy, final OrderTableCleanUp orderTableCleanUp) {
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException("주문 상태가 서빙완료일 때만 가능합니다.");
         }
         status = EatInOrderStatus.COMPLETED;
-        if (completePolicy.isClearOrderTableCondition(orderTableId)) {
-            completePolicy.clearOrderTable(orderTableId);
+        if (completePolicy.isCleanUpCondition(orderTableId)) {
+            orderTableCleanUp.clear(orderTableId);
         }
     }
 

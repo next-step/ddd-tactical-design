@@ -1,5 +1,9 @@
 package kitchenpos.eatinorders.order.tobe.domain;
 
+import kitchenpos.eatinorders.ordertable.tobe.domain.InMemoryOrderTableRepository;
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableCleanUp;
+import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,12 +20,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class EatInOrderTest {
 
     private EatInOrderRepository eatInOrderRepository;
-    private CleanUp cleanUp;
+    private OrderTableRepository orderTableRepository;
+    private OrderTableCleanUpPolicy orderTableCleanUpPolicy;
+    private OrderTableCleanUp orderTableCleanUp;
+
+    private UUID orderTableId;
 
     @BeforeEach
     void setUp() {
         eatInOrderRepository = new InMemoryEatInOrderRepository();
-        cleanUp = new DummyCleanUp();
+        orderTableRepository = new InMemoryOrderTableRepository();
+        orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
+        orderTableCleanUp = new OrderTableCleanUp(orderTableCleanUpPolicy, orderTableRepository);
+
+        final OrderTable orderTable = OrderTable.createEmptyTable("1번 테이블");
+        orderTable.use();
+        orderTableRepository.save(orderTable);
+        orderTableId = orderTable.id();
     }
 
     @DisplayName("매장주문을 생성한다.")
@@ -115,11 +130,11 @@ class EatInOrderTest {
             final EatInOrderLineItem eatInOrderLineItem1 = EatInOrderLineItem.create(UUID.randomUUID(), 15_000L, 2);
             final EatInOrderLineItem eatInOrderLineItem2 = EatInOrderLineItem.create(UUID.randomUUID(), 25_000L, 1);
             final EatInOrderLineItems eatInOrderLineItems = EatInOrderLineItems.of(eatInOrderLineItem1, eatInOrderLineItem2);
-            final EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), eatInOrderLineItems);
+            final EatInOrder eatInOrder = EatInOrder.create(orderTableId, eatInOrderLineItems);
             eatInOrder.accept();
             eatInOrder.serve();
 
-            eatInOrder.complete(new EatInOrderCompletePolicy(eatInOrderRepository, cleanUp));
+            eatInOrder.complete(orderTableCleanUpPolicy, orderTableCleanUp);
 
             assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
         }
@@ -130,9 +145,9 @@ class EatInOrderTest {
                 names = {"SERVED"},
                 mode = EnumSource.Mode.EXCLUDE)
         void error(final EatInOrderStatus status) {
-            final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), UUID.randomUUID(), status);
+            final EatInOrder eatInOrder = EatInOrderFixture.create(orderTableId, UUID.randomUUID(), status);
 
-            assertThatThrownBy(() -> eatInOrder.complete(new EatInOrderCompletePolicy(eatInOrderRepository, cleanUp)))
+            assertThatThrownBy(() -> eatInOrder.complete(orderTableCleanUpPolicy, orderTableCleanUp))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessage("주문 상태가 서빙완료일 때만 가능합니다.");
         }

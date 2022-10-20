@@ -1,36 +1,24 @@
 package kitchenpos.eatinorders.ordertable.tobe.domain;
 
-import kitchenpos.eatinorders.order.tobe.domain.EatInOrder;
-import kitchenpos.eatinorders.order.tobe.domain.EatInOrderFixture;
-import kitchenpos.eatinorders.order.tobe.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.order.tobe.domain.EatInOrderStatus;
-import kitchenpos.eatinorders.order.tobe.domain.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.ordertable.tobe.domain.vo.GuestOfNumbers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 
-import java.util.UUID;
-
+import static kitchenpos.eatinorders.ordertable.tobe.domain.CleanUpPolicyFixture.FAIL;
+import static kitchenpos.eatinorders.ordertable.tobe.domain.CleanUpPolicyFixture.PASS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderTableCleanUpTest {
 
-    private EatInOrderRepository eatInOrderRepository;
     private OrderTableRepository orderTableRepository;
-    private OrderTableCleanUp orderTableCleanUp;
-
     private OrderTable orderTable;
 
     @BeforeEach
     void setUp() {
-        eatInOrderRepository = new InMemoryEatInOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderTableCleanUp = new OrderTableCleanUp(orderTableRepository);
 
         orderTable = OrderTable.createEmptyTable("1번테이블");
         orderTable.use();
@@ -45,27 +33,22 @@ class OrderTableCleanUpTest {
         @DisplayName("성공")
         @Test
         void success() {
-            final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTable.id(), EatInOrderStatus.COMPLETED);
-            eatInOrderRepository.save(eatInOrder);
+            final OrderTableCleanUp orderTableCleanUp = new OrderTableCleanUp(PASS, orderTableRepository);
 
-            orderTableCleanUp.clear(orderTable.id(), eatInOrderRepository);
+            orderTableCleanUp.clear(orderTable.id());
 
             final OrderTable result = orderTableRepository.findById(OrderTableCleanUpTest.this.orderTable.id()).get();
             assertThat(result.isEmptyTable()).isTrue();
         }
 
-        @ParameterizedTest(name = "주문 테이블에 완료되지 않은 주문이 있으면 정리할 수 없다. status={0}")
-        @EnumSource(
-                value = EatInOrderStatus.class,
-                names = {"COMPLETED"},
-                mode = EnumSource.Mode.EXCLUDE)
-        void error(final EatInOrderStatus status) {
-            final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTable.id(), status);
-            eatInOrderRepository.save(eatInOrder);
+        @DisplayName("정리할 수 있는 조건일 때만 가능합니다.")
+        @Test
+        void error() {
+            final OrderTableCleanUp orderTableCleanUp = new OrderTableCleanUp(FAIL, orderTableRepository);
 
-            assertThatThrownBy(() -> orderTableCleanUp.clear(orderTable.id(), eatInOrderRepository))
+            assertThatThrownBy(() -> orderTableCleanUp.clear(orderTable.id()))
                     .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("완료되지 않은 주문이 있습니다.");
+                    .hasMessage("정리할 수 있는 조건이 아닙니다.");
         }
     }
 }
