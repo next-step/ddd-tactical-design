@@ -158,11 +158,25 @@ docker compose -p kitchenpos up -d
 
 ## 모델링
 
-### 상품
+---
+### 상품 컨텍스트
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### Product (상품)
 
+###### 속성
+
+- `Product`는 `ProductName`과 `ProductPrice`를 갖는다.
+  - `ProductName`에는 `Profanity`가 포함될 수 없다.
+  - `ProductPrice`은 0원 이상이다.
+
+###### 행위
+
+- `Product`를 등록 할 수 있다.
+- `ProductPrice`를 변경 할 수 있다.
+
+<br />
+
+---
 ### 메뉴
 
 - `MenuGroup`은 식별자와 이름을 가진다.
