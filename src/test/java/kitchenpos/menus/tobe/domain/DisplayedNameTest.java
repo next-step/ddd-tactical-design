@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.FakeProfanity;
 import kitchenpos.common.vo.DisplayedName;
@@ -9,8 +9,12 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+/*
+- [x] 메뉴의 이름이 올바르지 않으면 등록할 수 없다. (Null, Empty)
+- [x] 메뉴의 이름에는 비속어가 포함될 수 없다.
+ */
 class DisplayedNameTest {
-    @DisplayName("이름은 비어있을 수 없다.")
+    @DisplayName("메뉴 이름은 비어있을 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest
     void emptyName(final String name) {
@@ -21,7 +25,7 @@ class DisplayedNameTest {
                 .hasMessage(EMPTY_NAME_MESSAGE);
     }
 
-    @DisplayName("상품 이름에 비속어가 포함될 수 없다.")
+    @DisplayName("메뉴 이름에 비속어가 포함될 수 없다.")
     @Test
     void registerWithProfanity() {
         final String CONTAIN_PROFANITY_MESSAGE = "이름에 비속어가 포함될 수 없습니다.";
