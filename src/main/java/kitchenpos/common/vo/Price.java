@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.common.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,7 +13,7 @@ public class Price implements Comparable<Price> {
     @Column(name = "price", nullable = false)
     private final BigDecimal price;
 
-     Price(final BigDecimal price) {
+     public Price(final BigDecimal price) {
         if (null == price) {
             throw new IllegalArgumentException(EMPTY_NAME_MESSAGE);
         }
@@ -25,6 +25,10 @@ public class Price implements Comparable<Price> {
 
     protected Price() {
          this.price = null;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public Price multiply(long quantity) {
@@ -47,5 +51,9 @@ public class Price implements Comparable<Price> {
     @Override
     public int compareTo(final Price o) {
         return price.subtract(o.price).intValue();
+    }
+
+    public Price add(final Price price) {
+         return new Price(this.price.add(price.price));
     }
 }
