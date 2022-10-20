@@ -1,13 +1,18 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.common.FakeProfanity;
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.common.vo.Price;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,13 +32,13 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+        final Menu menu = new Menu(
+                UUID.randomUUID(),
+                new Price(BigDecimal.valueOf(price)),
+                new DisplayedName("후라이드+후라이드", new FakeProfanity()),
+                displayed,
+                Arrays.asList(menuProducts)
+        );
         return menu;
     }
 
@@ -123,7 +128,7 @@ public class Fixtures {
     public static Product product(final String name, final long price) {
         final Product product = new Product(
                 UUID.randomUUID(),
-                new ProductPrice(BigDecimal.valueOf(price)),
+                new Price(BigDecimal.valueOf(price)),
                 new DisplayedName(name, new FakePurgomalumClient())
         );
         return product;

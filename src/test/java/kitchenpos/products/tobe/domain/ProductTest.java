@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.FakeProfanity;
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.common.vo.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +14,8 @@ class ProductTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void register() {
-        final ProductPrice price = new ProductPrice(BigDecimal.TEN);
-        final DisplayedName name = new DisplayedName("chicken", new FakeProfanities());
+        final Price price = new Price(BigDecimal.TEN);
+        final DisplayedName name = new DisplayedName("chicken", new FakeProfanity());
 
         assertThatCode(() -> new Product(price, name))
                 .doesNotThrowAnyException();
@@ -21,10 +24,10 @@ class ProductTest {
     @DisplayName("가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final ProductPrice price = new ProductPrice(BigDecimal.TEN);
-        final DisplayedName name = new DisplayedName("chicken", new FakeProfanities());
+        final Price price = new Price(BigDecimal.TEN);
+        final DisplayedName name = new DisplayedName("chicken", new FakeProfanity());
 
         Product product = new Product(price, name);
-        product.changePrice(new ProductPrice(BigDecimal.ONE));
+        product.changePrice(new Price(BigDecimal.ONE));
     }
 }

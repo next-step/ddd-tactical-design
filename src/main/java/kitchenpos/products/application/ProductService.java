@@ -1,14 +1,14 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.common.vo.DisplayedName;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.common.vo.Price;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.Profanities;
-import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.common.infra.Profanities;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +36,7 @@ public class ProductService {
     @Transactional
     public Product create(final ProductRequest request) {
         final Product product = new Product(
-                new ProductPrice(request.getPrice()), new DisplayedName(request.getName(), purgomalumClient));
+                new Price(request.getPrice()), new DisplayedName(request.getName(), purgomalumClient));
         return productRepository.save(product);
     }
 
@@ -44,15 +44,13 @@ public class ProductService {
     public Product changePrice(final UUID productId, final ProductRequest request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.changePrice(new ProductPrice(request.getPrice()));
+        product.changePrice(new Price(request.getPrice()));
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
+           Price sum = new Price(BigDecimal.ZERO);
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                sum.add(
+                        menuProduct.getSumOfPrice()
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {

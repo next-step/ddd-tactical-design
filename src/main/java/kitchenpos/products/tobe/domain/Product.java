@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.common.vo.Price;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,28 +19,28 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     @Embedded
     private DisplayedName name;
 
-    public Product(final UUID id, final ProductPrice price, final DisplayedName name) {
+    public Product(final UUID id, final Price price, final DisplayedName name) {
         this.id = id;
         this.price = price;
         this.name = name;
     }
 
-    public Product(final ProductPrice price, final DisplayedName name) {
+    public Product(final Price price, final DisplayedName name) {
         this.price = price;
         this.name = name;
     }
 
-    public Product(final ProductPrice price) {
+    public Product(final Price price) {
         this.price = price;
     }
 
     public Product(BigDecimal price) {
-        this(new ProductPrice(price));
+        this(new Price(price));
     }
 
     protected Product() {
@@ -47,7 +50,7 @@ public class Product {
         return id;
     }
 
-    public ProductPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -59,7 +62,7 @@ public class Product {
         this.id = id;
     }
 
-    public void setPrice(final ProductPrice price) {
+    public void setPrice(final Price price) {
         this.price = price;
     }
 
@@ -67,7 +70,7 @@ public class Product {
         this.name = name;
     }
 
-    public void changePrice(final ProductPrice price) {
+    public void changePrice(final Price price) {
         this.price = price;
     }
 }
