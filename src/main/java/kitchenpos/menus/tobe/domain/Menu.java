@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.common.vo.Price;
 import kitchenpos.menus.domain.MenuGroup;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,17 +50,60 @@ public class Menu {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> menuProducts;
+    private List<MenuProduct> menuProducts = new ArrayList<>();
 
     @Transient
     private UUID menuGroupId;
 
-    public Menu(final Price price, final DisplayedName name, final MenuProduct menuProduct, final MenuGroup menuGroup) {
-        decideDisplay(menuProduct, price);
+    public static Menu createRequest(final Price price, final DisplayedName name, final List<MenuProduct> menuProducts, final UUID menuGroupId, final boolean displayed) {
+        return new Menu(price, name, menuProducts, menuGroupId, displayed);
+    }
+    public static Menu createRequest(final Price price) {
+        return new Menu(price);
+    }
+
+    public Menu(final UUID id,
+                final Price price,
+                final DisplayedName name,
+                final boolean displayed,
+                final List<MenuProduct> menuProducts) {
+        decideDisplay(menuProducts, price);
+        this.id = id;
         this.price = price;
         this.name = name;
-        this.menuProduct = menuProduct;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public Menu(final Price price, final DisplayedName name, final List<MenuProduct> menuProducts, final MenuGroup menuGroup) {
+        hasMenuProducts(menuProducts);
+        decideDisplay(menuProducts, price);
+        this.price = price;
+        this.name = name;
+        this.menuProducts = menuProducts;
         this.menuGroup = menuGroup;
+    }
+
+    private Menu(final Price price) {
+        this.price = price;
+    }
+
+    private static void hasMenuProducts(final List<MenuProduct> menuProducts) {
+        if (null == menuProducts || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private Menu(final Price price,
+                final DisplayedName name,
+                final List<MenuProduct> menuProducts,
+                final UUID menuGroupId,
+                final boolean displayed) {
+        this.price = price;
+        this.name = name;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
+        this.displayed = displayed;
     }
 
     public Menu() {
@@ -73,10 +119,6 @@ public class Menu {
 
     public Price getPrice() {
         return price;
-    }
-
-    public void setPrice(final Price price) {
-        this.price = price;
     }
 
     public DisplayedName getName() {
@@ -99,12 +141,8 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public MenuProduct getMenuProduct() {
-        return menuProduct;
-    }
-
-    public void setMenuProduct(final MenuProduct menuProduct) {
-        this.menuProduct = menuProduct;
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     public UUID getMenuGroupId() {
@@ -116,7 +154,9 @@ public class Menu {
     }
 
     public void changePrice(final Price price) {
-        decideDisplay(this.menuProduct, price);
+        if (!this.menuProducts.isEmpty()) {
+            decideDisplay(this.menuProducts, price);
+        }
         this.price = price;
     }
 
@@ -133,17 +173,21 @@ public class Menu {
         this.displayed = true;
     }
 
-    private void decideDisplay(final MenuProduct menuProduct, final Price price) {
-        if (menuProduct.lessThan(price)) {
-            this.displayed = false;
-            return;
+    private void decideDisplay(final List<MenuProduct> menuProducts, final Price price) {
+        for (MenuProduct menuProduct : menuProducts) {
+            if (menuProduct.lessThan(price)) {
+                this.displayed = false;
+                return;
+            }
+            this.displayed = true;
         }
-        this.displayed = true;
     }
 
     private void validateDisplay() {
-        if (menuProduct.lessThan(price)) {
-            throw new IllegalArgumentException(CAN_NOT_DISPLAY_MESSAGE);
+        for (MenuProduct menuProduct : this.menuProducts) {
+            if (menuProduct.lessThan(price)) {
+                throw new IllegalArgumentException(CAN_NOT_DISPLAY_MESSAGE);
+            }
         }
     }
 }

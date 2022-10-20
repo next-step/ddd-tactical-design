@@ -1,5 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.FakeProfanity;
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.common.vo.Price;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -28,7 +32,7 @@ class MenuTest {
         final Price price = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
         final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
-        final Menu menu = new Menu(price, name, menuProduct, new MenuGroup());
+        final Menu menu = new Menu(price, name, List.of(menuProduct), new MenuGroup());
 
         menu.changePrice(new Price(BigDecimal.ONE));
 
@@ -43,7 +47,7 @@ class MenuTest {
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
         final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(productPrice)));
 
-        assertThatCode(() -> new Menu(menuPrice, name, menuProduct, new MenuGroup()))
+        assertThatCode(() -> new Menu(menuPrice, name, List.of(menuProduct), new MenuGroup()))
                 .doesNotThrowAnyException();
     }
 
@@ -55,7 +59,7 @@ class MenuTest {
         final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
         final MenuGroup menuGroup = new MenuGroup();
 
-        assertThatCode(() -> new Menu(menuPrice, name, menuProduct, menuGroup))
+        assertThatCode(() -> new Menu(menuPrice, name, List.of(menuProduct), menuGroup))
                 .doesNotThrowAnyException();
     }
 
@@ -67,7 +71,7 @@ class MenuTest {
         final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
         final MenuGroup menuGroup = new MenuGroup();
 
-        final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);
+        final Menu menu = new Menu(menuPrice, name, List.of(menuProduct), menuGroup);
         menu.displayOff();
         assertThat(menu.isDisplayed()).isFalse();
 
@@ -85,7 +89,7 @@ class MenuTest {
         final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(4L)));
         final MenuGroup menuGroup = new MenuGroup();
 
-        final Menu menu = new Menu(menuPrice, name, menuProduct, menuGroup);
+        final Menu menu = new Menu(menuPrice, name, List.of(menuProduct), menuGroup);
         assertThat(menu.isDisplayed()).isFalse();
 
         assertThatThrownBy(() -> menu.displayOn())

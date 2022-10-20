@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.vo.Price;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.Column;
@@ -12,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -47,11 +47,43 @@ public class MenuProduct {
         this.product = product;
     }
 
-    protected MenuProduct() {
+    public MenuProduct() {
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public void setSeq(final Long seq) {
+        this.seq = seq;
+    }
+
+    public void setProduct(final Product product) {
+        this.product = product;
+    }
+
+    public void setQuantity(final long quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setProductId(final UUID productId) {
+        this.productId = productId;
     }
 
     public Price getSumOfPrice() {
-        return new Price(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        return product.getPrice().multiply(quantity);
     }
 
     public boolean lessThan(final Price price) {
