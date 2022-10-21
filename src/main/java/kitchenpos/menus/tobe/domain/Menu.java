@@ -135,12 +135,12 @@ public class Menu {
 
     public void changePrice(long price) {
         MenuPrice menuPrice = new MenuPrice(price);
-        validateMenuPrice(menuPrice, menuProducts);
-
         this.changePrice(menuPrice);
     }
 
     public void changePrice(MenuPrice price) {
+        validateMenuPrice(price, menuProducts);
+
         this.price = price;
     }
 
