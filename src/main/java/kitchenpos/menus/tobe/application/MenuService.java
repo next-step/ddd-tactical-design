@@ -38,22 +38,21 @@ public class MenuService {
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        //TODO 공통부분 메서드 추출
-        final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
+        final Menu menu = createMenu(menuId);
         menu.hide();
         return menu;
     }
 
     @Transactional
     public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
+        final Menu menu = createMenu(menuId);
         menu.display();
         return menu;
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
-        final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
+        final Menu menu = createMenu(menuId);
         menu.changePrice(new MenuPrice(request.price()));
         return menu;
     }
@@ -99,5 +98,9 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    private Menu createMenu(UUID menuId) {
+        return menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
     }
 }
