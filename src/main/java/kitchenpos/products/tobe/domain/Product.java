@@ -3,6 +3,8 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.common.domain.vo.DisplayedName;
 import kitchenpos.common.domain.vo.exception.InvalidDisplayedNameException;
 import kitchenpos.common.domain.vo.Price;
+import kitchenpos.common.event.ProductPriceChangedEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -14,7 +16,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -42,9 +44,9 @@ public class Product {
         return new Product(UUID.randomUUID(), displayedName, Price.valueOf(price));
     }
 
-    public void changePrice(final Long price, final PricePolicy pricePolicy) {
+    public void changePrice(final Long price) {
         this.price = Price.valueOf(price);
-        pricePolicy.changedProductPrice(id, price);
+        registerEvent(new ProductPriceChangedEvent(id, price));
     }
 
     public UUID id() {
