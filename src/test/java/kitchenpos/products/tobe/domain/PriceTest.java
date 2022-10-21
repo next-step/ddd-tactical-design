@@ -26,7 +26,7 @@ class PriceTest {
     void createNegativePrice(BigDecimal negativePrice) {
         assertThatThrownBy(() -> new Price(negativePrice))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
+                .hasMessageContaining("0원 이하일 수 없습니다.");
     }
 
     @DisplayName("가격을 변경한다.")
@@ -45,7 +45,7 @@ class PriceTest {
         Price price = new Price(BigDecimal.TEN);
         assertThatThrownBy(() -> price.change(changePrice))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("상품 가격은 0원보다 커야합니");
+                .hasMessageContaining("0원 이하일 수 없습니다.");
     }
 
 }

@@ -23,7 +23,7 @@ public class Price {
 
     private void validate(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품 가격은 0원보다 커야합니다.");
+            throw new IllegalArgumentException("0원 이하일 수 없습니다.");
         }
         this.price = price;
     }

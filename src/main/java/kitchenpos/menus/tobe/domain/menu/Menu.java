@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain.menu;
 
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.products.tobe.domain.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class Menu {
     @Id
     private UUID id;
     private final MenuProducts menuProducts;
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -29,7 +30,7 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    public Menu(MenuName menuName, MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    public Menu(MenuName menuName, Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
         this.menuName = menuName;
         this.menuGroup = menuGroup;
         this.price = price;
@@ -37,7 +38,7 @@ public class Menu {
         validate(price, menuProducts, menuGroup);
     }
 
-    private void validate(MenuPrice price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    private void validate(Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
         validateMenuProductsSize(menuProducts);
         validatePrice(price, menuProducts);
         validateMenuGroup(menuGroup);
@@ -49,7 +50,7 @@ public class Menu {
         }
     }
 
-    private void validatePrice(MenuPrice price, MenuProducts menuProducts) {
+    private void validatePrice(Price price, MenuProducts menuProducts) {
         if (isMenuPriceOverMenuProductsSum(price, menuProducts)) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 작을 수 없습니다.");
         }
@@ -58,7 +59,7 @@ public class Menu {
         }
     }
 
-    private boolean isMenuPriceOverMenuProductsSum(MenuPrice price, MenuProducts menuProducts) {
+    private boolean isMenuPriceOverMenuProductsSum(Price price, MenuProducts menuProducts) {
         return price.price().compareTo(menuProducts.sum()) > 0;
     }
 
@@ -76,12 +77,12 @@ public class Menu {
         return displayed;
     }
 
-    public void changePrice(MenuPrice price) {
+    public void changePrice(Price price) {
         validatePrice(price, this.menuProducts);
         this.price = price;
     }
 
-    public MenuPrice price() {
+    public Price price() {
         return this.price;
     }
 

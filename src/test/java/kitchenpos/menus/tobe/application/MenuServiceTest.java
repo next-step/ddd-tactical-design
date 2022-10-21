@@ -99,7 +99,7 @@ class MenuServiceTest {
         menuProductRequests.add(menuProductRequest(product.getId(), productName, productPrice, quantity));
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, menuPrice, menuProductRequests)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("메뉴 가격은 0원 이하일 수 없습니다.");
+                .hasMessageContaining("0원 이하일 수 없습니다.");
     }
 
     @DisplayName("메뉴명은 null 이나 공백일 수 없습니다.")

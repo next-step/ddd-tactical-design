@@ -53,7 +53,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = createMenu(menuId);
-        menu.changePrice(new MenuPrice(request.price()));
+        menu.changePrice(new Price(request.price()));
         return menu;
     }
 
@@ -65,7 +65,7 @@ public class MenuService {
         validateMenuProductSize(request);
         validateExistProduct(request.getMenuProducts());
         boolean isProfanity = !Objects.isNull(request.getMenuName()) && purgomalumClient.containsProfanity(request.getMenuName());
-        return new Menu(new MenuName(request.getMenuName(), isProfanity), new MenuPrice(request.getPrice()), createMenuProducts(request), menuGroup);
+        return new Menu(new MenuName(request.getMenuName(), isProfanity), new Price(request.getPrice()), createMenuProducts(request), menuGroup);
     }
 
     private MenuProducts createMenuProducts(CreateMenuRequest request) {

@@ -40,7 +40,7 @@ class ProductTest {
     void createNegativePriceProduct(long negativePrice) {
         assertThatThrownBy(() -> product(displayedName, negativePrice))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
+                .hasMessageContaining("0원 이하일 수 없습니다.");
     }
 
     @DisplayName("상품의 가격을 변경한다.")
@@ -58,7 +58,7 @@ class ProductTest {
     void changeNegativeProductPrice(BigDecimal negativePrice) {
         assertThatThrownBy(() -> product(displayedName, 20000).changePrice(negativePrice))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("상품 가격은 0원보다 커야합니다.");
+                .hasMessageContaining("0원 이하일 수 없습니다.");
     }
 
 }
