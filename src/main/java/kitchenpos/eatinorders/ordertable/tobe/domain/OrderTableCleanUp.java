@@ -16,7 +16,7 @@ public class OrderTableCleanUp {
     }
 
     public void clear(final UUID orderTableId) {
-        if (!cleanUpPolicy.isCleanUpCondition(orderTableId)) {
+        if (!cleanUpPolicy.isMatchCondition(orderTableId)) {
             throw new IllegalArgumentException("정리할 수 있는 조건이 아닙니다.");
         }
         final OrderTable orderTable = orderTableRepository.findById(orderTableId).orElseThrow(IllegalArgumentException::new);

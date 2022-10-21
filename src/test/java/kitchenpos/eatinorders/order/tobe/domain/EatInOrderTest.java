@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.order.tobe.domain;
 
 import kitchenpos.eatinorders.ordertable.tobe.domain.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTable;
-import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableCleanUp;
 import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +20,7 @@ class EatInOrderTest {
 
     private EatInOrderRepository eatInOrderRepository;
     private OrderTableRepository orderTableRepository;
-    private OrderTableCleanUpPolicy orderTableCleanUpPolicy;
-    private OrderTableCleanUp orderTableCleanUp;
+    private LastEatInOrderPolicy lastEatInOrderPolicy;
 
     private UUID orderTableId;
 
@@ -30,8 +28,7 @@ class EatInOrderTest {
     void setUp() {
         eatInOrderRepository = new InMemoryEatInOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
-        orderTableCleanUp = new OrderTableCleanUp(orderTableCleanUpPolicy, orderTableRepository);
+        lastEatInOrderPolicy = new LastEatInOrderPolicy(eatInOrderRepository);
 
         final OrderTable orderTable = OrderTable.createEmptyTable("1번 테이블");
         orderTable.use();
@@ -134,7 +131,7 @@ class EatInOrderTest {
             eatInOrder.accept();
             eatInOrder.serve();
 
-            eatInOrder.complete(orderTableCleanUpPolicy, orderTableCleanUp);
+            eatInOrder.complete(lastEatInOrderPolicy);
 
             assertThat(eatInOrder.status()).isEqualTo(EatInOrderStatus.COMPLETED);
         }
@@ -147,7 +144,7 @@ class EatInOrderTest {
         void error(final EatInOrderStatus status) {
             final EatInOrder eatInOrder = EatInOrderFixture.create(orderTableId, UUID.randomUUID(), status);
 
-            assertThatThrownBy(() -> eatInOrder.complete(orderTableCleanUpPolicy, orderTableCleanUp))
+            assertThatThrownBy(() -> eatInOrder.complete(lastEatInOrderPolicy))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessage("주문 상태가 서빙완료일 때만 가능합니다.");
         }

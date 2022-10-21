@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OrderTableCleanUpPolicyTest {
+class LastEatInOrderPolicyTest {
 
     private EatInOrderRepository eatInOrderRepository;
     private UUID orderTableId;
@@ -31,9 +31,9 @@ class OrderTableCleanUpPolicyTest {
         void isClearOrderTableCondition_true() {
             final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTableId, EatInOrderStatus.COMPLETED);
             eatInOrderRepository.save(eatInOrder);
-            final OrderTableCleanUpPolicy orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
+            final LastEatInOrderPolicy lastEatInOrderPolicy = new LastEatInOrderPolicy(eatInOrderRepository);
 
-            assertThat(orderTableCleanUpPolicy.isCleanUpCondition(orderTableId)).isTrue();
+            assertThat(lastEatInOrderPolicy.isMatchCondition(orderTableId)).isTrue();
         }
 
         @ParameterizedTest(name = "주문테이블의 모든 주문이 완료상태가 아닐 경우 False 를 반환한다. status={0}")
@@ -44,9 +44,9 @@ class OrderTableCleanUpPolicyTest {
         void isClearOrderTableCondition_false(final EatInOrderStatus status) {
             final EatInOrder eatInOrder = EatInOrderFixture.create(UUID.randomUUID(), orderTableId, status);
             eatInOrderRepository.save(eatInOrder);
-            final OrderTableCleanUpPolicy orderTableCleanUpPolicy = new OrderTableCleanUpPolicy(eatInOrderRepository);
+            final LastEatInOrderPolicy lastEatInOrderPolicy = new LastEatInOrderPolicy(eatInOrderRepository);
 
-            assertThat(orderTableCleanUpPolicy.isCleanUpCondition(orderTableId)).isFalse();
+            assertThat(lastEatInOrderPolicy.isMatchCondition(orderTableId)).isFalse();
         }
     }
 }

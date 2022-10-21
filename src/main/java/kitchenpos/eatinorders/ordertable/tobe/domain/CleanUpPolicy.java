@@ -5,5 +5,5 @@ import java.util.UUID;
 @FunctionalInterface
 public interface CleanUpPolicy {
 
-    boolean isCleanUpCondition(final UUID orderTableId);
+    boolean isMatchCondition(final UUID orderTableId);
 }

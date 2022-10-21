@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.order.tobe.domain;
 
-import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableCleanUp;
+import kitchenpos.common.event.LastEatInOrderCompleted;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Column;
@@ -69,13 +69,13 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
         status = EatInOrderStatus.SERVED;
     }
 
-    public void complete(final OrderTableCleanUpPolicy completePolicy, final OrderTableCleanUp orderTableCleanUp) {
+    public void complete(final LastEatInOrderPolicy lastEatInOrderPolicy) {
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException("주문 상태가 서빙완료일 때만 가능합니다.");
         }
         status = EatInOrderStatus.COMPLETED;
-        if (completePolicy.isCleanUpCondition(orderTableId)) {
-            orderTableCleanUp.clear(orderTableId);
+        if (lastEatInOrderPolicy.isMatchCondition(orderTableId)) {
+            registerEvent(new LastEatInOrderCompleted(orderTableId));
         }
     }
 
