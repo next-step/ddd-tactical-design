@@ -19,7 +19,7 @@ class MenuTest {
 
     @Test
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
-    void name() {
+    void create_menu() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -47,8 +47,8 @@ class MenuTest {
     }
 
     @Test
-    @DisplayName("상품이 없으면 등록할 수 없다.")
-    void name1() {
+    @DisplayName("상품이 없으면 메뉴를 등록할 수 없다.")
+    void can_not_create_menu_without_product() {
 
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -61,7 +61,7 @@ class MenuTest {
 
     @Test
     @DisplayName("메뉴에 속한 상품의 수량은 0 이상이어야 한다.")
-    void name2() {
+    void can_not_create_menu_quantity_less_then_zero() {
 
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -73,11 +73,9 @@ class MenuTest {
 
     }
 
-
-
     @Test
     @DisplayName("메뉴의 가격은 0원 이상이어야 한다.")
-    void name3() {
+    void can_not_create_menu_price_less_then_zero() {
 
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -85,12 +83,11 @@ class MenuTest {
                 Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class);
-
     }
 
     @Test
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-    void name4() {
+    void can_not_create_menu_over_product_price() {
 
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -99,12 +96,11 @@ class MenuTest {
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
-
     }
 
     @Test
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
-    void name5() {
+    void can_not_create_menu_belong_menu_group() {
 
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 null,
@@ -117,7 +113,7 @@ class MenuTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("메뉴의 이름은 비어있을 수 없다.")
-    void name6(String menuName) {
+    void can_not_create_menu_empty_name(String menuName) {
 
         assertThatThrownBy(() -> new Menu(createDisplayName(menuName),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -126,14 +122,12 @@ class MenuTest {
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴 이름이 비어 있습니다.");
-
     }
-
 
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @DisplayName("메뉴의 이름에는 비속어가 포함될 수 없다.")
-    void name7(String menuName) {
+    void can_not_create_menu_use_profanity(String menuName) {
 
         assertThatThrownBy(() -> new Menu(createDisplayName(menuName),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
@@ -142,12 +136,11 @@ class MenuTest {
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴 이름에는 비속어가 포함될 수 없습니다.");
-
     }
 
     @Test
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
-    void name8() {
+    void change_menu_price() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -160,11 +153,11 @@ class MenuTest {
         menu.changePrice(8000L);
 
         assertThat(menu.getPrice()).isEqualTo(new MenuPrice(8000L));
-
     }
+
     @Test
     @DisplayName("메뉴의 가격은 0원 이상이어야 한다.")
-    void name9() {
+    void can_not_change_menu_price_less_then_0() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -176,13 +169,11 @@ class MenuTest {
 
         assertThatThrownBy(() -> menu.changePrice(-1L) )
                 .isInstanceOf(IllegalArgumentException.class);
-
     }
-
 
     @Test
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-    void name10() {
+    void can_not_change_menu_price_over_product_price() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -196,10 +187,9 @@ class MenuTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-
     @Test
     @DisplayName("메뉴를 노출할 수 있다.")
-    void name12() {
+    void displayed_menu() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -215,7 +205,7 @@ class MenuTest {
 
     @Test
     @DisplayName("메뉴를 숨길 수 있다.")
-    void name14() {
+    void hide_menu() {
 
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
@@ -227,7 +217,6 @@ class MenuTest {
 
         menu.hide();
         assertThat(menu.getDisplayed()).isEqualTo(new MenuDisplayed(Boolean.FALSE));
-
     }
 
     public MenuProduct createMenuProduct(UUID productId , long price, long quantity) {
