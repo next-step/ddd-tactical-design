@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
+//TODO 행위에 따른 service 분리
 @Service
 public class MenuService {
 
@@ -37,6 +38,7 @@ public class MenuService {
 
     @Transactional
     public Menu hide(final UUID menuId) {
+        //TODO 공통부분 메서드 추출
         final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
         menu.hide();
         return menu;
@@ -59,6 +61,8 @@ public class MenuService {
     @Transactional
     public Menu create(final CreateMenuRequest request) {
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
+        //TODO 중복 로직 삭제
+        //Bean validation 사용으로 변경
         validateMenuProductSize(request);
         validateExistProduct(request.getMenuProducts());
         boolean isProfanity = !Objects.isNull(request.getMenuName()) && purgomalumClient.containsProfanity(request.getMenuName());

@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain.menu;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+//TODO 기존 Price 재사용
 public class MenuPrice {
 
     private final BigDecimal price;

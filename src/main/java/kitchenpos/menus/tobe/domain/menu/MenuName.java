@@ -4,6 +4,7 @@ import org.apache.logging.log4j.util.Strings;
 
 import java.util.Objects;
 
+//TODO DisplayedName 클래스 재사용
 public class MenuName {
 
     private final String name;
