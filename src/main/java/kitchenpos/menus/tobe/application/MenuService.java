@@ -8,7 +8,7 @@ import kitchenpos.menus.tobe.dto.menu.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.menu.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -65,7 +65,7 @@ public class MenuService {
         validateMenuProductSize(request);
         validateExistProduct(request.getMenuProducts());
         boolean isProfanity = !Objects.isNull(request.getMenuName()) && purgomalumClient.containsProfanity(request.getMenuName());
-        return new Menu(new MenuName(request.getMenuName(), isProfanity), new Price(request.getPrice()), createMenuProducts(request), menuGroup);
+        return new Menu(new Name(request.getMenuName(), isProfanity), new Price(request.getPrice()), createMenuProducts(request), menuGroup);
     }
 
     private MenuProducts createMenuProducts(CreateMenuRequest request) {
@@ -91,7 +91,7 @@ public class MenuService {
     }
 
     private static Product createProduct(MenuProductRequest menuProductRequest) {
-        return new Product(UUID.randomUUID(), new DisplayedName(menuProductRequest.getProductRequest().getProductName(), false),
+        return new Product(UUID.randomUUID(), new Name(menuProductRequest.getProductRequest().getProductName(), false),
                 new Price(menuProductRequest.getProductRequest().getProductPrice()));
     }
 

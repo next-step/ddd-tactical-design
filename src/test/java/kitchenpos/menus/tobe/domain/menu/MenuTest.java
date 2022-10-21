@@ -3,7 +3,7 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
-import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class MenuTest {
     @ParameterizedTest
     @CsvSource({"후라이드메뉴, 8000, 후라이드상품, false, 8000, 1"})
     void checkMenuGroup(String menuName, BigDecimal menuPrice, String displayedName, boolean isProfanity, BigDecimal productPrice, BigDecimal quantity) {
-        assertThatThrownBy(() -> new Menu(new MenuName(menuName, isProfanity), new Price(menuPrice), menuProducts(displayedName, isProfanity, productPrice, quantity), null))
+        assertThatThrownBy(() -> new Menu(new Name(menuName, isProfanity), new Price(menuPrice), menuProducts(displayedName, isProfanity, productPrice, quantity), null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("메뉴는 특정 메뉴 그룹에 속해야 한다.");
     }
@@ -95,13 +95,13 @@ class MenuTest {
     }
 
     private static MenuProduct menuProduct(String displayedName, boolean isProfanity, BigDecimal quantity, BigDecimal productPrice) {
-        return new MenuProduct(new Product(UUID.randomUUID(), new DisplayedName(displayedName, isProfanity),
+        return new MenuProduct(new Product(UUID.randomUUID(), new Name(displayedName, isProfanity),
                 new Price(productPrice)), new Quantity(quantity));
     }
 
 
     private static Menu menu(String menuGroupName, String menuName, BigDecimal menuPrice, boolean isProfanity, MenuProducts menuProducts) {
-        return new Menu(new MenuName(menuName, isProfanity), new Price(menuPrice), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName(menuGroupName)));
+        return new Menu(new Name(menuName, isProfanity), new Price(menuPrice), menuProducts, new MenuGroup(UUID.randomUUID(), new MenuGroupName(menuGroupName)));
     }
 
 }

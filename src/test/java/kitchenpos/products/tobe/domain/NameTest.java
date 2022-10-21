@@ -10,13 +10,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @DisplayName("상품 이름")
-class DisplayedNameTest {
+class NameTest {
 
     @DisplayName("상품 이름 생성")
     @Test
     public void createDisplayedName() {
         boolean isProfanity = false;
-        assertDoesNotThrow(() -> new DisplayedName("강정 치킨", isProfanity));
+        assertDoesNotThrow(() -> new Name("강정 치킨", isProfanity));
     }
 
 
@@ -25,7 +25,7 @@ class DisplayedNameTest {
     @ParameterizedTest
     void createEmptyName(String name) {
         boolean isProfanity = false;
-        assertThatThrownBy(() -> new DisplayedName(name, isProfanity))
+        assertThatThrownBy(() -> new Name(name, isProfanity))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("상품명은 null 이나 공백일 수 없습니다.");
     }
@@ -35,7 +35,7 @@ class DisplayedNameTest {
     void createProfanityName() {
         boolean isProfanity = true;
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new DisplayedName("강정 치킨", isProfanity));
+                .isThrownBy(() -> new Name("강정 치킨", isProfanity));
     }
 
 }

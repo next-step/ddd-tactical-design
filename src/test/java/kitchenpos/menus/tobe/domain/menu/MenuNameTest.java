@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import kitchenpos.products.tobe.domain.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,17 +16,17 @@ class MenuNameTest {
     @NullAndEmptySource
     void createEmptyMenuName(final String value) {
         boolean isProfanity = true;
-        assertThatThrownBy(() -> new MenuName(value, isProfanity))
+        assertThatThrownBy(() -> new Name(value, isProfanity))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("메뉴명은 null 이나 공백일 수 없습니다.");
+                .hasMessageContaining("null 이나 공백일 수 없습니다.");
     }
 
     @DisplayName("메뉴 이름에 비속어를 포함할 수 없다")
     @Test
     void createProfanityMenuName() {
-        assertThatThrownBy(() -> new MenuName("후라이드 치킨", true))
+        assertThatThrownBy(() -> new Name("후라이드 치킨", true))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("메뉴명에 비속어를 포함할 수 없습니다.");
+                .hasMessageContaining("비속어를 포함할 수 없습니다.");
     }
 
 }

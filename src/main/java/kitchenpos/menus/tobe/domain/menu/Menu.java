@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain.menu;
 
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
-    private final MenuName menuName;
+    private final Name menuName;
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -30,7 +31,7 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    public Menu(MenuName menuName, Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
+    public Menu(Name menuName, Price price, MenuProducts menuProducts, MenuGroup menuGroup) {
         this.menuName = menuName;
         this.menuGroup = menuGroup;
         this.price = price;

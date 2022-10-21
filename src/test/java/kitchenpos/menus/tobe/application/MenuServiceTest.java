@@ -109,7 +109,7 @@ class MenuServiceTest {
         assertThatThrownBy(() -> menuService.create(createMenuRequest(menuGroup.getId(), menuName, BigDecimal.valueOf(3000),
                 menuProductRequests(product.getId(), "후라이드", BigDecimal.ONE, BigDecimal.ONE))))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("메뉴명은 null 이나 공백일 수 없습니다.");
+                .hasMessageContaining("null 이나 공백일 수 없습니다.");
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")

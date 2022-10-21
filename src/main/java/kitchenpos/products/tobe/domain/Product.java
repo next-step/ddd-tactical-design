@@ -11,16 +11,16 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private DisplayedName displayedName;
+    private Name name;
 
     @Embedded
     private Price price;
 
     protected Product() {}
 
-    public Product(UUID id, DisplayedName displayedName, Price price) {
+    public Product(UUID id, Name name, Price price) {
         this.id = id;
-        this.displayedName = displayedName;
+        this.name = name;
         this.price = price;
     }
 
