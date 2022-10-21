@@ -3,11 +3,11 @@ package kitchenpos.common.event;
 import java.util.Objects;
 import java.util.UUID;
 
-public class LastEatInOrderCompleted {
+public class LastEatInOrderCompletedEvent {
 
     private final UUID orderTableId;
 
-    public LastEatInOrderCompleted(UUID orderTableId) {
+    public LastEatInOrderCompletedEvent(UUID orderTableId) {
         this.orderTableId = orderTableId;
     }
 
@@ -19,7 +19,7 @@ public class LastEatInOrderCompleted {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LastEatInOrderCompleted that = (LastEatInOrderCompleted) o;
+        LastEatInOrderCompletedEvent that = (LastEatInOrderCompletedEvent) o;
         return Objects.equals(orderTableId, that.orderTableId);
     }
 

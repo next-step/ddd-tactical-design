@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.order.tobe.domain;
 
-import kitchenpos.common.event.LastEatInOrderCompleted;
+import kitchenpos.common.event.LastEatInOrderCompletedEvent;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.Column;
@@ -75,7 +75,7 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
         }
         status = EatInOrderStatus.COMPLETED;
         if (lastEatInOrderPolicy.isMatchCondition(orderTableId)) {
-            registerEvent(new LastEatInOrderCompleted(orderTableId));
+            registerEvent(new LastEatInOrderCompletedEvent(orderTableId));
         }
     }
 

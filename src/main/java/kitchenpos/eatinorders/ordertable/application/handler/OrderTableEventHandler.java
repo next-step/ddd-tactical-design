@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.ordertable.application.handler;
 
-import kitchenpos.common.event.LastEatInOrderCompleted;
+import kitchenpos.common.event.LastEatInOrderCompletedEvent;
 import kitchenpos.eatinorders.ordertable.tobe.domain.OrderTableCleanUp;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class OrderTableEventHandler {
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
-    public void lastEatInOrderCompleted(final LastEatInOrderCompleted event) {
+    public void lastEatInOrderCompleted(final LastEatInOrderCompletedEvent event) {
         orderTableCleanUp.clear(event.getOrderTableId());
     }
 }
