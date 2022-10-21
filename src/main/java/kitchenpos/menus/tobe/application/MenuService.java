@@ -60,9 +60,6 @@ public class MenuService {
     @Transactional
     public Menu create(final CreateMenuRequest request) {
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(() -> new NoSuchElementException("해당하는 메뉴 그룹이 업습니다."));
-        //TODO 중복 로직 삭제
-        //Bean validation 사용으로 변경
-        validateMenuProductSize(request);
         validateExistProduct(request.getMenuProducts());
         boolean isProfanity = !Objects.isNull(request.getMenuName()) && purgomalumClient.containsProfanity(request.getMenuName());
         return new Menu(new Name(request.getMenuName(), isProfanity), new Price(request.getPrice()), createMenuProducts(request), menuGroup);
@@ -72,12 +69,6 @@ public class MenuService {
         MenuProducts menuProducts = new MenuProducts();
         request.getMenuProducts().stream().map(MenuService::createMenuProduct).forEach(menuProducts::add);
         return menuProducts;
-    }
-
-    private static void validateMenuProductSize(CreateMenuRequest request) {
-        if (request.getMenuProducts().size() < 1) {
-            throw new IllegalArgumentException("메뉴 상품을 등록해주세요.");
-        }
     }
 
     private void validateExistProduct(List<MenuProductRequest> menuProducts) {
