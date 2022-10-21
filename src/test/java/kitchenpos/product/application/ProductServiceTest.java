@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.common.name.Name;
+import kitchenpos.common.name.NameFactory;
 import kitchenpos.common.price.Price;
+import kitchenpos.common.profanity.FakeProfanityDetectService;
+import kitchenpos.common.profanity.domain.ProfanityDetectService;
 import kitchenpos.product.InMemoryProductRepository;
 import kitchenpos.product.tobe.domain.entity.Product;
 import kitchenpos.product.tobe.domain.repository.ProductRepository;
@@ -22,10 +24,14 @@ class ProductServiceTest {
 
     private ProductService productService;
 
+    private NameFactory nameFactory;
+
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         productService = new ProductService(productRepository);
+        final ProfanityDetectService profanityDetectService = new FakeProfanityDetectService();
+        nameFactory = new NameFactory(profanityDetectService);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -68,7 +74,7 @@ class ProductServiceTest {
     private Product createProductRequest(final String name, final BigDecimal price) {
         return new Product(
             null,
-            new Name(name),
+            this.nameFactory.create(name),
             new Price(price)
         );
     }

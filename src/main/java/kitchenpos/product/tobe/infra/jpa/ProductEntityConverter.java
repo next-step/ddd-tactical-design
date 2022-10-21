@@ -1,9 +1,10 @@
 package kitchenpos.product.tobe.infra.jpa;
 
-import kitchenpos.common.name.Name;
+import kitchenpos.common.name.NameFactory;
 import kitchenpos.common.price.Price;
 import kitchenpos.product.tobe.domain.entity.Product;
 import kitchenpos.util.converter.Converter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 public class ProductEntityConverter {
@@ -29,9 +30,20 @@ public class ProductEntityConverter {
     public static class ProductEntityToProductConverter
         implements Converter<ProductEntity, Product> {
 
+        private final NameFactory nameFactory;
+
+        @Autowired
+        public ProductEntityToProductConverter(NameFactory nameFactory) {
+            this.nameFactory = nameFactory;
+        }
+
         @Override
         public Product convert(ProductEntity source) {
-            return new Product(source.id, new Name(source.name), new Price(source.price));
+            return new Product(
+                source.id,
+                this.nameFactory.create(source.name),
+                new Price(source.price)
+            );
         }
     }
 }

@@ -9,7 +9,7 @@ public class Name {
 
     public final String value;
 
-    public Name(String value) {
+    Name(String value) {
         this.value = value;
     }
 
