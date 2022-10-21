@@ -1,13 +1,10 @@
 package kitchenpos.menus.tobe.application;
 
-
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.menus.tobe.dto.menu.ChangeMenuPriceRequest;
 import kitchenpos.menus.tobe.dto.menu.CreateMenuRequest;
 import kitchenpos.menus.tobe.dto.menu.MenuProductRequest;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Name;
 import kitchenpos.products.tobe.domain.Price;
@@ -21,41 +18,19 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
-//TODO 행위에 따른 service 분리
 @Service
-public class MenuService {
+public class MenuCrudService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public MenuService(final MenuRepository menuRepository, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository, final PurgomalumClient purgomalumClient) {
+    public MenuCrudService(final MenuRepository menuRepository, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository, final PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.productRepository = productRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.purgomalumClient = purgomalumClient;
-    }
-
-    @Transactional
-    public Menu hide(final UUID menuId) {
-        final Menu menu = createMenu(menuId);
-        menu.hide();
-        return menu;
-    }
-
-    @Transactional
-    public Menu display(final UUID menuId) {
-        final Menu menu = createMenu(menuId);
-        menu.display();
-        return menu;
-    }
-
-    @Transactional
-    public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
-        final Menu menu = createMenu(menuId);
-        menu.changePrice(new Price(request.price()));
-        return menu;
     }
 
     @Transactional
@@ -66,16 +41,21 @@ public class MenuService {
         return new Menu(new Name(request.getMenuName(), isProfanity), new Price(request.getPrice()), createMenuProducts(request), menuGroup);
     }
 
-    private MenuProducts createMenuProducts(CreateMenuRequest request) {
-        MenuProducts menuProducts = new MenuProducts();
-        request.getMenuProducts().stream().map(MenuService::createMenuProduct).forEach(menuProducts::add);
-        return menuProducts;
+    @Transactional(readOnly = true)
+    public List<Menu> findAll() {
+        return menuRepository.findAll();
     }
 
     private void validateExistProduct(List<MenuProductRequest> menuProducts) {
         for (MenuProductRequest menuProductRequest : menuProducts) {
             productRepository.findById(menuProductRequest.getProductRequest().getProductId()).orElseThrow(() -> new NoSuchElementException("해당하는 상품이 업습니다."));
         }
+    }
+
+    private MenuProducts createMenuProducts(CreateMenuRequest request) {
+        MenuProducts menuProducts = new MenuProducts();
+        request.getMenuProducts().stream().map(MenuCrudService::createMenuProduct).forEach(menuProducts::add);
+        return menuProducts;
     }
 
     private static MenuProduct createMenuProduct(MenuProductRequest menuProductRequest) {
@@ -87,12 +67,4 @@ public class MenuService {
                 new Price(menuProductRequest.getProductRequest().getProductPrice()));
     }
 
-    @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
-    }
-
-    private Menu createMenu(UUID menuId) {
-        return menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
-    }
 }
