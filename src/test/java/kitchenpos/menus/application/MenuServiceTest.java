@@ -50,7 +50,7 @@ class MenuServiceTest {
     @Test
     void create() {
         final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), 2L)
+            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         final Menu actual = menuService.create(expected);
         assertThat(actual).isNotNull();
@@ -85,7 +85,7 @@ class MenuServiceTest {
     @Test
     void createNegativeQuantity() {
         final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), -1L)
+            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), -1L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -97,7 +97,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void create(final BigDecimal price) {
         final Menu expected = createMenuRequest(
-            "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), 2L)
+            "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -107,7 +107,7 @@ class MenuServiceTest {
     @Test
     void createExpensiveMenu() {
         final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), 2L)
+            "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -118,7 +118,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void create(final UUID menuGroupId) {
         final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), 2L)
+            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(NoSuchElementException.class);
@@ -130,7 +130,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void create(final String name) {
         final Menu expected = createMenuRequest(
-            name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getValue(), 2L)
+            name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);

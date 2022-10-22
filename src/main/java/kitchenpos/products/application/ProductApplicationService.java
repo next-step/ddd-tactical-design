@@ -50,7 +50,8 @@ public class ProductApplicationService {
     public ProductResponse changePrice(final UUID productId, final ProductPriceChangeRequest request) {
         Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product = Product.changePrice(request.getProductId(), request.getPrice());
+
+        product.changePrice(request.getPrice());
 
         product = productRepository.save(product);
 
@@ -59,7 +60,7 @@ public class ProductApplicationService {
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                if (menuProduct.getProduct().getId().getValue().equals(productId)) {
+                if (menuProduct.getProduct().getId().getId().equals(productId)) {
                     sum = sum.add(
                             request.getPrice()
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))

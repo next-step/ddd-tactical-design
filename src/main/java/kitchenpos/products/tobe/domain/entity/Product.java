@@ -44,25 +44,29 @@ public class Product implements AggregateRoot<ProductId> {
     }
 
     public static Product createProductByNameAndPrice(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+        if (isInvalidPrice(price)) {
             throw new IllegalArgumentException();
         }
 
-        if (Objects.isNull(name) || (purgomalumClient != null && purgomalumClient.containsProfanity(name))) {
+        if (isInvalidName(purgomalumClient, name)) {
             throw new IllegalArgumentException();
         }
 
         return new Product(UUID.randomUUID(), name, price);
     }
 
-    public static Product changePrice(UUID id, BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+    public void changePrice(BigDecimal price) {
+        if (isInvalidPrice(price)) {
             throw new IllegalArgumentException();
         }
+        this.price = price;
+    }
 
-        Product product = new Product();
-        product.id = new ProductId(id);
-        product.price = price;
-        return product;
+    private static boolean isInvalidPrice(BigDecimal price) {
+        return Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    private static boolean isInvalidName(PurgomalumClient purgomalumClient, String name) {
+        return Objects.isNull(name) || (purgomalumClient != null && purgomalumClient.containsProfanity(name));
     }
 }
