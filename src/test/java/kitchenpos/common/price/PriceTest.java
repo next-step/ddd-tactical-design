@@ -65,6 +65,31 @@ class PriceTest {
         }
     }
 
+    @DisplayName("add()")
+    @Nested
+    class Sbzrrxpt {
+
+        @DisplayName("더한 결과가 정확해야 한다.")
+        @ValueSource(doubles = {
+            6371.44, 4658.70, 885.35, 331.00, 3989.34,
+            758.08, 7988.55, 8136.68, 2548.28, 6164.34,
+        })
+        @ParameterizedTest
+        void nzbkndwy(final double price) {
+            final Price initial = new Price(1000);
+            final Price augend = new Price(price);
+
+            final Price actual = initial.add(augend);
+
+            final BigDecimal expected = BigDecimal.valueOf(1000).add(BigDecimal.valueOf(price));
+
+            Assertions.assertAll(
+                () -> assertThat(actual.value).isEqualTo(expected),
+                () -> assertThat(actual).isEqualTo(new Price(expected))
+            );
+        }
+    }
+
     @DisplayName("multiply()")
     @Nested
     class Ducojvvs {

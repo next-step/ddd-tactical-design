@@ -30,6 +30,10 @@ public class Price {
         this(BigDecimal.valueOf(value));
     }
 
+    public Price add(Price augend) {
+        return new Price(this.value.add(augend.value));
+    }
+
     public Price multiply(BigDecimal multiplicand) {
         return new Price(this.value.multiply(multiplicand));
     }
