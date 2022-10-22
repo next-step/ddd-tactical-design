@@ -30,6 +30,14 @@ public class Price {
         this(BigDecimal.valueOf(value));
     }
 
+    public Price multiply(BigDecimal multiplicand) {
+        return new Price(this.value.multiply(multiplicand));
+    }
+
+    public Price multiply(long multiplicand) {
+        return this.multiply(BigDecimal.valueOf(multiplicand));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
