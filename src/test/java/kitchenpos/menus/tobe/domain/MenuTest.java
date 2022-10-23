@@ -26,24 +26,21 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                 createMenuProduct(productId2, 3000L, 3)));
 
         MenuDisplayedName displayedName = createDisplayName("메뉴 이름");
         MenuGroup menuGroup = createMenuGroup(menuGroupId, "메뉴 그룹");
         MenuPrice menuPrice = createMenuPrice(10000L);
-        List<MenuProduct> menuProducts = Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
-                createMenuProduct(productId2, 3000L, 3));
+        MenuProducts menuProducts = new MenuProducts(Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProduct(productId2, 3000L, 3)));
 
         assertThat(menu.getId()).isNotNull();
         assertThat(menu.getName()).isEqualTo(displayedName);
         assertThat(menu.getPrice()).isEqualTo(menuPrice);
         assertThat(menu.getMenuGroup()).isEqualTo(menuGroup);
 
-        for(int i = 0; i < menuProducts.size(); i++) {
-            assertThat(menu.getMenuProducts().get(i)).isEqualTo(menuProducts.get(i));
-        }
-
+        assertThat(menu.getMenuProducts()).isEqualTo(menuProducts);
     }
 
     @Test
@@ -53,7 +50,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(10000L),
-                Lists.newArrayList())
+                createMenuProducts())
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("상품은 1개 이상 등록해야 합니다.");
     }
@@ -66,7 +63,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 0)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴에 속한 상품의 수량은 0이상 이어야 합니다.");
@@ -80,7 +77,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(-1L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class);
     }
@@ -92,7 +89,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(20000L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
@@ -105,7 +102,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName("메뉴 이름"),
                 null,
                 createMenuPrice(20000L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class);
     }
@@ -118,7 +115,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName(menuName),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(20000L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴 이름이 비어 있습니다.");
@@ -132,7 +129,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(createDisplayName(menuName),
                 createMenuGroup(UUID.randomUUID(), "메뉴 그룹"),
                 createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(UUID.randomUUID(), 1000L, 2),
+                createMenuProducts(createMenuProduct(UUID.randomUUID(), 1000L, 2),
                         createMenuProduct(UUID.randomUUID(), 3000L, 3)))
         ).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴 이름에는 비속어가 포함될 수 없습니다.");
@@ -147,7 +144,7 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
         menu.changePrice(8000L);
@@ -164,7 +161,7 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
         assertThatThrownBy(() -> menu.changePrice(-1L) )
@@ -180,7 +177,7 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
         assertThatThrownBy(() -> menu.changePrice(20000L) )
@@ -196,7 +193,7 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
         menu.display();
@@ -212,7 +209,7 @@ class MenuTest {
         UUID menuGroupId = UUID.randomUUID();
 
         Menu menu = new Menu(createDisplayName("메뉴 이름"), createMenuGroup(menuGroupId, "메뉴 그룹"), createMenuPrice(10000L),
-                Lists.newArrayList(createMenuProduct(productId1, 1000L, 2),
+                createMenuProducts(createMenuProduct(productId1, 1000L, 2),
                         createMenuProduct(productId2, 3000L, 3)));
 
         menu.hide();
@@ -233,5 +230,9 @@ class MenuTest {
 
     public MenuGroup createMenuGroup(UUID menuGroupId, String name) {
         return new MenuGroup(menuGroupId, name, menuProfanityClient);
+    }
+
+    private MenuProducts createMenuProducts(MenuProduct... menuProducts) {
+        return new MenuProducts(Lists.newArrayList(menuProducts));
     }
 }

@@ -40,14 +40,8 @@ public class Menu {
     @Embedded
     private MenuDisplayed displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -55,7 +49,7 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuDisplayedName name, MenuGroup menuGroup, MenuPrice price, List<MenuProduct> menuProducts) {
+    public Menu(MenuDisplayedName name, MenuGroup menuGroup, MenuPrice price, MenuProducts menuProducts) {
         validate(menuGroup, price, menuProducts);
 
         this.id = UUID.randomUUID();
@@ -67,18 +61,11 @@ public class Menu {
         this.displayed = new MenuDisplayed(Boolean.TRUE);
     }
 
-    private void validate(MenuGroup menuGroup, MenuPrice price, List<MenuProduct> menuProducts) {
-        validateMenuProducts(menuProducts);
+    private void validate(MenuGroup menuGroup, MenuPrice price, MenuProducts menuProducts) {
         validateMenuGroup(menuGroup);
         validateMenuPrice(price, menuProducts);
     }
 
-
-    private void validateMenuProducts(List<MenuProduct> menuProducts) {
-        if(menuProducts == null || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException("상품은 1개 이상 등록해야 합니다.");
-        }
-    }
 
     private void validateMenuGroup(MenuGroup menuGroup) {
         if(Objects.isNull(menuGroup)) {
@@ -86,11 +73,8 @@ public class Menu {
         }
     }
 
-    private void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
-        BigDecimal menuProductsPrice = menuProducts.stream()
-                .map(MenuProduct::calculatePrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
+    private void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
+        BigDecimal menuProductsPrice = menuProducts.calculateProductPrice();
         if(price.value().compareTo(menuProductsPrice) > 0) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
         }
@@ -117,20 +101,12 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public BigDecimal calculateProductPrice() {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(menuProduct.calculatePrice());
-        }
-        return sum;
     }
 
     public void changePrice(long price) {
