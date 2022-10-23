@@ -12,7 +12,6 @@ public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-
     public ProductPrice(BigDecimal price) {
         if (Objects.isNull(price) || MIN_PRICE.compareTo(price) > 0) {
             throw new IllegalArgumentException();

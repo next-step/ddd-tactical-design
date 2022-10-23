@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain.entity;
 
+import kitchenpos.products.tobe.domain.service.ProductMenuPricePolicy;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
@@ -24,8 +25,10 @@ public class Product {
         this.price = price;
     }
 
-    public void changePrice(ProductPrice price) {
+    public void changePrice(ProductPrice price, ProductMenuPricePolicy productMenuPricePolicy) {
         this.price = price;
+
+        productMenuPricePolicy.checkMenuPrice(id);
     }
 
     public UUID getId() {

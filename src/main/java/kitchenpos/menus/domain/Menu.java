@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +44,22 @@ public class Menu {
     private UUID menuGroupId;
 
     public Menu() {
+    }
+
+    public ProductPrice originalPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : this.menuProducts) {
+            sum = sum.add(menuProduct.totalPrice().getPrice());
+        }
+        return new ProductPrice(sum);
+    }
+
+    public boolean isReasonablePrice() {
+        return price.compareTo(originalPrice().getPrice()) <= 0;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 
     public UUID getId() {
