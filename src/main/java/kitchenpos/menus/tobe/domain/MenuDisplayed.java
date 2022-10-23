@@ -7,7 +7,7 @@ public class MenuDisplayed {
 
     private boolean displayed;
 
-    public MenuDisplayed() {
+    protected MenuDisplayed() {
     }
 
     public MenuDisplayed(boolean displayed) {

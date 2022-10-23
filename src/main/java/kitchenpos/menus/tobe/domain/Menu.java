@@ -52,7 +52,7 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    protected Menu() {
     }
 
     public Menu(MenuDisplayedName name, MenuGroup menuGroup, MenuPrice price, List<MenuProduct> menuProducts) {

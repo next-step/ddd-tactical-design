@@ -7,7 +7,7 @@ public class MenuQuantity {
 
     private long quantity;
 
-    public MenuQuantity() {
+    protected MenuQuantity() {
     }
 
     public MenuQuantity(long quantity) {

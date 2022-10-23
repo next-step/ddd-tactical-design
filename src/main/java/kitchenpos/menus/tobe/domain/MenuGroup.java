@@ -18,7 +18,7 @@ public class MenuGroup {
     @Embedded
     private MenuGroupDisplayedName name;
 
-    public MenuGroup() {
+    protected MenuGroup() {
     }
 
     public MenuGroup(UUID id, String name, MenuProfanityClient menuProfanityClient) {
