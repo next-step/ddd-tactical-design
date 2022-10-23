@@ -19,28 +19,28 @@ public class Menu {
 
     private final List<MenuProduct> menuProducts;
 
-    private Boolean isVisible;
+    private Boolean displayed;
 
     private Price price;
 
     public Menu(
         final UUID id,
         final Name name,
-        final Boolean isVisible,
+        final Boolean displayed,
         final Price price,
         final MenuGroup menuGroup,
         final List<MenuProduct> menuProducts
     ) {
         this.id = id;
         this.name = name;
-        this.isVisible = isVisible;
+        this.displayed = displayed;
         this.price = price;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
     }
 
-    public boolean isVisible() {
-        return this.isVisible;
+    public boolean displayed() {
+        return this.displayed;
     }
 
     public Price price() {
@@ -55,11 +55,11 @@ public class Menu {
         if (!MenuDisplayPolicy.isDisplayable(this)) {
             throw new IllegalStateException("메뉴 노출 정책에 따라 이 메뉴를 노출할 수 없습니다");
         }
-        this.isVisible = true;
+        this.displayed = true;
     }
 
     public void hide() {
-        this.isVisible = false;
+        this.displayed = false;
     }
 
     public void setPrice(final Price price) {
