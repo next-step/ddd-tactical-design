@@ -71,10 +71,9 @@ public class Menu {
 
     public void changeMenuProductPrice(final UUID productId, final Price price) {
         menuProducts.changePrice(productId, price);
-    }
-
-    public boolean hasBiggerPriceThanTotalAmount() {
-        return price.isBiggerThan(menuProducts.totalAmount());
+        if (this.price.isBiggerThan(menuProducts.totalAmount())) {
+            hide();
+        }
     }
 
     public void show() {
@@ -110,5 +109,22 @@ public class Menu {
 
     public MenuProducts menuProducts() {
         return menuProducts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
