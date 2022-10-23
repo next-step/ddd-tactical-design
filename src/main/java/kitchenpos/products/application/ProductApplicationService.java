@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductPriceChangeRequest;

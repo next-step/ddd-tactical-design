@@ -1,6 +1,8 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.dto.MenuGroupCreateRequest;
+import kitchenpos.menus.dto.MenuGroupResponse;
+import kitchenpos.menus.mapper.MenuGroupMapper;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,21 +21,23 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private MenuGroupService menuGroupService;
+    private MenuGroupMapper menuGroupMapper;
 
     @BeforeEach
     void setUp() {
         menuGroupRepository = new InMemoryMenuGroupRepository();
-        menuGroupService = new MenuGroupService(menuGroupRepository);
+        menuGroupMapper = new MenuGroupMapper();
+        menuGroupService = new MenuGroupService(menuGroupRepository, menuGroupMapper);
     }
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create() {
         final MenuGroupCreateRequest expected = createMenuGroupRequest("두마리메뉴");
-        final MenuGroup actual = menuGroupService.create(expected);
+        final MenuGroupResponse actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
+            () -> assertThat(actual.getMenuGroupId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
@@ -51,7 +55,7 @@ class MenuGroupServiceTest {
     @Test
     void findAll() {
         menuGroupRepository.save(menuGroup("두마리메뉴"));
-        final List<MenuGroup> actual = menuGroupService.findAll();
+        final List<MenuGroupResponse> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }
 

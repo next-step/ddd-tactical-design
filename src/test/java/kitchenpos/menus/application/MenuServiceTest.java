@@ -3,9 +3,12 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.dto.MenuResponse;
+import kitchenpos.menus.mapper.MenuGroupMapper;
+import kitchenpos.menus.mapper.MenuMapper;
+import kitchenpos.menus.mapper.MenuProductMapper;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -34,6 +37,9 @@ class MenuServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private PurgomalumClient purgomalumClient;
+    private MenuGroupMapper menuGroupMapper;
+    private MenuProductMapper menuProductMapper;
+    private MenuMapper menuMapper;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -44,7 +50,10 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        menuGroupMapper = new MenuGroupMapper();
+        menuProductMapper = new MenuProductMapper();
+        menuMapper = new MenuMapper(menuGroupMapper, menuProductMapper);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, menuMapper);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -55,15 +64,15 @@ class MenuServiceTest {
         final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
-        final Menu actual = menuService.create(expected);
+        final MenuResponse actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroupResponse().getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts()).hasSize(1)
+            () -> assertThat(actual.getMenuProductResponseList()).hasSize(1)
         );
     }
 
@@ -144,7 +153,7 @@ class MenuServiceTest {
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuPriceChangeRequest expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
+        final MenuResponse actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -172,7 +181,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.display(menuId);
+        final MenuResponse actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -188,7 +197,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.hide(menuId);
+        final MenuResponse actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 
@@ -196,7 +205,7 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<Menu> actual = menuService.findAll();
+        final List<MenuResponse> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 

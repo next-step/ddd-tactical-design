@@ -1,8 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.dto.MenuCreateRequest;
-import kitchenpos.menus.dto.MenuPriceChangeRequest;
-import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.dto.*;
+import kitchenpos.menus.mapper.MenuMapper;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
@@ -24,21 +23,24 @@ public class MenuService {
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
+    private final MenuMapper menuMapper;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+        final PurgomalumClient purgomalumClient,
+        final MenuMapper menuMapper
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
+        this.menuMapper = menuMapper;
     }
 
     @Transactional
-    public Menu create(final MenuCreateRequest request) {
+    public MenuResponse create(final MenuCreateRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final List<MenuProductRequest> menuProductRequests = request.getMenuProductRequestList();
@@ -54,36 +56,38 @@ public class MenuService {
         );
 
         Menu menu = Menu.createMenu(request, menuGroup, products, purgomalumClient);
-        return menuRepository.save(menu);
+        menu = menuRepository.save(menu);
+        return menuMapper.toMenuResponse(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
+    public MenuResponse changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.changePrice(request.getPrice());
-        return menu;
+        return menuMapper.toMenuResponse(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public MenuResponse display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
 
         menu.display();
-        return menu;
+        return menuMapper.toMenuResponse(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public MenuResponse hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
-        return menu;
+        return menuMapper.toMenuResponse(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        return menuRepository.findAll().stream().map(v -> menuMapper.toMenuResponse(v))
+                .collect(Collectors.toList());
     }
 }
