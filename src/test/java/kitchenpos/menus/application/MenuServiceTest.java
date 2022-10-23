@@ -1,6 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.dto.MenuCreateRequest;
+import kitchenpos.menus.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
@@ -142,7 +143,7 @@ class MenuServiceTest {
     @Test
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(16_000L);
+        final MenuPriceChangeRequest expected = changePriceRequest(16_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
@@ -153,7 +154,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(price);
+        final MenuPriceChangeRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -162,7 +163,7 @@ class MenuServiceTest {
     @Test
     void changePriceToExpensive() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(33_000L);
+        final MenuPriceChangeRequest expected = changePriceRequest(33_000L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -252,13 +253,13 @@ class MenuServiceTest {
         return menuProduct;
     }
 
-    private Menu changePriceRequest(final long price) {
+    private MenuPriceChangeRequest changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private Menu changePriceRequest(final BigDecimal price) {
-        final Menu menu = new Menu();
-        menu.setPrice(price);
-        return menu;
+    private MenuPriceChangeRequest changePriceRequest(final BigDecimal price) {
+        final MenuPriceChangeRequest menuPriceChangeRequest = new MenuPriceChangeRequest();
+        menuPriceChangeRequest.setPrice(price);
+        return menuPriceChangeRequest;
     }
 }

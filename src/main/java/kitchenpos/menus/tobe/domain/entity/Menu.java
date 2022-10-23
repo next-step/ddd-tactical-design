@@ -8,6 +8,7 @@ import kitchenpos.products.tobe.domain.entity.Product;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Table(name = "menu")
 @Entity
@@ -122,6 +123,22 @@ public class Menu {
         menu.setDisplayed(menuCreateRequest.isDisplayed());
         menu.setMenuProducts(menuProductList);
         return menu;
+    }
+
+    public void changePrice(BigDecimal price) {
+        List<Product> products = menuProducts.stream().map(v -> v.getProduct()).collect(Collectors.toList());
+        if (isInvalidPrice(price, menuProducts, products)) {
+            throw new IllegalArgumentException("유효하지 않은 가격");
+        }
+        this.price = price;
+    }
+
+    public void display() {
+        List<Product> products = menuProducts.stream().map(v -> v.getProduct()).collect(Collectors.toList());
+        if (isInvalidPrice(this.price, menuProducts, products)) {
+            throw new IllegalStateException();
+        }
+        this.setDisplayed(true);
     }
 
     private static List<MenuProduct> createMenuProduct(List<MenuProductRequest> menuProductRequestList, List<Product> productList) {
