@@ -1,9 +1,10 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_group")
@@ -33,5 +34,15 @@ public class MenuGroup {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public static MenuGroup createMenuGroup(String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        final MenuGroup menuGroup = new MenuGroup();
+        menuGroup.setId(UUID.randomUUID());
+        menuGroup.setName(name);
+        return menuGroup;
     }
 }

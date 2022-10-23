@@ -1,9 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.dto.MenuCreateRequest;
+import kitchenpos.menus.dto.MenuPriceChangeRequest;
+import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.dto.MenuResponse;
+import kitchenpos.menus.mapper.MenuGroupMapper;
+import kitchenpos.menus.mapper.MenuMapper;
+import kitchenpos.menus.mapper.MenuProductMapper;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -31,6 +37,9 @@ class MenuServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private PurgomalumClient purgomalumClient;
+    private MenuGroupMapper menuGroupMapper;
+    private MenuProductMapper menuProductMapper;
+    private MenuMapper menuMapper;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -41,7 +50,10 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        menuGroupMapper = new MenuGroupMapper();
+        menuProductMapper = new MenuProductMapper();
+        menuMapper = new MenuMapper(menuGroupMapper, menuProductMapper);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, menuMapper);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -49,26 +61,26 @@ class MenuServiceTest {
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
     @Test
     void create() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
-        final Menu actual = menuService.create(expected);
+        final MenuResponse actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroupResponse().getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts()).hasSize(1)
+            () -> assertThat(actual.getMenuProductResponseList()).hasSize(1)
         );
     }
 
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
-    void create(final List<MenuProduct> menuProducts) {
-        final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
+    void create(final List<MenuProductRequest> menuProducts) {
+        final MenuCreateRequest expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -84,7 +96,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), -1L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -96,7 +108,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -106,7 +118,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -117,7 +129,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final UUID menuGroupId) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -129,7 +141,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateRequest expected = createMenuRequest(
             name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId().getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -140,8 +152,8 @@ class MenuServiceTest {
     @Test
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
+        final MenuPriceChangeRequest expected = changePriceRequest(16_000L);
+        final MenuResponse actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -151,7 +163,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(price);
+        final MenuPriceChangeRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -160,7 +172,7 @@ class MenuServiceTest {
     @Test
     void changePriceToExpensive() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(33_000L);
+        final MenuPriceChangeRequest expected = changePriceRequest(33_000L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -169,7 +181,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.display(menuId);
+        final MenuResponse actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -185,7 +197,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.hide(menuId);
+        final MenuResponse actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 
@@ -193,70 +205,70 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<Menu> actual = menuService.findAll();
+        final List<MenuResponse> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateRequest createMenuRequest(
         final String name,
         final long price,
         final UUID menuGroupId,
         final boolean displayed,
-        final MenuProduct... menuProducts
+        final MenuProductRequest... menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateRequest createMenuRequest(
         final String name,
         final BigDecimal price,
         final UUID menuGroupId,
         final boolean displayed,
-        final MenuProduct... menuProducts
+        final MenuProductRequest... menuProducts
     ) {
         return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateRequest createMenuRequest(
         final String name,
         final long price,
         final UUID menuGroupId,
         final boolean displayed,
-        final List<MenuProduct> menuProducts
+        final List<MenuProductRequest> menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateRequest createMenuRequest(
         final String name,
         final BigDecimal price,
         final UUID menuGroupId,
         final boolean displayed,
-        final List<MenuProduct> menuProducts
+        final List<MenuProductRequest> menuProducts
     ) {
-        final Menu menu = new Menu();
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(menuProducts);
-        return menu;
+        final MenuCreateRequest menuCreateRequest = new MenuCreateRequest();
+        menuCreateRequest.setName(name);
+        menuCreateRequest.setPrice(price);
+        menuCreateRequest.setMenuGroupId(menuGroupId);
+        menuCreateRequest.setDisplayed(displayed);
+        menuCreateRequest.setMenuProductRequestList(menuProducts);
+        return menuCreateRequest;
     }
 
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
+    private static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
+        final MenuProductRequest menuProduct = new MenuProductRequest();
         menuProduct.setProductId(productId);
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
-    private Menu changePriceRequest(final long price) {
+    private MenuPriceChangeRequest changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private Menu changePriceRequest(final BigDecimal price) {
-        final Menu menu = new Menu();
-        menu.setPrice(price);
-        return menu;
+    private MenuPriceChangeRequest changePriceRequest(final BigDecimal price) {
+        final MenuPriceChangeRequest menuPriceChangeRequest = new MenuPriceChangeRequest();
+        menuPriceChangeRequest.setPrice(price);
+        return menuPriceChangeRequest;
     }
 }
