@@ -1,5 +1,6 @@
 package kitchenpos.products.infra;
 
+import kitchenpos.products.tobe.domain.infra.PurgomalumValidator;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -8,10 +9,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class DefaultPurgomalumClient implements PurgomalumClient {
+public class DefaultPurgomalumValidator implements PurgomalumValidator {
     private final RestTemplate restTemplate;
 
-    public DefaultPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
+    public DefaultPurgomalumValidator(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

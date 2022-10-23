@@ -7,8 +7,11 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
+    static final BigDecimal MIN_PRICE = BigDecimal.ZERO;
+
     @Column(name = "price", nullable = false)
     private BigDecimal price;
+
 
     public ProductPrice(BigDecimal price) {
         if (Objects.isNull(price) || MIN_PRICE.compareTo(price) > 0) {
@@ -22,9 +25,7 @@ public class ProductPrice {
         return price;
     }
 
-    static final BigDecimal MIN_PRICE = BigDecimal.ZERO;
-
-    public ProductPrice() {}
+    protected ProductPrice() {}
 
     @Override
     public boolean equals(Object o) {

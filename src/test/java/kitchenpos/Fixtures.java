@@ -4,7 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakePurgomalumValidator;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
@@ -121,6 +121,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(new ProductName(name, new FakePurgomalumClient()), new ProductPrice(BigDecimal.valueOf(price)));
+        return new Product(new ProductName(name, new FakePurgomalumValidator()), new ProductPrice(BigDecimal.valueOf(price)));
     }
 }

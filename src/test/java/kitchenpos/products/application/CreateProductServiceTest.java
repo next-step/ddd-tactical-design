@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.infra.PurgomalumValidator;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CreateProductServiceTest {
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumValidator purgomalumValidator;
     private CreateProductService createProductService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        createProductService = new CreateProductService(purgomalumClient, productRepository);
+        purgomalumValidator = new FakePurgomalumValidator();
+        createProductService = new CreateProductService(purgomalumValidator, productRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -42,7 +42,7 @@ class CreateProductServiceTest {
         );
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("상품의 가격이 올바르지 않으면 예외가 발생한다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -52,7 +52,7 @@ class CreateProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("상품의 이름이 올바르지 않으면 예외가 발생한다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest

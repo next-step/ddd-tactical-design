@@ -9,9 +9,9 @@ import java.util.UUID;
 public interface ProductRepository {
     Product save(Product product);
 
-    Optional<Product> findById(UUID productId);
+    Optional<Product> findById(UUID id);
 
     List<Product> findAll();
 
-    List<Product> findAllByIdIn(List<UUID> collect);
+    List<Product> findAllByIdIn(List<UUID> ids);
 }

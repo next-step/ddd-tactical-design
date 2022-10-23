@@ -40,5 +40,5 @@ public class Product {
         return price;
     }
 
-    public Product() {}
+    protected Product() {}
 }
