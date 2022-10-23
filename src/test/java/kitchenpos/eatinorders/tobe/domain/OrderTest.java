@@ -3,12 +3,14 @@ package kitchenpos.eatinorders.tobe.domain;
 import kitchenpos.eatinorders.domain.OrderType;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 /*
 공통
 - [x] 주문 유형이 올바르지 않으면 등록할 수 없다.
-- 메뉴가 없으면 등록할 수 없다.
+- [x] 메뉴가 없으면 등록할 수 없다.
 - 숨겨진 메뉴는 주문할 수 없다.
 - 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
 - 주문을 접수한다.
@@ -47,7 +49,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class OrderTest {
     @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
     void registerWithValidOrderType() {
-        assertThatCode(() -> new Order(OrderType.EAT_IN))
+        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem())))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    void registerWithMenu() {
+        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem())))
                 .doesNotThrowAnyException();
     }
 }
