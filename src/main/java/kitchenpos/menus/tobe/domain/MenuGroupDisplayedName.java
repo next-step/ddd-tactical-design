@@ -15,11 +15,11 @@ public class MenuGroupDisplayedName {
 
     public MenuGroupDisplayedName(String name, MenuProfanityClient menuProfanityClient) {
         if(StringUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("메뉴 이름이 비어 있습니다.");
+            throw new IllegalArgumentException("메뉴 그룹 이름이 비어 있습니다.");
         }
 
         if(menuProfanityClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("메뉴 이름에는 비속어가 포함될 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 그룹 이름에는 비속어가 포함될 수 없습니다.");
         }
 
         this.name = name;

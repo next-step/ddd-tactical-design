@@ -50,7 +50,7 @@ public class Menu {
     }
 
     public Menu(MenuDisplayedName name, MenuGroup menuGroup, MenuPrice price, MenuProducts menuProducts) {
-        validate(menuGroup, price, menuProducts);
+        validate(price, menuProducts);
 
         this.id = UUID.randomUUID();
         this.name = name;
@@ -61,16 +61,8 @@ public class Menu {
         this.displayed = new MenuDisplayed(Boolean.TRUE);
     }
 
-    private void validate(MenuGroup menuGroup, MenuPrice price, MenuProducts menuProducts) {
-        validateMenuGroup(menuGroup);
+    private void validate(MenuPrice price, MenuProducts menuProducts) {
         validateMenuPrice(price, menuProducts);
-    }
-
-
-    private void validateMenuGroup(MenuGroup menuGroup) {
-        if(Objects.isNull(menuGroup)) {
-            throw new IllegalArgumentException("메뉴는 메뉴 그룹에 속해야 합니다 ");
-        }
     }
 
     private void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
