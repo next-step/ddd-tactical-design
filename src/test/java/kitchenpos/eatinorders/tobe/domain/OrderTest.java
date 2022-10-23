@@ -1,20 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.common.FakeProfanity;
-import kitchenpos.common.vo.DisplayedName;
-import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.util.List;
-
+import static kitchenpos.eatinorders.tobe.domain.fixture.OrderFixture.createEatInOrder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -27,13 +17,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
     - [x] 접수 대기 중인 주문만 접수할 수 있다.
 - 주문을 서빙한다.
 -   [x] 접수된 주문만 서빙할 수 있다.
-- 주문을 완료한다.
-
-- 주문 목록을 조회할 수 있다.
 - [] 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
 
 매장
-- 매장 주문은 주문 항목의 수량이 0 미만일 수 있다.
+- [x] 매장 주문은 주문 항목의 수량이 0 미만일 수 있다.
 - 매장 주문을 제외한 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.
 - 매장 주문의 경우 서빙된 주문만 완료할 수 있다.
 - 주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.
@@ -62,7 +49,7 @@ class OrderTest {
     @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
     @Test
     void registerWithValidOrderType() {
-        assertThatCode(() -> createOrder())
+        assertThatCode(() -> createEatInOrder())
                 .doesNotThrowAnyException();
     }
 
@@ -70,21 +57,21 @@ class OrderTest {
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     @Test
     void registerWithMenu() {
-        assertThatCode(() -> createOrder())
+        assertThatCode(() -> createEatInOrder())
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
     @Test
     void hideMenu() {
-        assertThatCode(() -> createOrder())
+        assertThatCode(() -> createEatInOrder())
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
     @Test
     void accept() {
-        final Order order = createOrder();
+        final Order order = createEatInOrder();
 
         order.accept();
 
@@ -94,7 +81,7 @@ class OrderTest {
     @DisplayName("접수된 주문만 서빙할 수 있다.")
     @Test
     void serve() {
-        final Order order = createOrder();
+        final Order order = createEatInOrder();
         order.accept();
 
         order.serve();
@@ -102,19 +89,10 @@ class OrderTest {
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    private Order createOrder() {
-        final OrderType orderType = OrderType.EAT_IN;
-        final Menu menu = createMenu();
-        final List<OrderLineItem> orderLineItems = List.of(new OrderLineItem(menu));
-        final OrderStatus orderStatus = OrderStatus.WAITING;
-
-        return new Order(orderType, orderLineItems, orderStatus);
-    }
-
-    private Menu createMenu() {
-        final Price price = new Price(BigDecimal.TEN);
-        final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
-        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
-        return new Menu(price, name, List.of(menuProduct), new MenuGroup());
+    @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
+    @Test
+    void quantity() {
+        assertThatCode(() -> createEatInOrder())
+                .doesNotThrowAnyException();
     }
 }
