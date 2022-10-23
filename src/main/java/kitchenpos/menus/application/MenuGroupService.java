@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,8 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    public MenuGroup create(final MenuGroupCreateRequest request) {
+        return menuGroupRepository.save(MenuGroup.createMenuGroup(request.getName()));
     }
 
     @Transactional(readOnly = true)
