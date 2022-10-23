@@ -1,8 +1,17 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.common.FakeProfanity;
+import kitchenpos.common.vo.DisplayedName;
+import kitchenpos.common.vo.Price;
 import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -11,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 공통
 - [x] 주문 유형이 올바르지 않으면 등록할 수 없다.
 - [x] 메뉴가 없으면 등록할 수 없다.
-- 숨겨진 메뉴는 주문할 수 없다.
+- [x] 숨겨진 메뉴는 주문할 수 없다.
 - 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
 - 주문을 접수한다.
 - 접수 대기 중인 주문만 접수할 수 있다.
@@ -48,14 +57,31 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 class OrderTest {
     @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
+    @Test
     void registerWithValidOrderType() {
-        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem())))
+        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem(createMenu()))))
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @Test
     void registerWithMenu() {
-        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem())))
+        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem(createMenu()))))
                 .doesNotThrowAnyException();
+    }
+
+    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    @Test
+    void hideMenu() {
+        final Menu menu = createMenu();
+        assertThatCode(() -> new Order(OrderType.EAT_IN, List.of(new OrderLineItem(menu))))
+                .doesNotThrowAnyException();
+    }
+
+    private Menu createMenu() {
+        final Price price = new Price(BigDecimal.TEN);
+        final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
+        final MenuProduct menuProduct = new MenuProduct(2L, new Product(BigDecimal.valueOf(6L)));
+        return new Menu(price, name, List.of(menuProduct), new MenuGroup());
     }
 }
