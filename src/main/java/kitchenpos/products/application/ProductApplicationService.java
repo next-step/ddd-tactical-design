@@ -1,8 +1,8 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductPriceChangeRequest;
 import kitchenpos.products.dto.ProductResponse;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
