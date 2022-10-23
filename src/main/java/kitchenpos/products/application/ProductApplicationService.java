@@ -58,20 +58,7 @@ public class ProductApplicationService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                if (menuProduct.getProduct().getId().getId().equals(productId)) {
-                    sum = sum.add(
-                            request.getPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                    );
-                } else {
-                    sum = sum.add(
-                            menuProduct.getProduct()
-                                    .getPrice()
-                                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                    );
-                }
-            }
+            sum.add(menu.getMenuPrice());
             if (menu.getPrice().compareTo(sum) > 0) {
                 menu.setDisplayed(false);
             }

@@ -171,6 +171,17 @@ public class Menu {
         return false;
     }
 
+    public BigDecimal getMenuPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (MenuProduct menuProduct : menuProducts) {
+            sum = sum.add(
+                    menuProduct.getProduct().getPrice()
+                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            );
+        }
+        return sum;
+    }
+
     private static boolean isInvalidName(String name, PurgomalumClient purgomalumClient) {
         return Objects.isNull(name) || purgomalumClient.containsProfanity(name);
     }
