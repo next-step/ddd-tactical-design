@@ -6,7 +6,8 @@ import kitchenpos.eatinorders.domain.OrderType;
 import java.util.List;
 
 public class Order {
-    private static final String INVALID_ORDER_STATUS_MESSAGE = "대기 상태에만 수락상태로 변경할 수 있습니다.";
+    private static final String NOT_WAITING_MESSAGE = "대기 상태에만 수락상태로 변경할 수 있습니다.";
+    private static final String NOT_ACCEPT_MESSAGE = "수락 상태에만 서빙상태로 변경할 수 있습니다.";
     private final OrderType orderType;
 
     private final List<OrderLineItem> orderLineItems;
@@ -25,8 +26,15 @@ public class Order {
 
     public void accept() {
         if (orderStatus != OrderStatus.WAITING) {
-            throw new IllegalArgumentException(INVALID_ORDER_STATUS_MESSAGE);
+            throw new IllegalArgumentException(NOT_WAITING_MESSAGE);
         }
         orderStatus = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (orderStatus != OrderStatus.ACCEPTED) {
+            throw new IllegalArgumentException(NOT_ACCEPT_MESSAGE);
+        }
+        orderStatus = OrderStatus.SERVED;
     }
 }

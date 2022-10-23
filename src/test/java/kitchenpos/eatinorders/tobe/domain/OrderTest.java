@@ -25,9 +25,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 - [x] 숨겨진 메뉴는 주문할 수 없다.
 - 주문을 접수한다.
     - [x] 접수 대기 중인 주문만 접수할 수 있다.
-- 주문을 완료한다.
 - 주문을 서빙한다.
-- 접수된 주문만 서빙할 수 있다.
+-   [x] 접수된 주문만 서빙할 수 있다.
+- 주문을 완료한다.
+
 - 주문 목록을 조회할 수 있다.
 - [] 주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.
 
@@ -82,12 +83,23 @@ class OrderTest {
 
     @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
     @Test
-    void price() {
+    void accept() {
         final Order order = createOrder();
 
         order.accept();
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ACCEPTED);
+    }
+
+    @DisplayName("접수된 주문만 서빙할 수 있다.")
+    @Test
+    void serve() {
+        final Order order = createOrder();
+        order.accept();
+
+        order.serve();
+
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
     private Order createOrder() {
