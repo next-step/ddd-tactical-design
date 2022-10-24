@@ -1,6 +1,7 @@
 package kitchenpos.menu.application;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
@@ -54,14 +55,23 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productRepository.findAllByIdIn(
+        final Map<UUID, Price> productPrices = productRepository.findAllByIdIn(
             menuProductRequests.stream()
                 .map(menuProduct -> menuProduct.productId)
                 .collect(Collectors.toUnmodifiableList())
-        );
-        if (products.size() != menuProductRequests.size()) {
+        )
+            .stream()
+            .collect(Collectors.toMap(product -> product.id, Product::price));
+        if (productPrices.size() != menuProductRequests.size()) {
             throw new IllegalArgumentException();
         }
+        final List<MenuProduct> menuProducts = menuProductRequests.stream()
+            .map(menuProduct -> new MenuProduct(
+                menuProduct.productId,
+                productPrices.get(menuProduct.productId),
+                menuProduct.quantity
+            ))
+            .collect(Collectors.toUnmodifiableList());
         final Name name = this.nameFactory.create(command.name);
         final Menu menu = new Menu(
             UUID.randomUUID(),
@@ -69,7 +79,7 @@ public class MenuService {
             command.displayed,
             price,
             menuGroup,
-            command.menuProducts
+            menuProducts
         );
         return menuRepository.save(menu);
     }
