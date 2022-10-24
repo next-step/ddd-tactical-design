@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.Order;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
@@ -21,8 +22,9 @@ public class OrderFixture {
         final Menu menu = createMenu();
         final List<OrderLineItem> orderLineItems = List.of(new OrderLineItem(menu, -1L));
         final OrderStatus orderStatus = OrderStatus.WAITING;
+        final OrderTable orderTable = new OrderTable(5, true);
 
-        return new Order(orderType, orderLineItems, orderStatus);
+        return new Order(orderType, orderLineItems, orderStatus, orderTable);
     }
 
     private static Menu createMenu() {
