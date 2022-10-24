@@ -3,6 +3,8 @@ package kitchenpos.eatinorders.tobe.domain;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static kitchenpos.eatinorders.tobe.domain.fixture.OrderFixture.createEatInOrder;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,38 +46,20 @@ import static org.assertj.core.api.Assertions.assertThatCode;
   - 배달 주소는 비워 둘 수 없다.
 - 배달 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.
  */
-
 class OrderTest {
-    @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
-    @Test
-    void registerWithValidOrderType() {
+    @DisplayName("주문 등록")
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+            "주문 유형이 올바르지 않으면 등록할 수 없다.",
+            "메뉴가 없으면 등록할 수 없다.",
+            "숨겨진 메뉴는 주문할 수 없다.",
+            "접수 대기 중인 주문만 접수할 수 있다.",
+            "매장 주문은 주문 항목의 수량이 0 미만일 수 있다.",
+            "빈 테이블에는 매장 주문을 등록할 수 없다."
+    })
+    void register(String message) {
         assertThatCode(() -> createEatInOrder())
                 .doesNotThrowAnyException();
-    }
-
-
-    @DisplayName("메뉴가 없으면 등록할 수 없다.")
-    @Test
-    void registerWithMenu() {
-        assertThatCode(() -> createEatInOrder())
-                .doesNotThrowAnyException();
-    }
-
-    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
-    @Test
-    void hideMenu() {
-        assertThatCode(() -> createEatInOrder())
-                .doesNotThrowAnyException();
-    }
-
-    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
-    @Test
-    void accept() {
-        final Order order = createEatInOrder();
-
-        order.accept();
-
-        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
     @DisplayName("접수된 주문만 서빙할 수 있다.")
@@ -89,13 +73,6 @@ class OrderTest {
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
-    @Test
-    void quantity() {
-        assertThatCode(() -> createEatInOrder())
-                .doesNotThrowAnyException();
-    }
-
     @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
     @Test
     void completeAndEmpty() {
@@ -106,12 +83,5 @@ class OrderTest {
         eatInOrder.complete();
 
         assertThat(eatInOrder.getOrderTable().isOccupied()).isFalse();
-    }
-
-    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
-    @Test
-    void registerWithEmptyTable() {
-        assertThatCode(() -> createEatInOrder())
-                .doesNotThrowAnyException();
     }
 }
