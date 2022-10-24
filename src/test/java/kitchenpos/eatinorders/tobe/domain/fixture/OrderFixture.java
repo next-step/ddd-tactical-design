@@ -27,6 +27,17 @@ public class OrderFixture {
         return new Order(orderType, orderLineItems, orderStatus, orderTable);
     }
 
+    public static Order createTakeOutOrder() {
+        final OrderType orderType = OrderType.TAKEOUT;
+        final Menu menu = createMenu();
+        final List<OrderLineItem> orderLineItems = List.of(new OrderLineItem(menu, 1L));
+        final OrderStatus orderStatus = OrderStatus.WAITING;
+        final OrderTable orderTable = new OrderTable(5, true);
+
+        return new Order(orderType, orderLineItems, orderStatus, orderTable);
+
+    }
+
     private static Menu createMenu() {
         final Price price = new Price(BigDecimal.TEN);
         final DisplayedName name = new DisplayedName("치킨 세트", new FakeProfanity());
