@@ -35,7 +35,17 @@ public class OrderFixture {
         final OrderTable orderTable = new OrderTable(5, true);
 
         return new Order(orderType, orderLineItems, orderStatus, orderTable);
+    }
 
+    public static Order createDeliveryOrder() {
+        final OrderType orderType = OrderType.DELIVERY;
+        final Menu menu = createMenu();
+        final List<OrderLineItem> orderLineItems = List.of(new OrderLineItem(menu, 1L));
+        final OrderStatus orderStatus = OrderStatus.WAITING;
+        final OrderTable orderTable = new OrderTable(5, true);
+        final String address = "테스트-주소";
+
+        return Order.createDeliveryOrder(orderType, orderLineItems, orderStatus, orderTable, address);
     }
 
     private static Menu createMenu() {

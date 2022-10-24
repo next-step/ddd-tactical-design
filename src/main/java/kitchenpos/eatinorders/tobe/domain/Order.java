@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderType;
+import org.aspectj.weaver.ast.Or;
 
 import java.util.List;
 
@@ -15,6 +16,22 @@ public class Order {
     private final List<OrderLineItem> orderLineItems;
     private OrderStatus orderStatus;
     private OrderTable orderTable;
+    private String deliveryAddress;
+
+    public static Order createDeliveryOrder(final OrderType orderType, final List<OrderLineItem> orderLineItems,
+                                         final OrderStatus orderStatus, final OrderTable orderTable, final String address) {
+        return new Order(orderType, orderLineItems, orderStatus, orderTable, address);
+    }
+    private Order(final OrderType orderType, final List<OrderLineItem> orderLineItems, final OrderStatus orderStatus,
+                  final OrderTable orderTable, final String address) {
+        if (orderType != OrderType.EAT_IN && orderLineItems.stream().anyMatch(o -> o.getQuantity() < 0)) {
+            throw new IllegalArgumentException(CAN_NOT_MINUS_QUANTITY_EXCEPT_EAT_IN);
+        }
+        this.orderType = orderType;
+        this.orderLineItems = orderLineItems;
+        this.orderStatus = orderStatus;
+        this.orderTable = orderTable;
+    }
 
     public Order(final OrderType orderType, final List<OrderLineItem> orderLineItems, final OrderStatus orderStatus, final OrderTable orderTable) {
         if (orderType != OrderType.EAT_IN && orderLineItems.stream().anyMatch(o -> o.getQuantity() < 0)) {
