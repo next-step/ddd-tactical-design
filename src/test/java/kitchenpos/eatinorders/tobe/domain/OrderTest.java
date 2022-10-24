@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class OrderTest {
     void setup() {
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(orderLineItem());
-        createOrder = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable());
+        createOrder = new Order(orderLineItems, TobeFixtures.orderTable());
     }
 
     @Test
@@ -37,7 +36,7 @@ public class OrderTest {
         orderLineItems.add(orderLineItem());
 
         // when
-        Order order = new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable());
+        Order order = new Order(orderLineItems, TobeFixtures.orderTable());
 
         // then
         assertAll(
@@ -45,20 +44,6 @@ public class OrderTest {
                 () -> assertThat(order.type()).isEqualTo(OrderType.EAT_IN),
                 () -> assertThat(order.status()).isEqualTo(OrderStatus.WAITING)
         );
-    }
-
-    @ParameterizedTest
-    @NullSource
-    @DisplayName("매장 주문을 생성한다 - 주문 타입이 null일경우 Exception 발생")
-    void createOrder(OrderType orderType) {
-        // given
-        List<OrderLineItem> orderLineItems = new ArrayList<>();
-        orderLineItems.add(orderLineItem());
-
-        // when
-        // then
-        assertThatThrownBy(() -> new Order(orderType, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable()))
-                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -70,7 +55,7 @@ public class OrderTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, TobeFixtures.orderTable()))
+        assertThatThrownBy(() -> new Order(orderLineItems, TobeFixtures.orderTable()))
                 .isInstanceOf(IllegalStateException.class);
     }
 
@@ -85,7 +70,7 @@ public class OrderTest {
 
         // when
         // then
-        assertThatThrownBy(() -> new Order(OrderType.EAT_IN, OrderStatus.WAITING, orderLineItems, orderTable))
+        assertThatThrownBy(() -> new Order(orderLineItems, orderTable))
                 .isInstanceOf(IllegalStateException.class);
     }
 

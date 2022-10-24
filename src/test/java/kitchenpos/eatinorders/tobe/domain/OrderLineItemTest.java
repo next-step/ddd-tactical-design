@@ -25,22 +25,10 @@ public class OrderLineItemTest {
         long quantity = 2;
 
         // when
-        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity, menu.priceValue());
+        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity);
 
         // then
-        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity, menu.priceValue()));
-    }
-
-    @Test
-    @DisplayName("메뉴의 가격은 판매되는 메뉴 가격과 일치해야 한다.")
-    void createOrderLineItemValidatePrice() {
-        // given
-        long quantity = 2;
-
-        // when
-        // then
-        assertThatThrownBy(() -> new OrderLineItem(menu, quantity, price))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity));
     }
 
     @ParameterizedTest
@@ -48,9 +36,9 @@ public class OrderLineItemTest {
     @ValueSource(ints = {-1, 0, 1})
     void createMenuPrice(int quantity) {
         // when
-        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity, menu.priceValue());
+        OrderLineItem orderLineItem = new OrderLineItem(menu, quantity);
 
         // then
-        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity, menu.priceValue()));
+        assertThat(orderLineItem).isEqualTo(new OrderLineItem(menu, quantity));
     }
 }

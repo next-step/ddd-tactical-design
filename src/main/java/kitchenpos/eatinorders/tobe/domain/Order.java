@@ -49,14 +49,13 @@ public class Order {
     public Order() {
     }
 
-    public Order(OrderType type, OrderStatus status, List<OrderLineItem> orderLineItems, OrderTable orderTable) {
-        validateOrderType(type);
+    public Order(List<OrderLineItem> orderLineItems, OrderTable orderTable) {
         validateOrderLineItems(orderLineItems);
         validateOrderTable(orderTable);
 
         this.id = UUID.randomUUID();
-        this.type = type;
-        this.status = status;
+        this.type = OrderType.EAT_IN;
+        this.status = WAITING;
         this.orderDateTime = LocalDateTime.now();
         this.orderLineItems = orderLineItems;
         this.orderTable = orderTable;
@@ -101,16 +100,8 @@ public class Order {
         this.status = COMPLETED;
     }
 
-    private void validateOrderType(OrderType type) {
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     private void validateOrderLineItems(List<OrderLineItem> orderLineItems) {
-        for (OrderLineItem orderLineItem : orderLineItems) {
-            validateMenuIsDisplayed(orderLineItem);
-        }
+        orderLineItems.forEach(OrderLineItem::validateMenuIsDisplayed);
     }
 
     private void validateOrderTable(OrderTable orderTable) {
@@ -133,12 +124,6 @@ public class Order {
 
     private void statusIsServed() {
         if (this.status != SERVED) {
-            throw new IllegalStateException();
-        }
-    }
-
-    private void validateMenuIsDisplayed(OrderLineItem orderLineItem) {
-        if (!orderLineItem.menuIsDisplayed()) {
             throw new IllegalStateException();
         }
     }

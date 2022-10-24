@@ -24,9 +24,9 @@ public class NumberOfGuestsTest {
     }
 
     @ParameterizedTest
-    @DisplayName("상품 가격이 0보다 작을 경우 Exception을 발생시킨다.")
-    @ValueSource(ints = {-1})
-    void createMenuPrice(int numberOfGuests) {
+    @DisplayName("방문 고객 수가 0보다 작을 경우 Exception을 발생시킨다.")
+    @ValueSource(ints = {-1, -2})
+    void createNumberOfGuests(int numberOfGuests) {
         // when
         // then
         assertThatThrownBy(() -> new NumberOfGuests(numberOfGuests))

@@ -35,16 +35,11 @@ public class OrderLineItem {
     protected OrderLineItem() {
     }
 
-    public OrderLineItem(Menu menu, long quantity, BigDecimal price) {
-        validatePrice(menu, price);
+    public OrderLineItem(Menu menu, long quantity) {
         this.menu = menu;
         this.quantity = quantity;
         this.menuId = menu.id();
-        this.price = price;
-    }
-
-    public Long seq() {
-        return seq;
+        this.price = menu.priceValue();
     }
 
     public Menu menu() {
@@ -55,21 +50,13 @@ public class OrderLineItem {
         return quantity;
     }
 
-    public UUID menuId() {
-        return menuId;
-    }
-
     public BigDecimal price() {
         return price;
     }
 
-    public boolean menuIsDisplayed() {
-        return menu.isDisplayed();
-    }
-
-    private void validatePrice(Menu menu, BigDecimal price) {
-        if (menu.priceValue().compareTo(price) != 0) {
-            throw new IllegalArgumentException();
+    public void validateMenuIsDisplayed() {
+        if (!menu.isDisplayed()) {
+            throw new IllegalStateException();
         }
     }
 
