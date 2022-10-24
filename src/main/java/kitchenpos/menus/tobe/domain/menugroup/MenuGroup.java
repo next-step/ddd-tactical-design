@@ -1,6 +1,4 @@
-package kitchenpos.menus.domain;
-
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,7 +13,8 @@ public class MenuGroup {
     @Embedded
     private MenuGroupName name;
 
-    protected MenuGroup() {}
+    protected MenuGroup() {
+    }
 
     public MenuGroup(UUID uuid, MenuGroupName name) {
         this.id = uuid;

@@ -5,13 +5,13 @@ import org.apache.logging.log4j.util.Strings;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class DisplayedName {
+public class Name {
 
     private String name;
 
-    protected DisplayedName() {}
+    protected Name() {}
 
-    protected DisplayedName(String name, boolean isProfanity) {
+    public Name(String name, boolean isProfanity) {
         validate(name, isProfanity);
         this.name = name;
     }

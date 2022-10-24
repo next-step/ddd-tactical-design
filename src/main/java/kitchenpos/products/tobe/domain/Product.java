@@ -2,28 +2,30 @@ package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Embedded
-    private DisplayedName displayedName;
+    private Name name;
 
     @Embedded
     private Price price;
 
     protected Product() {}
 
-    public Product(DisplayedName displayedName, Price price) {
-        this.displayedName = displayedName;
+    public Product(UUID id, Name name, Price price) {
+        this.id = id;
+        this.name = name;
         this.price = price;
     }
 
-    public Long getId() {
-        return id;
+    public UUID getId() {
+        return this.id;
     }
 
     public void changePrice(BigDecimal price) {
@@ -31,7 +33,11 @@ public class Product {
     }
 
     public Price getPrice() {
-        return price;
+        return this.price;
+    }
+
+    public BigDecimal price() {
+        return this.price.price();
     }
 
 }
