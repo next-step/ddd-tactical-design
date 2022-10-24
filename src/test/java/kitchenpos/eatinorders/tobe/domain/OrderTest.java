@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 - [x] 1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.
 - [x] 주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.
 - [x] 완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.
-- 빈 테이블에는 매장 주문을 등록할 수 없다.
+- [x] 빈 테이블에는 매장 주문을 등록할 수 없다.
 
 포장
 - 포장 주문의 경우 서빙된 주문만 완료할 수 있다.
@@ -106,5 +106,12 @@ class OrderTest {
         eatInOrder.complete();
 
         assertThat(eatInOrder.getOrderTable().isOccupied()).isFalse();
+    }
+
+    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
+    @Test
+    void registerWithEmptyTable() {
+        assertThatCode(() -> createEatInOrder())
+                .doesNotThrowAnyException();
     }
 }
