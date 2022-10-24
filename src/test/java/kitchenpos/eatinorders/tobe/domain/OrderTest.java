@@ -32,8 +32,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 포장
 - [x] 포장 주문의 경우 서빙된 주문만 완료할 수 있다.
-- 1개 이상의 등록된 메뉴로 포장 주문을 등록할 수 있다.
-- 포장 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.
+- [x] 1개 이상의 등록된 메뉴로 포장 주문을 등록할 수 있다.
+- [x] 포장 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.
 배달
 - 1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.
 - 배달 주문을 접수되면 배달 대행사를 호출한다.
@@ -48,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 - 배달 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.
  */
 class OrderTest {
-    @DisplayName("주문 등록")
+    @DisplayName("매장 주문 등록")
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
             "주문 유형이 올바르지 않으면 등록할 수 없다.",
@@ -58,8 +58,19 @@ class OrderTest {
             "매장 주문은 주문 항목의 수량이 0 미만일 수 있다.",
             "빈 테이블에는 매장 주문을 등록할 수 없다."
     })
-    void register(String message) {
+    void registerWithEatIn(String message) {
         assertThatCode(() -> createEatInOrder())
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("포장 주문 등록")
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+            "1개 이상의 등록된 메뉴로 포장 주문을 등록할 수 있다.",
+            "포장 주문의 경우 주문 항목의 수량은 0 이상이어야 한다."
+    })
+    void registerWithTakeOut(String message) {
+        assertThatCode(() -> createTakeOutOrder())
                 .doesNotThrowAnyException();
     }
 
