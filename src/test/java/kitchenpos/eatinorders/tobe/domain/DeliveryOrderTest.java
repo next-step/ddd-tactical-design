@@ -36,7 +36,7 @@ class DeliveryOrderTest {
     @Test
     void startDelivery() {
         final Order deliveryOrder = createDeliveryOrder();
-        deliveryOrder.accept(new FakeKitchenridersClient(), BigDecimal.TEN);
+        deliveryOrder.accept(new FakeKitchenridersClient());
         deliveryOrder.serve();
         deliveryOrder.startDelivery();
 
@@ -47,7 +47,7 @@ class DeliveryOrderTest {
     @Test
     void completeDelivery() {
         final Order deliveryOrder = createDeliveryOrder();
-        deliveryOrder.accept(new FakeKitchenridersClient(), BigDecimal.TEN);
+        deliveryOrder.accept(new FakeKitchenridersClient());
         deliveryOrder.serve();
         deliveryOrder.startDelivery();
 
