@@ -19,7 +19,7 @@ public class OrderPolicy {
         this.menuRepository = menuRepository;
     }
 
-    public void validateOlis(List<OrderLineItem> orderLineItems) {
+    public void validateOrderLineItems(List<OrderLineItem> orderLineItems) {
         List<UUID> menuIds = orderLineItems.stream()
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList());
@@ -35,13 +35,13 @@ public class OrderPolicy {
                 throw new IllegalOrderLineException(NOT_DISPLAYED);
             }
 
-            if (!findMatchingOli(orderLineItems, menu).priceEq(menu)) {
+            if (!findMatchingOrderLineItem(orderLineItems, menu).priceEq(menu)) {
                 throw new IllegalOrderLineException(PRICE_MISMATCH);
             }
         });
     }
 
-    private OrderLineItem findMatchingOli(List<OrderLineItem> orderLineItems, Menu menu) {
+    private OrderLineItem findMatchingOrderLineItem(List<OrderLineItem> orderLineItems, Menu menu) {
         return orderLineItems
                 .stream()
                 .filter(i -> i.getMenuId().equals(menu.getId()))

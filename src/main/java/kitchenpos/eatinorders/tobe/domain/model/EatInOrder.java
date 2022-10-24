@@ -38,7 +38,7 @@ public class EatInOrder extends AbstractOrder {
     }
 
     private void addOrderLineItems(OrderPolicy orderPolicy, OrderLineItem... orderLineItems) {
-        orderPolicy.validateOlis(List.of(orderLineItems));
+        orderPolicy.validateOrderLineItems(List.of(orderLineItems));
         addOrderLineItems(orderLineItems);
     }
 

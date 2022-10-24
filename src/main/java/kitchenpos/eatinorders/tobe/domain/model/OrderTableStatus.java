@@ -10,8 +10,6 @@ import static kitchenpos.eatinorders.tobe.domain.exception.IllegalOrderTableStat
 
 @Embeddable
 public class OrderTableStatus {
-    private static final OrderTableStatus EMPTY_STATUS = new OrderTableStatus(0, false);
-    private static final OrderTableStatus OCCUPIED_STATUS_WITH_ZERO_GUESTS = new OrderTableStatus(0, true);
 
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
@@ -19,7 +17,7 @@ public class OrderTableStatus {
     private boolean occupied;
 
     public static OrderTableStatus ofEmpty() {
-        return EMPTY_STATUS;
+        return new OrderTableStatus(0, false);
     }
 
     protected OrderTableStatus() {
@@ -44,11 +42,11 @@ public class OrderTableStatus {
         if (occupied) {
             throw new IllegalOrderTableStatusException(ALREADY_OCCUPIED);
         }
-        return OCCUPIED_STATUS_WITH_ZERO_GUESTS;
+        return new OrderTableStatus(0, true);
     }
 
     OrderTableStatus clear() {
-        return EMPTY_STATUS;
+        return new OrderTableStatus(0, false);
     }
 
     @Override
