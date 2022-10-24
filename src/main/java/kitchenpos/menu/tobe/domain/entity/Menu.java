@@ -18,14 +18,14 @@ public class Menu {
 
     private final List<MenuProduct> menuProducts;
 
-    private Boolean displayed;
+    private boolean displayed;
 
     private Price price;
 
     public Menu(
         final UUID id,
         final Name name,
-        final Boolean displayed,
+        final boolean displayed,
         final Price price,
         final MenuGroup menuGroup,
         final List<MenuProduct> menuProducts
