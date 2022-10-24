@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.common.name.Name;
 import kitchenpos.common.price.Price;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceCommand;
 import kitchenpos.menu.tobe.domain.entity.Menu;
 import kitchenpos.menu.tobe.domain.entity.MenuGroup;
 import kitchenpos.menu.tobe.domain.repository.MenuGroupRepository;
@@ -72,12 +73,9 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final Price price = request.price();
-        if (Objects.isNull(price)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = menuRepository.findById(menuId)
+    public Menu changePrice(final ChangeMenuPriceCommand command) {
+        final Price price = new Price(command.price);
+        final Menu menu = menuRepository.findById(command.id)
             .orElseThrow(NoSuchElementException::new);
         menu.setPrice(price);
         return menu;

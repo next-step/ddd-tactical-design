@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.application.MenuService;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceCommand;
 import kitchenpos.menu.tobe.domain.entity.Menu;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/menus")
 @RestController
 public class MenuRestController {
+
     private final MenuService menuService;
 
     public MenuRestController(final MenuService menuService) {
@@ -31,8 +33,15 @@ public class MenuRestController {
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
-        return ResponseEntity.ok(menuService.changePrice(menuId, request));
+    public ResponseEntity<Menu> changePrice(
+        @PathVariable final UUID menuId,
+        @RequestBody final Menu request
+    ) {
+        final ChangeMenuPriceCommand command = new ChangeMenuPriceCommand(
+            menuId,
+            request.price().value
+        );
+        return ResponseEntity.ok(menuService.changePrice(command));
     }
 
     @PutMapping("/{menuId}/display")

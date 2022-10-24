@@ -21,6 +21,7 @@ import kitchenpos.common.profanity.FakeProfanityDetectService;
 import kitchenpos.common.profanity.domain.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuGroupRepository;
 import kitchenpos.menu.InMemoryMenuRepository;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceCommand;
 import kitchenpos.menu.tobe.domain.entity.Menu;
 import kitchenpos.menu.tobe.domain.entity.MenuGroup;
 import kitchenpos.menu.tobe.domain.repository.MenuGroupRepository;
@@ -146,9 +147,9 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(
             menu(19_000L, menuProduct(product, 2L))
         ).id;
-        final Menu expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.price()).isEqualTo(expected.price());
+        final ChangeMenuPriceCommand command = changeMenuPriceCommand(menuId, 16_000L);
+        final Menu actual = menuService.changePrice(command);
+        assertThat(actual.price().value).isEqualTo(command.price);
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
@@ -157,8 +158,8 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(
             menu(19_000L, menuProduct(product, 2L))
         ).id;
-        final Menu expected = changePriceRequest(33_000L);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
+        final ChangeMenuPriceCommand command = changeMenuPriceCommand(menuId, 33_000L);
+        assertThatThrownBy(() -> menuService.changePrice(command))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -270,11 +271,20 @@ class MenuServiceTest {
         );
     }
 
-    private Menu changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
+    private ChangeMenuPriceCommand changeMenuPriceCommand(
+        final UUID menuId,
+        final BigDecimal price
+    ) {
+        return new ChangeMenuPriceCommand(
+            menuId,
+            price
+        );
     }
 
-    private Menu changePriceRequest(final BigDecimal price) {
-        return new Menu(null, null, null, new Price(price), null, null);
+    private ChangeMenuPriceCommand changeMenuPriceCommand(
+        final UUID menuId,
+        final long price
+    ) {
+        return this.changeMenuPriceCommand(menuId, BigDecimal.valueOf(price));
     }
 }
