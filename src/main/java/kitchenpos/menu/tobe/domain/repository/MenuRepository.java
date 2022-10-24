@@ -17,5 +17,3 @@ public interface MenuRepository {
 
     List<Menu> findAllByProductId(final UUID productId);
 }
-
-

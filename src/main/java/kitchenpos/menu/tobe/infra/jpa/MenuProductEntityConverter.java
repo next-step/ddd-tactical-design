@@ -25,6 +25,16 @@ public class MenuProductEntityConverter {
             menuProductEntity.quantity = menuProduct.quantity.value;
             return menuProductEntity;
         }
+
+        public List<MenuProductEntity> convert(final List<MenuProduct> menuProducts, final Menu menu) {
+            return menuProducts.stream()
+                .map(menuProduct -> this.convert(menuProduct, menu))
+                .collect(Collectors.toUnmodifiableList());
+        }
+
+        public List<MenuProductEntity> convert(final Menu menu) {
+            return this.convert(menu.menuProducts(), menu);
+        }
     }
 
     @Component

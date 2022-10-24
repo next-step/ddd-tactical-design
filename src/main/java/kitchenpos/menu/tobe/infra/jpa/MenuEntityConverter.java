@@ -4,6 +4,7 @@ import java.util.List;
 import kitchenpos.common.name.NameFactory;
 import kitchenpos.common.price.Price;
 import kitchenpos.menu.tobe.domain.entity.Menu;
+import kitchenpos.menu.tobe.domain.entity.MenuGroup;
 import kitchenpos.menu.tobe.infra.jpa.MenuGroupEntityConverter.MenuGroupEntityToMenuGroupConverter;
 import kitchenpos.menu.tobe.infra.jpa.MenuProductEntityConverter.MenuProductEntityToMenuProductConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class MenuEntityConverter {
 
         public Menu convert(
             final MenuEntity menu,
-            final MenuGroupEntity menuGroup,
+            final MenuGroup menuGroup,
             final List<MenuProductEntity> menuProducts
         ) {
             return new Menu(
@@ -58,8 +59,20 @@ public class MenuEntityConverter {
                 this.nameFactory.create(menu.name),
                 menu.displayed,
                 new Price(menu.price),
-                this.menuGroupEntityToMenuGroupConverter.convert(menuGroup),
+                menuGroup,
                 this.menuProductEntityToMenuProductConverter.convert(menuProducts)
+            );
+        }
+
+        public Menu convert(
+            final MenuEntity menu,
+            final MenuGroupEntity menuGroup,
+            final List<MenuProductEntity> menuProducts
+        ) {
+            return this.convert(
+                menu,
+                this.menuGroupEntityToMenuGroupConverter.convert(menuGroup),
+                menuProducts
             );
         }
     }
