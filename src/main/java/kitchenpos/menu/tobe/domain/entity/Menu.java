@@ -36,6 +36,9 @@ public class Menu {
         this.price = price;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
+        if (!MenuDisplayPolicy.isDisplayable(this)) {
+            throw new IllegalArgumentException("가격이 메뉴 노출 정책에 부합하지 않습니다");
+        }
     }
 
     public boolean displayed() {

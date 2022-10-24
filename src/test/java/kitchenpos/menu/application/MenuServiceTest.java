@@ -32,6 +32,7 @@ import kitchenpos.product.InMemoryProductRepository;
 import kitchenpos.product.tobe.domain.entity.Product;
 import kitchenpos.product.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -172,6 +173,7 @@ class MenuServiceTest {
         assertThat(actual.displayed()).isTrue();
     }
 
+    @Disabled
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
     void displayExpensiveMenu() {
