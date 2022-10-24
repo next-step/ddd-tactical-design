@@ -7,9 +7,9 @@ import kitchenpos.menu.tobe.domain.entity.MenuGroup;
 
 public interface MenuGroupRepository {
 
-    MenuGroup save(MenuGroup menuGroup);
+    MenuGroup save(final MenuGroup menuGroup);
 
-    Optional<MenuGroup> findById(UUID id);
+    Optional<MenuGroup> findById(final UUID id);
 
     List<MenuGroup> findAll();
 }

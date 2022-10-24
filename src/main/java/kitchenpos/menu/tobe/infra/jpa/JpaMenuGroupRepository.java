@@ -22,9 +22,9 @@ public class JpaMenuGroupRepository implements MenuGroupRepository {
 
     @Autowired
     public JpaMenuGroupRepository(
-        JpaMenuGroupDao jpaMenuGroupDao,
-        MenuGroupToMenuGroupEntityConverter menuGroupToMenuGroupEntityConverter,
-        MenuGroupEntityToMenuGroupConverter menuGroupEntityToMenuGroupConverter
+        final JpaMenuGroupDao jpaMenuGroupDao,
+        final MenuGroupToMenuGroupEntityConverter menuGroupToMenuGroupEntityConverter,
+        final MenuGroupEntityToMenuGroupConverter menuGroupEntityToMenuGroupConverter
     ) {
         this.jpaMenuGroupDao = jpaMenuGroupDao;
         this.menuGroupToMenuGroupEntityConverter = menuGroupToMenuGroupEntityConverter;
@@ -32,14 +32,14 @@ public class JpaMenuGroupRepository implements MenuGroupRepository {
     }
 
     @Override
-    public MenuGroup save(MenuGroup menuGroup) {
+    public MenuGroup save(final MenuGroup menuGroup) {
         final MenuGroupEntity menuGroupEntity = this.menuGroupToMenuGroupEntityConverter.convert(menuGroup);
         final MenuGroupEntity result = this.jpaMenuGroupDao.save(menuGroupEntity);
         return this.menuGroupEntityToMenuGroupConverter.convert(result);
     }
 
     @Override
-    public Optional<MenuGroup> findById(UUID id) {
+    public Optional<MenuGroup> findById(final UUID id) {
         final Optional<MenuGroupEntity> result = this.jpaMenuGroupDao.findById(id);
         if (result.isEmpty()) {
             return Optional.empty();
