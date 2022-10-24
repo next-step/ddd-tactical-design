@@ -1,5 +1,8 @@
 package kitchenpos.menu.tobe.infra.jpa;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import kitchenpos.common.price.Price;
 import kitchenpos.menu.tobe.domain.entity.Menu;
 import kitchenpos.menu.tobe.domain.vo.MenuProduct;
@@ -33,6 +36,12 @@ public class MenuProductEntityConverter {
                 new Price(menuProductEntity.price),
                 new MenuProductQuantity(menuProductEntity.quantity)
             );
+        }
+
+        public List<MenuProduct> convert(final Collection<MenuProductEntity> menuProductEntities) {
+            return menuProductEntities.stream()
+                .map(this::convert)
+                .collect(Collectors.toUnmodifiableList());
         }
     }
 }
