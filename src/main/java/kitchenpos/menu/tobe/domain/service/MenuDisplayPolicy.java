@@ -13,10 +13,19 @@ public class MenuDisplayPolicy {
     }
 
     public static boolean isDisplayable(final Menu menu) {
-        final Price total = menu.menuProducts()
+        final Price total = getTotalPrice(menu);
+        return menu.price().compareTo(total) <= 0;
+    }
+
+    public static boolean isDisplayable(final Menu menu, final Price targetPrice) {
+        final Price total = getTotalPrice(menu);
+        return targetPrice.compareTo(total) <= 0;
+    }
+
+    private static Price getTotalPrice(final Menu menu) {
+        return menu.menuProducts()
             .stream()
             .map(MenuProduct::subtotal)
             .reduce(new Price(0), Price::add);
-        return menu.price().compareTo(total) <= 0;
     }
 }

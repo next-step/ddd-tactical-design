@@ -1,7 +1,5 @@
 package kitchenpos.menu;
 
-import static kitchenpos.menu.tobe.domain.vo.MenuGroupFixture.menuGroupVo;
-
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -31,7 +29,7 @@ public class Fixtures {
             nameFactory.create("후라이드+후라이드"),
             displayed,
             new Price(price),
-            menuGroupVo(),
+            menuGroup(),
             Arrays.asList(menuProducts)
         );
     }

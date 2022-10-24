@@ -1,28 +1,34 @@
 package kitchenpos.menu.application;
 
-import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.menu.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
+import kitchenpos.common.name.NameFactory;
+import kitchenpos.common.profanity.FakeProfanityDetectService;
+import kitchenpos.common.profanity.domain.ProfanityDetectService;
 import kitchenpos.menu.InMemoryMenuGroupRepository;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuGroupRepository;
+import kitchenpos.menu.tobe.domain.entity.MenuGroup;
+import kitchenpos.menu.tobe.domain.repository.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 class MenuGroupServiceTest {
+
     private MenuGroupRepository menuGroupRepository;
+
     private MenuGroupService menuGroupService;
+
+    private NameFactory nameFactory;
 
     @BeforeEach
     void setUp() {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
+        final ProfanityDetectService profanityDetectService = new FakeProfanityDetectService();
+        nameFactory = new NameFactory(profanityDetectService);
     }
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
@@ -32,18 +38,9 @@ class MenuGroupServiceTest {
         final MenuGroup actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+            () -> assertThat(actual.id).isNotNull(),
+            () -> assertThat(actual.name).isEqualTo(expected.name)
         );
-    }
-
-    @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
-    @NullAndEmptySource
-    @ParameterizedTest
-    void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -55,8 +52,6 @@ class MenuGroupServiceTest {
     }
 
     private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(null, this.nameFactory.create(name));
     }
 }

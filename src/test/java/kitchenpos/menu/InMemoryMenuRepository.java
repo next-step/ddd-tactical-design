@@ -7,15 +7,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menu.tobe.domain.entity.Menu;
+import kitchenpos.menu.tobe.domain.repository.MenuRepository;
 
 public class InMemoryMenuRepository implements MenuRepository {
+
     private final Map<UUID, Menu> menus = new HashMap<>();
 
     @Override
     public Menu save(final Menu menu) {
-        menus.put(menu.getId(), menu);
+        menus.put(menu.id, menu);
         return menu;
     }
 
@@ -33,7 +34,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
             .stream()
-            .filter(menu -> ids.contains(menu.getId()))
+            .filter(menu -> ids.contains(menu.id))
             .collect(Collectors.toList());
     }
 
@@ -41,7 +42,10 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(final UUID productId) {
         return menus.values()
             .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+            .filter(menu -> menu.menuProducts()
+                .stream()
+                .anyMatch(menuProduct -> menuProduct.productId.equals(productId))
+            )
             .collect(Collectors.toList());
     }
 }

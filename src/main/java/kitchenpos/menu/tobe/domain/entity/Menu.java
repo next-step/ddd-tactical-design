@@ -62,7 +62,7 @@ public class Menu {
     }
 
     public void setPrice(final Price price) {
-        if (!MenuDisplayPolicy.isDisplayable(this)) {
+        if (!MenuDisplayPolicy.isDisplayable(this, price)) {
             throw new IllegalArgumentException("메뉴 노출 정책에 따라 가격을 변경할 수 없습니다");
         }
         this.price = price;
