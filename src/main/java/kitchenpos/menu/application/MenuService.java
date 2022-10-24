@@ -1,116 +1,94 @@
 package kitchenpos.menu.application;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.common.profanity.domain.ProfanityDetectService;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuGroupRepository;
-import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.common.name.Name;
+import kitchenpos.common.name.NameFactory;
+import kitchenpos.common.price.Price;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceCommand;
+import kitchenpos.menu.tobe.application.dto.CreateMenuCommand;
+import kitchenpos.menu.tobe.domain.entity.Menu;
+import kitchenpos.menu.tobe.domain.entity.MenuGroup;
+import kitchenpos.menu.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menu.tobe.domain.repository.MenuRepository;
+import kitchenpos.menu.tobe.domain.vo.MenuProduct;
+import kitchenpos.product.tobe.domain.entity.Product;
+import kitchenpos.product.tobe.domain.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MenuService {
-    private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
-    private final ProfanityDetectService profanityDetectService;
 
+    private final MenuRepository menuRepository;
+
+    private final MenuGroupRepository menuGroupRepository;
+
+    private final ProductRepository productRepository;
+
+    private final NameFactory nameFactory;
+
+    @Autowired
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final ProfanityDetectService profanityDetectService
+        final NameFactory nameFactory
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.profanityDetectService = profanityDetectService;
+        this.nameFactory = nameFactory;
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+    public Menu create(final CreateMenuCommand command) {
+        final Price price = new Price(command.price);
+        final MenuGroup menuGroup = menuGroupRepository.findById(command.menuGroupId)
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<MenuProduct> menuProductRequests = command.menuProducts;
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productRepository.findAllByIdIn(
+        final Map<UUID, Price> productPrices = productRepository.findAllByIdIn(
             menuProductRequests.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList())
+                .map(menuProduct -> menuProduct.productId)
+                .collect(Collectors.toUnmodifiableList())
+        )
+            .stream()
+            .collect(Collectors.toMap(product -> product.id, Product::price));
+        if (productPrices.size() != menuProductRequests.size()) {
+            throw new IllegalArgumentException();
+        }
+        final List<MenuProduct> menuProducts = menuProductRequests.stream()
+            .map(menuProduct -> new MenuProduct(
+                menuProduct.productId,
+                productPrices.get(menuProduct.productId),
+                menuProduct.quantity
+            ))
+            .collect(Collectors.toUnmodifiableList());
+        final Name name = this.nameFactory.create(command.name);
+        final Menu menu = new Menu(
+            UUID.randomUUID(),
+            name,
+            command.displayed,
+            price,
+            menuGroup,
+            menuProducts
         );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || profanityDetectService.profanityIn(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
         return menuRepository.save(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = menuRepository.findById(menuId)
+    public Menu changePrice(final ChangeMenuPriceCommand command) {
+        final Price price = new Price(command.price);
+        final Menu menu = menuRepository.findById(command.id)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
         menu.setPrice(price);
         return menu;
     }
@@ -119,18 +97,7 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.setDisplayed(true);
+        menu.display();
         return menu;
     }
 
@@ -138,7 +105,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.hide();
         return menu;
     }
 

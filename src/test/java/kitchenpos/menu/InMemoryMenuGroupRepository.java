@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuGroupRepository;
+import kitchenpos.menu.tobe.domain.entity.MenuGroup;
+import kitchenpos.menu.tobe.domain.repository.MenuGroupRepository;
 
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {
+
     private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();
 
     @Override
     public MenuGroup save(final MenuGroup menuGroup) {
-        menuGroups.put(menuGroup.getId(), menuGroup);
+        menuGroups.put(menuGroup.id, menuGroup);
         return menuGroup;
     }
 
