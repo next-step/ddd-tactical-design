@@ -65,38 +65,14 @@ public class JpaMenuRepository implements MenuRepository {
         if (menuEntity == null) {
             return Optional.empty();
         }
-        final List<MenuProductEntity> menuProductEntities = this.jpaMenuProductDao.findAllByMenuId(
-            menuEntity.id
-        );
-        final MenuGroupEntity menuGroupEntity = this.jpaMenuGroupDao.findById(
-                menuEntity.menuGroupId
-            )
-            .orElseThrow(() -> new IllegalStateException("MenuGroup을 찾을 수 없습니다."));
-        return Optional.of(this.menuEntityToMenuConverter.convert(
-            menuEntity,
-            menuGroupEntity,
-            menuProductEntities
-        ));
+        return Optional.of(this.getMenuFromMenuEntity(menuEntity));
     }
 
     @Override
     public List<Menu> findAll() {
         return this.jpaMenuDao.findAll()
             .stream()
-            .map(menuEntity -> {
-                final List<MenuProductEntity> menuProductEntities = this.jpaMenuProductDao.findAllByMenuId(
-                    menuEntity.id
-                );
-                final MenuGroupEntity menuGroupEntity = this.jpaMenuGroupDao.findById(
-                        menuEntity.menuGroupId
-                    )
-                    .orElseThrow(() -> new IllegalStateException("MenuGroup을 찾을 수 없습니다."));
-                return this.menuEntityToMenuConverter.convert(
-                    menuEntity,
-                    menuGroupEntity,
-                    menuProductEntities
-                );
-            })
+            .map(this::getMenuFromMenuEntity)
             .collect(Collectors.toUnmodifiableList());
     }
 
@@ -104,20 +80,7 @@ public class JpaMenuRepository implements MenuRepository {
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return this.jpaMenuDao.findAllByIdIn(ids)
             .stream()
-            .map(menuEntity -> {
-                final List<MenuProductEntity> menuProductEntities = this.jpaMenuProductDao.findAllByMenuId(
-                    menuEntity.id
-                );
-                final MenuGroupEntity menuGroupEntity = this.jpaMenuGroupDao.findById(
-                        menuEntity.menuGroupId
-                    )
-                    .orElseThrow(() -> new IllegalStateException("MenuGroup을 찾을 수 없습니다."));
-                return this.menuEntityToMenuConverter.convert(
-                    menuEntity,
-                    menuGroupEntity,
-                    menuProductEntities
-                );
-            })
+            .map(this::getMenuFromMenuEntity)
             .collect(Collectors.toUnmodifiableList());
     }
 
@@ -125,20 +88,22 @@ public class JpaMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(final UUID productId) {
         return this.jpaMenuDao.findAllByProductId(productId)
             .stream()
-            .map(menuEntity -> {
-                final List<MenuProductEntity> menuProductEntities = this.jpaMenuProductDao.findAllByMenuId(
-                    menuEntity.id
-                );
-                final MenuGroupEntity menuGroupEntity = this.jpaMenuGroupDao.findById(
-                        menuEntity.menuGroupId
-                    )
-                    .orElseThrow(() -> new IllegalStateException("MenuGroup을 찾을 수 없습니다."));
-                return this.menuEntityToMenuConverter.convert(
-                    menuEntity,
-                    menuGroupEntity,
-                    menuProductEntities
-                );
-            })
+            .map(this::getMenuFromMenuEntity)
             .collect(Collectors.toUnmodifiableList());
+    }
+
+    private Menu getMenuFromMenuEntity(final MenuEntity menuEntity) {
+        final List<MenuProductEntity> menuProductEntities = this.jpaMenuProductDao.findAllByMenuId(
+            menuEntity.id
+        );
+        final MenuGroupEntity menuGroupEntity = this.jpaMenuGroupDao.findById(
+                menuEntity.menuGroupId
+            )
+            .orElseThrow(() -> new IllegalStateException("MenuGroup을 찾을 수 없습니다."));
+        return this.menuEntityToMenuConverter.convert(
+            menuEntity,
+            menuGroupEntity,
+            menuProductEntities
+        );
     }
 }
