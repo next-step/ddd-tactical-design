@@ -52,7 +52,7 @@ public class Order {
         if (orderStatus != OrderStatus.SERVED) {
             throw new IllegalArgumentException(NOT_ACCEPT_MESSAGE);
         }
-        orderTable.makeEmpty();
         orderStatus = OrderStatus.COMPLETED;
+        orderTable.makeEmpty();
     }
 }
