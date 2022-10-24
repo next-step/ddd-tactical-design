@@ -8,7 +8,7 @@ package kitchenpos.menu.tobe.domain.vo;
  */
 public class MenuProductQuantity {
 
-    final long value;
+    public final long value;
 
     public MenuProductQuantity(final long value) {
         if (value < 1) {
