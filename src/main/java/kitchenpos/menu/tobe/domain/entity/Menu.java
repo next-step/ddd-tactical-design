@@ -6,7 +6,6 @@ import java.util.UUID;
 import kitchenpos.common.name.Name;
 import kitchenpos.common.price.Price;
 import kitchenpos.menu.tobe.domain.service.MenuDisplayPolicy;
-import kitchenpos.menu.tobe.domain.vo.MenuGroup;
 import kitchenpos.menu.tobe.domain.vo.MenuProduct;
 
 public class Menu {
