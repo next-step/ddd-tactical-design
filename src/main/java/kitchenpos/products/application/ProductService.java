@@ -52,11 +52,11 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.menuProducts().menuProducts()) {
+            for (final MenuProduct menuProduct : menu.menuProductList()) {
                 sum = sum.add(
                     menuProduct.product()
                         .priceValue()
-                        .multiply(BigDecimal.valueOf(menuProduct.quantity().quantity()))
+                        .multiply(BigDecimal.valueOf(menuProduct.quantityValue()))
                 );
             }
             if (menu.priceValue().compareTo(sum) > 0) {
