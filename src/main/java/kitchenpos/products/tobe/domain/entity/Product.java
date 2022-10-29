@@ -14,14 +14,15 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductName name;
+    @AttributeOverride(name = "name", column = @Column(name = "name", nullable = false))
+    private ProductName productName;
 
     @Embedded
     private ProductPrice price;
 
-    public Product(ProductName name, ProductPrice price) {
+    public Product(ProductName productName, ProductPrice price) {
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.productName = productName;
         this.price = price;
     }
 
@@ -36,7 +37,7 @@ public class Product {
     }
 
     public ProductName getName() {
-        return name;
+        return productName;
     }
 
     public ProductPrice getPrice() {

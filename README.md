@@ -101,7 +101,7 @@ docker compose -p kitchenpos up -d
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
 | 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 이름 | displayed productName | 음식을 상상하게 만드는 중요한 요소 |
 
 ### 메뉴
 
@@ -113,7 +113,7 @@ docker compose -p kitchenpos up -d
 | 메뉴 그룹  | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
 | 메뉴 상품  | menu product | 메뉴에 속하는 수량이 있는 상품 |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름     | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 이름     | displayed productName | 음식을 상상하게 만드는 중요한 요소 |
 
 ### 매장 주문
 

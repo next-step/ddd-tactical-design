@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductName {
-    @Column(name = "name", nullable = false)
+    @Column()
     private String name;
 
     public ProductName(String name, PurgomalumValidator purgomalumValidator) {

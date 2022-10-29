@@ -2,8 +2,9 @@ package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 import kitchenpos.products.application.FakePurgomalumValidator;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.vo.ProductName;
@@ -31,10 +32,21 @@ public class Fixtures {
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
+        menu.setMenuGroup(legacyMenuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
+    }
+
+    public static kitchenpos.menus.domain.MenuGroup legacyMenuGroup() {
+        return legacyMenuGroup("두마리메뉴");
+    }
+
+    public static kitchenpos.menus.domain.MenuGroup legacyMenuGroup(final String name) {
+        kitchenpos.menus.domain.MenuGroup menuGroup = new kitchenpos.menus.domain.MenuGroup();
+        menuGroup.setId(UUID.randomUUID());
+        menuGroup.setName(name);
+        return menuGroup;
     }
 
     public static MenuGroup menuGroup() {
@@ -42,10 +54,7 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(new MenuGroupName(name));
     }
 
     public static MenuProduct menuProduct() {

@@ -38,11 +38,11 @@ class MenuServiceTest {
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuGroupRepository = new InMemoryLegacyMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumValidator = new FakePurgomalumValidator();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumValidator);
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
+        menuGroupId = menuGroupRepository.save(legacyMenuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
 
