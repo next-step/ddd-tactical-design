@@ -1,14 +1,16 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.IncludedProduct;
+import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
+import kitchenpos.menus.tobe.domain.vo.MenuProductQuantity;
 import kitchenpos.products.application.FakePurgomalumValidator;
 import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.common.domain.vo.Name;
+import kitchenpos.common.domain.vo.Price;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,26 +30,15 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(legacyMenuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+        Price priceVo = new Price(BigDecimal.valueOf(price));
+
+        final Menu menu = new Menu(priceVo, new Name("후라이드+후라이드", new FakePurgomalumValidator()), displayed, menuGroup());
+        for (MenuProduct menuProduct : menuProducts) {
+            menu.getMenuProducts().add(menuProduct);
+        }
         return menu;
     }
 
-    public static kitchenpos.menus.domain.MenuGroup legacyMenuGroup() {
-        return legacyMenuGroup("두마리메뉴");
-    }
-
-    public static kitchenpos.menus.domain.MenuGroup legacyMenuGroup(final String name) {
-        kitchenpos.menus.domain.MenuGroup menuGroup = new kitchenpos.menus.domain.MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
-    }
 
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
@@ -58,19 +49,19 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
-        return menuProduct;
+        return new MenuProduct(new MenuProductQuantity(2L), includedProduct());
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+    public static MenuProduct menuProduct(final IncludedProduct includedProduct, final long quantity) {
+        return new MenuProduct(new MenuProductQuantity(quantity), includedProduct);
+    }
+
+    public static IncludedProduct includedProduct() {
+        return new IncludedProduct(new Price(BigDecimal.valueOf(16_000L)));
+    }
+
+    public static IncludedProduct includedProduct(final long price) {
+        return new IncludedProduct(new Price(BigDecimal.valueOf(price)));
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
@@ -108,7 +99,7 @@ public class Fixtures {
     public static OrderLineItem orderLineItem() {
         final OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
+        orderLineItem.setMenu(new kitchenpos.menus.domain.Menu());
         return orderLineItem;
     }
 
@@ -130,6 +121,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(new ProductName(name, new FakePurgomalumValidator()), new ProductPrice(BigDecimal.valueOf(price)));
+        return new Product(new Name(name, new FakePurgomalumValidator()), new Price(BigDecimal.valueOf(price)));
     }
 }

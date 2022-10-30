@@ -1,17 +1,17 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.common.domain.vo;
 
-import kitchenpos.products.tobe.domain.infra.PurgomalumValidator;
+import kitchenpos.common.domain.infra.PurgomalumValidator;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class Name {
     @Column()
     private String name;
 
-    public ProductName(String name, PurgomalumValidator purgomalumValidator) {
+    public Name(String name, PurgomalumValidator purgomalumValidator) {
         if (Objects.isNull(name) || purgomalumValidator.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
@@ -23,13 +23,13 @@ public class ProductName {
         return name;
     }
 
-    protected ProductName() {}
+    protected Name() {}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
+        Name that = (Name) o;
         return Objects.equals(name, that.name);
     }
 

@@ -14,10 +14,10 @@ public class InMemoryMenuGroupRepository implements MenuGroupRepository {
         return menuGroup;
     }
 
-//    @Override
-//    public Optional<MenuGroup> findById(final UUID id) {
-//        return Optional.ofNullable(menuGroups.get(id));
-//    }
+    @Override
+    public Optional<MenuGroup> findById(final UUID id) {
+        return Optional.ofNullable(menuGroups.get(id));
+    }
 
     @Override
     public List<MenuGroup> findAll() {

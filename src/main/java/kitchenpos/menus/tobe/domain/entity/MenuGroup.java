@@ -5,6 +5,7 @@ import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 import javax.persistence.*;
 import java.util.UUID;
 
+@Table(name = "menu_group")
 @Entity
 public class MenuGroup {
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -12,7 +13,7 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    @AttributeOverride(name = "name", column = @Column(name = "name", nullable = false))
+    @AttributeOverride(name = "name", column = @Column(name = "productName", nullable = false))
     private MenuGroupName name;
 
     public UUID getId() {

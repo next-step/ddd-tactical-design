@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.tobe.domain.infra.PurgomalumValidator;
+import kitchenpos.common.domain.infra.PurgomalumValidator;
 
 import java.util.Arrays;
 import java.util.List;

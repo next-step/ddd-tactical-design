@@ -3,7 +3,7 @@ POST {{host}}/api/order-tables
 Content-Type: application/json
 
 {
-  "productName": "9번"
+  "name": "9번"
 }
 
 ###
