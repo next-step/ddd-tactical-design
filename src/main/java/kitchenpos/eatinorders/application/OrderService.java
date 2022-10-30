@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.LegacyMenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
+    private final LegacyMenuRepository legacyMenuRepository;
     private final OrderTableRepository orderTableRepository;
     private final KitchenridersClient kitchenridersClient;
 
     public OrderService(
         final OrderRepository orderRepository,
-        final MenuRepository menuRepository,
+        final LegacyMenuRepository legacyMenuRepository,
         final OrderTableRepository orderTableRepository,
         final KitchenridersClient kitchenridersClient
     ) {
         this.orderRepository = orderRepository;
-        this.menuRepository = menuRepository;
+        this.legacyMenuRepository = legacyMenuRepository;
         this.orderTableRepository = orderTableRepository;
         this.kitchenridersClient = kitchenridersClient;
     }
@@ -41,7 +41,7 @@ public class OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
+        final List<Menu> menus = legacyMenuRepository.findAllByIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList())
@@ -57,7 +57,7 @@ public class OrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+            final Menu menu = legacyMenuRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();

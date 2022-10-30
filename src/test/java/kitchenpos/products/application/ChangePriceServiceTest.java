@@ -1,8 +1,9 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.LegacyMenuRepository;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,16 +20,16 @@ import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ChangeProductPriceServiceTest {
+class ChangePriceServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ChangeProductPriceService changeProductPriceService;
+    private MenuRepository menuRepository;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        changeProductPriceService = new ChangeProductPriceService(menuRepository, productRepository);
+        changeProductPriceService = new ChangeProductPriceService(productRepository);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
@@ -54,7 +55,7 @@ class ChangeProductPriceServiceTest {
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(includedProduct(product.getPrice().getPrice().longValue()), 2L)));
         BigDecimal price = BigDecimal.valueOf(8_000L);
         changeProductPriceService.changePrice(product.getId(), price);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();

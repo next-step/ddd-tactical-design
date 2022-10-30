@@ -1,45 +1,48 @@
 package kitchenpos.products.tobe.domain.entity;
 
-import kitchenpos.products.tobe.domain.service.ProductMenuPricePolicy;
-import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
+import kitchenpos.common.domain.vo.Name;
+import kitchenpos.common.domain.vo.Price;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
     @Column(name = "id")
     @Id
     private UUID id;
 
     @Embedded
-    private ProductName name;
+    @AttributeOverride(name = "name", column = @Column(name = "productName", nullable = false))
+    private Name name;
 
     @Embedded
-    private ProductPrice price;
+    @AttributeOverride(name = "price", column = @Column(name = "price", nullable = false))
+    private Price price;
 
-    public Product(ProductName name, ProductPrice price) {
+    public Product(Name name, Price price) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
 
-    public void changePrice(ProductPrice price, ProductMenuPricePolicy productMenuPricePolicy) {
+    public void changePrice(Price price) {
         this.price = price;
 
-        productMenuPricePolicy.checkMenuPrice(id);
+        registerEvent(new ProductPriceChangedEvent(id));
     }
 
     public UUID getId() {
         return id;
     }
 
-    public ProductName getName() {
+    public Name getName() {
         return name;
     }
 
-    public ProductPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 

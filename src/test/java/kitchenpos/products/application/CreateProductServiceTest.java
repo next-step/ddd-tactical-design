@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.tobe.domain.infra.PurgomalumValidator;
+import kitchenpos.common.domain.infra.PurgomalumValidator;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;

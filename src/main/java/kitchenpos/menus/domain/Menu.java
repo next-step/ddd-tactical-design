@@ -1,6 +1,6 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.common.domain.vo.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -46,12 +46,12 @@ public class Menu {
     public Menu() {
     }
 
-    public ProductPrice originalPrice() {
+    public Price originalPrice() {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : this.menuProducts) {
             sum = sum.add(menuProduct.totalPrice().getPrice());
         }
-        return new ProductPrice(sum);
+        return new Price(sum);
     }
 
     public boolean isReasonablePrice() {
