@@ -5,19 +5,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity(name = "TobeMenuProduct")
+@Table(name = "menu_product")
 public class MenuProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq")
     private Long seq;
-
+    @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
+    @Column(name = "quantity", nullable = false)
     private int quantity;
-    private long price;
+    @Column(name = "price")
+    private BigDecimal price;
 
     protected MenuProduct() {
     }
@@ -25,11 +30,11 @@ public class MenuProduct {
     public MenuProduct(UUID productId, int quantity, long price) {
         this.productId = productId;
         this.quantity = quantity;
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
     }
 
     long amount() {
-        return price * quantity;
+        return price.longValue() * quantity;
     }
 
     boolean matchProductId(UUID productId) {
@@ -37,7 +42,7 @@ public class MenuProduct {
     }
 
     void updatePrice(long price) {
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
     }
 
     @Override

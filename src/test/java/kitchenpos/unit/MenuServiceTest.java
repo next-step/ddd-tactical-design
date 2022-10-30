@@ -1,6 +1,6 @@
 package kitchenpos.unit;
 
-import kitchenpos.common.ProfanityChecker;
+import kitchenpos.common.Profanity;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -41,7 +41,7 @@ class MenuServiceTest {
     ProductRepository productRepository;
 
     @Mock
-    ProfanityChecker profanityChecker;
+    Profanity profanity;
 
     @InjectMocks
     MenuService menuService;
@@ -128,7 +128,7 @@ class MenuServiceTest {
         when(menuGroupRepository.findById(request.getMenuGroupId())).thenReturn(Optional.of(request.getMenuGroup()));
         when(productRepository.findAllByIdIn(any())).thenReturn(Collections.singletonList(product));
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-        when(profanityChecker.containsProfanity("바보")).thenReturn(true);
+        when(profanity.contains("바보")).thenReturn(true);
 
         // when + then
         assertThatThrownBy(() -> menuService.create(request))

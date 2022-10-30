@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.ProfanityChecker;
+import kitchenpos.common.Profanity;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
@@ -20,12 +20,12 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityChecker purgomalumClient;
+    private final Profanity purgomalumClient;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final ProfanityChecker purgomalumClient
+        final Profanity purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
@@ -39,7 +39,7 @@ public class ProductService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (!StringUtils.hasText(name) || purgomalumClient.containsProfanity(name)) {
+        if (!StringUtils.hasText(name) || purgomalumClient.contains(name)) {
             throw new IllegalArgumentException();
         }
         final Product product = new Product();

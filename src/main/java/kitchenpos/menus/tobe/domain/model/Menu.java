@@ -1,25 +1,30 @@
 package kitchenpos.menus.tobe.domain.model;
 
+import kitchenpos.common.DisplayedName;
 import kitchenpos.menus.tobe.domain.exception.IllegalMenuPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.UUID;
 
 @Entity(name = "TobeMenu")
+@Table(name = "menu")
 public class Menu {
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
     @Embedded
-    private MenuName name;
+    private DisplayedName name;
     @Embedded
     private MenuPrice price;
-    private Long menuGroupId;
+    @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuGroupId;
+    @Column(name = "displayed", nullable = false)
     private boolean displayed;
     @Embedded
     private MenuProducts menuProducts;
@@ -27,15 +32,15 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(UUID id, MenuName name, long price, Long menuGroupId, boolean displayed, MenuProduct... menuProducts) {
+    public Menu(UUID id, DisplayedName name, long price, UUID menuGroupId, boolean displayed, MenuProduct... menuProducts) {
         this(id, name, new MenuPrice(price), menuGroupId, displayed, new MenuProducts(Arrays.asList(menuProducts)));
     }
 
     public Menu(
         UUID id,
-        MenuName name,
+        DisplayedName name,
         MenuPrice price,
-        Long menuGroupId,
+        UUID menuGroupId,
         boolean displayed,
         MenuProducts menuProducts
     ) {
@@ -80,11 +85,15 @@ public class Menu {
         return displayed;
     }
 
+    public boolean containsProduct(UUID productId) {
+        return menuProducts.containsProduct(productId);
+    }
+
     public UUID getId() {
         return id;
     }
 
-    public boolean containsProduct(UUID productId) {
-        return menuProducts.containsProduct(productId);
+    public long getPrice() {
+        return price.getPrice();
     }
 }
