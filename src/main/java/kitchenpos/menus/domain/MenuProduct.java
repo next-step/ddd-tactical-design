@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
+
+import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,9 +16,9 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
