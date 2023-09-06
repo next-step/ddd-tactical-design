@@ -11,7 +11,8 @@ public class Product {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Column(name = "price", nullable = false)
     @Embedded

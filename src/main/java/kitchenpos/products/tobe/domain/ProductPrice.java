@@ -4,6 +4,7 @@ import kitchenpos.products.tobe.exception.message.ProductPriceException;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static kitchenpos.products.tobe.exception.message.ProductErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO;
 
@@ -29,6 +30,19 @@ public class ProductPrice {
     public ProductPrice add(ProductPrice inputPrice) {
         BigDecimal add = price.add(inputPrice.price);
         return new ProductPrice(add);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductPrice that = (ProductPrice) o;
+        return Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(price);
     }
 }
 
