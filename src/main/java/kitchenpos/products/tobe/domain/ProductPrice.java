@@ -1,12 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.exception.message.ProductErrorCode;
 import kitchenpos.products.tobe.exception.message.ProductPriceException;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import static kitchenpos.products.tobe.exception.message.ProductErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO;
 
 @Embeddable
 public class ProductPrice {
@@ -17,8 +17,11 @@ public class ProductPrice {
     }
 
     public ProductPrice(BigDecimal price) {
+        if (price == null) {
+            throw new ProductPriceException(ProductErrorCode.PRICE_IS_NULL);
+        }
         if (isLessThanZero(price)) {
-            throw new ProductPriceException(PRICE_IS_GREATER_THAN_EQUAL_ZERO);
+            throw new ProductPriceException(ProductErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
         }
         this.price = price;
     }
