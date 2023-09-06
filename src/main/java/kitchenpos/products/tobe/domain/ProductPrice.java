@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.exception.message.ProductErrorCode;
-import kitchenpos.products.tobe.exception.message.ProductPriceException;
+import kitchenpos.products.exception.ProductErrorCode;
+import kitchenpos.products.exception.ProductPriceException;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;

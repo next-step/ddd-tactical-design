@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.exception.message;
+package kitchenpos.products.exception;
 
 public class ProductNameException extends RuntimeException {
     private final ProductErrorCode message;

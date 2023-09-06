@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.exception.message.ProductErrorCode;
-import kitchenpos.products.tobe.exception.message.ProductNameException;
+import kitchenpos.products.exception.ProductErrorCode;
+import kitchenpos.products.exception.ProductNameException;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;

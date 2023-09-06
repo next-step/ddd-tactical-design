@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.exception.message;
+package kitchenpos.products.exception;
 
 public enum ProductErrorCode {
 
