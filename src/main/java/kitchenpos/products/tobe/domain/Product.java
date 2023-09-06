@@ -1,6 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -18,4 +22,39 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
+    protected Product() {
+
+    }
+    public Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public static Product of(String name, PurgomalumClient profanityClient, BigDecimal price){
+        return new Product(
+                UUID.randomUUID()
+                , new ProductName(name, profanityClient)
+                , new ProductPrice(price)
+        );
+    }
+
+    public void changePrice(ProductPrice price){
+        this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
