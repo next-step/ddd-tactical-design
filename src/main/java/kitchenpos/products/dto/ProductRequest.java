@@ -1,23 +1,21 @@
 package kitchenpos.products.dto;
 
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.infra.PurgomalumClient;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class ProductRequest {
-    private UUID id;
-
     @NotBlank
     private String name;
-
     @NotEmpty
     @Min(0)
     private BigDecimal price;
 
-    public ProductRequest(UUID id, String name, BigDecimal price) {
-        this.id = id;
+    public ProductRequest(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }
@@ -30,10 +28,7 @@ public class ProductRequest {
         return price;
     }
 
-    public static ProductRequest fromEntity(Product product){
-        return new ProductRequest(
-                product.getId()
-                , product.getNameValue()
-                , product.getPriceValue());
+    public Product toEntity(PurgomalumClient profanityClient){
+        return Product.of(this.name, profanityClient, this.price);
     }
 }
