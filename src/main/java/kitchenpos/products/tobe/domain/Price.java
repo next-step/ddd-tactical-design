@@ -9,22 +9,22 @@ public class Price {
     public Price() {
     }
 
-    public Price(BigDecimal amount) {
+    public Price(Long amount) {
         validateIfAmountIsLessThanZero(amount);
-        this.amount = amount;
+        this.amount = BigDecimal.valueOf(amount);
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void changeAmount(BigDecimal amount) {
+    public void changeAmount(Long amount) {
         validateIfAmountIsLessThanZero(amount);
-        this.amount = amount;
+        this.amount = BigDecimal.valueOf(amount);
     }
 
-    private void validateIfAmountIsLessThanZero(BigDecimal amount) {
-        if (Objects.isNull(amount) || amount.compareTo(BigDecimal.ZERO) < 0) {
+    private void validateIfAmountIsLessThanZero(Long amount) {
+        if (Objects.isNull(amount) || amount.compareTo(0L) < 0) {
             throw new IllegalArgumentException();
         }
     }

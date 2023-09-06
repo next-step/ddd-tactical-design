@@ -3,9 +3,9 @@ package kitchenpos.products.tobe.dto;
 import java.math.BigDecimal;
 
 public class PriceChangeRequestDto {
-    private BigDecimal price;
+    private Long price;
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 }

@@ -24,7 +24,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String displayedName, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public Product(String displayedName, Long price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
         this.displayedName = new DisplayedName(displayedName, purgomalumClient);
         this.price = new Price(price);
@@ -42,7 +42,7 @@ public class Product {
         return price.getAmount();
     }
 
-    public void changePrice(BigDecimal amount) {
+    public void changePrice(Long amount) {
         price.changeAmount(amount);
     };
 

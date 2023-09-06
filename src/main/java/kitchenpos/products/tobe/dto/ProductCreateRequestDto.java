@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 public class ProductCreateRequestDto {
     private String name;
-    private BigDecimal price;
+    private Long price;
 
     public String getName() {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 }
