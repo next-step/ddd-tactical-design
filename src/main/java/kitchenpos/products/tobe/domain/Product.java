@@ -56,11 +56,6 @@ public class Product {
     }
 
 
-    //TODO 2023-09-05 hiblue02 메뉴 도메인 리팩토링 후 지워야 하는 메소드임.
-    public BigDecimal getPrice() {
-        return price.getValue();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
