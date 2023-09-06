@@ -35,6 +35,11 @@ public class ProductPrice {
         return new ProductPrice(add);
     }
 
+    public ProductPrice multiply(long input) {
+        BigDecimal multiply = price.multiply(BigDecimal.valueOf(input));
+        return new ProductPrice(multiply);
+    }
+
     public BigDecimal getValue() {
         return price;
     }
