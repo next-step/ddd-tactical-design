@@ -35,6 +35,10 @@ public class ProductPrice {
         return new ProductPrice(add);
     }
 
+    public BigDecimal getValue() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

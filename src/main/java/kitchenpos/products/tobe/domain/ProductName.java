@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductNameException;
+import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -25,9 +25,12 @@ public class ProductName {
         this.name = name;
     }
 
-
     private boolean isNullAndEmpty(String name) {
         return name == null || name.isBlank();
+    }
+
+    public String getValue() {
+        return name;
     }
 
     @Override

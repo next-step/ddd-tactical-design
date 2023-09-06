@@ -43,6 +43,22 @@ public class Product {
         this.price = price;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getNameValue() {
+        return name.getValue();
+    }
+
+    public BigDecimal getPriceValue(){
+        return price.getValue();
+    }
+
+    public ProductPrice getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
