@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.Fixtures.*;
+import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

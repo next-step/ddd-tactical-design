@@ -157,4 +157,9 @@ public class MenuService {
         }
 
     }
+
+    public Menu findById(UUID menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
+    }
 }

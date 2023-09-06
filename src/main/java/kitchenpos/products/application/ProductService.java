@@ -10,6 +10,7 @@ import kitchenpos.products.tobe.domain.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -37,10 +38,10 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
+    public Product changePrice(final UUID productId, BigDecimal price) {
         Product product = findById(productId);
-        ProductPrice changePrice = new ProductPrice(request.getPrice());
-        product.changePrice(changePrice);
+        ProductPrice productPrice = new ProductPrice(price);
+        product.changePrice(productPrice);
 
         menuService.hideMenuIfMenuPriceGreaterThanProductPrice(productId);
         return product;
