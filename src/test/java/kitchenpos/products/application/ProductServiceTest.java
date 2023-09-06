@@ -57,7 +57,7 @@ class ProductServiceTest {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -89,7 +89,7 @@ class ProductServiceTest {
 
         final Product actual = productService.changePrice(productId, changePrice);
 
-        assertThat(actual.getPrice()).isEqualTo(changePrice);
+        assertThat(actual.getPriceValue()).isEqualTo(changePrice);
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
