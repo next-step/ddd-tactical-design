@@ -55,8 +55,10 @@ public class Product {
         return price.getValue();
     }
 
-    public ProductPrice getPrice() {
-        return price;
+
+    //TODO 2023-09-05 hiblue02 메뉴 도메인 리팩토링 후 지워야 하는 메소드임.
+    public BigDecimal getPrice() {
+        return price.getValue();
     }
 
     @Override

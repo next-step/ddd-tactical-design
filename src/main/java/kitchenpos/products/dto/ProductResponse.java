@@ -5,11 +5,11 @@ import kitchenpos.products.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 
-public class ProductCreateRequestDto {
+public class ProductResponse {
     private String name;
     private BigDecimal price;
 
-    public ProductCreateRequestDto(String name, BigDecimal price) {
+    public ProductResponse(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }

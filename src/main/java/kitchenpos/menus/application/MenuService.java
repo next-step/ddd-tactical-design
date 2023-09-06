@@ -3,6 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,5 +138,23 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    public void hideMenuIfMenuPriceGreaterThanProduct(UUID productId) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        for (final Menu menu : menus) {
+            BigDecimal sum = BigDecimal.ZERO;
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                sum = sum.add(
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                );
+            }
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
+        }
+
     }
 }
