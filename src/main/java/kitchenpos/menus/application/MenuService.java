@@ -140,7 +140,7 @@ public class MenuService {
         return menuRepository.findAll();
     }
 
-    public void hideMenuIfMenuPriceGreaterThanProduct(UUID productId) {
+    public void hideMenuIfMenuPriceGreaterThanProductPrice(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

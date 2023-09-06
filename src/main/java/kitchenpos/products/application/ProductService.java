@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductResponse;
@@ -43,7 +42,7 @@ public class ProductService {
         ProductPrice changePrice = new ProductPrice(request.getPrice());
         product.changePrice(changePrice);
 
-        menuService.hideMenuIfMenuPriceGreaterThanProduct(productId);
+        menuService.hideMenuIfMenuPriceGreaterThanProductPrice(productId);
         return product;
     }
 
