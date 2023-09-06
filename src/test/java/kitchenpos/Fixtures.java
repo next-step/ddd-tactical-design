@@ -118,10 +118,10 @@ public class Fixtures {
     }
 
     public static Product product() {
-        return product("후라이드", 16_000L, purgomalumClient);
+        return product("후라이드", 16_000L);
     }
 
-    public static Product product(final String name, final long price, final PurgomalumClient purgomalumClient) {
+    public static Product product(final String name, final long price) {
         return new Product(name, price, purgomalumClient);
     }
 }
