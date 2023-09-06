@@ -16,7 +16,7 @@ public class Product {
 
     @Column(name = "name", nullable = false)
     @Embedded
-    private ProductName name;
+    private DisplayedName name;
 
     @Column(name = "price", nullable = false)
     @Embedded
@@ -25,7 +25,7 @@ public class Product {
     protected Product() {
 
     }
-    public Product(UUID id, ProductName name, ProductPrice price) {
+    public Product(UUID id, DisplayedName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -34,7 +34,7 @@ public class Product {
     public static Product of(String name, PurgomalumClient profanityClient, BigDecimal price){
         return new Product(
                 UUID.randomUUID()
-                , new ProductName(name, profanityClient)
+                , new DisplayedName(name, profanityClient)
                 , new ProductPrice(price)
         );
     }

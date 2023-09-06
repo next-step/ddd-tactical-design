@@ -8,14 +8,14 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class DisplayedName {
     private String name;
 
-    protected ProductName() {
+    protected DisplayedName() {
 
     }
 
-    public ProductName(String name, PurgomalumClient profanityClient) {
+    public DisplayedName(String name, PurgomalumClient profanityClient) {
         if (isNullAndEmpty(name)) {
             throw new ProductNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
@@ -37,7 +37,7 @@ public class ProductName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
+        DisplayedName that = (DisplayedName) o;
         return Objects.equals(name, that.name);
     }
 
