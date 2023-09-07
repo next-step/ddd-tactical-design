@@ -3,8 +3,8 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +44,7 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.getDisplayedName()).isEqualTo(expected.getDisplayedName()),
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
         );
     }
@@ -113,7 +113,7 @@ class ProductServiceTest {
 
     private Product createProductRequest(final String name, final BigDecimal price) {
         final Product product = new Product();
-        product.setName(name);
+        product.setDisplayedName(name);
         product.setPrice(price);
         return product;
     }

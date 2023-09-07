@@ -3,8 +3,8 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,13 +37,13 @@ public class ProductService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final String name = request.getName();
+        final String name = request.getDisplayedName();
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Product product = new Product();
         product.setId(UUID.randomUUID());
-        product.setName(name);
+        product.setDisplayedName(name);
         product.setPrice(price);
         return productRepository.save(product);
     }

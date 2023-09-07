@@ -1,4 +1,4 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.tobe.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +14,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "displayed_name", nullable = false)
+    private String displayedName;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -31,12 +31,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayedName() {
+        return displayedName;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setDisplayedName(final String displayedName) {
+        this.displayedName = displayedName;
     }
 
     public BigDecimal getPrice() {
