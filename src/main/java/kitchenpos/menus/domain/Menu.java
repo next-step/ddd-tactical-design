@@ -99,4 +99,14 @@ public class Menu {
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
     }
+
+    public void hideIfMenuPriceTooHigher() {
+        BigDecimal sum = menuProducts.stream()
+                .map(it -> it.getProduct().getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (price.compareTo(sum) > 0) {
+            this.displayed = false;
+        }
+    }
 }
