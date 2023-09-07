@@ -1,7 +1,6 @@
 package kitchenpos.products.ui;
 
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
@@ -25,7 +24,7 @@ public class ProductRestController {
     public ResponseEntity<ProductDetailResponse> create(@RequestBody final ProductCreateRequest request) {
         final ProductDetailResponse response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")

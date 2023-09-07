@@ -1,10 +1,9 @@
-package kitchenpos.products.application;
+package kitchenpos.products.tobe.domain;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.application.ProductService;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
@@ -20,23 +19,25 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.menu;
+import static kitchenpos.Fixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
-    private ProductRepository productRepository;
+    private ProductAggregate productAggregate;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productRepository = new InMemoryProductRepository();
+        ProductRepository productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productAggregate = new ProductAggregate(productRepository, purgomalumClient, menuRepository);
+        productService = new ProductService(productAggregate);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -75,7 +76,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productAggregate.create("후라이드", BigDecimal.valueOf(16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
         final ProductDetailResponse actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -86,7 +87,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productAggregate.create("후라이드", BigDecimal.valueOf(16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -95,7 +96,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
+        final Product product = productAggregate.create("후라이드", BigDecimal.valueOf(16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
@@ -104,8 +105,8 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(product("후라이드", 16_000L));
-        productRepository.save(product("양념치킨", 16_000L));
+        productAggregate.create("후라이드", BigDecimal.valueOf(16_000L));
+        productAggregate.create("양념치킨", BigDecimal.valueOf(16_000L));
         final List<ProductDetailResponse> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
