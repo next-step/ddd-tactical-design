@@ -61,6 +61,16 @@ create table product
     primary key (id)
 ) engine = InnoDB;
 
+create table tobe_product
+(
+    id    binary(16)     not null,
+    name  varchar(255)   not null,
+    price decimal(19, 2) not null,
+    currency varchar(255) not null,
+    primary key (id)
+) engine = InnoDB;
+
+
 alter table menu
     add constraint fk_menu_to_menu_group
         foreign key (menu_group_id)
