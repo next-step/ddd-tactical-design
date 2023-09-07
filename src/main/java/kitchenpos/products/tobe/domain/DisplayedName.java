@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.exception.ProductNameException;
+import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Embeddable;
@@ -17,10 +17,10 @@ public class DisplayedName {
 
     public DisplayedName(String name, PurgomalumClient profanityClient) {
         if (isNullAndEmpty(name)) {
-            throw new ProductNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
+            throw new DisplayedNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
         if (profanityClient.containsProfanity(name)) {
-            throw new ProductNameException(ProductErrorCode.NAME_HAS_PROFANITY);
+            throw new DisplayedNameException(ProductErrorCode.NAME_HAS_PROFANITY);
         }
         this.name = name;
     }

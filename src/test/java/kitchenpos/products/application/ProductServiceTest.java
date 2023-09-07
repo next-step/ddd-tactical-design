@@ -5,9 +5,8 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.exception.ProductNameException;
+import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
@@ -78,7 +77,7 @@ class ProductServiceTest {
     void create(final String name) {
         final ProductRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
-                .isInstanceOf(ProductNameException.class);
+                .isInstanceOf(DisplayedNameException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
