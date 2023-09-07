@@ -30,14 +30,21 @@ class ProductPriceTest {
     @Test
     void isGreaterThan1() {
         var price = ProductPrice.of(30_000L);
-        assertThat(price.isGreaterThan(29_999L)).isTrue();
+        assertThat(price.isGreaterThan(ProductPrice.of(29_999L))).isTrue();
     }
 
     @ParameterizedTest
     @ValueSource(longs = {30000, 30001})
     void isGreaterThan2(long value) {
         var price = ProductPrice.of(30_000L);
-        assertThat(price.isGreaterThan(value)).isFalse();
+        assertThat(price.isGreaterThan(ProductPrice.of(value))).isFalse();
+    }
+
+    @Test
+    void addPrice() {
+        var price1 = ProductPrice.of(30_000L);
+        var price2 = ProductPrice.of(10_000L);
+        assertThat(price1.add(price2)).isEqualTo(ProductPrice.of(40_000L));
     }
 
     @Test
