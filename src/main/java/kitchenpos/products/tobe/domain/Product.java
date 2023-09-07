@@ -10,13 +10,13 @@ import java.util.UUID;
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private final UUID id;
+    private UUID id;
 
     @Column(name = "displayed_name", nullable = false)
-    private final String displayedName;
+    private String displayedName;
 
     @Column(name = "price", nullable = false)
-    private final BigDecimal price;
+    private BigDecimal price;
 
 
     public Product(UUID id, String displayedName, BigDecimal price) {
