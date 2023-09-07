@@ -7,6 +7,12 @@ Content-Type: application/json
   "price": 17000
 }
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 201, "Response status is wrong");
+    });
+%}
+
 ###
 PUT {{host}}/api/products/3b528244-34f7-406b-bb7e-690912f66b10/price
 Content-Type: application/json
@@ -15,5 +21,17 @@ Content-Type: application/json
   "price": 18000
 }
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
+
 ###
 GET {{host}}/api/products
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
