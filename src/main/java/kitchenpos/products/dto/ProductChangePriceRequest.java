@@ -3,7 +3,10 @@ package kitchenpos.products.dto;
 import java.math.BigDecimal;
 
 public final class ProductChangePriceRequest {
-    private final BigDecimal price;
+    private BigDecimal price;
+
+    public ProductChangePriceRequest() {
+    }
 
     public ProductChangePriceRequest(BigDecimal price) {
         this.price = price;

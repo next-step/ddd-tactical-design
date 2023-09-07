@@ -35,7 +35,7 @@ public class ProductAggregate {
         Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(ProductPrice.update(productId, price, menuRepository));
-        return productRepository.save(product);
+        return product;
     }
 
     public Optional<Product> findById(UUID productId) {
