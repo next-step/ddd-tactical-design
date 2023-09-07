@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.tobe.domain.vo.ProductDisplayedName;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -18,28 +20,14 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-
     public Product(UUID id, String displayedName, BigDecimal price) {
         this.id = id;
-        this.displayedName = setDisplayedName(displayedName);
-        this.price = setPrice(price);
-    }
-
-    private BigDecimal setPrice(BigDecimal price) {
-
-        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidProductPriceException();
-        }
-
-        return price;
+        this.displayedName = new ProductDisplayedName(displayedName).getDisplayedName();
+        this.price = new ProductPrice(price).getPrice();
     }
 
     public Product changePrice(BigDecimal price) {
         return new Product(this.id, this.displayedName, price);
-    }
-
-    private String setDisplayedName(String name) {
-        return name;
     }
 
     public UUID getId() {

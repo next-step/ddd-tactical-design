@@ -19,25 +19,19 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final MenuRepository menuRepository
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
         final String name = request.getDisplayedName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
         final Product product = new Product(UUID.randomUUID(), name, price);
         return productRepository.save(product);
     }

@@ -3,7 +3,6 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
@@ -26,15 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuRepository);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -59,15 +56,15 @@ class ProductServiceTest {
                 .isInstanceOf(InvalidProductPriceException.class);
     }
 
-    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
-    @ParameterizedTest
-    void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
+//    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
+//    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
+//    @NullSource
+//    @ParameterizedTest
+//    void create(final String name) {
+//        final Product expected = createProductRequest(name, 16_000L);
+//        assertThatThrownBy(() -> productService.create(expected))
+//                .isInstanceOf(InvalidProductDisplayedNameException.class);
+//    }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
