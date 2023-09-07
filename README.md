@@ -160,8 +160,11 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
+- `Product`는 식별자와 `DisplayedName`, `Price`를 가진다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+- `Product`의 가격은 변경 할 수 있다
+  - `Price`는 0이상 이어야 한다
+  - `Product`의 `Price`가 변경되면 `Product`를 포함한 `Menu`들의 `display`가능한 지 확인한다
 
 ### 메뉴
 
