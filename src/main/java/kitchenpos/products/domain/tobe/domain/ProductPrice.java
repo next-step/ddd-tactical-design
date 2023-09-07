@@ -8,6 +8,7 @@ import javax.persistence.Column;
 public class ProductPrice {
     @Column(name = "price", nullable = false)
     private final BigDecimal price;
+    @Column(name = "currency", nullable = false)
     private final String currency;
 
     private ProductPrice(BigDecimal price) {
@@ -52,16 +53,16 @@ public class ProductPrice {
         }
     }
 
-    public boolean isGreaterThan(BigDecimal comparePrice) {
-        return price.compareTo(comparePrice) >= 1;
+    public ProductPrice add(ProductPrice productPrice) {
+        return ProductPrice.of(price.add(productPrice.price));
+    }
+
+    public boolean isGreaterThan(ProductPrice comparePrice) {
+        return price.compareTo(comparePrice.price) >= 1;
     }
 
     public boolean isSamePrice(ProductPrice comparePrice) {
         return this.equals(comparePrice);
-    }
-
-    public boolean isGreaterThan(long price) {
-        return isGreaterThan(BigDecimal.valueOf(price));
     }
 
     public ProductPrice changePrice(BigDecimal newPrice) {
