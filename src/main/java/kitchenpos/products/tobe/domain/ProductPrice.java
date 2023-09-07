@@ -26,6 +26,10 @@ public class ProductPrice {
         this.price = price;
     }
 
+    public ProductPrice(long price) {
+        this(BigDecimal.valueOf(price));
+    }
+
     private boolean isLessThanZero(BigDecimal price) {
         return price.compareTo(BigDecimal.ZERO) < 0;
     }

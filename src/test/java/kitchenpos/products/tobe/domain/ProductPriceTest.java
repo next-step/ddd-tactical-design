@@ -53,21 +53,18 @@ class ProductPriceTest {
     @DisplayName("더하기")
     @Test
     void add() {
-        ProductPrice ten = createProductPrice(10);
-        ProductPrice hundred = createProductPrice(100);
+        ProductPrice ten = new ProductPrice(10);
+        ProductPrice hundred = new ProductPrice(100);
         ProductPrice add = ten.add(hundred);
-        assertThat(add).isEqualTo(createProductPrice(110));
+        assertThat(add).isEqualTo(new ProductPrice(110));
     }
 
     @DisplayName("곱하기")
     @Test
     void multiply() {
-        ProductPrice ten = createProductPrice(10);
+        ProductPrice ten = new ProductPrice(10);
         ProductPrice multiply = ten.multiply(10);
-        assertThat(multiply).isEqualTo(createProductPrice(100));
+        assertThat(multiply).isEqualTo(new ProductPrice(100));
     }
 
-    private ProductPrice createProductPrice(long input) {
-        return new ProductPrice(BigDecimal.valueOf(input));
-    }
 }
