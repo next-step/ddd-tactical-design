@@ -5,6 +5,8 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.dto.ProductCreateRequest;
+import kitchenpos.products.dto.ProductDetailResponse;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
+    public ProductDetailResponse create(final ProductCreateRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -45,7 +47,7 @@ public class ProductService {
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(price);
-        return productRepository.save(product);
+        return toProductDetailResponse(productRepository.save(product));
     }
 
     @Transactional
@@ -77,5 +79,9 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    private ProductDetailResponse toProductDetailResponse(Product product) {
+        return new ProductDetailResponse(product.getId(), product.getName(), product.getPrice());
     }
 }
