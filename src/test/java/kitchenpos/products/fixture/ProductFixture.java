@@ -1,12 +1,12 @@
 package kitchenpos.products.fixture;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 
 public class ProductFixture {
-    private static final PurgomalumClient profanityclient = text -> false;
+    private static final ProfanityClient profanityclient = text -> false;
 
     public static Product product() {
         return product("후라이드", 16_000L);

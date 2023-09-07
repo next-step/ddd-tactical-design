@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.DisplayedNameException;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -15,7 +15,7 @@ public class DisplayedName {
 
     }
 
-    public DisplayedName(String name, PurgomalumClient profanityClient) {
+    public DisplayedName(String name, ProfanityClient profanityClient) {
         if (isNullAndEmpty(name)) {
             throw new DisplayedNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
         }

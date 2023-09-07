@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ public class Product {
         this.price = price;
     }
 
-    public static Product of(String name, PurgomalumClient profanityClient, BigDecimal price){
+    public static Product of(String name, ProfanityClient profanityClient, BigDecimal price){
         return new Product(
                 UUID.randomUUID()
                 , new DisplayedName(name, profanityClient)

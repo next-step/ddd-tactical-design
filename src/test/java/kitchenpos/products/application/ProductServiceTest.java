@@ -8,7 +8,7 @@ import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,19 +31,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuService menuService;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityClient profanityClient;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuService, purgomalumClient);
+        profanityClient = new FakeProfanityClient();
+        productService = new ProductService(productRepository, menuService, profanityClient);
         this.menuService = new MenuService(
                 new InMemoryMenuRepository()
                 , new InMemoryMenuGroupRepository()
                 , productRepository
-                , purgomalumClient
+                , profanityClient
         );
     }
 

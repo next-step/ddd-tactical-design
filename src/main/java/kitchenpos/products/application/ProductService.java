@@ -2,9 +2,8 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import org.springframework.stereotype.Service;
@@ -19,21 +18,21 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuService menuService;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityClient profanityClient;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuService menuService,
-            final PurgomalumClient purgomalumClient
+            final ProfanityClient profanityClient
     ) {
         this.productRepository = productRepository;
         this.menuService = menuService;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityClient = profanityClient;
     }
 
     @Transactional
     public Product create(final ProductRequest request) {
-        Product product = request.toEntity(purgomalumClient);
+        Product product = request.toEntity(profanityClient);
         return productRepository.save(product);
     }
 

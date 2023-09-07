@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeProfanityClient;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,24 +16,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("이름")
 class DisplayedNameTest {
 
-    private PurgomalumClient purgomalumClient;
+    private ProfanityClient profanityClient;
     @BeforeEach
     void setUp(){
-        purgomalumClient = new FakePurgomalumClient();
+        profanityClient = new FakeProfanityClient();
     }
 
     @DisplayName("[성공] 이름을 생성한다.")
     @Test
     void create1() {
         assertThatNoException().isThrownBy(
-                () -> new DisplayedName("표준어", purgomalumClient));
+                () -> new DisplayedName("표준어", profanityClient));
     }
 
     @DisplayName("[실패] 이름에 비속어가 포함될 수 없다.")
     @Test
     void create2() {
         assertThatThrownBy(
-                () -> new DisplayedName("비속어", purgomalumClient))
+                () -> new DisplayedName("비속어", profanityClient))
                 .isInstanceOf(DisplayedNameException.class)
                 .hasMessage(ProductErrorCode.NAME_HAS_PROFANITY.getMessage());
     }
@@ -43,7 +43,7 @@ class DisplayedNameTest {
     @NullAndEmptySource
     void create_test_3(String name) {
         assertThatThrownBy(
-                () -> new DisplayedName(name, purgomalumClient))
+                () -> new DisplayedName(name, profanityClient))
                 .isInstanceOf(DisplayedNameException.class)
                 .hasMessage(ProductErrorCode.NAME_IS_NULL_OR_EMPTY.getMessage());
     }

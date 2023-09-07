@@ -1,6 +1,6 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.validation.constraints.Min;
@@ -28,7 +28,7 @@ public class ProductRequest {
         return price;
     }
 
-    public Product toEntity(PurgomalumClient profanityClient) {
+    public Product toEntity(ProfanityClient profanityClient) {
         return Product.of(this.name, profanityClient, this.price);
     }
 }

@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeProfanityClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class ProductTest {
     @Test
     void create() {
         assertThatNoException().isThrownBy(
-                () -> Product.of(NAME, new FakePurgomalumClient(), BigDecimal.TEN)
+                () -> Product.of(NAME, new FakeProfanityClient(), BigDecimal.TEN)
         );
     }
 
@@ -26,7 +26,7 @@ class ProductTest {
     @Test
     void changePrice1() {
         //given
-        Product product = Product.of(NAME, new FakePurgomalumClient(), BigDecimal.TEN);
+        Product product = Product.of(NAME, new FakeProfanityClient(), BigDecimal.TEN);
         //when
         product.changePrice(new ProductPrice(1000));
         //then
