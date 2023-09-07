@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -51,7 +52,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public ProductDetailResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -73,7 +74,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return toProductDetailResponse(product);
     }
 
     @Transactional(readOnly = true)

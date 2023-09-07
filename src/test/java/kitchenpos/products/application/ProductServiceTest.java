@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -75,8 +76,8 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
+        final ProductChangePriceRequest expected = changePriceRequest(15_000L);
+        final ProductDetailResponse actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -86,7 +87,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
+        final ProductChangePriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -117,13 +118,11 @@ class ProductServiceTest {
         return new ProductCreateRequest(name, price);
     }
 
-    private Product changePriceRequest(final long price) {
+    private ProductChangePriceRequest changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
+    private ProductChangePriceRequest changePriceRequest(final BigDecimal price) {
+        return new ProductChangePriceRequest(price);
     }
 }
