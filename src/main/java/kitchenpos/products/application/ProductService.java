@@ -3,7 +3,6 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -39,10 +37,10 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getPrice();
-
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        Product changePrice = product.changePrice(price);
+
+        Product changePrice = product.changePrice(price, menuRepository.findAllByProductId(productId));
         productRepository.save(product.changePrice(price));
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
@@ -50,8 +48,7 @@ public class ProductService {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
-                        productRepository.findById(menuProduct.getProduct().getId())
-                                .orElseThrow(NoSuchElementException::new)
+                        menuProduct.getProduct()
                                 .getPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );

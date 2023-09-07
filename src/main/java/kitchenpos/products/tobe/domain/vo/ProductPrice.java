@@ -13,6 +13,7 @@ public class ProductPrice {
         }
         this.price = price;
     }
+
     public BigDecimal getPrice() {
         return price;
     }

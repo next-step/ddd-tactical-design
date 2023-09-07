@@ -1,12 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.vo.ProductDisplayedName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public class Product {
@@ -27,6 +29,18 @@ public class Product {
     }
 
     public Product changePrice(BigDecimal price) {
+        return new Product(this.id, this.displayedName, price);
+    }
+
+    public Product changePrice(BigDecimal price, List<Menu> menus) {
+        for (final Menu menu : menus) {
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                if (menuProduct.getProduct().getId().equals(this.id)) {
+                    Product product = menuProduct.getProduct().changePrice(price);
+                    menuProduct.setProduct(product);
+                }
+            }
+        }
         return new Product(this.id, this.displayedName, price);
     }
 
