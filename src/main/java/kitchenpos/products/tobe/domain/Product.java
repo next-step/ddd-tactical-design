@@ -55,6 +55,9 @@ public class Product {
         return price.getValue();
     }
 
+    public ProductPrice getPrice() {
+        return price;
+    }
 
     @Override
     public boolean equals(Object o) {
