@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;

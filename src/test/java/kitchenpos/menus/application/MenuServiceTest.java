@@ -6,7 +6,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakeProfanityClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;

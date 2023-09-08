@@ -4,7 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;

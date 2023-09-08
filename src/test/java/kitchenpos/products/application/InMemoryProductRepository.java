@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.util.*;
