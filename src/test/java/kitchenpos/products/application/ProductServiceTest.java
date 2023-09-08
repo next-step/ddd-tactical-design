@@ -1,13 +1,17 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
+import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductDomainService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.menu;
@@ -27,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private ProductDomainService productDomainService;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
@@ -37,8 +41,12 @@ class ProductServiceTest {
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
         productRepository = new InMemoryProductRepository();
-        productDomainService = new ProductDomainService(productRepository, purgomalumClient, menuRepository);
-        productService = new ProductService(productDomainService, productRepository);
+        productService = new ProductService(
+                productRepository,
+                new ProductDomainService(),
+                purgomalumClient,
+                menuRepository
+        );
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -77,7 +85,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productDomainService.create("후라이드", BigDecimal.valueOf(16_000L)).getId();
+        final UUID productId = productService.create(createProductRequest("후라이드", BigDecimal.valueOf(16_000L))).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
         final ProductDetailResponse actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -88,7 +96,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productDomainService.create("후라이드", BigDecimal.valueOf(16_000L)).getId();
+        final UUID productId = productService.create(createProductRequest("후라이드", BigDecimal.valueOf(16_000L))).getId();
         final ProductChangePriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -97,7 +105,9 @@ class ProductServiceTest {
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
-        final Product product = productDomainService.create("후라이드", BigDecimal.valueOf(16_000L));
+        ProductDetailResponse productDetailResponse = productService.create(createProductRequest("후라이드", BigDecimal.valueOf(16_000L)));
+        final Product product = productRepository.findById(productDetailResponse.getId())
+                .orElseThrow(NoSuchElementException::new);
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
@@ -106,8 +116,8 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productDomainService.create("후라이드", BigDecimal.valueOf(16_000L));
-        productDomainService.create("양념치킨", BigDecimal.valueOf(16_000L));
+        productService.create(createProductRequest("후라이드", BigDecimal.valueOf(16_000L)));
+        productService.create(createProductRequest("양념치킨", BigDecimal.valueOf(16_000L)));
         final List<ProductDetailResponse> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }

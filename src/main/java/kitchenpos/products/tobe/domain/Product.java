@@ -45,14 +45,13 @@ public class Product extends AbstractAggregateRoot<Product> {
         return price.getValue();
     }
 
-    public void changePrice(ProductPrice productPrice) {
+    public boolean changePrice(ProductPrice productPrice) {
         if (this.price.equals(productPrice)) {
-            return;
+            return false;
         }
 
         this.price = productPrice;
-
-        registerEvent(new ProductPriceChangedEvent(this));
+        return true;
     }
 
     @Override

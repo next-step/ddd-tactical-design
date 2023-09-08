@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.infra.FakePurgomalumClient;
+
 import java.math.BigDecimal;
 
 public class FakeProduct extends Product {

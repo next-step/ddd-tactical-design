@@ -1,36 +1,49 @@
 package kitchenpos.products.application;
 
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductDomainService;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    private final ProductDomainService productDomainService;
     private final ProductRepository productRepository;
+    private final ProductDomainService productDomainService;
+    private final PurgomalumClient purgomalumClient;
+    private final MenuRepository menuRepository;
 
-    public ProductService(ProductDomainService productDomainService, ProductRepository productRepository) {
-        this.productDomainService = productDomainService;
+    public ProductService(ProductRepository productRepository, ProductDomainService productDomainService, PurgomalumClient purgomalumClient, MenuRepository menuRepository) {
         this.productRepository = productRepository;
+        this.productDomainService = productDomainService;
+        this.purgomalumClient = purgomalumClient;
+        this.menuRepository = menuRepository;
     }
 
     @Transactional
     public ProductDetailResponse create(final ProductCreateRequest request) {
-        return toProductDetailResponse(productDomainService.create(request.getName(), request.getPrice()));
+        Product product = Product.create(
+                ProductName.create(request.getName(), purgomalumClient),
+                ProductPrice.create(request.getPrice())
+        );
+        return toProductDetailResponse(productRepository.save(product));
     }
 
     @Transactional
     public ProductDetailResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
-        return toProductDetailResponse(productDomainService.changePrice(productId, request.getPrice()));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new);
+        List<Menu> menus = menuRepository.findAllByProductId(productId);
+        return toProductDetailResponse(productDomainService.changePrice(product, request.getPrice(), menus));
     }
 
     @Transactional(readOnly = true)

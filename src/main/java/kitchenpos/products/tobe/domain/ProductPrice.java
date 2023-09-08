@@ -1,14 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
@@ -29,33 +24,13 @@ public final class ProductPrice {
         return productPrice;
     }
 
-    public static ProductPrice update(UUID productId, BigDecimal changedValue, MenuRepository menuRepository) {
+    public static ProductPrice update(BigDecimal changedValue) {
         validateProductPriceIsNull(changedValue);
         validateProductPriceIsNegative(changedValue);
-
-        checkMenuCouldBeDisplayedAfterProductPriceChanged(productId, menuRepository);
 
         ProductPrice productPrice = new ProductPrice();
         productPrice.value = changedValue;
         return productPrice;
-    }
-
-    private static void checkMenuCouldBeDisplayedAfterProductPriceChanged(UUID productId, MenuRepository menuRepository) {
-        List<Menu> menusWhichContainsProduct = menuRepository.findAllByProductId(productId);
-        menusWhichContainsProduct.forEach(menu -> {
-            BigDecimal totalMenuProductPrice = menu.getMenuProducts()
-                    .parallelStream()
-                    .map(menuProduct -> menuProduct.getProduct().getPrice())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            if (isMenuPriceGreaterThanSumOfMenuProducts(menu, totalMenuProductPrice)) {
-                menu.setDisplayed(false);
-            }
-        });
-    }
-
-    private static boolean isMenuPriceGreaterThanSumOfMenuProducts(Menu menu, BigDecimal totalMenuProductPrice) {
-        return menu.getPrice().compareTo(totalMenuProductPrice) > 0;
     }
 
     private static void validateProductPriceIsNegative(BigDecimal value) {
