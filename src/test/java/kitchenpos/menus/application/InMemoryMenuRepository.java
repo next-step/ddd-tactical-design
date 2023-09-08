@@ -1,32 +1,32 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.ToBeMenu;
+import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class InMemoryMenuRepository implements MenuRepository {
-    private final Map<UUID, Menu> menus = new HashMap<>();
+public class InMemoryMenuRepository implements ToBeMenuRepository {
+    private final Map<UUID, ToBeMenu> menus = new HashMap<>();
 
     @Override
-    public Menu save(final Menu menu) {
+    public ToBeMenu save(final ToBeMenu menu) {
         menus.put(menu.getId(), menu);
         return menu;
     }
 
     @Override
-    public Optional<Menu> findById(final UUID id) {
+    public Optional<ToBeMenu> findById(final UUID id) {
         return Optional.ofNullable(menus.get(id));
     }
 
     @Override
-    public List<Menu> findAll() {
+    public List<ToBeMenu> findAll() {
         return new ArrayList<>(menus.values());
     }
 
     @Override
-    public List<Menu> findAllByIdIn(final List<UUID> ids) {
+    public List<ToBeMenu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
             .stream()
             .filter(menu -> ids.contains(menu.getId()))
@@ -34,7 +34,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
-    public List<Menu> findAllByProductId(final UUID productId) {
+    public List<ToBeMenu> findAllByProductId(final UUID productId) {
         return menus.values()
             .stream()
             .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
