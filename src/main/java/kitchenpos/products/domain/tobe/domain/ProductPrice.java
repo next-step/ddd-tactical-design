@@ -1,20 +1,31 @@
 package kitchenpos.products.domain.tobe.domain;
 
+import static kitchenpos.products.domain.tobe.domain.Currency.*;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
+@Embeddable
 public class ProductPrice {
     @Column(name = "price", nullable = false)
-    private final BigDecimal price;
+    private BigDecimal price;
     @Column(name = "currency", nullable = false)
-    private final String currency;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
 
     private ProductPrice(BigDecimal price) {
         validationOfPrice(price);
         this.price = price;
         this.currency = defaultCurrency();
+    }
+
+    public ProductPrice() {
+
     }
 
     public static ProductPrice of(BigDecimal price) {
@@ -38,10 +49,6 @@ public class ProductPrice {
     @Override
     public int hashCode() {
         return Objects.hash(price, currency);
-    }
-
-    private String defaultCurrency() {
-        return "Won";
     }
 
     private void validationOfPrice(BigDecimal price) {
