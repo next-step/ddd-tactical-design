@@ -8,7 +8,7 @@ import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductAggregate;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private ProductAggregate productAggregate;
+    private ProductRepository productRepository;
     private PurgomalumClient purgomalumClient;
     private MenuService menuService;
     private UUID menuGroupId;
@@ -54,11 +54,11 @@ class MenuServiceTest {
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
-        productAggregate = new ProductAggregate(new InMemoryProductRepository(), new FakePurgomalumClient(), menuRepository);
+        productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productAggregate, purgomalumClient);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
-        product = productAggregate.create("후라이드", BigDecimal.valueOf(16_000L));
+        product = productRepository.save(product("후라이드", 16_000L));
     }
 
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

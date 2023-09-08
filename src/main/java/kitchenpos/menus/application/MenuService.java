@@ -3,7 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductAggregate;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,18 +15,13 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductAggregate productAggregate;
+    private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public MenuService(
-            final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
-            final ProductAggregate productAggregate,
-            final PurgomalumClient purgomalumClient
-    ) {
+    public MenuService(MenuRepository menuRepository, MenuGroupRepository menuGroupRepository, ProductRepository productRepository, PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productAggregate = productAggregate;
+        this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -42,7 +37,7 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productAggregate.findAllByIdIn(
+        final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.stream()
                         .map(MenuProduct::getProductId)
                         .collect(Collectors.toList())
@@ -57,7 +52,7 @@ public class MenuService {
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
-            final Product product = productAggregate.findById(menuProductRequest.getProductId())
+            final Product product = productRepository.findById(menuProductRequest.getProductId())
                     .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                     product.getPrice()

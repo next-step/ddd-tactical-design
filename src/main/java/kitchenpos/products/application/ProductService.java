@@ -4,7 +4,8 @@ import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductAggregate;
+import kitchenpos.products.tobe.domain.ProductDomainService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,25 +15,27 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    private final ProductAggregate productAggregate;
+    private final ProductDomainService productDomainService;
+    private final ProductRepository productRepository;
 
-    public ProductService(ProductAggregate productAggregate) {
-        this.productAggregate = productAggregate;
+    public ProductService(ProductDomainService productDomainService, ProductRepository productRepository) {
+        this.productDomainService = productDomainService;
+        this.productRepository = productRepository;
     }
 
     @Transactional
     public ProductDetailResponse create(final ProductCreateRequest request) {
-        return toProductDetailResponse(productAggregate.create(request.getName(), request.getPrice()));
+        return toProductDetailResponse(productDomainService.create(request.getName(), request.getPrice()));
     }
 
     @Transactional
     public ProductDetailResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
-        return toProductDetailResponse(productAggregate.changePrice(productId, request.getPrice()));
+        return toProductDetailResponse(productDomainService.changePrice(productId, request.getPrice()));
     }
 
     @Transactional(readOnly = true)
     public List<ProductDetailResponse> findAll() {
-        return productAggregate.findAll()
+        return productRepository.findAll()
                 .stream()
                 .map(this::toProductDetailResponse)
                 .collect(Collectors.toUnmodifiableList());

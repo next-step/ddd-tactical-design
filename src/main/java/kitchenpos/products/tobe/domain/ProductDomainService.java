@@ -2,22 +2,20 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
-@Component
-public class ProductAggregate {
+@Service
+public class ProductDomainService {
 
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
     private final MenuRepository menuRepository;
 
-    public ProductAggregate(ProductRepository productRepository, PurgomalumClient purgomalumClient, MenuRepository menuRepository) {
+    public ProductDomainService(ProductRepository productRepository, PurgomalumClient purgomalumClient, MenuRepository menuRepository) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
         this.menuRepository = menuRepository;
@@ -36,17 +34,5 @@ public class ProductAggregate {
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(ProductPrice.update(productId, price, menuRepository));
         return product;
-    }
-
-    public Optional<Product> findById(UUID productId) {
-        return productRepository.findById(productId);
-    }
-
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
-
-    public List<Product> findAllByIdIn(List<UUID> productIds) {
-        return productRepository.findAllByIdIn(productIds);
     }
 }
