@@ -15,23 +15,23 @@ public class Product {
 
     @Embedded
     @Column(name = "name", nullable = false)
-    private DisplayedName displayedName;
+    private ProductName productName;
 
     @Embedded
     @Column(name = "price", nullable = false)
-    private Price price;
+    private ProductPrice productPrice;
 
     protected Product() { }
 
     public static Product of(ProductRequest request) {
-        DisplayedName displayedName = new DisplayedName(request.getName());
-        Price price = new Price(request.getPrice());
-        return new Product(displayedName, price);
+        ProductName productName = new ProductName(request.getName());
+        ProductPrice productPrice = new ProductPrice(request.getPrice());
+        return new Product(productName, productPrice);
     }
 
-    public Product(DisplayedName displayedName, Price price) {
-        this.displayedName = displayedName;
-        this.price = price;
+    public Product(ProductName productName, ProductPrice productPrice) {
+        this.productName = productName;
+        this.productPrice = productPrice;
     }
 
     public String getId() {
@@ -39,14 +39,14 @@ public class Product {
     }
 
     public String getName() {
-        return displayedName.value();
+        return productName.value();
     }
 
     public BigDecimal getPrice() {
-        return price.value();
+        return productPrice.value();
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new Price(price);
+        this.productPrice = new ProductPrice(price);
     }
 }
