@@ -26,16 +26,29 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
+        MenuGroup menuGroup = menuGroup();
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
+        menu.setMenuGroup(menuGroup);
+        menu.setMenuGroupId(menuGroup.getId());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
 
+    public static Menu menu(final long price, final boolean displayed, MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        final Menu menu = new Menu();
+        menu.setId(UUID.randomUUID());
+        menu.setName("후라이드+후라이드");
+        menu.setPrice(BigDecimal.valueOf(price));
+        menu.setMenuGroup(menuGroup);
+        menu.setMenuGroupId(menuGroup.getId());
+        menu.setDisplayed(displayed);
+        menu.setMenuProducts(Arrays.asList(menuProducts));
+        return menu;
+    }
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }
@@ -60,6 +73,7 @@ public class Fixtures {
         menuProduct.setSeq(new Random().nextLong());
         menuProduct.setProduct(product);
         menuProduct.setQuantity(quantity);
+        menuProduct.setProductId(product.getId());
         return menuProduct;
     }
 

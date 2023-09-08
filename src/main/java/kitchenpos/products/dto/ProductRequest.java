@@ -19,6 +19,10 @@ public class ProductRequest {
         this.name = name;
         this.price = price;
     }
+    public ProductRequest(String name, long price) {
+        this.name = name;
+        this.price = BigDecimal.valueOf(price);
+    }
 
     public String getName() {
         return name;
@@ -28,7 +32,7 @@ public class ProductRequest {
         return price;
     }
 
-    public Product toEntity(ProfanityClient profanityClient) {
-        return Product.of(this.name, profanityClient, this.price);
+    public Product toEntity() {
+        return Product.of(this.name, this.price);
     }
 }

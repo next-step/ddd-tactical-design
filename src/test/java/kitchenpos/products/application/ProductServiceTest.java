@@ -4,12 +4,15 @@ import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;
-import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.profanity.ProfanityClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +24,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.Fixtures.*;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,26 +33,26 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuService menuService;
+
     private ProfanityClient profanityClient;
     private ProductService productService;
+    private MenuGroupRepository menuGroupRepository;
+    private MenuRepository menuRepository;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
+        menuGroupRepository = new InMemoryMenuGroupRepository();
         profanityClient = new FakeProfanityClient();
+        menuRepository = new InMemoryMenuRepository();
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanityClient);
         productService = new ProductService(productRepository, menuService, profanityClient);
-        this.menuService = new MenuService(
-                new InMemoryMenuRepository()
-                , new InMemoryMenuGroupRepository()
-                , productRepository
-                , profanityClient
-        );
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final ProductRequest expected = createProductRequest("후라이드", 16_000L);
+        final ProductRequest expected = new ProductRequest("후라이드", 16_000L);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -65,7 +67,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final ProductRequest expected = createProductRequest("후라이드", price);
+        final ProductRequest expected = new ProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
                 .isInstanceOf(ProductPriceException.class);
     }
@@ -75,7 +77,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final ProductRequest expected = createProductRequest(name, 16_000L);
+        final ProductRequest expected = new ProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
                 .isInstanceOf(DisplayedNameException.class);
     }
@@ -98,14 +100,16 @@ class ProductServiceTest {
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(ProductPriceException.class);
     }
 
+    // TODO 이 테스트는 메뉴에 있어야 하지 않을까?
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuService.create(menu(19_000L, true, menuProduct(product, 2L)));
+        final MenuGroup menuGroup = menuGroupRepository.save(menuGroup());
+        final Menu menu = menuService.create(menu(19_000L, true, menuGroup, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), BigDecimal.valueOf(8_000L));
         assertThat(menuService.findById(menu.getId()).isDisplayed()).isFalse();
     }
@@ -117,14 +121,6 @@ class ProductServiceTest {
         productRepository.save(product("양념치킨", 16_000L));
         final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
-    }
-
-    private ProductRequest createProductRequest(final String name, final long price) {
-        return new ProductRequest(name, BigDecimal.valueOf(price));
-    }
-
-    private ProductRequest createProductRequest(final String name, BigDecimal price) {
-        return new ProductRequest(name, price);
     }
 
 }

@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
 import kitchenpos.profanity.ProfanityClient;
 
 import javax.persistence.*;
@@ -31,10 +32,10 @@ public class Product {
         this.price = price;
     }
 
-    public static Product of(String name, ProfanityClient profanityClient, BigDecimal price){
+    public static Product of(String name, BigDecimal price){
         return new Product(
                 UUID.randomUUID()
-                , new DisplayedName(name, profanityClient)
+                , new DisplayedName(name)
                 , new ProductPrice(price)
         );
     }
@@ -57,6 +58,10 @@ public class Product {
 
     public ProductPrice getPrice() {
         return price;
+    }
+
+    public DisplayedName getName() {
+        return name;
     }
 
     @Override

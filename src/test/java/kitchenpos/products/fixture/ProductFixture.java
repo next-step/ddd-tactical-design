@@ -13,7 +13,7 @@ public class ProductFixture {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.of(name, profanityclient, BigDecimal.valueOf(price));
+        return Product.of(name, BigDecimal.valueOf(price));
     }
 
 

@@ -18,7 +18,7 @@ class ProductTest {
     @Test
     void create() {
         assertThatNoException().isThrownBy(
-                () -> Product.of(NAME, new FakeProfanityClient(), BigDecimal.TEN)
+                () -> Product.of(NAME, BigDecimal.TEN)
         );
     }
 
@@ -26,7 +26,7 @@ class ProductTest {
     @Test
     void changePrice1() {
         //given
-        Product product = Product.of(NAME, new FakeProfanityClient(), BigDecimal.TEN);
+        Product product = Product.of(NAME, BigDecimal.TEN);
         //when
         product.changePrice(new ProductPrice(1000));
         //then

@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
 import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -20,6 +21,8 @@ public class ProductService {
     private final MenuService menuService;
     private final ProfanityClient profanityClient;
 
+    private final DisplayedNamePolicy displayedNamePolicy;
+
     public ProductService(
             final ProductRepository productRepository,
             final MenuService menuService,
@@ -28,11 +31,13 @@ public class ProductService {
         this.productRepository = productRepository;
         this.menuService = menuService;
         this.profanityClient = profanityClient;
+        this.displayedNamePolicy = new DisplayedNamePolicy(profanityClient);
     }
 
     @Transactional
     public Product create(final ProductRequest request) {
-        Product product = request.toEntity(profanityClient);
+        displayedNamePolicy.validate(request.getName());
+        Product product = request.toEntity();
         return productRepository.save(product);
     }
 
