@@ -1,9 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.exception.DisplayedNameException;
-import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
-
 import javax.persistence.Embeddable;
 import java.util.Objects;
 

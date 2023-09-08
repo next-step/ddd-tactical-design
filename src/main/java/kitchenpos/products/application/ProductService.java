@@ -4,6 +4,7 @@ import kitchenpos.menus.application.MenuService;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
+import kitchenpos.products.tobe.domain.policy.DisplayedNameProfanityPolicy;
 import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -19,19 +20,16 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuService menuService;
-    private final ProfanityClient profanityClient;
-
     private final DisplayedNamePolicy displayedNamePolicy;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuService menuService,
-            final ProfanityClient profanityClient
+            final DisplayedNamePolicy displayedNamePolicy
     ) {
         this.productRepository = productRepository;
         this.menuService = menuService;
-        this.profanityClient = profanityClient;
-        this.displayedNamePolicy = new DisplayedNamePolicy(profanityClient);
+        this.displayedNamePolicy = displayedNamePolicy;
     }
 
     @Transactional

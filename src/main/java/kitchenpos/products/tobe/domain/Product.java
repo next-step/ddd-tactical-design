@@ -1,8 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
-import kitchenpos.profanity.ProfanityClient;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
