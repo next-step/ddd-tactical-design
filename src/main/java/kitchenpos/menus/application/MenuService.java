@@ -1,6 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.*;
+import kitchenpos.products.domain.ChangedPriceApplier;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -60,12 +61,10 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
-                product.getPriceValue()
+                product.getPrice()
                     .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = MenuProduct.of(product.getId(), quantity);
             menuProducts.add(menuProduct);
         }
         if (price.compareTo(sum) > 0) {
@@ -93,14 +92,10 @@ public class MenuService {
         }
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPriceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
+        Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
+                .stream()
+                .collect(Collectors.toMap(Product::getId, p -> p));
+        BigDecimal sum = ChangedPriceApplier.sumMenuProductPrice(productMap, menu);
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
@@ -112,17 +107,10 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPriceValue()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
+        Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
+                .stream()
+                .collect(Collectors.toMap(Product::getId, p -> p));
+        ChangedPriceApplier.checkPrice(productMap, menu);
         menu.setDisplayed(true);
         return menu;
     }

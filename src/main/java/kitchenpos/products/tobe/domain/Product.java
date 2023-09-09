@@ -42,7 +42,7 @@ public class Product {
         return id;
     }
 
-    public BigDecimal getPriceValue() {
+    public BigDecimal getPrice() {
         return price.getPrice();
     }
 
