@@ -27,6 +27,9 @@ public class ToBeMenuProduct {
     @Transient
     private UUID productId;
 
+    public ToBeMenuProduct() {
+    }
+
     public ToBeMenuProduct(ToBeProduct product, long quantity) {
         this.product = product;
         this.quantity = quantity;

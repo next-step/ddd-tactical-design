@@ -2,14 +2,13 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
-public class DisplayedName {
+public class ProductName {
     private String name;
     private final PurgomalumClient purgomalumClient;
 
-    public DisplayedName(String name, PurgomalumClient purgomalumClient) {
+    public ProductName(String name, PurgomalumClient purgomalumClient) {
         this.purgomalumClient = purgomalumClient;
 
         checkDisplayedName(name);

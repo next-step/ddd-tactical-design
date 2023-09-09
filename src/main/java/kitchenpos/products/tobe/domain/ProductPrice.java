@@ -3,10 +3,10 @@ package kitchenpos.products.tobe.domain;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Price {
+public class ProductPrice {
     private BigDecimal price;
 
-    public Price(BigDecimal price){
+    public ProductPrice(BigDecimal price){
         checkPrice(price);
         this.price = price;
     }

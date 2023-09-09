@@ -45,6 +45,9 @@ public class ToBeMenu {
     @Transient
     private UUID menuGroupId;
 
+    public ToBeMenu() {
+    }
+
     public ToBeMenu(long price, boolean displayed, ToBeMenuProduct menuProduct) {
         this.price = BigDecimal.valueOf(price);
         this.displayed = displayed;

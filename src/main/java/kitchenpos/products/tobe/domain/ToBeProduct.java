@@ -15,11 +15,11 @@ public class ToBeProduct {
 
     @Column(name = "displayed name", nullable = false)
     @Embedded
-    private DisplayedName displayedName;
+    private ProductName productName;
 
     @Column(name = "price", nullable = false)
     @Embedded
-    private Price price;
+    private ProductPrice productPrice;
 
     public ToBeProduct() {
 
@@ -27,22 +27,22 @@ public class ToBeProduct {
 
     public ToBeProduct(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName(name, purgomalumClient);
-        this.price = new Price(price);
+        this.productName = new ProductName(name, purgomalumClient);
+        this.productPrice = new ProductPrice(price);
     }
 
     public ToBeProduct(BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName("test", purgomalumClient);
-        this.price = new Price(price);
+        this.productName = new ProductName("test", purgomalumClient);
+        this.productPrice = new ProductPrice(price);
     }
 
     public void changePrice(BigDecimal price){
-        this.price.checkPrice(price);
+        this.productPrice.checkPrice(price);
     }
 
     public void checkDisplayedName(String name){
-        this.displayedName.checkDisplayedName(name);
+        this.productName.checkDisplayedName(name);
 
     }
 
@@ -51,11 +51,11 @@ public class ToBeProduct {
     }
 
     public String getName() {
-        return displayedName.getDisplayedName();
+        return productName.getDisplayedName();
     }
 
     public BigDecimal getPrice() {
-        return price.getPrice();
+        return productPrice.getPrice();
     }
 
 }
