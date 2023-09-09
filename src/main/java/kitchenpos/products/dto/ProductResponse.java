@@ -28,8 +28,8 @@ public class ProductResponse {
 
     public static ProductResponse fromEntity(Product product) {
         return new ProductResponse(
-                product.getId()
-                , product.getNameValue()
-                , product.getPriceValue());
+                product.getId(),
+                product.getNameValue(),
+                product.getPriceValue());
     }
 }

@@ -6,6 +6,7 @@ import java.util.Objects;
 @Embeddable
 public class DisplayedName {
     private String name;
+
     protected DisplayedName() {
 
     }
@@ -13,7 +14,6 @@ public class DisplayedName {
     public DisplayedName(String name) {
         this.name = name;
     }
-
 
 
     public String getValue() {

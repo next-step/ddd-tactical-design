@@ -1,13 +1,11 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
-import kitchenpos.products.tobe.domain.policy.DisplayedNameProfanityPolicy;
-import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

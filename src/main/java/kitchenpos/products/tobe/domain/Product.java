@@ -23,21 +23,22 @@ public class Product {
     protected Product() {
 
     }
+
     public Product(UUID id, DisplayedName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public static Product of(String name, BigDecimal price){
+    public static Product of(String name, BigDecimal price) {
         return new Product(
-                UUID.randomUUID()
-                , new DisplayedName(name)
-                , new ProductPrice(price)
+                UUID.randomUUID(),
+                new DisplayedName(name),
+                new ProductPrice(price)
         );
     }
 
-    public void changePrice(ProductPrice price){
+    public void changePrice(ProductPrice price) {
         this.price = price;
     }
 
@@ -49,7 +50,7 @@ public class Product {
         return name.getValue();
     }
 
-    public BigDecimal getPriceValue(){
+    public BigDecimal getPriceValue() {
         return price.getValue();
     }
 

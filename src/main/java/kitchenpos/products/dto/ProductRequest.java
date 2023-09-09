@@ -1,6 +1,5 @@
 package kitchenpos.products.dto;
 
-import kitchenpos.profanity.ProfanityClient;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.validation.constraints.Min;
@@ -19,6 +18,7 @@ public class ProductRequest {
         this.name = name;
         this.price = price;
     }
+
     public ProductRequest(String name, long price) {
         this.name = name;
         this.price = BigDecimal.valueOf(price);
