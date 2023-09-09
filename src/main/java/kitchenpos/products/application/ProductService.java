@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
+    public Product create(final CreateProductRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();

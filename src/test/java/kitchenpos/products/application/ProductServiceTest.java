@@ -39,7 +39,7 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
+        final CreateProductRequest expected = createProductRequest("후라이드", 16_000L);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -54,7 +54,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Product expected = createProductRequest("후라이드", price);
+        final CreateProductRequest expected = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -64,7 +64,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
+        final CreateProductRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -107,15 +107,12 @@ class ProductServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    private Product createProductRequest(final String name, final long price) {
+    private CreateProductRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
     }
 
-    private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+    private CreateProductRequest createProductRequest(final String name, final BigDecimal price) {
+        return  CreateProductRequest.of(price,name);
     }
 
     private Product changePriceRequest(final long price) {
