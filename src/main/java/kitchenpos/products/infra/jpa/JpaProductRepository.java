@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.jpa;
+package kitchenpos.products.infra.jpa;
 
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
