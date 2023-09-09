@@ -3,9 +3,11 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,10 +19,12 @@ public class ToBeMenu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -28,7 +32,7 @@ public class ToBeMenu {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private MenuGroup menuGroup;
+    private ToBeMenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -49,64 +53,62 @@ public class ToBeMenu {
     }
 
     public ToBeMenu(long price, boolean displayed, ToBeMenuProduct menuProduct) {
-        this.price = BigDecimal.valueOf(price);
+        this.price = new MenuPrice(BigDecimal.valueOf(price));
         this.displayed = displayed;
         this.menuProducts = List.of(menuProduct);
+    }
+
+    public ToBeMenu(String name, long price, ToBeMenuGroup menuGroup, boolean displayed, PurgomalumClient purgomalumClient, List<ToBeMenuProduct> menuProducts) {
+        this.id = UUID.randomUUID();
+        this.name = new MenuName(name,purgomalumClient);
+        this.price = new MenuPrice(BigDecimal.valueOf(price));
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public ToBeMenu(String name, long price, UUID menuGroupId, boolean displayed, PurgomalumClient purgomalumClient, List<ToBeMenuProduct> menuProducts) {
+        this.id = UUID.randomUUID();
+        this.name = new MenuName(name,purgomalumClient);
+        this.price = new MenuPrice(BigDecimal.valueOf(price));
+        this.menuGroupId = menuGroupId;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public void changeDisplayed(final boolean displayed) {
+        this.displayed = displayed;
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = new MenuPrice(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.getMenuName();
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
+    public ToBeMenuGroup getMenuGroup() {
         return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
     public List<ToBeMenuProduct> getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<ToBeMenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 }

@@ -6,8 +6,8 @@ import kitchenpos.eatinorders.tobe.domain.ToBeOrderLineItem;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 
 import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.infra.DefaultPurgomalumClient;
@@ -24,48 +24,34 @@ public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static ToBeMenu menu(PurgomalumClient purgomalumClient) {
-        return menu(19_000L, true, menuProduct(purgomalumClient));
+        return menu(19_000L, true, purgomalumClient, menuProduct(purgomalumClient));
     }
 
-    public static ToBeMenu menu(final long price, final ToBeMenuProduct... menuProducts) {
-        return menu(price, false, menuProducts);
+    public static ToBeMenu menu(final long price,PurgomalumClient purgomalumClient ,final ToBeMenuProduct... menuProducts) {
+        return menu(price, false,purgomalumClient , menuProducts);
     }
 
-    public static ToBeMenu menu(final long price, final boolean displayed, final ToBeMenuProduct... menuProducts) {
-        final ToBeMenu menu = new ToBeMenu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+    public static ToBeMenu menu(final long price, final boolean displayed,PurgomalumClient purgomalumClient ,final ToBeMenuProduct... menuProducts) {
+        final ToBeMenu menu = new ToBeMenu("후라이드+후라이드",price,menuGroup(),displayed,purgomalumClient,Arrays.asList(menuProducts));
         return menu;
     }
 
-    public static MenuGroup menuGroup() {
+    public static ToBeMenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }
 
-    public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+    public static ToBeMenuGroup menuGroup(final String name) {
+        final ToBeMenuGroup menuGroup = new ToBeMenuGroup(name);
         return menuGroup;
     }
 
     public static ToBeMenuProduct menuProduct(PurgomalumClient purgomalumClient) {
-        final ToBeMenuProduct menuProduct = new ToBeMenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product(purgomalumClient));
-        menuProduct.setQuantity(2L);
+        final ToBeMenuProduct menuProduct = new ToBeMenuProduct(new Random().nextLong(),product(purgomalumClient),2L);
         return menuProduct;
     }
 
     public static ToBeMenuProduct menuProduct(final ToBeProduct product, final long quantity) {
-        final ToBeMenuProduct menuProduct = new ToBeMenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
+        final ToBeMenuProduct menuProduct = new ToBeMenuProduct(new Random().nextLong(),product,quantity);
         return menuProduct;
     }
 

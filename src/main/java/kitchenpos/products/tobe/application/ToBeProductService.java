@@ -65,7 +65,7 @@ public class ToBeProductService {
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+                menu.changeDisplayed(false);
             }
         }
         return product;

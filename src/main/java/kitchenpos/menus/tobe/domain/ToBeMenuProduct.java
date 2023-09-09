@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+
 import kitchenpos.products.tobe.domain.ToBeProduct;
 
 import javax.persistence.*;
@@ -15,14 +16,15 @@ public class ToBeMenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private ToBeProduct product;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private MenuProductQuantity quantity;
 
     @Transient
     private UUID productId;
@@ -30,40 +32,34 @@ public class ToBeMenuProduct {
     public ToBeMenuProduct() {
     }
 
+    public ToBeMenuProduct(Long seq, ToBeProduct product, long quantity) {
+        this.seq = seq;
+        this.product = product;
+        this.quantity = new MenuProductQuantity(quantity);
+    }
+
     public ToBeMenuProduct(ToBeProduct product, long quantity) {
         this.product = product;
-        this.quantity = quantity;
+        this.quantity = new MenuProductQuantity(quantity);
     }
 
+    public ToBeMenuProduct(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = new MenuProductQuantity(quantity);
+    }
     public Long getSeq() {
         return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
     }
 
     public ToBeProduct getProduct() {
         return product;
     }
 
-    public void setProduct(final ToBeProduct product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return quantity.getQuantity();
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }
