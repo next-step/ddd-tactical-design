@@ -4,7 +4,11 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
+import kitchenpos.products.tobe.domain.ProductDisplayedName;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -118,10 +122,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setDisplayedName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return new Product(UUID.randomUUID(), ProductDisplayedName.from(name, displayedNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
+    }
+
+    public static DisplayedNamePolicy displayedNamePolicy() {
+        return new DisplayedNamePolicy(new FakePurgomalumClient());
     }
 }

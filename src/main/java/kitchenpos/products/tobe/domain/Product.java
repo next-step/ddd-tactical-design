@@ -1,9 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -14,13 +11,35 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "displayed_name", nullable = false)
-    private String displayedName;
+    @Embedded
+    private ProductDisplayedName productDisplayedName;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
-    public Product() {
+    protected Product() {
+    }
+
+    public Product(ProductPrice price) {
+        this.price = price;
+    }
+
+    public Product(ProductDisplayedName productDisplayedName, ProductPrice price) {
+        this(null, productDisplayedName, price);
+    }
+
+    public Product(UUID id, ProductDisplayedName productDisplayedName, ProductPrice price) {
+        this.id = id;
+        this.productDisplayedName = productDisplayedName;
+        this.price = price;
+    }
+
+    public Product giveId() {
+        return new Product(UUID.randomUUID(), productDisplayedName, price);
+    }
+
+    public void changePrice(ProductPrice price) {
+        this.price = price;
     }
 
     public UUID getId() {
@@ -31,19 +50,11 @@ public class Product {
         this.id = id;
     }
 
-    public String getDisplayedName() {
-        return displayedName;
+    public ProductDisplayedName getDisplayedName() {
+        return productDisplayedName;
     }
 
-    public void setDisplayedName(final String displayedName) {
-        this.displayedName = displayedName;
-    }
-
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }

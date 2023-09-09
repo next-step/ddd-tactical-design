@@ -3,71 +3,60 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.ui.dto.ProductChangePriceRequest;
+import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final DisplayedNamePolicy displayedNamePolicy;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            ProductRepository productRepository,
+            MenuRepository menuRepository,
+            DisplayedNamePolicy displayedNamePolicy
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.displayedNamePolicy = displayedNamePolicy;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getDisplayedName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setDisplayedName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public Product create(final ProductCreateRequest request) {
+        Product product = request.toProduct(displayedNamePolicy);
+        Product productWithId = product.giveId();
+        return productRepository.save(productWithId);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
+        final ProductPrice price = ProductPrice.from(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
+            ProductPrice sum = ProductPrice.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                     menuProduct.getProduct()
                         .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        .multiplyQuantity(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
-            if (menu.getPrice().compareTo(sum) > 0) {
+            if (menu.getPrice().compareTo(sum.getValue()) > 0) {
                 menu.setDisplayed(false);
             }
         }
