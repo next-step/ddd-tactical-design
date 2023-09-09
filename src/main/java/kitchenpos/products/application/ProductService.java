@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
@@ -12,7 +11,6 @@ import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -48,17 +46,7 @@ public class ProductService {
         product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
-            ProductPrice sum = ProductPrice.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiplyQuantity(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum.getValue()) > 0) {
-                menu.setDisplayed(false);
-            }
+            menu.changeMenuProductPrice(product);
         }
         return product;
     }
