@@ -35,10 +35,10 @@ public class ToBeProduct {
 
     private void validationOfName(String name, boolean containsProfanity) {
         if (name == "" || Objects.isNull(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("상품 이름은 필수로 입력되야 합니다.");
         }
         if (containsProfanity) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("상품 이름에 비속어가 포함되어 있습니다.");
         }
     }
 

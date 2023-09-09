@@ -53,10 +53,10 @@ public class ProductPrice {
 
     private void validationOfPrice(BigDecimal price) {
         if (price == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("상품의 가격은 필수로 입력해야 합니다.");
         }
         if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(" 상품의 가격은 0원 이상이어야 합니다.");
         }
     }
 
