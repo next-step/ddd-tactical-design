@@ -46,10 +46,6 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public ProductDisplayedName getDisplayedName() {
         return productDisplayedName;
     }
