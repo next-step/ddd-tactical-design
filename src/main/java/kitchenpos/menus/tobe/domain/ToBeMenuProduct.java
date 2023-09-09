@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-
 import kitchenpos.products.tobe.domain.ToBeProduct;
 
 import javax.persistence.*;
@@ -50,6 +49,7 @@ public class ToBeMenuProduct {
     public Long getSeq() {
         return seq;
     }
+
 
     public ToBeProduct getProduct() {
         return product;

@@ -8,6 +8,7 @@ import kitchenpos.products.infra.PurgomalumClient;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class ToBeMenu {
     @Embedded
     private MenuPrice price;
 
+
     @ManyToOne(optional = false)
     @JoinColumn(
         name = "menu_group_id",
@@ -33,6 +35,7 @@ public class ToBeMenu {
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private ToBeMenuGroup menuGroup;
+
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -54,6 +57,7 @@ public class ToBeMenu {
 
     public ToBeMenu(long price, boolean displayed, ToBeMenuProduct menuProduct) {
         this.price = new MenuPrice(BigDecimal.valueOf(price));
+
         this.displayed = displayed;
         this.menuProducts = List.of(menuProduct);
     }
@@ -103,6 +107,7 @@ public class ToBeMenu {
     public boolean isDisplayed() {
         return displayed;
     }
+
 
     public List<ToBeMenuProduct> getMenuProducts() {
         return menuProducts;
