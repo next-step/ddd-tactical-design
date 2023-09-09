@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,9 +73,9 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+        final ChangeProductPriceRequest request = changePriceRequest(15_000L);
+        final Product actual = productService.changePrice(request);
+        assertThat(actual.getPrice()).isEqualTo(request.getPrice());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -84,8 +84,8 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
+        final ChangeProductPriceRequest request = changePriceRequest(price);
+        assertThatThrownBy(() -> productService.changePrice(request))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -94,7 +94,7 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        productService.changePrice(changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -115,13 +115,11 @@ class ProductServiceTest {
         return  CreateProductRequest.of(price,name);
     }
 
-    private Product changePriceRequest(final long price) {
+    private ChangeProductPriceRequest changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
+    private ChangeProductPriceRequest changePriceRequest(final BigDecimal price) {
+        return ChangeProductPriceRequest.of(price);
     }
 }
