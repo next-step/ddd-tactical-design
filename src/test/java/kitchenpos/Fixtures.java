@@ -4,13 +4,15 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+
+import static kitchenpos.products.fixture.ProductFixture.product;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -24,11 +26,25 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
+        MenuGroup menuGroup = menuGroup();
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
+        menu.setMenuGroup(menuGroup);
+        menu.setMenuGroupId(menuGroup.getId());
+        menu.setDisplayed(displayed);
+        menu.setMenuProducts(Arrays.asList(menuProducts));
+        return menu;
+    }
+
+    public static Menu menu(final long price, final boolean displayed, MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        final Menu menu = new Menu();
+        menu.setId(UUID.randomUUID());
+        menu.setName("후라이드+후라이드");
+        menu.setPrice(BigDecimal.valueOf(price));
+        menu.setMenuGroup(menuGroup);
+        menu.setMenuGroupId(menuGroup.getId());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
@@ -58,6 +74,7 @@ public class Fixtures {
         menuProduct.setSeq(new Random().nextLong());
         menuProduct.setProduct(product);
         menuProduct.setQuantity(quantity);
+        menuProduct.setProductId(product.getId());
         return menuProduct;
     }
 
@@ -113,15 +130,4 @@ public class Fixtures {
         return orderTable;
     }
 
-    public static Product product() {
-        return product("후라이드", 16_000L);
-    }
-
-    public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
-    }
 }
