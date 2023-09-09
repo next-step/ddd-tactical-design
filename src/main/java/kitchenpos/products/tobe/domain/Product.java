@@ -29,19 +29,8 @@ public class Product {
     }
 
     public Product changePrice(BigDecimal price) {
-        return new Product(this.id, this.displayedName, price);
-    }
-
-    public Product changePrice(BigDecimal price, List<Menu> menus) {
-        menus.stream()
-                .flatMap(menu -> menu.getMenuProducts().stream())
-                .filter(menuProduct -> menuProduct.getProduct().getId().equals(this.id))
-                .forEach(menuProduct -> {
-                    Product product = menuProduct.getProduct().changePrice(price);
-                    menuProduct.setProduct(product);
-                });
-
-        return new Product(this.id, this.displayedName, price);
+        this.price = price;
+        return this;
     }
 
     public UUID getId() {

@@ -36,12 +36,11 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
 
-        Product changePrice = product.changePrice(price, menuRepository.findAllByProductId(productId));
-        productRepository.save(product.changePrice(price));
+        Product changePrice = product.changePrice(request.getPrice());
+        productRepository.save(changePrice);
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
