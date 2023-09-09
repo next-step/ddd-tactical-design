@@ -15,7 +15,7 @@ public class Price {
     protected Price() {}
 
     private Price(BigDecimal price) {
-        if (price.intValue() < 0) {
+        if (price == null || price.intValue() < 0) {
             throw new IllegalArgumentException(PRODUCT_PRICE_MORE_ZERO);
         }
         this.price = price;

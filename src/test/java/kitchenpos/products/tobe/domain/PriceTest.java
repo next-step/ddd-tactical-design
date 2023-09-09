@@ -18,7 +18,7 @@ class PriceTest {
     @Test
     void create() {
         Price price = Price.of(BigDecimal.valueOf(1));
-        assertThat(price.getPrice()).isEqualTo(1);
+        assertThat(price.getPrice()).isEqualTo(BigDecimal.valueOf(1));
     }
 
     @DisplayName("가격은 0 보다 작으면 예외가 발생한다.")

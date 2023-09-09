@@ -45,7 +45,7 @@ class ProductServiceTest {
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+            () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -73,18 +73,18 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequest request = changePriceRequest(15_000L);
+        final ChangeProductPriceRequest request = changePriceRequest(productId, 15_000L);
         final Product actual = productService.changePrice(request);
-        assertThat(actual.getPrice()).isEqualTo(request.getPrice());
+        assertThat(actual.getPriceValue()).isEqualTo(request.getPrice());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
-    void changePrice(final BigDecimal price) {
+    void changePrice(final Long price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequest request = changePriceRequest(price);
+        final ChangeProductPriceRequest request = changePriceRequest(productId, price);
         assertThatThrownBy(() -> productService.changePrice(request))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -94,7 +94,7 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(changePriceRequest(8_000L));
+        productService.changePrice(changePriceRequest(product.getId(), 8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -115,11 +115,10 @@ class ProductServiceTest {
         return  CreateProductRequest.of(price,name);
     }
 
-    private ChangeProductPriceRequest changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private ChangeProductPriceRequest changePriceRequest(final BigDecimal price) {
-        return ChangeProductPriceRequest.of(price);
+    private ChangeProductPriceRequest changePriceRequest(UUID productId, Long price) {
+        if (price == null) {
+            return ChangeProductPriceRequest.of(productId, null);
+        }
+        return ChangeProductPriceRequest.of(productId, BigDecimal.valueOf(price));
     }
 }
