@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -30,10 +32,10 @@ public class Product {
         this.price = price;
     }
 
-    public static Product of(String name, BigDecimal price) {
+    public static Product of(String name, BigDecimal price, ProfanityPolicy profanityPolicy) {
         return new Product(
                 UUID.randomUUID(),
-                new DisplayedName(name),
+                new DisplayedName(name, profanityPolicy),
                 new ProductPrice(price)
         );
     }

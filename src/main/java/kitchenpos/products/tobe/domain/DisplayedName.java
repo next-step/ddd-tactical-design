@@ -1,5 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.exception.DisplayedNameException;
+import kitchenpos.products.exception.ProductErrorCode;
+import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
@@ -11,10 +15,24 @@ public class DisplayedName {
 
     }
 
-    public DisplayedName(String name) {
+    public DisplayedName(String name, ProfanityPolicy profanityPolicy) {
+        validate(name, profanityPolicy);
         this.name = name;
     }
 
+    private void validate(String text, ProfanityPolicy profanityPolicy) {
+        if (isNullAndEmpty(text)) {
+            throw new DisplayedNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
+        }
+
+        if (profanityPolicy.containsProfanity(text)) {
+            throw new DisplayedNameException(ProductErrorCode.NAME_HAS_PROFANITY);
+        }
+    }
+
+    private boolean isNullAndEmpty(String name) {
+        return name == null || name.isBlank();
+    }
 
     public String getValue() {
         return name;

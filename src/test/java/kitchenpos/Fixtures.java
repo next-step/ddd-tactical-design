@@ -49,6 +49,7 @@ public class Fixtures {
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
+
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }

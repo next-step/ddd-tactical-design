@@ -12,8 +12,7 @@ import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.policy.DisplayedNameProfanityPolicy;
-import kitchenpos.profanity.ProfanityClient;
+import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuService menuService;
 
-    private ProfanityClient profanityClient;
+    private ProfanityPolicy profanityPolicy;
     private ProductService productService;
     private MenuGroupRepository menuGroupRepository;
     private MenuRepository menuRepository;
@@ -44,10 +43,10 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
-        profanityClient = new FakeProfanityClient();
+        profanityPolicy = new FakeProfanityPolicy();
         menuRepository = new InMemoryMenuRepository();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanityClient);
-        productService = new ProductService(productRepository, menuService, new DisplayedNameProfanityPolicy(profanityClient));
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanityPolicy);
+        productService = new ProductService(productRepository, menuService, profanityPolicy);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

@@ -5,7 +5,7 @@ import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.policy.DisplayedNamePolicy;
+import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +18,20 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuService menuService;
-    private final DisplayedNamePolicy displayedNamePolicy;
+    private final ProfanityPolicy profanityPolicy;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuService menuService,
-            final DisplayedNamePolicy displayedNamePolicy
-    ) {
+            final ProfanityPolicy profanityPolicy) {
         this.productRepository = productRepository;
         this.menuService = menuService;
-        this.displayedNamePolicy = displayedNamePolicy;
+        this.profanityPolicy = profanityPolicy;
     }
 
     @Transactional
     public Product create(final ProductRequest request) {
-        displayedNamePolicy.validate(request.getName());
-        Product product = request.toEntity();
+        Product product = request.toEntity(profanityPolicy);
         return productRepository.save(product);
     }
 
