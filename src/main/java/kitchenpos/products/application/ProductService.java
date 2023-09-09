@@ -2,7 +2,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.ChangedPriceApplier;
+import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
@@ -44,7 +44,7 @@ public class ProductService {
         final Product product = findProductById(request);
         final List<Menu> menus = menuRepository.findAllByProductId(request.getId());
         Map<UUID, Product> productMap = findProductInMenus(menus);
-        ChangedPriceApplier.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
+        MenuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
         return product;
     }
 

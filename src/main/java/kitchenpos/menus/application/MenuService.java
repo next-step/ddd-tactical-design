@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.ChangedPriceApplier;
+import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -95,7 +95,7 @@ public class MenuService {
         Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
                 .stream()
                 .collect(Collectors.toMap(Product::getId, p -> p));
-        BigDecimal sum = ChangedPriceApplier.sumMenuProductPrice(productMap, menu);
+        BigDecimal sum = MenuProductPriceHandler.sumMenuProductPrice(productMap, menu);
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
@@ -110,7 +110,7 @@ public class MenuService {
         Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
                 .stream()
                 .collect(Collectors.toMap(Product::getId, p -> p));
-        ChangedPriceApplier.checkPrice(productMap, menu);
+        MenuProductPriceHandler.checkPrice(productMap, menu);
         menu.setDisplayed(true);
         return menu;
     }

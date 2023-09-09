@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ChangedPriceApplier {
+public class MenuProductPriceHandler {
     public static void hideMenuDisplayMenuPriceGreaterThanSum(Map<UUID, Product> productMap, List<Menu> menus) {
         for (final Menu menu : menus) {
             BigDecimal sum = sumMenuProductPrice(productMap, menu);
