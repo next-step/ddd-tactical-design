@@ -5,11 +5,11 @@ import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.UpdateProductPort;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
-import kitchenpos.profanity.infra.FakePurgomalumClient;
+import kitchenpos.profanity.application.port.out.FakeProfanityFilterPort;
 import kitchenpos.menu.domain.InMemoryMenuRepository;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.adapter.out.persistence.ProductEntity;
-import kitchenpos.profanity.infra.PurgomalumClient;
+import kitchenpos.profanity.application.port.out.ProfanityFilterPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityFilterPort profanityFilterPort;
     private LoadProductPort loadProductPort;
     private UpdateProductPort updateProductPort;
     private ProductService productService;
@@ -37,10 +37,10 @@ class ProductServiceTest {
     void setUp() {
         final ProductOutPortCatalog productOutPortCatalog = new ProductOutPortCatalog();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        profanityFilterPort = new FakeProfanityFilterPort();
         loadProductPort = productOutPortCatalog.loadProductPort();
         updateProductPort = productOutPortCatalog.updateProductPort();
-        productService = new ProductService(loadProductPort, updateProductPort, menuRepository, purgomalumClient);
+        productService = new ProductService(loadProductPort, updateProductPort, menuRepository, profanityFilterPort);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

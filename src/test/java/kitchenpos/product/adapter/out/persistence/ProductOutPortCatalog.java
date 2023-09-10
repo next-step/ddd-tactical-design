@@ -2,7 +2,6 @@ package kitchenpos.product.adapter.out.persistence;
 
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.UpdateProductPort;
-import kitchenpos.product.domain.InMemoryProductRepository;
 
 public class ProductOutPortCatalog {
 

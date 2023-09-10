@@ -8,7 +8,7 @@ import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.UpdateProductPort;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
-import kitchenpos.profanity.infra.PurgomalumClient;
+import kitchenpos.profanity.application.port.out.ProfanityFilterPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,24 +22,23 @@ class ProductService implements ProductUseCase {
     private final UpdateProductPort updateProductPort;
     // TODO: MenuRepository 참조 제거
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityFilterPort profanityFilterPort;
 
-    public ProductService(LoadProductPort loadProductPort, UpdateProductPort updateProductPort, MenuRepository menuRepository, PurgomalumClient purgomalumClient) {
+    public ProductService(LoadProductPort loadProductPort, UpdateProductPort updateProductPort, MenuRepository menuRepository, ProfanityFilterPort profanityFilterPort) {
         this.loadProductPort = loadProductPort;
         this.updateProductPort = updateProductPort;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityFilterPort = profanityFilterPort;
     }
 
     @Transactional
     public Product create(final Product request) {
         final String name = request.getName();
-        if (purgomalumClient.containsProfanity(name)) {
+        if (profanityFilterPort.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
 
-        updateProductPort.updateProduct(request);
-        return request;
+        return updateProductPort.updateProduct(request);
     }
 
     @Transactional
@@ -65,7 +64,8 @@ class ProductService implements ProductUseCase {
                 }
             }
         }
-        return product;
+
+        return updateProductPort.updateProduct(product);
     }
 
     @Transactional(readOnly = true)

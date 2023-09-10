@@ -1,14 +1,14 @@
 package kitchenpos.menu.application;
 
 import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.profanity.infra.FakePurgomalumClient;
-import kitchenpos.profanity.infra.PurgomalumClient;
+import kitchenpos.profanity.application.port.out.FakeProfanityFilterPort;
+import kitchenpos.profanity.application.port.out.ProfanityFilterPort;
 import kitchenpos.menu.domain.InMemoryMenuGroupRepository;
 import kitchenpos.menu.domain.InMemoryMenuRepository;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroupRepository;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.domain.InMemoryProductRepository;
+import kitchenpos.product.adapter.out.persistence.InMemoryProductRepository;
 import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.adapter.out.persistence.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityFilterPort profanityFilterPort;
     private MenuService menuService;
     private UUID menuGroupId;
     private ProductEntity product;
@@ -42,8 +42,8 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        profanityFilterPort = new FakeProfanityFilterPort();
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanityFilterPort);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
