@@ -18,7 +18,7 @@ public class ToBeMenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public ToBeMenuGroup() {
+    protected ToBeMenuGroup() {
     }
 
     public ToBeMenuGroup(String name) {

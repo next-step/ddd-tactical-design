@@ -65,7 +65,7 @@ public class Price {
     }
 
     public boolean isGreaterThan(Price comparePrice) {
-        return price.compareTo(comparePrice.price) >= 1;
+        return price.compareTo(comparePrice.price) > 0;
     }
 
     public boolean isSamePrice(Price comparePrice) {

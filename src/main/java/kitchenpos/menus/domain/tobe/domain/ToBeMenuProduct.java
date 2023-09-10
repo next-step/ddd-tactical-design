@@ -33,7 +33,7 @@ public class ToBeMenuProduct {
     @Embedded
     private Quantity quantity;
 
-    public ToBeMenuProduct() {
+    protected ToBeMenuProduct() {
     }
 
     public ToBeMenuProduct(ToBeProduct product, long quantity) {
