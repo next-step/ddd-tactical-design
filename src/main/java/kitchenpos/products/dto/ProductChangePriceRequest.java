@@ -1,14 +1,16 @@
 package kitchenpos.products.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public final class ProductChangePriceRequest {
-    private BigDecimal price;
+    @JsonProperty("price")
+    private final BigDecimal price;
 
-    public ProductChangePriceRequest() {
-    }
-
-    public ProductChangePriceRequest(BigDecimal price) {
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public ProductChangePriceRequest(@JsonProperty("price") BigDecimal price) {
         this.price = price;
     }
 
