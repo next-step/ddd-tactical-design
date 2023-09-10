@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "menu_group")
+@Table(name = "tobe_menu_group")
 @Entity
 public class ToBeMenuGroup {
     @Column(name = "id", columnDefinition = "binary(16)")

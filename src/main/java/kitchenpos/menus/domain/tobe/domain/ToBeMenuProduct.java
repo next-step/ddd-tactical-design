@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import kitchenpos.products.domain.tobe.domain.Price;
 import kitchenpos.products.domain.tobe.domain.ToBeProduct;
 
-@Table(name = "menu_product")
+@Table(name = "tobe_menu_product")
 @Entity
 public class ToBeMenuProduct {
     @Column(name = "seq")

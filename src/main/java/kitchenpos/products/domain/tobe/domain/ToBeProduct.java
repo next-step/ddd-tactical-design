@@ -1,7 +1,6 @@
 package kitchenpos.products.domain.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import kitchenpos.menus.domain.tobe.domain.Name;
+
 @Table(name = "tobe_product")
 @Entity
 public class ToBeProduct {
@@ -17,8 +18,8 @@ public class ToBeProduct {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
     @Embedded
     private Price price;
@@ -27,18 +28,15 @@ public class ToBeProduct {
     }
 
     public ToBeProduct(String name, BigDecimal productPrice, boolean containsProfanity) {
-        validationOfName(name, containsProfanity);
+        validationOfProfanity(containsProfanity);
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.name = Name.of(name);
         this.price = Price.of(productPrice);
     }
 
-    private void validationOfName(String name, boolean containsProfanity) {
-        if (name == "" || Objects.isNull(name)) {
-            throw new IllegalArgumentException("상품 이름은 필수로 입력되야 합니다.");
-        }
+    private void validationOfProfanity(boolean containsProfanity) {
         if (containsProfanity) {
-            throw new IllegalArgumentException("상품 이름에 비속어가 포함되어 있습니다.");
+            throw new IllegalArgumentException("메뉴 이름에 비속어가 포함되어 있습니다.");
         }
     }
 
