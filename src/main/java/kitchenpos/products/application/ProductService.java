@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.MenuPricePolicy;
 import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -18,16 +17,16 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
+    private final MenuPricePolicy menuPricePolicy;
     private final DisplayedNamePolicy displayedNamePolicy;
 
     public ProductService(
             ProductRepository productRepository,
-            MenuRepository menuRepository,
+            MenuPricePolicy menuPricePolicy,
             DisplayedNamePolicy displayedNamePolicy
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
+        this.menuPricePolicy = menuPricePolicy;
         this.displayedNamePolicy = displayedNamePolicy;
     }
 
@@ -44,10 +43,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            menu.changeMenuProductPrice(product);
-        }
+        menuPricePolicy.changeMenuProductPrice(product);
         return product;
     }
 
