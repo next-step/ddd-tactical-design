@@ -6,7 +6,9 @@ import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 class ProductPersistenceAdapter implements LoadProductPort, UpdateProductPort {
@@ -20,6 +22,14 @@ class ProductPersistenceAdapter implements LoadProductPort, UpdateProductPort {
     public Optional<Product> loadProductById(final ProductId id) {
         return productRepository.findById(id.getValue())
                 .map(ProductDomainEntityMapper::entityToDomain);
+    }
+
+    @Override
+    public List<Product> loadAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductDomainEntityMapper::entityToDomain)
+                .collect(Collectors.toList());
     }
 
     @Override

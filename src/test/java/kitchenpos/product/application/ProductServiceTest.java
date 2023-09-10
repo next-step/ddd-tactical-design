@@ -1,6 +1,5 @@
 package kitchenpos.product.application;
 
-import kitchenpos.product.ProductFixtures;
 import kitchenpos.product.adapter.out.persistence.FakeProductPersistenceAdapter;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.UpdateProductPort;
@@ -8,7 +7,6 @@ import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
 import kitchenpos.profanity.infra.FakePurgomalumClient;
 import kitchenpos.menu.domain.InMemoryMenuRepository;
-import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.domain.InMemoryProductRepository;
 import kitchenpos.product.adapter.out.persistence.ProductEntity;
@@ -23,9 +21,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.product.ProductFixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -47,7 +44,7 @@ class ProductServiceTest {
         purgomalumClient = new FakePurgomalumClient();
         loadProductPort = productPersistenceAdapter;
         updateProductPort = productPersistenceAdapter;
-        productService = new ProductService(productRepository, loadProductPort, updateProductPort, menuRepository, purgomalumClient);
+        productService = new ProductService(loadProductPort, updateProductPort, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -76,7 +73,7 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final ProductId productId =
-                updateProductPort.updateProduct(ProductFixtures.product("후라이드", 16_000L)).getId();
+                updateProductPort.updateProduct(product("후라이드", 16_000L)).getId();
         final BigDecimal expected = BigDecimal.valueOf(15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected);
@@ -88,7 +85,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final ProductId productId =
-                updateProductPort.updateProduct(ProductFixtures.product("후라이드", 16_000L)).getId();
+                updateProductPort.updateProduct(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -106,18 +103,18 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(product("후라이드", 16_000L));
-        productRepository.save(product("양념치킨", 16_000L));
-        final List<ProductEntity> actual = productService.findAll();
+        updateProductPort.updateProduct(product("후라이드", 16_000L));
+        updateProductPort.updateProduct(product("양념치킨", 16_000L));
+        final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 
     private Product createProductRequest(final String name, final long price) {
-        return ProductFixtures.product(name, price);
+        return product(name, price);
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        return ProductFixtures.product(name, price);
+        return product(name, price);
     }
 
     private ProductEntity changePriceRequest(final long price) {

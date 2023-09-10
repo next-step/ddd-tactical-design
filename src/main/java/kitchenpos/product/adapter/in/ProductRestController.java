@@ -1,8 +1,6 @@
 package kitchenpos.product.adapter.in;
 
-import kitchenpos.product.application.ProductService;
 import kitchenpos.product.application.port.in.ProductUseCase;
-import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +10,14 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/products")
 @RestController
 class ProductRestController {
-    private final ProductService productService;
     private final ProductUseCase productUseCase;
 
-    public ProductRestController(ProductService productService, ProductUseCase productUseCase) {
-        this.productService = productService;
+    ProductRestController(ProductUseCase productUseCase) {
         this.productUseCase = productUseCase;
     }
 
@@ -43,7 +40,11 @@ class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductEntity>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductResponse>> findAll() {
+        final List<ProductResponse> responses = productUseCase.findAll()
+                .stream()
+                .map(ProductMapper::domainToResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 }
