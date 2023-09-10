@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class Name {
@@ -11,6 +12,9 @@ public class Name {
     }
 
     public Name(String name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
