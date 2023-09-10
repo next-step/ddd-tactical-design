@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.ui;
 
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class ProductResponse {
@@ -10,7 +9,6 @@ public class ProductResponse {
 
     private final String name;
 
-    @NotNull
     private final BigDecimal price;
 
     public ProductResponse(String id, String name, BigDecimal price) {

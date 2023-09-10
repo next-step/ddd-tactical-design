@@ -30,6 +30,7 @@ public class Product {
     }
 
     public Product(ProductName productName, ProductPrice productPrice) {
+        this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
     }

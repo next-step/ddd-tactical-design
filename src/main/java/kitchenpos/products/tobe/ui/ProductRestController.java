@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.ui;
 
 import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<ProductResponse>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 }
