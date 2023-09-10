@@ -29,6 +29,10 @@ public class Product {
     protected Product() {
     }
 
+    public void changePrice(BigDecimal price) {
+        this.price = new Price(price);
+    }
+
     public UUID getId() {
         return id;
     }
