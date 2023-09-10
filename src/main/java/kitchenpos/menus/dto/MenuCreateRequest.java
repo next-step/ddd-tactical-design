@@ -1,20 +1,21 @@
 package kitchenpos.menus.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class MenuCreateRequest {
 
     private BigDecimal price;
-    private UUID menugroupId;
+    private UUID menuGroupId;
     private List<MenuProductRequest> menuProducts;
     private String name;
     private boolean displayed;
 
-    public MenuCreateRequest(BigDecimal price, UUID menugroupId, List<MenuProductRequest> menuProducts, String name, boolean displayed) {
+    public MenuCreateRequest(BigDecimal price, UUID menuGroupId, List<MenuProductRequest> menuProducts, String name, boolean displayed) {
         this.price = price;
-        this.menugroupId = menugroupId;
+        this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.name = name;
         this.displayed = displayed;
@@ -24,8 +25,8 @@ public class MenuCreateRequest {
         return price;
     }
 
-    public UUID getMenugroupId() {
-        return menugroupId;
+    public UUID getMenuGroupId() {
+        return menuGroupId;
     }
 
     public List<MenuProductRequest> getMenuProducts() {
@@ -39,4 +40,5 @@ public class MenuCreateRequest {
     public boolean isDisplayed() {
         return displayed;
     }
+
 }

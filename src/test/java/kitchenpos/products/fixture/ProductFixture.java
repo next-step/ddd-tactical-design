@@ -1,7 +1,7 @@
 package kitchenpos.products.fixture;
 
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 
 import java.math.BigDecimal;
 

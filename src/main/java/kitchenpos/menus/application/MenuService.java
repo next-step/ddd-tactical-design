@@ -1,14 +1,17 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
+import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.exception.MenuErrorCode;
+import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.domain.policy.ProfanityPolicy;
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,16 +38,14 @@ public class MenuService {
     public Menu create(final MenuCreateRequest request) {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
         final MenuPrice menuPrice = new MenuPrice(request.getPrice());
-        final MenuGroup menuGroup = menuGroupService.findById(request.getMenugroupId());
+        final MenuGroup menuGroup = menuGroupService.findById(request.getMenuGroupId());
+
 
         // 메뉴 상품 조립
+        validateMenuProducts(request);
         List<MenuProduct> menuProductValues = request.getMenuProducts()
                 .stream()
-                .map(menuProductRequest -> {
-                    MenuProductQuantity menuProductQuantity = new MenuProductQuantity(menuProductRequest.getQuantity());
-                    Product product = productService.findById(menuProductRequest.getProductId());
-                    return new MenuProduct(product, menuProductQuantity);
-                })
+                .map(this::menuProductRequestToEntity)
                 .collect(Collectors.toUnmodifiableList());
 
         final Menu menu = new Menu(
@@ -58,13 +59,20 @@ public class MenuService {
         return menuRepository.save(menu);
     }
 
-    @Transactional
-    public Menu changePrice(final UUID menuId, final BigDecimal request) {
+    private void validateMenuProducts(MenuCreateRequest request) {
+        List<MenuProductRequest> menuProducts = request.getMenuProducts();
 
-        MenuPrice price = new MenuPrice(request);
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new MenuProductException(MenuErrorCode.MENU_PRODUCT_IS_EMPTY);
+        }
+
+    }
+
+    @Transactional
+    public Menu changePrice(final UUID menuId, MenuChangePriceRequest request) {
 
         final Menu menu = findById(menuId);
-        menu.changePrice(price);
+        menu.changePrice(new MenuPrice(request.getPrice()));
 
         return menu;
     }
@@ -91,25 +99,18 @@ public class MenuService {
     @Transactional
     public void hideMenuWhenChangeProductPrice(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPriceValue()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-
+        menus.forEach(Menu::hideWhenPriceGreaterThanProducts);
     }
 
     @Transactional(readOnly = true)
     public Menu findById(UUID menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    private MenuProduct menuProductRequestToEntity(MenuProductRequest menuProductRequest) {
+        MenuProductQuantity menuProductQuantity = new MenuProductQuantity(menuProductRequest.getQuantity());
+        Product product = productService.findById(menuProductRequest.getProductId());
+        return new MenuProduct(product, menuProductQuantity);
     }
 }

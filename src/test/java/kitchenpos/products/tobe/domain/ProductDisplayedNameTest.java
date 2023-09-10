@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProfanityPolicy;
+import kitchenpos.common.FakeProfanityPolicy;
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("이름")
-class DisplayedNameTest {
+class ProductDisplayedNameTest {
 
     private ProfanityPolicy profanityPolicy;
 
@@ -27,14 +27,14 @@ class DisplayedNameTest {
     @Test
     void create1() {
         assertThatNoException().isThrownBy(
-                () -> new DisplayedName("표준어", profanityPolicy));
+                () -> new ProductDisplayedName("표준어", profanityPolicy));
     }
 
     @DisplayName("[실패] 이름에 비속어가 포함될 수 없다.")
     @Test
     void create2() {
         assertThatThrownBy(
-                () -> new DisplayedName("비속어", profanityPolicy))
+                () -> new ProductDisplayedName("비속어", profanityPolicy))
                 .isInstanceOf(DisplayedNameException.class)
                 .hasMessage(ProductErrorCode.NAME_HAS_PROFANITY.getMessage());
     }
@@ -44,7 +44,7 @@ class DisplayedNameTest {
     @NullAndEmptySource
     void create_test_3(String name) {
         assertThatThrownBy(
-                () -> new DisplayedName(name, profanityPolicy))
+                () -> new ProductDisplayedName(name, profanityPolicy))
                 .isInstanceOf(DisplayedNameException.class)
                 .hasMessage(ProductErrorCode.NAME_IS_NULL_OR_EMPTY.getMessage());
     }

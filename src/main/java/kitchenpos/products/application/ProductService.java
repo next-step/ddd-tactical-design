@@ -1,11 +1,14 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.exception.ProductErrorCode;
+import kitchenpos.products.exception.ProductPriceException;
+import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +20,17 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuService menuService;
     private final ProfanityPolicy profanityPolicy;
+
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuService menuService,
-            final ProfanityPolicy profanityPolicy) {
+            final ProfanityPolicy profanityPolicy,
+            final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
-        this.menuService = menuService;
         this.profanityPolicy = profanityPolicy;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -41,7 +45,12 @@ public class ProductService {
         ProductPrice productPrice = new ProductPrice(price);
         product.changePrice(productPrice);
 
-        menuService.hideMenuWhenChangeProductPrice(productId);
+        try {
+            publisher.publishEvent(new ProductPriceChangedEvent(this, productId));
+        } catch (RuntimeException ex) {
+            throw new ProductPriceException(ProductErrorCode.FAIL_REFLACT_MENU_PRICE);
+        }
+
         return product;
     }
 
@@ -56,4 +65,8 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    @Transactional(readOnly = true)
+    public List<Product> findAllInById(List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds);
+    }
 }

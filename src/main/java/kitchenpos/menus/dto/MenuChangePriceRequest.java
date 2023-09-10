@@ -8,6 +8,10 @@ public class MenuChangePriceRequest {
     public MenuChangePriceRequest(BigDecimal price) {
         this.price = price;
     }
+    public MenuChangePriceRequest(long price) {
+        this.price = BigDecimal.valueOf(price);
+    }
+
 
     public BigDecimal getPrice() {
         return price;

@@ -1,48 +1,62 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuGroupRepository;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.common.FakeProfanityPolicy;
+import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menus.application.*;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
+
     private ProductRepository productRepository;
+
     private MenuService menuService;
 
-    private ProfanityPolicy profanityPolicy;
     private ProductService productService;
-    private MenuGroupRepository menuGroupRepository;
-    private MenuRepository menuRepository;
+    private MenuGroupService menuGroupService;
+
+    @Spy
+    private ApplicationEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
-        profanityPolicy = new FakeProfanityPolicy();
-        menuRepository = new InMemoryMenuRepository();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, profanityPolicy);
-        productService = new ProductService(productRepository, menuService, profanityPolicy);
+        menuGroupService = new MenuGroupService(new InMemoryMenuGroupRepository());
+        MenuRepository menuRepository = new InMemoryMenuRepository();
+        ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
+        productService = new ProductService(productRepository,
+                profanityPolicy,
+                publisher);
+        menuService = new MenuService(menuRepository,
+                menuGroupService,
+                productService,
+                new FakeMenuProfanityPolicy()
+        );
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -97,17 +111,6 @@ class ProductServiceTest {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
                 .isInstanceOf(ProductPriceException.class);
-    }
-
-    // TODO 이 테스트는 메뉴에 있어야 하지 않을까?
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-    @Test
-    void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
-        final MenuGroup menuGroup = menuGroupRepository.save(menuGroup());
-        final Menu menu = menuService.create(menu(19_000L, true, menuGroup, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), BigDecimal.valueOf(8_000L));
-        assertThat(menuService.findById(menu.getId()).isDisplayed()).isFalse();
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")

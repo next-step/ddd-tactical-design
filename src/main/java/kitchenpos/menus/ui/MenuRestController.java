@@ -30,7 +30,7 @@ public class MenuRestController {
 
     @PutMapping("/{menuId}/price")
     public ResponseEntity<MenuResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuChangePriceRequest request) {
-        Menu response = menuService.changePrice(menuId, request.getPrice());
+        Menu response = menuService.changePrice(menuId, request);
         return ResponseEntity.ok(MenuResponse.fromEntity(response));
     }
 

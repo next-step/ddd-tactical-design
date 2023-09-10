@@ -1,21 +1,21 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.exception.DisplayedNameException;
 import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class DisplayedName {
+public class ProductDisplayedName {
     private String name;
 
-    protected DisplayedName() {
+    protected ProductDisplayedName() {
 
     }
 
-    public DisplayedName(String name, ProfanityPolicy profanityPolicy) {
+    public ProductDisplayedName(String name, ProfanityPolicy profanityPolicy) {
         validate(name, profanityPolicy);
         this.name = name;
     }
@@ -42,7 +42,7 @@ public class DisplayedName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DisplayedName that = (DisplayedName) o;
+        ProductDisplayedName that = (ProductDisplayedName) o;
         return Objects.equals(name, that.name);
     }
 

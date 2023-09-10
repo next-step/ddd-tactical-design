@@ -20,8 +20,11 @@ public class MenuProduct {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-
     private Product product;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "line_id")
+    private Menu menu;
 
     protected MenuProduct() {
 
@@ -33,6 +36,11 @@ public class MenuProduct {
     public MenuProduct(Product product, MenuProductQuantity quantity) {
         this.product = product;
         this.quantity = quantity;
+    }
+
+    public MenuProduct(Product product, long quantity) {
+        this.product = product;
+        this.quantity = new MenuProductQuantity(quantity);
     }
 
     public Long getSeq() {
@@ -55,5 +63,9 @@ public class MenuProduct {
 
     public ProductPrice getProductPrice() {
         return product.getPrice().multiply(quantity.getValue());
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

@@ -1,11 +1,11 @@
-package kitchenpos.products.application;
+package kitchenpos.menus.application;
 
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+import kitchenpos.common.domain.ProfanityPolicy;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FakeProfanityPolicy implements ProfanityPolicy {
+public class FakeMenuProfanityPolicy implements ProfanityPolicy {
     private static final List<String> profanities;
 
     static {

@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProfanityPolicy;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+import kitchenpos.common.FakeProfanityPolicy;
+import kitchenpos.common.domain.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
@@ -12,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @DisplayName("상품")
+@SpringBootTest
 class ProductTest {
 
     private ProfanityPolicy profanityPolicy;
