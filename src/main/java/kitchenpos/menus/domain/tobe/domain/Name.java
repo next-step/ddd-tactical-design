@@ -22,6 +22,13 @@ public class Name {
         return new Name(name);
     }
 
+    public static Name of(String name, boolean containsProfanity) {
+        if (containsProfanity) {
+            throw new IllegalArgumentException("상품 이름에 비속어가 포함되어 있습니다.");
+        }
+        return new Name(name);
+    }
+
     private void nullValidation(String name) {
         if (name == "" || Objects.isNull(name)) {
             throw new IllegalArgumentException("이름은 필수로 입력되야 합니다.");

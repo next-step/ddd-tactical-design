@@ -49,10 +49,7 @@ public class ToBeMenuProduct {
     }
 
     public Price getProductPrice() {
-        return product.getPrice();
+        return product.getPrice().multiply(quantity.getValue());
     }
 
-    public long getQuantity() {
-        return quantity.getValue();
-    }
 }

@@ -136,6 +136,21 @@ class ToBeMenuTest {
         assertThat(menu.isDisplayed()).isTrue();
     }
 
+    @DisplayName("메뉴에 속한 상품 금액의 합보다 큰 가격이면 메뉴 노출이 안된다.")
+    @Test
+    void display2() {
+        ToBeMenu menu = new ToBeMenu("김밥세트"
+            , BigDecimal.valueOf(30_000L)
+            , menuGroup
+            , false
+            , false
+            , List.of(menuProduct));
+        김밥.changePrice(BigDecimal.valueOf(90_000L));
+        assertThatThrownBy(() -> menu.display())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
+    }
+
     @DisplayName("메뉴가 숨겨진다.")
     @Test
     void hide() {
