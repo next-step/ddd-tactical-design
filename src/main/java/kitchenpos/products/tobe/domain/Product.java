@@ -25,9 +25,13 @@ public class Product {
     }
 
     public Product(String displayedName, Long price, PurgomalumClient purgomalumClient) {
+        this(new DisplayedName(displayedName, purgomalumClient), new Price(price));
+    }
+
+    public Product(DisplayedName displayedName, Price price) {
         this.id = UUID.randomUUID();
-        this.displayedName = new DisplayedName(displayedName, purgomalumClient);
-        this.price = new Price(price);
+        this.displayedName = displayedName;
+        this.price = price;
     }
 
     public UUID getId() {
