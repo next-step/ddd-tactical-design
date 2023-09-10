@@ -59,4 +59,7 @@ public class Price {
         return Objects.hash(value);
     }
 
+    public BigDecimal multiply(BigDecimal bigDecimal) {
+        return value.multiply(bigDecimal);
+    }
 }
