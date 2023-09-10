@@ -1,6 +1,6 @@
 package kitchenpos.product.application;
 
-import kitchenpos.product.adapter.out.persistence.FakeProductPersistenceAdapter;
+import kitchenpos.product.adapter.out.persistence.ProductOutPortCatalog;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.UpdateProductPort;
 import kitchenpos.product.domain.Product;
@@ -8,9 +8,7 @@ import kitchenpos.product.domain.ProductId;
 import kitchenpos.profanity.infra.FakePurgomalumClient;
 import kitchenpos.menu.domain.InMemoryMenuRepository;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.domain.InMemoryProductRepository;
 import kitchenpos.product.adapter.out.persistence.ProductEntity;
-import kitchenpos.product.adapter.out.persistence.ProductRepository;
 import kitchenpos.profanity.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
-    private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private LoadProductPort loadProductPort;
@@ -38,12 +35,11 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new InMemoryProductRepository();
-        final FakeProductPersistenceAdapter productPersistenceAdapter = new FakeProductPersistenceAdapter(productRepository);
+        final ProductOutPortCatalog productOutPortCatalog = new ProductOutPortCatalog();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        loadProductPort = productPersistenceAdapter;
-        updateProductPort = productPersistenceAdapter;
+        loadProductPort = productOutPortCatalog.loadProductPort();
+        updateProductPort = productOutPortCatalog.updateProductPort();
         productService = new ProductService(loadProductPort, updateProductPort, menuRepository, purgomalumClient);
     }
 
