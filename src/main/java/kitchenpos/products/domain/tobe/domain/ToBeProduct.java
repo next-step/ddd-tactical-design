@@ -54,4 +54,7 @@ public class ToBeProduct {
         return price.isGreaterThan(Price.of(productPrice));
     }
 
+    public Price getPrice() {
+        return price;
+    }
 }
