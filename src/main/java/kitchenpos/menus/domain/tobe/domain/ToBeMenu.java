@@ -59,7 +59,7 @@ public class ToBeMenu {
         validationOfProfanity(containsProfanity);
         validationOfMenuGroup(menuGroup);
         validationOfMenuProduct(menuProducts);
-        validationOfPrice();
+        validationOfPrice(price, menuProducts);
 
         this.id = UUID.randomUUID();
         this.name = Name.of(name);
@@ -69,15 +69,49 @@ public class ToBeMenu {
         this.menuProducts = menuProducts;
     }
 
+    public void changePrice(BigDecimal price) {
+        validationOfPrice(price);
+        this.price = Price.of(price);
+    }
+
+    public void display() {
+        validationOfPrice();
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    private void validationOfPrice(BigDecimal price, List<ToBeMenuProduct> menuProducts) {
+        validationOfPrice(Price.of(price), getSumOfProductPrice(menuProducts));
+    }
+
+    private void validationOfPrice(BigDecimal price) {
+        validationOfPrice(Price.of(price), getSumOfProductPrice(menuProducts));
+    }
+
     private void validationOfPrice() {
-        if (this.price.isGreaterThan(getSumOfProductPrice())) {
+        validationOfPrice(price, getSumOfProductPrice(menuProducts));
+    }
+
+    private void validationOfPrice(Price price, Price sumOfProducts) {
+        if (price.isGreaterThan(sumOfProducts)) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
     }
 
-    private Price getSumOfProductPrice() {
+    private Price getSumOfProductPrice(List<ToBeMenuProduct> menuProducts) {
         return menuProducts.stream()
-            .map(it -> it.getProductPrice())
+            .map(it -> it.getProductPrice().multiply(it.getQuantity()))
             .reduce(Price.of(BigDecimal.ZERO), Price::add);
     }
 
