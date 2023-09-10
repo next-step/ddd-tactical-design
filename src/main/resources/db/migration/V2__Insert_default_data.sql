@@ -35,6 +35,15 @@ values (x'5e9879b761124791a4cef22e94af8752', '순살파닭두마리메뉴');
 insert into menu_group (id, name)
 values (x'd9bc21accc104593b5064a40e0170e02', '신메뉴');
 
+insert into tobe_menu_group (id, name)
+values (x'f1860abc2ea1411bbd4abaa44f0d5580', '두마리메뉴');
+insert into tobe_menu_group (id, name)
+values (x'cbc75faefeb04bb18be2cb8ce5d8fded', '한마리메뉴');
+insert into tobe_menu_group (id, name)
+values (x'5e9879b761124791a4cef22e94af8752', '순살파닭두마리메뉴');
+insert into tobe_menu_group (id, name)
+values (x'd9bc21accc104593b5064a40e0170e02', '신메뉴');
+
 insert into menu (id, displayed, name, price, menu_group_id)
 values (x'f59b1e1cb145440aaa6f6095a0e2d63b', true, '후라이드치킨', 16000, x'cbc75faefeb04bb18be2cb8ce5d8fded');
 insert into menu (id, displayed, name, price, menu_group_id)
@@ -48,6 +57,20 @@ values (x'b9c670b04ef5409083496868df1c7d62', true, '간장치킨', 17000, x'cbc7
 insert into menu (id, displayed, name, price, menu_group_id)
 values (x'a64af6cac34d4cd882fe454abf512d1f', true, '순살치킨', 17000, x'cbc75faefeb04bb18be2cb8ce5d8fded');
 
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'f59b1e1cb145440aaa6f6095a0e2d63b', true, '후라이드치킨', 16000, 'Won',
+        x'cbc75faefeb04bb18be2cb8ce5d8fded');
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'e1254913860846aab23aa07c1dcbc648', true, '양념치킨', 16000, 'Won', x'cbc75faefeb04bb18be2cb8ce5d8fded');
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'191fa247b5f34b51b175e65db523f754', true, '반반치킨', 16000, 'Won', x'cbc75faefeb04bb18be2cb8ce5d8fded');
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'33e558df7d934622b50efcc4282cd184', true, '통구이', 16000, 'Won', x'cbc75faefeb04bb18be2cb8ce5d8fded');
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'b9c670b04ef5409083496868df1c7d62', true, '간장치킨', 17000, 'Won', x'cbc75faefeb04bb18be2cb8ce5d8fded');
+insert into tobe_menu (id, displayed, name, price, currency, menu_group_id)
+values (x'a64af6cac34d4cd882fe454abf512d1f', true, '순살치킨', 17000, 'Won', x'cbc75faefeb04bb18be2cb8ce5d8fded');
+
 insert into menu_product (quantity, product_id, menu_id)
 values (1, x'3b52824434f7406bbb7e690912f66b10', x'f59b1e1cb145440aaa6f6095a0e2d63b');
 insert into menu_product (quantity, product_id, menu_id)
@@ -59,6 +82,19 @@ values (1, x'4721ee722ff3417fade3acd0a804605b', x'33e558df7d934622b50efcc4282cd1
 insert into menu_product (quantity, product_id, menu_id)
 values (1, x'0ac16db71b024a87b9c1e7d8f226c48d', x'b9c670b04ef5409083496868df1c7d62');
 insert into menu_product (quantity, product_id, menu_id)
+values (1, x'7de4b8affa0f4391aaa9c61ea9b40f83', x'a64af6cac34d4cd882fe454abf512d1f');
+
+insert into tobe_menu_product (quantity, product_id, menu_id)
+values (1, x'3b52824434f7406bbb7e690912f66b10', x'f59b1e1cb145440aaa6f6095a0e2d63b');
+insert into tobe_menu_product (quantity, product_id, menu_id)
+values (1, x'c5ee925c3dbb4941b825021446f24446', x'e1254913860846aab23aa07c1dcbc648');
+insert into tobe_menu_product (quantity, product_id, menu_id)
+values (1, x'625c6fc4145d408f8dd533c16ba26064', x'191fa247b5f34b51b175e65db523f754');
+insert into tobe_menu_product (quantity, product_id, menu_id)
+values (1, x'4721ee722ff3417fade3acd0a804605b', x'33e558df7d934622b50efcc4282cd184');
+insert into tobe_menu_product (quantity, product_id, menu_id)
+values (1, x'0ac16db71b024a87b9c1e7d8f226c48d', x'b9c670b04ef5409083496868df1c7d62');
+insert into tobe_menu_product (quantity, product_id, menu_id)
 values (1, x'7de4b8affa0f4391aaa9c61ea9b40f83', x'a64af6cac34d4cd882fe454abf512d1f');
 
 insert into order_table (id, occupied, name, number_of_guests)
