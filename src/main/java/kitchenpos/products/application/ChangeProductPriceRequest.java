@@ -1,7 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.tobe.domain.Product;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -14,16 +12,12 @@ public class ChangeProductPriceRequest {
         this.price = price;
     }
 
-    public ChangeProductPriceRequest(BigDecimal price) {
-        this.price = price;
-    }
-
     public static ChangeProductPriceRequest of(UUID productId, BigDecimal price) {
         return new ChangeProductPriceRequest(productId, price);
     }
 
-    public static ChangeProductPriceRequest of(BigDecimal price) {
-        return new ChangeProductPriceRequest(price);
+    public static ChangeProductPriceRequest of(UUID productId) {
+        return new ChangeProductPriceRequest(productId, null);
     }
 
     public UUID getId() {
@@ -32,5 +26,10 @@ public class ChangeProductPriceRequest {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public ChangeProductPriceRequest addProductId(UUID productId) {
+        this.id = productId;
+        return this;
     }
 }

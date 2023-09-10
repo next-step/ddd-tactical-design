@@ -7,7 +7,6 @@ import kitchenpos.products.tobe.domain.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -25,12 +24,12 @@ public class ProductRestController {
     public ResponseEntity<Product> create(@RequestBody final CreateProductRequest request) {
         final Product response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final BigDecimal price) {
-        return ResponseEntity.ok(productService.changePrice(ChangeProductPriceRequest.of(productId, price)));
+    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final ChangeProductPriceRequest request) {
+        return ResponseEntity.ok(productService.changePrice(request.addProductId(productId)));
     }
 
     @GetMapping

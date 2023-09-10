@@ -18,7 +18,7 @@ class DisplayedNameTest {
     @Test
     void create() {
         DisplayedName name = DisplayedName.of("이름");
-        assertThat(name.getName()).isEqualTo("이름");
+        assertThat(name).isEqualTo(DisplayedName.of("이름"));
     }
 
     @DisplayName("이름에 비속어가 포함되어 있으면 예외를 반환한다.")

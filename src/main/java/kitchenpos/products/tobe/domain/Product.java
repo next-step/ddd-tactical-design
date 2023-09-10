@@ -4,6 +4,7 @@ import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -30,12 +31,12 @@ public class Product {
         this.name = name;
     }
 
-    public static Product create(BigDecimal price, String name) {
-        return new Product(UUID.randomUUID(), Price.of(price), DisplayedName.of(name));
+    public static Product create(UUID id, BigDecimal price, String name, PurgomalumClient purgomalumClient) {
+        return new Product(id, Price.of(price), DisplayedName.of(name, purgomalumClient));
     }
 
-    public static Product create(BigDecimal price, String name, PurgomalumClient purgomalumClient) {
-        return new Product(UUID.randomUUID(), Price.of(price), DisplayedName.of(name, purgomalumClient));
+    public void changePrice(BigDecimal price) {
+        this.price = Price.of(price);
     }
 
     public UUID getId() {
@@ -50,7 +51,16 @@ public class Product {
         return name.getName();
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = Price.of(price);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(price, product.price) && Objects.equals(name, product.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, price, name);
     }
 }

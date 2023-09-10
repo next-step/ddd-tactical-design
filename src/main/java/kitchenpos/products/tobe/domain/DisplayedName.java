@@ -6,6 +6,8 @@ import org.thymeleaf.util.StringUtils;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import java.util.Objects;
+
 import static kitchenpos.products.exception.ProductExceptionMessage.PRODUCT_NAME_CONTAINS_PROFANITY;
 
 @Embeddable
@@ -32,5 +34,18 @@ public class DisplayedName {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DisplayedName that = (DisplayedName) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
