@@ -2,12 +2,9 @@ package kitchenpos.common.values;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
-import kitchenpos.util.KitchenPostExceptionAssertionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import javax.validation.constraints.Null;
 
 import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertEqualsExceptionType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +19,7 @@ class NameTest {
 
         assertAll(
                 () -> assertNotNull(actual),
-                () -> assertEquals(name, actual.getName())
+                () -> assertEquals(name, actual.getValue())
         );
     }
 
