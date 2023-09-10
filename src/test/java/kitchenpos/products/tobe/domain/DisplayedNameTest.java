@@ -17,8 +17,8 @@ class DisplayedNameTest {
     @DisplayName("상품 이름 생성")
     @Test
     void create() {
-        DisplayedName name = DisplayedName.of("이름");
-        assertThat(name).isEqualTo(DisplayedName.of("이름"));
+        DisplayedName name = DisplayedName.of("이름", purgomalumClient);
+        assertThat(name).isEqualTo(DisplayedName.of("이름", purgomalumClient));
     }
 
     @DisplayName("이름에 비속어가 포함되어 있으면 예외를 반환한다.")

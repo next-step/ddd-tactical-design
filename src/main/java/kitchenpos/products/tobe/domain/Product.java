@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
+import static kitchenpos.products.exception.ProductExceptionMessage.PRODUCT_PRICE_MORE_ZERO;
+
 @Entity
 @Table(name = "product")
 public class Product {
@@ -35,8 +37,11 @@ public class Product {
         return new Product(id, Price.of(price), DisplayedName.of(name, purgomalumClient));
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = Price.of(price);
+    public void changePrice(Long price) {
+        if (price == null || price < 0) {
+            throw new IllegalArgumentException(PRODUCT_PRICE_MORE_ZERO);
+        }
+        this.price = Price.of(BigDecimal.valueOf(price));
     }
 
     public UUID getId() {
@@ -56,11 +61,11 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(price, product.price) && Objects.equals(name, product.name);
+        return Objects.equals(id, product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, name);
+        return Objects.hash(id);
     }
 }

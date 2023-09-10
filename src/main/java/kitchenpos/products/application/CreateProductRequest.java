@@ -6,6 +6,8 @@ public class CreateProductRequest {
     private BigDecimal price;
     private String name;
 
+    public CreateProductRequest() {}
+
     public CreateProductRequest(BigDecimal price, String name) {
         this.price = price;
         this.name = name;

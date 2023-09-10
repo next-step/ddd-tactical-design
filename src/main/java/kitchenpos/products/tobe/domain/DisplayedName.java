@@ -21,10 +21,6 @@ public class DisplayedName {
         this.name = name;
     }
 
-    public static DisplayedName of(String name) {
-        return new DisplayedName(name);
-    }
-
     public static DisplayedName of(String name, PurgomalumClient purgomalumClient) {
         if (StringUtils.isEmpty(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException(PRODUCT_NAME_CONTAINS_PROFANITY);

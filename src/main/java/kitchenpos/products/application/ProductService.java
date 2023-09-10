@@ -22,15 +22,18 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final MenuProductPriceHandler menuProductPriceHandler;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient,
+            final MenuProductPriceHandler menuProductPriceHandler
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.menuProductPriceHandler = menuProductPriceHandler;
     }
 
     @Transactional
@@ -40,11 +43,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final ChangeProductPriceRequest request) {
-        final Product product = findProductById(request);
-        final List<Menu> menus = menuRepository.findAllByProductId(request.getId());
+    public Product changePrice(final UUID id, final Long price) {
+        Product product = findProductById(id);
+        product.changePrice(price);
+        final List<Menu> menus = menuRepository.findAllByProductId(id);
         Map<UUID, Product> productMap = findProductInMenus(menus);
-        MenuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
+        menuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
         return product;
     }
 
@@ -62,10 +66,8 @@ public class ProductService {
                 .collect(Collectors.toMap(Product::getId, p -> p));
     }
 
-    private Product findProductById(ChangeProductPriceRequest request) {
-        final Product product = productRepository.findById(request.getId())
+    private Product findProductById(UUID id) {
+        return productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_PRODUCT));
-        product.changePrice(request.getPrice());
-        return product;
     }
 }

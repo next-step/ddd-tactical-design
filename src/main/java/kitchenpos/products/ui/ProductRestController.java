@@ -29,7 +29,7 @@ public class ProductRestController {
 
     @PutMapping("/{productId}/price")
     public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final ChangeProductPriceRequest request) {
-        return ResponseEntity.ok(productService.changePrice(request.addProductId(productId)));
+        return ResponseEntity.ok(productService.changePrice(productId, request.getPrice()));
     }
 
     @GetMapping

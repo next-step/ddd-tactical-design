@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
@@ -27,13 +28,15 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
+    private MenuProductPriceHandler menuProductPriceHandler;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        menuProductPriceHandler = new MenuProductPriceHandler();
+        productService = new ProductService(productRepository, menuRepository, purgomalumClient, menuProductPriceHandler);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -73,9 +76,8 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequest request = changePriceRequest(productId, 15_000L);
-        final Product actual = productService.changePrice(request);
-        assertThat(actual.getPrice()).isEqualTo(request.getPrice());
+        final Product actual = productService.changePrice(productId, 15_000L);
+        assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(15_000L));
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -84,8 +86,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final Long price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequest request = changePriceRequest(productId, price);
-        assertThatThrownBy(() -> productService.changePrice(request))
+        assertThatThrownBy(() -> productService.changePrice(productId, price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -94,7 +95,7 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(changePriceRequest(product.getId(), 8_000L));
+        productService.changePrice(product.getId(), 8_000L);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -115,10 +116,4 @@ class ProductServiceTest {
         return CreateProductRequest.of(price, name);
     }
 
-    private ChangeProductPriceRequest changePriceRequest(UUID productId, Long price) {
-        if (price == null) {
-            return ChangeProductPriceRequest.of(productId);
-        }
-        return ChangeProductPriceRequest.of(productId, BigDecimal.valueOf(price));
-    }
 }
