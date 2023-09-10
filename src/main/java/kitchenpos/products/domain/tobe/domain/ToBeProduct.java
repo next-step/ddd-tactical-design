@@ -60,10 +60,6 @@ public class ToBeProduct {
         price = price.changePrice(productPrice);
     }
 
-    public boolean isSamePrice(BigDecimal productPrice) {
-        return price.isSamePrice(Price.of(productPrice));
-    }
-
     public boolean isGreaterThanPrice(BigDecimal productPrice) {
         return price.isGreaterThan(Price.of(productPrice));
     }

@@ -39,8 +39,8 @@ class ToBeProductTest {
     @DisplayName("가격을 변경한다")
     @Test
     void changePrice() {
-        product.changePrice(price);
-        assertThat(product.isSamePrice(price))
+        product.changePrice(BigDecimal.valueOf(15_000L));
+        assertThat(product.getPrice().equals(Price.of(15_000L)))
             .isTrue();
     }
 

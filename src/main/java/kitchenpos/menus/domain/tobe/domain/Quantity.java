@@ -39,6 +39,10 @@ public class Quantity {
         return new Quantity(quantity);
     }
 
+    public long getValue() {
+        return quantity;
+    }
+
     public Quantity changeQuantity(long quantity) {
         return new Quantity(quantity);
     }

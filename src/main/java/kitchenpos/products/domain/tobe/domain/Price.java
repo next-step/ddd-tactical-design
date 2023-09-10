@@ -24,7 +24,7 @@ public class Price {
         this.currency = defaultCurrency();
     }
 
-    public Price() {
+    protected Price() {
 
     }
 
@@ -61,15 +61,15 @@ public class Price {
     }
 
     public Price add(Price price) {
-        return Price.of(this.price.add(price.price));
+        return new Price(this.price.add(price.price));
+    }
+
+    public Price multiply(long value) {
+        return new Price(this.price.multiply(BigDecimal.valueOf(value)));
     }
 
     public boolean isGreaterThan(Price comparePrice) {
         return price.compareTo(comparePrice.price) > 0;
-    }
-
-    public boolean isSamePrice(Price comparePrice) {
-        return this.equals(comparePrice);
     }
 
     public Price changePrice(BigDecimal newPrice) {
