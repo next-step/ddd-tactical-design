@@ -1,11 +1,16 @@
 package kitchenpos.menus.tobe.domain;
 
-import javax.persistence.*;
+import kitchenpos.menus.tobe.ui.MenuRequest;
+import kitchenpos.products.tobe.domain.Product;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -23,15 +28,23 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
+    public static MenuProducts of(MenuRequest request, Map<String, Product> productMap) {
+        final List<MenuProduct> menuProductList = request.getMenuProductRequests().stream()
+                .map(it -> new MenuProduct(it.getSeq(), productMap.get(it.getProductId().toString()), it.getQuantity()))
+                .collect(Collectors.toList());
+
+        return new MenuProducts(menuProductList);
+    }
+
     public BigDecimal getTotalPrice() {
         return menuProducts.stream()
                 .map(it -> it.getProduct().getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public List<UUID> getProductIds() {
+    public List<Long> getSequences() {
         return menuProducts.stream()
-                .map(MenuProduct::getProductId)
+                .map(MenuProduct::getSeq)
                 .collect(Collectors.toList());
     }
 

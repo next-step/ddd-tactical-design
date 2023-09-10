@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.domain.Product;
+
+import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Table(name = "menu_product")
 @Entity
@@ -28,10 +28,18 @@ public class MenuProduct {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
-    @Transient
-    private UUID productId;
+
+    public MenuProduct(Long seq, Product product, long quantity) {
+        this.seq = seq;
+        this.product = product;
+        this.quantity = new MenuProductQuantity(quantity);
+    }
 
     protected MenuProduct() { }
+
+    public Long getSeq() {
+        return seq;
+    }
 
     public Product getProduct() {
         return product;
@@ -41,7 +49,7 @@ public class MenuProduct {
         return quantity.value();
     }
 
-    public UUID getProductId() {
+    public String getProductId() {
         return product.getId();
     }
 }
