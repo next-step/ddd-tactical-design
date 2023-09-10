@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.tobe.ui.MenuGroupRequest;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +27,15 @@ public class MenuGroup {
         this.name = new MenuGroupName(name);
     }
 
-    public static MenuGroup of(MenuGroup request) {
-        return new MenuGroup(UUID.randomUUID(), request.name.value());
+    public static MenuGroup of(MenuGroupRequest request) {
+        return new MenuGroup(UUID.randomUUID(), request.getName());
     }
 
-    public UUID getId() {
-        return id;
+    public String getId() {
+        return id.toString();
+    }
+
+    public String getName() {
+        return name.value();
     }
 }
