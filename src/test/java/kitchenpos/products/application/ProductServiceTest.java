@@ -4,6 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.ProductRequest;
+import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.infra.PurgomalumClient;
@@ -27,14 +28,14 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
-    private kitchenpos.products.tobe.application.ProductService productService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new kitchenpos.products.tobe.application.ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

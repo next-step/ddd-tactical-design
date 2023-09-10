@@ -30,11 +30,11 @@ public class ProductService {
 
     @Transactional
     public Product create(final ProductRequest request) {
-        request.validate(purgomalumClient.containsProfanity(request.getName()));
+        request.validate(purgomalumClient::containsProfanity);
         final Product product = Product.create(
-                request.getId(),
-                request.getName(),
-                request.getPrice()
+            UUID.randomUUID(),
+            request.getName(),
+            request.getPrice()
         );
         return productRepository.save(product);
     }
