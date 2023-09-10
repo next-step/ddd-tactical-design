@@ -1,16 +1,13 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.ToBeOrder;
 import kitchenpos.eatinorders.tobe.domain.ToBeOrderLineItem;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-
 import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.infra.DefaultPurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ToBeProduct;
 

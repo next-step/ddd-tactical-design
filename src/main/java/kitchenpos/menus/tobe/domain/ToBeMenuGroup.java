@@ -14,7 +14,7 @@ public class ToBeMenuGroup {
     @Embedded
     private MenuGroupName name;
 
-    public ToBeMenuGroup() {
+    protected ToBeMenuGroup() {
     }
 
     public ToBeMenuGroup(String name) {

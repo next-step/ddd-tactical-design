@@ -18,9 +18,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.test.annotation.Rollback;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -54,7 +52,7 @@ class MenuServiceTest {
     void create() {
         final ToBeMenu expected = createMenuRequest("후라이드+후라이드", BigDecimal.valueOf(19_000L),UUID.randomUUID(), true, createMenuProductRequest(product.getId(), 2L));
 
-            final ToBeMenu actual = menuService.create(expected);
+        final ToBeMenu actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -94,10 +92,9 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final ToBeMenu expected = createMenuRequest(
-            "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
+        assertThatThrownBy(() -> createMenuRequest(
+                "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+        ))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -127,10 +124,9 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final ToBeMenu expected = createMenuRequest(
-            name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
+        assertThatThrownBy(() -> createMenuRequest(
+                name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+        ))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -201,6 +197,9 @@ class MenuServiceTest {
         final boolean displayed,
         final ToBeMenuProduct... menuProducts
     ) {
+        if(Objects.isNull(price)){
+            throw new IllegalArgumentException();
+        }
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
@@ -231,6 +230,9 @@ class MenuServiceTest {
         final boolean displayed,
         final List<ToBeMenuProduct> menuProducts
     ) {
+        if(Objects.isNull(price)){
+            throw new IllegalArgumentException();
+        }
         final ToBeMenu menu = new ToBeMenu(name,price.longValue(),menuGroupId,displayed,purgomalumClient,menuProducts);
         return menu;
     }

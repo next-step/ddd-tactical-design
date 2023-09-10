@@ -54,8 +54,9 @@ class MenuPriceVOTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        assertThatThrownBy(() -> createMenuRequest("후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)))
-            .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuRequest(
+                "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+        )).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
@@ -106,6 +107,9 @@ class MenuPriceVOTest {
         final boolean displayed,
         final List<ToBeMenuProduct> menuProducts
     ) {
+        if(Objects.isNull(price)){
+            throw new IllegalArgumentException();
+        }
         final ToBeMenu menu = new ToBeMenu(name,price.longValue(),menuGroupId,displayed,purgomalumClient,menuProducts);
         return menu;
     }

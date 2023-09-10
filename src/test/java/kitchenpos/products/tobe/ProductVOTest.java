@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe;
 
-import kitchenpos.Fixtures;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.ToBeMenu;
 import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -18,8 +16,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

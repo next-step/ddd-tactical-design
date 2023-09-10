@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class MenuProductQuantity {
-    private long quantity;
+    public long quantity;
 
     public MenuProductQuantity(long quantity){
         checkQuantity(quantity);

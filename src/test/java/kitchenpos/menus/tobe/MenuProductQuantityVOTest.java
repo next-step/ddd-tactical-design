@@ -46,7 +46,7 @@ class MenuProductQuantityVOTest {
         purgomalumClient = new FakePurgomalumClient();
         menuService = new ToBeMenuService(toBeMenuRepository, menuGroupRepository, toBeProductRepository, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
-        product = toBeProductRepository.save(new ToBeProduct("후라이드", BigDecimal.valueOf(16_000L),purgomalumClient));
+        product = toBeProductRepository.save(new ToBeProduct("후라이드", BigDecimal.valueOf(16_000L), purgomalumClient));
     }
 
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
@@ -56,43 +56,46 @@ class MenuProductQuantityVOTest {
     }
 
     private ToBeMenu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final ToBeMenuProduct... menuProducts
+            final String name,
+            final long price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final ToBeMenuProduct... menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
     private ToBeMenu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final ToBeMenuProduct... menuProducts
+            final String name,
+            final BigDecimal price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final ToBeMenuProduct... menuProducts
     ) {
         return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
     }
 
     private ToBeMenu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<ToBeMenuProduct> menuProducts
+            final String name,
+            final long price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final List<ToBeMenuProduct> menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
     private ToBeMenu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<ToBeMenuProduct> menuProducts
+            final String name,
+            final BigDecimal price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final List<ToBeMenuProduct> menuProducts
     ) {
-        final ToBeMenu menu = new ToBeMenu(name,price.longValue(),menuGroupId,displayed,purgomalumClient,menuProducts);
+        if(Objects.isNull(price)){
+            throw new IllegalArgumentException();
+        }
+        final ToBeMenu menu = new ToBeMenu(name, price.longValue(), menuGroupId, displayed, purgomalumClient, menuProducts);
         return menu;
     }
 
