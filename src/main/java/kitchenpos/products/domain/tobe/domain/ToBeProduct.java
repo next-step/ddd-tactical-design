@@ -1,6 +1,7 @@
 package kitchenpos.products.domain.tobe.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -32,6 +33,21 @@ public class ToBeProduct {
         this.id = UUID.randomUUID();
         this.name = Name.of(name);
         this.price = Price.of(productPrice);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ToBeProduct product = (ToBeProduct)o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     private void validationOfProfanity(boolean containsProfanity) {

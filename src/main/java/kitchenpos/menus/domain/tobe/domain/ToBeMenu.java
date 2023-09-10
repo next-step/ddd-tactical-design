@@ -70,8 +70,7 @@ public class ToBeMenu {
     }
 
     private void validationOfPrice() {
-        Price productPrice = getSumOfProductPrice();
-        if (this.price.isGreaterThan(productPrice)) {
+        if (this.price.isGreaterThan(getSumOfProductPrice())) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
     }
