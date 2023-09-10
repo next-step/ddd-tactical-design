@@ -1,6 +1,11 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.exception.MenuErrorCode;
+import kitchenpos.menus.exception.MenuProductException;
+import kitchenpos.products.tobe.domain.ProductPrice;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,17 +18,28 @@ public class MenuProducts {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
+
     private List<MenuProduct> values;
 
-    public MenuProducts(List<MenuProduct> values) {
-        this.values = values;
+    protected MenuProducts() {
     }
 
-    protected MenuProducts() {
-
+    public MenuProducts(List<MenuProduct> values) {
+        if (values.isEmpty()) {
+            throw new MenuProductException(MenuErrorCode.MENU_PRODUCT_IS_EMPTY);
+        }
+        this.values = values;
     }
 
     public List<MenuProduct> getValues() {
         return Collections.unmodifiableList(values);
+    }
+
+    public BigDecimal getSum() {
+        return values.stream()
+                .map(MenuProduct::getProductPrice)
+                .reduce(ProductPrice::add)
+                .get()
+                .getValue();
     }
 }

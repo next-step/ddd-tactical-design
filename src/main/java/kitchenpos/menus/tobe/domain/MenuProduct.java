@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -19,13 +20,19 @@ public class MenuProduct {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
+
     private Product product;
+
+    protected MenuProduct() {
+
+    }
 
     @Embedded
     private MenuProductQuantity quantity;
 
-
-    public MenuProduct() {
+    public MenuProduct(Product product, MenuProductQuantity quantity) {
+        this.product = product;
+        this.quantity = quantity;
     }
 
     public Long getSeq() {
@@ -44,5 +51,9 @@ public class MenuProduct {
 
     public UUID getProductId() {
         return product.getId();
+    }
+
+    public ProductPrice getProductPrice() {
+        return product.getPrice().multiply(quantity.getValue());
     }
 }

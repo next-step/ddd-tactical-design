@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.exception.ProductPriceException;
+import kitchenpos.menus.exception.MenuErrorCode;
+import kitchenpos.menus.exception.MenuPriceException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -20,10 +20,10 @@ public class MenuPrice {
 
     public MenuPrice(BigDecimal price) {
         if (price == null) {
-            throw new ProductPriceException(ProductErrorCode.PRICE_IS_NULL);
+            throw new MenuPriceException(MenuErrorCode.PRICE_IS_NULL);
         }
         if (isLessThanZero(price)) {
-            throw new ProductPriceException(ProductErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
+            throw new MenuPriceException(MenuErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
         }
         this.price = price;
     }
@@ -44,6 +44,10 @@ public class MenuPrice {
     public MenuPrice multiply(long input) {
         BigDecimal multiply = price.multiply(BigDecimal.valueOf(input));
         return new MenuPrice(multiply);
+    }
+
+    public boolean isGreaterThan(BigDecimal input) {
+        return price.compareTo(input) > 0;
     }
 
     public BigDecimal getValue() {

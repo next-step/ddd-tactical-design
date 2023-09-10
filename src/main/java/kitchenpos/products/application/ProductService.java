@@ -41,7 +41,7 @@ public class ProductService {
         ProductPrice productPrice = new ProductPrice(price);
         product.changePrice(productPrice);
 
-        menuService.hideMenuIfMenuPriceGreaterThanProductPrice(productId);
+        menuService.hideMenuWhenChangeProductPrice(productId);
         return product;
     }
 
@@ -50,8 +50,10 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Product findById(UUID productId) {
         return productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
     }
+
 }
