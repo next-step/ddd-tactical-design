@@ -6,9 +6,11 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Money;
+import kitchenpos.products.tobe.domain.Name;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,7 @@ class MenuServiceTest {
         purgomalumClient = new FakePurgomalumClient();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
-        product = productRepository.save(product("후라이드", 16_000L));
+        product = productRepository.save(product(new Name("후라이드"), new Money(BigDecimal.valueOf(16_000L))));
     }
 
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

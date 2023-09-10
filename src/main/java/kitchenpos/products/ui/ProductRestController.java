@@ -1,7 +1,7 @@
 package kitchenpos.products.ui;
 
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +12,7 @@ import java.util.UUID;
 @RequestMapping("/api/products")
 @RestController
 public class ProductRestController {
+
     private final ProductService productService;
 
     public ProductRestController(final ProductService productService) {
@@ -19,7 +20,7 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
+    public ResponseEntity<Product> create(@RequestBody final ProductVo request) {
         final Product response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
             .body(response);

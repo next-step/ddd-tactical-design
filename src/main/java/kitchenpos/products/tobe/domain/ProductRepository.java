@@ -1,10 +1,11 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.tobe.domain;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductRepository {
+
     Product save(Product product);
 
     Optional<Product> findById(UUID id);
@@ -12,5 +13,5 @@ public interface ProductRepository {
     List<Product> findAll();
 
     List<Product> findAllByIdIn(List<UUID> ids);
-}
 
+}
