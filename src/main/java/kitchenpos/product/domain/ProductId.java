@@ -11,16 +11,12 @@ public class ProductId {
         this.value = value;
     }
 
-    public static ProductId from(final UUID value) {
-        if (value == null) {
-            return newId();
-        }
-
+    public static ProductId from(@NotNull final UUID value) {
         return new ProductId(value);
     }
 
     public static ProductId newId() {
-        return new ProductId(null);
+        return new ProductId(UUID.randomUUID());
     }
 
     public UUID getValue() {

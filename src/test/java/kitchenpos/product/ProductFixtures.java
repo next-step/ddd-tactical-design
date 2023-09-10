@@ -1,11 +1,9 @@
 package kitchenpos.product;
 
-import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductId;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class ProductFixtures {
     private ProductFixtures() {}
@@ -15,10 +13,10 @@ public class ProductFixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(ProductId.newId(), name, BigDecimal.valueOf(price));
+        return Product.of(ProductId.newId(), name, BigDecimal.valueOf(price));
     }
 
     public static Product product(final String name, final BigDecimal price) {
-        return new Product(ProductId.newId(), name, price);
+        return Product.of(ProductId.newId(), name, price);
     }
 }

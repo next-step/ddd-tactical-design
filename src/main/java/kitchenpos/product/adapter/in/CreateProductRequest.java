@@ -1,23 +1,15 @@
 package kitchenpos.product.adapter.in;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-class ProductRequest {
-    private UUID id;
-
+class CreateProductRequest {
     private String name;
 
     private BigDecimal price;
 
-    ProductRequest(UUID id, String name, BigDecimal price) {
-        this.id = id;
+    CreateProductRequest(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public String getName() {

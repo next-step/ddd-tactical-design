@@ -4,9 +4,11 @@ import kitchenpos.product.application.ProductService;
 import kitchenpos.product.application.port.in.ProductUseCase;
 import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.domain.Product;
+import kitchenpos.product.domain.ProductId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +25,7 @@ class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody final ProductRequest request) {
+    public ResponseEntity<ProductResponse> create(@RequestBody final CreateProductRequest request) {
         final Product product = productUseCase.create(ProductMapper.requestToDomain(request));
         final ProductResponse response = ProductMapper.domainToResponse(product);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
@@ -31,8 +33,13 @@ class ProductRestController {
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<ProductEntity> changePrice(@PathVariable final UUID productId, @RequestBody final ProductEntity request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+    public ResponseEntity<ProductResponse> changePrice(
+            @PathVariable final UUID productId,
+            @RequestBody final ChangePriceRequest request
+    ) {
+        final Product product = productUseCase.changePrice(ProductId.from(productId), BigDecimal.valueOf(request.getPrice()));
+        final ProductResponse response = ProductMapper.domainToResponse(product);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

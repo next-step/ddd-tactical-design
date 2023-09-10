@@ -23,7 +23,8 @@ class ProductPersistenceAdapter implements LoadProductPort, UpdateProductPort {
     }
 
     @Override
-    public void updateProduct(final Product product) {
-        productRepository.save(ProductDomainEntityMapper.domainToEntity(product));
+    public Product updateProduct(final Product product) {
+        final ProductEntity entity = productRepository.save(ProductDomainEntityMapper.domainToEntity(product));
+        return ProductDomainEntityMapper.entityToDomain(entity);
     }
 }

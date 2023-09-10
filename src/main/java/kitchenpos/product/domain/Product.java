@@ -10,18 +10,14 @@ public class Product {
 
     private BigDecimal price;
 
-    public Product(ProductId id, String name, BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    private Product() {}
 
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
-        }
-
-        this.id = id;
-        this.name = name;
-        this.price = price;
+    public static Product of(final ProductId id, final String name, final BigDecimal price) {
+        final Product product = new Product();
+        product.setId(id);
+        product.setName(name);
+        product.setPrice(price);
+        return product;
     }
 
     public ProductId getId() {
@@ -34,5 +30,29 @@ public class Product {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public Product changePrice(final BigDecimal newPrice) {
+        return Product.of(id, name, newPrice);
+    }
+
+    private void setId(ProductId id) {
+        this.id = id;
+    }
+
+    private void setName(String name) {
+        if (Objects.isNull(name)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.name = name;
+    }
+
+    private void setPrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.price = price;
     }
 }

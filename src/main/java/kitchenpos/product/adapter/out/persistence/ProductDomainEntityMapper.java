@@ -7,7 +7,7 @@ class ProductDomainEntityMapper {
     private ProductDomainEntityMapper() {}
 
     static Product entityToDomain(final ProductEntity entity) {
-        return new Product(ProductId.from(entity.getId()), entity.getName(), entity.getPrice());
+        return Product.of(ProductId.from(entity.getId()), entity.getName(), entity.getPrice());
     }
 
     static ProductEntity domainToEntity(final Product domain) {
