@@ -3,11 +3,13 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductQuantityException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 
 @Embeddable
 public class MenuProductQuantity {
+    @Column(name = "quantity", nullable = false)
     private long value;
 
     protected MenuProductQuantity() {

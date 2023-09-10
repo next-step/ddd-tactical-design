@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 
 @Embeddable
@@ -20,5 +21,9 @@ public class MenuProducts {
 
     protected MenuProducts() {
 
+    }
+
+    public List<MenuProduct> getValues() {
+        return Collections.unmodifiableList(values);
     }
 }

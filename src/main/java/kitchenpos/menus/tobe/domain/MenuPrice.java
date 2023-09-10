@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductPriceException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 @Embeddable
 public class MenuPrice {
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     protected MenuPrice() {
