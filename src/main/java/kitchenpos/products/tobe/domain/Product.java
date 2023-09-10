@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -46,28 +45,11 @@ public class Product {
         return price;
     }
 
-    public void validate(final boolean containsProfanity) {
-        validatePrice();
-        validateName(containsProfanity);
-    }
-
-    public void validatePrice() {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateName(final boolean containsProfanity) {
-        if (Objects.isNull(name) || containsProfanity) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     public static Product create(final UUID id, final String name, final BigDecimal price) {
         return new Product(id, name, price);
     }
 
-    public void changePrice(BigDecimal price, List<Menu> menus) {
+    public void changePrice(final BigDecimal price, final List<Menu> menus) {
         this.price = price;
         // TODO: 메뉴 리팩토링 시 메뉴쪽 메서드로 분리할 것!
         for (final Menu menu : menus) {
