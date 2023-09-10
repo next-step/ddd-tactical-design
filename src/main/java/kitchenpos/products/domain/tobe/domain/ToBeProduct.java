@@ -23,7 +23,7 @@ public class ToBeProduct {
     @Embedded
     private Price price;
 
-    public ToBeProduct() {
+    protected ToBeProduct() {
     }
 
     public ToBeProduct(String name, BigDecimal productPrice, boolean containsProfanity) {
