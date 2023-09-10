@@ -3,10 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -18,30 +15,32 @@ public class Product {
     @Id
     private UUID id;
 
+    @Embedded
     @Column(name = "name", nullable = false)
-    private String name;
+    private Name name;
 
+    @Embedded
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Price price;
 
     public Product() {
     }
 
     public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
-        this.name = name;
-        this.price = price;
+        this.name = new Name(name);
+        this.price = new Price(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getName() {
+    public Name getName() {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -50,7 +49,7 @@ public class Product {
     }
 
     public void changePrice(final BigDecimal price, final List<Menu> menus) {
-        this.price = price;
+        this.price = new Price(price);
         // TODO: 메뉴 리팩토링 시 메뉴쪽 메서드로 분리할 것!
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
