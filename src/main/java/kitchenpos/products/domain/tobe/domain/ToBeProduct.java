@@ -21,7 +21,7 @@ public class ToBeProduct {
     private String name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     public ToBeProduct() {
     }
@@ -30,7 +30,7 @@ public class ToBeProduct {
         validationOfName(name, containsProfanity);
         this.id = UUID.randomUUID();
         this.name = name;
-        this.price = ProductPrice.of(productPrice);
+        this.price = Price.of(productPrice);
     }
 
     private void validationOfName(String name, boolean containsProfanity) {
@@ -47,11 +47,11 @@ public class ToBeProduct {
     }
 
     public boolean isSamePrice(BigDecimal productPrice) {
-        return price.isSamePrice(ProductPrice.of(productPrice));
+        return price.isSamePrice(Price.of(productPrice));
     }
 
     public boolean isGreaterThanPrice(BigDecimal productPrice) {
-        return price.isGreaterThan(ProductPrice.of(productPrice));
+        return price.isGreaterThan(Price.of(productPrice));
     }
 
 }

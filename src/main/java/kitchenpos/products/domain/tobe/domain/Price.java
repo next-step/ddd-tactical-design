@@ -11,38 +11,38 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Embeddable
-public class ProductPrice {
+public class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
     @Column(name = "currency", nullable = false)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    private ProductPrice(BigDecimal price) {
+    private Price(BigDecimal price) {
         validationOfPrice(price);
         this.price = price;
         this.currency = defaultCurrency();
     }
 
-    public ProductPrice() {
+    public Price() {
 
     }
 
-    public static ProductPrice of(BigDecimal price) {
-        return new ProductPrice(price);
+    public static Price of(BigDecimal price) {
+        return new Price(price);
     }
 
-    public static ProductPrice of(long price) {
-        return new ProductPrice(BigDecimal.valueOf(price));
+    public static Price of(long price) {
+        return new Price(BigDecimal.valueOf(price));
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof ProductPrice))
+        if (!(o instanceof Price))
             return false;
-        ProductPrice that = (ProductPrice)o;
+        Price that = (Price)o;
         return Objects.equals(price, that.price) && Objects.equals(currency, that.currency);
     }
 
@@ -60,23 +60,23 @@ public class ProductPrice {
         }
     }
 
-    public ProductPrice add(ProductPrice productPrice) {
-        return ProductPrice.of(price.add(productPrice.price));
+    public Price add(Price price) {
+        return Price.of(this.price.add(price.price));
     }
 
-    public boolean isGreaterThan(ProductPrice comparePrice) {
+    public boolean isGreaterThan(Price comparePrice) {
         return price.compareTo(comparePrice.price) >= 1;
     }
 
-    public boolean isSamePrice(ProductPrice comparePrice) {
+    public boolean isSamePrice(Price comparePrice) {
         return this.equals(comparePrice);
     }
 
-    public ProductPrice changePrice(BigDecimal newPrice) {
-        return new ProductPrice(newPrice);
+    public Price changePrice(BigDecimal newPrice) {
+        return new Price(newPrice);
     }
 
-    public ProductPrice changePrice(Long newPrice) {
-        return new ProductPrice(BigDecimal.valueOf(newPrice));
+    public Price changePrice(Long newPrice) {
+        return new Price(BigDecimal.valueOf(newPrice));
     }
 }
