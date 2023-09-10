@@ -19,10 +19,6 @@ public class ProductChangePriceRequest {
         this.price = price;
     }
 
-    public Product toProduct(DisplayedNamePolicy displayedNamePolicy) {
-        return new Product(id, ProductDisplayedName.from(displayedName, displayedNamePolicy), ProductPrice.from(price));
-    }
-
     public UUID getId() {
         return id;
     }
