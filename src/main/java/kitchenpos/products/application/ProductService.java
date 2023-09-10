@@ -1,5 +1,8 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.exception.KitchenPosException;
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
@@ -10,42 +13,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+
+import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
 
 @Service
 public class ProductService {
+    private final kitchenpos.products.tobe.domain.ProductRepository tobeProductRepository;
+
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final kitchenpos.products.tobe.domain.ProductRepository tobeProductRepository,
+            final ProductRepository productRepository,
+            final MenuRepository menuRepository,
+            final PurgomalumClient purgomalumClient
     ) {
+        this.tobeProductRepository = tobeProductRepository;
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+    public kitchenpos.products.tobe.domain.Product create(final Product request) {
+        final Name name = new Name(request.getName());
+        final Price price = new Price(request.getPrice());
+        if (purgomalumClient.containsProfanity(name.getValue())) {
+            throw new KitchenPosException("상품 이름에 비속어가 포함되어 있으므로", BAD_REQUEST);
         }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+        final kitchenpos.products.tobe.domain.Product product = new kitchenpos.products.tobe.domain.Product(name, price);
+        return tobeProductRepository.save(product);
     }
 
     @Transactional

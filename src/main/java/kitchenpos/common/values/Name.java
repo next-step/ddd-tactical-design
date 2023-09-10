@@ -4,6 +4,7 @@ import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class Name {
@@ -29,6 +30,23 @@ public class Name {
 
     public String getValue() {
         return value;
+    }
+
+    public boolean equalValue(String value) {
+        return this.value.equals(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name name = (Name) o;
+        return Objects.equals(value, name.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
 }

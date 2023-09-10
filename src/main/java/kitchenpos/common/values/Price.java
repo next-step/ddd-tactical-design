@@ -3,8 +3,11 @@ package kitchenpos.common.values;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Objects;
 
 import static java.math.BigDecimal.ZERO;
 import static kitchenpos.common.ComparisonUtils.lessThan;
@@ -12,6 +15,7 @@ import static kitchenpos.common.ComparisonUtils.lessThan;
 @Embeddable
 public class Price {
 
+    @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
 
@@ -36,6 +40,23 @@ public class Price {
 
     public BigDecimal getValue() {
         return value;
+    }
+
+    public boolean equalValue(BigDecimal value) {
+        return this.value.equals(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price = (Price) o;
+        return Objects.equals(value, price.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
 }

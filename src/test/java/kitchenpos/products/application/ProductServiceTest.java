@@ -1,11 +1,13 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.exception.KitchenPosExceptionType;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.util.KitchenPostExceptionAssertionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,11 +20,14 @@ import java.util.List;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
+import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProductServiceTest {
+    private kitchenpos.products.tobe.domain.ProductRepository tobeProductRepository;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
@@ -30,22 +35,23 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        tobeProductRepository = new kitchenpos.products.application.tobe.InMemoryProductRepository();
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(tobeProductRepository, productRepository, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
         final Product expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final kitchenpos.products.tobe.domain.Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+            () -> assertTrue(actual.getName().equalValue(expected.getName())),
+            () -> assertTrue(actual.getPrice().equalValue(expected.getPrice()))
         );
     }
 
@@ -55,8 +61,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void create(final BigDecimal price) {
         final Product expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+        assertThrows(KitchenPosExceptionType.BAD_REQUEST, () -> productService.create(expected));
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -65,8 +70,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void create(final String name) {
         final Product expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+        assertThrows(KitchenPosExceptionType.BAD_REQUEST, () -> productService.create(expected));
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
