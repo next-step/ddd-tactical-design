@@ -1,9 +1,9 @@
 package kitchenpos.menus.exception;
 
-public class DisplayedNameException extends RuntimeException {
+public class MenuDisplayedNameException extends RuntimeException {
     private final MenuErrorCode message;
 
-    public DisplayedNameException(MenuErrorCode message) {
+    public MenuDisplayedNameException(MenuErrorCode message) {
         this.message = message;
     }
 

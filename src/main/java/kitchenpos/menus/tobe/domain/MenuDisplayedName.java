@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.exception.DisplayedNameException;
+import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.common.domain.ProfanityPolicy;
 
@@ -22,11 +22,11 @@ public class MenuDisplayedName {
 
     private void validate(String text, ProfanityPolicy profanityPolicy) {
         if (isNullAndEmpty(text)) {
-            throw new DisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
+            throw new MenuDisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
 
         if (profanityPolicy.containsProfanity(text)) {
-            throw new DisplayedNameException(MenuErrorCode.NAME_HAS_PROFANITY);
+            throw new MenuDisplayedNameException(MenuErrorCode.NAME_HAS_PROFANITY);
         }
     }
 

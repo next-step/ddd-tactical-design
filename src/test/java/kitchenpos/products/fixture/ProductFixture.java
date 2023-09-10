@@ -16,5 +16,8 @@ public class ProductFixture {
         return Product.of(name, BigDecimal.valueOf(price), PROFANITY_POLICY);
     }
 
+    public static Product product(long price) {
+        return product("후라이드", price);
+    }
 
 }

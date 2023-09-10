@@ -76,4 +76,5 @@ public class MenuFixture {
                 menuProduct.getProductId(),
                 menuProduct.getQuantityValue());
     }
+
 }

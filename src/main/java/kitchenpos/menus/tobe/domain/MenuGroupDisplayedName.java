@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.exception.DisplayedNameException;
+import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 
 import javax.persistence.Embeddable;
@@ -16,7 +16,7 @@ public class MenuGroupDisplayedName {
 
     public MenuGroupDisplayedName(String name) {
         if (isNullAndEmpty(name)) {
-            throw new DisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
+            throw new MenuDisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
         this.name = name;
     }

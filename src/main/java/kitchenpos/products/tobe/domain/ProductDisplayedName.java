@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.exception.DisplayedNameException;
+import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.exception.ProductErrorCode;
 
 import javax.persistence.Embeddable;
@@ -22,11 +22,11 @@ public class ProductDisplayedName {
 
     private void validate(String text, ProfanityPolicy profanityPolicy) {
         if (isNullAndEmpty(text)) {
-            throw new DisplayedNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
+            throw new ProductDisplayedNameException(ProductErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
 
         if (profanityPolicy.containsProfanity(text)) {
-            throw new DisplayedNameException(ProductErrorCode.NAME_HAS_PROFANITY);
+            throw new ProductDisplayedNameException(ProductErrorCode.NAME_HAS_PROFANITY);
         }
     }
 

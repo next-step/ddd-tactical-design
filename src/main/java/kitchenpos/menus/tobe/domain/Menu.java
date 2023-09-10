@@ -42,7 +42,12 @@ public class Menu {
     }
 
 
-    public Menu(String name, ProfanityPolicy policy, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(String name,
+                ProfanityPolicy policy,
+                BigDecimal price,
+                MenuGroup menuGroup,
+                boolean displayed,
+                List<MenuProduct> menuProducts) {
         this(new MenuDisplayedName(name, policy),
                 new MenuPrice(price),
                 menuGroup,
@@ -51,7 +56,11 @@ public class Menu {
         );
     }
 
-    public Menu(MenuDisplayedName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public Menu(MenuDisplayedName name,
+                MenuPrice price,
+                MenuGroup menuGroup,
+                boolean displayed,
+                MenuProducts menuProducts) {
         if (displayed && price.isGreaterThan(menuProducts.getSum())) {
             throw new MenuPriceException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
@@ -62,6 +71,20 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         menuProducts.setMenu(this);
+    }
+
+    public Menu(String name,
+                ProfanityPolicy policy,
+                long price,
+                MenuGroup menuGroup,
+                boolean displayed,
+                MenuProducts menuProducts) {
+        this(new MenuDisplayedName(name, policy),
+                new MenuPrice(price),
+                menuGroup,
+                displayed,
+                menuProducts
+        );
     }
 
     public void changePrice(MenuPrice price) {

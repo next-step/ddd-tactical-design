@@ -1,9 +1,9 @@
 package kitchenpos.products.exception;
 
-public class DisplayedNameException extends RuntimeException {
+public class ProductDisplayedNameException extends RuntimeException {
     private final ProductErrorCode message;
 
-    public DisplayedNameException(ProductErrorCode message) {
+    public ProductDisplayedNameException(ProductErrorCode message) {
         this.message = message;
     }
 

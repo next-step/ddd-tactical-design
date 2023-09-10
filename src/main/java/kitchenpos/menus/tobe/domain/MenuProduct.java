@@ -4,6 +4,7 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -67,5 +68,25 @@ public class MenuProduct {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MenuProduct that = (MenuProduct) o;
+
+        if (!Objects.equals(seq, that.seq)) return false;
+        if (!Objects.equals(product, that.product)) return false;
+        return Objects.equals(menu, that.menu);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = seq != null ? seq.hashCode() : 0;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (menu != null ? menu.hashCode() : 0);
+        return result;
     }
 }

@@ -5,7 +5,7 @@ import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
-import kitchenpos.menus.exception.DisplayedNameException;
+import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuPriceException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
@@ -106,7 +106,7 @@ class MenuServiceTest {
                 19_000L,
                 menuGroupId,
                 true,
-               createMenuProduct(INVALID_ID, 2L));
+                createMenuProduct(INVALID_ID, 2L));
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -163,7 +163,7 @@ class MenuServiceTest {
                 name, 19_000L, menuGroupId, true, createMenuProduct(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
-                .isInstanceOf(DisplayedNameException.class);
+                .isInstanceOf(MenuDisplayedNameException.class);
     }
 
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
@@ -282,7 +282,4 @@ class MenuServiceTest {
         return new MenuProductRequest(id, l);
     }
 
-    private MenuChangePriceRequest changePriceRequest(final BigDecimal price) {
-        return new MenuChangePriceRequest(price);
-    }
 }

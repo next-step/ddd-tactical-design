@@ -1,9 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.exception.ProductDisplayedNameException;
-import kitchenpos.products.exception.ProductErrorCode;
+import kitchenpos.menus.exception.MenuDisplayedNameException;
+import kitchenpos.menus.exception.MenuErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,8 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("이름")
-class ProductDisplayedNameTest {
+@DisplayName("메뉴 이름")
+class MenuDisplayedNameTest {
 
     private ProfanityPolicy profanityPolicy;
 
@@ -27,16 +27,16 @@ class ProductDisplayedNameTest {
     @Test
     void create1() {
         assertThatNoException().isThrownBy(
-                () -> new ProductDisplayedName("표준어", profanityPolicy));
+                () -> new MenuDisplayedName("표준어", profanityPolicy));
     }
 
     @DisplayName("[실패] 이름에 비속어가 포함될 수 없다.")
     @Test
     void create2() {
         assertThatThrownBy(
-                () -> new ProductDisplayedName("비속어", profanityPolicy))
-                .isInstanceOf(ProductDisplayedNameException.class)
-                .hasMessage(ProductErrorCode.NAME_HAS_PROFANITY.getMessage());
+                () -> new MenuDisplayedName("비속어", profanityPolicy))
+                .isInstanceOf(MenuDisplayedNameException.class)
+                .hasMessage(MenuErrorCode.NAME_HAS_PROFANITY.getMessage());
     }
 
     @DisplayName("[실패] 이름은 null이거나 공백일 수 없다.")
@@ -44,8 +44,8 @@ class ProductDisplayedNameTest {
     @NullAndEmptySource
     void create_test_3(String name) {
         assertThatThrownBy(
-                () -> new ProductDisplayedName(name, profanityPolicy))
-                .isInstanceOf(ProductDisplayedNameException.class)
-                .hasMessage(ProductErrorCode.NAME_IS_NULL_OR_EMPTY.getMessage());
+                () -> new MenuDisplayedName(name, profanityPolicy))
+                .isInstanceOf(MenuDisplayedNameException.class)
+                .hasMessage(MenuErrorCode.NAME_IS_NULL_OR_EMPTY.getMessage());
     }
 }
