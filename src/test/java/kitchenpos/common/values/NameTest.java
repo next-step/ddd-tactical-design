@@ -5,8 +5,12 @@ import kitchenpos.common.exception.KitchenPosExceptionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.springframework.web.client.HttpClientErrorException;
 
+import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
+import static kitchenpos.common.exception.KitchenPosExceptionType.METHOD_NOT_ALLOWED;
 import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertEqualsExceptionType;
+import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
@@ -25,15 +29,13 @@ class NameTest {
 
     @Test
     void create_fail1() {
-        KitchenPosException kitchenPosException = assertThrows(KitchenPosException.class, Name::new);
-        assertEqualsExceptionType(kitchenPosException, KitchenPosExceptionType.METHOD_NOT_ALLOWED);
+        assertThrows(METHOD_NOT_ALLOWED, Name::new);
     }
 
     @NullAndEmptySource
     @ParameterizedTest
     void create_fail2(String givenName) {
-        KitchenPosException kitchenPosException = assertThrows(KitchenPosException.class, () -> new Name(givenName));
-        assertEqualsExceptionType(kitchenPosException, KitchenPosExceptionType.BAD_REQUEST);
+        assertThrows(BAD_REQUEST, () -> new Name(givenName));
     }
 
 }
