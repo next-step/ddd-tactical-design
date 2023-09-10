@@ -1,13 +1,17 @@
 package kitchenpos.menus.tobe.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Embeddable
 public class MenuProducts {
     @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JoinColumn(
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
     private List<MenuProduct> values;
 
     public MenuProducts(List<MenuProduct> values) {
