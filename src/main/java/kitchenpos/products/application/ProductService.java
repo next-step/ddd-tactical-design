@@ -3,37 +3,35 @@ package kitchenpos.products.application;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateReqeust;
+import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
+import static kitchenpos.common.exception.KitchenPosExceptionType.NOT_FOUND;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
-    ) {
+            final PurgomalumClient purgomalumClient,
+            final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -51,22 +49,9 @@ public class ProductService {
     public Product changePrice(final UUID productId, final ChangePriceRequest request) {
         final Price price = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
         product.changePrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        publisher.publishEvent(new ProductPriceChangeEvent(product.getId()));
         return product;
     }
 

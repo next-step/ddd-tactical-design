@@ -33,7 +33,7 @@ public class Price {
 
     private static void validate(BigDecimal value) {
         if (value == null || lessThan(value, ZERO)) {
-            String message = String.format("이름이 %s 이므로", value);
+            String message = String.format("가격이 %s 이므로", value);
             throw new KitchenPosException(message, KitchenPosExceptionType.BAD_REQUEST);
         }
     }
@@ -62,4 +62,8 @@ public class Price {
     public BigDecimal multiply(BigDecimal bigDecimal) {
         return value.multiply(bigDecimal);
     }
+    public BigDecimal multiply(long bigDecimal) {
+        return value.multiply(BigDecimal.valueOf(bigDecimal));
+    }
+
 }

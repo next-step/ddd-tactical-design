@@ -4,6 +4,7 @@ package kitchenpos.menus.domain;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -62,4 +63,5 @@ public class MenuProduct {
     public void setProductId(final UUID productId) {
         this.productId = productId;
     }
+
 }
