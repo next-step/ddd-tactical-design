@@ -13,5 +13,7 @@ public interface ProductRepository {
     List<Product> findAll();
 
     List<Product> findAllByIdIn(List<UUID> ids);
+
+    Integer countByIdIn(List<UUID> ids);
 }
 

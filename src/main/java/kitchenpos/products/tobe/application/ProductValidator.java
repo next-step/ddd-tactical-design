@@ -1,12 +1,11 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductValidator {
@@ -18,10 +17,11 @@ public class ProductValidator {
     }
 
     @Transactional(readOnly = true)
-    public void isExistProductIn(MenuProducts menuProducts) {
-        final List<Product> products = productRepository.findAllByIdIn(menuProducts.getProductIds());
+    public void isExistProductIn(List<UUID> productIds) {
 
-        if (products.size() != menuProducts.size()) {
+        Integer productSize = productRepository.countByIdIn(productIds);
+
+        if (productSize != productIds.size()) {
             throw new IllegalArgumentException();
         }
     }
