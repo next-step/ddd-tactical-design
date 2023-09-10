@@ -25,6 +25,17 @@ public class Fixtures {
         return menu(price, false, menuProducts);
     }
 
+    public static Menu menu(final long price, final boolean displayed, final MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        final Menu menu = new Menu();
+        menu.setId(UUID.randomUUID());
+        menu.setName("후라이드+후라이드");
+        menu.setPrice(BigDecimal.valueOf(price));
+        menu.setMenuGroup(menuGroup);
+        menu.setDisplayed(displayed);
+        menu.setMenuProducts(Arrays.asList(menuProducts));
+        return menu;
+    }
+
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());

@@ -1,37 +1,30 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.common.event.ProductPriceChangedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class ProductDomainService {
 
-    public Product changePrice(Product product, BigDecimal price, List<Menu> menus) {
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public ProductDomainService(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+
+    public boolean changePrice(Product product, BigDecimal price) {
         boolean isChanged = product.changePrice(ProductPrice.update(price));
         if (isChanged) {
-            checkMenuCouldBeDisplayedAfterProductPriceChanged(menus);
+            applicationEventPublisher.publishEvent(new ProductPriceChangedEvent(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice()
+            ));
         }
-        return product;
-    }
-
-    private void checkMenuCouldBeDisplayedAfterProductPriceChanged(List<Menu> menus) {
-        menus.forEach(menu -> {
-            BigDecimal totalMenuProductPrice = menu.getMenuProducts()
-                    .parallelStream()
-                    .map(menuProduct -> menuProduct.getProduct().getPrice())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            if (isMenuPriceGreaterThanSumOfMenuProducts(menu, totalMenuProductPrice)) {
-                menu.setDisplayed(false);
-            }
-        });
-    }
-
-    private boolean isMenuPriceGreaterThanSumOfMenuProducts(Menu menu, BigDecimal totalMenuProductPrice) {
-        return menu.getPrice().compareTo(totalMenuProductPrice) > 0;
+        return isChanged;
     }
 
 }

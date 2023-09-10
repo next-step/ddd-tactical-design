@@ -1,7 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
@@ -18,15 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductDomainService productDomainService;
     private final PurgomalumClient purgomalumClient;
-    private final MenuRepository menuRepository;
+    private final ProductDomainService productDomainService;
 
-    public ProductService(ProductRepository productRepository, ProductDomainService productDomainService, PurgomalumClient purgomalumClient, MenuRepository menuRepository) {
+    public ProductService(ProductRepository productRepository, PurgomalumClient purgomalumClient, ProductDomainService productDomainService) {
         this.productRepository = productRepository;
-        this.productDomainService = productDomainService;
         this.purgomalumClient = purgomalumClient;
-        this.menuRepository = menuRepository;
+        this.productDomainService = productDomainService;
     }
 
     @Transactional
@@ -42,8 +38,8 @@ public class ProductService {
     public ProductDetailResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        List<Menu> menus = menuRepository.findAllByProductId(productId);
-        return toProductDetailResponse(productDomainService.changePrice(product, request.getPrice(), menus));
+        productDomainService.changePrice(product, request.getPrice());
+        return toProductDetailResponse(product);
     }
 
     @Transactional(readOnly = true)

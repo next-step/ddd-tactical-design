@@ -1,7 +1,9 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.event.ProductPriceChangedEvent;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuDomainService;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
@@ -18,6 +20,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,23 +38,34 @@ import static kitchenpos.Fixtures.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.when;
 
+@Transactional
+@SpringBootTest
+@RecordApplicationEvents
 class ProductServiceTest {
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
+    @SpyBean
+    private ProductService productService;
+    @Autowired
+    private ProductDomainService productDomainService;
+    @SpyBean
+    private MenuDomainService menuDomainService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
-    private ProductService productService;
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
         productRepository = new InMemoryProductRepository();
+        purgomalumClient = new FakePurgomalumClient();
         productService = new ProductService(
                 productRepository,
-                new ProductDomainService(),
                 purgomalumClient,
-                menuRepository
+                productDomainService
         );
     }
 
@@ -109,7 +129,12 @@ class ProductServiceTest {
         final Product product = productRepository.findById(productDetailResponse.getId())
                 .orElseThrow(NoSuchElementException::new);
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        when(menuDomainService.findAllByProductId(product.getId()))
+                .thenReturn(List.of(menu));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+        assertThat(applicationEvents.stream(ProductPriceChangedEvent.class).count()).isOne();
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
