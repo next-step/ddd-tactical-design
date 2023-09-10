@@ -8,26 +8,18 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class DisplayedName {
+public class MenuGroupDisplayedName {
     private String name;
 
-    protected DisplayedName() {
+    protected MenuGroupDisplayedName() {
 
     }
 
-    public DisplayedName(String name, ProfanityPolicy profanityPolicy) {
-        validate(name, profanityPolicy);
-        this.name = name;
-    }
-
-    private void validate(String text, ProfanityPolicy profanityPolicy) {
-        if (isNullAndEmpty(text)) {
+    public MenuGroupDisplayedName(String name) {
+        if (isNullAndEmpty(name)) {
             throw new DisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
-
-        if (profanityPolicy.containsProfanity(text)) {
-            throw new DisplayedNameException(MenuErrorCode.NAME_HAS_PROFANITY);
-        }
+        this.name = name;
     }
 
     private boolean isNullAndEmpty(String name) {
@@ -42,7 +34,7 @@ public class DisplayedName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DisplayedName that = (DisplayedName) o;
+        MenuGroupDisplayedName that = (MenuGroupDisplayedName) o;
         return Objects.equals(name, that.name);
     }
 
