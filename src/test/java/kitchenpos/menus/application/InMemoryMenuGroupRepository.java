@@ -1,5 +1,8 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+
 import java.util.*;
 
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {

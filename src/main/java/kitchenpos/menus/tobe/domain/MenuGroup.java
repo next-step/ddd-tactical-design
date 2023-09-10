@@ -30,4 +30,8 @@ public class MenuGroup {
     public String getNameValue() {
         return name.getValue();
     }
+
+    public MenuGroupDisplayedName getName() {
+        return name;
+    }
 }

@@ -1,5 +1,7 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +10,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
 
-import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -53,8 +55,6 @@ class MenuGroupServiceTest {
     }
 
     private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(name);
     }
 }
