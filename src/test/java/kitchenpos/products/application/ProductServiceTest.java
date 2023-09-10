@@ -105,9 +105,9 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(product("후라이드", 16_000L));
-        productRepository.save(product("양념치킨", 16_000L));
-        final List<Product> actual = productService.findAll();
+        tobeProductRepository.save(toBeProduct("후라이드", 16_000L));
+        tobeProductRepository.save(toBeProduct("양념치킨", 16_000L));
+        final List<kitchenpos.products.tobe.domain.Product> actual = tobeProductRepository.findAll();
         assertThat(actual).hasSize(2);
     }
 
