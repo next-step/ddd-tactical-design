@@ -56,9 +56,9 @@ public class Product {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    menuProduct.getProduct()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
