@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductTest {
 
+    PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+
     @DisplayName("상품을 등록할수 있다")
     @ParameterizedTest
     @ValueSource(longs = {1, 100, 1_000, 10_000, 100_000, 1_000_000})
@@ -19,7 +21,7 @@ public class ProductTest {
         String name = "name";
 
         //when
-        Product product = new Product(name, BigDecimal.valueOf(price));
+        Product product = new Product(name, BigDecimal.valueOf(price), purgomalumClient);
 
         //then
         assertAll(
@@ -35,10 +37,18 @@ public class ProductTest {
     @ValueSource(longs = {-1, -100, -1_000, -10_000, -100_000, -1_000_000})
     void test2(long price) {
         assertThatThrownBy(
-            () -> new Product("name", BigDecimal.valueOf(price))
+            () -> new Product("name", BigDecimal.valueOf(price), purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("가격은 음수가 될수 없습니다");
     }
 
-
+    @DisplayName("비속어 이름을 가진 상품은 등록할수 없다")
+    @ParameterizedTest
+    @ValueSource(strings = {"비속어", "욕설"})
+    void test3(String profanity) {
+        assertThatThrownBy(
+            () -> new Product(profanity, BigDecimal.TEN, purgomalumClient)
+        ).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("상품명은 비속어가 될수 없습니다");
+    }
 }

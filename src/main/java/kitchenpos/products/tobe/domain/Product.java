@@ -14,15 +14,15 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private Price price = new Price();
 
-    public Product(String name, BigDecimal price) {
+    public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.name = new ProductName(name, purgomalumClient);
         this.price = new Price(price);
     }
 
@@ -38,7 +38,7 @@ public class Product {
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
     public BigDecimal getPrice() {

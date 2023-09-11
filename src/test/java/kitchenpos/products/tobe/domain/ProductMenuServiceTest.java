@@ -16,13 +16,14 @@ public class ProductMenuServiceTest {
 
     ProductMenuService productMenuService;
     ProductRepository productRepository;
-
+    PurgomalumClient purgomalumClient;
 
     ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     public void init() {
         productRepository = new InMemoryProductRepository();
+        purgomalumClient = new FakePurgomalumClient();
         eventPublisher = Mockito.mock(ApplicationEventPublisher.class);
         productMenuService = new ProductMenuService(productRepository, eventPublisher);
 
@@ -32,7 +33,7 @@ public class ProductMenuServiceTest {
     @Test
     void test1() {
         //given
-        Product product = productRepository.save(new Product("name", BigDecimal.TEN));
+        Product product = productRepository.save(new Product("name", BigDecimal.TEN, purgomalumClient));
         BigDecimal changePrice = BigDecimal.valueOf(1_000);
 
         //when
