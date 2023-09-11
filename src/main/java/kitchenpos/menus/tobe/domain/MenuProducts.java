@@ -36,10 +36,11 @@ public class MenuProducts {
         return new MenuProducts(menuProductList);
     }
 
-    public BigDecimal getTotalPrice() {
-        return menuProducts.stream()
+    public boolean hasTotalPriceLowerThan(BigDecimal price) {
+        BigDecimal totalPrice = menuProducts.stream()
                 .map(it -> it.getProduct().getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return totalPrice.compareTo(price) < 0;
     }
 
     public List<Long> getSequences() {

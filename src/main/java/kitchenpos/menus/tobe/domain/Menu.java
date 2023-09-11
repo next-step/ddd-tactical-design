@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.ui.MenuRequest;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -55,30 +53,30 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
 
-        if (isPriceLessThanTotal()) {
+        if (isMenuPriceHigherThanTotalProducts(this.price.value())) {
             throw new IllegalArgumentException();
         }
     }
 
     public void hideIfMenuPriceTooHigher() {
-        if (isPriceLessThanTotal()) {
+        if (isMenuPriceHigherThanTotalProducts(this.price.value())) {
             this.displayed = false;
         }
     }
 
-    public void changePrice(BigDecimal ten) {
-        if (isPriceLessThanTotal()) {
-            throw new IllegalArgumentException();
+    public void changePrice(BigDecimal price) {
+        if (isMenuPriceHigherThanTotalProducts(price)) {
+            this.displayed = false;
         }
-        this.price = new MenuPrice(ten);
+        this.price = new MenuPrice(price);
     }
 
-    private boolean isPriceLessThanTotal() {
-        return price.value().compareTo(menuProducts.getTotalPrice()) < 0;
+    private boolean isMenuPriceHigherThanTotalProducts(BigDecimal price) {
+        return menuProducts.hasTotalPriceLowerThan(price);
     }
 
     public void setDisplayable() {
-        if (isPriceLessThanTotal()) {
+        if (isMenuPriceHigherThanTotalProducts(this.price.value())) {
             throw new IllegalArgumentException();
         }
         this.displayed = true;
