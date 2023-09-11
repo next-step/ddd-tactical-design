@@ -1,10 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.math.BigDecimal;
+import kitchenpos.products.ui.ProductCreateRequest;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -15,19 +13,16 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
     public Product() {
     }
 
-    private Product(UUID id, String name, BigDecimal price) {
-        ProductPolicy.checkDisplayedName(name);
-        ProductPolicy.checkPrice(price);
-
+    private Product(UUID id, DisplayedName name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -37,11 +32,11 @@ public class Product {
         return id;
     }
 
-    public String getName() {
+    public DisplayedName getName() {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -49,19 +44,25 @@ public class Product {
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setName(DisplayedName name) {
         this.name = name;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
-    public static Product create(UUID id, String name, BigDecimal price) {
+    public static Product create(UUID id, DisplayedName name, Price price) {
+        if (name == null) {
+            throw new IllegalArgumentException("이름은 필수 항목입니다.");
+        }
+        if (price == null) {
+            throw new IllegalArgumentException("가격은 필수 항목입니다.");
+        }
         return new Product(id, name, price);
     }
 
-    public static Product create(String name, BigDecimal price) {
+    public static Product create(DisplayedName name, Price price) {
         return create(UUID.randomUUID(), name, price);
     }
 

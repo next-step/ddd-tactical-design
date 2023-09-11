@@ -25,7 +25,7 @@ public class MenuPolicy {
     private static BigDecimal getMenuAmount(Menu menu) {
         return menu.getMenuProducts()
                 .stream()
-                .map(menuProduct -> menuProduct.getProduct().getPrice())
+                .map(menuProduct -> menuProduct.getProduct().getPrice().getPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

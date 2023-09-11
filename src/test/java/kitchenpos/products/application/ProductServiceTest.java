@@ -5,9 +5,9 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductChangeRequest;
-import kitchenpos.products.tobe.domain.ProductCreateRequest;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.ui.ProductChangeRequest;
+import kitchenpos.products.ui.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,14 +56,12 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final ProductCreateRequest expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> productService.create(expected))
+        assertThatThrownBy(() -> createProductRequest("후라이드", price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
     @ParameterizedTest
     void create(final String name) {
         final ProductCreateRequest expected = createProductRequest(name, 16_000L);
@@ -85,10 +83,8 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ProductChangeRequest expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> changePriceRequest(price))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")

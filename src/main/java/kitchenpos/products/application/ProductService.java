@@ -3,7 +3,11 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.*;
+import kitchenpos.products.tobe.domain.MenuPolicy;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.ui.ProductChangeRequest;
+import kitchenpos.products.ui.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +22,9 @@ public class ProductService {
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final ProductRepository productRepository,
+            final MenuRepository menuRepository,
+            final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
@@ -30,16 +34,14 @@ public class ProductService {
     @Transactional
     public Product create(final ProductCreateRequest request) {
         Product product = Product.of(request);
-        if (purgomalumClient.containsProfanity(product.getName())) {
-            throw new IllegalArgumentException();
+        if (purgomalumClient.containsProfanity(product.getName().getName())) {
+            throw new IllegalArgumentException("비속어 입력됨: " + product.getName().getName());
         }
         return productRepository.save(product);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final ProductChangeRequest request) {
-        ProductPolicy.checkPrice(request.getPrice());
-
         Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.setPrice(request.getPrice());
