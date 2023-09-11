@@ -26,10 +26,6 @@ public class MenuProducts {
         this.values = values;
     }
 
-    public List<MenuProduct> getValues() {
-        return Collections.unmodifiableList(values);
-    }
-
     public BigDecimal calculateSum() {
         return values.stream()
                 .map(MenuProduct::calculatePrice)
@@ -40,5 +36,9 @@ public class MenuProducts {
 
     public void mapMenu(Menu menu) {
         values.forEach(menuProduct -> menuProduct.mapMenu(menu));
+    }
+
+    public List<MenuProduct> getValues() {
+        return Collections.unmodifiableList(values);
     }
 }

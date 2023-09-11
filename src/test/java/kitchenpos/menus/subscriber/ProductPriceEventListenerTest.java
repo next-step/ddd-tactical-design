@@ -7,7 +7,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;

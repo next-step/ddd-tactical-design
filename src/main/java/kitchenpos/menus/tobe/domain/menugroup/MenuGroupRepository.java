@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain.menugroup;
 
-import kitchenpos.menus.tobe.domain.menu.MenuGroup;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

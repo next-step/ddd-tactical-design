@@ -59,6 +59,14 @@ public class MenuProduct {
         }
     }
 
+    public Price calculatePrice() {
+        return productPrice.multiply(quantity.getValue());
+    }
+
+    public void mapMenu(Menu menu) {
+        this.menu = menu;
+    }
+
     public Long getSeq() {
         return seq;
     }
@@ -69,14 +77,6 @@ public class MenuProduct {
 
     public long getQuantityValue() {
         return quantity.getValue();
-    }
-
-    public Price calculatePrice() {
-        return productPrice.multiply(quantity.getValue());
-    }
-
-    public void mapMenu(Menu menu) {
-        this.menu = menu;
     }
 
     @Override

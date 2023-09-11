@@ -3,7 +3,7 @@ package kitchenpos.menus.ui;
 import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.dto.MenuGroupResponse;
-import kitchenpos.menus.tobe.domain.menu.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
