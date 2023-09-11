@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("메뉴 가격")
 class PriceTest {
 
-
     @DisplayName("가격 생성")
     @Nested
     class create {

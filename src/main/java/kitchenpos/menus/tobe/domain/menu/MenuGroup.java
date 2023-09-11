@@ -25,7 +25,6 @@ public class MenuGroup {
         this.name = new MenuGroupDisplayedName(name);
     }
 
-
     public UUID getId() {
         return id;
     }

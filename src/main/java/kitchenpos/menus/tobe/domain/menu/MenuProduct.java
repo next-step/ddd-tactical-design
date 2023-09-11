@@ -17,7 +17,6 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 

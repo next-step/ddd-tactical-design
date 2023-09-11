@@ -62,7 +62,6 @@ public class MenuFixture {
         );
     }
 
-
     public static MenuProduct menuProduct() {
         return new MenuProduct(product(), 2L);
     }

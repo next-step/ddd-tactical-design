@@ -6,14 +6,12 @@ import kitchenpos.menus.exception.MenuProductQuantityException;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-
 @Embeddable
 public class MenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private long value;
 
     protected MenuProductQuantity() {
-
     }
 
     public MenuProductQuantity(long value) {
@@ -27,11 +25,9 @@ public class MenuProductQuantity {
         return input < 0;
     }
 
-
     public long getValue() {
         return value;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -48,5 +44,4 @@ public class MenuProductQuantity {
         return (int) (value ^ (value >>> 32));
     }
 }
-
 

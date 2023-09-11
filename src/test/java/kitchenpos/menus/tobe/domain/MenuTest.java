@@ -108,7 +108,6 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isTrue();
     }
 
-
     @DisplayName("[실패] 메뉴 상품 금액의 합보다 메뉴 가격이 크면, 메뉴를 노출할 수 없다.")
     @Test
     void display2() {

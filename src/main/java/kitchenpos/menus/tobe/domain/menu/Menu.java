@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.exception.MenuErrorCode;
@@ -40,7 +39,6 @@ public class Menu {
 
     protected Menu() {
     }
-
 
     public Menu(String name,
                 ProfanityPolicy policy,

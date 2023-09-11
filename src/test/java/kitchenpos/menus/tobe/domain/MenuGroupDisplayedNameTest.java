@@ -21,7 +21,6 @@ class MenuGroupDisplayedNameTest {
                 () -> new MenuGroupDisplayedName("표준어"));
     }
 
-
     @DisplayName("[실패] 이름은 null이거나 공백일 수 없다.")
     @ParameterizedTest
     @NullAndEmptySource

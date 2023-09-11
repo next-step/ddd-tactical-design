@@ -8,7 +8,6 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-
 @Embeddable
 public class Price {
     @Column(name = "price", nullable = false)
@@ -54,7 +53,6 @@ public class Price {
         return price;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,5 +66,4 @@ public class Price {
         return Objects.hash(price);
     }
 }
-
 

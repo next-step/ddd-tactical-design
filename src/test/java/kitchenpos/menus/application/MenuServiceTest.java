@@ -78,7 +78,6 @@ class MenuServiceTest {
         );
     }
 
-
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProductRequests")
     @ParameterizedTest
