@@ -75,7 +75,7 @@ public class MenuProduct {
         return productPrice.multiply(quantity.getValue());
     }
 
-    public void setMenu(Menu menu) {
+    public void mapMenu(Menu menu) {
         this.menu = menu;
     }
 

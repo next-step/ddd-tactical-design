@@ -68,7 +68,7 @@ public class Menu {
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        menuProducts.setMenu(this);
+        menuProducts.mapMenu(this);
     }
 
     public Menu(String name,

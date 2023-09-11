@@ -38,7 +38,7 @@ public class MenuProducts {
                 .getValue();
     }
 
-    public void setMenu(Menu menu) {
-        values.forEach(menuProduct -> menuProduct.setMenu(menu));
+    public void mapMenu(Menu menu) {
+        values.forEach(menuProduct -> menuProduct.mapMenu(menu));
     }
 }
