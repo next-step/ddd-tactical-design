@@ -119,6 +119,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.create(UUID.randomUUID(), name, BigDecimal.valueOf(price));
+        return Product.create(UUID.randomUUID(), name, BigDecimal.valueOf(price), false);
     }
 }

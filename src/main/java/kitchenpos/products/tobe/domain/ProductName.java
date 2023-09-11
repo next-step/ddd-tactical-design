@@ -4,15 +4,15 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Name {
+public class ProductName {
 
     private String name;
 
-    public Name() {
+    public ProductName() {
     }
 
-    public Name(String name) {
-        if (Objects.isNull(name)) {
+    public ProductName(String name, boolean containsProfanity) {
+        if (Objects.isNull(name) || containsProfanity) {
             throw new IllegalArgumentException();
         }
         this.name = name;
@@ -23,9 +23,9 @@ public class Name {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Name name1 = (Name) o;
+        ProductName productName1 = (ProductName) o;
 
-        return name.equals(name1.name);
+        return name.equals(productName1.name);
     }
 
     @Override

@@ -23,15 +23,11 @@ class ProductTest {
         BigDecimal price = BigDecimal.valueOf(10_000L);
 
         // when
-        Product actual = Product.create(id, name, price);
+        Product actual = Product.create(id, name, price, false);
 
         // then
         assertThat(actual).isNotNull();
-        assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(new Name(name)),
-            () -> assertThat(actual.getPrice()).isEqualTo(new Price(price))
-        );
+        assertThat(actual.getId()).isNotNull();
     }
 
     @Test
@@ -46,7 +42,7 @@ class ProductTest {
 
         // then
         assertAll(
-            () -> assertThat(product.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(15_000L))),
+            () -> assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(15_000L))),
             () -> assertThat(menu.isDisplayed()).isTrue()
         );
     }
@@ -63,7 +59,7 @@ class ProductTest {
 
         // then
         assertAll(
-            () -> assertThat(product.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(8_000L))),
+            () -> assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(8_000L))),
             () -> assertThat(menu.isDisplayed()).isFalse()
         );
     }

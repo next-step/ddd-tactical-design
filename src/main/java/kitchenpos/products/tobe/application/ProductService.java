@@ -34,7 +34,8 @@ public class ProductService {
         final Product product = Product.create(
             UUID.randomUUID(),
             request.getName(),
-            request.getPrice()
+            request.getPrice(),
+            purgomalumClient.containsProfanity(request.getName())
         );
         return productRepository.save(product);
     }

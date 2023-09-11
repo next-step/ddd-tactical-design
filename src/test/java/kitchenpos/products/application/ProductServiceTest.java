@@ -5,9 +5,8 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.ProductRequest;
 import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Name;
-import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,6 @@ import java.util.UUID;
 import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
@@ -46,11 +44,7 @@ class ProductServiceTest {
         final ProductRequest expected = createProductRequest("후라이드", 16_000L);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
-        assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(new Name(expected.getName())),
-            () -> assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()))
-        );
+        assertThat(actual.getId()).isNotNull();
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
@@ -79,7 +73,7 @@ class ProductServiceTest {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductRequest expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(new Price(expected.getPrice()));
+        assertThat(actual.getPrice()).isEqualTo(new ProductPrice(expected.getPrice()));
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")

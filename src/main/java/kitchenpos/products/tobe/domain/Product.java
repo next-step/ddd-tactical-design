@@ -17,47 +17,56 @@ public class Product {
 
     @Embedded
     @Column(name = "name", nullable = false)
-    private Name name;
+    private ProductName productName;
 
     @Embedded
     @Column(name = "price", nullable = false)
-    private Price price;
+    private ProductPrice productPrice;
 
     public Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
+    public Product(UUID id, String name, BigDecimal price, boolean containsProfanity) {
         this.id = id;
-        this.name = new Name(name);
-        this.price = new Price(price);
+        this.productName = new ProductName(name, containsProfanity);
+        this.productPrice = new ProductPrice(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Name getName() {
-        return name;
+    public ProductName getName() {
+        return productName;
     }
 
-    public Price getPrice() {
-        return price;
+    public ProductPrice getPrice() {
+        return productPrice;
     }
 
-    public static Product create(final UUID id, final String name, final BigDecimal price) {
-        return new Product(id, name, price);
+    public BigDecimal multiplyPrice(BigDecimal multiplicand) {
+        BigDecimal price = this.productPrice.toBigDecimal();
+        return price.multiply(multiplicand);
+    }
+
+    public static Product create(
+        final UUID id,
+        final String name,
+        final BigDecimal price,
+        boolean containsProfanity
+    ) {
+        return new Product(id, name, price, containsProfanity);
     }
 
     public void changePrice(final BigDecimal price, final List<Menu> menus) {
-        this.price = new Price(price);
+        this.productPrice = new ProductPrice(price);
         // TODO: 메뉴 리팩토링 시 메뉴쪽 메서드로 분리할 것!
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                     menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        .multiplyPrice(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
