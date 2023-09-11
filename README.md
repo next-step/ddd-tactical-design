@@ -156,49 +156,154 @@ docker compose -p kitchenpos up -d
 | 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
 | 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
 
+
 ## 모델링
 
-### 상품
+### 상품(Product)
 
-- `Product`는 식별자와 `DisplayedName`, `Price`를 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
-- `Product`의 가격은 변경 할 수 있다
-  - `Price`는 0이상 이어야 한다
-  - `Product`의 `Price`가 변경되면 `Product`를 포함한 `Menu`들의 `display`가능한 지 확인한다
+- `Product`는 `Price`와 `DisplayedName`을 가진다
 
-### 메뉴
+- `매장점주`는 `Product`를 등록 할 수 있다
+  - `Price`는 0원 이상이어야 한다
+  - `Name`은 비어 있을 수 없다
+  - `Name`은 `profanity`을 포함할 수 없다
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `매장점주`는 `Product`의 `Price`를 변경할 수 있다
 
-### 매장 주문
+### 메뉴(Menu)
 
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- `Menu`는 `DisplayedName`, `Price`, `MenuProducts` 그리고 `DisplayStatus`를 가진다
 
-### 배달 주문
+- `Menu`는 `MenuGroup`에 포함된다
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+- `매장점주`는 `Menu`를 등록할 수 있다
+  - `Price`는 0원 이상이어야 한다
+  - `Price`는 `MenuProduct`들의 가격 합보다 클 수 없다
+  - `Name`은 비어 있을 수 없다
+  - `Name`은 `profanity`을 포함할 수 없다
+  - `MenuProduct`는 비어 있을 수 없다
+    - `MenuProduct`의 `Product`는 매장에 등록된 `Product`이어야 한다
+    - `MenuProduct`의 수량은 0개 이상이어야 한다
 
-### 포장 주문
+- `매장점주`는 `Menu`의 `Price`를 변경할 수 있다
+  - `Price`는 0원 이상이어야 한다
+  - `Price`가 `MenuProducts`의 `TotalPrice`보다 크다면 `hide` 상태가 된다
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+- `매장점주`는 `Menu`를 `display` 할수 있다
+  - `Price`가 `MenuProducts`의 `TotalPrice`보다 크다면 `display`할 수 없다
+
+- `매장점주`는 `Menu`를 `hide` 할수 있다
+
+### 포장 주문(TakeOutOrder)
+- `TakeOutOrder`는 `OrderStatus`, `OrderLineItems`, `OrderDateTime` 을 가진다
+
+- `TakeOutOrder`의 흐름은 `접수 대기 중` -> `수락됨` -> `서빙` -> `계산 완료됨` 이다
+
+- `고객`은 `TakeOutOrder`을 요청할 수 있다
+  - `OrderLineItem`는 비어 있을 수 없다
+    - `Price`과 수량을 가진다
+    - 수량은 1개 이상이어야 한다
+    - `Menu`는 `display` 상태이어야 한다
+    - `Menu`는 매장 내 `Menu`의 가격과 일치하여야 한다
+
+- `매장점주`는 `TakeOutOrder`를 수락할 수 있다
+  - `TakeOutOrder`는 `접수 대기 중` 상태 이어야 한다
+
+- `매장점주`는 `TakeOutOrder`를 포장 후 전달할 수 있다
+  - `TakeOutOrder`는 `수락됨` 상태 이어야 한다
+
+- `매장점주`는 `TakeOutOrder`를 계산 완료할 수 있다
+  - - `TakeOutOrder`는 `서빙` 상태 이어야 한다
+
+### 배달 주문(DeliveryOrder)
+
+- `DeliveryOrder`는 `OrderStatus`, `OrderLineItems`, `OrderDateTime` 그리고 `DeliveryAddress` 을 가진다
+
+- `DeliveryOrder`의 흐름은 `접수 대기 중` -> `수락됨` -> `서빙` -> `배달 중` -> `배달 완료` -> `계산 완료됨` 이다
+
+- `DeliveryOrder`의 `OrderLineItem`의 수량은 1개 이상이어야 한다
+
+- `고객`은 `DeliveryOrder`를 요청할 수 있다
+  - `DeliveryAddress`는 비어 있을 수 없다
+  - `OrderLineItem`는 비어 있을 수 없다
+    - `Price`과 수량을 가진다
+    - 수량은 1개 이상이어야 한다
+    - `Menu`는 `display` 상태이어야 한다
+    - `Menu`는 매장 내 `Menu`의 가격과 일치하여야 한다
+
+- `매장점주`는 `DeliveryOrder`를 수락할 수 있다
+  - `EatInOrder`는 `접수 대기 중` 상태 이어야 한다
+  - `KitchenridersClient`에 배달을 요청한다
+
+- `매장점주`는 `DeliveryOrder`를 `배달기사`에게 전달할 수 있다
+  - `EatInOrder`는 `수락됨` 상태 이어야 한다
+
+- `배달기사`는 `DeliveryOrder`의 배달을 시작할 수 있다
+  - `EatInOrder`는 `서빙` 상태 이어야 한다
+
+- `배달기사`는 `DeliveryOrder`의 배달을 완료할 수 있다
+  - `EatInOrder`는 `배달 중` 상태 이어야 한다
+
+- `매장점주`는 `DeliveryOrder`를 계산 완료할 수 있다
+  - `DeliveryOrder`는 `배달 완료` 상태 이어야 한다
+
+### 매장 식사 주문(EatInOrder)
+
+- `EatInOrder`는 `OrderStatus`, `OrderLineItems`, `OrderDateTime` 그리고 `OrderTable` 을 가진다
+
+- `EatInOrder`의 흐름은 `접수 대기 중` -> `수락됨` -> `서빙` -> `계산 완료됨` 이다
+
+- `고객`은 `EatInOrder`를 요청할 수 있다
+  - `OrderTable`는 이용 가능한 상태이어야 한다
+  - `OrderLineItem`는 비어 있을 수 없다
+    - `Price`과 수량을 가진다
+    - 수량을 1개 미만으로 설정하여서 취소할 수 있다
+    - `Menu`는 `display` 상태이어야 한다
+    - `Menu`는 매장 내 `Menu`의 가격과 일치하여야 한다
+
+- `매장점주`는 `EatInOrder`를 수락할 수 있다
+  - `EatInOrder`는 `접수 대기 중` 상태 이어야 한다
+
+- `매장점주`는 `EatInOrder`를 매장 테이블로 전달할 수 있다
+  - `EatInOrder`는 `수락됨` 상태 이어야 한다
+
+- `매장점주`는 `EatInOrder`를 계산 완료할 수 있다
+  - `EatInOrder`는 `서빙` 상태 이어야 한다
+  - `OrderTable`을 다시 손님을 받을 수 있도록 정리한다
+
+## Value Objects
+
+### 공개 이름(DisplayedName)
+
+- `DisplayedName`은 1자 이상의 문자를 가진다
+  - `DisplayedName`은 `PurgomalumClient`을 통해 비속어 여부를 검사를 한다
+
+### 가격(Price)
+
+- `Price`는 0원 이상의 정수를 가진다
+- `Product`나 `Menu`의 `Price`를 변경하면 `MenuPriceValidator`를 통해 `Menu`의 `DisplayStatus`를 변경한다
+
+### 전체 구성품 (MenuProducts)
+
+- `MenuProducts`는 `Menu`에 포함된 모든 `MenuProduct` 가진다
+- `MenuProducts`에서 전체 구성품의 `TotalPrice`를 생성한다
+
+## 도메인 모델
+
+```mermaid
+
+stateDiagram-v2
+    상품
+    메뉴 --> 주문
+    메뉴 --> 상품
+    배달_주문 --> 배달
+    매장_주문 --> 매장_테이블
+    손님 --> 메뉴
+    손님 --> 주문
+
+    state 주문 {
+        포장_주문
+        배달_주문
+        매장_주문
+    }
+```

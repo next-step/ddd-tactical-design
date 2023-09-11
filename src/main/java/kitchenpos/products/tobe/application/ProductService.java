@@ -1,9 +1,9 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.ui.ProductRequest;
 import kitchenpos.products.tobe.ui.ProductResponse;
@@ -13,31 +13,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProductNameFactory productNameFactory;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final ProductNameFactory productNameFactory
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.productNameFactory = productNameFactory;
     }
 
     @Transactional
     public ProductResponse create(final ProductRequest request) {
-        if (purgomalumClient.containsProfanity(request.getName())) {
-            throw new IllegalArgumentException();
-        }
-
-        Product savedProduct = productRepository.save(Product.of(request));
-        return new ProductResponse(savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice());
+        ProductName productName = productNameFactory.createProductName(request.getName());
+        Product savedProduct = productRepository.save(Product.of(productName, request.getPrice()));
+        return new ProductResponse(savedProduct);
     }
 
     @Transactional
@@ -49,12 +47,14 @@ public class ProductService {
         menuRepository.findAllByProductId(productId)
                 .forEach(Menu::hideIfMenuPriceTooHigher);
 
-        return new ProductResponse(product.getId(), product.getName(), product.getPrice());
+        return new ProductResponse(product);
     }
 
 
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll().stream()
+                .map(ProductResponse::new)
+                .collect(Collectors.toList());
     }
 }

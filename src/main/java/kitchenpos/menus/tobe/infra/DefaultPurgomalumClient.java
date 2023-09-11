@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.menus.tobe.infra;
 
 import kitchenpos.products.tobe.domain.PurgomalumClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;

@@ -4,12 +4,12 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 @Embeddable
-public class Price {
+public class ProductPrice {
     private BigDecimal value;
 
-    protected Price() { }
+    protected ProductPrice() { }
 
-    public Price(BigDecimal price) {
+    public ProductPrice(BigDecimal price) {
         if (price != null && price.compareTo(BigDecimal.ZERO) < 0 ) {
             throw new IllegalArgumentException("price는 0보다 높아야 한다");
         }
