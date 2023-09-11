@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
-import kitchenpos.common.domain.ProductPrice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -32,8 +32,8 @@ public class MenuProducts {
 
     public BigDecimal getSum() {
         return values.stream()
-                .map(MenuProduct::getProductPrice)
-                .reduce(ProductPrice::add)
+                .map(MenuProduct::getPrice)
+                .reduce(Price::add)
                 .get()
                 .getValue();
     }

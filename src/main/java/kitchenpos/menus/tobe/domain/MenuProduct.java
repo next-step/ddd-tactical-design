@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.common.domain.ProductPrice;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -23,13 +23,14 @@ public class MenuProduct {
     )
     private Product product;
 
+    protected MenuProduct() {
+
+    }
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "line_id")
     private Menu menu;
 
-    protected MenuProduct() {
-
-    }
 
     @Embedded
     private MenuProductQuantity quantity;
@@ -62,7 +63,7 @@ public class MenuProduct {
         return product.getId();
     }
 
-    public ProductPrice getProductPrice() {
+    public Price getPrice() {
         return product.getPrice().multiply(quantity.getValue());
     }
 

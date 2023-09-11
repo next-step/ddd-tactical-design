@@ -1,12 +1,12 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.common.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, BigDecimal price) {
         Product product = findById(productId);
-        ProductPrice productPrice = new ProductPrice(price);
+        Price productPrice = new Price(price);
         product.changePrice(productPrice);
 
         try {

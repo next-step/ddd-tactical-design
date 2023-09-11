@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.common.domain.ProductPrice;
 import kitchenpos.common.domain.ProfanityPolicy;
 
 import javax.persistence.*;
@@ -23,13 +22,13 @@ public class Product {
 
     @Column(name = "price", nullable = false)
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product() {
 
     }
 
-    public Product(UUID id, ProductDisplayedName name, ProductPrice price) {
+    public Product(UUID id, ProductDisplayedName name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -39,7 +38,7 @@ public class Product {
         return new Product(
                 UUID.randomUUID(),
                 new ProductDisplayedName(name, profanityPolicy),
-                new ProductPrice(price)
+                new Price(price)
         );
     }
 
@@ -59,7 +58,7 @@ public class Product {
         return price.getValue();
     }
 
-    public ProductPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 
