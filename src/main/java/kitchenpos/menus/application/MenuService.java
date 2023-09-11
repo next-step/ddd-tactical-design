@@ -110,8 +110,7 @@ public class MenuService {
     }
 
     private MenuProduct menuProductRequestToEntity(MenuProductRequest menuProductRequest) {
-        MenuProductQuantity menuProductQuantity = new MenuProductQuantity(menuProductRequest.getQuantity());
         Product product = productService.findById(menuProductRequest.getProductId());
-        return new MenuProduct(product, menuProductQuantity);
+        return new MenuProduct(product, menuProductRequest.getQuantity());
     }
 }

@@ -2,10 +2,8 @@ package kitchenpos.menus.tobe.domain;
 
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.common.exception.PriceErrorCode;
-import kitchenpos.menus.exception.MenuErrorCode;
-import kitchenpos.common.exception.PriceException;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuException;
 
 import javax.persistence.*;
@@ -30,8 +28,7 @@ public class Menu {
     @ManyToOne(optional = false)
     @JoinColumn(
             name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            columnDefinition = "binary(16)"
     )
     private MenuGroup menuGroup;
 
@@ -91,14 +88,14 @@ public class Menu {
     }
 
     public void changePrice(Price price) {
-        if (isDisplayed() && price.isGreaterThan(menuProducts.getSum())) {
+        if (displayed && price.isGreaterThan(menuProducts.getSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
 
         this.price = price;
     }
 
-    public void hideWhenPriceGreaterThanProducts(){
+    public void hideWhenPriceGreaterThanProducts() {
         if (price.isGreaterThan(menuProducts.getSum())) {
             hide();
         }

@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.domain.Price;
+import kitchenpos.menus.exception.MenuErrorCode;
+import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
@@ -15,56 +17,63 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
 
-    protected MenuProduct() {
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
 
-    }
+    @Transient
+    private Price productPrice;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "line_id")
     private Menu menu;
 
-
     @Embedded
     private MenuProductQuantity quantity;
 
-    public MenuProduct(Product product, MenuProductQuantity quantity) {
-        this.product = product;
+    protected MenuProduct() {
+
+    }
+
+    public MenuProduct(UUID productId, Price productPrice, MenuProductQuantity quantity) {
+        validateProductPrice(productPrice);
+        this.productPrice = productPrice;
+        this.productId = productId;
         this.quantity = quantity;
     }
 
+    public MenuProduct(UUID productId, Price productPrice, long quantity) {
+        this(productId, productPrice, new MenuProductQuantity(quantity));
+    }
+
     public MenuProduct(Product product, long quantity) {
-        this.product = product;
-        this.quantity = new MenuProductQuantity(quantity);
+        this(product.getId(), product.getPrice(), new MenuProductQuantity(quantity));
+    }
+
+    public MenuProduct(Product product, MenuProductQuantity quantity) {
+        this(product.getId(), product.getPrice(), quantity);
+    }
+
+    private void validateProductPrice(Price productPrice) {
+        if (productPrice == null) {
+            throw new MenuProductException(MenuErrorCode.MENU_PRODUCT_PRICE_IS_EMPTY);
+        }
     }
 
     public Long getSeq() {
         return seq;
     }
 
-
-    public Product getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
-
 
     public long getQuantityValue() {
         return quantity.getValue();
     }
 
-    public UUID getProductId() {
-        return product.getId();
-    }
-
     public Price getPrice() {
-        return product.getPrice().multiply(quantity.getValue());
+        return productPrice.multiply(quantity.getValue());
     }
 
     public void setMenu(Menu menu) {
@@ -79,14 +88,14 @@ public class MenuProduct {
         MenuProduct that = (MenuProduct) o;
 
         if (!Objects.equals(seq, that.seq)) return false;
-        if (!Objects.equals(product, that.product)) return false;
+        if (!Objects.equals(productId, that.productId)) return false;
         return Objects.equals(menu, that.menu);
     }
 
     @Override
     public int hashCode() {
         int result = seq != null ? seq.hashCode() : 0;
-        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (productId != null ? productId.hashCode() : 0);
         result = 31 * result + (menu != null ? menu.hashCode() : 0);
         return result;
     }

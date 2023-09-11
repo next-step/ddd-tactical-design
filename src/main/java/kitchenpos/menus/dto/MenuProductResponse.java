@@ -2,30 +2,30 @@ package kitchenpos.menus.dto;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.products.dto.ProductResponse;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MenuProductResponse {
 
     private Long seq;
-    private ProductResponse product;
     private long quantity;
+    private UUID productId;
 
     public MenuProductResponse() {
     }
 
-    public MenuProductResponse(Long seq, ProductResponse product, long quantity) {
+    public MenuProductResponse(Long seq, UUID productId, long quantity) {
         this.seq = seq;
-        this.product = product;
+        this.productId = productId;
         this.quantity = quantity;
     }
 
     public static MenuProductResponse fromEntity(MenuProduct menuProduct) {
         return new MenuProductResponse(
                 menuProduct.getSeq(),
-                ProductResponse.fromEntity(menuProduct.getProduct()),
+                menuProduct.getProductId(),
                 menuProduct.getQuantityValue()
         );
     }
@@ -45,12 +45,12 @@ public class MenuProductResponse {
         this.seq = seq;
     }
 
-    public ProductResponse getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
 
-    public void setProduct(ProductResponse product) {
-        this.product = product;
+    public void setProductId(UUID productId) {
+        this.productId = productId;
     }
 
     public long getQuantity() {

@@ -39,7 +39,7 @@ public class InMemoryMenuRepository implements MenuRepository {
                 .stream()
                 .filter(menu -> menu.getMenuProducts().getValues()
                         .stream()
-                        .anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+                        .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
                 .collect(Collectors.toList());
     }
 }
