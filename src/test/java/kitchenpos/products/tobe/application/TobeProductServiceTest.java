@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +102,7 @@ class TobeProductServiceTest {
     }
 
     private TobeProduct createProductRequest(final String name, final BigDecimal price) {
-        return new TobeProduct(UUID.randomUUID(), name, price);
+        return product(name, price);
     }
 
     private TobeProduct changePriceRequest(final long price) {
@@ -108,14 +110,19 @@ class TobeProductServiceTest {
     }
 
     private TobeProduct changePriceRequest(final BigDecimal price) {
-        return new TobeProduct(UUID.randomUUID(), "후라이드 치킨", price);
+        return product("후라이드 치킨", price);
     }
 
-    public static TobeProduct product() {
+    public TobeProduct product() {
         return product("후라이드", 16_000L);
     }
 
-    public static TobeProduct product(final String name, final long price) {
-        return new TobeProduct(UUID.randomUUID(), name, BigDecimal.valueOf(price));
+    public TobeProduct product(final String name, final long price) {
+        return product(name, BigDecimal.valueOf(price));
+    }
+
+    public TobeProduct product(final String name, final BigDecimal price) {
+        return new TobeProduct(UUID.randomUUID(), new ProductName(name, purgomalumClient),
+                               new ProductPrice(price));
     }
 }

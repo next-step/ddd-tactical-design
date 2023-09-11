@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -30,20 +29,14 @@ public class TobeProductService {
 
     @Transactional
     public TobeProduct create(BigDecimal price, String name) {
-        ProductName productName = new ProductName(name);
-        if (purgomalumClient.containsProfanity(productName.getName())) {
-            throw new IllegalArgumentException("이름에는 비속어가 포함될 수 없습니다. name: " + name);
-        }
-
-        final TobeProduct product = new TobeProduct(UUID.randomUUID(), productName, new ProductPrice(price));
+        final TobeProduct product = new TobeProduct(UUID.randomUUID(),
+                                                    new ProductName(name, purgomalumClient),
+                                                    new ProductPrice(price));
         return tobeProductRepository.save(product);
     }
 
     @Transactional
     public TobeProduct changePrice(final UUID productId, BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final TobeProduct product = tobeProductRepository.findById(productId)
                                                          .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);

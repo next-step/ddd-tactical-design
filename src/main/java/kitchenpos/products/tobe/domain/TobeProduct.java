@@ -25,12 +25,6 @@ public class TobeProduct {
     protected TobeProduct() {
     }
 
-    public TobeProduct(UUID id, String name, BigDecimal price) {
-        this.id = id;
-        this.name = new ProductName(name);
-        this.price = new ProductPrice(price);
-    }
-
     public TobeProduct(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
