@@ -73,4 +73,35 @@ class MenuTest {
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("메뉴명은 비속어가 될수 없습니다");
     }
+
+    @DisplayName("메뉴를 숨길수 있다")
+    @Test
+    void test3() {
+        //given
+        String menuName = "name";
+        BigDecimal menuPrice = BigDecimal.TEN;
+        Menu menu = new Menu(menuName, menuPrice, menuGroup, purgomalumClient);
+
+        //when
+        menu.hide();
+
+        //then
+        assertThat(menu.getStatus()).isEqualTo(DisplayStatus.HIDE);
+    }
+
+    @DisplayName("메뉴를 표시할수 있다")
+    @Test
+    void test4() {
+        //given
+        String menuName = "name";
+        BigDecimal menuPrice = BigDecimal.TEN;
+        Menu menu = new Menu(menuName, menuPrice, menuGroup, purgomalumClient);
+        menu.hide();
+
+        //when
+        menu.display();
+
+        //then
+        assertThat(menu.getStatus()).isEqualTo(DisplayStatus.DISPLAY);
+    }
 }

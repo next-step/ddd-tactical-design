@@ -46,6 +46,14 @@ public class Menu {
     protected Menu() {
     }
 
+    public void display() {
+        this.status = DisplayStatus.DISPLAY;
+    }
+
+    public void hide() {
+        this.status = DisplayStatus.HIDE;
+    }
+
     public UUID getId() {
         return id;
     }
