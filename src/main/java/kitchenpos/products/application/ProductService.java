@@ -6,14 +6,19 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.ui.dto.ProductChangePriceRequest;
+import kitchenpos.products.ui.dto.ProductChangePriceResponse;
+import kitchenpos.products.ui.dto.ProductCreateRequest;
+import kitchenpos.products.ui.dto.ProductCreateResponse;
+import kitchenpos.products.ui.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -22,9 +27,9 @@ public class ProductService {
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final ProductRepository productRepository,
+            final MenuRepository menuRepository,
+            final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
@@ -32,50 +37,46 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public ProductCreateResponse create(final ProductCreateRequest request) {
+        final Product product = new Product(request.getName(), purgomalumClient, request.getPrice());
+        Product saveProduct = productRepository.save(product);
+        return ProductCreateResponse.of(
+                saveProduct.getId(),
+                saveProduct.getName().getValue(),
+                saveProduct.getPrice().getValue())
+                ;
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public ProductChangePriceResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+                .orElseThrow(NoSuchElementException::new);
+        product.changePrice(request.getPrice());
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                                .getValue()
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ProductChangePriceResponse.of(
+                product.getId(),
+                product.getName().getValue(),
+                product.getPrice().getValue());
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll().stream()
+                .map(product -> ProductResponse.of(product.getId(), product.getName().getValue(), product.getPrice().getValue()))
+                .collect(Collectors.toList());
     }
 }

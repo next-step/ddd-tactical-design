@@ -1,6 +1,9 @@
 package kitchenpos.products.domain;
 
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -14,36 +17,34 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
-    public Product() {
+    protected Product() {
+    }
+
+    public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
+        this.id = UUID.randomUUID();
+        this.name = new DisplayedName(name, purgomalumClient);
+        this.price = new Price(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public DisplayedName getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(final BigDecimal price) {
+        this.price = new Price(price);
     }
 }
