@@ -1,5 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.vo.MenuPrice;
+import kitchenpos.menus.vo.MenuProducts;
+import kitchenpos.products.application.ProductService;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,62 +45,56 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
+        this.id = id;
+        this.name = name;
+        this.price = new MenuPrice(price).getPrice();
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = new MenuProducts(menuProducts).getMenuProducts();
+        this.menuGroupId = menuGroupId;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
     public MenuGroup getMenuGroup() {
         return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+    public MenuProducts getMenuProducts() {
+        return new MenuProducts(menuProducts);
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    public void changePrice(BigDecimal price) {
+        this.price = new MenuPrice(price).getPrice();;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void displayed() {
+        this.displayed = true;
+    }
+    public void hide() {
+        this.displayed = false;
     }
 }

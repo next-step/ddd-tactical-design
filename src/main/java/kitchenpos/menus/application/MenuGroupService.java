@@ -2,6 +2,7 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.exception.NotFoundMenuGroupException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,5 +26,11 @@ public class MenuGroupService {
     @Transactional(readOnly = true)
     public List<MenuGroup> findAll() {
         return menuGroupRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public MenuGroup findById(final UUID menuGroupId) {
+        return menuGroupRepository.findById(menuGroupId)
+                .orElseThrow(NotFoundMenuGroupException::new);
     }
 }

@@ -4,8 +4,10 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.exception.InvalidMenuPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.application.ProductService;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -34,6 +36,8 @@ class MenuServiceTest {
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
+    private MenuGroupService menuGroupService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +45,9 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        menuGroupService = new MenuGroupService(menuGroupRepository);
+        productService = new ProductService(productRepository, menuRepository);
+        menuService = new MenuService(menuRepository, productService,  purgomalumClient, menuGroupService);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -60,7 +66,7 @@ class MenuServiceTest {
                 () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-                () -> assertThat(actual.getMenuProducts()).hasSize(1)
+                () -> assertThat(actual.getMenuProducts(productService).getMenuProducts()).hasSize(1)
         );
     }
 
@@ -96,11 +102,9 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Menu expected = createMenuRequest(
-                "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuRequest(
+                "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)))
+                .isInstanceOf(InvalidMenuPriceException.class);
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
@@ -150,10 +154,8 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(price);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> changePriceRequest(price))
+                .isInstanceOf(InvalidMenuPriceException.class);
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
@@ -234,12 +236,7 @@ class MenuServiceTest {
             final boolean displayed,
             final List<MenuProduct> menuProducts
     ) {
-        final Menu menu = new Menu();
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(menuProducts);
+        final Menu menu = new Menu(UUID.randomUUID(),name, price, menuGroup(), displayed, menuProducts, menuGroupId);
         return menu;
     }
 
@@ -255,8 +252,8 @@ class MenuServiceTest {
     }
 
     private Menu changePriceRequest(final BigDecimal price) {
-        final Menu menu = new Menu();
-        menu.setPrice(price);
+        final Menu menu = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L));
+        menu.changePrice(price);
         return menu;
     }
 }

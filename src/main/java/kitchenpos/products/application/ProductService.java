@@ -3,8 +3,10 @@ package kitchenpos.products.application;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.vo.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.vo.Products;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -45,7 +48,7 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+            for (final MenuProduct menuProduct : menu.getMenuProducts().getMenuProducts()) {
                 sum = sum.add(
                         menuProduct.getProduct()
                                 .getPrice()
@@ -53,14 +56,31 @@ public class ProductService {
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+                menu.displayed();
             }
         }
         return changePrice;
     }
 
     @Transactional(readOnly = true)
+    public Products findAllByIdIn(MenuProducts menuProducts) {
+        return new Products(productRepository.findAllByIdIn(
+                menuProducts.getMenuProducts().stream()
+                        .map(MenuProduct::getProductId)
+                        .collect(Collectors.toList()))
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Product findById(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+
+
 }
