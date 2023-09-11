@@ -1,9 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
 
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.exception.PriceErrorCode;
 import kitchenpos.menus.exception.MenuErrorCode;
-import kitchenpos.menus.exception.MenuPriceException;
+import kitchenpos.common.exception.PriceException;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menus.exception.MenuException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,7 +25,7 @@ public class Menu {
     private MenuDisplayedName name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -49,7 +52,7 @@ public class Menu {
                 boolean displayed,
                 List<MenuProduct> menuProducts) {
         this(new MenuDisplayedName(name, policy),
-                new MenuPrice(price),
+                new Price(price),
                 menuGroup,
                 displayed,
                 new MenuProducts(menuProducts)
@@ -57,12 +60,12 @@ public class Menu {
     }
 
     public Menu(MenuDisplayedName name,
-                MenuPrice price,
+                Price price,
                 MenuGroup menuGroup,
                 boolean displayed,
                 MenuProducts menuProducts) {
         if (displayed && price.isGreaterThan(menuProducts.getSum())) {
-            throw new MenuPriceException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
+            throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
         this.id = UUID.randomUUID();
         this.name = name;
@@ -80,16 +83,16 @@ public class Menu {
                 boolean displayed,
                 MenuProducts menuProducts) {
         this(new MenuDisplayedName(name, policy),
-                new MenuPrice(price),
+                new Price(price),
                 menuGroup,
                 displayed,
                 menuProducts
         );
     }
 
-    public void changePrice(MenuPrice price) {
+    public void changePrice(Price price) {
         if (isDisplayed() && price.isGreaterThan(menuProducts.getSum())) {
-            throw new MenuPriceException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
+            throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
 
         this.price = price;
@@ -115,7 +118,7 @@ public class Menu {
 
     public void display() {
         if (price.isGreaterThan(menuProducts.getSum())) {
-            throw new MenuPriceException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
+            throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
         this.displayed = true;
     }
@@ -140,7 +143,7 @@ public class Menu {
         return price.getValue();
     }
 
-    public MenuPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 }

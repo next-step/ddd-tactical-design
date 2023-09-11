@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.common.domain.ProductPrice;
 
 import javax.persistence.*;
 import java.util.Objects;

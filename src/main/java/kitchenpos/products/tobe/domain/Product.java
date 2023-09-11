@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
 
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductPrice;
 import kitchenpos.common.domain.ProfanityPolicy;
 
 import javax.persistence.*;
@@ -41,7 +43,7 @@ public class Product {
         );
     }
 
-    public void changePrice(ProductPrice price) {
+    public void changePrice(Price price) {
         this.price = price;
     }
 

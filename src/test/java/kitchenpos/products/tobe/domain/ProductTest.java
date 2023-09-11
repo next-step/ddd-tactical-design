@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.FakeProfanityPolicy;
+import kitchenpos.common.domain.ProductPrice;
 import kitchenpos.common.domain.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

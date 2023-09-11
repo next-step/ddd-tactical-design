@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.common.domain.ProductPrice;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;

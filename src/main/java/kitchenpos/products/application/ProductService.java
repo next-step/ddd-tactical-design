@@ -6,7 +6,7 @@ import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.common.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

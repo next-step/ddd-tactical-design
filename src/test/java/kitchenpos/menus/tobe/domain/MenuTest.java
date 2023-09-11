@@ -1,9 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.FakeMenuProfanityPolicy;
-import kitchenpos.menus.exception.MenuPriceException;
+import kitchenpos.common.exception.PriceException;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,21 +67,21 @@ class MenuTest {
                         menuGroup(),
                         true,
                         menuProducts)
-        ).isInstanceOf(MenuPriceException.class);
+        ).isInstanceOf(PriceException.class);
     }
 
     @DisplayName("[실패] 메뉴 가격 수정 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다. ")
     @Test
     void changePrice() {
-        assertThatThrownBy(() -> menu.changePrice(new MenuPrice(10000)))
-                .isInstanceOf(MenuPriceException.class);
+        assertThatThrownBy(() -> menu.changePrice(new Price(10000)))
+                .isInstanceOf(PriceException.class);
     }
 
     @DisplayName("[성공] 메뉴 상품 금액의 합보다 메뉴 가격이 크면, 메뉴는 숨겨진다.")
     @Test
     void changePrice1() {
         //given
-        product_2000.changePrice(new ProductPrice(500));
+        product_2000.changePrice(new Price(500));
         menu.hideWhenPriceGreaterThanProducts();
         //then
         assertThat(menu.isDisplayed()).isFalse();
@@ -110,9 +110,9 @@ class MenuTest {
     @Test
     void display2() {
         //given
-        product_2000.changePrice(new ProductPrice(500));
+        product_2000.changePrice(new Price(500));
         //when
         assertThatThrownBy(() -> menu.display())
-                .isInstanceOf(MenuPriceException.class);
+                .isInstanceOf(PriceException.class);
     }
 }

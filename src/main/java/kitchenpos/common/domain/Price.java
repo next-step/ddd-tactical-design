@@ -1,32 +1,34 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
-import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.exception.ProductPriceException;
+import kitchenpos.common.exception.PriceErrorCode;
+import kitchenpos.common.exception.PriceException;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 
 @Embeddable
-public class ProductPrice {
+public class Price {
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected ProductPrice() {
+    protected Price() {
 
     }
 
-    public ProductPrice(BigDecimal price) {
+    public Price(BigDecimal price) {
         if (price == null) {
-            throw new ProductPriceException(ProductErrorCode.PRICE_IS_NULL);
+            throw new PriceException(PriceErrorCode.PRICE_IS_NULL);
         }
         if (isLessThanZero(price)) {
-            throw new ProductPriceException(ProductErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
+            throw new PriceException(PriceErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
         }
         this.price = price;
     }
 
-    public ProductPrice(long price) {
+    public Price(long price) {
         this(BigDecimal.valueOf(price));
     }
 
@@ -34,14 +36,18 @@ public class ProductPrice {
         return price.compareTo(BigDecimal.ZERO) < 0;
     }
 
-    public ProductPrice add(ProductPrice inputPrice) {
+    public Price add(Price inputPrice) {
         BigDecimal add = price.add(inputPrice.price);
-        return new ProductPrice(add);
+        return new Price(add);
     }
 
-    public ProductPrice multiply(long input) {
+    public Price multiply(long input) {
         BigDecimal multiply = price.multiply(BigDecimal.valueOf(input));
-        return new ProductPrice(multiply);
+        return new Price(multiply);
+    }
+
+    public boolean isGreaterThan(BigDecimal input) {
+        return price.compareTo(input) > 0;
     }
 
     public BigDecimal getValue() {
@@ -53,7 +59,7 @@ public class ProductPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        Price that = (Price) o;
         return Objects.equals(price, that.price);
     }
 

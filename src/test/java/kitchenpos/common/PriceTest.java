@@ -1,7 +1,8 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.common;
 
-import kitchenpos.menus.exception.MenuErrorCode;
-import kitchenpos.menus.exception.MenuPriceException;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.exception.PriceErrorCode;
+import kitchenpos.common.exception.PriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("메뉴 가격")
-class MenuPriceTest {
+class PriceTest {
 
 
     @DisplayName("가격 생성")
@@ -25,7 +26,7 @@ class MenuPriceTest {
         @Test
         void create1() {
             assertThatNoException().isThrownBy(
-                    () -> new MenuPrice(BigDecimal.TEN)
+                    () -> new Price(BigDecimal.TEN)
             );
         }
 
@@ -34,9 +35,9 @@ class MenuPriceTest {
         @ValueSource(strings = {"-10", "-200"})
         void create2(BigDecimal price) {
             assertThatThrownBy(
-                    () -> new MenuPrice(price))
-                    .isInstanceOf(MenuPriceException.class)
-                    .hasMessage(MenuErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO.getMessage());
+                    () -> new Price(price))
+                    .isInstanceOf(PriceException.class)
+                    .hasMessage(PriceErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO.getMessage());
         }
 
         @DisplayName("[실패] 메뉴 가격은 null일 수 없다")
@@ -44,33 +45,33 @@ class MenuPriceTest {
         @NullSource
         void create3(BigDecimal price) {
             assertThatThrownBy(
-                    () -> new MenuPrice(price))
-                    .isInstanceOf(MenuPriceException.class)
-                    .hasMessage(MenuErrorCode.PRICE_IS_NULL.getMessage());
+                    () -> new Price(price))
+                    .isInstanceOf(PriceException.class)
+                    .hasMessage(PriceErrorCode.PRICE_IS_NULL.getMessage());
         }
     }
 
     @DisplayName("더하기")
     @Test
     void add() {
-        MenuPrice ten = new MenuPrice(10);
-        MenuPrice hundred = new MenuPrice(100);
-        MenuPrice add = ten.add(hundred);
-        assertThat(add).isEqualTo(new MenuPrice(110));
+        Price ten = new Price(10);
+        Price hundred = new Price(100);
+        Price add = ten.add(hundred);
+        assertThat(add).isEqualTo(new Price(110));
     }
 
     @DisplayName("곱하기")
     @Test
     void multiply() {
-        MenuPrice ten = new MenuPrice(10);
-        MenuPrice multiply = ten.multiply(10);
-        assertThat(multiply).isEqualTo(new MenuPrice(100));
+        Price ten = new Price(10);
+        Price multiply = ten.multiply(10);
+        assertThat(multiply).isEqualTo(new Price(100));
     }
 
     @DisplayName("보다 크다")
     @Test
     void isGreaterThan() {
-        MenuPrice ten = new MenuPrice(10);
+        Price ten = new Price(10);
         assertThat(ten.isGreaterThan(BigDecimal.ONE)).isTrue();
     }
 

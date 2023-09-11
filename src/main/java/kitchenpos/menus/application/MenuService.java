@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
@@ -37,7 +38,7 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
-        final MenuPrice menuPrice = new MenuPrice(request.getPrice());
+        final Price price = new Price(request.getPrice());
         final MenuGroup menuGroup = menuGroupService.findById(request.getMenuGroupId());
 
 
@@ -50,7 +51,7 @@ public class MenuService {
 
         final Menu menu = new Menu(
                 menuDisplayedName,
-                menuPrice,
+                price,
                 menuGroup,
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
@@ -72,7 +73,7 @@ public class MenuService {
     public Menu changePrice(final UUID menuId, MenuChangePriceRequest request) {
 
         final Menu menu = findById(menuId);
-        menu.changePrice(new MenuPrice(request.getPrice()));
+        menu.changePrice(new Price(request.getPrice()));
 
         return menu;
     }
