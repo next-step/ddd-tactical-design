@@ -4,6 +4,7 @@ import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
+import kitchenpos.menus.tobe.domain.menu.MenuDisplayedName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

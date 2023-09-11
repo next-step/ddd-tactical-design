@@ -6,8 +6,8 @@ import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
-import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,6 @@ public class MenuService {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
         final Price price = new Price(request.getPrice());
         final MenuGroup menuGroup = menuGroupService.findById(request.getMenuGroupId());
-
 
         // 메뉴 상품 조립
         validateMenuProducts(request);

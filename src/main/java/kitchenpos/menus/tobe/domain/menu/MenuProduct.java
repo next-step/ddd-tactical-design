@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.exception.MenuErrorCode;
@@ -25,7 +25,7 @@ public class MenuProduct {
     private Price productPrice;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "line_id")
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
     @Embedded

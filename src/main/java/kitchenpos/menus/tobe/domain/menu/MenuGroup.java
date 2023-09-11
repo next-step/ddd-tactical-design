@@ -1,4 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
+
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
 
 import javax.persistence.*;
 import java.util.Objects;

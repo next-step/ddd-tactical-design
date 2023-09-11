@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.application.*;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.exception.ProductPriceException;

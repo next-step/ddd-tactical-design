@@ -3,9 +3,9 @@ package kitchenpos.menus.application.fixtures;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuGroup;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;

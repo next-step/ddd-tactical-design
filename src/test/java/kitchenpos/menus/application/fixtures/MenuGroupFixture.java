@@ -1,6 +1,6 @@
 package kitchenpos.menus.application.fixtures;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.menu.MenuGroup;
 
 public class MenuGroupFixture {
     public static MenuGroup menuGroup() {

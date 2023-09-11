@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.exception.MenuProductException;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

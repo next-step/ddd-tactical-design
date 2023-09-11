@@ -1,33 +1,24 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
-import kitchenpos.common.domain.ProfanityPolicy;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuDisplayedName {
+public class MenuGroupDisplayedName {
     private String name;
 
-    protected MenuDisplayedName() {
+    protected MenuGroupDisplayedName() {
 
     }
 
-    public MenuDisplayedName(String name, ProfanityPolicy profanityPolicy) {
-        validate(name, profanityPolicy);
-        this.name = name;
-    }
-
-    private void validate(String text, ProfanityPolicy profanityPolicy) {
-        if (isNullAndEmpty(text)) {
+    public MenuGroupDisplayedName(String name) {
+        if (isNullAndEmpty(name)) {
             throw new MenuDisplayedNameException(MenuErrorCode.NAME_IS_NULL_OR_EMPTY);
         }
-
-        if (profanityPolicy.containsProfanity(text)) {
-            throw new MenuDisplayedNameException(MenuErrorCode.NAME_HAS_PROFANITY);
-        }
+        this.name = name;
     }
 
     private boolean isNullAndEmpty(String name) {
@@ -42,7 +33,7 @@ public class MenuDisplayedName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuDisplayedName that = (MenuDisplayedName) o;
+        MenuGroupDisplayedName that = (MenuGroupDisplayedName) o;
         return Objects.equals(name, that.name);
     }
 
