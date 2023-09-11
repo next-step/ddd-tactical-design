@@ -31,6 +31,12 @@ public class TobeProduct {
         this.price = new ProductPrice(price);
     }
 
+    public TobeProduct(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }
