@@ -21,7 +21,6 @@ public class ProductPriceEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener
     public void listen(ProductPriceChangedEvent event) {
-        System.out.println("event.getProductId() = " + event.getProductId());
         menuService.hideMenuWhenChangeProductPrice(event.getProductId());
     }
 }
