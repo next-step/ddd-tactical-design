@@ -10,14 +10,14 @@ import java.util.Objects;
 @Embeddable
 public class DisplayedName {
     @Column(name = "name", nullable = false)
-    private String name;
+    private String value;
 
     protected DisplayedName() {
     }
 
-    public DisplayedName(final String name, PurgomalumClient purgomalumClient) {
-        validate(name, purgomalumClient);
-        this.name = name;
+    public DisplayedName(final String value, PurgomalumClient purgomalumClient) {
+        validate(value, purgomalumClient);
+        this.value = value;
     }
 
 
@@ -27,7 +27,7 @@ public class DisplayedName {
         }
     }
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 }

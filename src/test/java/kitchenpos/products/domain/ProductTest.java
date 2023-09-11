@@ -30,8 +30,8 @@ class ProductTest {
         Product actual = new Product(name, purgomalumClient, price);
 
         assertThat(actual.getId()).isNotNull();
-        assertThat(actual.getName().getName()).isEqualTo(name);
-        assertThat(actual.getPrice().getPrice()).isEqualTo(price);
+        assertThat(actual.getName().getValue()).isEqualTo(name);
+        assertThat(actual.getPrice().getValue()).isEqualTo(price);
     }
 
     @ParameterizedTest

@@ -70,7 +70,7 @@ public class MenuService {
             sum = sum.add(
                     product.getPrice()
                             .multiply(BigDecimal.valueOf(quantity))
-                            .getPrice()
+                            .getValue()
             );
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
@@ -108,7 +108,7 @@ public class MenuService {
                     menuProduct.getProduct()
                             .getPrice()
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                            .getPrice()
+                            .getValue()
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -128,7 +128,7 @@ public class MenuService {
                     menuProduct.getProduct()
                             .getPrice()
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                            .getPrice()
+                            .getValue()
             );
         }
         if (menu.getPrice().compareTo(sum) > 0) {

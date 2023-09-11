@@ -42,8 +42,8 @@ public class ProductService {
         Product saveProduct = productRepository.save(product);
         return ProductCreateResponse.of(
                 saveProduct.getId(),
-                saveProduct.getName().getName(),
-                saveProduct.getPrice().getPrice())
+                saveProduct.getName().getValue(),
+                saveProduct.getPrice().getValue())
                 ;
     }
 
@@ -60,7 +60,7 @@ public class ProductService {
                         menuProduct.getProduct()
                                 .getPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                                .getPrice()
+                                .getValue()
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
@@ -69,14 +69,14 @@ public class ProductService {
         }
         return ProductChangePriceResponse.of(
                 product.getId(),
-                product.getName().getName(),
-                product.getPrice().getPrice());
+                product.getName().getValue(),
+                product.getPrice().getValue());
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         return productRepository.findAll().stream()
-                .map(product -> ProductResponse.of(product.getId(), product.getName().getName(), product.getPrice().getPrice()))
+                .map(product -> ProductResponse.of(product.getId(), product.getName().getValue(), product.getPrice().getValue()))
                 .collect(Collectors.toList());
     }
 }
