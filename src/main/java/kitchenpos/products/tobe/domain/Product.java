@@ -26,6 +26,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
+        this.id = UUID.randomUUID();
+        this.name = new DisplayedName(name, purgomalumClient);
+        this.price = new Price(price);
+    }
+
     public UUID getId() {
         return id;
     }
