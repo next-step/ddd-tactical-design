@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.common.exception.PriceException;
 import kitchenpos.menus.application.FakeMenuProfanityPolicy;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.tobe.domain.menu.Menu;
@@ -37,12 +36,7 @@ class MenuTest {
         menuProduct_1000 = new MenuProduct(product_1000, 3);
         menuProduct_2000 = new MenuProduct(product_2000, 3);
         menuProducts = new MenuProducts(Arrays.asList(menuProduct_1000, menuProduct_2000));
-        menu = new Menu("정상",
-                new FakeMenuProfanityPolicy(),
-                8000,
-                menuGroup(),
-                true,
-                menuProducts);
+        menu = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
 
     }
 
@@ -50,35 +44,21 @@ class MenuTest {
     @Test
     void create1() {
         //when
-        Menu response = new Menu("정상",
-                new FakeMenuProfanityPolicy(),
-                8000,
-                menuGroup(),
-                true,
-                menuProducts);
+        Menu response = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
         //then
-        assertThat(response.getPriceValue())
-                .isEqualTo(BigDecimal.valueOf(8000));
+        assertThat(response.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
     }
 
     @DisplayName("[실패] 메뉴 생성 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다.")
     @Test
     void create2() {
-        assertThatThrownBy(
-                () -> new Menu("정상",
-                        new FakeMenuProfanityPolicy(),
-                        10000,
-                        menuGroup(),
-                        true,
-                        menuProducts)
-        ).isInstanceOf(MenuException.class);
+        assertThatThrownBy(() -> new Menu("정상", new FakeMenuProfanityPolicy(), 10000, menuGroup(), true, menuProducts)).isInstanceOf(MenuException.class);
     }
 
     @DisplayName("[실패] 메뉴 가격 수정 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다. ")
     @Test
     void changePrice() {
-        assertThatThrownBy(() -> menu.changePrice(new Price(10000)))
-                .isInstanceOf(MenuException.class);
+        assertThatThrownBy(() -> menu.changePrice(new Price(10000))).isInstanceOf(MenuException.class);
     }
 
     @DisplayName("[성공] 메뉴를 숨긴다.")
@@ -106,7 +86,6 @@ class MenuTest {
         menu.hide();
         menu.changePrice(new Price(30_000L));
         //when
-        assertThatThrownBy(() -> menu.display())
-                .isInstanceOf(MenuException.class);
+        assertThatThrownBy(() -> menu.display()).isInstanceOf(MenuException.class);
     }
 }

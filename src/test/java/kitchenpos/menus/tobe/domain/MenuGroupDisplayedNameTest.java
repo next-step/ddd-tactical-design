@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
-import kitchenpos.products.exception.ProductDisplayedNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

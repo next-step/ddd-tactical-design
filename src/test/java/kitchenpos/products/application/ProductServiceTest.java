@@ -7,7 +7,6 @@ import kitchenpos.menus.application.*;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductDisplayedNameException;
-import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
