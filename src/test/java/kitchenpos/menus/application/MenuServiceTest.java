@@ -10,11 +10,11 @@ import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
+import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,8 +55,8 @@ class MenuServiceTest {
         ProductRepository productRepository = new InMemoryProductRepository();
         MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        ProductService productService = new ProductService(productRepository, profanityPolicy, publisher);
-        menuService = new MenuService(menuRepository, menuGroupService, productService, profanityPolicy);
+        DefaultMenuProductMappingService mappingService = new DefaultMenuProductMappingService(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupService, mappingService, profanityPolicy);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

@@ -2,10 +2,8 @@ package kitchenpos.menus.subscriber;
 
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.menus.application.InMemoryMenuGroupRepository;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.MenuGroupService;
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.*;
+import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -37,7 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         MenuGroupService.class,
         MenuService.class,
         ProductService.class,
-        FakeProfanityPolicy.class
+        FakeProfanityPolicy.class,
+        DefaultMenuProductMappingService.class
 })
 class ProductPriceEventListenerTest {
 
@@ -61,6 +60,9 @@ class ProductPriceEventListenerTest {
 
     @Autowired
     ProfanityPolicy profanityPolicy;
+
+    @Autowired
+    MenuProductMappingService mappingService;
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test

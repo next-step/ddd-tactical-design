@@ -7,7 +7,6 @@ import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
-import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
@@ -23,13 +22,13 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupService menuGroupService;
-    private final DefaultMenuProductMappingService mappingService;
+    private final MenuProductMappingService mappingService;
     private final ProfanityPolicy profanityPolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupService menuGroupService,
-            final DefaultMenuProductMappingService mappingService,
+            final MenuProductMappingService mappingService,
             final ProfanityPolicy profanityPolicy
     ) {
         this.menuRepository = menuRepository;

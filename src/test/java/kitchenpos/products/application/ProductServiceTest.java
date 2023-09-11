@@ -3,8 +3,6 @@ package kitchenpos.products.application;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.common.exception.PriceException;
-import kitchenpos.menus.application.*;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.tobe.domain.Product;
@@ -34,10 +32,7 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
 
-    private MenuService menuService;
-
     private ProductService productService;
-    private MenuGroupService menuGroupService;
 
     @Spy
     private ApplicationEventPublisher publisher;
@@ -45,17 +40,8 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuGroupService = new MenuGroupService(new InMemoryMenuGroupRepository());
-        MenuRepository menuRepository = new InMemoryMenuRepository();
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        productService = new ProductService(productRepository,
-                profanityPolicy,
-                publisher);
-        menuService = new MenuService(menuRepository,
-                menuGroupService,
-                productService,
-                new FakeMenuProfanityPolicy()
-        );
+        productService = new ProductService(productRepository, profanityPolicy, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
