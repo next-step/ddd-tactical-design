@@ -8,7 +8,7 @@ public class ProductCreateResponse {
     private String name;
     private BigDecimal price;
 
-    public ProductCreateResponse() {
+    private ProductCreateResponse() {
     }
 
     private ProductCreateResponse(UUID id, String name, BigDecimal price) {

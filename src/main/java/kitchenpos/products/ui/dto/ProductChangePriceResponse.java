@@ -8,7 +8,7 @@ public class ProductChangePriceResponse {
     private String name;
     private BigDecimal price;
 
-    public ProductChangePriceResponse() {
+    private ProductChangePriceResponse() {
     }
 
     private ProductChangePriceResponse(UUID id, String name, BigDecimal price) {

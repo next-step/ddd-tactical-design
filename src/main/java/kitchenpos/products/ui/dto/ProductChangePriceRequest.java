@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class ProductChangePriceRequest {
     private BigDecimal price;
 
-    public ProductChangePriceRequest() {
+    private ProductChangePriceRequest() {
     }
 
     public ProductChangePriceRequest(BigDecimal price) {

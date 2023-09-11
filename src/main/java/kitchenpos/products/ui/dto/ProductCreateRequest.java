@@ -6,7 +6,7 @@ public class ProductCreateRequest {
     private String name;
     private BigDecimal price;
 
-    protected ProductCreateRequest() {
+    private ProductCreateRequest() {
     }
 
     public ProductCreateRequest(String name, BigDecimal price) {

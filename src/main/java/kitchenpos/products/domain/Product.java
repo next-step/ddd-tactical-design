@@ -23,7 +23,7 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
