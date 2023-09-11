@@ -33,7 +33,7 @@ public class ToBeMenuProducts {
 
     public Price getSumOfProducts() {
         return value.stream()
-            .map(it -> it.getProductPrice())
+            .map(ToBeMenuProduct::getProductPrice)
             .reduce(Price.of(0), Price::add);
     }
 }

@@ -79,4 +79,8 @@ public class Price {
     public Price changePrice(Long newPrice) {
         return new Price(BigDecimal.valueOf(newPrice));
     }
+
+    public BigDecimal getValue() {
+        return price;
+    }
 }
