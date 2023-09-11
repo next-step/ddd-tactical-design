@@ -32,14 +32,7 @@ public class MenuService {
 
     @Transactional
     public Menu create(final Menu request) {
-        MenuProducts menuProductRequests = request.getMenuProducts();
-        Products products = productService.findAllByIdIn(menuProductRequests);
-
-        if (products.size() != menuProductRequests.size()) {
-            throw new InvalidMenuProductsSizeException();
-        }
-
-
+        validMenuProduct(request);
         return menuRepository.save(new Menu(UUID.randomUUID(),
                 request.getName(),
                 request.getPrice(),
@@ -85,5 +78,14 @@ public class MenuService {
 
     private MenuGroup getMenuGroup(Menu request) {
         return this.menuGroupService.findById(request.getMenuGroupId());
+    }
+
+    private void validMenuProduct(Menu request) {
+        MenuProducts menuProductRequests = request.getMenuProducts();
+        Products products = productService.findAllByIdIn(menuProductRequests);
+
+        if (products.size() != menuProductRequests.size()) {
+            throw new InvalidMenuProductsSizeException();
+        }
     }
 }
