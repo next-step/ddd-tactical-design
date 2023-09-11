@@ -4,13 +4,20 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class OrderLineItemRequest {
-    private Long seq;
+    private final Long seq;
 
-    private UUID menuId;
+    private final UUID menuId;
 
-    private long quantity;
+    private final long quantity;
 
-    private BigDecimal price;
+    private final BigDecimal price;
+
+    public OrderLineItemRequest(Long seq, UUID menuId, long quantity, BigDecimal price) {
+        this.seq = seq;
+        this.menuId = menuId;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     public Long getSeq() {
         return seq;
