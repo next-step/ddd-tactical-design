@@ -4,11 +4,13 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.FakeProduct;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -21,6 +23,17 @@ public class Fixtures {
 
     public static Menu menu(final long price, final MenuProduct... menuProducts) {
         return menu(price, false, menuProducts);
+    }
+
+    public static Menu menu(final long price, final boolean displayed, final MenuGroup menuGroup, final MenuProduct... menuProducts) {
+        final Menu menu = new Menu();
+        menu.setId(UUID.randomUUID());
+        menu.setName("후라이드+후라이드");
+        menu.setPrice(BigDecimal.valueOf(price));
+        menu.setMenuGroup(menuGroup);
+        menu.setDisplayed(displayed);
+        menu.setMenuProducts(Arrays.asList(menuProducts));
+        return menu;
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
@@ -67,7 +80,7 @@ public class Fixtures {
         order.setType(OrderType.DELIVERY);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         order.setDeliveryAddress(deliveryAddress);
         return order;
     }
@@ -78,7 +91,7 @@ public class Fixtures {
         order.setType(OrderType.TAKEOUT);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         return order;
     }
 
@@ -88,7 +101,7 @@ public class Fixtures {
         order.setType(OrderType.EAT_IN);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         order.setOrderTable(orderTable);
         return order;
     }
@@ -118,10 +131,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return FakeProduct.createFake(name, BigDecimal.valueOf(price));
     }
 }
