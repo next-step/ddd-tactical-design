@@ -10,6 +10,7 @@ import kitchenpos.products.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.ui.dto.ProductChangePriceResponse;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import kitchenpos.products.ui.dto.ProductCreateResponse;
+import kitchenpos.products.ui.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -70,9 +72,11 @@ public class ProductService {
                 product.getName().getName(),
                 product.getPrice().getPrice());
     }
-//
-//    @Transactional(readOnly = true)
-//    public List<Product> findAll() {
-//        return productRepository.findAll();
-//    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll().stream()
+                .map(product -> ProductResponse.of(product.getId(), product.getName().getName(), product.getPrice().getPrice()))
+                .collect(Collectors.toList());
+    }
 }

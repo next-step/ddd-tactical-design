@@ -10,6 +10,7 @@ import kitchenpos.products.ui.dto.ProductChangePriceRequest;
 import kitchenpos.products.ui.dto.ProductChangePriceResponse;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import kitchenpos.products.ui.dto.ProductCreateResponse;
+import kitchenpos.products.ui.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.menu;
@@ -103,14 +105,14 @@ class ProductServiceTest {
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
-//    @DisplayName("상품의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        productRepository.save(product("후라이드", 16_000L));
-//        productRepository.save(product("양념치킨", 16_000L));
-//        final List<Product> actual = productService.findAll();
-//        assertThat(actual).hasSize(2);
-//    }
+    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        productRepository.save(product("후라이드", 16_000L));
+        productRepository.save(product("양념치킨", 16_000L));
+        final List<ProductResponse> actual = productService.findAll();
+        assertThat(actual).hasSize(2);
+    }
 
     private ProductCreateRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
