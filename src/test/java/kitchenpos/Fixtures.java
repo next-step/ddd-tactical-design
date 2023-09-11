@@ -13,6 +13,8 @@ import java.util.UUID;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -122,6 +124,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.of(name, BigDecimal.valueOf(price));
+        return Product.of(new ProductName(name, purgomalumClient), new ProductPrice(BigDecimal.valueOf(price)));
     }
 }
