@@ -51,7 +51,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
         return getMenu(menuId)
-                .checkMenuProductPrice()
+                .checkMenuProductPrice(request.getPrice())
                 .changePrice(request.getPrice());
     }
 

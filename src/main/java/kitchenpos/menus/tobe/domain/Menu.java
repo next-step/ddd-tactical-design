@@ -107,6 +107,24 @@ public class Menu {
     }
 
     public Menu checkMenuProductPrice() {
+        BigDecimal sum = sumMenuProductPrice();
+
+        if (price.compareTo(sum) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
+        return this;
+    }
+
+    public Menu checkMenuProductPrice(BigDecimal price) {
+        BigDecimal sum = sumMenuProductPrice();
+
+        if (price.compareTo(sum) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
+        return this;
+    }
+
+    private BigDecimal sumMenuProductPrice() {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menuProducts) {
             sum = sum.add(
@@ -115,11 +133,7 @@ public class Menu {
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
-
-        if (price.compareTo(sum) > 0) {
-            throw new InvalidMenuProductsPriceException();
-        }
-        return this;
+        return sum;
     }
 
     public Menu checkMenuProductPrice(ProductService productService) {
