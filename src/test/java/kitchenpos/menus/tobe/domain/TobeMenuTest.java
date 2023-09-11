@@ -1,23 +1,24 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
 
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static kitchenpos.Fixtures.menu;
+import static kitchenpos.TobeFixtures.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MenuTest {
+class TobeMenuTest {
 
     @Test
-    void hideIfMenuPriceTooHigher() {
+    void changePrice() {
         Menu menu = menu();
         assertThat(menu.isDisplayed()).isTrue();
 
         // when
-        menu.setPrice(BigDecimal.valueOf(Double.MAX_VALUE));
+        menu.changePrice(BigDecimal.valueOf(Double.MAX_VALUE));
 
         // then
         assertThat(menu.isDisplayed()).isFalse();
     }
+
 }
