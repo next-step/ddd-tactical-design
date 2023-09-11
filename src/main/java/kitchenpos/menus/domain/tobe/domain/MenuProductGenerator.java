@@ -24,7 +24,7 @@ public class MenuProductGenerator {
             .map(item -> {
                 MenuProduct matchingProduct = request.getMenuProducts()
                     .stream()
-                    .filter(it -> item.equals(it))
+                    .filter(item::equals)
                     .findAny()
                     .orElseThrow(NoSuchElementException::new);
                 return new ToBeMenuProduct(item, matchingProduct.getQuantity());

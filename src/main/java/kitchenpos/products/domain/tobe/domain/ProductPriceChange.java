@@ -28,4 +28,5 @@ public class ProductPriceChange {
         product.changePrice(productPrice);
         applicationEventPublisher.publishEvent(productId);
     }
+    
 }
