@@ -25,6 +25,9 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2'
+
+    //값 검증을 위한 추가
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 test {

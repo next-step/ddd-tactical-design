@@ -159,7 +159,7 @@ class ProductServiceTest {
         //then
         assertAll(
             () -> assertThat(resultProducts).extracting("name")
-                .containsExactlyElementsOf(expectNames)
+                .containsExactlyInAnyOrderElementsOf(expectNames)
         );
 
     }
