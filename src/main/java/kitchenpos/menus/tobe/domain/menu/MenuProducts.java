@@ -30,9 +30,9 @@ public class MenuProducts {
         return Collections.unmodifiableList(values);
     }
 
-    public BigDecimal getSum() {
+    public BigDecimal calculateSum() {
         return values.stream()
-                .map(MenuProduct::getPrice)
+                .map(MenuProduct::calculatePrice)
                 .reduce(Price::add)
                 .get()
                 .getValue();

@@ -18,7 +18,7 @@ class MenuProductTest {
         //given
         MenuProduct menuProduct = new MenuProduct(product(1000), 3);
         //then
-        assertThat(menuProduct.getPrice().getValue())
+        assertThat(menuProduct.calculatePrice().getValue())
                 .isEqualTo(BigDecimal.valueOf(3000));
     }
 }

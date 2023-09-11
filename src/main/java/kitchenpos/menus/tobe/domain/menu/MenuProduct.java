@@ -71,7 +71,7 @@ public class MenuProduct {
         return quantity.getValue();
     }
 
-    public Price getPrice() {
+    public Price calculatePrice() {
         return productPrice.multiply(quantity.getValue());
     }
 

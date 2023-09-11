@@ -26,7 +26,7 @@ class MenuProductsTest {
         //when
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProduct_1000, menuProduct_2000));
         //then
-        assertThat(menuProducts.getSum())
+        assertThat(menuProducts.calculateSum())
                 .isEqualTo(BigDecimal.valueOf(9000));
     }
 

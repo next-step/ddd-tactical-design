@@ -59,7 +59,7 @@ public class Menu {
                 MenuGroup menuGroup,
                 boolean displayed,
                 MenuProducts menuProducts) {
-        if (displayed && price.isGreaterThan(menuProducts.getSum())) {
+        if (displayed && price.isGreaterThan(menuProducts.calculateSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
         this.id = UUID.randomUUID();
@@ -86,7 +86,7 @@ public class Menu {
     }
 
     public void changePrice(Price price) {
-        if (displayed && price.isGreaterThan(menuProducts.getSum())) {
+        if (displayed && price.isGreaterThan(menuProducts.calculateSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
 
@@ -94,7 +94,7 @@ public class Menu {
     }
 
     public void hideWhenPriceGreaterThanProducts() {
-        if (price.isGreaterThan(menuProducts.getSum())) {
+        if (price.isGreaterThan(menuProducts.calculateSum())) {
             hide();
         }
     }
@@ -112,7 +112,7 @@ public class Menu {
     }
 
     public void display() {
-        if (price.isGreaterThan(menuProducts.getSum())) {
+        if (price.isGreaterThan(menuProducts.calculateSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
         this.displayed = true;
