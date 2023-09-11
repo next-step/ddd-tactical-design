@@ -97,6 +97,7 @@ class MenuServiceTest {
         assertThatThrownBy(() -> createMenuRequest(
                 "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)))
                 .isInstanceOf(InvalidMenuProductQuantityException.class);
+
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")

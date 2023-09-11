@@ -24,6 +24,7 @@ public class MenuService {
             final MenuRepository menuRepository,
             final ProductService productService,
             final MenuGroupService menuGroupService) {
+
         this.menuRepository = menuRepository;
         this.productService = productService;
         this.menuGroupService = menuGroupService;
@@ -38,6 +39,7 @@ public class MenuService {
             throw new InvalidMenuProductsSizeException();
         }
 
+
         return menuRepository.save(new Menu(UUID.randomUUID(),
                 request.getName(),
                 request.getPrice(),
@@ -46,6 +48,7 @@ public class MenuService {
                 request.checkMenuProductPrice(productService).getMenuProducts().getMenuProducts(),
                 getMenuGroup(request).getId())
         );
+
     }
 
     @Transactional
@@ -66,6 +69,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         return getMenu(menuId)
                 .hide();
+
     }
 
     @Transactional(readOnly = true)
