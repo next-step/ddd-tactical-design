@@ -1,16 +1,13 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.products.tobe.domain.Product;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
 import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
-import static kitchenpos.products.fixture.ProductFixture.product;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);

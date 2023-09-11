@@ -45,7 +45,7 @@ public class MenuResponse {
         );
     }
 
-    public static List<MenuResponse> fromEntities(List<Menu> menus){
+    public static List<MenuResponse> fromEntities(List<Menu> menus) {
         return menus.stream()
                 .map(MenuResponse::fromEntity)
                 .collect(Collectors.toUnmodifiableList());

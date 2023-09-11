@@ -23,4 +23,5 @@ public class ProductPriceEventListener {
     public void listen(ProductPriceChangedEvent event) {
         menuService.hideMenuWhenChangeProductPrice(event.getProductId());
     }
+
 }

@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.FakeMenuProfanityPolicy;
 import kitchenpos.common.exception.PriceException;
+import kitchenpos.menus.application.FakeMenuProfanityPolicy;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;

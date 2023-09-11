@@ -28,8 +28,9 @@ public class MenuGroupService {
     }
 
     @Transactional(readOnly = true)
-    public MenuGroup findById(UUID menuGroupId){
+    public MenuGroup findById(UUID menuGroupId) {
         return menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NoSuchElementException::new);
     }
+
 }

@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe.domain.menu;
 
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
-import kitchenpos.common.domain.ProfanityPolicy;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
