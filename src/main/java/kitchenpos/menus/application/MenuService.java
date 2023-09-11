@@ -7,9 +7,9 @@ import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
+import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +23,18 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupService menuGroupService;
-    private final ProductService productService;
+    private final DefaultMenuProductMappingService mappingService;
     private final ProfanityPolicy profanityPolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupService menuGroupService,
-            final ProductService productService,
+            final DefaultMenuProductMappingService mappingService,
             final ProfanityPolicy profanityPolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupService = menuGroupService;
-        this.productService = productService;
+        this.mappingService = mappingService;
         this.profanityPolicy = profanityPolicy;
     }
 
@@ -48,7 +48,7 @@ public class MenuService {
         validateMenuProducts(request);
         List<MenuProduct> menuProductValues = request.getMenuProducts()
                 .stream()
-                .map(this::menuProductRequestToEntity)
+                .map(this::fetchMenuProduct)
                 .collect(Collectors.toUnmodifiableList());
 
         final Menu menu = new Menu(
@@ -60,6 +60,11 @@ public class MenuService {
         );
 
         return menuRepository.save(menu);
+    }
+
+    private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
+        Product product = mappingService.findById(menuProductRequest.getProductId());
+        return new MenuProduct(product.getId(), product.getPrice(), menuProductRequest.getQuantity());
     }
 
     private void validateMenuProducts(MenuCreateRequest request) {
@@ -101,17 +106,18 @@ public class MenuService {
 
     @Transactional
     public void checkHideAndPrice(UUID productId) {
-        Product product = productService.findById(productId);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(menu -> {
-            List<UUID> productIds = menu.getProductIds();
-            menu.getMenuProducts()
-                    .getValues()
-                    .stream()
-                    .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                    .forEach(menuProduct -> menuProduct.fetchPrice(product.getPrice()));
-        });
+        menus.forEach(menu -> fetchMenuProduct(productId, menu));
         menus.forEach(Menu::checkPriceAndHide);
+    }
+
+    private void fetchMenuProduct(UUID productId, Menu menu) {
+        Product product = mappingService.findById(productId);
+        menu.getMenuProducts()
+                .getValues()
+                .stream()
+                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .forEach(menuProduct -> menuProduct.fetchPrice(product.getPrice()));
     }
 
     @Transactional(readOnly = true)
@@ -119,10 +125,4 @@ public class MenuService {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
     }
-
-    private MenuProduct menuProductRequestToEntity(MenuProductRequest menuProductRequest) {
-        Product product = productService.findById(menuProductRequest.getProductId());
-        return new MenuProduct(product, menuProductRequest.getQuantity());
-    }
-
 }
