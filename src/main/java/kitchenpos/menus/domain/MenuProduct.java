@@ -1,7 +1,5 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
-
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -13,21 +11,36 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private Product product;
+    private UUID productId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID productId;
-
     public MenuProduct() {
+    }
+
+    private MenuProduct(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    private MenuProduct(Long seq, UUID productId, long quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public static MenuProduct of(UUID productId, long quantity) {
+        return new MenuProduct(productId, quantity);
+    }
+
+    public static MenuProduct of(Long seq, UUID productId, long quantity) {
+        return new MenuProduct(seq, productId, quantity);
     }
 
     public Long getSeq() {
@@ -36,14 +49,6 @@ public class MenuProduct {
 
     public void setSeq(final Long seq) {
         this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
     }
 
     public long getQuantity() {
