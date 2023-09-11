@@ -36,16 +36,8 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public DisplayedName getName() {
         return name;
-    }
-
-    public void setName(final String name, PurgomalumClient purgomalumClient) {
-        this.name = new DisplayedName(name, purgomalumClient);
     }
 
     public Price getPrice() {
