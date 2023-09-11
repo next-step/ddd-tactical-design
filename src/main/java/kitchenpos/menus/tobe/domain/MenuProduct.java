@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 
+import kitchenpos.menus.vo.MenuProductQuantity;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
@@ -28,38 +29,26 @@ public class MenuProduct {
     @Transient
     private UUID productId;
 
-    public MenuProduct() {
-    }
-
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
+    public MenuProduct(Long seq, Product product, long quantity, UUID productId) {
         this.seq = seq;
+        this.product = product;
+        this.quantity = new MenuProductQuantity(quantity).getQuantity();
+        this.productId = productId;
+    }
+
+    public MenuProduct(Product product, long quantity, UUID productId) {
+        this(null, product, quantity, productId);
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

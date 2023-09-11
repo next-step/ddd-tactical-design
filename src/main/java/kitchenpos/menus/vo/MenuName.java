@@ -20,4 +20,5 @@ public class MenuName {
     public String getName() {
         return name;
     }
+
 }

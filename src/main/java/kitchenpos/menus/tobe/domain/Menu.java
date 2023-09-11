@@ -1,8 +1,11 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsPriceException;
+import kitchenpos.menus.vo.MenuName;
 import kitchenpos.menus.vo.MenuPrice;
 import kitchenpos.menus.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
+import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -47,7 +50,7 @@ public class Menu {
 
     public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
         this.id = id;
-        this.name = name;
+        this.name = new MenuName(name).getName();
         this.price = new MenuPrice(price).getPrice();
         this.menuGroup = menuGroup;
         this.displayed = displayed;
@@ -79,22 +82,60 @@ public class Menu {
         return new MenuProducts(menuProducts);
     }
 
+    public MenuProducts getMenuProducts(ProductService productService) {
+        return new MenuProducts(menuProducts);
+    }
+
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = new MenuPrice(price).getPrice();;
+    public Menu changePrice(BigDecimal price) {
+        this.price = new MenuPrice(price).getPrice();
+        ;
+        return this;
     }
 
-    public void changeName(String name) {
-        this.name = name;
-    }
-
-    public void displayed() {
+    public Menu displayed() {
         this.displayed = true;
+        return this;
     }
-    public void hide() {
+
+    public Menu hide() {
         this.displayed = false;
+        return this;
     }
+
+    public Menu checkMenuProductPrice() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = sum.add(
+                    menuProduct.getProduct()
+                            .getPrice()
+                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            );
+        }
+
+        if (price.compareTo(sum) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
+        return this;
+    }
+
+    public Menu checkMenuProductPrice(ProductService productService) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            final Product product = productService.findById(menuProduct.getProductId());
+            sum = sum.add(
+                    product.getPrice()
+                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            );
+        }
+
+        if (price.compareTo(sum) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
+        return this;
+    }
+
 }
