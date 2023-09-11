@@ -13,6 +13,9 @@ public class MenuCreateRequest {
     private String name;
     private boolean displayed;
 
+    public MenuCreateRequest() {
+    }
+
     public MenuCreateRequest(BigDecimal price, UUID menuGroupId, List<MenuProductRequest> menuProducts, String name, boolean displayed) {
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -41,4 +44,23 @@ public class MenuCreateRequest {
         return displayed;
     }
 
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setMenuGroupId(UUID menuGroupId) {
+        this.menuGroupId = menuGroupId;
+    }
+
+    public void setMenuProducts(List<MenuProductRequest> menuProducts) {
+        this.menuProducts = menuProducts;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        this.displayed = displayed;
+    }
 }

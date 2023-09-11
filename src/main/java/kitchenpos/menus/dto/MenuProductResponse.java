@@ -13,6 +13,9 @@ public class MenuProductResponse {
     private ProductResponse product;
     private long quantity;
 
+    public MenuProductResponse() {
+    }
+
     public MenuProductResponse(Long seq, ProductResponse product, long quantity) {
         this.seq = seq;
         this.product = product;
@@ -32,5 +35,29 @@ public class MenuProductResponse {
                 .stream()
                 .map(MenuProductResponse::fromEntity)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
+    }
+
+    public ProductResponse getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductResponse product) {
+        this.product = product;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
     }
 }

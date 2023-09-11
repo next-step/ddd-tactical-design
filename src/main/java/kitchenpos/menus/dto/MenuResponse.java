@@ -3,6 +3,7 @@ package kitchenpos.menus.dto;
 import kitchenpos.menus.tobe.domain.Menu;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,6 +21,9 @@ public class MenuResponse {
     private boolean displayed;
 
     private List<MenuProductResponse> menuProducts;
+
+    public MenuResponse() {
+    }
 
     public MenuResponse(UUID id, String name, BigDecimal price, MenuGroupResponse menuGroup, boolean displayed, List<MenuProductResponse> menuProducts) {
         this.id = id;
@@ -45,5 +49,53 @@ public class MenuResponse {
         return menus.stream()
                 .map(MenuResponse::fromEntity)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public MenuGroupResponse getMenuGroup() {
+        return menuGroup;
+    }
+
+    public void setMenuGroup(MenuGroupResponse menuGroup) {
+        this.menuGroup = menuGroup;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        this.displayed = displayed;
+    }
+
+    public List<MenuProductResponse> getMenuProducts() {
+        return Collections.unmodifiableList(menuProducts);
+    }
+
+    public void setMenuProducts(List<MenuProductResponse> menuProducts) {
+        this.menuProducts = menuProducts;
     }
 }
