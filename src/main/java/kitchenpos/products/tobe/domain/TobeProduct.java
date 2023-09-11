@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -43,5 +44,18 @@ public class TobeProduct {
     }
     public ProductPrice getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TobeProduct product = (TobeProduct) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
