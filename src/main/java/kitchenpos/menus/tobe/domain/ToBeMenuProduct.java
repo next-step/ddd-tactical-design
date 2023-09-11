@@ -31,12 +31,6 @@ public class ToBeMenuProduct {
     public ToBeMenuProduct() {
     }
 
-    public ToBeMenuProduct(Long seq, ToBeProduct product, long quantity) {
-        this.seq = seq;
-        this.product = product;
-        this.quantity = new MenuProductQuantity(quantity);
-    }
-
     public ToBeMenuProduct(ToBeProduct product, long quantity) {
         this.product = product;
         this.quantity = new MenuProductQuantity(quantity);

@@ -5,11 +5,13 @@ import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.ToBeOrder;
 import kitchenpos.eatinorders.tobe.domain.ToBeOrderLineItem;
+import kitchenpos.menus.tobe.domain.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.ToBeMenu;
 import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ToBeProduct;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,12 +45,16 @@ public class Fixtures {
     }
 
     public static ToBeMenuProduct menuProduct(PurgomalumClient purgomalumClient) {
-        final ToBeMenuProduct menuProduct = new ToBeMenuProduct(new Random().nextLong(),product(purgomalumClient),2L);
+        final ToBeMenuProduct menuProduct = menuProduct(product(purgomalumClient),2L);
         return menuProduct;
     }
 
     public static ToBeMenuProduct menuProduct(final ToBeProduct product, final long quantity) {
-        final ToBeMenuProduct menuProduct = new ToBeMenuProduct(new Random().nextLong(),product,quantity);
+        final ToBeMenuProduct menuProduct = new ToBeMenuProduct();
+        ReflectionTestUtils.setField(menuProduct,"seq",new Random().nextLong());
+        ReflectionTestUtils.setField(menuProduct,"product",product);
+        ReflectionTestUtils.setField(menuProduct,"quantity",new MenuProductQuantity(quantity));
+
         return menuProduct;
     }
 
