@@ -15,11 +15,11 @@ public class ProductPrice {
     }
 
     public ProductPrice(BigDecimal price) {
-        if (isPriceNegative(price)) {
-            throw new ProductException(ProductErrorCode.PRICE_IS_NEGATIVE);
-        }
         if (isPriceNull(price)) {
             throw new ProductException(ProductErrorCode.PRICE_IS_NULL);
+        }
+        if (isPriceNegative(price)) {
+            throw new ProductException(ProductErrorCode.PRICE_IS_NEGATIVE);
         }
         this.price = price;
     }
