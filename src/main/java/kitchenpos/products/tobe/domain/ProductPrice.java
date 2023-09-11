@@ -6,17 +6,17 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Price {
+public class ProductPrice {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Price(BigDecimal price) {
+    public ProductPrice(BigDecimal price) {
         checkPriceIsMinus(price);
         this.price = price;
     }
 
-    protected Price() {
+    protected ProductPrice() {
     }
 
     private void checkPriceIsMinus(BigDecimal price) {
@@ -34,11 +34,11 @@ public class Price {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Price)) {
+        if (!(o instanceof ProductPrice)) {
             return false;
         }
-        Price price1 = (Price) o;
-        return Objects.equals(price, price1.price);
+        ProductPrice productPrice1 = (ProductPrice) o;
+        return Objects.equals(price, productPrice1.price);
     }
 
     @Override

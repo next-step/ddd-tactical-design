@@ -18,19 +18,19 @@ public class Product {
     private ProductName name;
 
     @Embedded
-    private Price price = new Price();
+    private ProductPrice price = new ProductPrice();
 
     public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
         this.name = new ProductName(name, purgomalumClient);
-        this.price = new Price(price);
+        this.price = new ProductPrice(price);
     }
 
     protected Product() {
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new Price(price);
+        this.price = new ProductPrice(price);
     }
 
     public UUID getId() {
