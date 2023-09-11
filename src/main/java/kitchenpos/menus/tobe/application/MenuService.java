@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final MenuNameFactory menuNameFactory;
     private final ProductRepository productRepository;
     private final ProductValidator productValidator;
 
@@ -29,12 +29,12 @@ public class MenuService {
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient,
+        final MenuNameFactory menuNameFactory,
         ProductValidator productValidator) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.menuNameFactory = menuNameFactory;
         this.productValidator = productValidator;
     }
 
@@ -51,14 +51,10 @@ public class MenuService {
         final Map<String, Product> productMap = productRepository.findAllByIdIn(productIds).stream()
                 .collect(Collectors.toMap(Product::getId, product -> product));
         final MenuProducts menuProducts = MenuProducts.of(request, productMap);
+        final MenuName menuName = menuNameFactory.createMenuName(request.getName());
 
-        if (purgomalumClient.containsProfanity(request.getName())) {
-            throw new IllegalArgumentException("메뉴의 이름은 비속어를 포함할 수 없습니다");
-        }
-
-        Menu menu = Menu.of(request, menuGroup, menuProducts);
-        Menu savedMenu = menuRepository.save(menu);
-        return new MenuResponse(savedMenu.getId(), savedMenu.getName(), savedMenu.getPrice(), savedMenu.getMenuGroupId(), savedMenu.isDisplayed(), savedMenu.getMenuProductsSeq());
+        Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts));
+        return new MenuResponse(savedMenu);
     }
 
     @Transactional
@@ -66,7 +62,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
         menu.changePrice(request.getPrice());
-        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getMenuGroupId(), menu.isDisplayed(), menu.getMenuProductsSeq());
+        return new MenuResponse(menu);
     }
 
     @Transactional
@@ -74,7 +70,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId
         ).orElseThrow(NoSuchElementException::new);
         menu.setDisplayable();
-        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getMenuGroupId(), menu.isDisplayed(), menu.getMenuProductsSeq());
+        return new MenuResponse(menu);
     }
 
     @Transactional
@@ -82,13 +78,13 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setHide();
-        return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getMenuGroupId(), menu.isDisplayed(), menu.getMenuProductsSeq());
+        return new MenuResponse(menu);
     }
 
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
         return menuRepository.findAll().stream()
-                .map(it -> new MenuResponse(it.getId(), it.getName(), it.getPrice(), it.getMenuGroupId(), it.isDisplayed(), it.getMenuProductsSeq()))
+                .map(MenuResponse::new)
                 .collect(Collectors.toList());
     }
 }

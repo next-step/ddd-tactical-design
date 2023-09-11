@@ -6,9 +6,11 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class MenuName {
-    private String value;
+    private final String value;
 
-    protected MenuName() { }
+    protected MenuName() {
+        value = null;
+    }
 
     public MenuName(String name) {
         if (!StringUtils.hasText(name)) {
