@@ -30,6 +30,10 @@ public class TobeProduct {
         this.price = new ProductPrice(price);
     }
 
+    public void changePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -37,11 +41,7 @@ public class TobeProduct {
     public ProductName getName() {
         return name;
     }
-
     public ProductPrice getPrice() {
         return price;
-    }
-    public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
     }
 }
