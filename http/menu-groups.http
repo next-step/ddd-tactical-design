@@ -6,5 +6,17 @@ Content-Type: application/json
   "name": "추천메뉴"
 }
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 201, "Response status is wrong");
+    });
+%}
+
 ###
 GET {{host}}/api/menu-groups
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
