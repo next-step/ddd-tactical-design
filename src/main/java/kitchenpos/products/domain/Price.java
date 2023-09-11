@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -26,5 +26,9 @@ public class Price {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public Price multiply(BigDecimal price) {
+        return new Price(this.getPrice().multiply(price));
     }
 }

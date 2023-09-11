@@ -1,24 +1,24 @@
-package kitchenpos.products.tobe.ui.dto;
+package kitchenpos.products.ui.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ProductCreateResponse {
+public class ProductChangePriceResponse {
     private UUID id;
     private String name;
     private BigDecimal price;
 
-    public ProductCreateResponse() {
+    public ProductChangePriceResponse() {
     }
 
-    private ProductCreateResponse(UUID id, String name, BigDecimal price) {
+    private ProductChangePriceResponse(UUID id, String name, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public static ProductCreateResponse of(UUID id, String name, BigDecimal price) {
-        return new ProductCreateResponse(id, name, price);
+    public static ProductChangePriceResponse of(UUID id, String name, BigDecimal price) {
+        return new ProductChangePriceResponse(id, name, price);
     }
 
     public UUID getId() {

@@ -1,12 +1,20 @@
 package kitchenpos.products.ui;
 
+
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.ui.dto.ProductChangePriceRequest;
+import kitchenpos.products.ui.dto.ProductChangePriceResponse;
+import kitchenpos.products.ui.dto.ProductCreateRequest;
+import kitchenpos.products.ui.dto.ProductCreateResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/products")
@@ -19,19 +27,19 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
-        final Product response = productService.create(request);
+    public ResponseEntity<ProductCreateResponse> create(@RequestBody final ProductCreateRequest request) {
+        final ProductCreateResponse response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
+    public ResponseEntity<ProductChangePriceResponse> changePrice(@PathVariable final UUID productId, @RequestBody final ProductChangePriceRequest request) {
         return ResponseEntity.ok(productService.changePrice(productId, request));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
-    }
+//    @GetMapping
+//    public ResponseEntity<List<Product>> findAll() {
+//        return ResponseEntity.ok(productService.findAll());
+//    }
 }
