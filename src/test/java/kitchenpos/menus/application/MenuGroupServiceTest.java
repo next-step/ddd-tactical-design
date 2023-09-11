@@ -2,6 +2,8 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.dto.MenuGroupCreateRequest;
+import kitchenpos.menus.dto.MenuGroupDetailResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,7 @@ class MenuGroupServiceTest {
     @Test
     void create() {
         final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
-        final MenuGroup actual = menuGroupService.create(expected);
+        final MenuGroupDetailResponse actual = menuGroupService.create(new MenuGroupCreateRequest(expected.getName()));
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -42,7 +44,7 @@ class MenuGroupServiceTest {
     @ParameterizedTest
     void create(final String name) {
         final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
+        assertThatThrownBy(() -> menuGroupService.create(new MenuGroupCreateRequest(expected.getName())))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -50,7 +52,7 @@ class MenuGroupServiceTest {
     @Test
     void findAll() {
         menuGroupRepository.save(menuGroup("두마리메뉴"));
-        final List<MenuGroup> actual = menuGroupService.findAll();
+        final List<MenuGroupDetailResponse> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }
 

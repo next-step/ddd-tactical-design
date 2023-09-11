@@ -4,6 +4,7 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.dto.MenuGroupDetailResponse;
+import kitchenpos.menus.mapper.MenuMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static kitchenpos.menus.mapper.MenuMapper.toMenuGroupDetailResponse;
 
 @Service
 public class MenuGroupService {
@@ -36,11 +39,8 @@ public class MenuGroupService {
     public List<MenuGroupDetailResponse> findAll() {
         return menuGroupRepository.findAll()
                 .stream()
-                .map(this::toMenuGroupDetailResponse)
+                .map(MenuMapper::toMenuGroupDetailResponse)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private MenuGroupDetailResponse toMenuGroupDetailResponse(MenuGroup menuGroup) {
-        return new MenuGroupDetailResponse(menuGroup.getId(), menuGroup.getName());
-    }
 }
