@@ -2,6 +2,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.common.exception.PriceException;
 import kitchenpos.menus.application.*;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductRequest;
@@ -78,7 +79,7 @@ class ProductServiceTest {
     void create(final BigDecimal price) {
         final ProductRequest expected = new ProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
-                .isInstanceOf(ProductPriceException.class);
+                .isInstanceOf(PriceException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -109,7 +110,7 @@ class ProductServiceTest {
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
-                .isInstanceOf(ProductPriceException.class);
+                .isInstanceOf(PriceException.class);
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")

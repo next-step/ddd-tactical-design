@@ -100,9 +100,18 @@ public class MenuService {
     }
 
     @Transactional
-    public void hideMenuWhenChangeProductPrice(UUID productId) {
+    public void checkHideAndPrice(UUID productId) {
+        Product product = productService.findById(productId);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(Menu::hideWhenPriceGreaterThanProducts);
+        menus.forEach(menu -> {
+            List<UUID> productIds = menu.getProductIds();
+            menu.getMenuProducts()
+                    .getValues()
+                    .stream()
+                    .filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                    .forEach(menuProduct -> menuProduct.fetchPrice(product.getPrice()));
+        });
+        menus.forEach(Menu::checkPriceAndHide);
     }
 
     @Transactional(readOnly = true)

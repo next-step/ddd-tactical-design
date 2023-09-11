@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
 import kitchenpos.products.exception.ProductDisplayedNameException;
@@ -27,7 +28,7 @@ class MenuGroupDisplayedNameTest {
     void create_test_3(String name) {
         assertThatThrownBy(
                 () -> new MenuGroupDisplayedName(name))
-                .isInstanceOf(ProductDisplayedNameException.class)
+                .isInstanceOf(MenuDisplayedNameException.class)
                 .hasMessage(MenuErrorCode.NAME_IS_NULL_OR_EMPTY.getMessage());
     }
 }

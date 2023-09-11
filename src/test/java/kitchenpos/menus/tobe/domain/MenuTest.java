@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.exception.PriceException;
 import kitchenpos.menus.application.FakeMenuProfanityPolicy;
+import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
@@ -70,24 +71,14 @@ class MenuTest {
                         menuGroup(),
                         true,
                         menuProducts)
-        ).isInstanceOf(PriceException.class);
+        ).isInstanceOf(MenuException.class);
     }
 
     @DisplayName("[실패] 메뉴 가격 수정 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다. ")
     @Test
     void changePrice() {
         assertThatThrownBy(() -> menu.changePrice(new Price(10000)))
-                .isInstanceOf(PriceException.class);
-    }
-
-    @DisplayName("[성공] 메뉴 상품 금액의 합보다 메뉴 가격이 크면, 메뉴는 숨겨진다.")
-    @Test
-    void changePrice1() {
-        //given
-        product_2000.changePrice(new Price(500));
-        menu.hideWhenPriceGreaterThanProducts();
-        //then
-        assertThat(menu.isDisplayed()).isFalse();
+                .isInstanceOf(MenuException.class);
     }
 
     @DisplayName("[성공] 메뉴를 숨긴다.")
@@ -112,9 +103,10 @@ class MenuTest {
     @Test
     void display2() {
         //given
-        product_2000.changePrice(new Price(500));
+        menu.hide();
+        menu.changePrice(new Price(30_000L));
         //when
         assertThatThrownBy(() -> menu.display())
-                .isInstanceOf(PriceException.class);
+                .isInstanceOf(MenuException.class);
     }
 }

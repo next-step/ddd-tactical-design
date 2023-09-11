@@ -94,7 +94,7 @@ public class Menu {
         this.price = price;
     }
 
-    public void hideWhenPriceGreaterThanProducts() {
+    public void checkPriceAndHide() {
         if (price.isGreaterThan(menuProducts.calculateSum())) {
             hide();
         }
@@ -125,6 +125,10 @@ public class Menu {
 
     public MenuProducts getMenuProducts() {
         return menuProducts;
+    }
+
+    public List<UUID> getProductIds() {
+        return menuProducts.getProductIds();
     }
 
     public MenuDisplayedName getName() {

@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,9 +42,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuGroupRequest(name))
+                .isInstanceOf(MenuDisplayedNameException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")

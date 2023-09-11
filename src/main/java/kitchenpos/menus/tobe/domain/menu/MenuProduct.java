@@ -67,6 +67,10 @@ public class MenuProduct {
         this.menu = menu;
     }
 
+    public void fetchPrice(Price price) {
+        this.productPrice = price;
+    }
+
     public Long getSeq() {
         return seq;
     }
@@ -98,4 +102,5 @@ public class MenuProduct {
         result = 31 * result + (menu != null ? menu.hashCode() : 0);
         return result;
     }
+
 }

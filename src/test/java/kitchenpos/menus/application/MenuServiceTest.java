@@ -7,6 +7,7 @@ import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
+import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
 import kitchenpos.menus.tobe.domain.menu.Menu;
@@ -139,7 +140,7 @@ class MenuServiceTest {
                 "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProduct(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
-                .isInstanceOf(PriceException.class);
+                .isInstanceOf(MenuException.class);
     }
 
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
@@ -191,7 +192,7 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(50_000L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-                .isInstanceOf(PriceException.class);
+                .isInstanceOf(MenuException.class);
     }
 
     @DisplayName("메뉴를 노출할 수 있다.")
@@ -208,7 +209,7 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
         menuService.changePrice(menuId, new MenuChangePriceRequest(33_000L));
         assertThatThrownBy(() -> menuService.display(menuId))
-                .isInstanceOf(PriceException.class);
+                .isInstanceOf(MenuException.class);
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")
