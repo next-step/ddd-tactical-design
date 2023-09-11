@@ -1,10 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,13 +12,9 @@ public class ToBeOrder {
     @Id
     private UUID id;
 
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
-
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private ToBeOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
@@ -37,16 +28,13 @@ public class ToBeOrder {
     )
     private List<ToBeOrderLineItem> orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
         name = "order_table_id",
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
-    private OrderTable orderTable;
+    private ToBeOrderTable orderTable;
 
     @Transient
     private UUID orderTableId;
@@ -54,27 +42,22 @@ public class ToBeOrder {
     public ToBeOrder() {
     }
 
+    public ToBeOrder(ToBeOrderStatus toBeOrderStatus, LocalDateTime localDateTime, List<ToBeOrderLineItem> orderLineItems){
+        this.status = toBeOrderStatus;
+        this.orderDateTime = localDateTime;
+        this.orderLineItems = orderLineItems;
+    }
+
+
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public OrderType getType() {
-        return type;
-    }
-
-    public void setType(final OrderType type) {
-        this.type = type;
-    }
-
-    public OrderStatus getStatus() {
+    public ToBeOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
+    public void changeStatus(ToBeOrderStatus status){
         this.status = status;
     }
 
@@ -82,31 +65,17 @@ public class ToBeOrder {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
 
     public List<ToBeOrderLineItem> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(final List<ToBeOrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderTable getOrderTable() {
+    public ToBeOrderTable getOrderTable() {
         return orderTable;
     }
 
-    public void setOrderTable(final OrderTable orderTable) {
+    public void setOrderTable(ToBeOrderTable orderTable) {
         this.orderTable = orderTable;
     }
 
@@ -114,7 +83,4 @@ public class ToBeOrder {
         return orderTableId;
     }
 
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
-    }
 }

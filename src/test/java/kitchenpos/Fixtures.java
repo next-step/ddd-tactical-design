@@ -1,10 +1,6 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.eatinorders.tobe.domain.ToBeOrder;
-import kitchenpos.eatinorders.tobe.domain.ToBeOrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.ToBeMenu;
 import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
@@ -58,55 +54,35 @@ public class Fixtures {
         return menuProduct;
     }
 
-    public static ToBeOrder order(final OrderStatus status, final String deliveryAddress, PurgomalumClient purgomalumClient) {
-        final ToBeOrder order = new ToBeOrder();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem(purgomalumClient)));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
-    }
 
-    public static ToBeOrder order(final OrderStatus status, PurgomalumClient purgomalumClient) {
+    public static ToBeOrder order(final ToBeOrderStatus status, final ToBeOrderTable orderTable, PurgomalumClient purgomalumClient) {
         final ToBeOrder order = new ToBeOrder();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem(purgomalumClient)));
-        return order;
-    }
-
-    public static ToBeOrder order(final OrderStatus status, final OrderTable orderTable, PurgomalumClient purgomalumClient) {
-        final ToBeOrder order = new ToBeOrder();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem(purgomalumClient)));
+        ReflectionTestUtils.setField(order,"id",UUID.randomUUID());
+        ReflectionTestUtils.setField(order,"status",status);
+        ReflectionTestUtils.setField(order,"orderDateTime",LocalDateTime.of(2020, 1, 1, 12, 0));
+        ReflectionTestUtils.setField(order,"orderLineItems",Arrays.asList(orderLineItem(purgomalumClient)));
         order.setOrderTable(orderTable);
         return order;
     }
 
     public static ToBeOrderLineItem orderLineItem(PurgomalumClient purgomalumClient) {
         final ToBeOrderLineItem orderLineItem = new ToBeOrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu(purgomalumClient));
+        ReflectionTestUtils.setField(orderLineItem,"seq",new Random().nextLong());
+        ReflectionTestUtils.setField(orderLineItem,"menu",menu(purgomalumClient));
         return orderLineItem;
     }
 
-    public static OrderTable orderTable() {
+    public static ToBeOrderTable orderTable() {
         return orderTable(false, 0);
     }
 
-    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
+    public static ToBeOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+        final ToBeOrderTable orderTable = new ToBeOrderTable();
+        ReflectionTestUtils.setField(orderTable,"id",UUID.randomUUID());
+        ReflectionTestUtils.setField(orderTable,"name",new OrderTableName("1번"));
+        ReflectionTestUtils.setField(orderTable,"numberOfGuests",new NumberOfGuests(numberOfGuests));
+        ReflectionTestUtils.setField(orderTable,"occupied",occupied);
+
         return orderTable;
     }
 
