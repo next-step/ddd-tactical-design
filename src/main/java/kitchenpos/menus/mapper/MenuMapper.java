@@ -1,11 +1,11 @@
 package kitchenpos.menus.mapper;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.dto.MenuDetailResponse;
 import kitchenpos.menus.dto.MenuGroupDetailResponse;
 import kitchenpos.menus.dto.MenuProductElement;
+import kitchenpos.menus.tobe.domain.MenuGroup;
 
 import java.util.stream.Collectors;
 

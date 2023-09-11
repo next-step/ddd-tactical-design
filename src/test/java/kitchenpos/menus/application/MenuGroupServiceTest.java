@@ -1,9 +1,10 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.dto.MenuGroupDetailResponse;
+import kitchenpos.menus.tobe.domain.FakeMenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +44,7 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(new MenuGroupCreateRequest(expected.getName())))
+        assertThatThrownBy(() -> menuGroupService.create(new MenuGroupCreateRequest(name)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -57,8 +57,6 @@ class MenuGroupServiceTest {
     }
 
     private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        return FakeMenuGroup.createFake(name);
     }
 }
