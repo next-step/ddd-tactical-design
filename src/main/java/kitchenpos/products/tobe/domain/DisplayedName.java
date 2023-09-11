@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.Column;
@@ -21,8 +20,8 @@ public class DisplayedName {
         this.name = name;
     }
 
-    public static DisplayedName of(String name, PurgomalumClient purgomalumClient) {
-        if (StringUtils.isEmpty(name) || purgomalumClient.containsProfanity(name)) {
+    public static DisplayedName of(String name, DisplayNameChecker displayNameChecker) {
+        if (StringUtils.isEmpty(name) || displayNameChecker.containsProfanity(name)) {
             throw new IllegalArgumentException(PRODUCT_NAME_CONTAINS_PROFANITY);
         }
         return new DisplayedName(name);

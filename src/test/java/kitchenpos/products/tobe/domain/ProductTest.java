@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeDisplayNameChecker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,18 +22,18 @@ class ProductTest {
     @Test
     void create_success() {
         UUID id = UUID.randomUUID();
-        Product product = Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakePurgomalumClient());
+        Product product = Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakeDisplayNameChecker());
         assertThat(product)
-                .isEqualTo(Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakePurgomalumClient()));
+                .isEqualTo(Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakeDisplayNameChecker()));
     }
 
     @DisplayName("메뉴의 식별자가 같으면 같은 상품이다.")
     @Test
     void create_success_only_equal_id() {
         UUID id = UUID.randomUUID();
-        Product product = Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakePurgomalumClient());
+        Product product = Product.create(id, BigDecimal.valueOf(1_000L), "후라이드", new FakeDisplayNameChecker());
         assertThat(product)
-                .isEqualTo(Product.create(id, BigDecimal.valueOf(2_000L), "양념치킨", new FakePurgomalumClient()));
+                .isEqualTo(Product.create(id, BigDecimal.valueOf(2_000L), "양념치킨", new FakeDisplayNameChecker()));
     }
 
     @DisplayName("상품이름에 비속어가 포함되면 예외를 반환한다.")
@@ -41,7 +41,7 @@ class ProductTest {
     @ParameterizedTest
     void create_failed_profanity(String input) {
         UUID id = UUID.randomUUID();
-        assertThatThrownBy(() -> Product.create(id, BigDecimal.valueOf(1_000L), input, new FakePurgomalumClient()))
+        assertThatThrownBy(() -> Product.create(id, BigDecimal.valueOf(1_000L), input, new FakeDisplayNameChecker()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(PRODUCT_NAME_CONTAINS_PROFANITY);
     }
@@ -49,7 +49,7 @@ class ProductTest {
     @DisplayName("가격변경 성공")
     @Test
     void changePrice_success() {
-        Product product = Product.create(UUID.randomUUID(), BigDecimal.valueOf(1_000L), "후라이드", new FakePurgomalumClient());
+        Product product = Product.create(UUID.randomUUID(), BigDecimal.valueOf(1_000L), "후라이드", new FakeDisplayNameChecker());
 
         product.changePrice(3000L);
 
@@ -61,7 +61,7 @@ class ProductTest {
     @ValueSource(longs = {-2L, -1L})
     @ParameterizedTest
     void changePrice_failed(Long input) {
-        Product product = Product.create(UUID.randomUUID(), BigDecimal.valueOf(1_000L), "후라이드", new FakePurgomalumClient());
+        Product product = Product.create(UUID.randomUUID(), BigDecimal.valueOf(1_000L), "후라이드", new FakeDisplayNameChecker());
         assertThatThrownBy(() -> product.changePrice(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(PRODUCT_PRICE_MORE_ZERO);

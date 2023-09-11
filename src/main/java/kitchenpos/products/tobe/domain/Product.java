@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -33,8 +31,8 @@ public class Product {
         this.name = name;
     }
 
-    public static Product create(UUID id, BigDecimal price, String name, PurgomalumClient purgomalumClient) {
-        return new Product(id, Price.of(price), DisplayedName.of(name, purgomalumClient));
+    public static Product create(UUID id, BigDecimal price, String name, DisplayNameChecker displayNameChecker) {
+        return new Product(id, Price.of(price), DisplayedName.of(name, displayNameChecker));
     }
 
     public void changePrice(Long price) {

@@ -4,7 +4,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.DisplayNameChecker;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,24 +21,24 @@ import static kitchenpos.products.exception.ProductExceptionMessage.NOT_FOUND_PR
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final DisplayNameChecker displayNameChecker;
     private final MenuProductPriceHandler menuProductPriceHandler;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient,
+            final DisplayNameChecker displayNameChecker,
             final MenuProductPriceHandler menuProductPriceHandler
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.displayNameChecker = displayNameChecker;
         this.menuProductPriceHandler = menuProductPriceHandler;
     }
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        Product product = Product.create(UUID.randomUUID(), request.getPrice(), request.getName(), purgomalumClient);
+        Product product = Product.create(UUID.randomUUID(), request.getPrice(), request.getName(), displayNameChecker);
         return productRepository.save(product);
     }
 
