@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.ui;
 
+import kitchenpos.menus.tobe.domain.Menu;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,13 +19,13 @@ public class MenuResponse {
 
     private final List<Long> menuProductsSeq;
 
-    public MenuResponse(String id, String name, BigDecimal price, String menuGroupId, boolean displayed, List<Long> menuProductsSeq) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.menuGroupId = menuGroupId;
-        this.displayed = displayed;
-        this.menuProductsSeq = menuProductsSeq;
+    public MenuResponse(Menu menu) {
+        this.id = menu.getId();
+        this.name = menu.getName();
+        this.price = menu.getPrice();
+        this.menuGroupId = menu.getMenuGroupId();
+        this.displayed = menu.isDisplayed();
+        this.menuProductsSeq = menu.getMenuProductsSeq();
     }
 
     public String getId() {

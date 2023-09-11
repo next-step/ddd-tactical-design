@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.ui.ProductRequest;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -23,9 +21,8 @@ public class Product {
 
     protected Product() { }
 
-    public static Product of(ProductRequest request) {
-        ProductName productName = new ProductName(request.getName());
-        ProductPrice productPrice = new ProductPrice(request.getPrice());
+    public static Product of(ProductName productName, BigDecimal price) {
+        ProductPrice productPrice = new ProductPrice(price);
         return new Product(productName, productPrice);
     }
 

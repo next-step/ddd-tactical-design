@@ -37,20 +37,19 @@ public class Menu {
     protected Menu() {
     }
 
-    public static Menu of(MenuRequest request, MenuGroup menuGroup, MenuProducts menuProducts) {
-        return new Menu(UUID.randomUUID(), request.getName(), request.getPrice(), menuGroup, request.isDisplayed(), menuProducts);
+    public static Menu of(MenuName name, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        return new Menu(name, price, menuGroup, displayed, menuProducts);
     }
 
     public Menu(
-            UUID id,
-            String name,
+            MenuName name,
             BigDecimal price,
             MenuGroup menuGroup,
             boolean displayed,
             MenuProducts menuProducts
     ) {
-        this.id = id;
-        this.name = new MenuName(name);
+        this.id = UUID.randomUUID();
+        this.name = name;
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;

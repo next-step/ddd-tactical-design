@@ -22,13 +22,13 @@ public class MenuGroup {
 
     protected MenuGroup() { }
 
-    public MenuGroup(UUID id, String name) {
-        this.id = id;
-        this.name = new MenuGroupName(name);
+    public static MenuGroup of(String name) {
+        return new MenuGroup(name);
     }
 
-    public static MenuGroup of(MenuGroupRequest request) {
-        return new MenuGroup(UUID.randomUUID(), request.getName());
+    public MenuGroup(String name) {
+        this.id = UUID.randomUUID();
+        this.name = new MenuGroupName(name);
     }
 
     public String getId() {

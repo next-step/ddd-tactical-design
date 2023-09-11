@@ -1,14 +1,17 @@
 package kitchenpos.menus.tobe.ui;
 
+
+import kitchenpos.menus.tobe.domain.MenuGroup;
+
 public class MenuGroupResponse {
 
     private final String id;
 
     private final String name;
 
-    public MenuGroupResponse(String id, String name) {
-        this.id = id;
-        this.name = name;
+    public MenuGroupResponse(MenuGroup menuGroup) {
+        this.id = menuGroup.getId();
+        this.name = menuGroup.getName();
     }
 
     public String getId() {
