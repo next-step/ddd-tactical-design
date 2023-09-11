@@ -4,7 +4,8 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -117,11 +118,12 @@ public class Fixtures {
         return product("후라이드", 16_000L);
     }
 
-    public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+    public static Product product(final String name, final Long price) {
+        return new Product(name, new BigDecimal(price), text -> false);
     }
+
+    public static Product product(final String name, final Long price, final PurgomalumClient purgomalumClient) {
+        return new Product(name, BigDecimal.valueOf(price), purgomalumClient);
+    }
+
 }
