@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;

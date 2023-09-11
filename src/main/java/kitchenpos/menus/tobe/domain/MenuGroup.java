@@ -1,4 +1,6 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
+
+import kitchenpos.menus.vo.MenuGroupName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,22 +18,16 @@ public class MenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public MenuGroup() {
+    public MenuGroup(UUID id, String name) {
+        this.id = id;
+        this.name = new MenuGroupName(name).getName();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 }

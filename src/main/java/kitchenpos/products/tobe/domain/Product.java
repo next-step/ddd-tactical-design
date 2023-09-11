@@ -1,14 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.vo.ProductDisplayedName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 public class Product {
