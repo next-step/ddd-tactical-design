@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 import kitchenpos.menus.tobe.domain.ToBeMenuGroupRepository;
@@ -10,10 +10,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class MenuGroupService {
+public class ToBeMenuGroupService {
     private final ToBeMenuGroupRepository menuGroupRepository;
 
-    public MenuGroupService(final ToBeMenuGroupRepository menuGroupRepository) {
+    public ToBeMenuGroupService(final ToBeMenuGroupRepository menuGroupRepository) {
         this.menuGroupRepository = menuGroupRepository;
     }
 

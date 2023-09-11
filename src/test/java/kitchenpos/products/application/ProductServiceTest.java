@@ -93,7 +93,7 @@ class ProductServiceTest {
     @Test
     void changePriceInMenu() {
         final ToBeProduct product = productRepository.save(product("후라이드", 16_000L, purgomalumClient));
-        final ToBeMenu menu = menuRepository.save(Fixtures.menu(19_000L, true, menuProduct(product, 2L)));
+        final ToBeMenu menu = menuRepository.save(Fixtures.menu(19_000L, true, purgomalumClient, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
