@@ -1,10 +1,11 @@
 package kitchenpos.menus.domain.vo;
 
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.ValueObject;
 
 import java.util.Objects;
 
-public class MenuName {
+public class MenuName extends ValueObject {
     private final String name;
 
     public MenuName(String name, PurgomalumClient purgomalumClient) {

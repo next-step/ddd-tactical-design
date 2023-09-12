@@ -1,11 +1,12 @@
 package kitchenpos.menus.domain.vo;
 
 import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
+import kitchenpos.support.ValueObject;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class MenuPrice {
+public class MenuPrice extends ValueObject {
     private final BigDecimal price;
 
     public MenuPrice(BigDecimal price) {
