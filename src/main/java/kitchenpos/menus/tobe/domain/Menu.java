@@ -1,10 +1,14 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.products.tobe.domain.Product;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Table(name = "menu")
 @Entity
@@ -19,7 +23,7 @@ public class Menu {
 
     @Embedded
     @Column(name = "price", nullable = false)
-    private MenuPrice price;
+    private MenuPrice menuPrice;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -58,7 +62,7 @@ public class Menu {
     ) {
         this.id = id;
         this.menuName = menuName;
-        this.price = price;
+        this.menuPrice = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
@@ -72,7 +76,6 @@ public class Menu {
         final MenuGroup menuGroup,
         final boolean displayed,
         final List<MenuProduct> menuProducts,
-        final UUID menuGroupId,
         final Predicate<String> predicate
     ) {
         return new Menu(
@@ -82,7 +85,7 @@ public class Menu {
             menuGroup,
             displayed,
             menuProducts,
-            menuGroupId
+            menuGroup.getId()
         );
     }
 
@@ -90,20 +93,20 @@ public class Menu {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public MenuName getMenuName() {
         return menuName;
     }
 
-    public MenuPrice getPrice() {
-        return price;
+    public String getStringName() {
+        return menuName.getName();
+    }
+
+    public MenuPrice getMenuPrice() {
+        return menuPrice;
     }
 
     public BigDecimal getBigDecimalPrice() {
-        return price.toBigDecimal();
+        return menuPrice.toBigDecimal();
     }
 
     public MenuGroup getMenuGroup() {
@@ -133,7 +136,7 @@ public class Menu {
         return sum;
     }
 
-    public boolean exceedsSum(BigDecimal target) {
+    public boolean exceedsSum(final BigDecimal target) {
         BigDecimal sum = getSumOfMenuProductPrice();
         return target.compareTo(sum) > 0;
     }
@@ -149,10 +152,42 @@ public class Menu {
         this.displayed = true;
     }
 
-    public void changePrice(BigDecimal price) {
+    public void changePrice(final BigDecimal price) {
         if (exceedsSum(price)) {
             throw new IllegalArgumentException();
         }
-        this.price = new MenuPrice(price);
+        this.menuPrice = new MenuPrice(price);
+    }
+
+    public static List<MenuProduct> createMenuProducts(final List<Product> products, final List<MenuProduct> menuProductRequests) {
+        validateSize(products, menuProductRequests);
+        return getFilteredMenuProducts(products, menuProductRequests);
+    }
+
+    private static List<MenuProduct> getFilteredMenuProducts(final List<Product> products, final List<MenuProduct> menuProductRequests) {
+        return menuProductRequests.stream()
+            .map(menuProductRequest -> {
+                final long quantity = menuProductRequest.getQuantity();
+                if (quantity < 0) {
+                    throw new IllegalArgumentException();
+                }
+                final Product product = products.stream()
+                    .filter(p -> p.getId().equals(menuProductRequest.getProductId()))
+                    .findFirst()
+                    .orElseThrow(NoSuchElementException::new);
+                return new MenuProduct(product, quantity);
+            })
+            .collect(Collectors.toList());
+    }
+
+    private static void validateSize(final List<Product> products, final List<MenuProduct> menuProducts) {
+        if (products.size() != menuProducts.size()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public BigDecimal multiplyPrice(BigDecimal multiplicand) {
+        BigDecimal price = this.menuPrice.toBigDecimal();
+        return price.multiply(multiplicand);
     }
 }

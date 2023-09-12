@@ -12,6 +12,10 @@ public class MenuName {
     public MenuName() {
     }
 
+    public String getName() {
+        return name;
+    }
+
     public MenuName(final String name, final Predicate<String> predicate) {
         if (Objects.isNull(name) || predicate.test(name)) {
             throw new IllegalArgumentException();

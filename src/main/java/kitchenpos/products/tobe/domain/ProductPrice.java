@@ -12,7 +12,7 @@ public class ProductPrice {
     public ProductPrice() {
     }
 
-    public ProductPrice(BigDecimal price) {
+    public ProductPrice(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }

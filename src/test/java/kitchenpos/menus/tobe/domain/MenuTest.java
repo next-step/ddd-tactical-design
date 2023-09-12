@@ -98,7 +98,6 @@ class MenuTest {
             new MenuGroup(),
             displayed,
             List.of(new MenuProduct(1L, product(), 1L, UUID.randomUUID())),
-            UUID.randomUUID(),
             purgomalumClient::containsProfanity
         );
     }

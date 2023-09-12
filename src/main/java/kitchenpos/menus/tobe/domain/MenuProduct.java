@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
+import java.util.Random;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -30,7 +31,21 @@ public class MenuProduct {
     public MenuProduct() {
     }
 
-    public MenuProduct(Long seq, Product product, long quantity, UUID productId) {
+    public MenuProduct(final UUID productId, final long quantity) {
+        this(new Random().nextLong(), null, quantity, productId);
+    }
+
+    public MenuProduct(final Product product, final long quantity) {
+        this(new Random().nextLong(), product, quantity);
+    }
+
+    public MenuProduct(final Long seq, final Product product, final long quantity) {
+        this.seq = seq;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public MenuProduct(final Long seq, final Product product, long quantity, final UUID productId) {
         this.seq = seq;
         this.product = product;
         this.quantity = quantity;
