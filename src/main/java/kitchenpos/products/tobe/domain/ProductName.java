@@ -5,15 +5,15 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Name {
+public class ProductName {
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected Name() {
+    protected ProductName() {
     }
 
-    public Name(String name, PurgomalumClient purgomalumClient) {
+    public ProductName(String name, PurgomalumClient purgomalumClient) {
         validate(name, purgomalumClient);
         this.name = name;
     }
@@ -31,9 +31,9 @@ public class Name {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Name)) return false;
-        Name name1 = (Name) o;
-        return Objects.equals(name, name1.name);
+        if (!(o instanceof ProductName)) return false;
+        ProductName productName1 = (ProductName) o;
+        return Objects.equals(name, productName1.name);
     }
 
     @Override

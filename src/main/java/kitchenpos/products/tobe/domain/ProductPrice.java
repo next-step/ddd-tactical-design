@@ -6,15 +6,15 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class ProductPrice {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected Price() {
+    protected ProductPrice() {
     }
 
-    public Price(BigDecimal price) {
+    public ProductPrice(BigDecimal price) {
         validatePrice(price);
         this.price = price;
     }
@@ -32,9 +32,9 @@ public class Price {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Price)) return false;
-        Price price1 = (Price) o;
-        return Objects.equals(price, price1.price);
+        if (!(o instanceof ProductPrice)) return false;
+        ProductPrice productPrice1 = (ProductPrice) o;
+        return Objects.equals(price, productPrice1.price);
     }
 
     @Override

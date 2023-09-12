@@ -13,10 +13,10 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private ProductName productName;
 
     @Embedded
-    private Price price;
+    private ProductPrice productPrice;
 
     protected Product() {
     }
@@ -27,8 +27,8 @@ public class Product {
 
     private Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = id;
-        this.name = new Name(name, purgomalumClient);
-        this.price = new Price(price);
+        this.productName = new ProductName(name, purgomalumClient);
+        this.productPrice = new ProductPrice(price);
     }
 
     public static Product of(Product product, PurgomalumClient purgomalumClient) {
@@ -36,7 +36,7 @@ public class Product {
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new Price(price);
+        this.productPrice = new ProductPrice(price);
     }
 
     public UUID getId() {
@@ -44,10 +44,10 @@ public class Product {
     }
 
     public String getName() {
-        return name.getName();
+        return productName.getName();
     }
 
     public BigDecimal getPrice() {
-        return price.getPrice();
+        return productPrice.getPrice();
     }
 }
