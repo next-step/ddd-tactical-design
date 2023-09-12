@@ -39,7 +39,7 @@ public class MenuProducts {
                 .collect(Collectors.toList());
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public List<MenuProduct> getMenuProductList() {
         return menuProducts;
     }
 

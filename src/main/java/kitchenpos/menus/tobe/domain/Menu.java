@@ -55,26 +55,26 @@ public class Menu {
         this.menuProducts = menuProducts;
 
 
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProducts())) {
+        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
             throw new IllegalArgumentException();
         }
     }
 
     public void hideIfMenuPriceTooHigher(MenuPriceChecker menuPriceChecker) {
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProducts())) {
+        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
             this.displayed = false;
         }
     }
 
     public void changePrice(BigDecimal price, MenuPriceChecker menuPriceChecker) {
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProducts())) {
+        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
             this.displayed = false;
         }
         this.price = new MenuPrice(price);
     }
 
     public void setDisplayable(MenuPriceChecker menuPriceChecker) {
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProducts())) {
+        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
             throw new IllegalArgumentException();
         }
         this.displayed = true;
@@ -102,6 +102,10 @@ public class Menu {
 
     public MenuProducts getMenuProducts() {
         return menuProducts;
+    }
+
+    public List<MenuProduct> getMenuProductList() {
+        return menuProducts.getMenuProductList();
     }
 
     public List<Long> getMenuProductsSeq() {
