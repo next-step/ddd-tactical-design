@@ -26,9 +26,9 @@ public class OrderTableService {
 
     @Transactional
     public OrderTableResponse create(final OrderTableRequest request) {
-        final OrderTable orderTable = OrderTable.of(request);
+        final OrderTable orderTable = OrderTable.of(request.getName());
         OrderTable savedOrderTable = orderTableRepository.save(orderTable);
-        return new OrderTableResponse(savedOrderTable.getId(), savedOrderTable.getName(), savedOrderTable.getNumberOfGuests(), savedOrderTable.isOccupied());
+        return new OrderTableResponse(savedOrderTable);
     }
 
     @Transactional
@@ -36,7 +36,7 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.sit();
-        return new OrderTableResponse(orderTable.getId(), orderTable.getName(), orderTable.getNumberOfGuests(), orderTable.isOccupied());
+        return new OrderTableResponse(orderTable);
     }
 
     @Transactional
@@ -47,24 +47,21 @@ public class OrderTableService {
             throw new IllegalStateException();
         }
         orderTable.clear();
-        return new OrderTableResponse(orderTable.getId(), orderTable.getName(), orderTable.getNumberOfGuests(), orderTable.isOccupied());
+        return new OrderTableResponse(orderTable);
     }
 
     @Transactional
     public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+        final OrderTable orderTable = orderTableRepository.findByIdOccupied(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
         orderTable.changeNumberOfGuest(request.getNumberOfGuests());
-        return new OrderTableResponse(orderTable.getId(), orderTable.getName(), orderTable.getNumberOfGuests(), orderTable.isOccupied());
+        return new OrderTableResponse(orderTable);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTableResponse> findAll() {
         return orderTableRepository.findAll().stream()
-                .map(it -> new OrderTableResponse(it.getId(), it.getName(), it.getNumberOfGuests(), it.isOccupied()))
+                .map(OrderTableResponse::new)
                 .collect(Collectors.toList());
     }
 }

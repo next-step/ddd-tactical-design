@@ -3,13 +3,12 @@ package kitchenpos.eatinorders.tobe.application;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.eatinorders.tobe.ui.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.tobe.ui.dto.EatInOrderResponse;
-import kitchenpos.eatinorders.tobe.ui.dto.OrderLineItemRequest;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,15 +52,7 @@ public class EatInOrderService {
         final OrderTable orderTable = orderTableRepository.findByIdNotOccupied(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
 
-
-        EatInOrder savedOrder = eatInOrderRepository.save(EatInOrder.of(orderLineItems, orderTable));
-        return new EatInOrderResponse(
-                savedOrder.getId(),
-                savedOrder.getStatus(),
-                savedOrder.getOrderDateTime(),
-                savedOrder.getOrderLineItemSequence(),
-                savedOrder.getOrderTableId()
-        );
+        return new EatInOrderResponse(savedOrder);
     }
 
     @Transactional
@@ -70,13 +61,7 @@ public class EatInOrderService {
                 .orElseThrow(NoSuchElementException::new);
 
         eatInOrder.accepted();
-        return new EatInOrderResponse(
-                eatInOrder.getId(),
-                eatInOrder.getStatus(),
-                eatInOrder.getOrderDateTime(),
-                eatInOrder.getOrderLineItemSequence(),
-                eatInOrder.getOrderTableId()
-        );
+        return new EatInOrderResponse(eatInOrder);
     }
 
     @Transactional
@@ -85,13 +70,7 @@ public class EatInOrderService {
                 .orElseThrow(NoSuchElementException::new);
 
         eatInOrder.serve();
-        return new EatInOrderResponse(
-                eatInOrder.getId(),
-                eatInOrder.getStatus(),
-                eatInOrder.getOrderDateTime(),
-                eatInOrder.getOrderLineItemSequence(),
-                eatInOrder.getOrderTableId()
-        );
+        return new EatInOrderResponse(eatInOrder);
     }
 
     @Transactional
@@ -106,24 +85,13 @@ public class EatInOrderService {
             orderTable.clear();
         }
 
-        return new EatInOrderResponse(
-                eatInOrder.getId(),
-                eatInOrder.getStatus(),
-                eatInOrder.getOrderDateTime(),
-                eatInOrder.getOrderLineItemSequence(),
-                eatInOrder.getOrderTableId()
-        );
+        return new EatInOrderResponse(eatInOrder);
     }
 
     @Transactional(readOnly = true)
     public List<EatInOrderResponse> findAll() {
         return eatInOrderRepository.findAll().stream()
-                .map(it -> new EatInOrderResponse(
-                        it.getId(),
-                        it.getStatus(),
-                        it.getOrderDateTime(),
-                        it.getOrderLineItemSequence(),
-                        it.getOrderTableId()
-                )).collect(Collectors.toList());
+                .map(EatInOrderResponse::new)
+                .collect(Collectors.toList());
     }
 }
