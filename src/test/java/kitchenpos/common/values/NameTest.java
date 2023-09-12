@@ -2,6 +2,7 @@ package kitchenpos.common.values;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
 
+    @DisplayName("[정상] 이름을 생성합니다.")
     @Test
     void create_success() {
         final String name = "name";
@@ -27,14 +29,10 @@ class NameTest {
         );
     }
 
-    @Test
-    void create_fail1() {
-        assertThrows(METHOD_NOT_ALLOWED, Name::new);
-    }
-
+    @DisplayName("[예외] null이나 빈 값으로 이름을 생성할 수 없습니다.")
     @NullAndEmptySource
     @ParameterizedTest
-    void create_fail2(String givenName) {
+    void create_fail1(String givenName) {
         assertThrows(BAD_REQUEST, () -> new Name(givenName));
     }
 

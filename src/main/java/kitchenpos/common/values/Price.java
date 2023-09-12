@@ -16,11 +16,10 @@ import static kitchenpos.common.ComparisonUtils.lessThan;
 public class Price {
 
     @Column(name = "price", nullable = false)
-    private final BigDecimal value;
+    private BigDecimal value;
 
 
     protected Price() {
-        throw new KitchenPosException("DEFAULT 생성자 호출", KitchenPosExceptionType.METHOD_NOT_ALLOWED);
     }
 
     public Price(final Long value) {

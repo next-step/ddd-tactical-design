@@ -3,17 +3,18 @@ package kitchenpos.common.values;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 public class Name {
 
-    private final String value;
+    @Column(name = "name", nullable = false)
+    private String value;
 
 
     protected Name() {
-        throw new KitchenPosException("DEFAULT 생성자 호출", KitchenPosExceptionType.METHOD_NOT_ALLOWED);
     }
 
     public Name(final String value) {
