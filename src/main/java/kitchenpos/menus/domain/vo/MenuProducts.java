@@ -1,7 +1,7 @@
-package kitchenpos.menus.vo;
+package kitchenpos.menus.domain.vo;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
+import kitchenpos.menus.domain.MenuProduct;
 
 import java.util.List;
 import java.util.Objects;

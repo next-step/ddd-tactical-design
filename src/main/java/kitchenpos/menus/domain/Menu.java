@@ -1,9 +1,9 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsPriceException;
-import kitchenpos.menus.vo.MenuName;
-import kitchenpos.menus.vo.MenuPrice;
-import kitchenpos.menus.vo.MenuProducts;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
+import kitchenpos.menus.domain.vo.MenuName;
+import kitchenpos.menus.domain.vo.MenuPrice;
+import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -50,11 +50,11 @@ public class Menu {
 
     public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
         this.id = id;
-        this.name = new MenuName(name).getName();
-        this.price = new MenuPrice(price).getPrice();
+        this.name = name;
+        this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
-        this.menuProducts = new MenuProducts(menuProducts).getMenuProducts();
+        this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
     }
 

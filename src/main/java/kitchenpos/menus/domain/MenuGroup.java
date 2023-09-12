@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
-import kitchenpos.menus.vo.MenuGroupName;
+import kitchenpos.menus.domain.vo.MenuGroupName;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

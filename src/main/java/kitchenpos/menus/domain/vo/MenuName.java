@@ -1,16 +1,13 @@
-package kitchenpos.menus.vo;
+package kitchenpos.menus.domain.vo;
 
-import kitchenpos.products.infra.DefaultPurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.util.Objects;
 
 public class MenuName {
     private final String name;
-    PurgomalumClient purgomalumClient = new DefaultPurgomalumClient(new RestTemplateBuilder());
 
-    public MenuName(String name) {
+    public MenuName(String name, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }

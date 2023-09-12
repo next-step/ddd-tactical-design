@@ -1,6 +1,6 @@
-package kitchenpos.menus.vo;
+package kitchenpos.menus.domain.vo;
 
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductQuantityException;
 
 public class MenuProductQuantity {
     private final long quantity;

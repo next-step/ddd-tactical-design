@@ -1,12 +1,12 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuPriceException;
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityException;
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsPriceException;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;

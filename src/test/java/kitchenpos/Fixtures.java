@@ -1,9 +1,9 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;

@@ -1,6 +1,6 @@
-package kitchenpos.menus.vo;
+package kitchenpos.menus.domain.vo;
 
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuPriceException;
+import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
