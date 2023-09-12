@@ -35,14 +35,13 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse create(final ProductCreateRequest request) {
+    public Product create(final ProductCreateRequest request) {
         Product product = new Product(request.getName(), request.getPrice(), purgomalumClient);
-        productRepository.save(product);
-        return ProductResponse.of(product);
+        return productRepository.save(product);
     }
 
     @Transactional
-    public ProductResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
+    public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
 
@@ -50,7 +49,7 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         menuPriceGreatorMenuproductsAllPriceThenHideMenu(menus);
 
-        return ProductResponse.of(product);
+        return product;
     }
 
     private void menuPriceGreatorMenuproductsAllPriceThenHideMenu(List<Menu> menus) {
@@ -70,10 +69,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponse> findAll() {
-        return productRepository.findAll()
-                .stream()
-                .map(ProductResponse::of)
-                .collect(Collectors.toList());
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 }

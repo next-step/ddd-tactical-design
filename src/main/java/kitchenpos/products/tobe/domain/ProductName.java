@@ -14,11 +14,11 @@ public class ProductName {
     }
 
     public ProductName(String name, PurgomalumClient purgomalumClient) {
-        validate(name, purgomalumClient);
+        validateName(name, purgomalumClient);
         this.name = name;
     }
 
-    private static void validate(String name, PurgomalumClient purgomalumClient) {
+    private static void validateName(String name, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
