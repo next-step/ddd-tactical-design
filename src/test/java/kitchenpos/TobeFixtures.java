@@ -1,7 +1,6 @@
 package kitchenpos;
 
 
-import kitchenpos.menus.tobe.application.DefaultMenuPriceChecker;
 import kitchenpos.menus.tobe.application.FakeMenuPriceChecker;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.infra.DefaultPurgomalumClient;
@@ -15,14 +14,12 @@ import java.util.Random;
 import java.util.UUID;
 
 public class TobeFixtures {
-    public static final UUID INVALID_ID = new UUID(0L, 0L);
-
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
     }
 
     public static Menu menu(final long price, final MenuProduct... menuProducts) {
-        return menu(price, false, menuProducts);
+        return menu(price, true, menuProducts);
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProductList) {

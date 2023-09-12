@@ -22,8 +22,7 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
-    protected OrderLineItem() {
-    }
+    protected OrderLineItem() { }
 
     public static OrderLineItem of(UUID menuId, long quantity, BigDecimal price) {
         return new OrderLineItem(menuId, quantity, price);
