@@ -1,49 +1,44 @@
-//package kitchenpos.products.domain;
-//
-//import javax.persistence.Column;
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
-//import javax.persistence.Table;
-//import java.math.BigDecimal;
-//import java.util.UUID;
-//
-//@Table(name = "product")
-//@Entity
-//public class Product {
-//    @Column(name = "id", columnDefinition = "binary(16)")
-//    @Id
-//    private UUID id;
-//
-//    @Column(name = "name", nullable = false)
-//    private String name;
-//
-//    @Column(name = "price", nullable = false)
-//    private BigDecimal price;
-//
-//    public Product() {
-//    }
-//
-//    public UUID getId() {
-//        return id;
-//    }
-//
-//    public void setId(final UUID id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
-//
-//    public BigDecimal getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(final BigDecimal price) {
-//        this.price = price;
-//    }
-//}
+package kitchenpos.products.domain;
+
+import kitchenpos.products.domain.vo.ProductDisplayedName;
+import kitchenpos.products.domain.vo.ProductPrice;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.util.UUID;
+
+public class Product {
+    @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
+    private UUID id;
+
+    @Column(name = "displayed_name", nullable = false)
+    private String displayedName;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
+
+    public Product(UUID id, String displayedName, BigDecimal price) {
+        this.id = id;
+        this.displayedName = new ProductDisplayedName(displayedName).getDisplayedName();
+        this.price = new ProductPrice(price).getPrice();
+    }
+
+    public Product changePrice(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getDisplayedName() {
+        return displayedName;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+}

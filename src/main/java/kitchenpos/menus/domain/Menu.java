@@ -1,11 +1,10 @@
 package kitchenpos.menus.domain;
 
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
-import kitchenpos.menus.domain.vo.MenuName;
 import kitchenpos.menus.domain.vo.MenuPrice;
 import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

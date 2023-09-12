@@ -2,7 +2,7 @@ package kitchenpos.menus.domain;
 
 
 import kitchenpos.menus.domain.vo.MenuProductQuantity;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import javax.persistence.*;
 import java.util.UUID;

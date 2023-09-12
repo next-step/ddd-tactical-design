@@ -1,6 +1,6 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.products.domain.vo;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.domain.exception.InvalidProductPriceException;
 
 import java.math.BigDecimal;
 

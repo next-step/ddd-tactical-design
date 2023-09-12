@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.exception;
+package kitchenpos.products.domain.exception;
 
 public class InvalidProductDisplayedNameException extends IllegalArgumentException {
 }

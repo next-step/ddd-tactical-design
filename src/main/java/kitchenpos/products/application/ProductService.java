@@ -4,9 +4,9 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.vo.MenuProducts;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.vo.Products;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.vo.Products;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

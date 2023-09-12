@@ -1,8 +1,8 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.products.domain.vo;
 
 import kitchenpos.products.infra.DefaultPurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.exception.InvalidProductDisplayedNameException;
+import kitchenpos.products.domain.exception.InvalidProductDisplayedNameException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.util.Objects;

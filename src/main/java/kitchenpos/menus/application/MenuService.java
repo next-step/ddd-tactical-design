@@ -7,7 +7,7 @@ import kitchenpos.menus.domain.exception.InvalidMenuProductsSizeException;
 import kitchenpos.menus.domain.exception.NotFoundMenuException;
 import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.tobe.domain.vo.Products;
+import kitchenpos.products.domain.vo.Products;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
