@@ -19,15 +19,9 @@ public class ProductDomainService {
     }
 
     @Transactional
-    public void changePrice(UUID productId, BigDecimal price) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(
-                        () -> new IllegalArgumentException("상품이 존재하지 않습니다 : " + productId)
-                );
-
+    public void changePrice(Product product, BigDecimal price) {
         product.changePrice(price);
-
-        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, price));
+        eventPublisher.publishEvent(new ProductPriceChangedEvent(product.getId(), price));
 
     }
 

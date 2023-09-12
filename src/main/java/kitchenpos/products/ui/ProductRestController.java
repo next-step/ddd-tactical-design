@@ -1,6 +1,7 @@
 package kitchenpos.products.ui;
 
 import kitchenpos.products.application.ProductService;
+import kitchenpos.products.tobe.domain.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
