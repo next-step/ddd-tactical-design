@@ -10,7 +10,7 @@ import java.util.UUID;
 public class FakeMenuPriceChecker implements MenuPriceChecker {
     @Override
     public boolean isTotalPriceLowerThanMenu(BigDecimal menuPrice, List<MenuProduct> menuProducts) {
-        return true;
+        return false;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.tobe.application.FakeMenuPriceChecker;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ class TobeMenuTest {
         assertThat(menu.isDisplayed()).isTrue();
 
         // when
-        menu.changePrice(BigDecimal.valueOf(Double.MAX_VALUE));
+        menu.changePrice(BigDecimal.valueOf(Double.MAX_VALUE), new FakeMenuPriceChecker());
 
         // then
         assertThat(menu.isDisplayed()).isFalse();
