@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.Fixtures.*;
+import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

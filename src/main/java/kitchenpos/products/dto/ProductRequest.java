@@ -1,7 +1,7 @@
 package kitchenpos.products.dto;
 
+import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

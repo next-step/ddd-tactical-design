@@ -1,7 +1,8 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.exception.MenuDisplayedNameException;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
 
-import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,9 +42,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuGroupRequest(name))
+                .isInstanceOf(MenuDisplayedNameException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -55,8 +55,6 @@ class MenuGroupServiceTest {
     }
 
     private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(name);
     }
 }

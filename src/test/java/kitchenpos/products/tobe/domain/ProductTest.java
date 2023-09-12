@@ -1,10 +1,12 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProfanityPolicy;
-import kitchenpos.products.tobe.domain.policy.ProfanityPolicy;
+import kitchenpos.common.FakeProfanityPolicy;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProfanityPolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
@@ -12,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @DisplayName("상품")
+@SpringBootTest
 class ProductTest {
 
     private ProfanityPolicy profanityPolicy;
@@ -36,9 +39,9 @@ class ProductTest {
         //given
         Product product = Product.of(NAME, BigDecimal.TEN, profanityPolicy);
         //when
-        product.changePrice(new ProductPrice(1000));
+        product.changePrice(new Price(1000));
         //then
         assertThat(product.getPrice())
-                .isEqualTo(new ProductPrice(1000));
+                .isEqualTo(new Price(1000));
     }
 }
