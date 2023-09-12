@@ -1,11 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.support.ValueObject;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class MenuGroupName {
+public class MenuGroupName extends ValueObject {
     private String value;
 
     protected MenuGroupName() { }

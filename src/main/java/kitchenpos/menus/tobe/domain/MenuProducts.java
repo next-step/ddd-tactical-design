@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.support.ValueObject;
 import kitchenpos.menus.tobe.ui.MenuProductRequest;
 
 import javax.persistence.CascadeType;
@@ -11,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Embeddable
-public class MenuProducts {
+public class MenuProducts extends ValueObject {
 
     @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<MenuProduct> menuProducts = new ArrayList<>();

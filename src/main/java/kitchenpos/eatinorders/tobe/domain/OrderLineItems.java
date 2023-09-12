@@ -1,11 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.support.ValueObject;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Embeddable
-public class OrderLineItems {
+public class OrderLineItems extends ValueObject {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(

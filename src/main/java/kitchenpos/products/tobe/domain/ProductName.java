@@ -1,9 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.support.ValueObject;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class ProductName {
+public class ProductName extends ValueObject {
     private String value;
 
     protected ProductName() { }
