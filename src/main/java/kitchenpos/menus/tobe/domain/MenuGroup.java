@@ -1,10 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.ui.MenuGroupRequest;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Table(name = "menu_group")
@@ -16,9 +15,6 @@ public class MenuGroup {
 
     @Column(name = "name", nullable = false)
     private MenuGroupName name;
-
-    @OneToMany(mappedBy = "menuGroup")
-    private List<Menu> menus = new ArrayList<>();
 
     protected MenuGroup() { }
 
