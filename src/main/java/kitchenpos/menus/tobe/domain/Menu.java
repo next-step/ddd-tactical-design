@@ -124,7 +124,4 @@ public class Menu {
         return menuProducts.getMenuProducts();
     }
 
-    public List<UUID> getProductIds() {
-        return menuProducts.getProductIds();
-    }
 }
