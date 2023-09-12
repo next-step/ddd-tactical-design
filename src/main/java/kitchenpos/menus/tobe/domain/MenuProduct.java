@@ -1,9 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -15,33 +12,24 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID productId;
-
     protected MenuProduct() {
     }
 
-    public MenuProduct(Product product, long quantity) {
-        this(null, product, quantity, product.getId());
+    public MenuProduct(UUID productId, long quantity) {
+        this(null, productId, quantity);
     }
 
-    public MenuProduct(Long seq, Product product, long quantity, UUID productId) {
+    public MenuProduct(Long seq, UUID productId, long quantity) {
         validateQuantity(quantity);
         this.seq = seq;
-        this.product = product;
-        this.quantity = quantity;
         this.productId = productId;
+        this.quantity = quantity;
     }
 
     private void validateQuantity(long quantity) {
@@ -50,12 +38,8 @@ public class MenuProduct {
         }
     }
 
-    public BigDecimal price() {
-        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
-    }
-
-    public Product getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
 
     public long getQuantity() {

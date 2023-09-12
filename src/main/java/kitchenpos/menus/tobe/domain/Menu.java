@@ -41,7 +41,7 @@ public class Menu {
 
     public Menu(String name, MenuPurgomalumClient menuPurgomalumClient,
                 BigDecimal price, MenuGroup menuGroup, boolean displayed,
-                List<MenuProduct> menuProducts) {
+                List<MenuProduct> menuProducts, MenuPricePolicy menuPricePolicy) {
         this(UUID.randomUUID(),
                 name,
                 menuPurgomalumClient,
@@ -49,12 +49,14 @@ public class Menu {
                 menuGroup,
                 displayed,
                 menuProducts,
-                menuGroup.getId());
+                menuGroup.getId(),
+                menuPricePolicy);
     }
 
     private Menu(UUID id, String name, MenuPurgomalumClient menuPurgomalumClient,
                  BigDecimal price, MenuGroup menuGroup,
-                 boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
+                 boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId,
+                 MenuPricePolicy menuPricePolicy) {
 
         this.id = id;
         this.name = new MenuName(name, menuPurgomalumClient);
@@ -64,21 +66,25 @@ public class Menu {
         this.menuProducts = new MenuProducts(menuProducts);
         this.menuGroupId = menuGroupId;
 
-        validate();
+        validate(menuPricePolicy);
     }
 
-    private void validate() {
-        if (isDisplayed() && isOverMenuProductsTotalPrice()) {
+    private void validate(MenuPricePolicy menuPricePolicy) {
+        if (isDisplayed() && menuPricePolicy.isNotPermit(price, this)) {
             throw new IllegalArgumentException();
         }
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price.changePrice(price, menuProducts);
+    public void changePrice(BigDecimal price, MenuPricePolicy menuPricePolicy) {
+        MenuPrice menuPrice = new MenuPrice(price);
+        if (menuPricePolicy.isNotPermit(menuPrice, this)) {
+            throw new IllegalArgumentException();
+        }
+        this.price = menuPrice;
     }
 
-    public void display() {
-        if (this.price.isOverMenuProductsTotalPrice(menuProducts)) {
+    public void display(MenuPricePolicy menuPricePolicy) {
+        if (menuPricePolicy.isNotPermit(price, this)) {
             throw new IllegalStateException();
         }
         this.displayed = true;
@@ -88,14 +94,10 @@ public class Menu {
         this.displayed = false;
     }
 
-    public void overMenuProductsTotalPriceThenHide() {
-        if (isOverMenuProductsTotalPrice()) {
+    public void overMenuProductsTotalPriceThenHide(MenuPricePolicy menuPricePolicy) {
+        if (menuPricePolicy.isNotPermit(price, this)) {
             hide();
         }
-    }
-
-    private boolean isOverMenuProductsTotalPrice() {
-        return this.price.isOverMenuProductsTotalPrice(menuProducts);
     }
 
     public UUID getId() {
@@ -120,5 +122,9 @@ public class Menu {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts.getMenuProducts();
+    }
+
+    public List<UUID> getProductIds() {
+        return menuProducts.getProductIds();
     }
 }

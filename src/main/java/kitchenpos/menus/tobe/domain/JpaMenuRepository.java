@@ -11,7 +11,7 @@ public interface JpaMenuRepository extends MenuRepository, JpaRepository<Menu, U
     @Query("select m " +
             " from Menu m " +
             " join m.menuProducts.values mp " +
-            "where mp.product.id = :productId")
+            "where mp.productId = :productId")
     @Override
     List<Menu> findAllByProductId(@Param("productId") UUID productId);
 }

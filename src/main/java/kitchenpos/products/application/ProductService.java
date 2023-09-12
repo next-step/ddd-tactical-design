@@ -1,10 +1,8 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProductPurgomalumClient;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.ui.request.ProductChangePriceRequest;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.springframework.stereotype.Service;
@@ -17,16 +15,13 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final ProductPurgomalumClient productPurgomalumClient;
 
     public ProductService(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
         final ProductPurgomalumClient productPurgomalumClient
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.productPurgomalumClient = productPurgomalumClient;
     }
 
@@ -40,13 +35,7 @@ public class ProductService {
     public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            menu.overMenuProductsTotalPriceThenHide();
-        }
-
-        return product;
+        return productRepository.save(product); // 이벤트 발행
     }
 
     @Transactional(readOnly = true)

@@ -1,12 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -37,6 +39,7 @@ public class Product {
 
     public void changePrice(BigDecimal price) {
         this.productPrice = new ProductPrice(price);
+        registerEvent(new ChangeProductPriceEvent(this));
     }
 
     public UUID getId() {
