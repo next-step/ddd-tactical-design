@@ -12,8 +12,8 @@ public class MenuName {
         value = null;
     }
 
-    public MenuName(String name) {
-        if (!StringUtils.hasText(name)) {
+    public MenuName(String name, PurgomalumClient purgomalumClient) {
+        if (!StringUtils.hasText(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException("이름은 비어있을 수 없습니다");
         }
         this.value = name;
