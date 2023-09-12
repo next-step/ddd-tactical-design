@@ -23,6 +23,8 @@ build/
 *.iml
 *.ipr
 out/
+!**/adapter/out/
+!**/port/out/
 
 ### NetBeans ###
 /nbproject/private/
