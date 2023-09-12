@@ -1,10 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 
-import kitchenpos.menus.tobe.domain.Menu;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity
@@ -14,13 +13,8 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
+    @Column(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -31,12 +25,12 @@ public class OrderLineItem {
     protected OrderLineItem() {
     }
 
-    public static OrderLineItem of(Menu menu, long quantity, BigDecimal price) {
-        return new OrderLineItem(menu, quantity, price);
+    public static OrderLineItem of(UUID menuId, long quantity, BigDecimal price) {
+        return new OrderLineItem(menuId, quantity, price);
     }
 
-    public OrderLineItem(Menu menu, long quantity, BigDecimal price) {
-        this.menu = menu;
+    public OrderLineItem(UUID menuId, long quantity, BigDecimal price) {
+        this.menuId = menuId;
         this.quantity = quantity;
         this.price = price;
     }
@@ -45,8 +39,8 @@ public class OrderLineItem {
         return seq;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public UUID getMenuId() {
+        return menuId;
     }
 
     public long getQuantity() {

@@ -12,8 +12,8 @@ public interface MenuRepository {
 
     Optional<Menu> findById(UUID id);
 
-    @Query("select m from Menu m where m.id = :id and m.displayed = true and m.price = :price")
-    Optional<Menu> findByIdAndDisplayedWithPrice(UUID id, BigDecimal price);
+    @Query("select count(m) from Menu m where m.id = :id and m.displayed = true and m.price = :price")
+    boolean existsByIdAndDisplayedWithPrice(UUID id, BigDecimal price);
 
     List<Menu> findAll();
 
