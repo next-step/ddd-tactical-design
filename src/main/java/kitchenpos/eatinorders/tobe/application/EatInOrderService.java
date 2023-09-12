@@ -14,43 +14,25 @@ import java.util.stream.Collectors;
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
-    private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
+    private final OrderLineItemsFactory orderLineItemsFactory;
 
     public EatInOrderService(
             final EatInOrderRepository eatInOrderRepository,
-            final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository
+            final OrderTableRepository orderTableRepository,
+            OrderLineItemsFactory orderLineItemsFactory
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
-        this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
+        this.orderLineItemsFactory = orderLineItemsFactory;
     }
 
     @Transactional
     public EatInOrderResponse create(final EatInOrderRequest request) {
-        List<OrderLineItemRequest> orderLineItemRequests = request.getOrderLineItemRequests();
-        if (orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-                orderLineItemRequests.stream()
-                        .map(OrderLineItemRequest::getMenuId)
-                        .collect(Collectors.toList())
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-
-        List<OrderLineItem> orderLineItems = orderLineItemRequests.stream()
-                .map(it -> {
-                    final Menu menu = menuRepository.findByIdAndDisplayedWithPrice(it.getMenuId(), it.getPrice())
-                            .orElseThrow(NoSuchElementException::new);
-                    return OrderLineItem.of(menu, it.getQuantity(), it.getPrice());
-                }).collect(Collectors.toList());
-
+        final OrderLineItems orderLineItems = orderLineItemsFactory.create(request.getOrderLineItemRequests());
         final OrderTable orderTable = orderTableRepository.findByIdNotOccupied(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
+        final EatInOrder savedOrder = eatInOrderRepository.save(EatInOrder.of(orderLineItems, orderTable));
 
         return new EatInOrderResponse(savedOrder);
     }
