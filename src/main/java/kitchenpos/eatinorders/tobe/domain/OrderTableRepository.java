@@ -14,6 +14,9 @@ public interface OrderTableRepository {
     @Query("select ot from OrderTable ot where ot.id = :id and ot.occupied = false")
     Optional<OrderTable> findByIdNotOccupied(UUID id);
 
+    @Query("select ot from OrderTable ot where ot.id = :id and ot.occupied = true")
+    Optional<OrderTable> findByIdOccupied(UUID id);
+
     List<OrderTable> findAll();
 }
 
