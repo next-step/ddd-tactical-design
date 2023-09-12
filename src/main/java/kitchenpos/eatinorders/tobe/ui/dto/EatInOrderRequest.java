@@ -28,7 +28,6 @@ public class EatInOrderRequest {
         this.orderTableId = orderTableId;
     }
 
-
     public UUID getId() {
         return id;
     }

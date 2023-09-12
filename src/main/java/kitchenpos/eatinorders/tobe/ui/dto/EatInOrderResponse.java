@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.ui.dto;
 
+import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.EatInOrderStatus;
 
 import java.time.LocalDateTime;
@@ -16,12 +17,12 @@ public class EatInOrderResponse {
 
     private final String orderTableId;
 
-    public EatInOrderResponse(String id, EatInOrderStatus status, LocalDateTime orderDateTime, List<Long> orderLineItemSequences, String orderTableId) {
-        this.id = id;
-        this.status = status;
-        this.orderDateTime = orderDateTime;
-        this.orderLineItemSequences = orderLineItemSequences;
-        this.orderTableId = orderTableId;
+    public EatInOrderResponse(EatInOrder eatInOrder) {
+        this.id = eatInOrder.getId();
+        this.status = eatInOrder.getStatus();
+        this.orderDateTime = eatInOrder.getOrderDateTime();
+        this.orderLineItemSequences = eatInOrder.getOrderLineItemSequence();
+        this.orderTableId = eatInOrder.getOrderTableId();
     }
 
     public String getId() {

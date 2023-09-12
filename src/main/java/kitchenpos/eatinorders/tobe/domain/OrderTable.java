@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.tobe.ui.dto.OrderTableRequest;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,11 +22,10 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    protected OrderTable() {
-    }
+    protected OrderTable() { }
 
-    public static OrderTable of(OrderTableRequest request) {
-        return new OrderTable(request.getName());
+    public static OrderTable of(String name) {
+        return new OrderTable(name);
     }
 
     public OrderTable(String name) {
