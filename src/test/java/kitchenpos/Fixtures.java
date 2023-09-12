@@ -8,7 +8,7 @@ import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.ordertable.domain.OrderTable;
 import kitchenpos.order.domain.OrderType;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.adapter.out.persistence.ProductEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -57,7 +57,7 @@ public class Fixtures {
         return menuProduct;
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
+    public static MenuProduct menuProduct(final ProductEntity product, final long quantity) {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(new Random().nextLong());
         menuProduct.setProduct(product);
@@ -117,12 +117,12 @@ public class Fixtures {
         return orderTable;
     }
 
-    public static Product product() {
+    public static ProductEntity product() {
         return product("후라이드", 16_000L);
     }
 
-    public static Product product(final String name, final long price) {
-        final Product product = new Product();
+    public static ProductEntity product(final String name, final long price) {
+        final ProductEntity product = new ProductEntity();
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(BigDecimal.valueOf(price));

@@ -1,5 +1,6 @@
 package kitchenpos.order.application;
 
+import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderStatus;
@@ -20,13 +21,13 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final MenuFacade menuFacade;
+    private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final KitchenridersClient kitchenridersClient;
 
-    public OrderService(OrderRepository orderRepository, MenuFacade menuFacade, OrderTableRepository orderTableRepository, KitchenridersClient kitchenridersClient) {
+    public OrderService(OrderRepository orderRepository, MenuRepository menuRepository, OrderTableRepository orderTableRepository, KitchenridersClient kitchenridersClient) {
         this.orderRepository = orderRepository;
-        this.menuFacade = menuFacade;
+        this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
         this.kitchenridersClient = kitchenridersClient;
     }
@@ -41,7 +42,7 @@ public class OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuFacade.findAllByIdIn(
+        final List<Menu> menus = menuRepository.findAllByIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList())
@@ -57,7 +58,7 @@ public class OrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuFacade.findById(orderLineItemRequest.getMenuId())
+            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();

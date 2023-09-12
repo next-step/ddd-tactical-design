@@ -9,7 +9,7 @@ import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroupRepository;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.domain.InMemoryProductRepository;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.adapter.out.persistence.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class MenuServiceTest {
     private PurgomalumClient purgomalumClient;
     private MenuService menuService;
     private UUID menuGroupId;
-    private Product product;
+    private ProductEntity product;
 
     @BeforeEach
     void setUp() {

@@ -1,5 +1,7 @@
 package kitchenpos.product.application.port.out;
 
+import kitchenpos.product.domain.Product;
+
 public interface UpdateProductPort {
-    // Not yet implemented
+    void updateProduct(final Product product);
 }

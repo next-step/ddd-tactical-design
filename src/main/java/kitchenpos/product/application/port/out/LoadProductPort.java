@@ -1,9 +1,10 @@
 package kitchenpos.product.application.port.out;
 
 import kitchenpos.product.domain.Product;
+import kitchenpos.product.domain.ProductId;
 
-import java.util.UUID;
+import java.util.Optional;
 
 public interface LoadProductPort {
-    Product loadProduct(final UUID id); // TODO: ID Wrapper 클래스 생성
+    Optional<Product> loadProductById(final ProductId id);
 }

@@ -6,7 +6,7 @@ import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuGroupRepository;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.adapter.out.persistence.ProductEntity;
 import kitchenpos.product.adapter.out.persistence.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +46,7 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productRepository.findAllByIdIn(
+        final List<ProductEntity> products = productRepository.findAllByIdIn(
             menuProductRequests.stream()
                 .map(MenuProduct::getProductId)
                 .collect(Collectors.toList())
@@ -61,7 +61,7 @@ public class MenuService {
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
+            final ProductEntity product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()

@@ -1,14 +1,23 @@
 package kitchenpos.product.adapter.out.persistence;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-// TODO: JPA Entity로 만들기
-class ProductEntity {
+@Table(name = "product")
+@Entity
+public class ProductEntity {
+    @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
     private UUID id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
     public ProductEntity() {
