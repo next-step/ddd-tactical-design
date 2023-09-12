@@ -13,13 +13,13 @@ public class ProductName {
     protected ProductName() {
     }
 
-    public ProductName(String name, PurgomalumClient purgomalumClient) {
-        validateName(name, purgomalumClient);
+    public ProductName(String name, ProductPurgomalumClient productPurgomalumClient) {
+        validateName(name, productPurgomalumClient);
         this.name = name;
     }
 
-    private static void validateName(String name, PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+    private static void validateName(String name, ProductPurgomalumClient productPurgomalumClient) {
+        if (Objects.isNull(name) || productPurgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
     }

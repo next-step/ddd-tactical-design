@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.FakeProductPurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ProductNameTest {
 
-    private FakePurgomalumClient purgomalumClient;
+    private FakeProductPurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        purgomalumClient = new FakeProductPurgomalumClient();
     }
 
     @DisplayName("이름생성")

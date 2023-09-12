@@ -21,18 +21,18 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
-        this(UUID.randomUUID(), name, price, purgomalumClient);
+    public Product(String name, BigDecimal price, ProductPurgomalumClient productPurgomalumClient) {
+        this(UUID.randomUUID(), name, price, productPurgomalumClient);
     }
 
-    private Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    private Product(UUID id, String name, BigDecimal price, ProductPurgomalumClient productPurgomalumClient) {
         this.id = id;
-        this.productName = new ProductName(name, purgomalumClient);
+        this.productName = new ProductName(name, productPurgomalumClient);
         this.productPrice = new ProductPrice(price);
     }
 
-    public static Product of(Product product, PurgomalumClient purgomalumClient) {
-        return new Product(product.getName(), product.getPrice(), purgomalumClient);
+    public static Product of(Product product, ProductPurgomalumClient productPurgomalumClient) {
+        return new Product(product.getName(), product.getPrice(), productPurgomalumClient);
     }
 
     public void changePrice(BigDecimal price) {
