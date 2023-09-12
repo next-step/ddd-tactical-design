@@ -1,6 +1,8 @@
 package kitchenpos.product.application;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import kitchenpos.product.application.exception.NotExistProductException;
 import kitchenpos.product.application.port.in.ProductUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
@@ -43,5 +45,13 @@ public class DefaultProductUseCase implements ProductUseCase {
         product.changePrice(price);
 
         publisher.publish(id);
+    }
+
+    @Override
+    public List<ProductDTO> findAll() {
+        return repository.findAll()
+            .stream()
+            .map(ProductDTO::new)
+            .collect(Collectors.toUnmodifiableList());
     }
 }
