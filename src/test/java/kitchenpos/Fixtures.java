@@ -1,10 +1,13 @@
 package kitchenpos;
 
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.application.FakePurgomalum;
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -118,9 +121,13 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(name, BigDecimal.valueOf(price));
+        Name createdName = new Name(name, FakePurgomalum.create());
+        Price createdPrice = new Price(price);
+        return new Product(createdName, createdPrice);
     }
-    public static kitchenpos.products.tobe.domain.Product toBeProduct(final String name, final long price) {
-        return new kitchenpos.products.tobe.domain.Product(name, BigDecimal.valueOf(price));
+    public static Product toBeProduct(final String name, final long price) {
+        Name createdName = new Name(name, FakePurgomalum.create());
+        Price createdPrice = new Price(price);
+        return new Product(createdName, createdPrice);
     }
 }

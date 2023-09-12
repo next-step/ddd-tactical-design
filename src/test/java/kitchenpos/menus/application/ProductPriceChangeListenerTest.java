@@ -2,9 +2,10 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.event.ProductPriceChangeEvent;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class ProductPriceChangeListenerTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new kitchenpos.products.application.tobe.InMemoryProductRepository();
+        productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         productPriceChangeListener = new ProductPriceChangeListener(menuRepository);
     }

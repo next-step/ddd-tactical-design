@@ -1,5 +1,6 @@
 package kitchenpos.common.values;
 
+import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 
@@ -17,14 +18,18 @@ public class Name {
     protected Name() {
     }
 
-    public Name(final String value) {
-        validate(value);
+    public Name(final String value, final Purgomalum purgomalum) {
+        validate(value, purgomalum);
         this.value = value;
     }
 
-    private static void validate(String value) {
+    private static void validate(String value, Purgomalum purgomalum) {
         if (value == null || value.isEmpty()) {
             String message = String.format("이름이 %s 이므로", value);
+            throw new KitchenPosException(message, KitchenPosExceptionType.BAD_REQUEST);
+        }
+        if(purgomalum.containsProfanity(value)) {
+            String message = String.format("이름=%s 에 비속어가 포함되어 있으므로", value);
             throw new KitchenPosException(message, KitchenPosExceptionType.BAD_REQUEST);
         }
     }

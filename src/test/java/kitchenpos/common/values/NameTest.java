@@ -2,6 +2,7 @@ package kitchenpos.common.values;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
+import kitchenpos.products.application.FakePurgomalum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,7 @@ class NameTest {
     void create_success() {
         final String name = "name";
 
-        final Name actual = new Name(name);
+        final Name actual = new Name(name, FakePurgomalum.create());
 
         assertAll(
                 () -> assertNotNull(actual),
@@ -33,7 +34,7 @@ class NameTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create_fail1(String givenName) {
-        assertThrows(BAD_REQUEST, () -> new Name(givenName));
+        assertThrows(BAD_REQUEST, () -> new Name(givenName, FakePurgomalum.create()));
     }
 
 }

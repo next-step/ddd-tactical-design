@@ -1,28 +1,27 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateReqeust;
 import kitchenpos.products.event.ProductPriceChangeEvent;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.product;
+import static kitchenpos.Fixtures.toBeProduct;
 import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -31,15 +30,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private Purgomalum purgomalumClient;
     private ProductService productService;
     private FakeApplicationEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
-        productRepository = new kitchenpos.products.application.tobe.InMemoryProductRepository();
+        productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        purgomalumClient = FakePurgomalum.create();
         publisher = new FakeApplicationEventPublisher();
         productService = new ProductService(productRepository, purgomalumClient, publisher);
     }
