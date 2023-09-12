@@ -1,15 +1,12 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.tobe.ui.MenuRequest;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.menus.tobe.ui.MenuProductRequest;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -28,25 +25,22 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public static MenuProducts of(MenuRequest request, Map<String, Product> productMap) {
-        final List<MenuProduct> menuProductList = request.getMenuProductRequests().stream()
-                .map(it -> new MenuProduct(it.getSeq(), productMap.get(it.getProductId().toString()), it.getQuantity()))
+    public static MenuProducts of(List<MenuProductRequest> menuProductRequests) {
+        final List<MenuProduct> menuProductList = menuProductRequests.stream()
+                .map(it -> new MenuProduct(it.getSeq(), it.getProductId(), it.getQuantity()))
                 .collect(Collectors.toList());
 
         return new MenuProducts(menuProductList);
-    }
-
-    public boolean hasTotalPriceLowerThan(BigDecimal price) {
-        BigDecimal totalPrice = menuProducts.stream()
-                .map(it -> it.getProduct().getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return totalPrice.compareTo(price) < 0;
     }
 
     public List<Long> getSequences() {
         return menuProducts.stream()
                 .map(MenuProduct::getSeq)
                 .collect(Collectors.toList());
+    }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     public int size() {

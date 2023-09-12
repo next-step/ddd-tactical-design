@@ -1,9 +1,13 @@
 package kitchenpos;
 
 
+import kitchenpos.menus.tobe.application.DefaultMenuPriceChecker;
+import kitchenpos.menus.tobe.application.FakeMenuPriceChecker;
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.infra.DefaultPurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -22,9 +26,9 @@ public class TobeFixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProductList) {
-        MenuName menuName = new MenuName("후라이드+후라이드");
+        MenuName menuName = new MenuName("후라이드+후라이드", new DefaultPurgomalumClient(new RestTemplateBuilder()));
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProductList));
-        return Menu.of(menuName, BigDecimal.valueOf(price), menuGroup(), displayed, menuProducts);
+        return Menu.of(menuName, BigDecimal.valueOf(price), menuGroup(), displayed, menuProducts, new FakeMenuPriceChecker());
     }
 
     public static MenuGroup menuGroup() {
@@ -36,11 +40,11 @@ public class TobeFixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(new Random().nextLong(), product(), 2L);
+        return new MenuProduct(new Random().nextLong(), UUID.fromString(product().getId()), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(new Random().nextLong(), product, quantity);
+        return new MenuProduct(new Random().nextLong(), UUID.fromString(product.getId()), quantity);
     }
 
     public static Product product() {

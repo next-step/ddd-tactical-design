@@ -1,18 +1,15 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.domain.MenuPriceChecker;
 import kitchenpos.menus.tobe.ui.MenuProductRequest;
 import kitchenpos.menus.tobe.ui.MenuRequest;
 import kitchenpos.menus.tobe.ui.MenuResponse;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.application.ProductValidator;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,20 +18,20 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuNameFactory menuNameFactory;
-    private final ProductRepository productRepository;
+    private final PurgomalumClient purgomalumClient;
+    private final MenuPriceChecker menuPriceChecker;
     private final ProductValidator productValidator;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final MenuNameFactory menuNameFactory,
+        final MenuPriceChecker menuPriceChecker,
+        final PurgomalumClient purgomalumClient,
         ProductValidator productValidator) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
-        this.menuNameFactory = menuNameFactory;
+        this.menuPriceChecker = menuPriceChecker;
+        this.purgomalumClient = purgomalumClient;
         this.productValidator = productValidator;
     }
 
@@ -48,12 +45,10 @@ public class MenuService {
 
         productValidator.isExistProductIn(productIds);
 
-        final Map<String, Product> productMap = productRepository.findAllByIdIn(productIds).stream()
-                .collect(Collectors.toMap(Product::getId, product -> product));
-        final MenuProducts menuProducts = MenuProducts.of(request, productMap);
-        final MenuName menuName = menuNameFactory.createMenuName(request.getName());
+        final MenuProducts menuProducts = MenuProducts.of(request.getMenuProductRequests());
+        final MenuName menuName = new MenuName(request.getName(), purgomalumClient);
 
-        Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts));
+        Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts, menuPriceChecker));
         return new MenuResponse(savedMenu);
     }
 
@@ -61,7 +56,7 @@ public class MenuService {
     public MenuResponse changePrice(final UUID menuId, final MenuRequest request) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(request.getPrice());
+        menu.changePrice(request.getPrice(), menuPriceChecker);
         return new MenuResponse(menu);
     }
 
@@ -69,7 +64,7 @@ public class MenuService {
     public MenuResponse display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId
         ).orElseThrow(NoSuchElementException::new);
-        menu.setDisplayable();
+        menu.setDisplayable(menuPriceChecker);
         return new MenuResponse(menu);
     }
 

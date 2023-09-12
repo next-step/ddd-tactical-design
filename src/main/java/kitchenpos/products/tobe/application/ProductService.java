@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.MenuPriceChecker;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -18,16 +17,16 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final ProductNameFactory productNameFactory;
+    private final MenuPriceChecker menuPriceChecker;
 
     public ProductService(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final ProductNameFactory productNameFactory
+        final ProductNameFactory productNameFactory,
+        final MenuPriceChecker menuPriceChecker
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
+        this.menuPriceChecker = menuPriceChecker;
         this.productNameFactory = productNameFactory;
     }
 
@@ -44,8 +43,7 @@ public class ProductService {
 
         product.changePrice(request.getPrice());
 
-        menuRepository.findAllByProductId(productId)
-                .forEach(Menu::hideIfMenuPriceTooHigher);
+        menuPriceChecker.checkMenuPriceAndHideMenuIfTotalPriceLower(productId);
 
         return new ProductResponse(product);
     }
