@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.PurgomalumChecker;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
@@ -17,20 +17,20 @@ import java.util.UUID;
 @Service
 public class TobeProductService {
     private final TobeProductRepository tobeProductRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final PurgomalumChecker purgomalumChecker;
     private final ApplicationEventPublisher eventPublisher;
 
-    public TobeProductService(final TobeProductRepository tobeProductRepository, final PurgomalumClient purgomalumClient,
+    public TobeProductService(final TobeProductRepository tobeProductRepository, final PurgomalumChecker purgomalumChecker,
                               final ApplicationEventPublisher eventPublisher) {
         this.tobeProductRepository = tobeProductRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.purgomalumChecker = purgomalumChecker;
         this.eventPublisher = eventPublisher;
     }
 
     @Transactional
     public TobeProduct create(BigDecimal price, String name) {
         final TobeProduct product = new TobeProduct(UUID.randomUUID(),
-                                                    new ProductName(name, purgomalumClient),
+                                                    new ProductName(name, purgomalumChecker),
                                                     new ProductPrice(price));
         return tobeProductRepository.save(product);
     }

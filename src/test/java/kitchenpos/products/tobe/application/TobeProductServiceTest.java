@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.application.FakePurgomalumChecker;
+import kitchenpos.products.tobe.domain.PurgomalumChecker;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TobeProductServiceTest {
     private TobeProductRepository tobeProductRepository;
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumChecker purgomalumChecker;
     private TobeProductService tobeProductService;
 
     private InMemoryApplicationEventPublisher publisher;
@@ -33,8 +33,8 @@ class TobeProductServiceTest {
     void setUp() {
         publisher = new InMemoryApplicationEventPublisher();
         tobeProductRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        tobeProductService = new TobeProductService(tobeProductRepository, purgomalumClient, publisher);
+        purgomalumChecker = new FakePurgomalumChecker();
+        tobeProductService = new TobeProductService(tobeProductRepository, purgomalumChecker, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -122,7 +122,7 @@ class TobeProductServiceTest {
     }
 
     public TobeProduct product(final String name, final BigDecimal price) {
-        return new TobeProduct(UUID.randomUUID(), new ProductName(name, purgomalumClient),
+        return new TobeProduct(UUID.randomUUID(), new ProductName(name, purgomalumChecker),
                                new ProductPrice(price));
     }
 }

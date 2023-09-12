@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
@@ -14,12 +12,12 @@ public class ProductName {
     protected ProductName() {
     }
 
-    public ProductName(String name, PurgomalumClient purgomalumClient) {
+    public ProductName(String name, PurgomalumChecker purgomalumChecker) {
         if (Objects.isNull(name)) {
             throw new IllegalArgumentException("상품의 이름은 비어 있을 수 없습니다.");
         }
 
-        if (purgomalumClient.containsProfanity(name)) {
+        if (purgomalumChecker.containsProfanity(name)) {
             throw new IllegalArgumentException("이름에는 비속어가 포함될 수 없습니다. name: " + name);
         }
 
