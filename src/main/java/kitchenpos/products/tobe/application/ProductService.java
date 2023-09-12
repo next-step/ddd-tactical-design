@@ -40,15 +40,10 @@ public class ProductService {
     @Transactional
     public ProductResponse changePrice(final UUID productId, final ProductRequest request) {
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
-
         product.changePrice(request.getPrice());
-
         menuPriceChecker.checkMenuPriceAndHideMenuIfTotalPriceLower(productId);
-
         return new ProductResponse(product);
     }
-
-
 
     public List<ProductResponse> findAll() {
         return productRepository.findAll().stream()

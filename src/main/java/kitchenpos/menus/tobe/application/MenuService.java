@@ -1,8 +1,6 @@
 package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.domain.MenuPriceChecker;
-import kitchenpos.menus.tobe.ui.MenuProductRequest;
 import kitchenpos.menus.tobe.ui.MenuRequest;
 import kitchenpos.menus.tobe.ui.MenuResponse;
 import kitchenpos.products.tobe.application.ProductValidator;
@@ -39,15 +37,11 @@ public class MenuService {
     public MenuResponse create(final MenuRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<UUID> productIds = request.getMenuProductRequests().stream()
-                .map(MenuProductRequest::getProductId)
-                .collect(Collectors.toList());
 
-        productValidator.isExistProductIn(productIds);
+        productValidator.isExistProductIn(request);
 
         final MenuProducts menuProducts = MenuProducts.of(request.getMenuProductRequests());
         final MenuName menuName = new MenuName(request.getName(), purgomalumClient);
-
         Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts, menuPriceChecker));
         return new MenuResponse(savedMenu);
     }
@@ -62,8 +56,8 @@ public class MenuService {
 
     @Transactional
     public MenuResponse display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId
-        ).orElseThrow(NoSuchElementException::new);
+        final Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
         menu.setDisplayable(menuPriceChecker);
         return new MenuResponse(menu);
     }

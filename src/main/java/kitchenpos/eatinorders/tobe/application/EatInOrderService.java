@@ -33,7 +33,6 @@ public class EatInOrderService {
         final OrderTable orderTable = orderTableRepository.findByIdNotOccupied(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
         final EatInOrder savedOrder = eatInOrderRepository.save(EatInOrder.of(orderLineItems, orderTable));
-
         return new EatInOrderResponse(savedOrder);
     }
 
@@ -41,7 +40,6 @@ public class EatInOrderService {
     public EatInOrderResponse accept(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findByIdAndStatus(orderId, EatInOrderStatus.WAITING)
                 .orElseThrow(NoSuchElementException::new);
-
         eatInOrder.accepted();
         return new EatInOrderResponse(eatInOrder);
     }
@@ -50,7 +48,6 @@ public class EatInOrderService {
     public EatInOrderResponse serve(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findByIdAndStatus(orderId, EatInOrderStatus.ACCEPTED)
                 .orElseThrow(NoSuchElementException::new);
-
         eatInOrder.serve();
         return new EatInOrderResponse(eatInOrder);
     }
@@ -59,10 +56,9 @@ public class EatInOrderService {
     public EatInOrderResponse complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findByIdAndStatus(orderId, EatInOrderStatus.SERVED)
                 .orElseThrow(NoSuchElementException::new);
-
         eatInOrder.complete();
-
         final OrderTable orderTable = eatInOrder.getOrderTable();
+
         if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
             orderTable.clear();
         }
