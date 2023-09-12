@@ -3,7 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

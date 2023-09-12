@@ -5,7 +5,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

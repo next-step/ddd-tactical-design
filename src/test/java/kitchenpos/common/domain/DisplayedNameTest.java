@@ -1,5 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
+import kitchenpos.common.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.products.application.FakeDisplayNameChecker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

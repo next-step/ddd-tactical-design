@@ -1,6 +1,6 @@
 package kitchenpos.products.infra;
 
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayNameChecker;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
