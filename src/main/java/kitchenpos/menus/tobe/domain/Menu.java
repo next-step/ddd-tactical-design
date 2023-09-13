@@ -52,6 +52,13 @@ public class Menu {
         this.status = DisplayStatus.DISPLAY;
     }
 
+    public void changePrice(BigDecimal price) {
+        this.price = new MenuPrice(price);
+        if (menuPriceIsMoreThanProductsPrice(this.price.getPrice(), menuProducts.getTotalPrice())) {
+            throw new IllegalArgumentException("메뉴의 가격이 상품들의 가격보다 높습니다");
+        }
+    }
+
     public void hideIfPriceIsInvalid() {
         if (menuPriceIsMoreThanProductsPrice(this.price.getPrice(), menuProducts.getTotalPrice())) {
             this.hide();

@@ -151,4 +151,40 @@ class MenuTest {
         //then
         assertThat(menu.getStatus()).isEqualTo(DisplayStatus.HIDE);
     }
+
+    @DisplayName("메뉴의 가격을 변경할수 있다")
+    @Test
+    void test7() {
+        //given
+        List<MenuProductRequest> menuProductRequests = of(
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        );
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+            purgomalumClient);
+
+        //when
+        menu.changePrice(BigDecimal.valueOf(17_000));
+
+        //then
+        assertThat(menu.getPrice()).isEqualTo(BigDecimal.valueOf(17_000));
+    }
+
+    @DisplayName("변경할 메뉴의 가격이 구성품들 가격보다 클수 없다")
+    @Test
+    void test8() {
+        //given
+        List<MenuProductRequest> menuProductRequests = of(
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        );
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+            purgomalumClient);
+
+        //when && then
+        assertThatThrownBy(
+            () -> menu.changePrice(BigDecimal.valueOf(17_000 + 18_000 + 1))
+        ).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 가격이 상품들의 가격보다 높습니다");
+    }
 }
