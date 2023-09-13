@@ -1,11 +1,12 @@
 package kitchenpos.menus.tobe.application;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.apply.menus.tobe.application.DefaultMenuPriceChecker;
+import kitchenpos.apply.menus.tobe.domain.Menu;
+import kitchenpos.apply.menus.tobe.domain.MenuProduct;
+import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.apply.products.tobe.domain.Product;
+import kitchenpos.apply.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.TobeFixtures.*;
+import static kitchenpos.apply.fixture.MenuFixture.menu;
+import static kitchenpos.apply.fixture.MenuFixture.menuProduct;
+import static kitchenpos.apply.fixture.TobeFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")

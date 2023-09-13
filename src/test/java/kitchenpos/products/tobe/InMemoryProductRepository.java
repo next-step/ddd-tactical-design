@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe;
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.apply.products.tobe.domain.Product;
+import kitchenpos.apply.products.tobe.domain.ProductRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;

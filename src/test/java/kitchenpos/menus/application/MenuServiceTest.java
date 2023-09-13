@@ -1,14 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.apply.menus.application.MenuService;
+import kitchenpos.apply.menus.domain.Menu;
+import kitchenpos.apply.menus.domain.MenuGroupRepository;
+import kitchenpos.apply.menus.domain.MenuProduct;
+import kitchenpos.apply.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.apply.products.domain.Product;
+import kitchenpos.apply.products.domain.ProductRepository;
+import kitchenpos.apply.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,9 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
-    private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -38,9 +36,9 @@ class MenuServiceTest {
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
-        productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
+        ProductRepository productRepository = new InMemoryProductRepository();
+        PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
@@ -77,7 +75,7 @@ class MenuServiceTest {
         return Arrays.asList(
             null,
             Arguments.of(Collections.emptyList()),
-            Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
+            Arguments.of(List.of(createMenuProductRequest(INVALID_ID, 2L)))
         );
     }
 
