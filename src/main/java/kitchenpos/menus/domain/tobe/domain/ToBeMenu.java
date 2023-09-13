@@ -7,13 +7,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import kitchenpos.products.domain.tobe.domain.Price;
 
 @Table(name = "tobe_menu")
 @Entity
@@ -23,18 +18,13 @@ public class ToBeMenu {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private MenuName name;
 
     @Embedded
-    private Price price;
+    private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private ToBeMenuGroup menuGroup;
+    @Column(name = "menu_group_id")
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -45,23 +35,23 @@ public class ToBeMenu {
     protected ToBeMenu() {
     }
 
-    public ToBeMenu(String name, BigDecimal price, ToBeMenuGroup menuGroup, boolean displayed,
+    public ToBeMenu(String name, BigDecimal price, UUID menuGroupId, boolean displayed,
         boolean containsProfanity, List<ToBeMenuProduct> menuProducts) {
 
-        validationOfMenuGroup(menuGroup);
+        validationOfMenuGroup(menuGroupId);
         validationOfPrice(price, menuProducts);
 
         this.id = UUID.randomUUID();
-        this.name = Name.of(name, containsProfanity);
-        this.price = Price.of(price);
-        this.menuGroup = menuGroup;
+        this.name = MenuName.of(name, containsProfanity);
+        this.price = MenuPrice.of(price);
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = new ToBeMenuProducts(menuProducts);
     }
 
     public void changePrice(BigDecimal price) {
         validationOfPrice(price);
-        this.price = Price.of(price);
+        this.price = MenuPrice.of(price);
     }
 
     public void display() {
@@ -73,7 +63,7 @@ public class ToBeMenu {
         this.displayed = false;
     }
 
-    public Price getPrice() {
+    public MenuPrice getPrice() {
         return price;
     }
 
@@ -82,24 +72,25 @@ public class ToBeMenu {
     }
 
     private void validationOfPrice(BigDecimal price, List<ToBeMenuProduct> menuProducts) {
-        validationOfPrice(Price.of(price), new ToBeMenuProducts((menuProducts)).getSumOfProducts());
+        validationOfPrice(MenuPrice.of(price), new ToBeMenuProducts((menuProducts)).getSumOfProducts()
+        );
     }
 
     private void validationOfPrice(BigDecimal price) {
-        validationOfPrice(Price.of(price), menuProducts.getSumOfProducts());
+        validationOfPrice(MenuPrice.of(price), menuProducts.getSumOfProducts());
     }
 
     private void validationOfPrice() {
         validationOfPrice(price, menuProducts.getSumOfProducts());
     }
 
-    private void validationOfPrice(Price price, Price sumOfProducts) {
+    private void validationOfPrice(MenuPrice price, BigDecimal sumOfProducts) {
         if (price.isGreaterThan(sumOfProducts)) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
     }
 
-    private void validationOfMenuGroup(ToBeMenuGroup menuGroup) {
+    private void validationOfMenuGroup(UUID menuGroup) {
         if (menuGroup == null) {
             throw new IllegalArgumentException("메뉴는 특정 메뉴 그룹에 속해야 한다.");
         }
