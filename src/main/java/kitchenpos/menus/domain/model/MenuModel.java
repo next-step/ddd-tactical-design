@@ -1,6 +1,9 @@
-package kitchenpos.menus.domain.vo;
+package kitchenpos.menus.domain.model;
 
 import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.vo.MenuName;
+import kitchenpos.menus.domain.vo.MenuPrice;
+import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.support.ValueObject;
 
 public class MenuModel extends ValueObject {

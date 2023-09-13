@@ -23,4 +23,5 @@ public class MenuProducts {
     public int size() {
         return menuProducts.size();
     }
+
 }
