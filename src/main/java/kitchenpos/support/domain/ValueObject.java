@@ -1,4 +1,4 @@
-package kitchenpos.support;
+package kitchenpos.support.domain;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -20,7 +20,7 @@ public abstract class ValueObject {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public int hashCode() {
         final Object[] values = Arrays.stream(getClass().getDeclaredFields())
                 .map(field -> {
                     field.setAccessible(true);

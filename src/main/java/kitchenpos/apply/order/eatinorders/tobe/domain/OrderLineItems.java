@@ -1,6 +1,6 @@
 package kitchenpos.apply.order.eatinorders.tobe.domain;
 
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.ValueObject;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,10 +22,6 @@ public class OrderLineItems extends ValueObject {
 
     public OrderLineItems(List<OrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
-    }
-
-    public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
     }
 
     public List<Long> getOrderLineItemSequence() {
