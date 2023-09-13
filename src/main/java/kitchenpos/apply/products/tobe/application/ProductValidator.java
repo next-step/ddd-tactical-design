@@ -1,8 +1,8 @@
-package kitchenpos.products.tobe.application;
+package kitchenpos.apply.products.tobe.application;
 
-import kitchenpos.menus.tobe.ui.MenuProductRequest;
-import kitchenpos.menus.tobe.ui.MenuRequest;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.apply.menus.tobe.ui.MenuProductRequest;
+import kitchenpos.apply.menus.tobe.ui.MenuRequest;
+import kitchenpos.apply.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +21,10 @@ public class ProductValidator {
 
     @Transactional(readOnly = true)
     public void isExistProductIn(MenuRequest request) {
+        if (request.getMenuProductRequests() == null) {
+            throw new IllegalArgumentException();
+        }
+
         final List<UUID> productIds = request.getMenuProductRequests().stream()
                 .map(MenuProductRequest::getProductId)
                 .collect(Collectors.toList());
