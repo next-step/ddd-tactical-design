@@ -1,11 +1,12 @@
 package kitchenpos.products.common;
 
+import kitchenpos.common.DomainService;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-@Service
+@DomainService
 public class NamePolicy {
     private final PurgomalumClient purgomalumClient;
 
