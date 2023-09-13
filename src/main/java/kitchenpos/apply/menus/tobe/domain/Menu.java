@@ -12,10 +12,10 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private MenuName name;
 
-    @Column(name = "price", nullable = false)
+    @Embedded
     private MenuPrice price;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

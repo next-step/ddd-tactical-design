@@ -1,12 +1,14 @@
 package kitchenpos.apply.menus.tobe.domain;
 
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.ValueObject;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 @Embeddable
 public class MenuPrice extends ValueObject {
+    @Column(name = "price", nullable = false)
     private BigDecimal value;
 
     protected MenuPrice() { }

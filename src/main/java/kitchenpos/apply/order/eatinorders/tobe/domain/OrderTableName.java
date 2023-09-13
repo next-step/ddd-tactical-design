@@ -1,12 +1,15 @@
 package kitchenpos.apply.order.eatinorders.tobe.domain;
 
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.ValueObject;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class OrderTableName extends ValueObject {
+
+    @Column(name = "name", nullable = false)
     private String value;
 
     protected OrderTableName() { }

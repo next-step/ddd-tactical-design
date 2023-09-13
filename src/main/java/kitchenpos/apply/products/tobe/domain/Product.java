@@ -12,11 +12,9 @@ public class Product {
     private UUID id;
 
     @Embedded
-    @Column(name = "name", nullable = false)
     private ProductName productName;
 
     @Embedded
-    @Column(name = "price", nullable = false)
     private ProductPrice productPrice;
 
     protected Product() { }

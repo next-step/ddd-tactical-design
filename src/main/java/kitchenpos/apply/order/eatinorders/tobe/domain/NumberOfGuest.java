@@ -1,11 +1,13 @@
 package kitchenpos.apply.order.eatinorders.tobe.domain;
 
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.ValueObject;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class NumberOfGuest extends ValueObject {
+    @Column(name = "number_of_guests", nullable = false)
     private int value;
 
     protected NumberOfGuest() { }

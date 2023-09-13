@@ -11,10 +11,8 @@ public class OrderTable {
     private UUID id;
 
     @Embedded
-    @Column(name = "name", nullable = false)
     private OrderTableName orderTableName;
 
-    @Column(name = "number_of_guests", nullable = false)
     @Embedded
     private NumberOfGuest numberOfGuests;
 

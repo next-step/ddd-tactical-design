@@ -4,10 +4,12 @@ import kitchenpos.support.domain.PurgomalumClient;
 import kitchenpos.support.domain.ValueObject;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class MenuName extends ValueObject {
+    @Column(name = "name", nullable = false)
     private final String value;
 
     protected MenuName() {

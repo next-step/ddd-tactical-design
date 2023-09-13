@@ -1,10 +1,11 @@
 package kitchenpos.apply.menus.tobe.domain;
 
 import kitchenpos.apply.menus.tobe.ui.MenuProductRequest;
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.ValueObject;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +15,17 @@ import java.util.stream.Collectors;
 @Embeddable
 public class MenuProducts extends ValueObject {
 
-    @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<MenuProduct> menuProducts = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name="menu_id")
+    private List<MenuProduct> menuProductList = new ArrayList<>();
 
     protected MenuProducts() { }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
-        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+    public MenuProducts(List<MenuProduct> menuProductList) {
+        if (Objects.isNull(menuProductList) || menuProductList.isEmpty()) {
             throw new IllegalArgumentException("구성품은 비어있 을 수 없습니다");
         }
-        this.menuProducts = menuProducts;
+        this.menuProductList = menuProductList;
     }
 
     public static MenuProducts of(List<MenuProductRequest> menuProductRequests) {
@@ -35,16 +37,16 @@ public class MenuProducts extends ValueObject {
     }
 
     public List<Long> getSequences() {
-        return menuProducts.stream()
+        return menuProductList.stream()
                 .map(MenuProduct::getSeq)
                 .collect(Collectors.toList());
     }
 
     public List<MenuProduct> getMenuProductList() {
-        return menuProducts;
+        return menuProductList;
     }
 
     public int size() {
-        return menuProducts.size();
+        return menuProductList.size();
     }
 }

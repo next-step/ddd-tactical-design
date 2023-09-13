@@ -15,7 +15,6 @@ public class MenuProduct {
     @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
 
-    @Column(name = "quantity", nullable = false)
     @Embedded
     private MenuProductQuantity quantity;
 
