@@ -40,7 +40,7 @@ class ToBeProductTest {
     @Test
     void changePrice() {
         product.changePrice(BigDecimal.valueOf(15_000L));
-        assertThat(product.getPrice().equals(Price.of(15_000L)))
+        assertThat(product.getPrice().equals(ProductPrice.of(15_000L)))
             .isTrue();
     }
 

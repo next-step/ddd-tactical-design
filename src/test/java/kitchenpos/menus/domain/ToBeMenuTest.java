@@ -4,16 +4,29 @@ import static kitchenpos.menus.domain.MenuFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import kitchenpos.menus.domain.tobe.domain.MenuPrice;
 import kitchenpos.menus.domain.tobe.domain.ToBeMenu;
 import kitchenpos.menus.domain.tobe.domain.ToBeMenuProduct;
-import kitchenpos.products.domain.tobe.domain.Price;
-import kitchenpos.products.domain.tobe.domain.ToBeProduct;
 
 class ToBeMenuTest {
+    private ToBeMenu menu;
+
+    @BeforeEach
+    void setUp() {
+        menu = createMenu("김밥세트"
+            , 30_000L
+            , UUID.randomUUID()
+            , true
+            , false
+            , createMenuProduct(30_000L, 1));
+        ;
+    }
 
     @DisplayName("상품이 없으면 등록 할 수 없다.")
     @Test
@@ -38,7 +51,7 @@ class ToBeMenuTest {
     void profanity() {
         assertThatThrownBy(() -> createMenu("김밥세트"
             , 8000L
-            , createMenuGroup("특가")
+            , UUID.randomUUID()
             , true
             , true
             , createMenuProduct(8000L, 1)))
@@ -51,7 +64,7 @@ class ToBeMenuTest {
     void sumPrice() {
         assertThatThrownBy(() -> createMenu("김밥세트"
             , 8001L
-            , createMenuGroup("특가")
+            , UUID.randomUUID()
             , true
             , false
             , createMenuProduct(8000L, 1)))
@@ -64,23 +77,17 @@ class ToBeMenuTest {
     void changePriceAndDisplay() {
         ToBeMenu menu = createMenu("김밥세트"
             , 30_000L
-            , createMenuGroup("특가")
+            , UUID.randomUUID()
             , true
             , false
             , createMenuProduct(30_000L, 1));
         menu.changePrice(BigDecimal.valueOf(29_999L));
-        assertThat(menu.getPrice()).isEqualTo(Price.of(29_999L));
+        assertThat(menu.getPrice()).isEqualTo(MenuPrice.of(29_999L));
     }
 
     @DisplayName("메뉴에 속한 상품 금액의 합보다 큰 가격으로 메뉴 가격을 변경하면 안된다.")
     @Test
     void tryChangePrice() {
-        ToBeMenu menu = createMenu("김밥세트"
-            , 30_000L
-            , createMenuGroup("특가")
-            , true
-            , false
-            , createMenuProduct(30_000L, 1));
         assertThatThrownBy(() -> menu.changePrice(BigDecimal.valueOf(30_001)))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
@@ -89,12 +96,6 @@ class ToBeMenuTest {
     @DisplayName("상품을 노출 시킨다.")
     @Test
     void display1() {
-        ToBeMenu menu = createMenu("김밥세트"
-            , 30_000L
-            , createMenuGroup("특가")
-            , false
-            , false
-            , createMenuProduct(30_000L, 1));
         menu.display();
         assertThat(menu.isDisplayed()).isTrue();
     }
@@ -102,15 +103,14 @@ class ToBeMenuTest {
     @DisplayName("메뉴에 속한 상품 금액의 합보다 큰 가격이면 메뉴 노출이 안된다.")
     @Test
     void display2() {
-        ToBeProduct product = createProduct("김밥", 30_000L);
-        ToBeMenuProduct menuProduct = createMenuProduct(product, 1);
+        ToBeMenuProduct menuProduct = new ToBeMenuProduct(UUID.randomUUID(), 30_000L, 1);
         ToBeMenu menu = createMenu("김밥세트"
             , 30_000L
-            , createMenuGroup("특가")
+            , UUID.randomUUID()
             , false
             , false
             , menuProduct);
-        product.changePrice(BigDecimal.valueOf(9000L));
+        menuProduct.changePrice(BigDecimal.valueOf(9000L));
         assertThatThrownBy(menu::display)
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
@@ -119,12 +119,6 @@ class ToBeMenuTest {
     @DisplayName("메뉴가 숨겨진다.")
     @Test
     void hide() {
-        ToBeMenu menu = createMenu("김밥세트"
-            , 30_000L
-            , createMenuGroup("특가")
-            , true
-            , false
-            , createMenuProduct(30_000L, 1));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
     }
