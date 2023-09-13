@@ -2,7 +2,7 @@ package kitchenpos.common.values;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
-import kitchenpos.products.application.FakePurgomalum;
+import kitchenpos.common.infra.FakePurgomalum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

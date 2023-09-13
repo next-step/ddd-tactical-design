@@ -2,6 +2,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosExceptionType;
+import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
