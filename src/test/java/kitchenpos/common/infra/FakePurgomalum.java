@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.common.infra;
 
 import kitchenpos.common.domain.Purgomalum;
 

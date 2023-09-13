@@ -1,4 +1,4 @@
-package kitchenpos.products.infra;
+package kitchenpos.common.infra;
 
 import kitchenpos.common.domain.Purgomalum;
 import org.springframework.boot.web.client.RestTemplateBuilder;
