@@ -2,7 +2,6 @@ package kitchenpos.menus.domain;
 
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.vo.MenuPrice;
-import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 
@@ -77,78 +76,19 @@ public class Menu {
         return displayed;
     }
 
-    public MenuProducts getMenuProducts() {
-        return new MenuProducts(menuProducts);
-    }
-
-    public MenuProducts getMenuProducts(ProductService productService) {
-        return new MenuProducts(menuProducts);
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
-
-    public Menu changePrice(BigDecimal price) {
-        this.price = new MenuPrice(price).getPrice();
-        ;
-        return this;
-    }
-
     public Menu displayed() {
         this.displayed = true;
         return this;
     }
 
-    public Menu hide() {
-        this.displayed = false;
-        return this;
+    public void changePrice(BigDecimal price) {
+        this.price = price;
     }
-
-    public Menu checkMenuProductPrice() {
-        BigDecimal sum = sumMenuProductPrice();
-
-        if (price.compareTo(sum) > 0) {
-            throw new InvalidMenuProductsPriceException();
-        }
-        return this;
-    }
-
-    public Menu checkMenuProductPrice(BigDecimal price) {
-        BigDecimal sum = sumMenuProductPrice();
-
-        if (price.compareTo(sum) > 0) {
-            throw new InvalidMenuProductsPriceException();
-        }
-        return this;
-    }
-
-    private BigDecimal sumMenuProductPrice() {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                            .getPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        return sum;
-    }
-
-    public Menu checkMenuProductPrice(ProductService productService) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menuProducts) {
-            final Product product = productService.findById(menuProduct.getProductId());
-            sum = sum.add(
-                    product.getPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-
-        if (price.compareTo(sum) > 0) {
-            throw new InvalidMenuProductsPriceException();
-        }
-        return this;
-    }
-
 }

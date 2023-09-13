@@ -37,7 +37,17 @@ public class MenuProduct {
     }
 
     public MenuProduct(Product product, long quantity, UUID productId) {
-        this(null, product, quantity, productId);
+        this.product = product;
+        this.quantity = new MenuProductQuantity(quantity).getQuantity();
+        this.productId = productId;
+    }
+    public MenuProduct(UUID productId, long quantity) {
+        this.quantity = new MenuProductQuantity(quantity).getQuantity();
+        this.productId = productId;
+    }
+
+    public MenuProduct() {
+
     }
 
     public Product getProduct() {

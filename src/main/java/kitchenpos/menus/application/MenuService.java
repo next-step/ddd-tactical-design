@@ -1,68 +1,65 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsSizeException;
 import kitchenpos.menus.domain.exception.NotFoundMenuException;
-import kitchenpos.menus.domain.vo.MenuProducts;
+import kitchenpos.menus.domain.model.MenuModel;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.vo.Products;
+import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
     private final ProductService productService;
     private final MenuGroupService menuGroupService;
+    private final PurgomalumClient purgomalumClient;
 
     public MenuService(
             final MenuRepository menuRepository,
             final ProductService productService,
-            final MenuGroupService menuGroupService) {
-
+            final MenuGroupService menuGroupService,
+            final PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.productService = productService;
         this.menuGroupService = menuGroupService;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Menu create(final Menu request) {
         validMenuProduct(request);
-        return menuRepository.save(new Menu(UUID.randomUUID(),
-                request.getName(),
-                request.getPrice(),
-                getMenuGroup(request),
-                request.isDisplayed(),
-                request.checkMenuProductPrice(productService).getMenuProducts().getMenuProducts(),
-                getMenuGroup(request).getId())
-        );
-
+        menuGroupService.findById(request.getMenuGroupId());
+        return menuRepository.save(new MenuModel(request, purgomalumClient).toMenu());
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
-        return getMenu(menuId)
-                .checkMenuProductPrice(request.getPrice())
-                .changePrice(request.getPrice());
+        return new MenuModel(getMenu(menuId), purgomalumClient)
+                .changePrice(request.getPrice())
+                .toMenu();
     }
 
     @Transactional
     public Menu display(final UUID menuId) {
-        return getMenu(menuId)
-                .checkMenuProductPrice()
-                .displayed();
+        return new MenuModel(getMenu(menuId), purgomalumClient)
+                .displayed()
+                .toMenu();
     }
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        return getMenu(menuId)
-                .hide();
-
+        return new MenuModel(getMenu(menuId), purgomalumClient)
+                .hide()
+                .toMenu();
     }
 
     @Transactional(readOnly = true)
@@ -76,15 +73,16 @@ public class MenuService {
                 .orElseThrow(NotFoundMenuException::new);
     }
 
-    private MenuGroup getMenuGroup(Menu request) {
-        return this.menuGroupService.findById(request.getMenuGroupId());
-    }
-
     private void validMenuProduct(Menu request) {
-        MenuProducts menuProductRequests = request.getMenuProducts();
-        Products products = productService.findAllByIdIn(menuProductRequests);
+        List<MenuProduct> menuProducts = request.getMenuProducts();
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new InvalidMenuProductsSizeException();
+        }
+        Products products = productService.findAllByIdIn(menuProducts.stream()
+                .map(MenuProduct::getProductId)
+                .collect(Collectors.toList()));
 
-        if (products.size() != menuProductRequests.size()) {
+        if (products.size() != menuProducts.size()) {
             throw new InvalidMenuProductsSizeException();
         }
     }

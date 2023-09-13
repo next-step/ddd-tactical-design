@@ -2,6 +2,7 @@ package kitchenpos.products.domain;
 
 import kitchenpos.products.domain.vo.ProductDisplayedName;
 import kitchenpos.products.domain.vo.ProductPrice;
+import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -19,11 +20,15 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Product(UUID id, String displayedName, BigDecimal price) {
+    public Product() {
+    }
+
+    public Product(UUID id, String displayedName, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = id;
-        this.displayedName = new ProductDisplayedName(displayedName).getDisplayedName();
+        this.displayedName = new ProductDisplayedName(displayedName, purgomalumClient).getDisplayedName();
         this.price = new ProductPrice(price).getPrice();
     }
+
 
     public Product changePrice(BigDecimal price) {
         this.price = price;

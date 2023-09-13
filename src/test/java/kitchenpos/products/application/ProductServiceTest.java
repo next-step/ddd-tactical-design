@@ -6,6 +6,7 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,14 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private ProductService productService;
+    private PurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
+        purgomalumClient = new FakePurgomalumClient();
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository);
+        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -108,7 +111,7 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price);
+        return new Product(UUID.randomUUID(), name, price, purgomalumClient);
     }
 
     private Product changePriceRequest(final long price) {
@@ -116,7 +119,7 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price);
+        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
         return product.changePrice(price);
     }
 }

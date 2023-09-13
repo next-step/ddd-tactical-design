@@ -3,10 +3,10 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.vo.Products;
+import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,26 +14,27 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
+    private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository
-    ) {
+            final MenuRepository menuRepository,
+            PurgomalumClient purgomalumClient) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
         final String name = request.getDisplayedName();
-        final Product product = new Product(UUID.randomUUID(), name, price);
+        final Product product = new Product(UUID.randomUUID(), name, price, purgomalumClient);
         return productRepository.save(product);
     }
 
@@ -48,7 +49,7 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts().getMenuProducts()) {
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                         menuProduct.getProduct()
                                 .getPrice()
@@ -64,12 +65,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Products findAllByIdIn(MenuProducts menuProducts) {
-        return new Products(productRepository.findAllByIdIn(
-                menuProducts.getMenuProducts().stream()
-                        .map(MenuProduct::getProductId)
-                        .collect(Collectors.toList()))
-        );
+    public Products findAllByIdIn(List<UUID> productIds) {
+        return new Products(productRepository.findAllByIdIn(productIds));
     }
 
     @Transactional(readOnly = true)
