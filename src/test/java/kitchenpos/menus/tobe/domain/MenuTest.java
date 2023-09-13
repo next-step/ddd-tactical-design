@@ -1,18 +1,23 @@
 package kitchenpos.menus.tobe.domain;
 
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 import kitchenpos.menus.tobe.domain.Menu.DisplayStatus;
+import kitchenpos.menus.tobe.domain.Menu.MenuProductRequest;
 import kitchenpos.products.tobe.domain.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class MenuTest {
@@ -31,7 +36,7 @@ class MenuTest {
     void test1() {
         //given
         String menuName = "name";
-        BigDecimal menuPrice = BigDecimal.TEN;
+        BigDecimal menuPrice = BigDecimal.ZERO;
 
         //when
         Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
@@ -66,7 +71,7 @@ class MenuTest {
     @ValueSource(strings = {"비속어", "욕설"})
     void test2(String profanity) {
         //given
-        BigDecimal menuPrice = BigDecimal.TEN;
+        BigDecimal menuPrice = BigDecimal.ZERO;
 
         //when && then
         assertThatThrownBy(
@@ -80,7 +85,7 @@ class MenuTest {
     void test3() {
         //given
         String menuName = "name";
-        BigDecimal menuPrice = BigDecimal.TEN;
+        BigDecimal menuPrice = BigDecimal.ZERO;
         Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
 
         //when
@@ -95,7 +100,7 @@ class MenuTest {
     void test4() {
         //given
         String menuName = "name";
-        BigDecimal menuPrice = BigDecimal.TEN;
+        BigDecimal menuPrice = BigDecimal.ZERO;
         Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
         menu.hide();
 
@@ -105,4 +110,27 @@ class MenuTest {
         //then
         assertThat(menu.getStatus()).isEqualTo(DisplayStatus.DISPLAY);
     }
+
+    @DisplayName("구성품들의 가격을 초과한 메뉴를 생성할수 없다")
+    @ParameterizedTest
+    @MethodSource("test5MethodSource")
+    void test5(List<MenuProductRequest> menuProductRequests) {
+        assertThatThrownBy(
+            () -> new Menu("치킨", BigDecimal.valueOf(36_000), menuGroup, menuProductRequests, purgomalumClient)
+        ).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("메뉴의 가격이 상품들의 가격보다 높습니다");
+    }
+
+    static Stream<List<MenuProductRequest>> test5MethodSource() {
+        return Stream.of(
+            of(new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)),
+            of(
+                new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(16_000), 1),
+                new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1)
+            ),
+            of(new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 2))
+        );
+    }
+
+
 }

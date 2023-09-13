@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -35,13 +36,32 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     private MenuGroup menuGroup = new MenuGroup();
 
-    public Menu(String name, BigDecimal price, MenuGroup menuGroup, List<MenuProduct> menuProducts, PurgomalumClient purgomalumClient) {
+    public Menu(String name, BigDecimal price, MenuGroup menuGroup, List<MenuProductRequest> menuProductRequests,
+        PurgomalumClient purgomalumClient) {
+        MenuProducts menuProducts = makeMenuProducts(menuProductRequests);
+
+        if (menuPriceIsMoreThanProductsPrice(price, menuProducts.getTotalPrice())) {
+            throw new IllegalArgumentException("메뉴의 가격이 상품들의 가격보다 높습니다");
+        }
+
         this.id = UUID.randomUUID();
         this.name = new MenuName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
-        this.menuProducts = new MenuProducts(menuProducts);
+        this.menuProducts = menuProducts;
         this.status = DisplayStatus.DISPLAY;
+    }
+
+
+    private boolean menuPriceIsMoreThanProductsPrice(BigDecimal menuPrice, long productsTotalPrice) {
+        return menuPrice.longValue() > productsTotalPrice;
+    }
+
+    private MenuProducts makeMenuProducts(List<MenuProductRequest> menuProductRequests) {
+        List<MenuProduct> menuProductList = menuProductRequests.stream()
+            .map(request -> new MenuProduct(this, request.getProductId(), request.getPrice(), request.getQuantity()))
+            .collect(Collectors.toList());
+        return new MenuProducts(menuProductList);
     }
 
     protected Menu() {
@@ -53,10 +73,6 @@ public class Menu {
 
     public void hide() {
         this.status = DisplayStatus.HIDE;
-    }
-
-    public MenuProduct makeMenuProduct(UUID productId, BigDecimal productPrice, long quantity) {
-        return new MenuProduct(this, productId, productPrice, quantity);
     }
 
     public UUID getId() {
@@ -85,5 +101,30 @@ public class Menu {
 
     public enum DisplayStatus {
         DISPLAY, HIDE
+    }
+
+    public static class MenuProductRequest {
+
+        private final UUID productId;
+        private final BigDecimal price;
+        private final long quantity;
+
+        public MenuProductRequest(UUID productId, BigDecimal price, long quantity) {
+            this.productId = productId;
+            this.price = price;
+            this.quantity = quantity;
+        }
+
+        public UUID getProductId() {
+            return productId;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public long getQuantity() {
+            return quantity;
+        }
     }
 }
