@@ -1,12 +1,12 @@
 package kitchenpos.apply.fixture;
 
+import kitchenpos.apply.menu.tobe.infra.FakeMenuPriceChecker;
 import kitchenpos.apply.menus.tobe.domain.*;
-import kitchenpos.apply.menus.tobe.infra.DefaultPurgomalumClient;
+import kitchenpos.support.infra.DefaultPurgomalumClient;
 import kitchenpos.apply.menus.tobe.ui.MenuGroupRequest;
 import kitchenpos.apply.menus.tobe.ui.MenuProductRequest;
 import kitchenpos.apply.menus.tobe.ui.MenuRequest;
 import kitchenpos.apply.products.tobe.domain.Product;
-import kitchenpos.menus.tobe.application.FakeMenuPriceChecker;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.math.BigDecimal;

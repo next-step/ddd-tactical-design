@@ -1,6 +1,6 @@
-package kitchenpos.apply.menus.tobe.infra;
+package kitchenpos.support.infra;
 
-import kitchenpos.apply.menus.tobe.domain.PurgomalumClient;
+import kitchenpos.support.domain.PurgomalumClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

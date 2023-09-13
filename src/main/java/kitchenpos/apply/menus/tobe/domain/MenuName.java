@@ -1,6 +1,7 @@
 package kitchenpos.apply.menus.tobe.domain;
 
-import kitchenpos.support.ValueObject;
+import kitchenpos.support.domain.PurgomalumClient;
+import kitchenpos.support.domain.ValueObject;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Embeddable;

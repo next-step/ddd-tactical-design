@@ -1,13 +1,13 @@
 package kitchenpos.apply.menu.tobe.application;
 
+import kitchenpos.apply.menu.tobe.domain.InMemoryMenuRepository;
 import kitchenpos.apply.menus.tobe.application.DefaultMenuPriceChecker;
 import kitchenpos.apply.menus.tobe.domain.Menu;
 import kitchenpos.apply.menus.tobe.domain.MenuProduct;
 import kitchenpos.apply.menus.tobe.domain.MenuRepository;
+import kitchenpos.apply.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.apply.products.tobe.domain.Product;
 import kitchenpos.apply.products.tobe.domain.ProductRepository;
-import kitchenpos.menus.tobe.application.InMemoryMenuRepository;
-import kitchenpos.products.tobe.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

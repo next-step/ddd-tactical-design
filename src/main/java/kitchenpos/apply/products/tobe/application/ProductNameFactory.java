@@ -1,7 +1,7 @@
 package kitchenpos.apply.products.tobe.application;
 
-import kitchenpos.apply.products.tobe.domain.PurgomalumClient;
 import kitchenpos.apply.products.tobe.domain.ProductName;
+import kitchenpos.support.domain.PurgomalumClient;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

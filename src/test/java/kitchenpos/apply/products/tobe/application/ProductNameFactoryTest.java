@@ -1,6 +1,6 @@
 package kitchenpos.apply.products.tobe.application;
 
-import kitchenpos.apply.products.tobe.domain.PurgomalumClient;
+import kitchenpos.support.domain.PurgomalumClient;
 import kitchenpos.apply.products.tobe.infra.FakePurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
