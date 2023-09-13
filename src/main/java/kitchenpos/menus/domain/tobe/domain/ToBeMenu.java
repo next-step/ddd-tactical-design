@@ -17,7 +17,7 @@ public class ToBeMenu {
     private UUID id;
 
     @Embedded
-    private MenuName name;
+    private MenuName displayedName;
 
     @Embedded
     private MenuPrice price;
@@ -34,14 +34,14 @@ public class ToBeMenu {
     protected ToBeMenu() {
     }
 
-    public ToBeMenu(String name, BigDecimal price, UUID menuGroupId, boolean displayed,
-        boolean containsProfanity, ToBeMenuProducts menuProducts) {
+    public ToBeMenu(MenuName name, BigDecimal price, UUID menuGroupId, boolean displayed,
+        ToBeMenuProducts menuProducts) {
 
         validationOfMenuGroup(menuGroupId);
         validationOfPrice(price, menuProducts);
 
         this.id = UUID.randomUUID();
-        this.name = MenuName.of(name, containsProfanity);
+        this.displayedName = name;
         this.price = MenuPrice.of(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
@@ -71,15 +71,15 @@ public class ToBeMenu {
     }
 
     private void validationOfPrice(BigDecimal price, ToBeMenuProducts menuProducts) {
-        validationOfPrice(MenuPrice.of(price), menuProducts.getSumOfProducts());
+        validationOfPrice(MenuPrice.of(price), menuProducts.sumOfProducts());
     }
 
     private void validationOfPrice(BigDecimal price) {
-        validationOfPrice(MenuPrice.of(price), menuProducts.getSumOfProducts());
+        validationOfPrice(MenuPrice.of(price), menuProducts.sumOfProducts());
     }
 
     private void validationOfPrice() {
-        validationOfPrice(price, menuProducts.getSumOfProducts());
+        validationOfPrice(price, menuProducts.sumOfProducts());
     }
 
     private void validationOfPrice(MenuPrice price, BigDecimal sumOfProducts) {
@@ -94,4 +94,10 @@ public class ToBeMenu {
         }
     }
 
+    public void changeProductPrice(UUID productId, BigDecimal productPrice) {
+        menuProducts.changePrice(productId, productPrice);
+        if (price.isGreaterThan(menuProducts.sumOfProducts())) {
+            hide();
+        }
+    }
 }

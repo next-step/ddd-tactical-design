@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import kitchenpos.menus.domain.tobe.domain.MenuName;
 import kitchenpos.menus.domain.tobe.domain.ToBeMenu;
 import kitchenpos.menus.domain.tobe.domain.ToBeMenuProduct;
 import kitchenpos.menus.domain.tobe.domain.ToBeMenuProducts;
@@ -47,11 +48,10 @@ public class MenuFixture {
 
     public static ToBeMenu createMenu(final String name, final long price, final UUID menuGroupId,
         boolean displayed, final boolean containsProfanity, final List<ToBeMenuProduct> menuProducts) {
-        return new ToBeMenu(name,
+        return new ToBeMenu(MenuName.of(name, containsProfanity),
             BigDecimal.valueOf(price),
             menuGroupId,
             displayed,
-            containsProfanity,
             new ToBeMenuProducts(menuProducts)
         );
     }
