@@ -35,11 +35,12 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     private MenuGroup menuGroup = new MenuGroup();
 
-    public Menu(String name, BigDecimal price, MenuGroup menuGroup, PurgomalumClient purgomalumClient) {
+    public Menu(String name, BigDecimal price, MenuGroup menuGroup, List<MenuProduct> menuProducts, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
         this.name = new MenuName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
+        this.menuProducts = new MenuProducts(menuProducts);
         this.status = DisplayStatus.DISPLAY;
     }
 
@@ -52,6 +53,10 @@ public class Menu {
 
     public void hide() {
         this.status = DisplayStatus.HIDE;
+    }
+
+    public MenuProduct makeMenuProduct(UUID productId, BigDecimal productPrice, long quantity) {
+        return new MenuProduct(this, productId, productPrice, quantity);
     }
 
     public UUID getId() {

@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,11 @@ class MenuProductsTest {
         //given
         UUID productUUID = UUID.randomUUID();
         long quantity = 3;
+        BigDecimal price = BigDecimal.TEN;
 
         //when && then
         assertThatThrownBy(
-            () -> new MenuProduct(null, productUUID, quantity)
+            () -> new MenuProduct(null, productUUID, price, quantity)
         ).isInstanceOf(AssertionError.class);
     }
 
@@ -27,10 +29,11 @@ class MenuProductsTest {
         //given
         Menu menu = new Menu();
         long quantity = 3;
+        BigDecimal price = BigDecimal.TEN;
 
         //when && then
         assertThatThrownBy(
-            () -> new MenuProduct(menu, null, quantity)
+            () -> new MenuProduct(menu, null, price, quantity)
         ).isInstanceOf(AssertionError.class);
     }
 }

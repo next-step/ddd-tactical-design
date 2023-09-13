@@ -16,11 +16,11 @@ public class MenuProducts {
     private List<MenuProduct> menuProducts = new ArrayList<>();
 
 
-    public MenuProducts() {
+    protected MenuProducts() {
     }
 
-    public void addMenuProduct(MenuProduct menuProduct) {
-        this.menuProducts.add(menuProduct);
+    public MenuProducts(List<MenuProduct> menuProducts) {
+        this.menuProducts = menuProducts;
     }
 
     public List<MenuProduct> getMenuProducts() {

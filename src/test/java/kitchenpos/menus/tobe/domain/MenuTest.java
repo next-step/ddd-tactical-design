@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
+import java.util.List;
 import kitchenpos.menus.tobe.domain.Menu.DisplayStatus;
 import kitchenpos.products.tobe.domain.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.PurgomalumClient;
@@ -33,7 +34,7 @@ class MenuTest {
         BigDecimal menuPrice = BigDecimal.TEN;
 
         //when
-        Menu menu = new Menu(menuName, menuPrice, menuGroup, purgomalumClient);
+        Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
 
         //then
         assertAll(
@@ -55,7 +56,7 @@ class MenuTest {
 
         //when && then
         assertThatThrownBy(
-            () -> new Menu(menuName, menuPrice, menuGroup, purgomalumClient)
+            () -> new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("가격은 음수가 될수 없습니다");
     }
@@ -69,7 +70,7 @@ class MenuTest {
 
         //when && then
         assertThatThrownBy(
-            () -> new Menu(profanity, menuPrice, menuGroup, purgomalumClient)
+            () -> new Menu(profanity, menuPrice, menuGroup, List.of(), purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("메뉴명은 비속어가 될수 없습니다");
     }
@@ -80,7 +81,7 @@ class MenuTest {
         //given
         String menuName = "name";
         BigDecimal menuPrice = BigDecimal.TEN;
-        Menu menu = new Menu(menuName, menuPrice, menuGroup, purgomalumClient);
+        Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
 
         //when
         menu.hide();
@@ -95,7 +96,7 @@ class MenuTest {
         //given
         String menuName = "name";
         BigDecimal menuPrice = BigDecimal.TEN;
-        Menu menu = new Menu(menuName, menuPrice, menuGroup, purgomalumClient);
+        Menu menu = new Menu(menuName, menuPrice, menuGroup, List.of(), purgomalumClient);
         menu.hide();
 
         //when

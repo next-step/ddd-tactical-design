@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -39,15 +40,20 @@ public class MenuProduct {
     private UUID productId;
 
     @Embedded
+    private ProductPrice price;
+
+    @Embedded
     private MenuProductQuantity quantity = new MenuProductQuantity();
 
-    public MenuProduct(Menu menu, UUID productId, long quantity) {
+    public MenuProduct(Menu menu, UUID productId, BigDecimal productPrice, long quantity) {
         assert isNotEmpty(menu);
         assert isNotEmpty(productId);
+        assert isNotEmpty(productPrice);
 
         this.menu = menu;
         this.productId = productId;
         this.quantity = new MenuProductQuantity(quantity);
+        this.price = new ProductPrice(productPrice);
     }
 
     protected MenuProduct() {
@@ -67,5 +73,9 @@ public class MenuProduct {
 
     public MenuProductQuantity getQuantity() {
         return quantity;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
     }
 }
