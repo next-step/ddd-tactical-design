@@ -29,9 +29,9 @@ public class DefaultProductUseCase implements ProductUseCase {
     }
 
     @Override
-    public void register(final Name nameCandidate, final ProductPrice price) {
+    public void register(final Name productNameCandidate, final ProductPrice price) {
         final ProductNew product
-            = ProductNew.newOf(nameFactory.create(nameCandidate), price);
+            = ProductNew.newOf(nameFactory.create(productNameCandidate), price);
 
         repository.save(product);
     }

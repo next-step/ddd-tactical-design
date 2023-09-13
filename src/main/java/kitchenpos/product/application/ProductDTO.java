@@ -2,6 +2,7 @@ package kitchenpos.product.application;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.google.common.base.MoreObjects;
 import java.util.UUID;
 import kitchenpos.product.domain.ProductName;
 import kitchenpos.product.domain.ProductNew;
@@ -19,5 +20,14 @@ public final class ProductDTO {
         id = entity.getId();
         price = entity.getPrice();
         name = entity.getName();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("id", id)
+            .add("price", price)
+            .add("name", name)
+            .toString();
     }
 }

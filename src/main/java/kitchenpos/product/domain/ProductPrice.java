@@ -11,13 +11,17 @@ public class ProductPrice {
 
     private long value;
 
+    protected ProductPrice() {
+    }
+
+    private ProductPrice(final long value) {
+        this.value = value;
+    }
+
     public static ProductPrice of(final long value) {
         checkArgument(value >= 0, "price must be bigger than 0. value : %s", value);
 
         return new ProductPrice(value);
-    }
-
-    public ProductPrice() {
     }
 
     @Override
@@ -37,7 +41,4 @@ public class ProductPrice {
         return Objects.hashCode(value);
     }
 
-    private ProductPrice(final long value) {
-        this.value = value;
-    }
 }

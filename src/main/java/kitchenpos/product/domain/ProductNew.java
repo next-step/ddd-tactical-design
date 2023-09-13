@@ -26,6 +26,16 @@ public class ProductNew {
     @AttributeOverride(name = "value", column = @Column(name = "price"))
     private ProductPrice price;
 
+
+    protected ProductNew() {
+    }
+
+    private ProductNew(final UUID id, final ProductName name, final ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public static ProductNew newOf(final ProductName name, final ProductPrice price) {
         return new ProductNew(UUID.randomUUID(), name, price);
     }
@@ -33,20 +43,7 @@ public class ProductNew {
     public void changePrice(final ProductPrice price) {
         this.price = price;
     }
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public ProductName getName() {
-        return name;
-    }
-
-    public ProductPrice getPrice() {
-        return price;
-    }
-
+    
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -64,12 +61,15 @@ public class ProductNew {
         return Objects.hash(id);
     }
 
-    private ProductNew(final UUID id, final ProductName name, final ProductPrice price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
+    public UUID getId() {
+        return id;
     }
 
-    public ProductNew() {
+    public ProductName getName() {
+        return name;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
     }
 }

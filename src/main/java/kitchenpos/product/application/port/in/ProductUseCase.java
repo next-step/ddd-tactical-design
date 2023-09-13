@@ -12,12 +12,12 @@ public interface ProductUseCase {
     /**
      * @throws IllegalArgumentException nameCandidate에 비속어가 포함되어 있을 때
      */
-    void register(final Name nameCandidate, final ProductPrice price);
+    void register(final Name productNameCandidate, final ProductPrice price);
 
     /**
      * @throws NotExistProductException id에 해당하는 product가 없을 때
      */
     void changePrice(final UUID id, final ProductPrice price);
-    
+
     List<ProductDTO> findAll();
 }
