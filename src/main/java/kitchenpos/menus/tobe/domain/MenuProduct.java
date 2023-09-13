@@ -59,6 +59,14 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
+    public void updatePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
+    public long getTotalPrice() {
+        return this.price.getPrice().longValue() * this.quantity.getQuantity();
+    }
+
     public Long getSeq() {
         return seq;
     }

@@ -23,6 +23,12 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
+    public long getTotalPrice() {
+        return menuProducts.stream()
+            .mapToLong(MenuProduct::getTotalPrice)
+            .sum();
+    }
+
     public List<MenuProduct> getMenuProducts() {
         return unmodifiableList(menuProducts);
     }
