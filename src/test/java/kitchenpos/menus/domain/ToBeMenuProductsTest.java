@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import kitchenpos.menus.domain.tobe.domain.ToBeMenuProduct;
@@ -22,10 +23,11 @@ class ToBeMenuProductsTest {
         돈가스 = new ToBeMenuProduct(UUID.randomUUID(), 13_000L, 1);
     }
 
+    @DisplayName("메뉴에 속한 상품 전체 합계금액 조회")
     @Test
-    void getSumOfProducts() {
+    void sumOfProducts() {
         ToBeMenuProducts menuProducts = new ToBeMenuProducts(List.of(김밥, 돈가스));
-        assertThat(menuProducts.getSumOfProducts())
+        assertThat(menuProducts.sumOfProducts())
             .isEqualTo(BigDecimal.valueOf(21_000));
     }
 }

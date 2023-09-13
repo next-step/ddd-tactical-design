@@ -2,6 +2,7 @@ package kitchenpos.menus.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +25,16 @@ class ToBeMenuProductTest {
 
     @DisplayName("MenuProduct의 가격을 조회하면 등록했을때 가격이 조회된다.")
     @Test
-    void name() {
+    void priceCheck() {
         ToBeMenuProduct menuProduct = new ToBeMenuProduct(UUID.randomUUID(), 10_000L, 3);
-        assertThat(menuProduct.amount().equals(MenuProductPrice.of(30_000L))).isTrue();
+        assertThat(menuProduct.amount()).isEqualTo(MenuProductPrice.of(30_000L));
+    }
+
+    @DisplayName("메뉴상품 가격을 변경한다")
+    @Test
+    void changePrice() {
+        ToBeMenuProduct menuProduct = new ToBeMenuProduct(UUID.randomUUID(), 10_000L, 3);
+        menuProduct.changePrice(BigDecimal.valueOf(15_000));
+        assertThat(menuProduct.amount()).isEqualTo(MenuProductPrice.of(45_000L));
     }
 }

@@ -19,7 +19,6 @@ public class ToBeMenuProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
-
     @Column(name = "product_id")
     private UUID productId;
     @Column(name = "price")
@@ -57,5 +56,9 @@ public class ToBeMenuProduct {
 
     public void changePrice(BigDecimal value) {
         this.price = MenuProductPrice.of(value);
+    }
+
+    public boolean isSameMenuProduct(UUID productId) {
+        return this.productId == productId;
     }
 }

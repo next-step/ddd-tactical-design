@@ -2,6 +2,7 @@ package kitchenpos.menus.domain.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -31,11 +32,16 @@ public class ToBeMenuProducts {
         this.value = menuProducts;
     }
 
-    public BigDecimal getSumOfProducts() {
+    public BigDecimal sumOfProducts() {
         return value.stream()
             .map(ToBeMenuProduct::amount)
             .reduce(MenuProductPrice.ZERO, MenuProductPrice::add)
             .getValue();
     }
 
+    public void changePrice(UUID productId, BigDecimal price) {
+        value.stream()
+            .filter(it -> it.isSameMenuProduct(productId))
+            .forEach(it -> it.changePrice(price));
+    }
 }
