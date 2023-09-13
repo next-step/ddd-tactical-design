@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import kitchenpos.menus.domain.tobe.domain.Name;
-
 @Table(name = "tobe_product")
 @Entity
 public class ToBeProduct {
@@ -20,10 +18,10 @@ public class ToBeProduct {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private ProductName name;
 
     @Embedded
-    private Price price;
+    private ProductPrice price;
 
     protected ToBeProduct() {
     }
@@ -31,8 +29,8 @@ public class ToBeProduct {
     public ToBeProduct(String name, BigDecimal productPrice, boolean containsProfanity) {
         validationOfProfanity(containsProfanity);
         this.id = UUID.randomUUID();
-        this.name = Name.of(name);
-        this.price = Price.of(productPrice);
+        this.name = ProductName.of(name);
+        this.price = ProductPrice.of(productPrice);
     }
 
     @Override
@@ -61,10 +59,14 @@ public class ToBeProduct {
     }
 
     public boolean isGreaterThanPrice(BigDecimal productPrice) {
-        return price.isGreaterThan(Price.of(productPrice));
+        return price.isGreaterThan(ProductPrice.of(productPrice));
     }
 
-    public Price getPrice() {
+    public UUID getId() {
+        return id;
+    }
+
+    public ProductPrice getPrice() {
         return price;
     }
 }
