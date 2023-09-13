@@ -1,10 +1,11 @@
 package kitchenpos.products.domain.vo;
 
 import kitchenpos.products.domain.exception.InvalidProductPriceException;
+import kitchenpos.support.ValueObject;
 
 import java.math.BigDecimal;
 
-public class ProductPrice {
+public class ProductPrice extends ValueObject {
     private final BigDecimal price;
 
     public ProductPrice(BigDecimal price) {

@@ -2,11 +2,12 @@ package kitchenpos.menus.domain.model;
 
 
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.support.ValueObject;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class MenuProductModel {
+public class MenuProductModel extends ValueObject {
     private final UUID productId;
     private final BigDecimal price;
     private final long quantity;

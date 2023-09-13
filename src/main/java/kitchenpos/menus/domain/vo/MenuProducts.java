@@ -3,21 +3,20 @@ package kitchenpos.menus.domain.vo;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
 import kitchenpos.menus.domain.model.MenuProductModel;
+import kitchenpos.support.ValueObject;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MenuProducts {
+public class MenuProducts extends ValueObject {
     final List<MenuProductModel> menuProducts;
 
     public MenuProducts(List<MenuProductModel> menuProducts) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new InvalidMenuProductsException();
         }
-
-
         this.menuProducts = menuProducts;
     }
 

@@ -2,12 +2,12 @@ package kitchenpos.menus.domain.model;
 
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.vo.MenuGroupName;
+import kitchenpos.support.ValueObject;
 
 import java.util.UUID;
 
-public class MenuGroupModel {
+public class MenuGroupModel extends ValueObject {
     private final UUID id;
-
     private final MenuGroupName name;
 
     public MenuGroupModel(UUID id, MenuGroupName name) {

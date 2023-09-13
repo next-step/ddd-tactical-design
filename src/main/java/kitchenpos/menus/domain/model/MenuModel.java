@@ -13,7 +13,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MenuModel extends ValueObject {
-
     private final UUID id;
     private final MenuName menuName;
     private MenuPrice price;
