@@ -52,6 +52,11 @@ public class Menu {
         this.status = DisplayStatus.DISPLAY;
     }
 
+    public void hideIfPriceIsInvalid() {
+        if (menuPriceIsMoreThanProductsPrice(this.price.getPrice(), menuProducts.getTotalPrice())) {
+            this.hide();
+        }
+    }
 
     private boolean menuPriceIsMoreThanProductsPrice(BigDecimal menuPrice, long productsTotalPrice) {
         return menuPrice.longValue() > productsTotalPrice;

@@ -132,5 +132,23 @@ class MenuTest {
         );
     }
 
+    @DisplayName("메뉴 가격이 구성품들의 가격보다 크다면 메뉴를 숨길수 있다")
+    @Test
+    void test6() {
+        //given
+        List<MenuProductRequest> menuProductRequests = of(
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        );
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+            purgomalumClient);
 
+        //when
+        MenuProduct menuProduct1 = menu.getMenuProducts().get(0);
+        menuProduct1.updatePrice(BigDecimal.valueOf(16_000));
+        menu.hideIfPriceIsInvalid();
+
+        //then
+        assertThat(menu.getStatus()).isEqualTo(DisplayStatus.HIDE);
+    }
 }
