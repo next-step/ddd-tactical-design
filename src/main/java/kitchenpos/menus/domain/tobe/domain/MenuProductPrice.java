@@ -71,14 +71,6 @@ public class MenuProductPrice {
         return new MenuProductPrice(this.price.multiply(BigDecimal.valueOf(value)));
     }
 
-    public boolean isGreaterThan(MenuProductPrice comparePrice) {
-        return price.compareTo(comparePrice.price) > 0;
-    }
-
-    public boolean isGreaterThan(BigDecimal comparePrice) {
-        return price.compareTo(comparePrice) > 0;
-    }
-
     public MenuProductPrice changePrice(BigDecimal newPrice) {
         return new MenuProductPrice(newPrice);
     }

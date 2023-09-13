@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,16 +9,15 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import kitchenpos.products.domain.tobe.domain.Price;
-
 @Embeddable
 public class ToBeMenuProducts {
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
         name = "menu_id",
         nullable = false,
         columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+        foreignKey = @ForeignKey(name = "fk_tobe_menu_product_to_menu")
     )
     private List<ToBeMenuProduct> value;
 
@@ -31,9 +31,11 @@ public class ToBeMenuProducts {
         this.value = menuProducts;
     }
 
-    public Price getSumOfProducts() {
+    public BigDecimal getSumOfProducts() {
         return value.stream()
-            .map(ToBeMenuProduct::getProductPrice)
-            .reduce(Price.of(0), Price::add);
+            .map(ToBeMenuProduct::amount)
+            .reduce(MenuProductPrice.ZERO, MenuProductPrice::add)
+            .getValue();
     }
+
 }
