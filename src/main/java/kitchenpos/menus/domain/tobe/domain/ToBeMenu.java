@@ -1,7 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -36,7 +35,7 @@ public class ToBeMenu {
     }
 
     public ToBeMenu(String name, BigDecimal price, UUID menuGroupId, boolean displayed,
-        boolean containsProfanity, List<ToBeMenuProduct> menuProducts) {
+        boolean containsProfanity, ToBeMenuProducts menuProducts) {
 
         validationOfMenuGroup(menuGroupId);
         validationOfPrice(price, menuProducts);
@@ -46,7 +45,7 @@ public class ToBeMenu {
         this.price = MenuPrice.of(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
-        this.menuProducts = new ToBeMenuProducts(menuProducts);
+        this.menuProducts = menuProducts;
     }
 
     public void changePrice(BigDecimal price) {
@@ -71,9 +70,8 @@ public class ToBeMenu {
         return displayed;
     }
 
-    private void validationOfPrice(BigDecimal price, List<ToBeMenuProduct> menuProducts) {
-        validationOfPrice(MenuPrice.of(price), new ToBeMenuProducts((menuProducts)).getSumOfProducts()
-        );
+    private void validationOfPrice(BigDecimal price, ToBeMenuProducts menuProducts) {
+        validationOfPrice(MenuPrice.of(price), menuProducts.getSumOfProducts());
     }
 
     private void validationOfPrice(BigDecimal price) {

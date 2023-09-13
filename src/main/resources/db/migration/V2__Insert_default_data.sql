@@ -84,18 +84,18 @@ values (1, x'0ac16db71b024a87b9c1e7d8f226c48d', x'b9c670b04ef5409083496868df1c7d
 insert into menu_product (quantity, product_id, menu_id)
 values (1, x'7de4b8affa0f4391aaa9c61ea9b40f83', x'a64af6cac34d4cd882fe454abf512d1f');
 
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'3b52824434f7406bbb7e690912f66b10', x'f59b1e1cb145440aaa6f6095a0e2d63b');
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'c5ee925c3dbb4941b825021446f24446', x'e1254913860846aab23aa07c1dcbc648');
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'625c6fc4145d408f8dd533c16ba26064', x'191fa247b5f34b51b175e65db523f754');
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'4721ee722ff3417fade3acd0a804605b', x'33e558df7d934622b50efcc4282cd184');
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'0ac16db71b024a87b9c1e7d8f226c48d', x'b9c670b04ef5409083496868df1c7d62');
-insert into tobe_menu_product (quantity, product_id, menu_id)
-values (1, x'7de4b8affa0f4391aaa9c61ea9b40f83', x'a64af6cac34d4cd882fe454abf512d1f');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'3b52824434f7406bbb7e690912f66b10', x'f59b1e1cb145440aaa6f6095a0e2d63b', 8000, 'WON');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'c5ee925c3dbb4941b825021446f24446', x'e1254913860846aab23aa07c1dcbc648', 8000, 'WON');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'625c6fc4145d408f8dd533c16ba26064', x'191fa247b5f34b51b175e65db523f754', 8000, 'WON');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'4721ee722ff3417fade3acd0a804605b', x'33e558df7d934622b50efcc4282cd184', 8000, 'WON');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'0ac16db71b024a87b9c1e7d8f226c48d', x'b9c670b04ef5409083496868df1c7d62', 8000, 'WON');
+insert into tobe_menu_product (quantity, product_id, menu_id, price, currency)
+values (1, x'7de4b8affa0f4391aaa9c61ea9b40f83', x'a64af6cac34d4cd882fe454abf512d1f', 8000, 'WON');
 
 insert into order_table (id, occupied, name, number_of_guests)
 values (x'8d71004329b6420e8452233f5a035520', false, '1번', 0);
