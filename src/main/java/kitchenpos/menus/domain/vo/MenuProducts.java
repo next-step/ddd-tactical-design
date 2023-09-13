@@ -1,7 +1,7 @@
 package kitchenpos.menus.domain.vo;
 
-import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
 import kitchenpos.menus.domain.model.MenuProductModel;
 
 import java.math.BigDecimal;
@@ -18,9 +18,9 @@ public class MenuProducts {
         }
 
 
-
         this.menuProducts = menuProducts;
     }
+
     public int size() {
         return menuProducts.size();
     }

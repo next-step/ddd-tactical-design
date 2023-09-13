@@ -12,6 +12,7 @@ import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,38 +39,47 @@ public class MenuService {
     public Menu create(final Menu request) {
         validMenuProduct(request);
         menuGroupService.findById(request.getMenuGroupId());
-        return menuRepository.save(new MenuModel(request, purgomalumClient).toMenu());
+        Menu menu = new MenuModel(request, purgomalumClient).toMenu();
+        return menuRepository.save(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        return new MenuModel(getMenu(menuId), purgomalumClient)
-                .changePrice(request.getPrice())
+    public Menu changePrice(final UUID menuId, final BigDecimal price) {
+        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
+                .changePrice(price)
                 .toMenu();
+        return this.menuRepository.save(menu);
+    }
+
+    public void changeProductPrice(final UUID productId, final BigDecimal price) {
+        this.menuRepository.findAllByProductId(productId)
+                .forEach(menu -> changePrice(menu.getId(), price));
     }
 
     @Transactional
     public Menu display(final UUID menuId) {
-        return new MenuModel(getMenu(menuId), purgomalumClient)
+        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
                 .displayed()
                 .toMenu();
+        return this.menuRepository.save(menu);
     }
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        return new MenuModel(getMenu(menuId), purgomalumClient)
+        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
                 .hide()
                 .toMenu();
+        return this.menuRepository.save(menu);
     }
 
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
-        return menuRepository.findAll();
+        return this.menuRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public Menu getMenu(UUID menuId) {
-        return menuRepository.findById(menuId)
+        return this.menuRepository.findById(menuId)
                 .orElseThrow(NotFoundMenuException::new);
     }
 
@@ -86,4 +96,6 @@ public class MenuService {
             throw new InvalidMenuProductsSizeException();
         }
     }
+
+
 }

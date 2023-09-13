@@ -1,10 +1,5 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
-import kitchenpos.menus.domain.vo.MenuPrice;
-import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -83,6 +78,7 @@ public class Menu {
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
+
     public Menu displayed() {
         this.displayed = true;
         return this;

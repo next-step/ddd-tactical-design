@@ -49,6 +49,10 @@ public class MenuModel extends ValueObject {
         if (price.compareTo(menuProducts.totalAmount()) > 0) {
             throw new InvalidMenuProductsPriceException();
         }
+
+        if (price.compareTo(menuProducts.totalAmount()) < 0) {
+            this.displayed = false;
+        }
         this.price = new MenuPrice(price);
         return this;
     }

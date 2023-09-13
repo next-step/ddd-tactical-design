@@ -30,6 +30,7 @@ public class MenuGroupModel {
     public MenuGroupModel of(MenuGroup menuGroup) {
         return new MenuGroupModel(menuGroup.getId(), new MenuGroupName(menuGroup.getName()));
     }
+
     public MenuGroup toMenuGroup() {
         return new MenuGroup(id, name.getName());
     }

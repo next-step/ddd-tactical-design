@@ -41,6 +41,7 @@ public class MenuProduct {
         this.quantity = new MenuProductQuantity(quantity).getQuantity();
         this.productId = productId;
     }
+
     public MenuProduct(UUID productId, long quantity) {
         this.quantity = new MenuProductQuantity(quantity).getQuantity();
         this.productId = productId;

@@ -4,7 +4,6 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
@@ -31,8 +30,9 @@ public class Fixtures {
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }
+
     public static MenuGroup menuGroup(UUID id) {
-        return  new MenuGroup(id, "두마리메뉴");
+        return new MenuGroup(id, "두마리메뉴");
     }
 
     public static MenuGroup menuGroup(final String name) {
@@ -109,10 +109,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price, new FakePurgomalumClient());
+        return new Product(UUID.randomUUID(), name, price);
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price), new FakePurgomalumClient());
+        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
 }

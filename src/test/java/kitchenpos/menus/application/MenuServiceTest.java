@@ -10,9 +10,9 @@ import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuService, purgomalumClient);
         menuService = new MenuService(menuRepository, productService, menuGroupService, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
@@ -141,7 +141,7 @@ class MenuServiceTest {
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final Menu expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
+        final Menu actual = menuService.changePrice(menuId, expected.getPrice());
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -151,7 +151,7 @@ class MenuServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         Menu menu = menuRepository.save(changePriceRequest(price));
-        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), menu))
+        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), menu.getPrice()))
                 .isInstanceOf(InvalidMenuPriceException.class);
     }
 
@@ -160,7 +160,7 @@ class MenuServiceTest {
     void changePriceToExpensive() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final Menu expected = changePriceRequest(33_000L);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
+        assertThatThrownBy(() -> menuService.changePrice(menuId, expected.getPrice()))
                 .isInstanceOf(InvalidMenuProductsPriceException.class);
     }
 
