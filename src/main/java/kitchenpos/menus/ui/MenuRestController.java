@@ -5,12 +5,12 @@ import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("/api/menus")
 @RestController
@@ -29,19 +29,19 @@ public class MenuRestController {
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<MenuResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuChangePriceRequest request) {
+    public ResponseEntity<MenuResponse> changePrice(@PathVariable final MenuId menuId, @RequestBody final MenuChangePriceRequest request) {
         Menu response = menuService.changePrice(menuId, request);
         return ResponseEntity.ok(MenuResponse.fromEntity(response));
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<MenuResponse> display(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuResponse> display(@PathVariable final MenuId menuId) {
         Menu response = menuService.display(menuId);
         return ResponseEntity.ok(MenuResponse.fromEntity(response));
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<MenuResponse> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuResponse> hide(@PathVariable final MenuId menuId) {
         Menu response = menuService.hide(menuId);
         return ResponseEntity.ok(MenuResponse.fromEntity(response));
     }

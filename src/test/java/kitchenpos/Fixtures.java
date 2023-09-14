@@ -1,6 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
+    public static final MenuId INVALID_MENU_ID = new MenuId(new UUID(0L, 0L));
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
         final Order order = new Order();

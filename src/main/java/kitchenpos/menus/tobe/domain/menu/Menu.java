@@ -9,14 +9,15 @@ import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
 @Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+
+    @EmbeddedId
+    private MenuId id;
 
     @Column(name = "name", nullable = false)
     @Embedded
@@ -63,7 +64,7 @@ public class Menu {
         if (displayed && price.isGreaterThan(menuProducts.calculateSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
-        this.id = UUID.randomUUID();
+        this.id = new MenuId(new UUID(0L, 0L));
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
@@ -115,7 +116,7 @@ public class Menu {
         this.displayed = false;
     }
 
-    public UUID getId() {
+    public MenuId getId() {
         return id;
     }
 
@@ -145,5 +146,20 @@ public class Menu {
 
     public Price getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Menu menu = (Menu) o;
+
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

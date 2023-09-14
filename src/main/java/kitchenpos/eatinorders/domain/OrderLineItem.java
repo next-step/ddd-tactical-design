@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ public class OrderLineItem {
     private long quantity;
 
     @Transient
-    private UUID menuId;
+    private MenuId menuId;
 
     @Transient
     private BigDecimal price;
@@ -58,11 +59,11 @@ public class OrderLineItem {
         this.quantity = quantity;
     }
 
-    public UUID getMenuId() {
+    public MenuId getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
+    public void setMenuId(final MenuId menuId) {
         this.menuId = menuId;
     }
 

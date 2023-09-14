@@ -75,7 +75,7 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, MenuChangePriceRequest request) {
+    public Menu changePrice(final MenuId menuId, MenuChangePriceRequest request) {
 
         final Menu menu = findById(menuId);
         menu.changePrice(new Price(request.getPrice()));
@@ -84,14 +84,14 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public Menu display(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.display();
         return menu;
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public Menu hide(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.hide();
         return menu;
@@ -119,7 +119,7 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public Menu findById(UUID menuId) {
+    public Menu findById(MenuId menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
     }

@@ -1,13 +1,14 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class InMemoryMenuRepository implements MenuRepository {
-    private final Map<UUID, Menu> menus = new HashMap<>();
+    private final Map<MenuId, Menu> menus = new HashMap<>();
 
     @Override
     public Menu save(final Menu menu) {
@@ -16,7 +17,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
-    public Optional<Menu> findById(final UUID id) {
+    public Optional<Menu> findById(final MenuId id) {
         return Optional.ofNullable(menus.get(id));
     }
 
@@ -26,7 +27,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
-    public List<Menu> findAllByIdIn(final List<UUID> ids) {
+    public List<Menu> findAllByIdIn(final List<MenuId> ids) {
         return menus.values()
                 .stream()
                 .filter(menu -> ids.contains(menu.getId()))

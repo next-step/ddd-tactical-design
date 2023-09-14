@@ -12,6 +12,7 @@ import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
 import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -172,7 +173,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(16_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
@@ -183,7 +184,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(price);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
                 .isInstanceOf(PriceException.class);
@@ -192,7 +193,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void changePriceToExpensive() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(50_000L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
                 .isInstanceOf(MenuException.class);
@@ -201,7 +202,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 노출할 수 있다.")
     @Test
     void display() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
         final Menu actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
@@ -209,7 +210,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
     void displayExpensiveMenu() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
         menuService.changePrice(menuId, new MenuChangePriceRequest(33_000L));
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(MenuException.class);
@@ -218,7 +219,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
     void hide() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        final MenuId menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
         final Menu actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
