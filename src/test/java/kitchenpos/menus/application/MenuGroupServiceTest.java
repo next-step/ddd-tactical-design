@@ -28,7 +28,7 @@ class MenuGroupServiceTest {
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
-    void create() {
+    void create1() {
         final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
         final MenuGroup actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
@@ -41,7 +41,7 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest
-    void create(final String name) {
+    void create2(final String name) {
         assertThatThrownBy(() -> createMenuGroupRequest(name))
                 .isInstanceOf(MenuDisplayedNameException.class);
     }

@@ -24,7 +24,7 @@ class MenuGroupDisplayedNameTest {
     @DisplayName("[실패] 이름은 null이거나 공백일 수 없다.")
     @ParameterizedTest
     @NullAndEmptySource
-    void create_test_3(String name) {
+    void create2(String name) {
         assertThatThrownBy(
                 () -> new MenuGroupDisplayedName(name))
                 .isInstanceOf(MenuDisplayedNameException.class)

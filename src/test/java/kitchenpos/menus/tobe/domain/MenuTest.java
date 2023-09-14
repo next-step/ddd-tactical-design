@@ -9,6 +9,7 @@ import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -40,19 +41,25 @@ class MenuTest {
 
     }
 
-    @DisplayName("[성공] 메뉴를 생성한다.")
-    @Test
-    void create1() {
-        //when
-        Menu response = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
-        //then
-        assertThat(response.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
-    }
+    @DisplayName("메뉴 생성")
+    @Nested
+    class create {
 
-    @DisplayName("[실패] 메뉴 생성 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다.")
-    @Test
-    void create2() {
-        assertThatThrownBy(() -> new Menu("정상", new FakeMenuProfanityPolicy(), 10000, menuGroup(), true, menuProducts)).isInstanceOf(MenuException.class);
+        @DisplayName("[성공] 메뉴를 생성한다.")
+        @Test
+        void create1() {
+            //when
+            Menu response = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
+            //then
+            assertThat(response.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
+        }
+
+        @DisplayName("[실패] 메뉴 생성 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다.")
+        @Test
+        void create2() {
+            assertThatThrownBy(() -> new Menu("정상", new FakeMenuProfanityPolicy(), 10000, menuGroup(), true, menuProducts)).isInstanceOf(MenuException.class);
+        }
+
     }
 
     @DisplayName("[실패] 메뉴 가격 수정 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다. ")
@@ -70,22 +77,29 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    @DisplayName("[성공] 메뉴를 노출한다.")
-    @Test
-    void display1() {
-        //when
-        menu.display();
-        //then
-        assertThat(menu.isDisplayed()).isTrue();
+    @DisplayName("메뉴를 노출한다")
+    @Nested
+    class display {
+
+        @DisplayName("[성공] 메뉴를 노출한다.")
+        @Test
+        void display1() {
+            //when
+            menu.display();
+            //then
+            assertThat(menu.isDisplayed()).isTrue();
+        }
+
+        @DisplayName("[실패] 메뉴 상품 금액의 합보다 메뉴 가격이 크면, 메뉴를 노출할 수 없다.")
+        @Test
+        void display2() {
+            //given
+            menu.hide();
+            menu.changePrice(new Price(30_000L));
+            //when
+            assertThatThrownBy(() -> menu.display()).isInstanceOf(MenuException.class);
+        }
+
     }
 
-    @DisplayName("[실패] 메뉴 상품 금액의 합보다 메뉴 가격이 크면, 메뉴를 노출할 수 없다.")
-    @Test
-    void display2() {
-        //given
-        menu.hide();
-        menu.changePrice(new Price(30_000L));
-        //when
-        assertThatThrownBy(() -> menu.display()).isInstanceOf(MenuException.class);
-    }
 }
