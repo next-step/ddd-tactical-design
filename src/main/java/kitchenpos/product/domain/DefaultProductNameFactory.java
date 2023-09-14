@@ -1,5 +1,9 @@
 package kitchenpos.product.domain;
 
+import static kitchenpos.product.support.constant.Name.NAME_CANDIDATE;
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
+
+import kitchenpos.product.application.exception.ContainsProfanityException;
 import kitchenpos.product.application.port.out.ProductPurgomalumChecker;
 
 public class DefaultProductNameFactory implements ProductNameFactory {
@@ -12,9 +16,10 @@ public class DefaultProductNameFactory implements ProductNameFactory {
 
     @Override
     public ProductName create(final Name nameCandidate) {
-        if (!checker.containsProfanity(nameCandidate)) {
-            throw new IllegalArgumentException(
-                String.format("name has profanity. name: %s", nameCandidate));
+        checkNotNull(nameCandidate, NAME_CANDIDATE);
+
+        if (checker.containsProfanity(nameCandidate)) {
+            throw new ContainsProfanityException(nameCandidate);
         }
 
         return ProductName.of(nameCandidate);

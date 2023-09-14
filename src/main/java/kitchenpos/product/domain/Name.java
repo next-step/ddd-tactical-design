@@ -2,6 +2,7 @@ package kitchenpos.product.domain;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.apache.logging.log4j.util.Strings;
 
@@ -30,6 +31,13 @@ public final class Name {
     @Override
     public int hashCode() {
         return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+            .add("value", value)
+            .toString();
     }
 
     public String getValue() {
