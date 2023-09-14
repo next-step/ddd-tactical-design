@@ -1,6 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
-import static kitchenpos.products.domain.tobe.domain.Currency.*;
+import static kitchenpos.common.Currency.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import kitchenpos.products.domain.tobe.domain.Currency;
+import kitchenpos.common.Currency;
 
 @Embeddable
 public class MenuPrice {
