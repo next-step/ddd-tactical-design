@@ -1,8 +1,8 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.application.dto.MenuPriceRequest;
 import kitchenpos.menus.tobe.application.dto.MenuRequest;
-import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuProduct;
@@ -61,7 +61,7 @@ class MenuServiceTest {
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getStringName()).isEqualTo(expected.getName()),
             () -> assertThat(actual.getBigDecimalPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
             () -> assertThat(actual.getMenuProducts()).hasSize(1)
         );

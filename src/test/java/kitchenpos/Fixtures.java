@@ -29,7 +29,7 @@ public class Fixtures {
             UUID.randomUUID(),
             "후라이드+후라이드",
             BigDecimal.valueOf(price),
-            menuGroup(),
+            UUID.randomUUID(),
             displayed,
             Arrays.asList(menuProducts),
             (name) -> false

@@ -95,7 +95,7 @@ class MenuTest {
             UUID.randomUUID(),
             "후라이드+후라이드",
             BigDecimal.valueOf(price),
-            new MenuGroup(),
+            UUID.randomUUID(),
             displayed,
             List.of(new MenuProduct(1L, product(), 1L, UUID.randomUUID())),
             purgomalumClient::containsProfanity

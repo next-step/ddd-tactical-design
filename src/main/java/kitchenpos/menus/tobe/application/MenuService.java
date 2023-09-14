@@ -50,7 +50,7 @@ public class MenuService {
             UUID.randomUUID(),
             request.getName(),
             request.getPrice(),
-            menuGroup,
+            menuGroup.getId(),
             request.isDisplayed(),
             Menu.createMenuProducts(products, request.getMenuProducts()),
             purgomalumClient::containsProfanity

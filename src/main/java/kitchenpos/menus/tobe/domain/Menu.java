@@ -25,14 +25,6 @@ public class Menu {
     @Column(name = "price", nullable = false)
     private MenuPrice menuPrice;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
-
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
@@ -48,14 +40,13 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    protected Menu() {
     }
 
     public Menu(
         UUID id,
         MenuName menuName,
         MenuPrice price,
-        MenuGroup menuGroup,
         boolean displayed,
         List<MenuProduct> menuProducts,
         UUID menuGroupId
@@ -63,7 +54,6 @@ public class Menu {
         this.id = id;
         this.menuName = menuName;
         this.menuPrice = price;
-        this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
@@ -73,7 +63,7 @@ public class Menu {
         final UUID id,
         final String name,
         final BigDecimal price,
-        final MenuGroup menuGroup,
+        final UUID menuGroupId,
         final boolean displayed,
         final List<MenuProduct> menuProducts,
         final Predicate<String> predicate
@@ -82,10 +72,9 @@ public class Menu {
             id,
             new MenuName(name, predicate),
             new MenuPrice(price),
-            menuGroup,
             displayed,
             menuProducts,
-            menuGroup.getId()
+            menuGroupId
         );
     }
 
@@ -107,10 +96,6 @@ public class Menu {
 
     public BigDecimal getBigDecimalPrice() {
         return menuPrice.toBigDecimal();
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
     }
 
     public boolean isDisplayed() {
