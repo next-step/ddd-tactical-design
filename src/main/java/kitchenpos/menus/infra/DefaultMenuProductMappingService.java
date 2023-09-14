@@ -1,7 +1,7 @@
 package kitchenpos.menus.infra;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.MenuProductMappingService;
-import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,9 @@ public class DefaultMenuProductMappingService implements MenuProductMappingServi
     }
 
     @Override
-    public Product findById(UUID productId) {
+    public Price findPriceById(UUID productId) {
         return productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new)
+                .getPrice();
     }
 }

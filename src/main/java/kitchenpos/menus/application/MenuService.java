@@ -9,7 +9,6 @@ import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,8 +61,8 @@ public class MenuService {
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
-        Product product = mappingService.findById(menuProductRequest.getProductId());
-        return new MenuProduct(product.getId(), product.getPrice(), menuProductRequest.getQuantity());
+        Price productPrice = mappingService.findPriceById(menuProductRequest.getProductId());
+        return new MenuProduct(menuProductRequest.getProductId(), productPrice, menuProductRequest.getQuantity());
     }
 
     private void validateMenuProducts(MenuCreateRequest request) {
@@ -111,12 +110,12 @@ public class MenuService {
     }
 
     private void fetchMenuProduct(UUID productId, Menu menu) {
-        Product product = mappingService.findById(productId);
+        Price productPrice = mappingService.findPriceById(productId);
         menu.getMenuProducts()
                 .getValues()
                 .stream()
                 .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.fetchPrice(product.getPrice()));
+                .forEach(menuProduct -> menuProduct.fetchPrice(productPrice));
     }
 
     @Transactional(readOnly = true)

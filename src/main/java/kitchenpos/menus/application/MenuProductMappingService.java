@@ -1,10 +1,10 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.common.domain.Price;
 
 import java.util.UUID;
 
 
 public interface MenuProductMappingService {
-    Product findById(UUID productId);
+    Price findPriceById(UUID productId);
 }

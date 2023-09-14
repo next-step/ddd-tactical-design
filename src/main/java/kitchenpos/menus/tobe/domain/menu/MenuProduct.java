@@ -49,9 +49,6 @@ public class MenuProduct {
         this(product.getId(), product.getPrice(), new MenuProductQuantity(quantity));
     }
 
-    public MenuProduct(Product product, MenuProductQuantity quantity) {
-        this(product.getId(), product.getPrice(), quantity);
-    }
 
     private void validateProductPrice(Price productPrice) {
         if (productPrice == null) {
