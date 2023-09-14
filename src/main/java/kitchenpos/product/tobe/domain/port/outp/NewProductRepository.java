@@ -1,4 +1,6 @@
-package kitchenpos.product.tobe.domain;
+package kitchenpos.product.tobe.domain.port.outp;
+
+import kitchenpos.product.tobe.domain.NewProduct;
 
 import java.util.List;
 import java.util.Optional;

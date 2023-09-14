@@ -1,10 +1,11 @@
 package kitchenpos.product.tobe.domain;
 
+import kitchenpos.profanity.domain.PurgomalumChecker;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -14,36 +15,40 @@ public class NewProduct {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
+    private Name name;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+    private Price price;
 
-    public NewProduct() {
+    protected NewProduct() {
+    }
+
+    public NewProduct(final UUID id, final Name name, final Price price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public static NewProduct createWithoutProfanity(final Name name, final Price price, final PurgomalumChecker purgomalumChecker) {
+        if (purgomalumChecker.containsProfanity(name.getValue())) {
+            throw new IllegalNewProductNameException();
+        }
+
+        return new NewProduct(UUID.randomUUID(), name, price);
+    }
+
+    public void changePrice(final Price price) {
+        this.price = price;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public Name getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
