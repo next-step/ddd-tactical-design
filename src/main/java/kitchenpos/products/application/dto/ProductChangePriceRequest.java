@@ -1,9 +1,4 @@
-package kitchenpos.products.ui.dto;
-
-import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductDisplayedName;
-import kitchenpos.products.tobe.domain.ProductPrice;
+package kitchenpos.products.application.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;

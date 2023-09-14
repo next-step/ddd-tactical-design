@@ -1,4 +1,4 @@
-package kitchenpos.products.ui.dto;
+package kitchenpos.products.application.dto;
 
 import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.ProductDisplayedName;

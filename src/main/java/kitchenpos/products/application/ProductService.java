@@ -5,8 +5,8 @@ import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.ui.dto.ProductChangePriceRequest;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
+import kitchenpos.products.application.dto.ProductChangePriceRequest;
+import kitchenpos.products.application.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
