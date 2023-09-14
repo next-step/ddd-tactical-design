@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 import kitchenpos.menus.tobe.domain.Menu.DisplayStatus;
-import kitchenpos.menus.tobe.domain.Menu.MenuProductRequest;
 import kitchenpos.products.tobe.domain.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -114,21 +113,21 @@ class MenuTest {
     @DisplayName("구성품들의 가격을 초과한 메뉴를 생성할수 없다")
     @ParameterizedTest
     @MethodSource("test5MethodSource")
-    void test5(List<MenuProductRequest> menuProductRequests) {
+    void test5(List<MenuProduct> menuProducts) {
         assertThatThrownBy(
-            () -> new Menu("치킨", BigDecimal.valueOf(36_000), menuGroup, menuProductRequests, purgomalumClient)
+            () -> new Menu("치킨", BigDecimal.valueOf(36_000), menuGroup, menuProducts, purgomalumClient)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("메뉴의 가격이 상품들의 가격보다 높습니다");
     }
 
-    static Stream<List<MenuProductRequest>> test5MethodSource() {
+    static Stream<List<MenuProduct>> test5MethodSource() {
         return Stream.of(
-            of(new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)),
+            of(new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)),
             of(
-                new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(16_000), 1),
-                new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1)
+                new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(16_000), 1),
+                new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1)
             ),
-            of(new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 2))
+            of(new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(17_000), 2))
         );
     }
 
@@ -136,11 +135,11 @@ class MenuTest {
     @Test
     void test6() {
         //given
-        List<MenuProductRequest> menuProductRequests = of(
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        List<MenuProduct> menuProducts = of(
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
         );
-        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProducts,
             purgomalumClient);
 
         //when
@@ -156,11 +155,11 @@ class MenuTest {
     @Test
     void test7() {
         //given
-        List<MenuProductRequest> menuProductRequests = of(
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        List<MenuProduct> menuProducts = of(
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
         );
-        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProducts,
             purgomalumClient);
 
         //when
@@ -174,11 +173,11 @@ class MenuTest {
     @Test
     void test8() {
         //given
-        List<MenuProductRequest> menuProductRequests = of(
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
-            new MenuProductRequest(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
+        List<MenuProduct> menuProducts = of(
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(17_000), 1),
+            new MenuProduct(UUID.randomUUID(), BigDecimal.valueOf(18_000), 1)
         );
-        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProductRequests,
+        Menu menu = new Menu("menu", BigDecimal.valueOf(17_000 + 18_000), menuGroup, menuProducts,
             purgomalumClient);
 
         //when && then

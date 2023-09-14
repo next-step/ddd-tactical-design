@@ -19,7 +19,11 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
+    public MenuProducts(List<MenuProduct> menuProducts, Menu menu) {
+        for (MenuProduct menuProduct : menuProducts) {
+            menuProduct.mapMenu(menu);
+        }
+
         this.menuProducts = menuProducts;
     }
 

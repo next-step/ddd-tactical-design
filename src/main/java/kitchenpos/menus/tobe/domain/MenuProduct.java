@@ -45,18 +45,20 @@ public class MenuProduct {
     @Embedded
     private MenuProductQuantity quantity = new MenuProductQuantity();
 
-    public MenuProduct(Menu menu, UUID productId, BigDecimal productPrice, long quantity) {
-        assert isNotEmpty(menu);
+    public MenuProduct(UUID productId, BigDecimal productPrice, long quantity) {
         assert isNotEmpty(productId);
         assert isNotEmpty(productPrice);
 
-        this.menu = menu;
         this.productId = productId;
         this.quantity = new MenuProductQuantity(quantity);
         this.price = new ProductPrice(productPrice);
     }
 
     protected MenuProduct() {
+    }
+
+    public void mapMenu(Menu menu) {
+        this.menu = menu;
     }
 
     public void updatePrice(BigDecimal price) {
