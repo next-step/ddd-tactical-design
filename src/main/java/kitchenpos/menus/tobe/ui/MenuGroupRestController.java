@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.menus.tobe.application.MenuGroupRequest;
+import kitchenpos.menus.tobe.application.dto.MenuGroupRequest;
 import kitchenpos.menus.tobe.application.MenuGroupService;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import org.springframework.http.ResponseEntity;

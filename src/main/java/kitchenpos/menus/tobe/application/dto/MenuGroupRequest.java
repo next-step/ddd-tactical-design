@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menus.tobe.application.dto;
 
 import java.util.Objects;
 

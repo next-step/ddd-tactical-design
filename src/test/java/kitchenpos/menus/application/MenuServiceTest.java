@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.application.MenuPriceRequest;
-import kitchenpos.menus.tobe.application.MenuRequest;
+import kitchenpos.menus.tobe.application.dto.MenuPriceRequest;
+import kitchenpos.menus.tobe.application.dto.MenuRequest;
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
