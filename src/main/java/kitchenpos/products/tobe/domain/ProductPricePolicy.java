@@ -1,5 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-public interface PricePolicy {
+public interface ProductPricePolicy {
     void changePrice(Product product, ProductPrice price);
 }
