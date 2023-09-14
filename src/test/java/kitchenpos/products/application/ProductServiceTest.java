@@ -7,6 +7,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateReqeust;
+import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -48,7 +49,7 @@ class ProductServiceTest {
     @Test
     void create() {
         final CreateReqeust request = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(request);
+        final ProductDto actual = productService.create(request);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -80,7 +81,7 @@ class ProductServiceTest {
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ChangePriceRequest expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
+        final ProductDto actual = productService.changePrice(productId, expected);
         assertTrue(actual.getPrice().equalValue(expected.getPrice()));
     }
 

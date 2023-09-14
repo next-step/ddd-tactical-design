@@ -6,6 +6,7 @@ import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateReqeust;
+import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -35,21 +36,22 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final CreateReqeust request) {
+    public ProductDto create(final CreateReqeust request) {
         final Name name = new Name(request.getName(), purgomalum);
         final Price price = new Price(request.getPrice());
         final Product product = new Product(name, price);
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductDto.from(savedProduct);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ChangePriceRequest request) {
+    public ProductDto changePrice(final UUID productId, final ChangePriceRequest request) {
         final Price price = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
         product.changePrice(price);
         publisher.publishEvent(new ProductPriceChangeEvent(product.getId()));
-        return product;
+        return ProductDto.from(product);
     }
 
     @Transactional(readOnly = true)
