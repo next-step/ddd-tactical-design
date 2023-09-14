@@ -1,5 +1,5 @@
 package kitchenpos.profanity.domain;
 
-public interface PurgomalumClient {
+public interface PurgomalumChecker {
     boolean containsProfanity(String text);
 }
