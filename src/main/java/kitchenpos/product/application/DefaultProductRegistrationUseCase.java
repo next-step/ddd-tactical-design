@@ -1,8 +1,12 @@
 package kitchenpos.product.application;
 
+import static kitchenpos.product.support.constant.Name.PRICE;
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
+
 import kitchenpos.product.application.port.in.ProductRegistrationUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
 import kitchenpos.product.domain.Name;
+import kitchenpos.product.domain.ProductName;
 import kitchenpos.product.domain.ProductNameFactory;
 import kitchenpos.product.domain.ProductNew;
 import kitchenpos.product.domain.ProductPrice;
@@ -21,10 +25,15 @@ public class DefaultProductRegistrationUseCase implements ProductRegistrationUse
     }
 
     @Override
-    public void register(final Name productNameCandidate, final ProductPrice price) {
-        final ProductNew product
-            = ProductNew.newOf(productNameFactory.create(productNameCandidate), price);
+    public ProductDTO register(final Name productNameCandidate, final ProductPrice price) {
+        checkNotNull(productNameCandidate, "productNameCandidate");
+        checkNotNull(price, PRICE);
 
-        repository.save(product);
+        final ProductName productName = productNameFactory.create(productNameCandidate);
+
+        final ProductNew product
+            = repository.save(ProductNew.newOf(productName, price));
+
+        return new ProductDTO(product);
     }
 }

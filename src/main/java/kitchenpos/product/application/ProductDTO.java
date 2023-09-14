@@ -31,4 +31,8 @@ public final class ProductDTO {
             .add("name", name)
             .toString();
     }
+
+    public UUID getId() {
+        return id;
+    }
 }

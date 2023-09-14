@@ -11,7 +11,7 @@ public class MenuDisplayingRearranger {
         this.menuUseCase = menuUseCase;
     }
 
-    public void rearrange(final UUID productId) {
+    public void execute(final UUID productId) {
         menuUseCase.rearrangeDisplaying(productId);
     }
 }

@@ -1,8 +1,11 @@
 package kitchenpos.product.adapter.out;
 
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
+
 import java.util.UUID;
 import kitchenpos.menu.adapter.in.MenuDisplayingRearranger;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
+import kitchenpos.product.support.constant.Name;
 
 public class DefaultProductPriceChangeEventPublisher implements ProductPriceChangeEventPublisher {
 
@@ -14,6 +17,8 @@ public class DefaultProductPriceChangeEventPublisher implements ProductPriceChan
 
     @Override
     public void publish(final UUID id) {
-        rearranger.rearrange(id);
+        checkNotNull(id, Name.ID);
+
+        rearranger.execute(id);
     }
 }
