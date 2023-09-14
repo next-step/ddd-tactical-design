@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe.domain;
+package kitchenpos.menus.domain.tobe.domain;
 
 import static kitchenpos.products.domain.tobe.domain.Currency.*;
 
@@ -10,39 +10,41 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import kitchenpos.products.domain.tobe.domain.Currency;
+
 @Embeddable
-public class ProductPrice {
+public class MenuPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
     @Column(name = "currency", nullable = false)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    private ProductPrice(BigDecimal price) {
+    private MenuPrice(BigDecimal price) {
         validationOfPrice(price);
         this.price = price;
         this.currency = defaultCurrency();
     }
 
-    protected ProductPrice() {
+    protected MenuPrice() {
 
     }
 
-    public static ProductPrice of(BigDecimal price) {
-        return new ProductPrice(price);
+    public static MenuPrice of(BigDecimal price) {
+        return new MenuPrice(price);
     }
 
-    public static ProductPrice of(long price) {
-        return new ProductPrice(BigDecimal.valueOf(price));
+    public static MenuPrice of(long price) {
+        return new MenuPrice(BigDecimal.valueOf(price));
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof ProductPrice))
+        if (!(o instanceof MenuPrice))
             return false;
-        ProductPrice that = (ProductPrice)o;
+        MenuPrice that = (MenuPrice)o;
         return Objects.equals(price, that.price) && Objects.equals(currency, that.currency);
     }
 
@@ -60,27 +62,20 @@ public class ProductPrice {
         }
     }
 
-    public ProductPrice add(ProductPrice price) {
-        return new ProductPrice(this.price.add(price.price));
+    public MenuPrice add(MenuPrice price) {
+        return new MenuPrice(this.price.add(price.price));
     }
 
-    public ProductPrice multiply(long value) {
-        return new ProductPrice(this.price.multiply(BigDecimal.valueOf(value)));
+    public boolean isGreaterThan(BigDecimal comparePrice) {
+        return price.compareTo(comparePrice) > 0;
     }
 
-    public boolean isGreaterThan(ProductPrice comparePrice) {
-        return price.compareTo(comparePrice.price) > 0;
+    public MenuPrice changePrice(BigDecimal newPrice) {
+        return new MenuPrice(newPrice);
     }
 
-    public ProductPrice changePrice(BigDecimal newPrice) {
-        return new ProductPrice(newPrice);
+    public MenuPrice changePrice(Long newPrice) {
+        return new MenuPrice(BigDecimal.valueOf(newPrice));
     }
 
-    public ProductPrice changePrice(Long newPrice) {
-        return new ProductPrice(BigDecimal.valueOf(newPrice));
-    }
-
-    public BigDecimal getValue() {
-        return price;
-    }
 }

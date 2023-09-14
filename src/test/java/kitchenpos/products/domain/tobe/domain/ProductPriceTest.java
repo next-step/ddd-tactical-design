@@ -28,7 +28,7 @@ class ProductPriceTest {
     void changePrice() {
         var price = ProductPrice.of(30_000L);
         var newPrice = price.changePrice(30_001L);
-        assertThat(newPrice.isSamePrice(ProductPrice.of(30_001L))).isTrue();
+        assertThat(newPrice.equals(ProductPrice.of(30_001L))).isTrue();
     }
 
     @DisplayName("상품가격이 입력한 금액보다 크다")
@@ -59,7 +59,7 @@ class ProductPriceTest {
     void isSamePrice() {
         var price1 = ProductPrice.of(30_000L);
         var price2 = ProductPrice.of(30_000L);
-        assertThat(price1.isSamePrice(price2)).isTrue();
+        assertThat(price1.equals(price2)).isTrue();
     }
 
     @DisplayName("동일한 상품가격은 같은 객체로 간주한다.")

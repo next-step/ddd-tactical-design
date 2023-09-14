@@ -17,28 +17,40 @@ public class ToBeProduct {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private ProductPrice price;
 
-    public ToBeProduct() {
+    protected ToBeProduct() {
     }
 
     public ToBeProduct(String name, BigDecimal productPrice, boolean containsProfanity) {
-        validationOfName(name, containsProfanity);
+        validationOfProfanity(containsProfanity);
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.name = ProductName.of(name);
         this.price = ProductPrice.of(productPrice);
     }
 
-    private void validationOfName(String name, boolean containsProfanity) {
-        if (name == "" || Objects.isNull(name)) {
-            throw new IllegalArgumentException("상품 이름은 필수로 입력되야 합니다.");
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ToBeProduct product = (ToBeProduct)o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    private void validationOfProfanity(boolean containsProfanity) {
         if (containsProfanity) {
-            throw new IllegalArgumentException("상품 이름에 비속어가 포함되어 있습니다.");
+            throw new IllegalArgumentException("메뉴 이름에 비속어가 포함되어 있습니다.");
         }
     }
 
@@ -46,12 +58,15 @@ public class ToBeProduct {
         price = price.changePrice(productPrice);
     }
 
-    public boolean isSamePrice(BigDecimal productPrice) {
-        return price.isSamePrice(ProductPrice.of(productPrice));
-    }
-
     public boolean isGreaterThanPrice(BigDecimal productPrice) {
         return price.isGreaterThan(ProductPrice.of(productPrice));
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
+    }
 }

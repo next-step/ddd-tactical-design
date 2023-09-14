@@ -8,6 +8,17 @@ create table menu
     primary key (id)
 ) engine = InnoDB;
 
+create table tobe_menu
+(
+    id            binary(16)     not null,
+    displayed     bit            not null,
+    name          varchar(255)   not null,
+    price         decimal(19, 2) not null,
+    currency      varchar(255) not null,
+    menu_group_id binary(16)     not null,
+    primary key (id)
+) engine = InnoDB;
+
 create table menu_group
 (
     id   binary(16)   not null,
@@ -15,12 +26,31 @@ create table menu_group
     primary key (id)
 ) engine = InnoDB;
 
+create table tobe_menu_group
+(
+    id   binary(16)   not null,
+    name varchar(255) not null,
+    primary key (id)
+) engine = InnoDB;
+
+
 create table menu_product
 (
     seq        bigint     not null auto_increment,
     quantity   bigint     not null,
     product_id binary(16) not null,
     menu_id    binary(16) not null,
+    primary key (seq)
+) engine = InnoDB;
+
+create table tobe_menu_product
+(
+    seq        bigint     not null auto_increment,
+    quantity   bigint     not null,
+    product_id binary(16) not null,
+    menu_id    binary(16) not null,
+    price decimal(19, 2) not null,
+    currency varchar(255) not null,
     primary key (seq)
 ) engine = InnoDB;
 
