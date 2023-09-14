@@ -8,7 +8,7 @@ import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.menugroup.domain.MenuGroupRepository;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductRepository;
-import kitchenpos.profanity.domain.PurgomalumClient;
+import kitchenpos.profanity.domain.PurgomalumChecker;
 import kitchenpos.support.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +35,7 @@ class ProductServiceTest extends BaseServiceTest {
     private final MenuRepository menuRepository;
 
     @MockBean
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumChecker purgomalumChecker;
 
     public ProductServiceTest(final ProductService productService, final ProductRepository productRepository, final MenuGroupRepository menuGroupRepository, final MenuRepository menuRepository) {
         this.productService = productService;
@@ -52,7 +52,7 @@ class ProductServiceTest extends BaseServiceTest {
         @Test
         void test1() {
             final Product product = createProduct();
-            given(purgomalumClient.containsProfanity(product.getName())).willReturn(false);
+            given(purgomalumChecker.containsProfanity(product.getName())).willReturn(false);
 
             final Product createdProduct = productService.create(product);
 
@@ -70,7 +70,7 @@ class ProductServiceTest extends BaseServiceTest {
         @Test
         void test2() {
             final Product product = createProduct(null, BigDecimal.TEN);
-            given(purgomalumClient.containsProfanity(product.getName())).willReturn(false);
+            given(purgomalumChecker.containsProfanity(product.getName())).willReturn(false);
 
             assertThatIllegalArgumentException().isThrownBy(() -> productService.create(product));
         }
@@ -80,7 +80,7 @@ class ProductServiceTest extends BaseServiceTest {
         void test3() {
             final Product product = createProduct("비속어", BigDecimal.TEN);
 
-            when(purgomalumClient.containsProfanity(product.getName())).thenReturn(true);
+            when(purgomalumChecker.containsProfanity(product.getName())).thenReturn(true);
 
             assertThatIllegalArgumentException().isThrownBy(() -> productService.create(product));
         }
