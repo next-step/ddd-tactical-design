@@ -1,5 +1,7 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.infra;
 
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +13,7 @@ public interface JpaMenuRepository extends MenuRepository, JpaRepository<Menu, U
     @Query("select m " +
             " from Menu m " +
             " join m.menuProducts.values mp " +
-            "where mp.productId = :productId")
+            "where mp.id = :productId")
     @Override
     List<Menu> findAllByProductId(@Param("productId") UUID productId);
 }

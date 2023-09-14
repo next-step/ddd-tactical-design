@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Embeddable
 public class MenuProducts {
@@ -34,16 +32,15 @@ public class MenuProducts {
         }
     }
 
+    public BigDecimal totalPrice() {
+        return values.stream()
+                .map(MenuProduct::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     public List<MenuProduct> getMenuProducts() {
         return Collections.unmodifiableList(values);
     }
 
-    public List<UUID> getProductIds() {
-        List<UUID> uuids = values.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList());
-
-        return Collections.unmodifiableList(uuids);
-    }
 
 }

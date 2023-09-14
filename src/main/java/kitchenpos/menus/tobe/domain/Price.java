@@ -6,17 +6,17 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class MenuPrice {
+public class Price {
 
     private static final int COMPARE_ZERO = 0;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected MenuPrice() {
+    protected Price() {
     }
 
-    public MenuPrice(BigDecimal price) {
+    public Price(BigDecimal price) {
         validatePrice(price);
         this.price = price;
     }
@@ -35,12 +35,16 @@ public class MenuPrice {
         return this.price.compareTo(price) > COMPARE_ZERO;
     }
 
+    public boolean isOverMenuProductsTotalPrice(MenuProducts menuProducts) {
+        return price.compareTo(menuProducts.totalPrice()) > COMPARE_ZERO;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MenuPrice)) return false;
-        MenuPrice menuPrice = (MenuPrice) o;
-        return Objects.equals(price, menuPrice.price);
+        if (!(o instanceof Price)) return false;
+        Price price = (Price) o;
+        return Objects.equals(this.price, price.price);
     }
 
     @Override

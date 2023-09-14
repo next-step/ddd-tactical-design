@@ -16,18 +16,15 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuPricePolicy menuPricePolicy;
     private final MenuPurgomalumClient menuPurgomalumClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final MenuPricePolicy menuPricePolicy,
         final MenuPurgomalumClient menuPurgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.menuPricePolicy = menuPricePolicy;
         this.menuPurgomalumClient = menuPurgomalumClient;
     }
 
@@ -36,26 +33,28 @@ public class MenuService {
 
         List<MenuProduct> menuProducts = Objects.isNull(request.getMenuProductCreateRequests()) ? null : request.getMenuProductCreateRequests()
                 .stream()
-                .map(menuProductCreateRequests -> new MenuProduct(menuProductCreateRequests.getProductId(), menuProductCreateRequests.getQuantity()))
+                .map(menuProductCreateRequests -> new MenuProduct(menuProductCreateRequests.getProductId(),
+                        menuProductCreateRequests.getPrice(),
+                        menuProductCreateRequests.getQuantity()))
                 .collect(Collectors.toList());
 
         MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId()).orElseThrow(NoSuchElementException::new);
 
-        Menu menu = new Menu(request.getName(), menuPurgomalumClient, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts, menuPricePolicy);
+        Menu menu = new Menu(request.getName(), menuPurgomalumClient, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts);
         return menuRepository.save(menu);
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuChangePriceRequest request) {
         final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
-        menu.changePrice(request.getPrice(), menuPricePolicy);
+        menu.changePrice(request.getPrice());
         return menu;
     }
 
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
-        menu.display(menuPricePolicy);
+        menu.display();
         return menu;
     }
 

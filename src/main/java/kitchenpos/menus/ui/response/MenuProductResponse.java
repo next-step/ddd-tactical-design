@@ -1,7 +1,6 @@
 package kitchenpos.menus.ui.response;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.ui.response.ProductResponse;
 
 public class MenuProductResponse {
 
@@ -15,7 +14,7 @@ public class MenuProductResponse {
 
     public static MenuProductResponse of(MenuProduct menuProduct) {
         return new MenuProductResponse(
-                new ProductResponse(menuProduct.getProductId()),
+                new ProductResponse(menuProduct.getId()),
                 menuProduct.getQuantity()
         );
     }

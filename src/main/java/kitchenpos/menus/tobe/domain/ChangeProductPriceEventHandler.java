@@ -11,7 +11,6 @@ import java.util.List;
 public class ChangeProductPriceEventHandler {
 
     private MenuRepository menuRepository;
-    private ProductTotalPricePolicy productTotalPricePolicy;
 
     public ChangeProductPriceEventHandler(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
@@ -22,7 +21,7 @@ public class ChangeProductPriceEventHandler {
     public void handle(ChangeProductPriceEvent event) {
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
-            menu.overMenuProductsTotalPriceThenHide(productTotalPricePolicy);
+            menu.overMenuProductsTotalPriceThenHide();
         }
     }
 

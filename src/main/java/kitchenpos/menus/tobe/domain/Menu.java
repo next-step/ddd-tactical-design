@@ -17,7 +17,7 @@ public class Menu {
     private MenuName name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,7 +41,7 @@ public class Menu {
 
     public Menu(String name, MenuPurgomalumClient menuPurgomalumClient,
                 BigDecimal price, MenuGroup menuGroup, boolean displayed,
-                List<MenuProduct> menuProducts, MenuPricePolicy menuPricePolicy) {
+                List<MenuProduct> menuProducts) {
         this(UUID.randomUUID(),
                 name,
                 menuPurgomalumClient,
@@ -49,42 +49,40 @@ public class Menu {
                 menuGroup,
                 displayed,
                 menuProducts,
-                menuGroup.getId(),
-                menuPricePolicy);
+                menuGroup.getId());
     }
 
     private Menu(UUID id, String name, MenuPurgomalumClient menuPurgomalumClient,
                  BigDecimal price, MenuGroup menuGroup,
-                 boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId,
-                 MenuPricePolicy menuPricePolicy) {
+                 boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
 
         this.id = id;
         this.name = new MenuName(name, menuPurgomalumClient);
-        this.price = new MenuPrice(price);
+        this.price = new Price(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = new MenuProducts(menuProducts);
         this.menuGroupId = menuGroupId;
 
-        validate(menuPricePolicy);
+        validate();
     }
 
-    private void validate(MenuPricePolicy menuPricePolicy) {
-        if (isDisplayed() && menuPricePolicy.isNotPermit(price, this)) {
+    private void validate() {
+        if (isDisplayed() && isPriceOverMenuProductsTotalPrice()) {
             throw new IllegalArgumentException();
         }
     }
 
-    public void changePrice(BigDecimal price, MenuPricePolicy menuPricePolicy) {
-        MenuPrice menuPrice = new MenuPrice(price);
-        if (menuPricePolicy.isNotPermit(menuPrice, this)) {
+    public void changePrice(BigDecimal price) {
+        Price menuPrice = new Price(price);
+        if (isPriceOverMenuProductsTotalPrice(menuPrice)) {
             throw new IllegalArgumentException();
         }
         this.price = menuPrice;
     }
 
-    public void display(MenuPricePolicy menuPricePolicy) {
-        if (menuPricePolicy.isNotPermit(price, this)) {
+    public void display() {
+        if (isPriceOverMenuProductsTotalPrice()) {
             throw new IllegalStateException();
         }
         this.displayed = true;
@@ -94,10 +92,18 @@ public class Menu {
         this.displayed = false;
     }
 
-    public void overMenuProductsTotalPriceThenHide(MenuPricePolicy menuPricePolicy) {
-        if (menuPricePolicy.isNotPermit(price, this)) {
+    public void overMenuProductsTotalPriceThenHide() {
+        if (isPriceOverMenuProductsTotalPrice()) {
             hide();
         }
+    }
+
+    private boolean isPriceOverMenuProductsTotalPrice() {
+        return isPriceOverMenuProductsTotalPrice(price);
+    }
+
+    private boolean isPriceOverMenuProductsTotalPrice(Price price) {
+        return price.isOverMenuProductsTotalPrice(menuProducts);
     }
 
     public UUID getId() {

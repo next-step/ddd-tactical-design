@@ -1,19 +1,19 @@
 package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
 @Entity
 public class MenuProduct {
 
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private Long seq;
+    private UUID id;
 
-    @Column(name = "product_id", nullable = false)
-    private UUID productId;
+    @Embedded
+    private Price price;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -21,14 +21,9 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, long quantity) {
-        this(null, productId, quantity);
-    }
-
-    public MenuProduct(Long seq, UUID productId, long quantity) {
-        validateQuantity(quantity);
-        this.seq = seq;
-        this.productId = productId;
+    public MenuProduct(UUID id, BigDecimal price, long quantity) {
+        this.id = id;
+        this.price = new Price(price);
         this.quantity = quantity;
     }
 
@@ -38,8 +33,12 @@ public class MenuProduct {
         }
     }
 
-    public UUID getProductId() {
-        return productId;
+    public UUID getId() {
+        return id;
+    }
+
+    public BigDecimal getPrice() {
+        return price.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 
     public long getQuantity() {
