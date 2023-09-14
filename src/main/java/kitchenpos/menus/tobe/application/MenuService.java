@@ -52,7 +52,7 @@ public class MenuService {
             request.getPrice(),
             menuGroup.getId(),
             request.isDisplayed(),
-            Menu.createMenuProducts(products, request.getMenuProducts()),
+            MenuProducts.createMenuProducts(products, request.getMenuProducts()),
             purgomalumClient::containsProfanity
         );
 

@@ -63,7 +63,7 @@ class MenuServiceTest {
             () -> assertThat(actual.getBigDecimalPrice()).isEqualTo(expected.getPrice()),
             () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts()).hasSize(1)
+            () -> assertThat(actual.getMenuProductList()).hasSize(1)
         );
     }
 

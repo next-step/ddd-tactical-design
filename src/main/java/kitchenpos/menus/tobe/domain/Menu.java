@@ -1,14 +1,10 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.Product;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Table(name = "menu")
 @Entity
@@ -28,14 +24,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -48,7 +38,7 @@ public class Menu {
         MenuName menuName,
         MenuPrice price,
         boolean displayed,
-        List<MenuProduct> menuProducts,
+        MenuProducts menuProducts,
         UUID menuGroupId
     ) {
         this.id = id;
@@ -65,7 +55,7 @@ public class Menu {
         final BigDecimal price,
         final UUID menuGroupId,
         final boolean displayed,
-        final List<MenuProduct> menuProducts,
+        final MenuProducts menuProducts,
         final Predicate<String> predicate
     ) {
         return new Menu(
@@ -102,8 +92,12 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
         return menuProducts;
+    }
+
+    public List<MenuProduct> getMenuProductList() {
+        return menuProducts.toMenuProductList();
     }
 
     public UUID getMenuGroupId() {
@@ -112,7 +106,7 @@ public class Menu {
 
     public BigDecimal getSumOfMenuProductPrice() {
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : this.getMenuProducts()) {
+        for (final MenuProduct menuProduct : menuProducts.toMenuProductList()) {
             sum = sum.add(
                 menuProduct.getProduct()
                     .multiplyPrice(BigDecimal.valueOf(menuProduct.getQuantity()))
@@ -142,33 +136,6 @@ public class Menu {
             throw new IllegalArgumentException();
         }
         this.menuPrice = new MenuPrice(price);
-    }
-
-    public static List<MenuProduct> createMenuProducts(final List<Product> products, final List<MenuProduct> menuProductRequests) {
-        validateSize(products, menuProductRequests);
-        return getFilteredMenuProducts(products, menuProductRequests);
-    }
-
-    private static List<MenuProduct> getFilteredMenuProducts(final List<Product> products, final List<MenuProduct> menuProductRequests) {
-        return menuProductRequests.stream()
-            .map(menuProductRequest -> {
-                final long quantity = menuProductRequest.getQuantity();
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-                final Product product = products.stream()
-                    .filter(p -> p.getId().equals(menuProductRequest.getProductId()))
-                    .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
-                return new MenuProduct(product, quantity);
-            })
-            .collect(Collectors.toList());
-    }
-
-    private static void validateSize(final List<Product> products, final List<MenuProduct> menuProducts) {
-        if (products.size() != menuProducts.size()) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public BigDecimal multiplyPrice(BigDecimal multiplicand) {

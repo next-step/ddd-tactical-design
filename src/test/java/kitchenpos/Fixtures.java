@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
@@ -31,7 +32,7 @@ public class Fixtures {
             BigDecimal.valueOf(price),
             UUID.randomUUID(),
             displayed,
-            Arrays.asList(menuProducts),
+            new MenuProducts(Arrays.asList(menuProducts)),
             (name) -> false
         );
     }

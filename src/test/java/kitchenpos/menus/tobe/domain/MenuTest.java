@@ -97,7 +97,9 @@ class MenuTest {
             BigDecimal.valueOf(price),
             UUID.randomUUID(),
             displayed,
-            List.of(new MenuProduct(1L, product(), 1L, UUID.randomUUID())),
+            new MenuProducts(
+                List.of(new MenuProduct(1L, product(), 1L, UUID.randomUUID()))
+            ),
             purgomalumClient::containsProfanity
         );
     }
