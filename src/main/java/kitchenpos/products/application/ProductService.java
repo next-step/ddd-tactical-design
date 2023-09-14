@@ -1,10 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.tobe.domain.ProductPricePolicy;
-import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.application.dto.ProductChangePriceRequest;
 import kitchenpos.products.application.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
@@ -17,17 +13,14 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductPricePolicy productPricePolicy;
     private final DisplayedNamePolicy displayedNamePolicy;
+    private final ProductEventPublisher productEventPublisher;
 
-    public ProductService(
-            ProductRepository productRepository,
-            ProductPricePolicy productPricePolicy,
-            DisplayedNamePolicy displayedNamePolicy
-    ) {
+    public ProductService(ProductRepository productRepository, DisplayedNamePolicy displayedNamePolicy, ProductEventPublisher productEventPublisher) {
+
         this.productRepository = productRepository;
-        this.productPricePolicy = productPricePolicy;
         this.displayedNamePolicy = displayedNamePolicy;
+        this.productEventPublisher = productEventPublisher;
     }
 
     @Transactional
@@ -42,7 +35,8 @@ public class ProductService {
         final ProductPrice changePrice = ProductPrice.from(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        productPricePolicy.changePrice(product, changePrice);
+        product.changePrice(changePrice);
+        productEventPublisher.changePrice(new ProductPriceChangeEvent(product.getId()));
         return product;
     }
 
