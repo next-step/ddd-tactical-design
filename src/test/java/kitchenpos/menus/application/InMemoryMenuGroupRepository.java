@@ -1,12 +1,13 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 
 import java.util.*;
 
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {
-    private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();
+    private final Map<MenuGroupId, MenuGroup> menuGroups = new HashMap<>();
 
     @Override
     public MenuGroup save(final MenuGroup menuGroup) {
@@ -15,7 +16,7 @@ public class InMemoryMenuGroupRepository implements MenuGroupRepository {
     }
 
     @Override
-    public Optional<MenuGroup> findById(final UUID id) {
+    public Optional<MenuGroup> findById(final MenuGroupId id) {
         return Optional.ofNullable(menuGroups.get(id));
     }
 

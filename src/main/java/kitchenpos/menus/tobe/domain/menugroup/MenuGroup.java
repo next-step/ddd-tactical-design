@@ -7,9 +7,9 @@ import java.util.UUID;
 @Table(name = "menu_group")
 @Entity
 public class MenuGroup {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+
+    @EmbeddedId
+    private MenuGroupId id;
 
     @Column(name = "name", nullable = false)
     @Embedded
@@ -19,11 +19,11 @@ public class MenuGroup {
     }
 
     public MenuGroup(String name) {
-        this.id = UUID.randomUUID();
+        this.id = new MenuGroupId();
         this.name = new MenuGroupDisplayedName(name);
     }
 
-    public UUID getId() {
+    public MenuGroupId getId() {
         return id;
     }
 

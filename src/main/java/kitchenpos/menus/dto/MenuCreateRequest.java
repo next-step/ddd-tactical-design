@@ -1,5 +1,7 @@
 package kitchenpos.menus.dto;
 
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -7,7 +9,7 @@ import java.util.UUID;
 public class MenuCreateRequest {
 
     private BigDecimal price;
-    private UUID menuGroupId;
+    private MenuGroupId menuGroupId;
     private List<MenuProductRequest> menuProducts;
     private String name;
     private boolean displayed;
@@ -15,7 +17,7 @@ public class MenuCreateRequest {
     public MenuCreateRequest() {
     }
 
-    public MenuCreateRequest(BigDecimal price, UUID menuGroupId, List<MenuProductRequest> menuProducts, String name, boolean displayed) {
+    public MenuCreateRequest(BigDecimal price, MenuGroupId menuGroupId, List<MenuProductRequest> menuProducts, String name, boolean displayed) {
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
@@ -27,7 +29,7 @@ public class MenuCreateRequest {
         return price;
     }
 
-    public UUID getMenuGroupId() {
+    public MenuGroupId getMenuGroupId() {
         return menuGroupId;
     }
 
@@ -47,7 +49,7 @@ public class MenuCreateRequest {
         this.price = price;
     }
 
-    public void setMenuGroupId(UUID menuGroupId) {
+    public void setMenuGroupId(MenuGroupId menuGroupId) {
         this.menuGroupId = menuGroupId;
     }
 

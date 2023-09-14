@@ -64,7 +64,7 @@ public class Menu {
         if (displayed && price.isGreaterThan(menuProducts.calculateSum())) {
             throw new MenuException(MenuErrorCode.MENU_PRICE_IS_GREATER_THAN_PRODUCTS);
         }
-        this.id = new MenuId(new UUID(0L, 0L));
+        this.id = new MenuId();
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;

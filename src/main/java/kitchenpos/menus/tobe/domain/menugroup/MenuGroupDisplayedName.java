@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain.menugroup;
 
+import kitchenpos.common.domain.ValueObject;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 
@@ -7,7 +8,7 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuGroupDisplayedName {
+public class MenuGroupDisplayedName extends ValueObject {
     private String name;
 
     protected MenuGroupDisplayedName() {
@@ -28,17 +29,5 @@ public class MenuGroupDisplayedName {
     public String getValue() {
         return name;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MenuGroupDisplayedName that = (MenuGroupDisplayedName) o;
-        return Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
+    
 }

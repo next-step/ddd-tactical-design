@@ -14,6 +14,7 @@ import kitchenpos.menus.infra.DefaultMenuProductMappingService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
@@ -44,7 +45,7 @@ class MenuServiceTest {
     private MenuService menuService;
     @Spy
     private ApplicationEventPublisher publisher;
-    private UUID menuGroupId;
+    private MenuGroupId menuGroupId;
     private Product product;
 
     @BeforeEach
@@ -149,7 +150,7 @@ class MenuServiceTest {
         @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
         @NullSource
         @ParameterizedTest
-        void create5(final UUID menuGroupId) {
+        void create5(final MenuGroupId menuGroupId) {
             final MenuCreateRequest expected = createMenuRequest(
                     "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProduct(product.getId(), 2L)
             );
@@ -232,14 +233,14 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuCreateRequest createMenuRequest(String name, long price, UUID menuGroupId, boolean displayed, List<MenuProductRequest> menuProducts) {
+    private MenuCreateRequest createMenuRequest(String name, long price, MenuGroupId menuGroupId, boolean displayed, List<MenuProductRequest> menuProducts) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
     private MenuCreateRequest createMenuRequest(
             final String name,
             final long price,
-            final UUID menuGroupId,
+            final MenuGroupId menuGroupId,
             final boolean displayed,
             final MenuProductRequest... menuProducts
     ) {
@@ -249,7 +250,7 @@ class MenuServiceTest {
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final UUID menuGroupId,
+            final MenuGroupId menuGroupId,
             final boolean displayed,
             final MenuProductRequest... menuProducts
     ) {
@@ -259,7 +260,7 @@ class MenuServiceTest {
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final UUID menuGroupId,
+            final MenuGroupId menuGroupId,
             final boolean displayed,
             final MenuProductRequest menuProduct
     ) {
@@ -269,7 +270,7 @@ class MenuServiceTest {
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final UUID menuGroupId,
+            final MenuGroupId menuGroupId,
             final boolean displayed,
             final List<MenuProductRequest> menuProducts
     ) {

@@ -1,17 +1,18 @@
 package kitchenpos.menus.dto;
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
 
 import java.util.UUID;
 
 public class MenuGroupResponse {
-    private UUID id;
+    private MenuGroupId id;
     private String name;
 
     public MenuGroupResponse() {
     }
 
-    public MenuGroupResponse(UUID id, String name) {
+    public MenuGroupResponse(MenuGroupId id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -20,11 +21,11 @@ public class MenuGroupResponse {
         return new MenuGroupResponse(menuGroup.getId(), menuGroup.getNameValue());
     }
 
-    public UUID getId() {
+    public MenuGroupId getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(MenuGroupId id) {
         this.id = id;
     }
 

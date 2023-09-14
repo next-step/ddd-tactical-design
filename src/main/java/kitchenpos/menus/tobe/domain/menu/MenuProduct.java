@@ -12,10 +12,9 @@ import java.util.UUID;
 @Table(name = "menu_product")
 @Entity
 public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
+
+    @EmbeddedId
+    private MenuProductId id;
 
     @Column(name = "product_id", nullable = false)
     private UUID productId;
@@ -68,8 +67,8 @@ public class MenuProduct {
         this.productPrice = price;
     }
 
-    public Long getSeq() {
-        return seq;
+    public MenuProductId getId() {
+        return id;
     }
 
     public UUID getProductId() {
@@ -87,14 +86,14 @@ public class MenuProduct {
 
         MenuProduct that = (MenuProduct) o;
 
-        if (!Objects.equals(seq, that.seq)) return false;
+        if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(productId, that.productId)) return false;
         return Objects.equals(menu, that.menu);
     }
 
     @Override
     public int hashCode() {
-        int result = seq != null ? seq.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (productId != null ? productId.hashCode() : 0);
         result = 31 * result + (menu != null ? menu.hashCode() : 0);
         return result;
