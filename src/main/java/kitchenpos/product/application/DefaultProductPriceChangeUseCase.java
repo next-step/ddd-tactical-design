@@ -1,5 +1,9 @@
 package kitchenpos.product.application;
 
+import static kitchenpos.product.support.constant.Name.ID;
+import static kitchenpos.product.support.constant.Name.PRICE;
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
+
 import java.util.UUID;
 import kitchenpos.product.application.exception.NotExistProductException;
 import kitchenpos.product.application.port.in.ProductPriceChangeUseCase;
@@ -24,6 +28,9 @@ public class DefaultProductPriceChangeUseCase implements ProductPriceChangeUseCa
     @Transactional
     @Override
     public void change(final UUID id, final ProductPrice price) {
+        checkNotNull(id, ID);
+        checkNotNull(price, PRICE);
+
         final ProductNew product = repository.findById(id)
             .orElseThrow(() -> new NotExistProductException(id));
 

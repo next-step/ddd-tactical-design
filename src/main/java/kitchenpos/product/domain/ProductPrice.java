@@ -19,7 +19,7 @@ public class ProductPrice {
     }
 
     public static ProductPrice of(final long value) {
-        checkArgument(value >= 0, "price must be bigger than 0. value : %s", value);
+        checkArgument(value >= 0, "price must be greater than and equal to 0. value : %s", value);
 
         return new ProductPrice(value);
     }

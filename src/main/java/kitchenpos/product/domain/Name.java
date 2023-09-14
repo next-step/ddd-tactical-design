@@ -10,7 +10,7 @@ public final class Name {
     private final String value;
 
     public Name(final String value) {
-        checkArgument(Strings.isNotEmpty(value), "name must be not empty. value: %s", value);
+        checkArgument(Strings.isNotEmpty(value), "name must not be empty. value: %s", value);
 
         this.value = value;
     }

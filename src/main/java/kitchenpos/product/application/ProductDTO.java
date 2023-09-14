@@ -1,6 +1,7 @@
 package kitchenpos.product.application;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static kitchenpos.product.support.constant.Name.ENTITY;
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import com.google.common.base.MoreObjects;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public final class ProductDTO {
     private final ProductName name;
 
     public ProductDTO(final ProductNew entity) {
-        checkArgument(entity != null, "entity must not be null. entity: %s", entity);
+        checkNotNull(entity, ENTITY);
 
         id = entity.getId();
         price = entity.getPrice();

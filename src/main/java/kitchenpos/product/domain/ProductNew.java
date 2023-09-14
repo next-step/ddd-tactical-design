@@ -1,5 +1,10 @@
 package kitchenpos.product.domain;
 
+
+import static kitchenpos.product.support.constant.Name.NAME;
+import static kitchenpos.product.support.constant.Name.PRICE;
+import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
+
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.AttributeOverride;
@@ -37,13 +42,18 @@ public class ProductNew {
     }
 
     public static ProductNew newOf(final ProductName name, final ProductPrice price) {
+        checkNotNull(name, NAME);
+        checkNotNull(price, PRICE);
+
         return new ProductNew(UUID.randomUUID(), name, price);
     }
 
     public void changePrice(final ProductPrice price) {
+        checkNotNull(price, PRICE);
+
         this.price = price;
     }
-    
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
