@@ -20,7 +20,6 @@ public class PricePolicyImpl implements PricePolicy {
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
             menu.changeMenuProductPrice(product);
-            menuRepository.save(menu);
         }
         menuRepository.saveAll(menus);
     }

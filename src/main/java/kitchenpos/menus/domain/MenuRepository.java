@@ -15,6 +15,6 @@ public interface MenuRepository {
 
     List<Menu> findAllByProductId(UUID productId);
 
-    void saveAll(List<Menu> menus);
+    <S extends Menu> List<S> saveAll(Iterable<S> menus);
 }
 
