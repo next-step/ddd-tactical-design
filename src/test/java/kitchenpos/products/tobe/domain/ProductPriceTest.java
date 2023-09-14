@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class LegacyProductPriceTest {
+class ProductPriceTest {
     @DisplayName("상품 가격 생성 성공")
     @ParameterizedTest
     @ValueSource(longs = {0, 10000})
