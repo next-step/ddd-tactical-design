@@ -1,6 +1,9 @@
 package kitchenpos.product.tobe.domain.port.inp;
 
-import kitchenpos.product.tobe.domain.*;
+import kitchenpos.product.tobe.domain.IllegalNewProductNameException;
+import kitchenpos.product.tobe.domain.Name;
+import kitchenpos.product.tobe.domain.NewProduct;
+import kitchenpos.product.tobe.domain.Price;
 import kitchenpos.product.tobe.domain.port.outp.NewProductRepository;
 import kitchenpos.profanity.domain.PurgomalumChecker;
 import kitchenpos.support.BaseServiceTest;
@@ -10,8 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 
-import static kitchenpos.fixture.ProductFixture.createProduct;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;

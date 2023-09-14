@@ -3,8 +3,6 @@ package kitchenpos.product.tobe.domain.port.inp;
 import kitchenpos.product.tobe.domain.Name;
 import kitchenpos.product.tobe.domain.Price;
 
-import java.math.BigDecimal;
-
 public class NewProductCreatorCommand {
     private final Name name;
     private final Price price;

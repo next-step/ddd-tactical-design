@@ -2,7 +2,6 @@ package kitchenpos.product.tobe.domain.port.inp;
 
 import kitchenpos.product.tobe.domain.Price;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public class NewProductPriceChangerCommand {

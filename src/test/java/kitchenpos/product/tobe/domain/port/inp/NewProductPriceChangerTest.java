@@ -1,7 +1,6 @@
 package kitchenpos.product.tobe.domain.port.inp;
 
 import kitchenpos.fixture.MenuProductFixture;
-import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
@@ -9,15 +8,12 @@ import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.menugroup.domain.MenuGroupRepository;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductRepository;
-import kitchenpos.product.service.ProductService;
 import kitchenpos.product.tobe.domain.NewProduct;
 import kitchenpos.product.tobe.domain.Price;
 import kitchenpos.product.tobe.domain.port.outp.NewProductRepository;
-import kitchenpos.profanity.domain.PurgomalumChecker;
 import kitchenpos.support.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.util.List;
