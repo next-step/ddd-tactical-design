@@ -14,5 +14,7 @@ public interface MenuRepository {
     List<Menu> findAllByIdIn(List<UUID> ids);
 
     List<Menu> findAllByProductId(UUID productId);
+
+    void saveAll(List<Menu> menus);
 }
 

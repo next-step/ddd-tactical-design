@@ -1,23 +1,27 @@
 package kitchenpos.menus.domain;
 
 import kitchenpos.common.DomainService;
-import kitchenpos.products.tobe.domain.MenuPricePolicy;
+import kitchenpos.products.tobe.domain.PricePolicy;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.util.List;
 
 @DomainService
-public class MenuPricePolicyImpl implements MenuPricePolicy {
+public class PricePolicyImpl implements PricePolicy {
     private final MenuRepository menuRepository;
 
-    public MenuPricePolicyImpl(MenuRepository menuRepository) {
+    public PricePolicyImpl(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
-    public void changeMenuProductPrice(Product product) {
+    public void changePrice(Product product, ProductPrice price) {
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
             menu.changeMenuProductPrice(product);
+            menuRepository.save(menu);
         }
+        menuRepository.saveAll(menus);
     }
 }

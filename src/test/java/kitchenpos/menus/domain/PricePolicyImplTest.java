@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MenuPricePolicyImplTest {
+class PricePolicyImplTest {
     private MenuRepository menuRepository;
     private ProductRepository productRepository;
 
@@ -33,8 +33,8 @@ class MenuPricePolicyImplTest {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(15_000L, true, menuProduct(product, 1L)));
         product.changePrice(ProductPrice.from(BigDecimal.valueOf(changePrice)));
-        final MenuPricePolicyImpl menuPricePolicy = new MenuPricePolicyImpl(menuRepository);
-        menuPricePolicy.changeMenuProductPrice(product);
+        final PricePolicyImpl menuPricePolicy = new PricePolicyImpl(menuRepository);
+        menuPricePolicy.changePrice(product, price);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isTrue();
     }
 
@@ -44,8 +44,8 @@ class MenuPricePolicyImplTest {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(15_000L, true, menuProduct(product, 1L)));
         product.changePrice(ProductPrice.from(BigDecimal.valueOf(14_999L)));
-        final MenuPricePolicyImpl menuPricePolicy = new MenuPricePolicyImpl(menuRepository);
-        menuPricePolicy.changeMenuProductPrice(product);
+        final PricePolicyImpl menuPricePolicy = new PricePolicyImpl(menuRepository);
+        menuPricePolicy.changePrice(product, price);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 }
