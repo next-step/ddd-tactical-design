@@ -52,6 +52,9 @@ public class Menu {
         this.status = DisplayStatus.DISPLAY;
     }
 
+    protected Menu() {
+    }
+
     public void changePrice(BigDecimal price) {
         this.price = new MenuPrice(price);
         if (menuPriceIsMoreThanProductsPrice(this.price.getPrice(), menuProducts.getTotalPrice())) {
@@ -67,9 +70,6 @@ public class Menu {
 
     private boolean menuPriceIsMoreThanProductsPrice(BigDecimal menuPrice, long productsTotalPrice) {
         return menuPrice.longValue() > productsTotalPrice;
-    }
-
-    protected Menu() {
     }
 
     public void display() {
