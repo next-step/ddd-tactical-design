@@ -1,11 +1,11 @@
 package kitchenpos.menus.mapper;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.dto.MenuDetailResponse;
 import kitchenpos.menus.dto.MenuGroupDetailResponse;
 import kitchenpos.menus.dto.MenuProductElement;
+import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 
 import java.util.stream.Collectors;
 
@@ -26,7 +26,7 @@ public final class MenuMapper {
             return null;
         }
 
-        return new MenuProductElement(menuProduct.getProductId(), menuProduct.getQuantity());
+        return new MenuProductElement(menuProduct.getProduct().getId(), menuProduct.getQuantity());
     }
 
     public static MenuDetailResponse toMenuDetailResponse(Menu menu) {

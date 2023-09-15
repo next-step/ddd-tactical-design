@@ -1,10 +1,9 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.event.ProductPriceChangedEvent;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuDomainService;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuDomainService;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
@@ -14,6 +13,7 @@ import kitchenpos.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductDomainService;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.event.ProductPriceChangedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

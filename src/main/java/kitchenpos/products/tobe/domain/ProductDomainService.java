@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.common.event.ProductPriceChangedEvent;
+import kitchenpos.support.event.ProductPriceChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class ProductDomainService {
     }
 
     public boolean changePrice(Product product, BigDecimal price) {
-        boolean isChanged = product.changePrice(ProductPrice.update(price));
+        boolean isChanged = product.changePrice(ProductPrice.create(price));
         if (isChanged) {
             applicationEventPublisher.publishEvent(new ProductPriceChangedEvent(
                     product.getId(),

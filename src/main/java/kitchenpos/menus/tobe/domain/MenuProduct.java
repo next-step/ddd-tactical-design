@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
 
 
 import kitchenpos.products.tobe.domain.Product;
@@ -22,44 +22,36 @@ public class MenuProduct {
     )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private MenuProductQuantity quantity;
 
     @Transient
     private UUID productId;
 
-    public MenuProduct() {
+    protected MenuProduct() {
+    }
+
+    public static MenuProduct create(Product product, MenuProductQuantity quantity) {
+        MenuProduct menuProduct = new MenuProduct();
+        menuProduct.product = product;
+        menuProduct.quantity = quantity;
+        menuProduct.productId = product.getId();
+        return menuProduct;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return quantity.getValue();
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

@@ -24,15 +24,6 @@ public final class ProductPrice {
         return productPrice;
     }
 
-    public static ProductPrice update(BigDecimal changedValue) {
-        validateProductPriceIsNull(changedValue);
-        validateProductPriceIsNegative(changedValue);
-
-        ProductPrice productPrice = new ProductPrice();
-        productPrice.value = changedValue;
-        return productPrice;
-    }
-
     private static void validateProductPriceIsNegative(BigDecimal value) {
         if (isNegative(value)) {
             throw new IllegalArgumentException("상품 가격은 음수일 수 없습니다.");

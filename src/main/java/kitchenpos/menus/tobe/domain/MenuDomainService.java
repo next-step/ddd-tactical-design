@@ -1,6 +1,6 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.event.ProductPriceChangedEvent;
+import kitchenpos.support.event.ProductPriceChangedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -36,7 +36,7 @@ public class MenuDomainService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             if (isMenuPriceGreaterThanSumOfMenuProducts(menu, totalMenuProductPrice)) {
-                menu.setDisplayed(false);
+                menu.hide();
             }
         });
     }
