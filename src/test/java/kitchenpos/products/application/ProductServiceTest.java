@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,15 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
     private ProductService productService;
+    private PurgomalumClient purgomalumClient;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        applicationEventPublisher = new FakeApplicationEventPublisher(productRepository, menuRepository);
+        productService = new ProductService(productRepository, purgomalumClient, applicationEventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
