@@ -109,6 +109,24 @@ public class MenuService {
     }
 
     @Transactional
+    public void changeDisplayed(final UUID productId) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        for (final Menu menu : menus) {
+            BigDecimal sum = BigDecimal.ZERO;
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                sum = sum.add(
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                );
+            }
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
+        }
+    }
+
+    @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
