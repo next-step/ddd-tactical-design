@@ -124,6 +124,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.of(new ProductName(name, purgomalumClient), new ProductPrice(BigDecimal.valueOf(price)));
+        return Product.of(new ProductName(name,purgomalumClient), new ProductPrice(BigDecimal.valueOf(price)));
     }
 }
