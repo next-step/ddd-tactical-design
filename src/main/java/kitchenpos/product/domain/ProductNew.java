@@ -41,7 +41,7 @@ public class ProductNew {
         this.price = price;
     }
 
-    public static ProductNew newOf(final ProductName name, final ProductPrice price) {
+    public static ProductNew create(final ProductName name, final ProductPrice price) {
         checkNotNull(name, NAME);
         checkNotNull(price, PRICE);
 

@@ -17,7 +17,7 @@ class ProductPriceTest {
     void of_가격은_음수일_수_없다(final long value) {
 
         // when & then
-        assertThatThrownBy(() -> ProductPrice.of(value))
+        assertThatThrownBy(() -> ProductPrice.create(value))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -27,10 +27,10 @@ class ProductPriceTest {
     void of_productPrice를_생성하여_반환한다(final long value) {
 
         // when
-        final ProductPrice actual = ProductPrice.of(value);
+        final ProductPrice actual = ProductPrice.create(value);
 
         // then
-        final ProductPrice expected = ProductPrice.of(value);
+        final ProductPrice expected = ProductPrice.create(value);
         assertThat(actual).isEqualTo(expected);
     }
 }

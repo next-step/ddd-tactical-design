@@ -22,6 +22,6 @@ public class DefaultProductNameFactory implements ProductNameFactory {
             throw new ContainsProfanityException(nameCandidate);
         }
 
-        return ProductName.of(nameCandidate);
+        return ProductName.create(nameCandidate);
     }
 }

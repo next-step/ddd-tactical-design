@@ -18,7 +18,7 @@ public class ProductPrice {
         this.value = value;
     }
 
-    public static ProductPrice of(final long value) {
+    public static ProductPrice create(final long value) {
         checkArgument(value >= 0, "price must be greater than and equal to 0. value : %s", value);
 
         return new ProductPrice(value);

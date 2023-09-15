@@ -3,7 +3,7 @@ package kitchenpos.product.domain;
 public final class ProductNameAccessor {
 
     public static ProductName create(final Name name) {
-        return ProductName.of(name);
+        return ProductName.create(name);
     }
 
     private ProductNameAccessor() {

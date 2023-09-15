@@ -32,7 +32,7 @@ public class DefaultProductRegistrationUseCase implements ProductRegistrationUse
         final ProductName productName = productNameFactory.create(productNameCandidate);
 
         final ProductNew product
-            = repository.save(ProductNew.newOf(productName, price));
+            = repository.save(ProductNew.create(productName, price));
 
         return new ProductDTO(product);
     }

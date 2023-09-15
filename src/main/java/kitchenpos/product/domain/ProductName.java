@@ -17,7 +17,7 @@ public class ProductName {
         this.value = name.getValue();
     }
 
-    static ProductName of(final Name name) {
+    static ProductName create(final Name name) {
         checkArgument(name != null, "name must be not null. value: %s", name);
 
         return new ProductName(name);

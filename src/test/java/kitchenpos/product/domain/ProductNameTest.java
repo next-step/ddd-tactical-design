@@ -18,7 +18,7 @@ class ProductNameTest {
     void of_name이_null이면_예외를_반환한다(final Name value) {
 
         // when & then
-        assertThatThrownBy(() -> ProductName.of(value))
+        assertThatThrownBy(() -> ProductName.create(value))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -31,7 +31,7 @@ class ProductNameTest {
         final Name name = new Name(value);
 
         // when
-        final ProductName actual = ProductName.of(name);
+        final ProductName actual = ProductName.create(name);
 
         // then
         assertThat(actual)

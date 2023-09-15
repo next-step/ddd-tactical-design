@@ -95,11 +95,11 @@ class DefaultProductPriceChangeUseCaseTest {
         final ProductNew product = repository.save(Fixtures.create(5_000L));
 
         // when
-        useCase.change(product.getId(), ProductPrice.of(10_000L));
+        useCase.change(product.getId(), ProductPrice.create(10_000L));
 
         // then
         assertThat(product.getPrice())
-            .isEqualTo(ProductPrice.of(10_000L));
+            .isEqualTo(ProductPrice.create(10_000L));
     }
 
     @Test
@@ -108,7 +108,7 @@ class DefaultProductPriceChangeUseCaseTest {
         final ProductNew product = repository.save(Fixtures.create(5_000L));
 
         // when
-        useCase.change(product.getId(), ProductPrice.of(10_000L));
+        useCase.change(product.getId(), ProductPrice.create(10_000L));
         // then
         // verify
         verify(mockEventPublisher)
