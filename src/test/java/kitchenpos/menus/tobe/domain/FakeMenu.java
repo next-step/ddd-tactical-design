@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.List;

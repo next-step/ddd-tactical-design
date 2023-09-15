@@ -6,9 +6,9 @@ import kitchenpos.menus.dto.MenuDetailResponse;
 import kitchenpos.menus.dto.MenuProductElement;
 import kitchenpos.menus.mapper.MenuMapper;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

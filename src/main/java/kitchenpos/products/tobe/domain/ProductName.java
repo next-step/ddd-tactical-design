@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.infra.PurgomalumClient;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
