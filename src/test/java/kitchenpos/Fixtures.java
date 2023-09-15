@@ -46,6 +46,10 @@ public class Fixtures {
         return menuGroup;
     }
 
+    public static kitchenpos.menus.tobe.domain.MenuGroup tobeMenuGroup(final String name) {
+        return kitchenpos.menus.tobe.domain.MenuGroup.create(UUID.randomUUID(), name);
+    }
+
     public static MenuProduct menuProduct() {
         return MenuProduct.of(new Random().nextLong(), product().getId(), 2L);
     }

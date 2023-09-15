@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import kitchenpos.menus.tobe.domain.MenuGroup;
+
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
@@ -40,7 +42,7 @@ public class MenuService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+        final kitchenpos.menus.domain.MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {

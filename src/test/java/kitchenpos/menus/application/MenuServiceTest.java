@@ -45,7 +45,7 @@ class MenuServiceTest {
         displayNameChecker = new FakeDisplayNameChecker();
         menuProductPriceHandler = new MenuProductPriceHandler();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, displayNameChecker, menuProductPriceHandler);
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
+        menuGroupId = menuGroupRepository.save(tobeMenuGroup("두마리메뉴")).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
 
