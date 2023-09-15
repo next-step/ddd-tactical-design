@@ -2,10 +2,10 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.infra.MenuRepository;
 import kitchenpos.products.common.NamePolicy;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.infra.ProductRepository;
 import kitchenpos.products.ui.request.ProductPriceChangeRequest;
 import kitchenpos.products.ui.request.ProductReq;
 import kitchenpos.products.ui.response.ProductRes;
