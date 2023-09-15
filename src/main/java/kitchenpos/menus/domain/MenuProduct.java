@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain;
 
+
 import kitchenpos.products.domain.Product;
 
 import javax.persistence.*;
@@ -61,4 +62,5 @@ public class MenuProduct {
     public void setProductId(final UUID productId) {
         this.productId = productId;
     }
+
 }

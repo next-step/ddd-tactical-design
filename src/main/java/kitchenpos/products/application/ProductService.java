@@ -1,77 +1,57 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.common.domain.Purgomalum;
+import kitchenpos.common.exception.KitchenPosException;
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
+import kitchenpos.products.dto.ChangePriceRequest;
+import kitchenpos.products.dto.CreateReqeust;
+import kitchenpos.products.dto.ProductDto;
+import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+
+import static kitchenpos.common.exception.KitchenPosExceptionType.NOT_FOUND;
 
 @Service
 public class ProductService {
+
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final Purgomalum purgomalum;
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
-    ) {
+            final ProductRepository productRepository,
+            final Purgomalum purgomalum,
+            final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.purgomalum = purgomalum;
+        this.publisher = publisher;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+    public ProductDto create(final CreateReqeust request) {
+        final Name name = new Name(request.getName(), purgomalum);
+        final Price price = new Price(request.getPrice());
+        final Product product = new Product(name, price);
+        Product savedProduct = productRepository.save(product);
+        return ProductDto.from(savedProduct);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public ProductDto changePrice(final UUID productId, final ChangePriceRequest request) {
+        final Price price = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-        return product;
+            .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
+        product.changePrice(price);
+        publisher.publishEvent(new ProductPriceChangeEvent(product.getId()));
+        return ProductDto.from(product);
     }
 
     @Transactional(readOnly = true)

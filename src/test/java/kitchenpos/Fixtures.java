@@ -1,9 +1,12 @@
 package kitchenpos;
 
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
@@ -118,10 +121,13 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        Name createdName = new Name(name, FakePurgomalum.create());
+        Price createdPrice = new Price(price);
+        return new Product(createdName, createdPrice);
+    }
+    public static Product toBeProduct(final String name, final long price) {
+        Name createdName = new Name(name, FakePurgomalum.create());
+        Price createdPrice = new Price(price);
+        return new Product(createdName, createdPrice);
     }
 }
