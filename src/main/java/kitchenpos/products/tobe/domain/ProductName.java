@@ -16,6 +16,10 @@ public class ProductName {
         this.productName = productName;
     }
 
+    protected ProductName() {
+
+    }
+
     public String getProductName() {
         return productName;
     }
@@ -29,9 +33,7 @@ public class ProductName {
         }
     }
 
-    protected ProductName() {
 
-    }
 
     @Override
     public boolean equals(Object o) {

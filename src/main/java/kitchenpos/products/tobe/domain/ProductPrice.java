@@ -15,6 +15,10 @@ public class ProductPrice {
         this.productPrice = productPrice;
     }
 
+    protected ProductPrice() {
+
+    }
+
     private void validateProductPrice(BigDecimal productPrice) {
         if (Objects.isNull(productPrice)) {
             throw new IllegalArgumentException("상풍 가격은 필수로 존재해야 합니다.");
@@ -22,10 +26,6 @@ public class ProductPrice {
         if (productPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("상품 가격은 0원 이상이어야 합니다.");
         }
-    }
-
-    protected ProductPrice() {
-
     }
 
     public BigDecimal getProductPrice() {

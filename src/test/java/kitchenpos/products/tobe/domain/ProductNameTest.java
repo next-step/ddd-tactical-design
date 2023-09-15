@@ -23,14 +23,11 @@ class ProductNameTest {
     @DisplayName("상품명 생성 성공")
     @Test
     void CreatingProductName_is_success() {
-        //given
-        String requestProductName = "치킨";
-
         //when
-        ProductName productName = new ProductName(requestProductName, purgomalumClient);
+        ProductName productName = new ProductName("치킨", purgomalumClient);
 
         //then
-        assertThat(productName.getProductName()).isEqualTo(requestProductName);
+        assertThat(productName.getProductName()).isEqualTo("치킨");
     }
     @DisplayName("상품 명은 필수로 존재해야 한다.")
     @ParameterizedTest
