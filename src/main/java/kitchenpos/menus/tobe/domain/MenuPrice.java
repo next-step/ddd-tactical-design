@@ -1,18 +1,18 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class MenuPrice {
 
     private BigDecimal price;
 
-    public ProductPrice() {
+    public MenuPrice() {
     }
 
-    public ProductPrice(final BigDecimal price) {
+    public MenuPrice(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
@@ -28,7 +28,7 @@ public class ProductPrice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductPrice productPrice1 = (ProductPrice) o;
+        MenuPrice productPrice1 = (MenuPrice) o;
 
         return price.equals(productPrice1.price);
     }

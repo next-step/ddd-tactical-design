@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.Menu;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -44,7 +43,7 @@ public class Product {
         return productPrice;
     }
 
-    public BigDecimal multiplyPrice(BigDecimal multiplicand) {
+    public BigDecimal multiplyPrice(final BigDecimal multiplicand) {
         BigDecimal price = this.productPrice.toBigDecimal();
         return price.multiply(multiplicand);
     }
@@ -60,17 +59,9 @@ public class Product {
 
     public void changePrice(final BigDecimal price, final List<Menu> menus) {
         this.productPrice = new ProductPrice(price);
-        // TODO: 메뉴 리팩토링 시 메뉴쪽 메서드로 분리할 것!
         for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .multiplyPrice(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+            if (menu.exceedsSum(menu.getBigDecimalPrice())) {
+                menu.hide();
             }
         }
     }

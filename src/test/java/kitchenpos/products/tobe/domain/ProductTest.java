@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.tobe.domain.Menu;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class ProductTest {
     void changePrice() {
         // give
         Menu menu = menu();
-        Product product = menu.getMenuProducts().get(0).getProduct();
+        Product product = menu.getMenuProductList().get(0).getProduct();
 
         // when
         product.changePrice(BigDecimal.valueOf(15_000L), List.of(menu));
@@ -52,7 +52,7 @@ class ProductTest {
     void changePriceInMenu() {
         // give
         Menu menu = menu();
-        Product product = menu.getMenuProducts().get(0).getProduct();
+        Product product = menu.getMenuProductList().get(0).getProduct();
 
         // when
         product.changePrice(BigDecimal.valueOf(8_000L), List.of(menu));
