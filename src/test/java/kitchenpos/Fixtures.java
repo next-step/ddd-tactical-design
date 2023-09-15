@@ -1,6 +1,9 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.order.EatInOrder;
+import kitchenpos.eatinorders.domain.order.EatInOrderLineItem;
+import kitchenpos.eatinorders.domain.order.EatInOrderStatus;
+import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 
 import java.time.LocalDateTime;
@@ -14,8 +17,8 @@ public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
     public static final MenuId INVALID_MENU_ID = new MenuId(new UUID(0L, 0L));
 
-    public static Order order(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
+    public static EatInOrder order(final EatInOrderStatus status, final String deliveryAddress) {
+        final EatInOrder order = new EatInOrder();
         order.setId(UUID.randomUUID());
         order.setType(OrderType.DELIVERY);
         order.setStatus(status);
@@ -25,8 +28,8 @@ public class Fixtures {
         return order;
     }
 
-    public static Order order(final OrderStatus status) {
-        final Order order = new Order();
+    public static EatInOrder order(final EatInOrderStatus status) {
+        final EatInOrder order = new EatInOrder();
         order.setId(UUID.randomUUID());
         order.setType(OrderType.TAKEOUT);
         order.setStatus(status);
@@ -35,8 +38,8 @@ public class Fixtures {
         return order;
     }
 
-    public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        final Order order = new Order();
+    public static EatInOrder order(final EatInOrderStatus status, final OrderTable orderTable) {
+        final EatInOrder order = new EatInOrder();
         order.setId(UUID.randomUUID());
         order.setType(OrderType.EAT_IN);
         order.setStatus(status);
@@ -46,11 +49,11 @@ public class Fixtures {
         return order;
     }
 
-    public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+    public static EatInOrderLineItem orderLineItem() {
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
+        eatInOrderLineItem.setSeq(new Random().nextLong());
+        eatInOrderLineItem.setMenu(menu());
+        return eatInOrderLineItem;
     }
 
     public static OrderTable orderTable() {

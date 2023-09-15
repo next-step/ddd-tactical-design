@@ -1,22 +1,21 @@
-package kitchenpos.menus.tobe.domain.menu;
+package kitchenpos.eatinorders.domain.order;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
-public class MenuId implements Serializable {
+public class OrderTableId {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
+    @Column(name = "order_table_id", nullable = false)
     private UUID id;
 
-    public MenuId() {
-        this.id = UUID.randomUUID();
+    protected OrderTableId() {
+
     }
 
-    public MenuId(UUID id) {
+    public OrderTableId(UUID id) {
         this.id = id;
     }
 
@@ -29,7 +28,7 @@ public class MenuId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuId menuId = (MenuId) o;
+        OrderTableId menuId = (OrderTableId) o;
 
         return Objects.equals(id, menuId.id);
     }

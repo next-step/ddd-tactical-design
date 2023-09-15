@@ -1,9 +1,10 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.order.EatInOrderStatus;
+import kitchenpos.ordertables.domain.OrderTable;
+import kitchenpos.ordertables.domain.OrderTableRepository;
+import kitchenpos.ordertables.application.OrderTableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,16 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class OrderTableServiceTest {
+class EatInOrderTableServiceTest {
     private OrderTableRepository orderTableRepository;
-    private OrderRepository orderRepository;
+    private EatInOrderRepository eatInOrderRepository;
     private OrderTableService orderTableService;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderRepository = new InMemoryOrderRepository();
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        eatInOrderRepository = new InMemoryEatInOrderRepository();
+        orderTableService = new OrderTableService(orderTableRepository, eatInOrderRepository);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
@@ -79,7 +80,7 @@ class OrderTableServiceTest {
     void clearWithUncompletedOrders() {
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         final UUID orderTableId = orderTable.getId();
-        orderRepository.save(order(OrderStatus.ACCEPTED, orderTable));
+        eatInOrderRepository.save(order(EatInOrderStatus.ACCEPTED, orderTable));
         assertThatThrownBy(() -> orderTableService.clear(orderTableId))
                 .isInstanceOf(IllegalStateException.class);
     }

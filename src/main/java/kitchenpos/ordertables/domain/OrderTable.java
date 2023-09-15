@@ -1,23 +1,21 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.ordertables.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
 public class OrderTable {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @EmbeddedId
+    private OrderTableId id;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private OrderTableName name;
+
+    @Embedded
+    private NumberOfGuest numberOfGuests;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;

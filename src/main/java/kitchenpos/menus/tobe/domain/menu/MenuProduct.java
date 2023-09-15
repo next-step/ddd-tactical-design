@@ -74,10 +74,6 @@ public class MenuProduct {
         return productId;
     }
 
-    public UUID getProductIdValue() {
-        return productId.getValue();
-    }
-
 
     public boolean hasProduct(ProductId productId) {
         return this.productId.equals(productId);
