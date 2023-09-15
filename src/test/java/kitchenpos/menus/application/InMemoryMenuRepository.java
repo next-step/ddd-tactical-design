@@ -40,4 +40,10 @@ public class InMemoryMenuRepository implements MenuRepository {
             .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
             .collect(Collectors.toList());
     }
+
+    @Override
+    public <S extends Menu> List<S> saveAll(Iterable<S> menus) {
+        menus.forEach(this::save);
+        return (List<S>) menus;
+    }
 }

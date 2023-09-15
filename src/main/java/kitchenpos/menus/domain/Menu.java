@@ -1,5 +1,8 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -98,5 +101,34 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    public void checkTotalAmountAndChangeDisplayed() {
+        ProductPrice sum = ProductPrice.ZERO;
+        for (final MenuProduct menuProduct : this.getMenuProducts()) {
+            sum = sum.add(ProductPrice.from(menuProduct.calculateAmount()));
+        }
+        if (this.getPrice().compareTo(sum.getValue()) > 0) {
+            this.displayed = false;
+        }
+    }
+
+    public void changeMenuProductPrice(Product product) {
+        for (final MenuProduct menuProduct : this.getMenuProducts()) {
+            if (menuProduct.getProduct().equals(product)) {
+                menuProduct.setProduct(product);
+            }
+        }
+        if (this.isAmountBiggerThanMenuProductsTotalAmount()) {
+            this.displayed = false;
+        }
+    }
+
+    private boolean isAmountBiggerThanMenuProductsTotalAmount() {
+        ProductPrice sum = ProductPrice.ZERO;
+        for (final MenuProduct menuProduct : this.getMenuProducts()) {
+            sum = sum.add(ProductPrice.from(menuProduct.calculateAmount()));
+        }
+        return this.getPrice().compareTo(sum.getValue()) > 0;
     }
 }
