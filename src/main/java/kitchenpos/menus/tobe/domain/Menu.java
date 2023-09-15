@@ -73,6 +73,10 @@ public class Menu {
         }
     }
 
+    public void changeProductPrice(UUID id, BigDecimal price) {
+        menuProducts.changeProductPrice(id, price);
+    }
+
     public void changePrice(BigDecimal price) {
         Price menuPrice = new Price(price);
         if (isPriceOverMenuProductsTotalPrice(menuPrice)) {
