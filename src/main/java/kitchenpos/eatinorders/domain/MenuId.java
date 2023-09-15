@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain.order;
+package kitchenpos.eatinorders.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -6,16 +6,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
-public class OrderTableId {
+public class MenuId {
 
-    @Column(name = "order_table_id", nullable = false)
+    @Column(name = "menu_id", nullable = false)
     private UUID id;
 
-    protected OrderTableId() {
+    protected MenuId() {
 
     }
 
-    public OrderTableId(UUID id) {
+    public MenuId(UUID id) {
         this.id = id;
     }
 
@@ -28,7 +28,7 @@ public class OrderTableId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderTableId menuId = (OrderTableId) o;
+        MenuId menuId = (MenuId) o;
 
         return Objects.equals(id, menuId.id);
     }

@@ -1,8 +1,9 @@
-package kitchenpos.eatinorders.domain.order;
+package kitchenpos.eatinorders.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -18,5 +19,9 @@ public class EatInOrderLineItems {
 
     protected EatInOrderLineItems() {
 
+    }
+
+    public List<EatInOrderLineItem> getValues() {
+        return Collections.unmodifiableList(values);
     }
 }

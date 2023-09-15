@@ -16,4 +16,8 @@ public class OrderDateTime extends ValueObject {
     public OrderDateTime(LocalDateTime value) {
         this.value = value;
     }
+
+    public LocalDateTime getValue() {
+        return value;
+    }
 }

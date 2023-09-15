@@ -1,0 +1,63 @@
+package kitchenpos.eatinorders.domain;
+
+import kitchenpos.common.domain.OrderDateTime;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Table(name = "orders")
+@Entity
+public class EatInOrder {
+    @EmbeddedId
+    private EatInOrderId id;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EatInOrderStatus status;
+
+    @Embedded
+    private OrderDateTime orderDateTime;
+
+    @Embedded
+    private EatInOrderLineItems eatInOrderLineItems;
+
+    @Embedded
+    private OrderTableId orderTableId;
+
+    protected EatInOrder() {
+    }
+
+    public EatInOrder(EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
+        this.id = new EatInOrderId();
+        this.status = EatInOrderStatus.WAITING;
+        this.orderDateTime = new OrderDateTime();
+        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.orderTableId = orderTableId;
+    }
+
+    public EatInOrderId getId() {
+        return id;
+    }
+
+    public UUID getIdValue() {
+        return id.getId();
+    }
+
+    public LocalDateTime getOrderDateTimeValue() {
+        return orderDateTime.getValue();
+    }
+
+    public UUID getOrderTableIdValue() {
+        return orderTableId.getValue();
+    }
+
+    public List<EatInOrderLineItem> getOrderLineItemValues() {
+        return eatInOrderLineItems.getValues();
+    }
+
+    public EatInOrderStatus getStatus() {
+        return status;
+    }
+}

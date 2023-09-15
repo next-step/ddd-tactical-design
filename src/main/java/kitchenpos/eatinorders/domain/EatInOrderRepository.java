@@ -1,10 +1,7 @@
-package kitchenpos.eatinorders.domain.order;
-
-import kitchenpos.ordertables.domain.OrderTable;
+package kitchenpos.eatinorders.domain;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface EatInOrderRepository {
     EatInOrder save(EatInOrder order);

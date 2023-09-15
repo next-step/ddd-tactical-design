@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
+import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.domain.order.*;
 import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableRepository;
@@ -19,18 +19,15 @@ public class OrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
-    private final KitchenridersClient kitchenridersClient;
 
     public OrderService(
             final EatInOrderRepository eatInOrderRepository,
             final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository,
-            final KitchenridersClient kitchenridersClient
+            final OrderTableRepository orderTableRepository
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
-        this.kitchenridersClient = kitchenridersClient;
     }
 
     @Transactional
@@ -93,7 +90,7 @@ public class OrderService {
     }
 
     @Transactional
-    public EatInOrder accept(final UUID orderId) {
+    public EatInOrder accept(final EatInOrderId orderId) {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != EatInOrderStatus.WAITING) {
@@ -113,7 +110,7 @@ public class OrderService {
     }
 
     @Transactional
-    public EatInOrder serve(final UUID orderId) {
+    public EatInOrder serve(final EatInOrderId orderId) {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != EatInOrderStatus.ACCEPTED) {
@@ -149,7 +146,7 @@ public class OrderService {
     }
 
     @Transactional
-    public EatInOrder complete(final UUID orderId) {
+    public EatInOrder complete(final EatInOrderId orderId) {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         final OrderType type = order.getType();
