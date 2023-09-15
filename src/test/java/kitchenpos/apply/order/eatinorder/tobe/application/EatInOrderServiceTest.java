@@ -1,6 +1,6 @@
 package kitchenpos.apply.order.eatinorder.tobe.application;
 
-import kitchenpos.apply.menu.tobe.domain.InMemoryMenuRepository;
+import kitchenpos.apply.menus.tobe.domain.InMemoryMenuRepository;
 import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.apply.order.eatinorder.tobe.domain.InMemoryEatInOrderRepository;
 import kitchenpos.apply.order.eatinorder.tobe.domain.InMemoryOrderTableRepository;

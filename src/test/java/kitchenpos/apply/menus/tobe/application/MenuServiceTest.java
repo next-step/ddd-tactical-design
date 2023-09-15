@@ -1,12 +1,10 @@
-package kitchenpos.apply.menu.tobe.application;
+package kitchenpos.apply.menus.tobe.application;
 
-import kitchenpos.apply.menu.tobe.domain.InMemoryMenuGroupRepository;
-import kitchenpos.apply.menu.tobe.domain.InMemoryMenuRepository;
-import kitchenpos.apply.menu.tobe.infra.FakePurgomalumClient;
-import kitchenpos.apply.menus.tobe.application.DefaultMenuPriceChecker;
-import kitchenpos.apply.menus.tobe.application.MenuService;
+import kitchenpos.apply.menus.tobe.domain.InMemoryMenuGroupRepository;
+import kitchenpos.apply.menus.tobe.domain.InMemoryMenuRepository;
+import kitchenpos.apply.menus.tobe.infra.FakePurgomalumClient;
 import kitchenpos.apply.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.apply.menus.tobe.domain.MenuPriceChecker;
+import kitchenpos.apply.menus.tobe.domain.MenuPriceCalculator;
 import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.apply.menus.tobe.ui.MenuProductRequest;
 import kitchenpos.apply.menus.tobe.ui.MenuRequest;
@@ -42,13 +40,13 @@ class MenuServiceTest {
 
     @BeforeEach
     void setUp() {
-        MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
-        ProductRepository productRepository = new InMemoryProductRepository();
-        PurgomalumClient purgomalumClient = new FakePurgomalumClient();
-        MenuPriceChecker priceChecker = new DefaultMenuPriceChecker(productRepository, menuRepository);
-        ProductValidator productValidator = new ProductValidator(productRepository);
+        final MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
+        final ProductRepository productRepository = new InMemoryProductRepository();
+        final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+        final ProductValidator productValidator = new ProductValidator(productRepository);
+        final MenuPriceCalculator menuPriceCalculator = new MenuPriceCalculator(productRepository);
         menuRepository = new InMemoryMenuRepository();
-        menuService = new MenuService(menuRepository, menuGroupRepository, priceChecker, purgomalumClient, productValidator);
+        menuService = new MenuService(menuRepository, menuGroupRepository, purgomalumClient, productValidator, menuPriceCalculator);
         menuGroupId = UUID.fromString(menuGroupRepository.save(menuGroup()).getId());
         product = productRepository.save(product("후라이드", 16_000L));
     }

@@ -1,4 +1,4 @@
-package kitchenpos.apply.menu.tobe.infra;
+package kitchenpos.apply.menus.tobe.infra;
 
 
 

@@ -1,7 +1,6 @@
-package kitchenpos.apply.menu.tobe.application;
+package kitchenpos.apply.menus.tobe.application;
 
-import kitchenpos.apply.menu.tobe.domain.InMemoryMenuGroupRepository;
-import kitchenpos.apply.menus.tobe.application.MenuGroupService;
+import kitchenpos.apply.menus.tobe.domain.InMemoryMenuGroupRepository;
 import kitchenpos.apply.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.apply.menus.tobe.ui.MenuGroupRequest;
 import kitchenpos.apply.menus.tobe.ui.MenuGroupResponse;

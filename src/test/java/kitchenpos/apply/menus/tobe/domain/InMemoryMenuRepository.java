@@ -1,7 +1,4 @@
-package kitchenpos.apply.menu.tobe.domain;
-
-import kitchenpos.apply.menus.tobe.domain.Menu;
-import kitchenpos.apply.menus.tobe.domain.MenuRepository;
+package kitchenpos.apply.menus.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.*;

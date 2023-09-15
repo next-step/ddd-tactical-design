@@ -1,6 +1,8 @@
 package kitchenpos.apply.products.tobe.application;
 
-import kitchenpos.apply.menu.tobe.infra.FakeMenuPriceChecker;
+import kitchenpos.apply.menus.tobe.domain.InMemoryMenuRepository;
+import kitchenpos.apply.menus.tobe.domain.MenuPriceCalculator;
+import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.apply.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.apply.products.tobe.domain.ProductRepository;
 import kitchenpos.support.domain.PurgomalumClient;
@@ -29,11 +31,12 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        final MenuRepository menuRepository = new InMemoryMenuRepository();
+        final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+        final ProductNameFactory productNameFactory = new ProductNameFactory(purgomalumClient);
+        final MenuPriceCalculator menuPriceCalculator = new MenuPriceCalculator(productRepository);
         productRepository = new InMemoryProductRepository();
-        PurgomalumClient purgomalumClient = new FakePurgomalumClient();
-        ProductNameFactory productNameFactory = new ProductNameFactory(purgomalumClient);
-        FakeMenuPriceChecker priceChecker = new FakeMenuPriceChecker();
-        productService = new ProductService(productRepository, productNameFactory, priceChecker);
+        productService = new ProductService(productRepository, productNameFactory, menuRepository, menuPriceCalculator);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

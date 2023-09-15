@@ -1,10 +1,5 @@
-package kitchenpos.apply.menu.tobe.domain;
+package kitchenpos.apply.menus.tobe.domain;
 
-import kitchenpos.apply.menus.tobe.application.DefaultMenuPriceChecker;
-import kitchenpos.apply.menus.tobe.domain.Menu;
-import kitchenpos.apply.menus.tobe.domain.MenuPriceChecker;
-import kitchenpos.apply.menus.tobe.domain.MenuProduct;
-import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.apply.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.apply.products.tobe.domain.Product;
 import kitchenpos.apply.products.tobe.domain.ProductRepository;
@@ -23,13 +18,13 @@ class MenuTest {
 
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private MenuPriceChecker priceChecker;
+    private MenuPriceCalculator menuPriceCalculator;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        priceChecker = new DefaultMenuPriceChecker(productRepository, menuRepository);
+        menuPriceCalculator = new MenuPriceCalculator(productRepository);
     }
 
     @Test
@@ -41,8 +36,9 @@ class MenuTest {
         menuRepository.save(menu);
         assertThat(menu.isDisplayed()).isTrue();
 
+        BigDecimal totalPrice = menuPriceCalculator.getTotalPriceFrom(menu);
 
-        assertThatThrownBy(() -> menu.changePrice(BigDecimal.valueOf(Double.MAX_VALUE), priceChecker))
+        assertThatThrownBy(() -> menu.changePrice(BigDecimal.valueOf(Double.MAX_VALUE), totalPrice))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
