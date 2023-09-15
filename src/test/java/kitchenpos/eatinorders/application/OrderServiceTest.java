@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class OrderServiceTest {
     void createDeliveryOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final Order expected = createOrderRequest(
-            OrderType.DELIVERY, "서울시 송파구 위례성대로 2", createOrderLineItemRequest(menuId, 19_000L, 3L)
+                OrderType.DELIVERY, "서울시 송파구 위례성대로 2", createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
         final Order actual = orderService.create(expected);
         assertThat(actual).isNotNull();
@@ -132,7 +132,7 @@ class OrderServiceTest {
     void createWithoutEatInOrder(final long quantity) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final Order expected = createOrderRequest(
-            OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, quantity)
+                OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, quantity)
         );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -144,7 +144,7 @@ class OrderServiceTest {
     void create(final String deliveryAddress) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final Order expected = createOrderRequest(
-            OrderType.DELIVERY, deliveryAddress, createOrderLineItemRequest(menuId, 19_000L, 3L)
+                OrderType.DELIVERY, deliveryAddress, createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);

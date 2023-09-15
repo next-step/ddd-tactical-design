@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/products")
 @RestController
@@ -24,18 +25,24 @@ public class ProductRestController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(@Validated @RequestBody final ProductCreateRequest request) {
-        final ProductResponse response = productService.create(request);
+        Product product = productService.create(request);
+        final ProductResponse response = ProductResponse.of(product);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{productId}/price")
     public ResponseEntity<ProductResponse> changePrice(@PathVariable final UUID productId, @RequestBody final ProductChangePriceRequest request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+        Product product = productService.changePrice(productId, request);
+        return ResponseEntity.ok(ProductResponse.of(product));
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+        List<ProductResponse> productResponses = productService.findAll()
+                .stream()
+                .map(ProductResponse::of)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(productResponses);
     }
 }

@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -7,6 +7,8 @@ import java.util.Objects;
 
 @Embeddable
 public class Price {
+
+    private static final int COMPARE_ZERO = 0;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -20,7 +22,7 @@ public class Price {
     }
 
     private void validatePrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < COMPARE_ZERO) {
             throw new IllegalArgumentException();
         }
     }
@@ -29,16 +31,26 @@ public class Price {
         return price;
     }
 
+    public boolean isOver(BigDecimal price) {
+        return this.price.compareTo(price) > COMPARE_ZERO;
+    }
+
+    public boolean isOverMenuProductsTotalPrice(MenuProducts menuProducts) {
+        return price.compareTo(menuProducts.totalPrice()) > COMPARE_ZERO;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Price)) return false;
-        Price price1 = (Price) o;
-        return Objects.equals(price, price1.price);
+        Price price = (Price) o;
+        return Objects.equals(this.price, price.price);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(price);
     }
+
+
 }
