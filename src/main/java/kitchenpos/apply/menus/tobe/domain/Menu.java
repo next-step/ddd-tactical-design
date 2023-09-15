@@ -35,8 +35,8 @@ public class Menu {
     protected Menu() {
     }
 
-    public static Menu of(MenuName name, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts, MenuPriceChecker menuPriceChecker) {
-        return new Menu(name, price, menuGroup, displayed, menuProducts, menuPriceChecker);
+    public static Menu of(MenuName name, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts, BigDecimal totalPrice) {
+        return new Menu(name, price, menuGroup, displayed, menuProducts, totalPrice);
     }
 
     public Menu(
@@ -45,7 +45,7 @@ public class Menu {
             MenuGroup menuGroup,
             boolean displayed,
             MenuProducts menuProducts,
-            MenuPriceChecker menuPriceChecker
+            BigDecimal totalPrice
     ) {
         this.id = UUID.randomUUID();
         this.name = name;
@@ -55,30 +55,30 @@ public class Menu {
         this.menuProducts = menuProducts;
 
 
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
+        if (MenuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), totalPrice)) {
             throw new IllegalArgumentException();
         }
     }
 
-    public void hideIfMenuPriceTooHigher(MenuPriceChecker menuPriceChecker) {
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
+    public void hideIfMenuPriceTooHigher(BigDecimal totalPrice) {
+        if (MenuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), totalPrice)) {
             this.displayed = false;
         }
     }
 
-    public void changePrice(BigDecimal changePrice, MenuPriceChecker menuPriceChecker) {
+    public void changePrice(BigDecimal changePrice, BigDecimal totalPrice) {
         if (changePrice == null || changePrice.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("변경할 가격은 0보다 커야합니다.");
         }
 
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(changePrice, menuProducts.getMenuProductList())) {
+        if (MenuPriceChecker.isTotalPriceLowerThanMenu(changePrice, totalPrice)) {
             throw new IllegalArgumentException();
         }
         this.price = new MenuPrice(changePrice);
     }
 
-    public void setDisplayable(MenuPriceChecker menuPriceChecker) {
-        if (menuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), menuProducts.getMenuProductList())) {
+    public void setDisplayable(BigDecimal totalPrice) {
+        if (MenuPriceChecker.isTotalPriceLowerThanMenu(this.price.value(), totalPrice)) {
             throw new IllegalStateException();
         }
         this.displayed = true;

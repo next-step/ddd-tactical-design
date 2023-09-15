@@ -1,6 +1,7 @@
 package kitchenpos.apply.menus.tobe.domain;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +13,9 @@ public interface MenuRepository {
 
     Optional<Menu> findById(UUID id);
 
+    @Query("select distinct m from Menu m join fetch m.menuProducts.menuProductList mp where m.id = :menuId")
+    Optional<Menu> findByMenuId(@Param("menuId") UUID menuId);
+
     @Query("select count(m) from Menu m where m.id = :id and m.displayed = true and m.price = :price")
     boolean existsByIdAndDisplayedWithPrice(UUID id, BigDecimal price);
 
@@ -19,6 +23,7 @@ public interface MenuRepository {
 
     List<Menu> findAllByIdIn(List<UUID> ids);
 
-    List<Menu> findAllByProductId(UUID productId);
+    @Query("select distinct m from Menu m join fetch m.menuProducts.menuProductList mp where mp.productId = :productId")
+    List<Menu> findAllByProductId(@Param("productId") UUID productId);
 }
 

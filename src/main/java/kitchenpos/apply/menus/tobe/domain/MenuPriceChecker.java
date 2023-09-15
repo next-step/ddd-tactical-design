@@ -1,11 +1,10 @@
 package kitchenpos.apply.menus.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
-public interface MenuPriceChecker {
-    boolean isTotalPriceLowerThanMenu(BigDecimal menuPrice, List<MenuProduct> menuProducts);
+public class MenuPriceChecker {
 
-    void checkMenuPriceAndHideMenuIfTotalPriceLower(UUID productId);
+    public static boolean isTotalPriceLowerThanMenu(BigDecimal menuPrice, BigDecimal totalPrice) {
+        return totalPrice.compareTo(menuPrice) < 0;
+    }
 }

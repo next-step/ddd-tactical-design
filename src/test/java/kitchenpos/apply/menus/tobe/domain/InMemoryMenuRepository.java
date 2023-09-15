@@ -22,6 +22,14 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
+    public Optional<Menu> findByMenuId(UUID menuId) {
+        return menus.values()
+                .stream()
+                .filter(menu -> menu.getId().equals(menuId.toString()))
+                .findAny();
+    }
+
+    @Override
     public boolean existsByIdAndDisplayedWithPrice(UUID id, BigDecimal price) {
         return menus.values().stream()
                 .anyMatch(it -> UUID.fromString(it.getId()).equals(id)

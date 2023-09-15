@@ -1,8 +1,9 @@
 package kitchenpos.apply.products.tobe.application;
 
+import kitchenpos.apply.menus.tobe.domain.MenuPriceCalculator;
+import kitchenpos.apply.menus.tobe.domain.MenuRepository;
 import kitchenpos.apply.products.tobe.ui.ProductRequest;
 import kitchenpos.apply.products.tobe.ui.ProductResponse;
-import kitchenpos.apply.menus.tobe.domain.MenuPriceChecker;
 import kitchenpos.apply.products.tobe.domain.Product;
 import kitchenpos.apply.products.tobe.domain.ProductName;
 import kitchenpos.apply.products.tobe.domain.ProductRepository;
@@ -18,22 +19,25 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductNameFactory productNameFactory;
-    private final MenuPriceChecker menuPriceChecker;
+    private final MenuRepository menuRepository;
+    private final MenuPriceCalculator menuPriceCalculator;
 
     public ProductService(
         final ProductRepository productRepository,
         final ProductNameFactory productNameFactory,
-        final MenuPriceChecker menuPriceChecker
+        final MenuRepository menuRepository,
+        final MenuPriceCalculator menuPriceCalculator
     ) {
         this.productRepository = productRepository;
-        this.menuPriceChecker = menuPriceChecker;
+        this.menuRepository = menuRepository;
         this.productNameFactory = productNameFactory;
+        this.menuPriceCalculator = menuPriceCalculator;
     }
 
     @Transactional
     public ProductResponse create(final ProductRequest request) {
-        ProductName productName = productNameFactory.createProductName(request.getName());
-        Product savedProduct = productRepository.save(Product.of(productName, request.getPrice()));
+        final ProductName productName = productNameFactory.createProductName(request.getName());
+        final Product savedProduct = productRepository.save(Product.of(productName, request.getPrice()));
         return new ProductResponse(savedProduct);
     }
 
@@ -41,7 +45,8 @@ public class ProductService {
     public ProductResponse changePrice(final UUID productId, final ProductRequest request) {
         final Product product = productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
-        menuPriceChecker.checkMenuPriceAndHideMenuIfTotalPriceLower(productId);
+        menuRepository.findAllByProductId(productId)
+                .forEach(it -> it.hideIfMenuPriceTooHigher(menuPriceCalculator.getTotalPriceFrom(it)));
         return new ProductResponse(product);
     }
 

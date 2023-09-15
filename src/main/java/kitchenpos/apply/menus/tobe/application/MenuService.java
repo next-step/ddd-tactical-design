@@ -8,6 +8,7 @@ import kitchenpos.support.domain.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -18,20 +19,20 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final PurgomalumClient purgomalumClient;
-    private final MenuPriceChecker menuPriceChecker;
     private final ProductValidator productValidator;
+    private final MenuPriceCalculator menuProductsCalculator;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final MenuPriceChecker menuPriceChecker,
         final PurgomalumClient purgomalumClient,
-        ProductValidator productValidator) {
+        final ProductValidator productValidator,
+        final MenuPriceCalculator menuProductsCalculator) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.menuPriceChecker = menuPriceChecker;
         this.purgomalumClient = purgomalumClient;
         this.productValidator = productValidator;
+        this.menuProductsCalculator = menuProductsCalculator;
     }
 
     @Transactional
@@ -43,23 +44,26 @@ public class MenuService {
 
         final MenuProducts menuProducts = MenuProducts.of(request.getMenuProductRequests());
         final MenuName menuName = new MenuName(request.getName(), purgomalumClient);
-        Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts, menuPriceChecker));
+        final BigDecimal totalPrice = menuProductsCalculator.getTotalPriceFrom(request);
+        final Menu savedMenu = menuRepository.save(Menu.of(menuName, request.getPrice(), menuGroup, request.isDisplayed(), menuProducts, totalPrice));
         return new MenuResponse(savedMenu);
     }
 
     @Transactional
     public MenuResponse changePrice(final UUID menuId, final MenuRequest request) {
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = menuRepository.findByMenuId(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(request.getPrice(), menuPriceChecker);
+        final BigDecimal totalPrice = menuProductsCalculator.getTotalPriceFrom(menu);
+        menu.changePrice(request.getPrice(), totalPrice);
         return new MenuResponse(menu);
     }
 
     @Transactional
     public MenuResponse display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = menuRepository.findByMenuId(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayable(menuPriceChecker);
+        final BigDecimal totalPrice = menuProductsCalculator.getTotalPriceFrom(menu);
+        menu.setDisplayable(totalPrice);
         return new MenuResponse(menu);
     }
 

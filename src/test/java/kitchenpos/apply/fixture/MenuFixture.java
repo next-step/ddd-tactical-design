@@ -1,6 +1,5 @@
 package kitchenpos.apply.fixture;
 
-import kitchenpos.apply.menu.tobe.infra.FakeMenuPriceChecker;
 import kitchenpos.apply.menus.tobe.domain.*;
 import kitchenpos.support.infra.DefaultPurgomalumClient;
 import kitchenpos.apply.menus.tobe.ui.MenuGroupRequest;
@@ -32,7 +31,7 @@ public class MenuFixture {
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProductList) {
         MenuName menuName = new MenuName("후라이드+후라이드", new DefaultPurgomalumClient(new RestTemplateBuilder()));
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProductList));
-        return Menu.of(menuName, BigDecimal.valueOf(price), menuGroup(), displayed, menuProducts, new FakeMenuPriceChecker());
+        return Menu.of(menuName, BigDecimal.valueOf(price), menuGroup(), displayed, menuProducts, BigDecimal.valueOf(Long.MAX_VALUE));
     }
 
     public static MenuRequest menuRequest(final long price, final MenuProductRequest... menuProducts) {
