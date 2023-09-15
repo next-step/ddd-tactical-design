@@ -1,6 +1,9 @@
 package kitchenpos.ordertables.domain;
 
 
+import kitchenpos.ordertables.exception.OrderTableErrorCode;
+import kitchenpos.ordertables.exception.OrderTableException;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -20,38 +23,45 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    protected OrderTable() {
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
+    public OrderTable(OrderTableName name, NumberOfGuest numberOfGuests, boolean occupied) {
+        this.id = new OrderTableId();
         this.name = name;
-    }
-
-    public int getNumberOfGuests() {
-        return numberOfGuests;
-    }
-
-    public void setNumberOfGuests(final int numberOfGuests) {
         this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
+    }
+
+    public void changeNumberOfGuest(NumberOfGuest numberOfGuest) {
+        if(!occupied){
+            throw new OrderTableException(OrderTableErrorCode.NON_OCCUPIED_CANNOT_CHANGE_NUMBER_OF_GUESTS);
+        }
+        this.numberOfGuests = numberOfGuest;
     }
 
     public boolean isOccupied() {
         return occupied;
     }
 
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
+    public UUID getIdValue() {
+        return id.getId();
+    }
+
+    public String getNameValue() {
+        return name.getValue();
+    }
+
+    public int getNumberOfGuestValue() {
+        return numberOfGuests.getValue();
+    }
+
+    public void clear() {
+        this.numberOfGuests = NumberOfGuest.ZERO;
+        this.occupied = false;
+    }
+
+    public void sit() {
+        this.occupied = true;
     }
 }

@@ -35,10 +35,6 @@ public class OrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
         final List<EatInOrderLineItem> eatInOrderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(eatInOrderLineItemRequests) || eatInOrderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();

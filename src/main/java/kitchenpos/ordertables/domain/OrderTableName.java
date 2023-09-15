@@ -1,6 +1,8 @@
 package kitchenpos.ordertables.domain;
 
 import kitchenpos.common.domain.ValueObject;
+import kitchenpos.ordertables.exception.OrderTableErrorCode;
+import kitchenpos.ordertables.exception.OrderTableNameException;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -17,7 +19,13 @@ public class OrderTableName extends ValueObject {
     }
 
     public OrderTableName(String value) {
+        if(value == null || value.isBlank()) {
+            throw new OrderTableNameException(OrderTableErrorCode.NAME_IS_EMTPY);
+        }
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
 }
