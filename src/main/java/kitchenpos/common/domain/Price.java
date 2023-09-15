@@ -49,6 +49,10 @@ public class Price extends ValueObject {
         return price.compareTo(input) > 0;
     }
 
+    public boolean isLessThan(BigDecimal input) {
+        return price.compareTo(input) < 0;
+    }
+
     public BigDecimal getValue() {
         return price;
     }

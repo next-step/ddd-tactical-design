@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.common.domain.OrderDateTime;
+import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
+import kitchenpos.eatinorders.exception.EatInOrderException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -60,4 +62,24 @@ public class EatInOrder {
     public EatInOrderStatus getStatus() {
         return status;
     }
+
+    public void accept() {
+        if (!status.isWaiting()) {
+            throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_WAITING);
+        }
+        this.status = EatInOrderStatus.ACCEPTED;
+    }
+    public void serve() {
+        if (!status.isAccepted()) {
+            throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_ACCEPTED);
+        }
+        this.status = EatInOrderStatus.SERVED;
+    }
+    public void complete() {
+        if (!status.isServed()) {
+            throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_SERVED);
+        }
+        this.status = EatInOrderStatus.ACCEPTED;
+    }
+
 }

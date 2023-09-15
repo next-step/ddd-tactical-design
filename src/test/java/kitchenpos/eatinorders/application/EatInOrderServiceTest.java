@@ -32,7 +32,7 @@ class EatInOrderServiceTest {
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private FakeKitchenridersClient kitchenridersClient;
-    private OrderService orderService;
+    private EatInOrderService orderService;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +40,7 @@ class EatInOrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
-        orderService = new OrderService(eatInOrderRepository, menuRepository, orderTableRepository, kitchenridersClient);
+        orderService = new EatInOrderService(eatInOrderRepository, menuRepository, orderTableRepository, kitchenridersClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")

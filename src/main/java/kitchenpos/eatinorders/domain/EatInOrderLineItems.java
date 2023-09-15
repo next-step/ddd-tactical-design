@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.domain;
 
+import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
+import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -14,6 +17,9 @@ public class EatInOrderLineItems {
     private List<EatInOrderLineItem> values;
 
     public EatInOrderLineItems(List<EatInOrderLineItem> values) {
+        if(values == null || values.isEmpty()){
+            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
+        }
         this.values = values;
     }
 

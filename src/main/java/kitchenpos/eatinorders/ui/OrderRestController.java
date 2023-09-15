@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.ui;
 
-import kitchenpos.eatinorders.application.OrderService;
+import kitchenpos.eatinorders.application.EatInOrderService;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderId;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
@@ -15,15 +15,15 @@ import java.util.UUID;
 @RequestMapping("/api/eat-in-orders")
 @RestController
 public class OrderRestController {
-    private final OrderService orderService;
+    private final EatInOrderService orderService;
 
-    public OrderRestController(final OrderService orderService) {
+    public OrderRestController(final EatInOrderService orderService) {
         this.orderService = orderService;
     }
 
     @PostMapping
     public ResponseEntity<EatInOrderResponse> create(@RequestBody final EatInOrderRequest request) {
-        final EatInOrder response = orderService.create(request.toEntity());
+        final EatInOrder response = orderService.create(request);
         return ResponseEntity.created(URI.create("/api/eat-in-orders/" + response.getId()))
                 .body(EatInOrderResponse.fromEntity(response));
     }
