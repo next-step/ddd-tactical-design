@@ -10,7 +10,6 @@ import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Embeddable
@@ -44,9 +43,16 @@ public class MenuProducts {
         return Collections.unmodifiableList(values);
     }
 
-    public List<UUID> getProductIds() {
+    public List<ProductId> getProductIds() {
         return values.stream()
                 .map(MenuProduct::getProductId)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public void fetchPrice(ProductId productId, Price productPrice) {
+        this.values
+                .stream()
+                .filter(menuProduct -> menuProduct.hasProduct(productId))
+                .forEach(menuProduct -> menuProduct.fetchPrice(productPrice));
     }
 }

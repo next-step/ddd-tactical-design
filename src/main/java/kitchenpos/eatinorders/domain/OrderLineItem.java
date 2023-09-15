@@ -5,7 +5,6 @@ import kitchenpos.menus.tobe.domain.menu.MenuId;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity

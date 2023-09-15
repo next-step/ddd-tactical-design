@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class Price extends ValueObject {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 

@@ -5,13 +5,13 @@ import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api/products")
@@ -31,7 +31,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<ProductResponse> changePrice(@PathVariable final UUID productId, @Valid @RequestBody final ProductChangePriceRequest request) {
+    public ResponseEntity<ProductResponse> changePrice(@PathVariable final ProductId productId, @Valid @RequestBody final ProductChangePriceRequest request) {
         final Product response = productService.changePrice(productId, request.getPrice());
         return ResponseEntity.ok(ProductResponse.fromEntity(response));
     }

@@ -11,9 +11,9 @@ import java.util.UUID;
 @Table(name = "product")
 @Entity
 public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+
+    @EmbeddedId
+    private ProductId id;
 
     @Column(name = "name", nullable = false)
     @Embedded
@@ -27,7 +27,7 @@ public class Product {
 
     }
 
-    public Product(UUID id, ProductDisplayedName name, Price price) {
+    public Product(ProductId id, ProductDisplayedName name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,7 +35,7 @@ public class Product {
 
     public static Product of(String name, BigDecimal price, ProfanityPolicy profanityPolicy) {
         return new Product(
-                UUID.randomUUID(),
+                new ProductId(),
                 new ProductDisplayedName(name, profanityPolicy),
                 new Price(price)
         );
@@ -45,8 +45,12 @@ public class Product {
         this.price = price;
     }
 
-    public UUID getId() {
+    public ProductId getId() {
         return id;
+    }
+
+    public UUID getIdValue() {
+        return this.id.getValue();
     }
 
     public String getNameValue() {

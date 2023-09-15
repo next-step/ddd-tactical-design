@@ -1,5 +1,8 @@
 package kitchenpos.menus.dto;
 
+
+import kitchenpos.menus.tobe.domain.menu.ProductId;
+
 import java.util.UUID;
 
 public class MenuProductRequest {
@@ -12,6 +15,11 @@ public class MenuProductRequest {
 
     public MenuProductRequest(UUID productId, long quantity) {
         this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public MenuProductRequest(ProductId productId, long quantity) {
+        this.productId = productId.getValue();
         this.quantity = quantity;
     }
 

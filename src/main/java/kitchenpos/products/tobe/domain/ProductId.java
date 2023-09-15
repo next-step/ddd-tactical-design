@@ -1,22 +1,23 @@
-package kitchenpos.menus.tobe.domain.menu;
+package kitchenpos.products.tobe.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
-public class MenuProductId implements Serializable {
+public class ProductId implements Serializable {
 
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
 
-    protected MenuProductId() {
+    public ProductId() {
+        this.id = UUID.randomUUID();
+    }
 
+    public ProductId(UUID id) {
+        this.id = id;
     }
 
     public UUID getValue() {
@@ -28,9 +29,9 @@ public class MenuProductId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MenuProductId menuId = (MenuProductId) o;
+        ProductId productId = (ProductId) o;
 
-        return Objects.equals(id, menuId.id);
+        return Objects.equals(id, productId.id);
     }
 
     @Override

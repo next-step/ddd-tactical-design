@@ -3,6 +3,7 @@ package kitchenpos.menus.dto;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProductId;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menu.ProductId;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,16 +11,16 @@ import java.util.stream.Collectors;
 
 public class MenuProductResponse {
 
-    private MenuProductId id;
+    private UUID id;
     private long quantity;
     private UUID productId;
 
     public MenuProductResponse() {
     }
 
-    public MenuProductResponse(MenuProductId id, UUID productId, long quantity) {
-        this.id = id;
-        this.productId = productId;
+    public MenuProductResponse(MenuProductId id, ProductId productId, long quantity) {
+        this.id = id.getValue();
+        this.productId = productId.getValue();
         this.quantity = quantity;
     }
 
@@ -38,20 +39,20 @@ public class MenuProductResponse {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public MenuProductId getId() {
+    public UUID getId() {
         return id;
     }
 
     public void setId(MenuProductId id) {
-        this.id = id;
+        this.id = id.getValue();
     }
 
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(UUID productId) {
-        this.productId = productId;
+    public void setProductId(ProductId productId) {
+        this.productId = productId.getValue();
     }
 
     public long getQuantity() {

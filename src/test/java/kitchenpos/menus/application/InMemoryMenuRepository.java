@@ -3,6 +3,7 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.ProductId;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     }
 
     @Override
-    public List<Menu> findAllByProductId(final UUID productId) {
+    public List<Menu> findAllByProductId(final ProductId productId) {
         return menus.values()
                 .stream()
                 .filter(menu -> menu.getMenuProducts().getValues()

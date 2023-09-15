@@ -1,10 +1,12 @@
 package kitchenpos.menus.application.fixtures;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.ProductId;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -63,12 +65,18 @@ public class MenuFixture {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(product(), 2L);
+        return menuProduct(product(), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(product, quantity);
+        ProductId productId = new ProductId(product.getId().getValue());
+        return new MenuProduct(productId, product.getPrice(), quantity);
     }
+
+    public static MenuProduct menuProduct(final ProductId productId, final Price productPrice, final long quantity) {
+        return new MenuProduct(productId, productPrice, quantity);
+    }
+
 
     public static MenuProductRequest menuProductRequest(MenuProduct menuProduct) {
         return new MenuProductRequest(

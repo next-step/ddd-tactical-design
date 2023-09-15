@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +17,7 @@ class MenuProductTest {
     @Test
     void calculatePrice() {
         //given
-        MenuProduct menuProduct = new MenuProduct(product(1000), 3);
+        MenuProduct menuProduct = menuProduct(product(1000), 3);
         //then
         assertThat(menuProduct.calculatePrice().getValue())
                 .isEqualTo(BigDecimal.valueOf(3000));

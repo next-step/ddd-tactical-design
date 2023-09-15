@@ -5,7 +5,6 @@ import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuErrorCode;
 
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 public class MenuGroupDisplayedName extends ValueObject {
@@ -29,5 +28,5 @@ public class MenuGroupDisplayedName extends ValueObject {
     public String getValue() {
         return name;
     }
-    
+
 }

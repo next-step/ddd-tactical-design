@@ -7,6 +7,7 @@ import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -40,13 +40,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, BigDecimal price) {
+    public Product changePrice(final ProductId productId, BigDecimal price) {
         Product product = findById(productId);
         Price productPrice = new Price(price);
         product.changePrice(productPrice);
 
         try {
-            publisher.publishEvent(new ProductPriceChangedEvent(this, productId));
+            publisher.publishEvent(new ProductPriceChangedEvent(this, productId.getValue()));
         } catch (RuntimeException ex) {
             throw new ProductPriceException(ProductErrorCode.FAIL_REFLACT_MENU_PRICE);
         }
@@ -60,13 +60,13 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Product findById(UUID productId) {
+    public Product findById(ProductId productId) {
         return productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAllInById(List<UUID> productIds) {
+    public List<Product> findAllInById(List<ProductId> productIds) {
         return productRepository.findAllByIdIn(productIds);
     }
 }

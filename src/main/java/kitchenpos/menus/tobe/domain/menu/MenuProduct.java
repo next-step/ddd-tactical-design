@@ -3,7 +3,6 @@ package kitchenpos.menus.tobe.domain.menu;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
-import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -16,8 +15,8 @@ public class MenuProduct {
     @EmbeddedId
     private MenuProductId id;
 
-    @Column(name = "product_id", nullable = false)
-    private UUID productId;
+    @Embedded
+    private ProductId productId;
 
     @Transient
     private Price productPrice;
@@ -33,19 +32,19 @@ public class MenuProduct {
 
     }
 
-    public MenuProduct(UUID productId, Price productPrice, MenuProductQuantity quantity) {
+    public MenuProduct(ProductId productId, Price productPrice, MenuProductQuantity quantity) {
         validateProductPrice(productPrice);
         this.productPrice = productPrice;
         this.productId = productId;
         this.quantity = quantity;
     }
 
-    public MenuProduct(UUID productId, Price productPrice, long quantity) {
+    public MenuProduct(ProductId productId, Price productPrice, long quantity) {
         this(productId, productPrice, new MenuProductQuantity(quantity));
     }
 
-    public MenuProduct(Product product, long quantity) {
-        this(product.getId(), product.getPrice(), new MenuProductQuantity(quantity));
+    public MenuProduct(UUID productId, Price productPrice, long quantity) {
+        this(new ProductId(productId), productPrice, new MenuProductQuantity(quantity));
     }
 
 
@@ -71,8 +70,17 @@ public class MenuProduct {
         return id;
     }
 
-    public UUID getProductId() {
+    public ProductId getProductId() {
         return productId;
+    }
+
+    public UUID getProductIdValue() {
+        return productId.getValue();
+    }
+
+
+    public boolean hasProduct(ProductId productId) {
+        return this.productId.equals(productId);
     }
 
     public long getQuantityValue() {

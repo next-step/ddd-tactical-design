@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Table(name = "menu")
 @Entity
@@ -128,7 +127,7 @@ public class Menu {
         return menuProducts;
     }
 
-    public List<UUID> getProductIds() {
+    public List<ProductId> getProductIds() {
         return menuProducts.getProductIds();
     }
 
@@ -161,5 +160,10 @@ public class Menu {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public void fetchProductPrice(ProductId productId, Price productPrice) {
+        this.menuProducts.fetchPrice(productId, productPrice);
+        checkPriceAndHide();
     }
 }

@@ -4,7 +4,6 @@ import kitchenpos.common.domain.Price;
 
 import java.util.UUID;
 
-
-public interface MenuProductMappingService {
+public interface ProductPriceLoader {
     Price findPriceById(UUID productId);
 }

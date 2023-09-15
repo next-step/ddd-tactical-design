@@ -1,6 +1,7 @@
 package kitchenpos.menus.subscriber;
 
 import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.tobe.domain.menu.ProductId;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -16,7 +17,8 @@ public class ProductPriceEventListener {
 
     @TransactionalEventListener
     public void listen(ProductPriceChangedEvent event) {
-        menuService.checkHideAndPrice(event.getProductId());
+        ProductId productId = new ProductId(event.getProductId());
+        menuService.checkHideAndPrice(productId);
     }
 
 }

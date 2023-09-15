@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,8 +35,8 @@ class MenuTest {
     void setup() {
         product_1000 = product(1000);
         product_2000 = product(2000);
-        menuProduct_1000 = new MenuProduct(product_1000, 3);
-        menuProduct_2000 = new MenuProduct(product_2000, 3);
+        menuProduct_1000 = menuProduct(product_1000, 3);
+        menuProduct_2000 = menuProduct(product_2000, 3);
         menuProducts = new MenuProducts(Arrays.asList(menuProduct_1000, menuProduct_2000));
         menu = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
 

@@ -1,26 +1,25 @@
 package kitchenpos.menus.infra;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.MenuProductMappingService;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.menus.application.ProductPriceLoader;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Component;
 
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Component
-public class DefaultMenuProductMappingService implements MenuProductMappingService {
+public class DefaultMenuProductMappingService implements ProductPriceLoader {
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public DefaultMenuProductMappingService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public DefaultMenuProductMappingService(ProductService productService) {
+        this.productService = productService;
     }
 
     @Override
     public Price findPriceById(UUID productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new)
+        return productService.findById(new ProductId(productId))
                 .getPrice();
     }
 }

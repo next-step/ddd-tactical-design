@@ -14,25 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupService menuGroupService;
-    private final MenuProductMappingService mappingService;
+    private final ProductPriceLoader productPriceLoader;
     private final ProfanityPolicy profanityPolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupService menuGroupService,
-            final MenuProductMappingService mappingService,
+            final ProductPriceLoader productPriceLoader,
             final ProfanityPolicy profanityPolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupService = menuGroupService;
-        this.mappingService = mappingService;
+        this.productPriceLoader = productPriceLoader;
         this.profanityPolicy = profanityPolicy;
     }
 
@@ -56,12 +55,11 @@ public class MenuService {
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
         );
-
         return menuRepository.save(menu);
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
-        Price productPrice = mappingService.findPriceById(menuProductRequest.getProductId());
+        Price productPrice = productPriceLoader.findPriceById(menuProductRequest.getProductId());
         return new MenuProduct(menuProductRequest.getProductId(), productPrice, menuProductRequest.getQuantity());
     }
 
@@ -103,19 +101,10 @@ public class MenuService {
     }
 
     @Transactional
-    public void checkHideAndPrice(UUID productId) {
+    public void checkHideAndPrice(ProductId productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(menu -> fetchMenuProduct(productId, menu));
-        menus.forEach(Menu::checkPriceAndHide);
-    }
-
-    private void fetchMenuProduct(UUID productId, Menu menu) {
-        Price productPrice = mappingService.findPriceById(productId);
-        menu.getMenuProducts()
-                .getValues()
-                .stream()
-                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.fetchPrice(productPrice));
+        Price productPrice = productPriceLoader.findPriceById(productId.getValue());
+        menus.forEach(menu -> menu.fetchProductPrice(productId, productPrice));
     }
 
     @Transactional(readOnly = true)

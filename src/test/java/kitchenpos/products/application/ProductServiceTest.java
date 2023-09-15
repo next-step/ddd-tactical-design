@@ -6,6 +6,7 @@ import kitchenpos.common.exception.PriceException;
 import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +21,6 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,7 +80,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final ProductId productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final BigDecimal changePrice = BigDecimal.valueOf(15_000L);
 
         final Product actual = productService.changePrice(productId, changePrice);
@@ -93,7 +93,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final ProductId productId = productRepository.save(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
                 .isInstanceOf(PriceException.class);
     }

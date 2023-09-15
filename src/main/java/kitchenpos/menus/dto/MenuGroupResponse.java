@@ -3,8 +3,6 @@ package kitchenpos.menus.dto;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
 
-import java.util.UUID;
-
 public class MenuGroupResponse {
     private MenuGroupId id;
     private String name;

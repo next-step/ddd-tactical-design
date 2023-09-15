@@ -7,8 +7,8 @@ public abstract class ValueObject {
 
     @Override
     public boolean equals(Object obj) {
-        if(this==obj) return true;
-        if(obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         return Arrays.stream(getClass().getDeclaredFields())
                 .allMatch(field -> {
                     field.setAccessible(true);
@@ -19,6 +19,7 @@ public abstract class ValueObject {
                     }
                 });
     }
+
     @Override
     public int hashCode() {
         final Object[] values = Arrays.stream(getClass().getDeclaredFields())
