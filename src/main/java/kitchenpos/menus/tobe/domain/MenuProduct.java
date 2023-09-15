@@ -1,0 +1,91 @@
+package kitchenpos.menus.tobe.domain;
+
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class MenuProduct {
+
+    @Column(name = "seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long seq;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "menu_id",
+        nullable = false,
+        columnDefinition = "binary(16)",
+        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
+    private Menu menu;
+
+    @JoinColumn(
+        name = "product_id",
+        columnDefinition = "binary(16)",
+        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+    )
+    private UUID productId;
+
+    @Embedded
+    private ProductPrice price;
+
+    @Embedded
+    private MenuProductQuantity quantity = new MenuProductQuantity();
+
+    public MenuProduct(UUID productId, BigDecimal productPrice, long quantity) {
+        assert isNotEmpty(productId);
+        assert isNotEmpty(productPrice);
+
+        this.productId = productId;
+        this.quantity = new MenuProductQuantity(quantity);
+        this.price = new ProductPrice(productPrice);
+    }
+
+    protected MenuProduct() {
+    }
+
+    public void mapMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public void updatePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
+    public long getTotalPrice() {
+        return this.price.getPrice().longValue() * this.quantity.getQuantity();
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
+
+    public MenuProductQuantity getQuantity() {
+        return quantity;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
+    }
+}
