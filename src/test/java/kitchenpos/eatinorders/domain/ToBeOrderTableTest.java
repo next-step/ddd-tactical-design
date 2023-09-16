@@ -73,4 +73,16 @@ class ToBeOrderTableTest {
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("빈 테이블이면 손님 수를 변경 할 수 없다.");
     }
+
+    @DisplayName("주문 테이블을 초기화 한다")
+    @Test
+    void name() {
+        orderTable.sit();
+        orderTable.changeNumberOfGuests(3);
+        orderTable.initOrderTable();
+        assertAll(
+            () -> assertThat(orderTable.isOccupied()).isFalse(),
+            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(NumberOfGuest.of(0))
+        );
+    }
 }

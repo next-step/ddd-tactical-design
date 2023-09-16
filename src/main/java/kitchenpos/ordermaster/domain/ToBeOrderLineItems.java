@@ -24,7 +24,7 @@ public class ToBeOrderLineItems {
 
     public ToBeOrderLineItems(List<ToBeOrderLineItem> orderLineItems) {
         if (orderLineItems == null || orderLineItems.isEmpty()) {
-            throw new IllegalArgumentException("주문이 없으면 등록할 수 없다.");
+            throw new IllegalArgumentException("주문 내역이 없으면 등록할 수 없다.");
         }
         this.orderLineItems = orderLineItems;
     }
