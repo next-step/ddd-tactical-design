@@ -39,11 +39,7 @@ public class MenuService {
         final MenuPrice price = MenuPrice.from(request.getPrice());
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProductCreateRequest> menuProductRequests = request.getMenuProducts();
-        this.validateMenuProducts(menuProductRequests);
-        final List<MenuProduct> menuProducts = menuProductRequests.stream()
-                .map(it -> menuProductFactory.create(it.getProductId(), it.getQuantity()))
-                .collect(Collectors.toList());
+        final List<MenuProduct> menuProducts = getMenuProducts(request.getMenuProducts());
         final MenuDisplayedName displayName = MenuDisplayedName.from(request.getName(), menuDisplayedNamePolicy);
         final Menu menu = new Menu(
                 UUID.randomUUID(),
@@ -54,6 +50,13 @@ public class MenuService {
                 new MenuProducts(menuProducts)
         );
         return menuRepository.save(menu);
+    }
+
+    private List<MenuProduct> getMenuProducts(List<MenuProductCreateRequest> menuProductRequests) {
+        this.validateMenuProducts(menuProductRequests);
+        return menuProductRequests.stream()
+                .map(it -> menuProductFactory.create(it.getProductId(), it.getQuantity()))
+                .collect(Collectors.toList());
     }
 
     private void validateMenuProducts(final List<MenuProductCreateRequest> menuProductRequests) {
