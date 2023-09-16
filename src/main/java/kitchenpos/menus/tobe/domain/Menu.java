@@ -2,8 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -34,15 +32,46 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
+
+    public Menu() {}
+
+    public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public static Menu create(UUID id, MenuGroup menuGroup, MenuProducts menuProducts, Price price, DisplayedName name, boolean displayed) {
+        return new Menu(id, name, price, menuGroup, displayed, menuProducts);
+    }
+
+    public List<UUID> getMenuProductIds() {
+        return menuProducts.getMenuProductIds();
+    }
+
+    public void displayed() {
+        this.displayed = true;
+    }
+
+    public void notDisplayed() {
+        this.displayed = false;
+    }
+
+    public BigDecimal getPrice() {
+        return price.getPrice();
+    }
+
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts.getMenuProducts();
+    }
+
+    public UUID getId() {
+        return id;
+    }
 }
