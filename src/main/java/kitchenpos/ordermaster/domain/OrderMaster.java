@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,10 +31,13 @@ public class OrderMaster {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
+    @Embedded
+    private ToBeOrderLineItems orderLineItems;
+
     protected OrderMaster() {
     }
 
-    public OrderMaster(OrderType type) {
+    public OrderMaster(OrderType type, ToBeOrderLineItems orderLineItems) {
         if (!OrderType.isValid(type)) {
             throw new IllegalArgumentException("주문 유형이 올바르지 않습니다.");
         }
@@ -41,6 +45,7 @@ public class OrderMaster {
         this.type = type;
         this.status = initialOrderStatus();
         this.orderDateTime = LocalDateTime.now();
+        this.orderLineItems = orderLineItems;
     }
 
     public void accept() {

@@ -62,6 +62,10 @@ public class ToBeMenu {
         this.displayed = false;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public MenuPrice getPrice() {
         return price;
     }
@@ -99,5 +103,9 @@ public class ToBeMenu {
         if (price.isGreaterThan(menuProducts.sumOfProducts())) {
             hide();
         }
+    }
+
+    public boolean isSamePrice(BigDecimal price) {
+        return this.price.equals(MenuPrice.of(price));
     }
 }

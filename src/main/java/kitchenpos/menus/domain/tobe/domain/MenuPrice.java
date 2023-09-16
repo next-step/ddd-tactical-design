@@ -78,4 +78,8 @@ public class MenuPrice {
         return new MenuPrice(BigDecimal.valueOf(newPrice));
     }
 
+    public BigDecimal getValue() {
+        return price;
+    }
+
 }

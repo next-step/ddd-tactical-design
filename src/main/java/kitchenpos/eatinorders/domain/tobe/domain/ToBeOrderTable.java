@@ -60,7 +60,13 @@ public class ToBeOrderTable {
         return numberOfGuest;
     }
 
-    private void initOrderTable() {
+    public void validationForEatInOrder() {
+        if (!occupied) {
+            throw new IllegalStateException("빈 테이블에는 매장 주문을 등록할 수 없다.");
+        }
+    }
+
+    public void initOrderTable() {
         numberOfGuest = NumberOfGuest.defaultNumber();
         occupied = false;
     }

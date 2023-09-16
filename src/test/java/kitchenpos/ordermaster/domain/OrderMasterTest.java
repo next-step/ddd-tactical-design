@@ -1,5 +1,6 @@
 package kitchenpos.ordermaster.domain;
 
+import static kitchenpos.ordermaster.domain.OrderFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,15 +15,15 @@ class OrderMasterTest {
 
     @BeforeEach
     void setUp() {
-        delivery = new OrderMaster(OrderType.DELIVERY);
-        eatIn = new OrderMaster(OrderType.EAT_IN);
+        delivery = new OrderMaster(OrderType.DELIVERY, createOrderLineItems());
+        eatIn = new OrderMaster(OrderType.EAT_IN, createOrderLineItems());
     }
 
     @DisplayName("주문종류가 null 이몬 주문테이블 생성이 안된다.")
     @ParameterizedTest
     @NullSource
     void name(OrderType orderType) {
-        assertThatThrownBy(() -> new OrderMaster(orderType))
+        assertThatThrownBy(() -> new OrderMaster(orderType, createOrderLineItems()))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("주문 유형이 올바르지 않습니다.");
     }
