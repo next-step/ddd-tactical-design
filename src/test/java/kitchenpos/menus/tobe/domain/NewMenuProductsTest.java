@@ -12,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayName("메뉴상품목록 테스트")
-class NewNewMenuProductsTest {
+class NewMenuProductsTest {
 
     @DisplayName("메뉴상품목록 생성 성공")
     @Test

@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class NewNewMenuGroupServiceTest {
+class MenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private MenuGroupService menuGroupService;
 
