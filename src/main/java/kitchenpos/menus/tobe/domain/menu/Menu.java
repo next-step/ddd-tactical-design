@@ -4,7 +4,6 @@ import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuException;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,12 +25,13 @@ public class Menu {
     @Embedded
     private Price price;
 
-    @ManyToOne(optional = false)
+
     @JoinColumn(
             name = "menu_group_id",
             columnDefinition = "binary(16)"
     )
-    private MenuGroup menuGroup;
+    @Embedded
+    private MenuGroupId menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -45,12 +45,12 @@ public class Menu {
     public Menu(String name,
                 ProfanityPolicy policy,
                 BigDecimal price,
-                MenuGroup menuGroup,
+                MenuGroupId menuGroupId,
                 boolean displayed,
                 List<MenuProduct> menuProducts) {
         this(new MenuDisplayedName(name, policy),
                 new Price(price),
-                menuGroup,
+                menuGroupId,
                 displayed,
                 new MenuProducts(menuProducts)
         );
@@ -58,7 +58,7 @@ public class Menu {
 
     public Menu(MenuDisplayedName name,
                 Price price,
-                MenuGroup menuGroup,
+                MenuGroupId menuGroupId,
                 boolean displayed,
                 MenuProducts menuProducts) {
         if (displayed && price.isGreaterThan(menuProducts.calculateSum())) {
@@ -67,7 +67,7 @@ public class Menu {
         this.id = new MenuId();
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
@@ -75,12 +75,12 @@ public class Menu {
     public Menu(String name,
                 ProfanityPolicy policy,
                 long price,
-                MenuGroup menuGroup,
+                MenuGroupId menuGroupId,
                 boolean displayed,
                 MenuProducts menuProducts) {
         this(new MenuDisplayedName(name, policy),
                 new Price(price),
-                menuGroup,
+                menuGroupId,
                 displayed,
                 menuProducts
         );
@@ -123,8 +123,8 @@ public class Menu {
         return id.getValue();
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
+    public MenuGroupId getMenuGroup() {
+        return menuGroupId;
     }
 
     public MenuProducts getMenuProducts() {
@@ -169,5 +169,9 @@ public class Menu {
     public void fetchProductPrice(ProductId productId, Price productPrice) {
         this.menuProducts.fetchPrice(productId, productPrice);
         checkPriceAndHide();
+    }
+
+    public UUID getMenuGroupIdValue() {
+        return menuGroupId.getValue();
     }
 }

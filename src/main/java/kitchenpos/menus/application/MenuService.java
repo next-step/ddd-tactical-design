@@ -8,7 +8,6 @@ import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.tobe.domain.menu.*;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +18,18 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupService menuGroupService;
+    private final MenuGroupLoader menuGroupLoader;
     private final ProductPriceLoader productPriceLoader;
     private final ProfanityPolicy profanityPolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
-            final MenuGroupService menuGroupService,
+            final MenuGroupLoader menuGroupLoader,
             final ProductPriceLoader productPriceLoader,
             final ProfanityPolicy profanityPolicy
     ) {
         this.menuRepository = menuRepository;
-        this.menuGroupService = menuGroupService;
+        this.menuGroupLoader = menuGroupLoader;
         this.productPriceLoader = productPriceLoader;
         this.profanityPolicy = profanityPolicy;
     }
@@ -39,7 +38,10 @@ public class MenuService {
     public Menu create(final MenuCreateRequest request) {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
         final Price price = new Price(request.getPrice());
-        final MenuGroup menuGroup = menuGroupService.findById(request.getMenuGroupId());
+
+        if (!menuGroupLoader.exists(request.getMenuGroupId())) {
+            throw new NoSuchElementException();
+        }
 
         // 메뉴 상품 조립
         validateMenuProducts(request);
@@ -51,7 +53,7 @@ public class MenuService {
         final Menu menu = new Menu(
                 menuDisplayedName,
                 price,
-                menuGroup,
+                new MenuGroupId(request.getMenuGroupId()),
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
         );

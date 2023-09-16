@@ -17,7 +17,7 @@ public class MenuResponse {
 
     private BigDecimal price;
 
-    private MenuGroupResponse menuGroup;
+    private UUID menuGroupId;
 
     private boolean displayed;
 
@@ -26,11 +26,11 @@ public class MenuResponse {
     public MenuResponse() {
     }
 
-    public MenuResponse(MenuId id, String name, BigDecimal price, MenuGroupResponse menuGroup, boolean displayed, List<MenuProductResponse> menuProducts) {
+    public MenuResponse(MenuId id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductResponse> menuProducts) {
         this.id = id.getValue();
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
@@ -40,7 +40,7 @@ public class MenuResponse {
                 menu.getId(),
                 menu.getNameValue(),
                 menu.getPriceValue(),
-                MenuGroupResponse.fromEntity(menu.getMenuGroup()),
+                menu.getMenuGroupIdValue(),
                 menu.isDisplayed(),
                 MenuProductResponse.fromEntities(menu.getMenuProducts())
         );
@@ -76,12 +76,12 @@ public class MenuResponse {
         this.price = price;
     }
 
-    public MenuGroupResponse getMenuGroup() {
-        return menuGroup;
+    public UUID getMenuGroupId() {
+        return menuGroupId;
     }
 
-    public void setMenuGroup(MenuGroupResponse menuGroup) {
-        this.menuGroup = menuGroup;
+    public void setMenuGroupId(UUID menuGroupId) {
+        this.menuGroupId = menuGroupId;
     }
 
     public boolean isDisplayed() {

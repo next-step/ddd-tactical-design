@@ -1,7 +1,7 @@
-package kitchenpos.menus.dto;
+package kitchenpos.menugroups.dto;
 
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
+import kitchenpos.menugroups.domain.MenuGroup;
+import kitchenpos.menugroups.domain.MenuGroupId;
 
 public class MenuGroupResponse {
     private MenuGroupId id;

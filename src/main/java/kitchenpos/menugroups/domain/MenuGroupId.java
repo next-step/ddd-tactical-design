@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.menugroup;
+package kitchenpos.menugroups.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,8 +12,12 @@ public class MenuGroupId implements Serializable {
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
 
-    protected MenuGroupId() {
+    public MenuGroupId(UUID menuGroupId) {
+        this.id = menuGroupId;
+    }
 
+    public MenuGroupId() {
+        this.id = UUID.randomUUID();
     }
 
     public UUID getValue() {

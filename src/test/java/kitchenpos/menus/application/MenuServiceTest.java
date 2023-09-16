@@ -5,6 +5,8 @@ import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.common.exception.PriceException;
+import kitchenpos.menugroups.application.InMemoryMenuGroupRepository;
+import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
@@ -12,13 +14,12 @@ import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
+import kitchenpos.menus.infra.DefaultMenuGroupLoader;
 import kitchenpos.menus.infra.DefaultProductPriceLoader;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.ProductId;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupId;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
@@ -30,14 +31,11 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
+import static kitchenpos.menugroups.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
-import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.products.fixture.ProductFixture.INVALID_ID;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuService menuService;
-    private MenuGroupId menuGroupId;
+    private UUID menuGroupId;
     private ProductId productId;
     private Price productPrice;
 
@@ -58,12 +56,12 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         kitchenpos.products.tobe.domain.ProductRepository productRepository = new InMemoryProductRepository();
-        MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
+        MenuGroupLoader menuGroupLoader = new DefaultMenuGroupLoader(menuGroupRepository);
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
         ProductService productService = new ProductService(productRepository, profanityPolicy, new FakeApplicationEventPublisher());
         DefaultProductPriceLoader productPriceLoader = new DefaultProductPriceLoader(productService);
-        menuService = new MenuService(menuRepository, menuGroupService, productPriceLoader, profanityPolicy);
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
+        menuService = new MenuService(menuRepository, menuGroupLoader, productPriceLoader, profanityPolicy);
+        menuGroupId = menuGroupRepository.save(menuGroup()).getIdValue();
         Product product = productRepository.save(product("후라이드", 16_000L));
         productId = new ProductId(product.getIdValue());
         productPrice = product.getPrice();
@@ -86,7 +84,7 @@ class MenuServiceTest {
                     () -> assertThat(actual.getId()).isNotNull(),
                     () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName()),
                     () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice()),
-                    () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+                    () -> assertThat(actual.getMenuGroupIdValue()).isEqualTo(expected.getMenuGroupId()),
                     () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                     () -> assertThat(actual.getMenuProducts().getValues()).hasSize(1)
             );
@@ -159,7 +157,7 @@ class MenuServiceTest {
         @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
         @NullSource
         @ParameterizedTest
-        void create5(final MenuGroupId menuGroupId) {
+        void create5(final UUID menuGroupId) {
             final MenuCreateRequest expected = createMenuRequest(
                     "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProduct(productId, 2L)
             );
@@ -242,24 +240,25 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuCreateRequest createMenuRequest(String name, long price, MenuGroupId menuGroupId, boolean displayed, List<MenuProductRequest> menuProducts) {
+    private MenuCreateRequest createMenuRequest(String name, long price, UUID menuGroupId, boolean displayed, List<MenuProductRequest> menuProducts) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
     private MenuCreateRequest createMenuRequest(
             final String name,
             final long price,
-            final MenuGroupId menuGroupId,
+            final UUID menuGroupId,
             final boolean displayed,
             final MenuProductRequest... menuProducts
     ) {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
+
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final MenuGroupId menuGroupId,
+            final UUID menuGroupId,
             final boolean displayed,
             final MenuProductRequest... menuProducts
     ) {
@@ -269,7 +268,7 @@ class MenuServiceTest {
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final MenuGroupId menuGroupId,
+            final UUID menuGroupId,
             final boolean displayed,
             final MenuProductRequest menuProduct
     ) {
@@ -279,7 +278,7 @@ class MenuServiceTest {
     private MenuCreateRequest createMenuRequest(
             final String name,
             final BigDecimal price,
-            final MenuGroupId menuGroupId,
+            final UUID menuGroupId,
             final boolean displayed,
             final List<MenuProductRequest> menuProducts
     ) {
@@ -291,6 +290,7 @@ class MenuServiceTest {
                 displayed
         );
     }
+
 
     private static MenuProductRequest createMenuProduct(ProductId productId, long l) {
         return new MenuProductRequest(productId, l);

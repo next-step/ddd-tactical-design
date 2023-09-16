@@ -80,7 +80,4 @@ public class OrderTable {
         this.occupied = true;
     }
 
-    public NumberOfGuest getNumberOfGuest() {
-        return numberOfGuests;
-    }
 }

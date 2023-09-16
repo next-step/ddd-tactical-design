@@ -2,11 +2,17 @@ package kitchenpos.menus.subscriber;
 
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.menus.application.*;
+import kitchenpos.menugroups.application.InMemoryMenuGroupRepository;
+import kitchenpos.menugroups.application.MenuGroupService;
+import kitchenpos.menugroups.domain.MenuGroup;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuGroupLoader;
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.ProductPriceLoader;
+import kitchenpos.menus.infra.DefaultMenuGroupLoader;
 import kitchenpos.menus.infra.DefaultProductPriceLoader;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
@@ -20,9 +26,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
+import static kitchenpos.menugroups.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menuCreate;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
-import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,10 +38,11 @@ import static org.assertj.core.api.Assertions.assertThat;
         InMemoryProductRepository.class,
         InMemoryMenuGroupRepository.class,
         MenuGroupService.class,
-        MenuService.class,
         ProductService.class,
         FakeProfanityPolicy.class,
-        DefaultProductPriceLoader.class
+        DefaultProductPriceLoader.class,
+        DefaultMenuGroupLoader.class,
+        MenuService.class
 })
 @DisplayName("상품 가격 변경 이벤트 발행")
 class ProductPriceEventListenerTest {
@@ -53,7 +60,7 @@ class ProductPriceEventListenerTest {
     MenuGroupService menuGroupService;
 
     @Autowired
-    MenuService menuService;
+    MenuGroupLoader menuGroupLoader;
 
     @Autowired
     ProductService productService;
@@ -63,6 +70,9 @@ class ProductPriceEventListenerTest {
 
     @Autowired
     ProductPriceLoader mappingService;
+
+    @Autowired
+    MenuService menuService;
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test

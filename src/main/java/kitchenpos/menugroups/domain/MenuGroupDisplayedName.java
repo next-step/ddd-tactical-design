@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.menugroup;
+package kitchenpos.menugroups.domain;
 
 import kitchenpos.common.domain.ValueObject;
 import kitchenpos.menus.exception.MenuDisplayedNameException;

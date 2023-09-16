@@ -4,6 +4,7 @@ import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.FakeMenuProfanityPolicy;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuGroupId;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
@@ -15,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import static kitchenpos.menugroups.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
-import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,6 +32,8 @@ class MenuTest {
     private Product product_1000;
     private Product product_2000;
 
+    private MenuGroupId menuGroupId;
+
     @BeforeEach
     void setup() {
         product_1000 = product(1000);
@@ -38,7 +41,8 @@ class MenuTest {
         menuProduct_1000 = menuProduct(product_1000, 3);
         menuProduct_2000 = menuProduct(product_2000, 3);
         menuProducts = new MenuProducts(Arrays.asList(menuProduct_1000, menuProduct_2000));
-        menu = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
+        menuGroupId = new MenuGroupId(menuGroup().getIdValue());
+        menu = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroupId, true, menuProducts);
 
     }
 
@@ -50,7 +54,12 @@ class MenuTest {
         @Test
         void create1() {
             //when
-            Menu response = new Menu("정상", new FakeMenuProfanityPolicy(), 8000, menuGroup(), true, menuProducts);
+            Menu response = new Menu("정상",
+                    new FakeMenuProfanityPolicy(),
+                    8000,
+                    menuGroupId,
+                    true,
+                    menuProducts);
             //then
             assertThat(response.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
         }
@@ -58,7 +67,13 @@ class MenuTest {
         @DisplayName("[실패] 메뉴 생성 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다.")
         @Test
         void create2() {
-            assertThatThrownBy(() -> new Menu("정상", new FakeMenuProfanityPolicy(), 10000, menuGroup(), true, menuProducts)).isInstanceOf(MenuException.class);
+            assertThatThrownBy(() -> new Menu("정상",
+                    new FakeMenuProfanityPolicy(),
+                    10000,
+                    menuGroupId,
+                    true,
+                    menuProducts))
+                    .isInstanceOf(MenuException.class);
         }
 
     }
@@ -66,7 +81,8 @@ class MenuTest {
     @DisplayName("[실패] 메뉴 가격 수정 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다. ")
     @Test
     void changePrice() {
-        assertThatThrownBy(() -> menu.changePrice(new Price(10000))).isInstanceOf(MenuException.class);
+        assertThatThrownBy(() -> menu.changePrice(new Price(10000)))
+                .isInstanceOf(MenuException.class);
     }
 
     @DisplayName("[성공] 메뉴를 숨긴다.")

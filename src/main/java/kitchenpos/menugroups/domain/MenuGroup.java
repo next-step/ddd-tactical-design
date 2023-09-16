@@ -1,7 +1,8 @@
-package kitchenpos.menus.tobe.domain.menugroup;
+package kitchenpos.menugroups.domain;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 @Table(name = "menu_group")
 @Entity
@@ -24,6 +25,10 @@ public class MenuGroup {
 
     public MenuGroupId getId() {
         return id;
+    }
+
+    public UUID getIdValue() {
+        return id.getValue();
     }
 
     public String getNameValue() {

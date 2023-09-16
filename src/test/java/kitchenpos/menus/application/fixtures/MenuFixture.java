@@ -2,12 +2,13 @@ package kitchenpos.menus.application.fixtures;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuGroupId;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.ProductId;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
+import static kitchenpos.menugroups.fixtures.MenuGroupFixture.menuGroup;
 import static kitchenpos.products.fixture.ProductFixture.product;
 
 public class MenuFixture {
@@ -36,7 +37,7 @@ public class MenuFixture {
     public static MenuCreateRequest menuCreate(final long price, final boolean displayed, MenuGroup menuGroup, final MenuProduct... menuProducts) {
         return new MenuCreateRequest(
                 BigDecimal.valueOf(price),
-                menuGroup.getId(),
+                menuGroup.getIdValue(),
                 Arrays.stream(menuProducts)
                         .map(MenuFixture::menuProductRequest)
                         .collect(Collectors.toUnmodifiableList()),
@@ -51,7 +52,7 @@ public class MenuFixture {
                 "후라이드+후라이드",
                 DEFAULT_PROFANITY_POLICY,
                 BigDecimal.valueOf(price),
-                menuGroup,
+                new MenuGroupId(menuGroup.getIdValue()),
                 displayed,
                 Arrays.asList(menuProducts)
         );
@@ -62,7 +63,7 @@ public class MenuFixture {
                 "후라이드+후라이드",
                 DEFAULT_PROFANITY_POLICY,
                 BigDecimal.valueOf(price),
-                menuGroup,
+                new MenuGroupId(menuGroup.getIdValue()),
                 displayed,
                 Arrays.asList(menuProducts)
         );
