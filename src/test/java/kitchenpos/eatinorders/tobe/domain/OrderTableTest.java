@@ -38,4 +38,15 @@ class OrderTableTest {
             .hasMessage("주문테이블은 이름을 가지고 있어야 합니다");
     }
 
+    @DisplayName("주문테이블의 상태를 확인할수 있다")
+    @Test
+    void test3() {
+        //when
+        OrderTable orderTable = new OrderTable(new OrderTableName("name"));
+        //then
+        assertAll(
+            () -> assertThat(orderTable.isOccupied()).isFalse(),
+            () -> assertThat(orderTable.isVacant()).isTrue()
+        );
+    }
 }

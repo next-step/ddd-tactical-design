@@ -40,6 +40,14 @@ public class OrderTable {
     protected OrderTable() {
     }
 
+    public boolean isOccupied() {
+        return this.status == OrderTableStatus.OCCUPIED;
+    }
+
+    public boolean isVacant() {
+        return !isOccupied();
+    }
+
     public UUID getId() {
         return id;
     }
