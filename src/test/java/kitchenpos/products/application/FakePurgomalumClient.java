@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.infra.PurgomalumClient;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +15,6 @@ public class FakePurgomalumClient implements PurgomalumClient {
     @Override
     public boolean containsProfanity(final String text) {
         return profanities.stream()
-            .anyMatch(text::contains);
+            .anyMatch(profanity -> text.contains(profanity));
     }
 }
