@@ -1,7 +1,5 @@
 package kitchenpos.menus.application.dto;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
-
 import java.util.UUID;
 
 public class MenuProductCreateRequest {
