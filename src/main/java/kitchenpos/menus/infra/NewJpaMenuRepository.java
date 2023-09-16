@@ -1,5 +1,7 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.infra;
 
+import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.NewMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
