@@ -1,9 +1,13 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import static kitchenpos.eatinorders.tobe.domain.OrderFixture.acceptedOrder;
+import static kitchenpos.eatinorders.tobe.domain.OrderFixture.completedOrder;
+import static kitchenpos.eatinorders.tobe.domain.OrderFixture.order;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import kitchenpos.eatinorders.tobe.domain.OrderTable.OrderTableStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,5 +68,45 @@ class OrderTableTest {
             () -> assertThat(orderTable.isOccupied()).isTrue(),
             () -> assertThat(orderTable.isVacant()).isFalse()
         );
+    }
+
+    @DisplayName("주문이 완료됬을때, 모든 주문이 완료된 상태라면 테이블을 정리한다")
+    @Test
+    void test5() {
+        //given
+        Orders allCompleteOrder = new Orders(List.of(completedOrder(), completedOrder()));
+        OrderTable orderTable = OrderFixture.occupiedOrderTable(allCompleteOrder);
+
+        Order order = order(orderTable);
+
+        //when
+        order.accept();
+        order.serve();
+        order.complete();
+
+        //then
+        assertAll(
+            () -> assertThat(orderTable.isVacant()).isTrue(),
+            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(NumberOfGuest.INIT)
+        );
+
+    }
+
+    @DisplayName("주문이 완료됬을때, 모든 주문이 완료된 상태가 아니라면 테이블을 정리하지 않는다")
+    @Test
+    void test6() {
+        //given
+        Orders notCompleteOrder = new Orders(List.of(completedOrder(), acceptedOrder()));
+        OrderTable orderTable = OrderFixture.occupiedOrderTable(notCompleteOrder);
+
+        Order order = order(orderTable);
+
+        //when
+        order.accept();
+        order.serve();
+        order.complete();
+
+        //then
+        assertThat(orderTable.isOccupied()).isTrue();
     }
 }

@@ -40,12 +40,7 @@ public class OrderFixture {
         return order;
     }
 
-    public static OrderTable occupiedOrderTable() {
-        OrderTable orderTable = new OrderTable(new OrderTableName("name"));
-        orderTable.occupy();
 
-        return orderTable;
-    }
 
     public static OrderLineItems orderLineItems() {
         OrderLineItem orderLineItem1 = new kitchenpos.eatinorders.tobe.domain.OrderLineItem(UUID.randomUUID(),
@@ -55,4 +50,19 @@ public class OrderFixture {
 
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }
+
+    public static OrderTable occupiedOrderTable(Orders orders) {
+        OrderTable orderTable = new OrderTable(new OrderTableName("name"), orders);
+        orderTable.occupy();
+
+        return orderTable;
+    }
+
+    public static OrderTable occupiedOrderTable() {
+        OrderTable orderTable = new OrderTable(new OrderTableName("name"));
+        orderTable.occupy();
+
+        return orderTable;
+    }
+
 }

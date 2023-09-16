@@ -93,6 +93,11 @@ public class Order {
         }
 
         this.status = OrderStatus.COMPLETED;
+        this.orderTable.clear();
+    }
+
+    public boolean isComplete() {
+        return this.status == OrderStatus.COMPLETED;
     }
 
     public UUID getId() {

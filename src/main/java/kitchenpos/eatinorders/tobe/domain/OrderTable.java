@@ -26,6 +26,9 @@ public class OrderTable {
     @Enumerated(STRING)
     private OrderTableStatus status;
 
+    @Embedded
+    private Orders orders = new Orders();
+
     public OrderTable(OrderTableName name) {
         if (isEmpty(name)) {
             throw new IllegalArgumentException("주문테이블은 이름을 가지고 있어야 합니다");
@@ -37,7 +40,27 @@ public class OrderTable {
         this.status = OrderTableStatus.VACANT;
     }
 
+    /* 테스트를 위한 생성자*/
+    protected OrderTable(OrderTableName name, Orders orders) {
+        if (isEmpty(name)) {
+            throw new IllegalArgumentException("주문테이블은 이름을 가지고 있어야 합니다");
+        }
+
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.orders = orders;
+        this.numberOfGuest = NumberOfGuest.INIT;
+        this.status = OrderTableStatus.VACANT;
+    }
+
     protected OrderTable() {
+    }
+
+    public void clear() {
+        if (orders.allOrderComplete()) {
+            this.status = OrderTableStatus.VACANT;
+            this.numberOfGuest = NumberOfGuest.INIT;
+        }
     }
 
     public void occupy() {
