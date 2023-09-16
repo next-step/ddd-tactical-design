@@ -1,20 +1,21 @@
-package kitchenpos.products.application;
+package kitchenpos.menus.application;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.MenuDisplayedNameProfanities;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FakePurgomalumClient implements PurgomalumClient {
+public class FakeMenuDisplayedNameProfanities implements MenuDisplayedNameProfanities {
+
     private final List<String> profanities;
 
-    public FakePurgomalumClient() {
+    public FakeMenuDisplayedNameProfanities() {
         this.profanities = Arrays.asList("비속어", "욕설");
     }
 
     @Override
     public boolean containsProfanity(final String text) {
         return profanities.stream()
-            .anyMatch(profanity -> text.contains(profanity));
+                .anyMatch(text::contains);
     }
 }

@@ -168,6 +168,7 @@ docker compose -p kitchenpos up -d
 
 - `MenuGroup`은 식별자와 이름을 가진다.
 - `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
+- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
 - `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
 - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.

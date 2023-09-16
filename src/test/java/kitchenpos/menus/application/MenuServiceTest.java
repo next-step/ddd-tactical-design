@@ -5,14 +5,13 @@ import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeProductEventPublisher;
-import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.application.dto.ProductChangePriceRequest;
-import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
+import kitchenpos.products.tobe.domain.ProductDisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductDisplayedNameProfanities;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,9 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private MenuDisplayedNameProfanities menuDisplayedNameProfanities;
+    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
+    private MenuDisplayedNamePolicy menuDisplayedNamePolicy;
     private MenuService menuService;
     private MenuProductFactory menuProductFactory;
     private ProductService productService;
@@ -46,10 +47,11 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        menuDisplayedNameProfanities = new FakeMenuDisplayedNameProfanities();
         menuProductFactory = new MenuProductFactory(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, menuProductFactory);
-        productService = new ProductService(productRepository, new DisplayedNamePolicy(purgomalumClient), new FakeProductEventPublisher(productRepository, menuRepository));
+        menuDisplayedNamePolicy = new MenuDisplayedNamePolicy(menuDisplayedNameProfanities);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, menuProductFactory, menuDisplayedNamePolicy);
+        productService = new ProductService(productRepository, new ProductDisplayedNamePolicy(productDisplayedNameProfanities), new FakeProductEventPublisher(productRepository, menuRepository));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -64,7 +66,7 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.getDisplayedName()).isEqualTo(MenuDisplayedName.from(expected.getName(), menuDisplayedNamePolicy)),
             () -> assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice())),
             () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),

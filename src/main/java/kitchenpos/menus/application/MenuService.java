@@ -6,7 +6,6 @@ import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,21 +17,21 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
     private final MenuProductFactory menuProductFactory;
+    private final MenuDisplayedNamePolicy menuDisplayedNamePolicy;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient,
-        final MenuProductFactory menuProductFactory
+        final MenuProductFactory menuProductFactory,
+        final MenuDisplayedNamePolicy menuDisplayedNamePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
         this.menuProductFactory = menuProductFactory;
+        this.menuDisplayedNamePolicy = menuDisplayedNamePolicy;
     }
 
     @Transactional
@@ -45,13 +44,10 @@ public class MenuService {
         final List<MenuProduct> menuProducts = menuProductRequests.stream()
                 .map(it -> menuProductFactory.create(it.getProductId(), it.getQuantity()))
                 .collect(Collectors.toList());
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+        final MenuDisplayedName displayName = MenuDisplayedName.from(request.getName(), menuDisplayedNamePolicy);
         final Menu menu = new Menu(
                 UUID.randomUUID(),
-                name,
+                displayName,
                 price,
                 menuGroup,
                 request.isDisplayed(),

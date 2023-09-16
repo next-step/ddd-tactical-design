@@ -12,8 +12,8 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuDisplayedName displayedName;
 
     @Embedded
     private MenuPrice price;
@@ -35,14 +35,14 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(String name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
-        this(null, name, price, menuGroup, displayed, menuProducts);
+    public Menu(MenuDisplayedName displayedName, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        this(null, displayedName, price, menuGroup, displayed, menuProducts);
     }
 
-    public Menu(UUID id, String name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public Menu(UUID id, MenuDisplayedName displayedName, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         this.validate(price, menuProducts);
         this.id = id;
-        this.name = name;
+        this.displayedName = displayedName;
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
@@ -94,8 +94,8 @@ public class Menu {
     }
 
 
-    public String getName() {
-        return name;
+    public MenuDisplayedName getDisplayedName() {
+        return displayedName;
     }
 
 

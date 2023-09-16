@@ -13,19 +13,19 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final DisplayedNamePolicy displayedNamePolicy;
+    private final ProductDisplayedNamePolicy productDisplayedNamePolicy;
     private final ProductEventPublisher productEventPublisher;
 
-    public ProductService(ProductRepository productRepository, DisplayedNamePolicy displayedNamePolicy, ProductEventPublisher productEventPublisher) {
+    public ProductService(ProductRepository productRepository, ProductDisplayedNamePolicy productDisplayedNamePolicy, ProductEventPublisher productEventPublisher) {
 
         this.productRepository = productRepository;
-        this.displayedNamePolicy = displayedNamePolicy;
+        this.productDisplayedNamePolicy = productDisplayedNamePolicy;
         this.productEventPublisher = productEventPublisher;
     }
 
     @Transactional
     public Product create(final ProductCreateRequest request) {
-        Product product = request.toProduct(displayedNamePolicy);
+        Product product = request.toProduct(productDisplayedNamePolicy);
         Product productWithId = product.giveId();
         return productRepository.save(productWithId);
     }

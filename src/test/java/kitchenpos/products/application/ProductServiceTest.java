@@ -4,7 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.ProductDisplayedNameProfanities;
 import kitchenpos.products.application.dto.ProductChangePriceRequest;
 import kitchenpos.products.application.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
-    private DisplayedNamePolicy displayedNamePolicy;
+    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
+    private ProductDisplayedNamePolicy productDisplayedNamePolicy;
     private ProductService productService;
     private ProductEventPublisher eventPublisher;
 
@@ -35,10 +35,10 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        displayedNamePolicy = new DisplayedNamePolicy(purgomalumClient);
+        productDisplayedNameProfanities = new FakeProductDisplayedNameProfanities();
+        productDisplayedNamePolicy = new ProductDisplayedNamePolicy(productDisplayedNameProfanities);
         eventPublisher = new FakeProductEventPublisher(productRepository, menuRepository);
-        productService = new ProductService(productRepository, displayedNamePolicy, eventPublisher);
+        productService = new ProductService(productRepository, productDisplayedNamePolicy, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -49,7 +49,7 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), displayedNamePolicy)),
+            () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), productDisplayedNamePolicy)),
             () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
         );
     }

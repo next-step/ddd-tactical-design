@@ -1,9 +1,10 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
+import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
+import kitchenpos.products.tobe.domain.ProductDisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.ProductDisplayedName;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -28,7 +29,7 @@ public class Fixtures {
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         return new Menu(
                 UUID.randomUUID(),
-                "후라이드+후라이드",
+                MenuDisplayedName.from("후라이드+후라이드", menuDisplayedNamePolicy()),
                 MenuPrice.from(BigDecimal.valueOf(price)),
                 menuGroup(),
                 displayed,
@@ -123,10 +124,14 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), ProductDisplayedName.from(name, displayedNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
+        return new Product(UUID.randomUUID(), ProductDisplayedName.from(name, productDisplayedNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
     }
 
-    public static DisplayedNamePolicy displayedNamePolicy() {
-        return new DisplayedNamePolicy(new FakePurgomalumClient());
+    public static ProductDisplayedNamePolicy productDisplayedNamePolicy() {
+        return new ProductDisplayedNamePolicy(new FakeProductDisplayedNameProfanities());
+    }
+
+    public static MenuDisplayedNamePolicy menuDisplayedNamePolicy() {
+        return new MenuDisplayedNamePolicy(new FakeMenuDisplayedNameProfanities());
     }
 }

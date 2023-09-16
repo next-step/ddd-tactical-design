@@ -20,7 +20,7 @@ class MenuTest {
         Menu menu = menu(30000L, true, menuProduct);
         assertAll(
                 () -> assertThat(menu.getId()).isNotNull(),
-                () -> assertThat(menu.getName()).isEqualTo("후라이드+후라이드"),
+                () -> assertThat(menu.getDisplayedName()).isEqualTo(MenuDisplayedName.from("후라이드+후라이드", menuDisplayedNamePolicy())),
                 () -> assertThat(menu.getPrice()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(30000L))),
                 () -> assertThat(menu.isDisplayed()).isTrue(),
                 () -> assertThat(menu.getMenuGroup().getName()).isEqualTo(menuGroup().getName()),

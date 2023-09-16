@@ -1,16 +1,15 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.DomainService;
-import kitchenpos.products.infra.PurgomalumClient;
 
 import java.util.Objects;
 
 @DomainService
-public class DisplayedNamePolicy {
-    private final PurgomalumClient purgomalumClient;
+public class ProductDisplayedNamePolicy {
+    private final ProductDisplayedNameProfanities productDisplayedNameProfanities;
 
-    public DisplayedNamePolicy(PurgomalumClient purgomalumClient) {
-        this.purgomalumClient = purgomalumClient;
+    public ProductDisplayedNamePolicy(ProductDisplayedNameProfanities productDisplayedNameProfanities) {
+        this.productDisplayedNameProfanities = productDisplayedNameProfanities;
     }
 
     public void validateDisplayName(ProductDisplayedName displayName) {
@@ -20,6 +19,6 @@ public class DisplayedNamePolicy {
     }
 
     private boolean containsProfanity(ProductDisplayedName productDisplayedName) {
-        return purgomalumClient.containsProfanity(productDisplayedName.getValue());
+        return productDisplayedNameProfanities.containsProfanity(productDisplayedName.getValue());
     }
 }
