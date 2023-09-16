@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.common.FakeApplicationEventPublisher;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
@@ -11,7 +12,7 @@ import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
-import kitchenpos.menus.infra.DefaultMenuProductMappingService;
+import kitchenpos.menus.infra.DefaultProductPriceLoader;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -21,15 +22,12 @@ import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Spy;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -40,30 +38,31 @@ import java.util.NoSuchElementException;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
 import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static kitchenpos.menus.application.fixtures.MenuGroupFixture.menuGroup;
+import static kitchenpos.products.fixture.ProductFixture.INVALID_ID;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("메뉴")
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuService menuService;
-    @Spy
-    private ApplicationEventPublisher publisher;
     private MenuGroupId menuGroupId;
     private ProductId productId;
     private Price productPrice;
+
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
-        ProductRepository productRepository = new InMemoryProductRepository();
+        kitchenpos.products.tobe.domain.ProductRepository productRepository = new InMemoryProductRepository();
         MenuGroupService menuGroupService = new MenuGroupService(menuGroupRepository);
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        ProductService productService = new ProductService(productRepository, profanityPolicy, publisher);
-        DefaultMenuProductMappingService mappingService = new DefaultMenuProductMappingService(productService);
-        menuService = new MenuService(menuRepository, menuGroupService, mappingService, profanityPolicy);
+        ProductService productService = new ProductService(productRepository, profanityPolicy, new FakeApplicationEventPublisher());
+        DefaultProductPriceLoader productPriceLoader = new DefaultProductPriceLoader(productService);
+        menuService = new MenuService(menuRepository, menuGroupService, productPriceLoader, profanityPolicy);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         Product product = productRepository.save(product("후라이드", 16_000L));
         productId = new ProductId(product.getIdValue());
@@ -120,7 +119,7 @@ class MenuServiceTest {
                     19_000L,
                     menuGroupId,
                     true,
-                    createMenuProduct(new ProductId(Fixtures.INVALID_ID), 2L));
+                    createMenuProduct(new ProductId(INVALID_ID), 2L));
             assertThatThrownBy(() -> menuService.create(expected))
                     .isInstanceOf(NoSuchElementException.class);
         }

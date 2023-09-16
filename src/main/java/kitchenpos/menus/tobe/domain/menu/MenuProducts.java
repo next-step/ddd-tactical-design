@@ -6,16 +6,20 @@ import kitchenpos.menus.exception.MenuProductException;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Embeddable
 public class MenuProducts {
-    @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<MenuProduct> values;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "menu_id", nullable = false)
+
+    private List<MenuProduct> values = new ArrayList<>();
 
     protected MenuProducts() {
     }
@@ -33,10 +37,6 @@ public class MenuProducts {
                 .reduce(Price::add)
                 .get()
                 .getValue();
-    }
-
-    public void mapMenu(Menu menu) {
-        values.forEach(menuProduct -> menuProduct.mapMenu(menu));
     }
 
     public List<MenuProduct> getValues() {

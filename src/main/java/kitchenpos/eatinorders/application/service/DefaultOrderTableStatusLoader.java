@@ -1,23 +1,26 @@
 package kitchenpos.eatinorders.application.service;
 
 import kitchenpos.eatinorders.application.OrderTableStatusLoader;
-import kitchenpos.ordertables.application.OrderTableService;
+import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
+import kitchenpos.ordertables.domain.OrderTableRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Component
 public class DefaultOrderTableStatusLoader implements OrderTableStatusLoader {
-    private OrderTableService orderTableService;
+    private final OrderTableRepository orderTableRepository;
 
-    public DefaultOrderTableStatusLoader(OrderTableService orderTableService) {
-        this.orderTableService = orderTableService;
+    public DefaultOrderTableStatusLoader(OrderTableRepository orderTableRepository) {
+        this.orderTableRepository = orderTableRepository;
     }
 
     @Override
     public boolean isUnOccupied(UUID orderTableId) {
-        return ! orderTableService.findById(new OrderTableId(orderTableId))
-                .isOccupied();
+        OrderTable orderTable = orderTableRepository.findById(new OrderTableId(orderTableId))
+                .orElseThrow(NoSuchElementException::new);
+        return !orderTable.isOccupied();
     }
 }

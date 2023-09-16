@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Table(name = "menu")
 @Entity
@@ -69,7 +70,6 @@ public class Menu {
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        menuProducts.mapMenu(this);
     }
 
     public Menu(String name,
@@ -117,6 +117,10 @@ public class Menu {
 
     public MenuId getId() {
         return id;
+    }
+
+    public UUID getIdValue() {
+        return id.getValue();
     }
 
     public MenuGroup getMenuGroup() {

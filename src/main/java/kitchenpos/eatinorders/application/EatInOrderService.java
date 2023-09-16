@@ -1,10 +1,14 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.EatInOrderId;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
+import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
 import kitchenpos.eatinorders.publisher.OrderTableClearEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -33,12 +37,15 @@ public class EatInOrderService {
         if (orderTableStatusLoader.isUnOccupied(request.getOrderTableId())) {
             throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_UNOCCUPIED);
         }
+        if (request.getOrderLineItems() == null || request.getOrderLineItems().isEmpty()) {
+            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
+        }
         // 주문 금액 검증
         request.getOrderLineItems()
                 .forEach(item -> {
                     Price menuPrice = menuPriceLoader.findMenuPriceById(item.getMenuId());
-                    if (menuPrice.isLessThan(item.getPrice())) {
-                        throw new EatInOrderException(EatInOrderErrorCode.ORDER_PRICE_IS_GREATER_THAN_MENU);
+                    if (!menuPrice.equal(item.getPrice())) {
+                        throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_PRICE_EQUAL_MENU_PRICE);
                     }
                 });
 
@@ -87,8 +94,5 @@ public class EatInOrderService {
         return eatInOrderRepository.findById(eatInOrderId)
                 .orElseThrow(NoSuchElementException::new);
     }
-    @Transactional(readOnly = true)
-    public boolean areAllOrdersComplete(OrderTableId targetId) {
-        return eatInOrderRepository.existsByOrderTableAndStatusNot(targetId, EatInOrderStatus.COMPLETED);
-    }
+
 }

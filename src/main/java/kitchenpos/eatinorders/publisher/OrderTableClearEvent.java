@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class OrderTableClearEvent extends ApplicationEvent {
 
-    private UUID orderTableId;
+    private final UUID orderTableId;
 
     public OrderTableClearEvent(Object source, UUID orderTableId) {
         super(source);

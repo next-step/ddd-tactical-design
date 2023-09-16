@@ -5,7 +5,6 @@ import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -20,10 +19,6 @@ public class MenuProduct {
 
     @Transient
     private Price productPrice;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
 
     @Embedded
     private MenuProductQuantity quantity;
@@ -58,10 +53,6 @@ public class MenuProduct {
         return productPrice.multiply(quantity.getValue());
     }
 
-    public void mapMenu(Menu menu) {
-        this.menu = menu;
-    }
-
     public void fetchPrice(Price price) {
         this.productPrice = price;
     }
@@ -86,21 +77,15 @@ public class MenuProduct {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof MenuProduct)) return false;
 
         MenuProduct that = (MenuProduct) o;
 
-        if (!Objects.equals(id, that.id)) return false;
-        if (!Objects.equals(productId, that.productId)) return false;
-        return Objects.equals(menu, that.menu);
+        return getId() != null ? getId().equals(that.getId()) : that.getId() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (productId != null ? productId.hashCode() : 0);
-        result = 31 * result + (menu != null ? menu.hashCode() : 0);
-        return result;
+        return getId() != null ? getId().hashCode() : 0;
     }
-
 }

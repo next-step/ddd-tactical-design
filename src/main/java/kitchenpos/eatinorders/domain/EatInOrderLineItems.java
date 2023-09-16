@@ -5,7 +5,9 @@ import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,21 +15,22 @@ import java.util.List;
 @Embeddable
 public class EatInOrderLineItems {
 
-    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<EatInOrderLineItem> values;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "order_id", nullable = false)
+    private List<EatInOrderLineItem> eatInOrderLineItems = new ArrayList<>();
 
     public EatInOrderLineItems(List<EatInOrderLineItem> values) {
-        if(values == null || values.isEmpty()){
+        if (values == null || values.isEmpty()) {
             throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
         }
-        this.values = values;
+        this.eatInOrderLineItems = values;
     }
 
     protected EatInOrderLineItems() {
 
     }
 
-    public List<EatInOrderLineItem> getValues() {
-        return Collections.unmodifiableList(values);
+    public List<EatInOrderLineItem> getEatInOrderLineItems() {
+        return Collections.unmodifiableList(eatInOrderLineItems);
     }
 }

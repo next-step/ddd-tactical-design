@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class DefaultMenuProductMappingService implements ProductPriceLoader {
+public class DefaultProductPriceLoader implements ProductPriceLoader {
 
     private final ProductService productService;
 
-    public DefaultMenuProductMappingService(ProductService productService) {
+    public DefaultProductPriceLoader(ProductService productService) {
         this.productService = productService;
     }
 

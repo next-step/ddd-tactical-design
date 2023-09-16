@@ -6,9 +6,11 @@ public enum EatInOrderStatus {
     public boolean isWaiting() {
         return this.equals(WAITING);
     }
+
     public boolean isAccepted() {
         return this.equals(ACCEPTED);
     }
+
     public boolean isServed() {
         return this.equals(SERVED);
     }

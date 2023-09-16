@@ -19,6 +19,12 @@ public class EatInOrderLineItemRequest {
         this.price = price;
     }
 
+    public EatInOrderLineItemRequest(UUID menuId, long quantity, long price) {
+        this.menuId = menuId;
+        this.quantity = quantity;
+        this.price = new BigDecimal(price);
+    }
+
     public EatInOrderLineItemRequest() {
     }
 
@@ -29,6 +35,7 @@ public class EatInOrderLineItemRequest {
                 new Price(price)
         );
     }
+
     public UUID getMenuId() {
         return menuId;
     }

@@ -33,8 +33,15 @@ public class OrderTable {
         this.occupied = occupied;
     }
 
+    public OrderTable(String name) {
+        this.id = new OrderTableId();
+        this.name = new OrderTableName(name);
+        this.numberOfGuests = new NumberOfGuest(0);
+        this.occupied = false;
+    }
+
     public void changeNumberOfGuest(NumberOfGuest numberOfGuest) {
-        if(!occupied){
+        if (!occupied) {
             throw new OrderTableException(OrderTableErrorCode.NON_OCCUPIED_CANNOT_CHANGE_NUMBER_OF_GUESTS);
         }
         this.numberOfGuests = numberOfGuest;
@@ -48,8 +55,16 @@ public class OrderTable {
         return id.getId();
     }
 
+    public OrderTableId getId() {
+        return id;
+    }
+
     public String getNameValue() {
         return name.getValue();
+    }
+
+    public OrderTableName getName() {
+        return name;
     }
 
     public int getNumberOfGuestValue() {
@@ -63,5 +78,9 @@ public class OrderTable {
 
     public void sit() {
         this.occupied = true;
+    }
+
+    public NumberOfGuest getNumberOfGuest() {
+        return numberOfGuests;
     }
 }

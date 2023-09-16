@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "order_line_item")
+@Table(name = "eat_in_order_line_item")
 @Entity
 public class EatInOrderLineItem {
 
@@ -21,7 +21,7 @@ public class EatInOrderLineItem {
     @Embedded
     private EatInOrderLineItemQuantity quantity;
 
-    @Transient
+    @Embedded
     private Price price;
 
     protected EatInOrderLineItem() {
@@ -30,6 +30,12 @@ public class EatInOrderLineItem {
     public EatInOrderLineItem(MenuId menuId, EatInOrderLineItemQuantity quantity, Price price) {
         this.menuId = menuId;
         this.quantity = quantity;
+        this.price = price;
+    }
+
+    public EatInOrderLineItem(MenuId menuId, long quantity, Price price) {
+        this.menuId = menuId;
+        this.quantity = new EatInOrderLineItemQuantity(quantity);
         this.price = price;
     }
 

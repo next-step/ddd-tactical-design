@@ -2,14 +2,12 @@ package kitchenpos.eatinorders.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Embeddable
 public class EatInOrderId implements Serializable {
 
-    @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
 

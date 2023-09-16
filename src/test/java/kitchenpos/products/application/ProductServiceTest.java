@@ -7,7 +7,6 @@ import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,10 +26,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("상품")
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
-    private ProductRepository productRepository;
+    private kitchenpos.products.tobe.domain.ProductRepository productRepository;
 
     private ProductService productService;
 

@@ -3,7 +3,7 @@ package kitchenpos.menus.subscriber;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.application.*;
-import kitchenpos.menus.infra.DefaultMenuProductMappingService;
+import kitchenpos.menus.infra.DefaultProductPriceLoader;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -30,14 +30,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = {ProductPriceEventListener.class,
         InMemoryMenuRepository.class,
         InMemoryProductRepository.class,
-        ProductService.class,
         InMemoryMenuGroupRepository.class,
         MenuGroupService.class,
         MenuService.class,
         ProductService.class,
         FakeProfanityPolicy.class,
-        DefaultMenuProductMappingService.class
+        DefaultProductPriceLoader.class
 })
+@DisplayName("상품 가격 변경 이벤트 발행")
 class ProductPriceEventListenerTest {
 
     @Autowired

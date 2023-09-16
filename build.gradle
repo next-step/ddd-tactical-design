@@ -7,7 +7,7 @@ plugins {
 
 group = 'camp.nextstep.edu'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "16"
 description = 'Kitchenpos project with domain-driven design'
 
 repositories {
@@ -37,3 +37,4 @@ flyway {
     user = 'user'
     password = 'password'
 }
+targetCompatibility = JavaVersion.VERSION_16

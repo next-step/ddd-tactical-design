@@ -19,7 +19,7 @@ public class OrderTableName extends ValueObject {
     }
 
     public OrderTableName(String value) {
-        if(value == null || value.isBlank()) {
+        if (value == null || value.isBlank()) {
             throw new OrderTableNameException(OrderTableErrorCode.NAME_IS_EMTPY);
         }
         this.value = value;

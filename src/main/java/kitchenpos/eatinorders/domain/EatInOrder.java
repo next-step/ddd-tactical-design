@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "orders")
+@Table(name = "eat_in_order")
 @Entity
 public class EatInOrder {
     @EmbeddedId
@@ -23,7 +23,7 @@ public class EatInOrder {
     private OrderDateTime orderDateTime;
 
     @Embedded
-    private EatInOrderLineItems eatInOrderLineItems;
+    private EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems();
 
     @Embedded
     private OrderTableId orderTableId;
@@ -34,6 +34,14 @@ public class EatInOrder {
     public EatInOrder(EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
         this.id = new EatInOrderId();
         this.status = EatInOrderStatus.WAITING;
+        this.orderDateTime = new OrderDateTime();
+        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.orderTableId = orderTableId;
+    }
+
+    public EatInOrder(EatInOrderStatus status, EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
+        this.id = new EatInOrderId();
+        this.status = status;
         this.orderDateTime = new OrderDateTime();
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
@@ -56,7 +64,7 @@ public class EatInOrder {
     }
 
     public List<EatInOrderLineItem> getOrderLineItemValues() {
-        return eatInOrderLineItems.getValues();
+        return eatInOrderLineItems.getEatInOrderLineItems();
     }
 
     public EatInOrderStatus getStatus() {
@@ -69,17 +77,19 @@ public class EatInOrder {
         }
         this.status = EatInOrderStatus.ACCEPTED;
     }
+
     public void serve() {
         if (!status.isAccepted()) {
             throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_ACCEPTED);
         }
         this.status = EatInOrderStatus.SERVED;
     }
+
     public void complete() {
         if (!status.isServed()) {
             throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_SERVED);
         }
-        this.status = EatInOrderStatus.ACCEPTED;
+        this.status = EatInOrderStatus.COMPLETED;
     }
 
     public OrderTableId getOrderTableId() {

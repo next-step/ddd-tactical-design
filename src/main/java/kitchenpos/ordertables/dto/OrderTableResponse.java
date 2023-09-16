@@ -1,8 +1,6 @@
 package kitchenpos.ordertables.dto;
 
-import kitchenpos.ordertables.domain.NumberOfGuest;
 import kitchenpos.ordertables.domain.OrderTable;
-import kitchenpos.ordertables.domain.OrderTableName;
 
 import java.util.List;
 import java.util.UUID;

@@ -6,7 +6,6 @@ import kitchenpos.ordertables.exception.OrderTableErrorCode;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.math.BigDecimal;
 
 @Embeddable
 public class NumberOfGuest extends ValueObject {

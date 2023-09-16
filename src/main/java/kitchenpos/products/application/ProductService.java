@@ -8,7 +8,6 @@ import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +18,12 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
+    private final kitchenpos.products.tobe.domain.ProductRepository productRepository;
     private final ProfanityPolicy profanityPolicy;
-
     private final ApplicationEventPublisher publisher;
 
     public ProductService(
-            final ProductRepository productRepository,
+            final kitchenpos.products.tobe.domain.ProductRepository productRepository,
             final ProfanityPolicy profanityPolicy,
             final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
@@ -69,4 +67,5 @@ public class ProductService {
     public List<Product> findAllInById(List<ProductId> productIds) {
         return productRepository.findAllByIdIn(productIds);
     }
+
 }

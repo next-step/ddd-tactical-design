@@ -1,7 +1,6 @@
 package kitchenpos.ordertables.ui;
 
 import kitchenpos.ordertables.application.OrderTableService;
-import kitchenpos.ordertables.domain.NumberOfGuest;
 import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
 import kitchenpos.ordertables.dto.ChangeNumberOfGuestRequest;
@@ -25,7 +24,7 @@ public class OrderTableRestController {
 
     @PostMapping
     public ResponseEntity<OrderTableResponse> create(@RequestBody final OrderTableRequest request) {
-        final OrderTable response = orderTableService.create(request.toEntity());
+        final OrderTable response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getIdValue()))
                 .body(OrderTableResponse.fromEntity(response));
     }
@@ -48,9 +47,8 @@ public class OrderTableRestController {
             @RequestBody final ChangeNumberOfGuestRequest request
     ) {
         OrderTableId targetOrderTableId = new OrderTableId(orderTableId);
-        NumberOfGuest numberOfGuest = new NumberOfGuest(request.getNumberOfGuest());
-        OrderTable response = orderTableService.changeNumberOfGuests(targetOrderTableId, numberOfGuest);
-        return  ResponseEntity.ok(OrderTableResponse.fromEntity(response));
+        OrderTable response = orderTableService.changeNumberOfGuests(targetOrderTableId, request.getNumberOfGuest());
+        return ResponseEntity.ok(OrderTableResponse.fromEntity(response));
     }
 
     @GetMapping

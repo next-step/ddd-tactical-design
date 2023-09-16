@@ -4,6 +4,7 @@ import kitchenpos.ordertables.domain.NumberOfGuest;
 import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
 import kitchenpos.ordertables.domain.OrderTableRepository;
+import kitchenpos.ordertables.dto.OrderTableRequest;
 import kitchenpos.ordertables.exception.OrderTableErrorCode;
 import kitchenpos.ordertables.exception.OrderTableException;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,14 @@ public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
     private final EatInOrderStatusLoader eatInOrderStatusLoader;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderStatusLoader eatInOrderStatusLoader) {
+    public OrderTableService(OrderTableRepository orderTableRepository, EatInOrderStatusLoader eatInOrderStatusLoader) {
         this.orderTableRepository = orderTableRepository;
         this.eatInOrderStatusLoader = eatInOrderStatusLoader;
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        return orderTableRepository.save(request);
+    public OrderTable create(final OrderTableRequest request) {
+        return orderTableRepository.save(request.toEntity());
     }
 
     @Transactional
@@ -47,9 +48,9 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final OrderTableId orderTableId, final NumberOfGuest numberOfGuest) {
+    public OrderTable changeNumberOfGuests(final OrderTableId orderTableId, int numberOfGuest) {
         OrderTable orderTable = findById(orderTableId);
-        orderTable.changeNumberOfGuest(numberOfGuest);
+        orderTable.changeNumberOfGuest(new NumberOfGuest(numberOfGuest));
         return orderTable;
     }
 

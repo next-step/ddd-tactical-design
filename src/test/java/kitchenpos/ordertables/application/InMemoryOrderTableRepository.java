@@ -16,7 +16,7 @@ public class InMemoryOrderTableRepository implements OrderTableRepository {
     }
 
     @Override
-    public Optional<OrderTable> findById(final UUID id) {
+    public Optional<OrderTable> findById(final OrderTableId id) {
         return Optional.ofNullable(orderTables.get(id));
     }
 
