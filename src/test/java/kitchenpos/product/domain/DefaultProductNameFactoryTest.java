@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doReturn;
 
 import kitchenpos.product.application.exception.ContainsProfanityException;
 import kitchenpos.product.application.port.out.ProductPurgomalumChecker;
+import kitchenpos.support.vo.Name;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;

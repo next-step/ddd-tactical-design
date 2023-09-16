@@ -1,4 +1,4 @@
-package kitchenpos.product.domain;
+package kitchenpos.support.vo;
 
 import static com.google.common.base.Preconditions.checkArgument;
 

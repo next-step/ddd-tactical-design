@@ -1,6 +1,6 @@
 package kitchenpos.product.application.port.out;
 
-import kitchenpos.product.domain.Name;
+import kitchenpos.support.vo.Name;
 
 public interface ProductPurgomalumChecker {
 

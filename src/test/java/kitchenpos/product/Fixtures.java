@@ -1,9 +1,9 @@
 package kitchenpos.product;
 
-import kitchenpos.product.domain.Name;
 import kitchenpos.product.domain.ProductNameAccessor;
 import kitchenpos.product.domain.ProductNew;
 import kitchenpos.product.domain.ProductPrice;
+import kitchenpos.support.vo.Name;
 
 public final class Fixtures {
 

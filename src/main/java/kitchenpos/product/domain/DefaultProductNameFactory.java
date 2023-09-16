@@ -5,6 +5,7 @@ import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import kitchenpos.product.application.exception.ContainsProfanityException;
 import kitchenpos.product.application.port.out.ProductPurgomalumChecker;
+import kitchenpos.support.vo.Name;
 
 public class DefaultProductNameFactory implements ProductNameFactory {
 

@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.google.common.base.Objects;
 import javax.persistence.Embeddable;
+import kitchenpos.support.vo.Name;
 
 @Embeddable
 public class ProductName {

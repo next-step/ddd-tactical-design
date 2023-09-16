@@ -5,11 +5,11 @@ import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import kitchenpos.product.application.port.in.ProductRegistrationUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
-import kitchenpos.product.domain.Name;
 import kitchenpos.product.domain.ProductName;
 import kitchenpos.product.domain.ProductNameFactory;
 import kitchenpos.product.domain.ProductNew;
 import kitchenpos.product.domain.ProductPrice;
+import kitchenpos.support.vo.Name;
 
 public class DefaultProductRegistrationUseCase implements ProductRegistrationUseCase {
 

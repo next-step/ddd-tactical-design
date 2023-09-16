@@ -1,6 +1,6 @@
 package kitchenpos.product.application.exception;
 
-import kitchenpos.product.domain.Name;
+import kitchenpos.support.vo.Name;
 
 public final class ContainsProfanityException extends IllegalArgumentException {
 
