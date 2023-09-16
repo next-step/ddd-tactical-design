@@ -6,8 +6,8 @@ import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
 

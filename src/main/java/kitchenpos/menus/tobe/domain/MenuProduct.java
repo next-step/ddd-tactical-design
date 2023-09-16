@@ -1,8 +1,18 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.domain.Product;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -15,14 +25,14 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private Quantity quantity;
 
     @Transient
     private UUID productId;
@@ -47,11 +57,11 @@ public class MenuProduct {
     }
 
     public long getQuantity() {
-        return quantity;
+        return quantity.getValue();
     }
 
     public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        this.quantity = new Quantity(quantity);
     }
 
     public UUID getProductId() {

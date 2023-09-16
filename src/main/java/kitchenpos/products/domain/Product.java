@@ -45,4 +45,8 @@ public class Product {
     public void changePrice(final BigDecimal price) {
         this.price = new Price(price);
     }
+
+    public Price multiplyPrice(final long quantity) {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
 }

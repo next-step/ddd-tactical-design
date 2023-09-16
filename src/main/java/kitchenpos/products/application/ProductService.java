@@ -1,8 +1,8 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
@@ -52,12 +52,7 @@ public class ProductService {
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                                .getValue()
-                );
+                sum = sum.add(menuProduct.getProduct().multiplyPrice(menuProduct.getQuantity()).getValue());
             }
             if (menu.getPrice().compareTo(sum) > 0) {
                 menu.setDisplayed(false);
