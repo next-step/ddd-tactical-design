@@ -1,7 +1,7 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductEventPublisher;
 import kitchenpos.products.tobe.domain.ProductPriceChangeEvent;
@@ -25,7 +25,7 @@ public class FakeProductEventPublisher extends ProductEventPublisher {
                 .orElseThrow();
         List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (Menu menu : menus) {
-            menu.changeMenuProductPrice(product);
+            menu.changeMenuProductPrice(product.getId(), product.getPrice().getValue());
         }
     }
 }

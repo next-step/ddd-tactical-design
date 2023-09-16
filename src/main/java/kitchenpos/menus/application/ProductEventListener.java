@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPriceChangeEvent;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -28,7 +28,7 @@ public class ProductEventListener {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
-            menu.changeMenuProductPrice(product);
+            menu.changeMenuProductPrice(product.getId(), product.getPrice().getValue());
         }
         menuRepository.saveAll(menus);
     }

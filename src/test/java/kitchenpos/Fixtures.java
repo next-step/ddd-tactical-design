@@ -1,9 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.DisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.ProductDisplayedName;
@@ -28,14 +26,14 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
+        return new Menu(
+                UUID.randomUUID(),
+                "후라이드+후라이드",
+                MenuPrice.from(BigDecimal.valueOf(price)),
+                menuGroup(),
+                displayed,
+                new MenuProducts(Arrays.asList(menuProducts))
+        );
     }
 
     public static MenuGroup menuGroup() {
@@ -50,19 +48,22 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
-        return menuProduct;
+        final Product product = product();
+        return new MenuProduct(
+                new Random().nextLong(),
+                product.getId(),
+                product.getPrice().getValue(),
+                2L
+        );
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+        return new MenuProduct(
+                new Random().nextLong(),
+                product.getId(),
+                product.getPrice().getValue(),
+                quantity
+        );
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {

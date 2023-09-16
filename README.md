@@ -111,6 +111,7 @@ docker compose -p kitchenpos up -d
 | 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
 | 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
 | 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
+| 노출된 메뉴 | displayed menu | 주문할 수 있는 노출된 메뉴 |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
 | 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
 
