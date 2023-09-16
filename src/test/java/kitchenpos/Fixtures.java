@@ -31,11 +31,11 @@ public class Fixtures {
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
+        menu.setName("후라이드+후라이드", new FakePurgomalumClient());
         menu.setPrice(BigDecimal.valueOf(price));
         menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+        menu.addMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
 
