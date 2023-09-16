@@ -41,6 +41,10 @@ public class OrderLineItem {
         this.quantity = quantity;
     }
 
+    public void mapOrder(Order order) {
+        this.order = order;
+    }
+
     protected OrderLineItem() {
     }
 
