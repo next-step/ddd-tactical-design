@@ -1,7 +1,4 @@
-package kitchenpos.menus.domain;
-
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+package kitchenpos.menus.tobe.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
