@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.domain.tobe.domain;
+package kitchenpos.ordermaster.domain;
 
-import static kitchenpos.eatinorders.domain.OrderStatus.*;
+import static kitchenpos.ordermaster.domain.OrderStatus.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,9 +11,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
 
 @Table(name = "orders_master")
 @Entity
