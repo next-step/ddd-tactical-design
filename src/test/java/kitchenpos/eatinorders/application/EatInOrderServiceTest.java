@@ -1,10 +1,12 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.deliveryorders.application.FakeKitchenridersClient;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.domain.order.*;
+import kitchenpos.ordertables.application.InMemoryOrderTableRepository;
 import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;

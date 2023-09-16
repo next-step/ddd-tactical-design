@@ -1,6 +1,5 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.Fixtures;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;

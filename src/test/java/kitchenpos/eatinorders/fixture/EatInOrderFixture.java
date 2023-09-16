@@ -1,10 +1,9 @@
-package kitchenpos;
+package kitchenpos.eatinorders.fixture;
 
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.ordertables.domain.OrderTable;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -13,11 +12,12 @@ import java.util.UUID;
 
 import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
 
-public class Fixtures {
-    public static final UUID INVALID_ID = new UUID(0L, 0L);
-    public static final MenuId INVALID_MENU_ID = new MenuId(new UUID(0L, 0L));
+public class EatInOrderFixture {
 
-    public static EatInOrder order(final EatInOrderStatus status, final String deliveryAddress) {
+    public static EatInOrder order(final EatInOrderStatus status) {
+        return new EatInOrder(
+
+        );
         final EatInOrder order = new EatInOrder();
         order.setId(UUID.randomUUID());
         order.setType(OrderType.DELIVERY);
@@ -54,19 +54,6 @@ public class Fixtures {
         eatInOrderLineItem.setSeq(new Random().nextLong());
         eatInOrderLineItem.setMenu(menu());
         return eatInOrderLineItem;
-    }
-
-    public static OrderTable orderTable() {
-        return orderTable(false, 0);
-    }
-
-    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
     }
 
 }
