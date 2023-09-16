@@ -14,11 +14,36 @@ import org.junit.jupiter.api.Test;
 public class OrderTest {
 
     private OrderTable orderTable;
+    private Order waitingOrder;
+    private Order acceptedOrder;
+    private Order servedOrder;
+    private Order completedOrder;
 
     @BeforeEach
     public void init() {
         this.orderTable = new OrderTable(new OrderTableName("name"));
+        waitingOrder = createOrder();
 
+        acceptedOrder = createOrder();
+        acceptedOrder.accept();
+
+        servedOrder = createOrder();
+        servedOrder.accept();
+        servedOrder.serve();
+
+        completedOrder = createOrder();
+        completedOrder.accept();
+        completedOrder.serve();
+        completedOrder.complete();
+    }
+
+    private Order createOrder() {
+        OrderLineItem orderLineItem1 = new OrderLineItem(UUID.randomUUID(), new OrderLineItemQuantity(1));
+        OrderLineItems orderLineItems = new OrderLineItems(List.of(orderLineItem1));
+        OrderTable orderTable = new OrderTable(new OrderTableName("name"));
+        orderTable.occupy();
+
+        return new Order(orderTable, orderLineItems);
     }
 
     @DisplayName("주문을 생성할수 있다")
@@ -73,5 +98,62 @@ public class OrderTest {
             () -> new Order(orderTable, orderLineItems)
         ).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("주문내역이 하나 이상 있어야 합니다");
+    }
+
+    @DisplayName("대기중인 주문만 수락할수 있다")
+    @Test
+    void test4() {
+        assertAll(
+            () -> assertThatThrownBy(
+                () -> acceptedOrder.accept()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("접수 대기 중인 주문만 수락할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> servedOrder.accept()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("접수 대기 중인 주문만 수락할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> completedOrder.accept()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("접수 대기 중인 주문만 수락할수 있습니다")
+        );
+    }
+
+    @DisplayName("수락된 주문만 전달할수 있다")
+    @Test
+    void test5() {
+        assertAll(
+            () -> assertThatThrownBy(
+                () -> waitingOrder.serve()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("수락된 주문만 전달할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> servedOrder.serve()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("수락된 주문만 전달할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> completedOrder.serve()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("수락된 주문만 전달할수 있습니다")
+        );
+    }
+
+    @DisplayName("전달된 주문만 완료할수 있다")
+    @Test
+    void test6() {
+        assertAll(
+            () -> assertThatThrownBy(
+                () -> waitingOrder.complete()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("전달된 주문만 완료할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> acceptedOrder.complete()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("전달된 주문만 완료할수 있습니다"),
+            () -> assertThatThrownBy(
+                () -> completedOrder.complete()
+            ).isInstanceOf(IllegalStateException.class)
+                .hasMessage("전달된 주문만 완료할수 있습니다")
+        );
     }
 }

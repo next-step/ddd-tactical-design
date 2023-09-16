@@ -71,6 +71,29 @@ public class Order {
         }
     }
 
+    public void accept() {
+        if (this.status != OrderStatus.WAITING) {
+            throw new IllegalStateException("접수 대기 중인 주문만 수락할수 있습니다");
+        }
+
+        this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (this.status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException("수락된 주문만 전달할수 있습니다");
+        }
+
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void complete() {
+        if (this.status != OrderStatus.SERVED) {
+            throw new IllegalStateException("전달된 주문만 완료할수 있습니다");
+        }
+
+        this.status = OrderStatus.COMPLETED;
+    }
 
     public UUID getId() {
         return id;
