@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultProductPriceChangeUseCase implements ProductPriceChangeUseCase {
 
     private final ProductNewRepository repository;
-    private final ProductPriceChangeEventPublisher eventPublisher;
+    private final ProductPriceChangeEventPublisher productPriceChangeEvent;
 
     public DefaultProductPriceChangeUseCase(final ProductNewRepository repository,
-        final ProductPriceChangeEventPublisher eventPublisher) {
+        final ProductPriceChangeEventPublisher productPriceChangeEvent) {
 
         this.repository = repository;
-        this.eventPublisher = eventPublisher;
+        this.productPriceChangeEvent = productPriceChangeEvent;
     }
 
     @Transactional
@@ -36,6 +36,6 @@ public class DefaultProductPriceChangeUseCase implements ProductPriceChangeUseCa
 
         product.changePrice(price);
 
-        eventPublisher.publish(id);
+        productPriceChangeEvent.publish(id);
     }
 }
