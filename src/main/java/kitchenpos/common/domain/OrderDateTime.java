@@ -13,10 +13,6 @@ public class OrderDateTime extends ValueObject {
         this.value = LocalDateTime.now();
     }
 
-    public OrderDateTime(LocalDateTime value) {
-        this.value = value;
-    }
-
     public LocalDateTime getValue() {
         return value;
     }

@@ -60,7 +60,7 @@ public class EatInOrderFixture {
         );
     }
 
-    private static EatInOrderLineItems orderLineItems(EatInOrderLineItem... orderLineItems) {
+    public static EatInOrderLineItems orderLineItems(EatInOrderLineItem... orderLineItems) {
         return new EatInOrderLineItems(Arrays.asList(orderLineItems));
     }
 
