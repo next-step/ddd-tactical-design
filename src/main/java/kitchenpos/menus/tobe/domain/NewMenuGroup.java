@@ -13,7 +13,7 @@ import static kitchenpos.menus.exception.MenuGroupExceptionMessage.NULL_EMPTY_NA
 
 @Table(name = "menu_group")
 @Entity
-public class MenuGroup {
+public class NewMenuGroup {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -21,10 +21,10 @@ public class MenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public MenuGroup() {
+    public NewMenuGroup() {
     }
 
-    private MenuGroup(UUID id, String name) {
+    private NewMenuGroup(UUID id, String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException(NULL_EMPTY_NAME);
         }
@@ -32,8 +32,8 @@ public class MenuGroup {
         this.name = name;
     }
 
-    public static MenuGroup create(UUID id, String name) {
-        return new MenuGroup(id, name);
+    public static NewMenuGroup create(UUID id, String name) {
+        return new NewMenuGroup(id, name);
     }
 
     public UUID getId() {
@@ -48,8 +48,8 @@ public class MenuGroup {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuGroup menuGroup = (MenuGroup) o;
-        return Objects.equals(id, menuGroup.id);
+        NewMenuGroup newMenuGroup = (NewMenuGroup) o;
+        return Objects.equals(id, newMenuGroup.id);
     }
 
     @Override

@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.products.application.FakeDisplayNameChecker;
 import kitchenpos.products.tobe.domain.Product;
 
@@ -46,8 +47,8 @@ public class Fixtures {
         return menuGroup;
     }
 
-    public static kitchenpos.menus.tobe.domain.MenuGroup tobeMenuGroup(final String name) {
-        return kitchenpos.menus.tobe.domain.MenuGroup.create(UUID.randomUUID(), name);
+    public static NewMenuGroup tobeMenuGroup(final String name) {
+        return NewMenuGroup.create(UUID.randomUUID(), name);
     }
 
     public static MenuProduct menuProduct() {

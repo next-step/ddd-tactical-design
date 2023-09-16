@@ -12,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayName("메뉴상품목록 테스트")
-class MenuProductsTest {
+class NewNewMenuProductsTest {
 
     @DisplayName("메뉴상품목록 생성 성공")
     @Test
@@ -49,7 +49,9 @@ class MenuProductsTest {
         List<UUID> result = menuProducts.getMenuProductIds();
 
         assertThat(result.size()).isEqualTo(3);
-        assertThat(result).isIn(uuids);
+        assertThat(result.get(0)).isEqualTo(uuids.get(0));
+        assertThat(result.get(1)).isEqualTo(uuids.get(1));
+        assertThat(result.get(2)).isEqualTo(uuids.get(2));
     }
 
 }

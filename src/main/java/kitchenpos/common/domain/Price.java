@@ -42,4 +42,9 @@ public class Price {
     public int hashCode() {
         return Objects.hash(price);
     }
+
+    public boolean isGreaterThan(Price sum) {
+        int result = this.price.compareTo(sum.price);
+        return result > 0;
+    }
 }

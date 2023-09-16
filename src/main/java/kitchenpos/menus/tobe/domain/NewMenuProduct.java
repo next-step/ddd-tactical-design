@@ -8,7 +8,7 @@ import static kitchenpos.menus.exception.MenuProductExceptionMessage.ILLEGAL_QUA
 
 @Table(name = "menu_product")
 @Entity
-public class MenuProduct {
+public class NewMenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -24,10 +24,10 @@ public class MenuProduct {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    public MenuProduct() {
+    public NewMenuProduct() {
     }
 
-    private MenuProduct(UUID productId, long quantity) {
+    private NewMenuProduct(UUID productId, long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException(ILLEGAL_QUANTITY);
         }
@@ -35,8 +35,21 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static MenuProduct of(UUID productId, long quantity) {
-        return new MenuProduct(productId, quantity);
+    private NewMenuProduct(Long seq, UUID productId, long quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException(ILLEGAL_QUANTITY);
+        }
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public static NewMenuProduct create(UUID productId, long quantity) {
+        return new NewMenuProduct(productId, quantity);
+    }
+
+    public static NewMenuProduct create(Long seq, UUID productId, long quantity) {
+        return new NewMenuProduct(seq, productId, quantity);
     }
 
     public UUID getProductId() {
@@ -51,7 +64,7 @@ public class MenuProduct {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuProduct that = (MenuProduct) o;
+        NewMenuProduct that = (NewMenuProduct) o;
         return Objects.equals(seq, that.seq);
     }
 

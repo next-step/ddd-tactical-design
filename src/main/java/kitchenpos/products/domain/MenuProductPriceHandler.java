@@ -1,7 +1,8 @@
 package kitchenpos.products.domain;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.common.domain.Price;
+import kitchenpos.menus.tobe.domain.NewMenu;
+import kitchenpos.menus.tobe.domain.NewMenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 
@@ -10,37 +11,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static kitchenpos.menus.exception.MenuExceptionMessage.MENU_PRICE_MORE_PRODUCTS_SUM;
+
 @Service
 public class MenuProductPriceHandler {
-    public void hideMenuDisplayMenuPriceGreaterThanSum(Map<UUID, Product> productMap, List<Menu> menus) {
-        for (final Menu menu : menus) {
-            BigDecimal sum = sumMenuProductPrice(productMap, menu);
-            hideMenuDisplayMenuPriceGreaterThanSum(menu.getPrice(), sum, menu);
+    public void hideMenuDisplayMenuPriceGreaterThanSum(Map<UUID, Product> productMap, List<NewMenu> newMenus) {
+        for (final NewMenu newMenu : newMenus) {
+            BigDecimal sum = sumMenuProductPrice(productMap, newMenu.getMenuProductList());
+            hideMenuDisplayMenuPriceGreaterThanSum(newMenu.getPrice(), sum, newMenu);
         }
     }
 
-    public void checkPrice(Map<UUID, Product> productMap, Menu menu) {
-        BigDecimal sum = sumMenuProductPrice(productMap, menu);
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
+    public void checkPrice(Map<UUID, Product> productMap, Price price, List<NewMenuProduct> newMenuProducts) {
+        Price sum = Price.of(sumMenuProductPrice(productMap, newMenuProducts));
+        if (price.isGreaterThan(sum)) {
+            throw new IllegalArgumentException(MENU_PRICE_MORE_PRODUCTS_SUM);
         }
     }
 
-    public BigDecimal sumMenuProductPrice(Map<UUID, Product> productMap, Menu menu) {
+    public BigDecimal sumMenuProductPrice(Map<UUID, Product> productMap, List<NewMenuProduct> newMenuProductList) {
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            Product product = productMap.get(menuProduct.getProductId());
+        for (final NewMenuProduct newMenuProduct : newMenuProductList) {
+            Product product = productMap.get(newMenuProduct.getProductId());
             sum = sum.add(
                     product.getPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                            .multiply(BigDecimal.valueOf(newMenuProduct.getQuantity()))
             );
         }
         return sum;
     }
 
-    private void hideMenuDisplayMenuPriceGreaterThanSum(BigDecimal price, BigDecimal sum, Menu menu) {
+    private void hideMenuDisplayMenuPriceGreaterThanSum(BigDecimal price, BigDecimal sum, NewMenu newMenu) {
         if (price.compareTo(sum) > 0) {
-            menu.setDisplayed(false);
+            newMenu.notDisplayed();
         }
     }
 

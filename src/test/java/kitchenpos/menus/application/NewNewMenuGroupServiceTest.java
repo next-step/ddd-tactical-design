@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.NewMenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,13 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MenuGroupServiceTest {
+class NewNewMenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private MenuGroupService menuGroupService;
 
     @BeforeEach
     void setUp() {
-        menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuGroupRepository = new NewInMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
     }
 
@@ -29,7 +29,7 @@ class MenuGroupServiceTest {
     @Test
     void create() {
         MenuGroupCreateRequest request = createMenuGroupRequest("두마리메뉴");
-        final MenuGroup actual = menuGroupService.create(request);
+        final NewMenuGroup actual = menuGroupService.create(request);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -50,7 +50,7 @@ class MenuGroupServiceTest {
     @Test
     void findAll() {
         menuGroupRepository.save(tobeMenuGroup("두마리메뉴"));
-        final List<MenuGroup> actual = menuGroupService.findAll();
+        final List<NewMenuGroup> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }
 

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Table(name = "menu")
 @Entity
-public class Menu {
+public class NewMenu {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -27,7 +28,7 @@ public class Menu {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private MenuGroup menuGroup;
+    private NewMenuGroup newMenuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -36,21 +37,22 @@ public class Menu {
     private MenuProducts menuProducts;
 
 
-    public Menu() {}
+    public NewMenu() {}
 
-    public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public NewMenu(UUID id, DisplayedName name, Price price, NewMenuGroup newMenuGroup, boolean displayed, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.newMenuGroup = newMenuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
-    public static Menu create(UUID id, MenuGroup menuGroup, MenuProducts menuProducts, Price price, DisplayedName name, boolean displayed) {
-        return new Menu(id, name, price, menuGroup, displayed, menuProducts);
+    public static NewMenu create(UUID id, NewMenuGroup newMenuGroup, MenuProducts menuProducts, Price price, DisplayedName name, boolean displayed) {
+        return new NewMenu(id, name, price, newMenuGroup, displayed, menuProducts);
     }
 
+    @JsonIgnore
     public List<UUID> getMenuProductIds() {
         return menuProducts.getMenuProductIds();
     }
@@ -63,15 +65,36 @@ public class Menu {
         this.displayed = false;
     }
 
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = Price.of(price);
+    }
+
     public BigDecimal getPrice() {
         return price.getPrice();
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
+
+    public List<NewMenuProduct> getMenuProductList() {
         return menuProducts.getMenuProducts();
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name.getName();
+    }
+
+    public NewMenuGroup getMenuGroup() {
+        return newMenuGroup;
     }
 }
