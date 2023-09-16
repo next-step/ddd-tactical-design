@@ -5,12 +5,12 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.ui.dto.ProductChangePriceRequest;
-import kitchenpos.products.ui.dto.ProductChangePriceResponse;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
-import kitchenpos.products.ui.dto.ProductCreateResponse;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.ui.dto.request.ProductChangePriceRequest;
+import kitchenpos.products.ui.dto.request.ProductCreateRequest;
+import kitchenpos.products.ui.dto.response.ProductChangePriceResponse;
+import kitchenpos.products.ui.dto.response.ProductCreateResponse;
+import kitchenpos.products.ui.dto.response.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +40,7 @@ public class ProductService {
     public ProductCreateResponse create(final ProductCreateRequest request) {
         final Product product = new Product(request.getName(), purgomalumClient, request.getPrice());
         Product saveProduct = productRepository.save(product);
-        return ProductCreateResponse.of(
-                saveProduct.getId(),
-                saveProduct.getName().getValue(),
-                saveProduct.getPrice().getValue())
-                ;
+        return ProductCreateResponse.of(saveProduct);
     }
 
     @Transactional
@@ -67,16 +63,13 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return ProductChangePriceResponse.of(
-                product.getId(),
-                product.getName().getValue(),
-                product.getPrice().getValue());
+        return ProductChangePriceResponse.of(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         return productRepository.findAll().stream()
-                .map(product -> ProductResponse.of(product.getId(), product.getName().getValue(), product.getPrice().getValue()))
+                .map(ProductResponse::of)
                 .collect(Collectors.toList());
     }
 }

@@ -2,11 +2,11 @@ package kitchenpos.products.ui;
 
 
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.ui.dto.ProductChangePriceRequest;
-import kitchenpos.products.ui.dto.ProductChangePriceResponse;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
-import kitchenpos.products.ui.dto.ProductCreateResponse;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.ui.dto.request.ProductChangePriceRequest;
+import kitchenpos.products.ui.dto.request.ProductCreateRequest;
+import kitchenpos.products.ui.dto.response.ProductChangePriceResponse;
+import kitchenpos.products.ui.dto.response.ProductCreateResponse;
+import kitchenpos.products.ui.dto.response.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
