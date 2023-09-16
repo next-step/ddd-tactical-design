@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -34,7 +33,7 @@ public class MenuProduct {
     @Embedded
     private Quantity quantity;
 
-    @Transient
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
     public MenuProduct() {

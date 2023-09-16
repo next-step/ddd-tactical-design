@@ -6,14 +6,14 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class DisplayedName {
+public class MenuGroupName {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected DisplayedName() {
+    protected MenuGroupName() {
     }
 
-    public DisplayedName(final String value) {
+    public MenuGroupName(final String value) {
         validate(value);
         this.value = value;
     }

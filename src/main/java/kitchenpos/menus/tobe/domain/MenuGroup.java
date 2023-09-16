@@ -15,14 +15,14 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private MenuGroupName name;
 
     protected MenuGroup() {
     }
 
     public MenuGroup(String name) {
         this.id = UUID.randomUUID();
-        this.name = new DisplayedName(name);
+        this.name = new MenuGroupName(name);
     }
 
     public UUID getId() {
@@ -33,7 +33,7 @@ public class MenuGroup {
         this.id = id;
     }
 
-    public DisplayedName getName() {
+    public MenuGroupName getName() {
         return name;
     }
 }
