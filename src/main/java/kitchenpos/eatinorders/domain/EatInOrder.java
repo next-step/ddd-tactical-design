@@ -82,4 +82,7 @@ public class EatInOrder {
         this.status = EatInOrderStatus.ACCEPTED;
     }
 
+    public OrderTableId getOrderTableId() {
+        return orderTableId;
+    }
 }

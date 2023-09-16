@@ -5,6 +5,8 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
+import kitchenpos.eatinorders.publisher.OrderTableClearEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +18,13 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuPriceLoader menuPriceLoader;
     private final OrderTableStatusLoader orderTableStatusLoader;
+    private final ApplicationEventPublisher publisher;
 
-    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuPriceLoader menuPriceLoader, OrderTableStatusLoader orderTableStatusLoader) {
+    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuPriceLoader menuPriceLoader, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuPriceLoader = menuPriceLoader;
         this.orderTableStatusLoader = orderTableStatusLoader;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -59,17 +63,17 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder complete(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
-        // 오더 테이블 지우기.. 테스트 코드 짜기 ㅠㅠ
+        order.complete();
 
-
-        order.setStatus(EatInOrderStatus.COMPLETED);
-        if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = order.getOrderTable();
-            if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
+        if (!eatInOrderRepository.existsByOrderTableAndStatusNot
+                (order.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
+            try {
+                publisher.publishEvent(new OrderTableClearEvent(this, order.getOrderTableIdValue()));
+            } catch (RuntimeException ex) {
+                throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_CANNOT_CLEAR);
             }
         }
+
         return order;
     }
 
@@ -83,5 +87,8 @@ public class EatInOrderService {
         return eatInOrderRepository.findById(eatInOrderId)
                 .orElseThrow(NoSuchElementException::new);
     }
-
+    @Transactional(readOnly = true)
+    public boolean areAllOrdersComplete(OrderTableId targetId) {
+        return eatInOrderRepository.existsByOrderTableAndStatusNot(targetId, EatInOrderStatus.COMPLETED);
+    }
 }

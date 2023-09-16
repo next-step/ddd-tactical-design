@@ -8,7 +8,8 @@ public enum EatInOrderErrorCode {
     MENU_IS_HIDE("숨겨진 메뉴는 주문할 수 없습니다."),
     ORDER_LINE_ITEMS_IS_EMPTY("주문한 메뉴가 없습니다."),
     ORDER_PRICE_IS_GREATER_THAN_MENU("메뉴 가격보다 주문금액이 큽니다."),
-    ORDER_TABLE_UNOCCUPIED("테이블이 사용중이 아닙니다.");
+    ORDER_TABLE_CANNOT_CLEAR("매장 테이블을 치울 수 없습니다."),
+    ORDER_TABLE_UNOCCUPIED("매장 테이블이 사용중이 아닙니다.");
 
     private final String message;
 
