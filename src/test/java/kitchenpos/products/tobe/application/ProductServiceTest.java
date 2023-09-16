@@ -31,7 +31,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new InMemoryProductRepository();
+        productRepository = new FakeProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
         productService = new ProductService(productRepository, menuRepository, purgomalumClient);

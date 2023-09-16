@@ -6,7 +6,7 @@ import kitchenpos.products.domain.ProductRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class InMemoryProductRepository implements ProductRepository {
+public class FakeProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new HashMap<>();
 
     @Override

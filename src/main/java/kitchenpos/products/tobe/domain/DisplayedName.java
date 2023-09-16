@@ -13,14 +13,14 @@ public class DisplayedName {
 
     protected DisplayedName() {}
 
-    public DisplayedName(final String name, PurgomalumClient purgomalumClient) {
+    public DisplayedName(final String name, final PurgomalumClient purgomalumClient) {
         validate(name, purgomalumClient);
         this.value = name;
     }
 
-    private void validate(final String name, PurgomalumClient purgomalumClient) {
+    private void validate(final String name, final PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new DisplayedNameValidateException(name);
         }
     }
 

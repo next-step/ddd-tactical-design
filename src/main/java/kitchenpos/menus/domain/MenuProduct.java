@@ -3,6 +3,7 @@ package kitchenpos.menus.domain;
 import kitchenpos.products.domain.Product;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -28,6 +29,19 @@ public class MenuProduct {
     private UUID productId;
 
     public MenuProduct() {
+    }
+
+    public BigDecimal calculateProductPriceSum() {
+        return getProductPrice()
+                .multiply(getBigDecimalQuantity());
+    }
+
+    private BigDecimal getProductPrice() {
+        return product.getPrice();
+    }
+
+    private BigDecimal getBigDecimalQuantity() {
+        return BigDecimal.valueOf(quantity);
     }
 
     public Long getSeq() {

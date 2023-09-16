@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.DisplayedName;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
@@ -14,7 +14,6 @@ import kitchenpos.products.tobe.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class ProductService {
 
     @Transactional
     public ProductCreateResponse create(final ProductCreateRequest request) {
-        final Product product = new Product(request.getName(), purgomalumClient, request.getPrice());
+        final Product product = new Product(new DisplayedName(request.getName(), purgomalumClient), request.getPrice());
         productRepository.save(product);
 
         return ProductCreateResponse.of(product);
@@ -49,20 +48,10 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
+
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        menus.forEach(menu -> menu.changePrice(request.getPrice()));
+
         return ProductChangePriceResponse.of(
                 product.getId(),
                 product.getName().getValue(),

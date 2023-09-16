@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -22,9 +20,9 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
+    public Product(final DisplayedName name, final BigDecimal price) {
         this.id = UUID.randomUUID();
-        this.name = new DisplayedName(name, purgomalumClient);
+        this.name = name;
         this.price = new Price(price);
     }
 

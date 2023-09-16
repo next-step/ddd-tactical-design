@@ -64,10 +64,6 @@ public class Menu {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
@@ -80,12 +76,21 @@ public class Menu {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
+    }
+
+    private BigDecimal calculateTotalPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::calculateProductPriceSum)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void changePrice(final BigDecimal price) {
+        BigDecimal sum = calculateTotalPrice();
+        if (price.compareTo(sum) > 0) {
+            this.displayed = false;
+        }
     }
 
     public void setMenuProducts(final List<MenuProduct> menuProducts) {
