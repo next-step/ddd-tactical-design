@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.infra;
+package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderStatus;

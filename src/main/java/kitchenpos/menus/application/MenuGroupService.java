@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.infra.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
