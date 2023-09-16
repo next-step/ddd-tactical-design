@@ -76,6 +76,10 @@ public class Menu {
         this.status = DisplayStatus.DISPLAY;
     }
 
+    public boolean isDisplay() {
+        return this.status == DisplayStatus.DISPLAY;
+    }
+
     public void hide() {
         this.status = DisplayStatus.HIDE;
     }
