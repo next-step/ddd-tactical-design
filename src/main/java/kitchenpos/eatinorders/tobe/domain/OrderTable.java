@@ -40,6 +40,10 @@ public class OrderTable {
     protected OrderTable() {
     }
 
+    public void occupy() {
+        this.status = OrderTableStatus.OCCUPIED;
+    }
+
     public boolean isOccupied() {
         return this.status == OrderTableStatus.OCCUPIED;
     }

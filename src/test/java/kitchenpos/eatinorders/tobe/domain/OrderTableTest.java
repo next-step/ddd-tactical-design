@@ -49,4 +49,20 @@ class OrderTableTest {
             () -> assertThat(orderTable.isVacant()).isTrue()
         );
     }
+
+    @DisplayName("주문테이블의 상태를 변경할수 있다")
+    @Test
+    void test4() {
+        //given
+        OrderTable orderTable = new OrderTable(new OrderTableName("name"));
+
+        //when
+        orderTable.occupy();
+
+        //then
+        assertAll(
+            () -> assertThat(orderTable.isOccupied()).isTrue(),
+            () -> assertThat(orderTable.isVacant()).isFalse()
+        );
+    }
 }
