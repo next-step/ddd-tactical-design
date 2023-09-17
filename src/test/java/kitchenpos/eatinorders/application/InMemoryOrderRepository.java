@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.legacy.eatinorders.domain.Order;
+import kitchenpos.legacy.eatinorders.domain.OrderRepository;
+import kitchenpos.legacy.eatinorders.domain.OrderStatus;
+import kitchenpos.legacy.eatinorders.domain.OrderTable;
 
 import java.util.*;
 
