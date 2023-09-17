@@ -1,8 +1,6 @@
 package kitchenpos.menus.domain;
 
 
-import kitchenpos.products.domain.Product;
-
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -14,53 +12,48 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
-
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
+    @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
 
-    public MenuProduct() {
+    protected MenuProduct() {
+    }
+
+    public MenuProduct(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+    public MenuProduct(Long seq, UUID productId, long quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
+    }
+
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setProductId(UUID productId) {
+        this.productId = productId;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
     }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
-
 }

@@ -5,7 +5,7 @@ import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.values.Price;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.dto.CreateMenuRequest;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 
@@ -35,9 +35,9 @@ public class MenuValidator {
 
     }
 
-    public void validatePrice(Price price, List<ToBeMenuProduct> menuProducts) {
+    public void validatePrice(Price price, List<MenuProduct> menuProducts) {
         List<Product> products = productRepository.findAllByIdIn(menuProducts.stream()
-                .map(ToBeMenuProduct::getProductId)
+                .map(MenuProduct::getProductId)
                 .collect(Collectors.toList()));
         Map<UUID, Product> productMap = products.stream()
                 .collect(Collectors.toMap(Product::getId, product -> product));

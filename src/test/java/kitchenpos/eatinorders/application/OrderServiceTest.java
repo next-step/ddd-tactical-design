@@ -1,10 +1,8 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
-import kitchenpos.menus.tobe.infra.ToBeInMemoryMenuRepository;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OrderServiceTest {
     private OrderRepository orderRepository;
-    private ToBeMenuRepository menuRepository;
+    private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private FakeKitchenridersClient kitchenridersClient;
     private OrderService orderService;
@@ -30,7 +28,7 @@ class OrderServiceTest {
     @BeforeEach
     void setUp() {
         orderRepository = new InMemoryOrderRepository();
-        menuRepository = new ToBeInMemoryMenuRepository();
+        menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
         orderService = new OrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient);

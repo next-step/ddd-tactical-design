@@ -2,10 +2,8 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.ProductValidator;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
-import static kitchenpos.common.exception.KitchenPosExceptionType.NOT_FOUND;
 
 @Service
 public class MenuProductService {
@@ -25,7 +22,7 @@ public class MenuProductService {
         this.productValidator = productValidator;
     }
 
-    public List<ToBeMenuProduct> create(final List<CreateMenuProductRequest> request) {
+    public List<MenuProduct> create(final List<CreateMenuProductRequest> request) {
         if (Objects.isNull(request) || request.isEmpty()) {
             throw new KitchenPosException("메뉴 구성 상품이 없으므로", BAD_REQUEST);
         }
@@ -37,7 +34,7 @@ public class MenuProductService {
         productValidator.isExistProducts(productIds);
 
         return request.stream()
-                .map(e -> new ToBeMenuProduct(e.getProductId(), e.getQuantity()))
+                .map(e -> new MenuProduct(e.getProductId(), e.getQuantity()))
                 .collect(Collectors.toList());
     }
 

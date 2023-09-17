@@ -3,10 +3,9 @@ package kitchenpos.menus.dto;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +16,7 @@ public class MenuDto {
     private Price price;
     private MenuGroup menuGroup;
     private boolean displayed;
-    private List<ToBeMenuProduct> menuProducts;
+    private List<MenuProduct> menuProducts;
     private UUID menuGroupId;
 
     public MenuDto() {
@@ -43,7 +42,7 @@ public class MenuDto {
         return displayed;
     }
 
-    public List<ToBeMenuProduct> getMenuProducts() {
+    public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
 
@@ -51,7 +50,7 @@ public class MenuDto {
         return menuGroupId;
     }
 
-    public static MenuDto from(ToBeMenu menu) {
+    public static MenuDto from(Menu menu) {
         final MenuDto menuDto = new MenuDto();
         menuDto.id = menu.getId();
         menuDto.name = menu.getName();

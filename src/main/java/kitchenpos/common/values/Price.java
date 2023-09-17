@@ -1,8 +1,8 @@
 package kitchenpos.common.values;
 
-import kitchenpos.common.util.ComparisonUtils;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
+import kitchenpos.common.util.ComparisonUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

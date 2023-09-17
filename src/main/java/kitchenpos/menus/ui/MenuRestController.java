@@ -1,14 +1,12 @@
 package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.dto.ChangePriceMenuRequest;
 import kitchenpos.menus.dto.CreateMenuRequest;
 import kitchenpos.menus.dto.MenuDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;

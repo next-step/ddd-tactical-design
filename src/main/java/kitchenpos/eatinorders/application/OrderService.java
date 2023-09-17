@@ -4,8 +4,6 @@ import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final ToBeMenuRepository menuRepository;
+    private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final KitchenridersClient kitchenridersClient;
 
     public OrderService(
         final OrderRepository orderRepository,
-        final ToBeMenuRepository menuRepository,
+        final MenuRepository menuRepository,
         final OrderTableRepository orderTableRepository,
         final KitchenridersClient kitchenridersClient
     ) {
@@ -43,7 +41,7 @@ public class OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<ToBeMenu> menus = menuRepository.findAllByIdIn(
+        final List<Menu> menus = menuRepository.findAllByIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
                 .collect(Collectors.toList())
@@ -59,12 +57,12 @@ public class OrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final ToBeMenu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().equalValue(orderLineItemRequest.getPrice())) {
+            if (!menu.getPrice().equalValue(orderLineItemRequest.getPrice())) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();

@@ -4,14 +4,12 @@ import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 import kitchenpos.common.infra.FakeApplicationEventPublisher;
 import kitchenpos.common.infra.FakePurgomalum;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateRequest;
 import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.event.ProductPriceChangeEvent;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private Purgomalum purgomalum;
     private ProductService productService;
     private FakeApplicationEventPublisher publisher;
@@ -41,7 +38,6 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
         purgomalum = FakePurgomalum.create();
         publisher = new FakeApplicationEventPublisher();
         productService = new ProductService(productRepository, purgomalum, publisher);

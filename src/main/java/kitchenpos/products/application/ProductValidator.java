@@ -2,14 +2,11 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.annotation.Validator;
 import kitchenpos.common.exception.KitchenPosException;
-import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static kitchenpos.common.exception.KitchenPosExceptionType.NOT_FOUND;
 

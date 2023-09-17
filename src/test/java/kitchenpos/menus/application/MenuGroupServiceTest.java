@@ -1,13 +1,12 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Purgomalum;
-import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.common.values.Name;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.CreateMenuGroupRequest;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import static kitchenpos.Fixtures.menuGroup;
 import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
 import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

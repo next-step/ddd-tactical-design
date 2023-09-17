@@ -5,8 +5,8 @@ import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 
 import java.time.LocalDateTime;
@@ -17,18 +17,18 @@ import java.util.UUID;
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static ToBeMenu menu() {
+    public static Menu menu() {
         return menu(19_000L, true, menuProduct());
     }
 
-    public static ToBeMenu menu(final long price, final ToBeMenuProduct... menuProducts) {
+    public static Menu menu(final long price, final MenuProduct... menuProducts) {
         return menu(price, false, menuProducts);
     }
 
-    public static ToBeMenu menu(final long price, final boolean displayed, final ToBeMenuProduct... menuProducts) {
+    public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         Name createdName = new Name("후라이드+후라이드", FakePurgomalum.create());
         Price createdPrice = new Price(price);
-        return new ToBeMenu(
+        return new Menu(
                 createdName,
                 createdPrice,
                 menuGroup(),
@@ -45,16 +45,16 @@ public class Fixtures {
         return new MenuGroup(name);
     }
 
-    public static ToBeMenuProduct menuProduct() {
-        return new ToBeMenuProduct(
+    public static MenuProduct menuProduct() {
+        return new MenuProduct(
                 new Random().nextLong(),
                 product().getId(),
                 2L
         );
     }
 
-    public static ToBeMenuProduct menuProduct(final Product product, final long quantity) {
-        return new ToBeMenuProduct(
+    public static MenuProduct menuProduct(final Product product, final long quantity) {
+        return new MenuProduct(
                 new Random().nextLong(),
                 product.getId(),
                 quantity

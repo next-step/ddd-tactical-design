@@ -1,8 +1,5 @@
 package kitchenpos.menus.dto;
 
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;

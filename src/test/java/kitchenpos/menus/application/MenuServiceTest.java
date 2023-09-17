@@ -2,23 +2,18 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosException;
-import kitchenpos.common.exception.KitchenPosExceptionType;
-import kitchenpos.common.values.Price;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.common.infra.FakePurgomalum;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.ChangePriceMenuRequest;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.dto.CreateMenuRequest;
 import kitchenpos.menus.dto.MenuDto;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.tobe.infra.ToBeInMemoryMenuRepository;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.products.application.ProductValidator;
-import kitchenpos.products.infra.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.util.KitchenPostExceptionAssertionUtils;
+import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +24,10 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
 import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
@@ -44,8 +42,7 @@ class MenuServiceTest {
     private ProductValidator productValidator;
     private MenuValidator menuValidator;
     private MenuProductService menuProductService;
-    private InMemoryMenuRepository menuRepository;
-    private ToBeInMemoryMenuRepository toBeMenuRepository;
+    private InMemoryMenuRepository toBeMenuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private Purgomalum purgomalum;
@@ -55,8 +52,7 @@ class MenuServiceTest {
 
     @BeforeEach
     void setUp() {
-        menuRepository = new InMemoryMenuRepository();
-        toBeMenuRepository = new ToBeInMemoryMenuRepository();
+        toBeMenuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalum = FakePurgomalum.create();
@@ -64,8 +60,8 @@ class MenuServiceTest {
         menuValidator = new MenuValidator(productRepository);
         menuProductService = new MenuProductService(productValidator);
         menuService = new MenuService(
-                menuValidator, productValidator, menuProductService, menuRepository,
-                toBeMenuRepository, menuGroupRepository, productRepository, purgomalum
+                menuValidator, productValidator, menuProductService,
+                toBeMenuRepository, menuGroupRepository, purgomalum
         );
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));

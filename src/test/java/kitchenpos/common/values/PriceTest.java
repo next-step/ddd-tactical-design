@@ -1,6 +1,5 @@
 package kitchenpos.common.values;
 
-import kitchenpos.common.exception.KitchenPosExceptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

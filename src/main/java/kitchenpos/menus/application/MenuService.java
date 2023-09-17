@@ -5,22 +5,21 @@ import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.util.CollectionUtils;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
-import kitchenpos.menus.domain.*;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.ChangePriceMenuRequest;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.dto.CreateMenuRequest;
 import kitchenpos.menus.dto.MenuDto;
-import kitchenpos.menus.tobe.domain.ToBeMenu;
-import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
-import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.ProductValidator;
-import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
@@ -32,9 +31,7 @@ public class MenuService {
     private final ProductValidator productValidator;
     private final MenuProductService menuProductService;
     private final MenuRepository menuRepository;
-    private final ToBeMenuRepository toBeMenuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final Purgomalum purgomalum;
 
     public MenuService(
@@ -42,18 +39,14 @@ public class MenuService {
             final ProductValidator productValidator,
             final MenuProductService menuProductService,
             final MenuRepository menuRepository,
-            final ToBeMenuRepository toBeMenuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final ProductRepository productRepository,
             final Purgomalum purgomalum
     ) {
         this.menuValidator = menuValidator;
         this.productValidator = productValidator;
         this.menuProductService = menuProductService;
         this.menuRepository = menuRepository;
-        this.toBeMenuRepository = toBeMenuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.purgomalum = purgomalum;
     }
 
@@ -72,17 +65,17 @@ public class MenuService {
                         .collect(Collectors.toList())
         );
 
-        final List<ToBeMenuProduct> menuProducts = menuProductService.create(menuProductRequests);
+        final List<MenuProduct> menuProducts = menuProductService.create(menuProductRequests);
         menuValidator.validatePrice(price, menuProducts);
         final Name name = new Name(request.getName(), purgomalum);
-        final ToBeMenu menu = new ToBeMenu(name, price, menuGroup, menuProducts, request.isDisplayed());
-        ToBeMenu result = toBeMenuRepository.save(menu);
+        final Menu menu = new Menu(name, price, menuGroup, menuProducts, request.isDisplayed());
+        Menu result = menuRepository.save(menu);
         return MenuDto.from(result);
     }
 
     @Transactional
     public MenuDto changePrice(final UUID menuId, final ChangePriceMenuRequest request) {
-        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+        final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
 
         Price price = new Price(request.getPrice());
@@ -93,7 +86,7 @@ public class MenuService {
 
     @Transactional
     public MenuDto display(final UUID menuId) {
-        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+        final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
         menuValidator.validatePrice(menu.getPrice(), menu.getMenuProducts());
         menu.setDisplayed(true);
@@ -102,7 +95,7 @@ public class MenuService {
 
     @Transactional
     public MenuDto hide(final UUID menuId) {
-        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+        final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
         menu.setDisplayed(false);
         return MenuDto.from(menu);
@@ -110,7 +103,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<MenuDto> findAll() {
-        return toBeMenuRepository.findAll().stream()
+        return menuRepository.findAll().stream()
                 .map(MenuDto::from)
                 .collect(Collectors.toList());
     }

@@ -1,7 +1,9 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
+
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,10 +15,10 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private Name name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,30 +43,40 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
+    // TODO
     public Menu() {
+    }
+    public Menu(Name name, Price price, MenuGroup menuGroup, List<MenuProduct> menuProducts, boolean displayed) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.menuProducts = menuProducts;
+        this.displayed = displayed;
     }
 
     public UUID getId() {
+
         return id;
     }
 
-    public void setId(final UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getName() {
+    public Name getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(Name name) {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
@@ -72,7 +84,7 @@ public class Menu {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
+    public void setMenuGroup(MenuGroup menuGroup) {
         this.menuGroup = menuGroup;
     }
 
@@ -80,7 +92,7 @@ public class Menu {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
+    public void setDisplayed(boolean displayed) {
         this.displayed = displayed;
     }
 
@@ -88,7 +100,7 @@ public class Menu {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
+    public void setMenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;
     }
 
@@ -96,7 +108,16 @@ public class Menu {
         return menuGroupId;
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
+    public void setMenuGroupId(UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
     }
+
+    public void display() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
 }
