@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.domain.EatInOrderId;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
+import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
 import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
@@ -32,7 +33,7 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrderRequest request) {
+    public EatInOrderResponse create(final EatInOrderRequest request) {
         // 주문 테이블 사용중 검증
         if (orderTableStatusLoader.isUnOccupied(request.getOrderTableId())) {
             throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_UNOCCUPIED);
@@ -49,26 +50,27 @@ public class EatInOrderService {
                     }
                 });
 
-        return eatInOrderRepository.save(request.toEntity());
+        EatInOrder response = eatInOrderRepository.save(request.toEntity());
+        return EatInOrderResponse.fromEntity(response);
     }
 
     @Transactional
-    public EatInOrder accept(final EatInOrderId orderId) {
+    public EatInOrderResponse accept(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.accept();
-        return order;
+        return EatInOrderResponse.fromEntity(order);
     }
 
     @Transactional
-    public EatInOrder serve(final EatInOrderId orderId) {
+    public EatInOrderResponse serve(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.serve();
-        return order;
+        return EatInOrderResponse.fromEntity(order);
     }
 
 
     @Transactional
-    public EatInOrder complete(final EatInOrderId orderId) {
+    public EatInOrderResponse complete(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.complete();
 
@@ -81,16 +83,16 @@ public class EatInOrderService {
             }
         }
 
-        return order;
+        return EatInOrderResponse.fromEntity(order);
     }
 
     @Transactional(readOnly = true)
-    public List<EatInOrder> findAll() {
-        return eatInOrderRepository.findAll();
+    public List<EatInOrderResponse> findAll() {
+        List<EatInOrder> responses = eatInOrderRepository.findAll();
+        return EatInOrderResponse.fromEntities(responses);
     }
 
-    @Transactional(readOnly = true)
-    public EatInOrder findById(EatInOrderId eatInOrderId) {
+    private EatInOrder findById(EatInOrderId eatInOrderId) {
         return eatInOrderRepository.findById(eatInOrderId)
                 .orElseThrow(NoSuchElementException::new);
     }

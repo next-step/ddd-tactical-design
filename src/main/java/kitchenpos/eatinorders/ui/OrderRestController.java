@@ -23,33 +23,33 @@ public class OrderRestController {
 
     @PostMapping
     public ResponseEntity<EatInOrderResponse> create(@RequestBody final EatInOrderRequest request) {
-        final EatInOrder response = orderService.create(request);
+        final EatInOrderResponse response = orderService.create(request);
         return ResponseEntity.created(URI.create("/api/eat-in-orders/" + response.getId()))
-                .body(EatInOrderResponse.fromEntity(response));
+                .body(response);
     }
 
     @PutMapping("/{orderId}/accept")
     public ResponseEntity<EatInOrderResponse> accept(@PathVariable final UUID orderId) {
-        EatInOrder response = orderService.accept(new EatInOrderId(orderId));
-        return ResponseEntity.ok(EatInOrderResponse.fromEntity(response));
+        EatInOrderResponse response = orderService.accept(new EatInOrderId(orderId));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{orderId}/serve")
     public ResponseEntity<EatInOrderResponse> serve(@PathVariable final UUID orderId) {
-        EatInOrder response = orderService.serve(new EatInOrderId(orderId));
-        return ResponseEntity.ok(EatInOrderResponse.fromEntity(response));
+        EatInOrderResponse response = orderService.serve(new EatInOrderId(orderId));
+        return ResponseEntity.ok(response);
     }
 
 
     @PutMapping("/{orderId}/complete")
     public ResponseEntity<EatInOrderResponse> complete(@PathVariable final UUID orderId) {
-        EatInOrder response = orderService.complete(new EatInOrderId(orderId));
-        return ResponseEntity.ok(EatInOrderResponse.fromEntity(response));
+        EatInOrderResponse response = orderService.complete(new EatInOrderId(orderId));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<EatInOrderResponse>> findAll() {
-        List<EatInOrder> responses = orderService.findAll();
-        return ResponseEntity.ok(EatInOrderResponse.fromEntities(responses));
+        List<EatInOrderResponse> responses = orderService.findAll();
+        return ResponseEntity.ok(responses);
     }
 }

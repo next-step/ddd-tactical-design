@@ -9,6 +9,7 @@ import kitchenpos.eatinorders.application.service.DefaultOrderTableStatusLoader;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.ordertables.application.EatInOrderStatusLoader;
@@ -76,9 +77,9 @@ class OrderTableClearEventListenerTest {
     void completeEatInOrder() {
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         final EatInOrder expected = eatInOrderRepository.save(order(EatInOrderStatus.SERVED, orderTable));
-        final EatInOrder actual = eatInOrderService.complete(expected.getId());
+        final EatInOrderResponse actual = eatInOrderService.complete(expected.getId());
         assertAll(
-                () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
+                () -> assertThat(actual.getEatInOrderStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuestValue()).isEqualTo(0)
         );
@@ -90,9 +91,9 @@ class OrderTableClearEventListenerTest {
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         eatInOrderRepository.save(order(EatInOrderStatus.ACCEPTED, orderTable));
         final EatInOrder expected = eatInOrderRepository.save(order(EatInOrderStatus.SERVED, orderTable));
-        final EatInOrder actual = eatInOrderService.complete(expected.getId());
+        final EatInOrderResponse actual = eatInOrderService.complete(expected.getId());
         assertAll(
-                () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
+                () -> assertThat(actual.getEatInOrderStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isTrue(),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuestValue()).isEqualTo(4)
         );

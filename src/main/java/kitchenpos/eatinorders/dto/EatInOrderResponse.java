@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class EatInOrderResponse {
 
-    private UUID eatInOrderId;
+    private UUID id;
     private EatInOrderStatus eatInOrderStatus;
     private LocalDateTime orderDateTime;
     private UUID orderTableId;
@@ -33,7 +33,7 @@ public class EatInOrderResponse {
     }
 
     public EatInOrderResponse(UUID eatInOrderId, EatInOrderStatus eatInOrderStatus, LocalDateTime orderDateTime, UUID orderTableId, List<EatInOrderLineItemResponse> orderLineItems) {
-        this.eatInOrderId = eatInOrderId;
+        this.id = eatInOrderId;
         this.eatInOrderStatus = eatInOrderStatus;
         this.orderDateTime = orderDateTime;
         this.orderTableId = orderTableId;
@@ -44,43 +44,24 @@ public class EatInOrderResponse {
 
     }
 
-    public UUID getEatInOrderId() {
-        return eatInOrderId;
-    }
-
-    public void setEatInOrderId(UUID eatInOrderId) {
-        this.eatInOrderId = eatInOrderId;
+    public UUID getId() {
+        return id;
     }
 
     public EatInOrderStatus getEatInOrderStatus() {
         return eatInOrderStatus;
     }
 
-    public void setEatInOrderStatus(EatInOrderStatus eatInOrderStatus) {
-        this.eatInOrderStatus = eatInOrderStatus;
-    }
-
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
-    }
-
-    public void setOrderDateTime(LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
     }
 
     public UUID getOrderTableId() {
         return orderTableId;
     }
 
-    public void setOrderTableId(UUID orderTableId) {
-        this.orderTableId = orderTableId;
-    }
-
     public List<EatInOrderLineItemResponse> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(List<EatInOrderLineItemResponse> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
 }

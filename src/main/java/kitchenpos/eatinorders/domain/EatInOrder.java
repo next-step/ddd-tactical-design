@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.common.domain.OrderDateTime;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
 
@@ -19,8 +18,8 @@ public class EatInOrder {
     @Enumerated(EnumType.STRING)
     private EatInOrderStatus status;
 
-    @Embedded
-    private OrderDateTime orderDateTime;
+    @Column(name = "order_date_time", nullable = false)
+    private LocalDateTime orderDateTime;
 
     @Embedded
     private EatInOrderLineItems eatInOrderLineItems = new EatInOrderLineItems();
@@ -34,7 +33,7 @@ public class EatInOrder {
     public EatInOrder(EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
         this.id = new EatInOrderId();
         this.status = EatInOrderStatus.WAITING;
-        this.orderDateTime = OrderDateTime.now();
+        this.orderDateTime = LocalDateTime.now();
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
     }
@@ -42,7 +41,7 @@ public class EatInOrder {
     public EatInOrder(EatInOrderStatus status, EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
         this.id = new EatInOrderId();
         this.status = status;
-        this.orderDateTime = OrderDateTime.now();
+        this.orderDateTime = LocalDateTime.now();
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
     }
@@ -56,7 +55,7 @@ public class EatInOrder {
     }
 
     public LocalDateTime getOrderDateTimeValue() {
-        return orderDateTime.getValue();
+        return orderDateTime;
     }
 
     public UUID getOrderTableIdValue() {
