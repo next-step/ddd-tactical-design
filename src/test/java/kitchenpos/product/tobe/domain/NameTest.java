@@ -3,7 +3,8 @@ package kitchenpos.product.tobe.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 public class NameTest {
     @DisplayName("이름은 비어 있지 않으면 된다")
