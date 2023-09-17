@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.dto;
+package kitchenpos.menus.application.dto;
 
 import java.util.UUID;
 

@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.dto.MenuProductCreateRequest;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -32,9 +31,10 @@ public class MenuProducts {
         this.newMenuProducts = newMenuProductList;
     }
 
-    public static MenuProducts create(List<MenuProductCreateRequest> requests) {
-        List<NewMenuProduct> newMenuProductList = requests.stream()
-                .map(req -> NewMenuProduct.create(req.getProductId(), req.getQuantity()))
+    public static MenuProducts create(Map<UUID, Long> productQuantityMap) {
+        List<NewMenuProduct> newMenuProductList = productQuantityMap.entrySet()
+                .stream()
+                .map(entry -> NewMenuProduct.create(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
         return new MenuProducts(newMenuProductList);
     }

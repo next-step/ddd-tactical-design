@@ -4,8 +4,9 @@ package kitchenpos.menus.application;
 import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.menus.application.dto.*;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
-import kitchenpos.menus.tobe.domain.dto.MenuProductCreateRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateDto;
+import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,11 +44,12 @@ public class MenuService {
         List<UUID> productIds = getProductIds(request.getMenuProducts());
         NewMenu menu = NewMenu.createMenu(
                 productIds, productQueryService::findAllByIdIn, UUID.randomUUID(),
-                displayNameChecker, newMenuGroup.getId(), request
+                displayNameChecker, newMenuGroup.getId(), createMenuCreateDto(request)
         );
         NewMenu savedMenu = menuRepository.save(menu);
         return createResponse(savedMenu);
     }
+
     @Transactional
     public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
         final NewMenu newMenu = findMenuById(menuId);
@@ -110,6 +112,19 @@ public class MenuService {
                 savedMenu.getMenuGroupId(),
                 savedMenu.isDisplayed(),
                 menuProductInfoResponseList
+        );
+    }
+
+    private MenuCreateDto createMenuCreateDto(MenuCreateRequest request) {
+        List<MenuProductCreateRequest> menuProducts = request.getMenuProducts();
+        Map<UUID, Long> productQuantityMap = menuProducts.stream()
+                .collect(Collectors.toMap(MenuProductCreateRequest::getProductId, MenuProductCreateRequest::getQuantity));
+        return MenuCreateDto.create(
+                request.getPrice(),
+                request.getMenuGroupId(),
+                request.getName(),
+                request.isDisplayed(),
+                productQuantityMap
         );
     }
 

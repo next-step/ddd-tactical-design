@@ -4,9 +4,8 @@ import kitchenpos.menus.application.dto.MenuChangePriceRequest;
 import kitchenpos.menus.application.dto.MenuChangePriceResponse;
 import kitchenpos.menus.application.dto.MenuInfoResponse;
 import kitchenpos.menus.application.dto.MenuDisplayResponse;
-import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.tobe.domain.NewMenu;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
