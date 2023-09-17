@@ -2,13 +2,10 @@ package kitchenpos.menus.application;
 
 
 import kitchenpos.common.domain.DisplayNameChecker;
-import kitchenpos.common.domain.DisplayedName;
-import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.dto.MenuChangePriceRequest;
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.application.dto.*;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.products.domain.MenuProductPriceHandler;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
+import kitchenpos.menus.tobe.domain.dto.MenuProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,42 +38,45 @@ public class MenuService {
     }
 
     @Transactional
-    public NewMenu create(final MenuCreateRequest request) {
+    public MenuInfoResponse create(final MenuCreateRequest request) {
         final NewMenuGroup newMenuGroup = findById(request.getMenuGroupId());
         List<UUID> productIds = getProductIds(request.getMenuProducts());
         NewMenu menu = NewMenu.createMenu(
                 productIds, productQueryService::findAllByIdIn, UUID.randomUUID(),
-                displayNameChecker, newMenuGroup, request.getName(), request.getPrice(), request.getMenuProducts(), request.isDisplayed()
+                displayNameChecker, newMenuGroup.getId(), request
         );
-        return menuRepository.save(menu);
+        NewMenu savedMenu = menuRepository.save(menu);
+        return createResponse(savedMenu);
     }
-
     @Transactional
-    public NewMenu changePrice(final UUID menuId, MenuChangePriceRequest request) {
+    public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
         final NewMenu newMenu = findMenuById(menuId);
         Map<UUID, BigDecimal> productPriceMap = productQueryService.findAllByIdIn(newMenu.getMenuProductIds());
         newMenu.changePrice(productPriceMap, request.getPrice());
-        return newMenu;
+        return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPrice());
     }
 
     @Transactional
-    public NewMenu display(final UUID menuId) {
+    public MenuDisplayResponse display(final UUID menuId) {
         final NewMenu newMenu = findMenuById(menuId);
         Map<UUID, BigDecimal> productPriceMap = productQueryService.findAllByIdIn(newMenu.getMenuProductIds());
         newMenu.displayed(productPriceMap);
-        return newMenu;
+        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
     }
 
     @Transactional
-    public NewMenu hide(final UUID menuId) {
+    public MenuDisplayResponse hide(final UUID menuId) {
         final NewMenu newMenu = findMenuById(menuId);
         newMenu.notDisplayed();
-        return newMenu;
+        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
     }
 
     @Transactional(readOnly = true)
-    public List<NewMenu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuInfoResponse> findAll() {
+        List<NewMenu> savedMenusList = menuRepository.findAll();
+        return savedMenusList.stream()
+                .map(this::createResponse)
+                .collect(Collectors.toList());
     }
 
     private NewMenuGroup findById(UUID id) {
@@ -96,6 +96,21 @@ public class MenuService {
         return menuProducts.stream()
                 .map(MenuProductCreateRequest::getProductId)
                 .collect(Collectors.toList());
+    }
+
+    private MenuInfoResponse createResponse(NewMenu savedMenu) {
+        List<NewMenuProduct> menuProductList = savedMenu.getMenuProductList();
+        List<MenuProductInfoResponse> menuProductInfoResponseList = menuProductList.stream()
+                .map(m -> new MenuProductInfoResponse(m.getProductId(), m.getQuantity()))
+                .collect(Collectors.toList());
+        return new MenuInfoResponse(
+                savedMenu.getId(),
+                savedMenu.getName(),
+                savedMenu.getPrice(),
+                savedMenu.getMenuGroupId(),
+                savedMenu.isDisplayed(),
+                menuProductInfoResponseList
+        );
     }
 
 }

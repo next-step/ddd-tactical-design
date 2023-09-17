@@ -1,12 +1,15 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.application.dto.MenuChangePriceRequest;
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.application.dto.MenuChangePriceResponse;
+import kitchenpos.menus.application.dto.MenuInfoResponse;
+import kitchenpos.menus.application.dto.MenuDisplayResponse;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
+import kitchenpos.menus.tobe.domain.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.common.domain.DisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -53,15 +56,15 @@ class MenuServiceTest {
         final MenuCreateRequest expected = createMenuRequest(
                 "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
-        final NewMenu actual = menuService.create(expected);
+        final MenuInfoResponse actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
                 () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-                () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+                () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-                () -> assertThat(actual.getMenuProductList()).hasSize(1)
+                () -> assertThat(actual.getMenuProductCreateResponseList()).hasSize(1)
         );
     }
 
@@ -147,8 +150,8 @@ class MenuServiceTest {
         void changePrice() {
             final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
             final MenuChangePriceRequest expected = changePriceRequest(16_000L);
-            final NewMenu actual = menuService.changePrice(menuId, expected);
-            assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+            final MenuChangePriceResponse actual = menuService.changePrice(menuId, expected);
+            assertThat(actual.getChangedPrice()).isEqualTo(expected.getPrice());
         }
 
         @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -179,7 +182,7 @@ class MenuServiceTest {
         @Test
         void display() {
             final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-            final NewMenu actual = menuService.display(menuId);
+            final MenuDisplayResponse actual = menuService.display(menuId);
             assertThat(actual.isDisplayed()).isTrue();
         }
 
@@ -196,7 +199,7 @@ class MenuServiceTest {
         @Test
         void hide() {
             final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-            final NewMenu actual = menuService.hide(menuId);
+            final MenuDisplayResponse actual = menuService.hide(menuId);
             assertThat(actual.isDisplayed()).isFalse();
         }
     }
@@ -206,7 +209,7 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<NewMenu> actual = menuService.findAll();
+        final List<MenuInfoResponse> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 

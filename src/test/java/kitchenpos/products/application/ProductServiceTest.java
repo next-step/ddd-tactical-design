@@ -8,7 +8,7 @@ import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.common.domain.DisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.tobe.domain.dto.MenuProductCreateRequest;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.MenuCreateRequest;
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -29,13 +28,14 @@ public class NewMenu {
     @Embedded
     private Price price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private NewMenuGroup newMenuGroup;
+//    @JoinColumn(
+//            name = "menu_group_id",
+//            nullable = false,
+//            columnDefinition = "binary(16)",
+//            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+//    )
+    @Column(name = "menu_group_id", nullable = false, columnDefinition = "binary(16)")
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -47,34 +47,33 @@ public class NewMenu {
     public NewMenu() {
     }
 
-    public NewMenu(UUID id, DisplayedName name, Price price, NewMenuGroup newMenuGroup, boolean displayed, MenuProducts menuProducts) {
+    public NewMenu(UUID id, DisplayedName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.newMenuGroup = newMenuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
-    public static NewMenu create(UUID id, NewMenuGroup newMenuGroup, MenuProducts menuProducts, Price price, DisplayedName name, boolean displayed) {
-        return new NewMenu(id, name, price, newMenuGroup, displayed, menuProducts);
+    public static NewMenu create(UUID id, UUID menuGroupId, MenuProducts menuProducts, Price price, DisplayedName name, boolean displayed) {
+        return new NewMenu(id, name, price, menuGroupId, displayed, menuProducts);
     }
 
     public static NewMenu createMenu(
             List<UUID> productIds, Function<List<UUID>, Map<UUID, BigDecimal>> func, UUID id,
-            DisplayNameChecker displayNameChecker, NewMenuGroup newMenuGroup,
-            String name, BigDecimal price, List<MenuProductCreateRequest> menuProductCreateRequests, boolean displayed) {
+            DisplayNameChecker displayNameChecker, UUID menuGroupId, MenuCreateRequest request) {
 
-        Price menuPrice = Price.of(price);
-        DisplayedName menuName = DisplayedName.of(name, displayNameChecker);
+        Price menuPrice = Price.of(request.getPrice());
+        DisplayedName menuName = DisplayedName.of(request.getName(), displayNameChecker);
 
         Map<UUID, BigDecimal> productPriceMap = func.apply(productIds);
         validateExistProduct(productIds, productPriceMap);
 
-        MenuProducts menuProducts = MenuProducts.create(menuProductCreateRequests);
+        MenuProducts menuProducts = MenuProducts.create(request.getMenuProducts());
         menuProducts.validateMenuPrice(productPriceMap, menuPrice);
 
-        return NewMenu.create(id, newMenuGroup, menuProducts, menuPrice, menuName, displayed);
+        return NewMenu.create(id, menuGroupId, menuProducts, menuPrice, menuName, request.isDisplayed());
     }
 
     private static void validateExistProduct(List<UUID> productIds, Map<UUID, BigDecimal> productPriceMap) {
@@ -124,8 +123,11 @@ public class NewMenu {
         return name.getName();
     }
 
-    public NewMenuGroup getMenuGroup() {
-        return newMenuGroup;
+    public UUID getMenuGroupId() {
+        return menuGroupId;
     }
 
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
 }

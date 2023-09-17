@@ -7,7 +7,7 @@ import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.menus.tobe.domain.NewMenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class NewFixtures {
     public static NewMenu menu(final long price, final boolean displayed, final NewMenuProduct... newMenuProducts) {
         return NewMenu.create(
                 UUID.randomUUID(),
-                menuGroup(),
+                menuGroup().getId(),
                 MenuProducts.of(Arrays.asList(newMenuProducts)),
                 Price.of(BigDecimal.valueOf(price)),
                 DisplayedName.of("후라이드+후라이드", new FakeDisplayNameChecker()),

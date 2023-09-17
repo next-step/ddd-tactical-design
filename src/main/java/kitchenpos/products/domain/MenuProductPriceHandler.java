@@ -3,7 +3,6 @@ package kitchenpos.products.domain;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.tobe.domain.NewMenu;
 import kitchenpos.menus.tobe.domain.NewMenuProduct;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -6,7 +6,7 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

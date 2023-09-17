@@ -1,6 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.application.dto.MenuGroupCreateRequest;
+import kitchenpos.menus.application.dto.MenuGroupInfoResponse;
 import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ class MenuGroupServiceTest {
     @Test
     void create() {
         MenuGroupCreateRequest request = createMenuGroupRequest("두마리메뉴");
-        final NewMenuGroup actual = menuGroupService.create(request);
+        final MenuGroupInfoResponse actual = menuGroupService.create(request);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -51,7 +52,7 @@ class MenuGroupServiceTest {
     @Test
     void findAll() {
         menuGroupRepository.save(tobeMenuGroup("두마리메뉴"));
-        final List<NewMenuGroup> actual = menuGroupService.findAll();
+        final List<MenuGroupInfoResponse> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }
 

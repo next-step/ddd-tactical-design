@@ -1,7 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.application.ProductQueryService;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.*;

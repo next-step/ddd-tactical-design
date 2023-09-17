@@ -1,7 +1,10 @@
 package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.dto.MenuChangePriceRequest;
-import kitchenpos.menus.application.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuChangePriceResponse;
+import kitchenpos.menus.application.dto.MenuInfoResponse;
+import kitchenpos.menus.application.dto.MenuDisplayResponse;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateRequest;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.NewMenu;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +24,29 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<NewMenu> create(@RequestBody final MenuCreateRequest request) {
-        final NewMenu response = menuService.create(request);
+    public ResponseEntity<MenuInfoResponse> create(@RequestBody final MenuCreateRequest request) {
+        final MenuInfoResponse response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<NewMenu> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuChangePriceRequest request) {
+    public ResponseEntity<MenuChangePriceResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuChangePriceRequest request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<NewMenu> display(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuDisplayResponse> display(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<NewMenu> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<MenuDisplayResponse> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
     }
 
     @GetMapping
-    public ResponseEntity<List<NewMenu>> findAll() {
+    public ResponseEntity<List<MenuInfoResponse>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
     }
 }

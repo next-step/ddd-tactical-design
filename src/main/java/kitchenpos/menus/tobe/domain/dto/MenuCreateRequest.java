@@ -1,6 +1,4 @@
-package kitchenpos.menus.application;
-
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+package kitchenpos.menus.tobe.domain.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
