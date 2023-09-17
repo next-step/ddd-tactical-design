@@ -61,7 +61,7 @@ public class Menu {
         menu.displayed = displayed;
         menu.menuProducts = menuProducts;
 
-        if (validateMenuPriceIsLowerThanMenuProductPriceSum(menu.price, menu.menuProducts)) {
+        if (isMenuPriceLowerThanMenuProductPriceSum(menu.price, menu.menuProducts)) {
             throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
         }
         validateMenuProductsIsEmpty(menuProducts);
@@ -111,14 +111,14 @@ public class Menu {
 
         this.price = menuPrice;
 
-        if (validateMenuPriceIsLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
+        if (isMenuPriceLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
             throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
         }
 
         return true;
     }
 
-    private static boolean validateMenuPriceIsLowerThanMenuProductPriceSum(MenuPrice menuPrice, List<MenuProduct> menuProducts) {
+    private static boolean isMenuPriceLowerThanMenuProductPriceSum(MenuPrice menuPrice, List<MenuProduct> menuProducts) {
         if (isNull(menuProducts)) {
             return true;
         }
@@ -140,7 +140,7 @@ public class Menu {
     }
 
     public void display() {
-        if (validateMenuPriceIsLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
+        if (isMenuPriceLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
             throw new IllegalStateException("메뉴 가격은 메뉴 상품 가격의 합보다 크면 메뉴를 노출할 수 없습니다.");
         }
 
