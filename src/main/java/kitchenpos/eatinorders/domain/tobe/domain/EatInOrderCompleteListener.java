@@ -9,10 +9,10 @@ import kitchenpos.common.DomainService;
 
 @DomainService
 public class EatInOrderCompleteListener {
-    private final EatInJpaOrderRepository orderRepository;
+    private final EatInOrderRepository orderRepository;
     private final ToBeOrderTableRepository orderTableRepository;
 
-    public EatInOrderCompleteListener(EatInJpaOrderRepository orderRepository,
+    public EatInOrderCompleteListener(EatInOrderRepository orderRepository,
         ToBeOrderTableRepository orderTableRepository) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;

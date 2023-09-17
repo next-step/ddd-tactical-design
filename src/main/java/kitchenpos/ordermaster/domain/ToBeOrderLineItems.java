@@ -1,5 +1,6 @@
 package kitchenpos.ordermaster.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,7 +18,7 @@ public class ToBeOrderLineItems {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_to_be_order_line_item_to_orders")
     )
-    private List<ToBeOrderLineItem> orderLineItems;
+    private List<ToBeOrderLineItem> values;
 
     protected ToBeOrderLineItems() {
     }
@@ -26,6 +27,13 @@ public class ToBeOrderLineItems {
         if (orderLineItems == null || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException("주문 내역이 없으면 등록할 수 없다.");
         }
-        this.orderLineItems = orderLineItems;
+        this.values = orderLineItems;
+    }
+
+    public BigDecimal sumOfOrderPrice() {
+        return values.stream()
+            .map(ToBeOrderLineItem::menuPrice)
+            .reduce(OrderMenuPrice.ZERO, OrderMenuPrice::add)
+            .getValue();
     }
 }

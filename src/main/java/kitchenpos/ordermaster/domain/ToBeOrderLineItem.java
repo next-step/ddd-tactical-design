@@ -27,4 +27,10 @@ public class ToBeOrderLineItem {
         this.orderMenu = orderMenu;
         this.quantity = quantity;
     }
+
+    public OrderMenuPrice menuPrice() {
+        return orderMenu.menuPrice()
+            .multiply(quantity.value());
+    }
+
 }

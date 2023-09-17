@@ -1,6 +1,5 @@
 package kitchenpos.ordermaster.domain;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +15,10 @@ public class OrderFixture {
     }
 
     public static OrderMenu createOrderMenu() {
-        return new OrderMenu(UUID.randomUUID(), BigDecimal.valueOf(13_000L));
+        return new OrderMenu(UUID.randomUUID(), OrderMenuPrice.of(13_000L));
+    }
+
+    public static OrderMenu createOrderMenu(long price) {
+        return new OrderMenu(UUID.randomUUID(), OrderMenuPrice.of(price));
     }
 }

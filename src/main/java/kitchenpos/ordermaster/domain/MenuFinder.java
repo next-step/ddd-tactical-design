@@ -36,7 +36,7 @@ public class MenuFinder {
                     throw new IllegalStateException("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 합니다다.");
                 }
                 return new ToBeOrderLineItem(
-                    new OrderMenu(menu.getId(), menu.getPrice().getValue()),
+                    new OrderMenu(menu.getId(), OrderMenuPrice.of(menu.getPrice().getValue())),
                     OrderQuantity.of(it.getQuantity(), request.getType()));
             })
             .collect(Collectors.toList());
