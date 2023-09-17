@@ -10,8 +10,10 @@ import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.support.event.ProductPriceChangedEvent;
 import kitchenpos.support.infra.PurgomalumClient;
+import kitchenpos.support.product.event.ProductPriceChangedEvent;
+import kitchenpos.support.product.vo.ProductName;
+import kitchenpos.support.product.vo.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -59,7 +61,14 @@ public class MenuService {
         for (MenuProductElement menuProductElement : menuProductRequests) {
             final Product product = productRepository.findById(menuProductElement.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-            menuProducts.add(MenuProduct.create(product, menuProductElement.getQuantity()));
+            menuProducts.add(MenuProduct.create(
+                    ProductInMenu.create(
+                            product.getId(),
+                            ProductName.create(product.getName(), purgomalumClient),
+                            ProductPrice.create(product.getPrice())
+                    ),
+                    menuProductElement.getQuantity()
+                    ));
         }
 
         final Menu menu = Menu.create(

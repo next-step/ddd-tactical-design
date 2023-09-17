@@ -1,9 +1,8 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.support.product.ProductAble;
 import kitchenpos.support.product.vo.ProductName;
 import kitchenpos.support.product.vo.ProductPrice;
-import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,7 +11,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product extends AbstractAggregateRoot<Product> implements ProductAble {
+public class ProductInMenu implements ProductAble {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -24,51 +23,45 @@ public class Product extends AbstractAggregateRoot<Product> implements ProductAb
     @Embedded
     private ProductPrice price;
 
-    protected Product() {
+    protected ProductInMenu() {
 
     }
 
-    protected Product(UUID id, ProductName name, ProductPrice price) {
+    protected ProductInMenu(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public static Product create(ProductName productName, ProductPrice productPrice) {
-        return new Product(
-                UUID.randomUUID(),
+    public static ProductInMenu create(UUID productId, ProductName productName, ProductPrice productPrice) {
+        return new ProductInMenu(
+                productId,
                 productName,
                 productPrice
         );
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
 
+    @Override
     public String getName() {
         return name.getValue();
     }
 
+    @Override
     public BigDecimal getPrice() {
         return price.getValue();
-    }
-
-    public boolean changePrice(ProductPrice productPrice) {
-        if (this.price.equals(productPrice)) {
-            return false;
-        }
-
-        this.price = productPrice;
-        return true;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id);
+        ProductInMenu that = (ProductInMenu) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

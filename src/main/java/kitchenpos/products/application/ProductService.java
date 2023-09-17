@@ -3,8 +3,12 @@ package kitchenpos.products.application;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
-import kitchenpos.products.tobe.domain.*;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductDomainService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.support.infra.PurgomalumClient;
+import kitchenpos.support.product.vo.ProductName;
+import kitchenpos.support.product.vo.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

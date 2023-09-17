@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.support.product.vo;
 
 import kitchenpos.support.infra.PurgomalumClient;
 
@@ -33,7 +33,7 @@ public final class ProductName {
         return new ProductName(value);
     }
 
-    protected String getValue() {
+    public String getValue() {
         return value;
     }
 

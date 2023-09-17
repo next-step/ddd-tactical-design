@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.support.event.ProductPriceChangedEvent;
+import kitchenpos.support.product.event.ProductPriceChangedEvent;
+import kitchenpos.support.product.vo.ProductPrice;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

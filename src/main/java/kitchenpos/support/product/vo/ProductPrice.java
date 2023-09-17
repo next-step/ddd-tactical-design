@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.support.product.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -42,7 +42,7 @@ public final class ProductPrice {
         return BigDecimal.ZERO.compareTo(value) > 0;
     }
 
-    BigDecimal getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 

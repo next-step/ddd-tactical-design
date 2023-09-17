@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static Menu menu(){
+    public static Menu menu() {
         return menu(19_000L, true, menuProduct());
     }
 
@@ -44,10 +44,10 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return MenuProduct.create(product(), 2L);
+        return MenuProduct.create(productInMenu(), 2L);
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
+    public static MenuProduct menuProduct(final ProductInMenu product, final long quantity) {
         return MenuProduct.create(product, quantity);
     }
 
@@ -103,11 +103,23 @@ public class Fixtures {
         return orderTable;
     }
 
+    public static ProductInMenu productInMenu() {
+        return productInMenu(UUID.randomUUID(), "후라이드", 16_000L);
+    }
+
+    public static ProductInMenu productInMenu(final UUID productId, final String name, final long price) {
+        return FakeProductInMenu.createFake(productId, name, BigDecimal.valueOf(price));
+    }
+
     public static Product product() {
         return product("후라이드", 16_000L);
     }
 
     public static Product product(final String name, final long price) {
         return FakeProduct.createFake(name, BigDecimal.valueOf(price));
+    }
+
+    public static ProductInMenu convertProductToProductInMenu(Product product) {
+        return productInMenu(product.getId(), product.getName(), product.getPrice().longValue());
     }
 }

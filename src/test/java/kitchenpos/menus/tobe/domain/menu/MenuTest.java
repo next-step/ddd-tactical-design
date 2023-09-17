@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static kitchenpos.Fixtures.product;
+import static kitchenpos.Fixtures.productInMenu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -94,10 +94,10 @@ class MenuTest {
         @Test
         void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenThrowException() {
             final MenuProduct menuProduct1 = MenuProduct.create(
-                    product(), 2L
+                    productInMenu(), 2L
             );
             final MenuProduct menuProduct2 = MenuProduct.create(
-                    product(), 3L
+                    productInMenu(), 3L
             );
             final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
                     .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));
@@ -115,10 +115,10 @@ class MenuTest {
         @Test
         void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenSuccess() {
             final MenuProduct menuProduct1 = MenuProduct.create(
-                    product(), 2L
+                    productInMenu(), 2L
             );
             final MenuProduct menuProduct2 = MenuProduct.create(
-                    product(), 3L
+                    productInMenu(), 3L
             );
             final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
                     .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));

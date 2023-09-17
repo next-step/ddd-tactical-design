@@ -1,8 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 
-import kitchenpos.products.tobe.domain.Product;
-
 import javax.persistence.*;
 
 import static java.util.Objects.isNull;
@@ -21,7 +19,7 @@ public class MenuProduct {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private Product product;
+    private ProductInMenu product;
 
     @Column(name = "quantity", nullable = false)
     private Long quantity;
@@ -29,7 +27,7 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    protected MenuProduct(Product product, Long quantity) {
+    protected MenuProduct(ProductInMenu product, Long quantity) {
         validateMenuProductQuantityIsNull(quantity);
         validateMenuProductQuantityIsNegative(quantity);
 
@@ -37,7 +35,7 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static MenuProduct create(Product product, Long quantity) {
+    public static MenuProduct create(ProductInMenu product, Long quantity) {
         return new MenuProduct(product, quantity);
     }
 
@@ -45,7 +43,7 @@ public class MenuProduct {
         return seq;
     }
 
-    public Product getProduct() {
+    public ProductInMenu getProduct() {
         return product;
     }
 
