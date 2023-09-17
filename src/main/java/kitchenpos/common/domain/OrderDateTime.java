@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 @Embeddable
 public class OrderDateTime extends ValueObject {
 
-
-
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime value;
 

@@ -3,6 +3,7 @@ package kitchenpos.menugroups.application;
 import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.domain.MenuGroupId;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.dto.MenuGroupResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,22 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        return menuGroupRepository.save(request);
+    public MenuGroupResponse create(final MenuGroup request) {
+        MenuGroup response = menuGroupRepository.save(request);
+        return MenuGroupResponse.fromEntity(response);
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupResponse> findAll() {
+        List<MenuGroup> responses = menuGroupRepository.findAll();
+        return MenuGroupResponse.fromEntities(responses);
     }
 
     @Transactional(readOnly = true)
-    public MenuGroup findById(MenuGroupId menuGroupId) {
-        return menuGroupRepository.findById(menuGroupId)
+    public MenuGroupResponse findById(MenuGroupId menuGroupId) {
+        MenuGroup response = menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NoSuchElementException::new);
+        return MenuGroupResponse.fromEntity(response);
     }
 
 }

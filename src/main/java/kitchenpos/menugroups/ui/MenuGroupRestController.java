@@ -1,4 +1,4 @@
-package kitchenpos.menus.ui;
+package kitchenpos.menugroups.ui;
 
 import kitchenpos.menugroups.application.MenuGroupService;
 import kitchenpos.menugroups.domain.MenuGroup;
@@ -22,17 +22,14 @@ public class MenuGroupRestController {
 
     @PostMapping
     public ResponseEntity<MenuGroupResponse> create(@RequestBody final MenuGroupCreateRequest request) {
-        final MenuGroup response = menuGroupService.create(request.toEntity());
+        final MenuGroupResponse response = menuGroupService.create(request.toEntity());
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
-                .body(MenuGroupResponse.fromEntity(response));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<MenuGroupResponse>> findAll() {
-        List<MenuGroupResponse> responses = menuGroupService.findAll()
-                .stream()
-                .map(MenuGroupResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
+        List<MenuGroupResponse> responses = menuGroupService.findAll();
         return ResponseEntity.ok(responses);
     }
 }

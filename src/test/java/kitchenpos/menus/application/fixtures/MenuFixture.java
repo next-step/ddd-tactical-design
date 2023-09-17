@@ -34,10 +34,10 @@ public class MenuFixture {
         return menu(price, true, menuProducts);
     }
 
-    public static MenuCreateRequest menuCreate(final long price, final boolean displayed, MenuGroup menuGroup, final MenuProduct... menuProducts) {
+    public static MenuCreateRequest menuCreateRequest(final long price, final boolean displayed, UUID menuGroupId, final MenuProduct... menuProducts) {
         return new MenuCreateRequest(
                 BigDecimal.valueOf(price),
-                menuGroup.getIdValue(),
+                menuGroupId,
                 Arrays.stream(menuProducts)
                         .map(MenuFixture::menuProductRequest)
                         .collect(Collectors.toUnmodifiableList()),
