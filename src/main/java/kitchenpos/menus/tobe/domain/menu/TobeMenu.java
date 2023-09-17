@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProducts;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,14 +33,18 @@ public class TobeMenu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<TobeMenuProduct> tobeMenuProducts;
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinColumn(
+//        name = "menu_id",
+//        nullable = false,
+//        columnDefinition = "binary(16)",
+//        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+//    )
+//    private List<TobeMenuProduct> tobeMenuProducts;
+
+    @Embedded
+    private TobeMenuProducts tobeMenuProducts = new TobeMenuProducts();
+
 
     @Transient
     private UUID menuGroupId;
@@ -53,6 +58,16 @@ public class TobeMenu {
             throw new IllegalArgumentException("메뉴의 상품은 비어있을 수 없습니다.");
         }
 
+        this.id = id;
+        this.menuName = menuName;
+        this.price = price;
+        this.tobeMenuGroup = tobeMenuGroup;
+        this.displayed = displayed;
+        this.tobeMenuProducts = new TobeMenuProducts(tobeMenuProducts);
+    }
+
+    public TobeMenu(UUID id, MenuName menuName, MenuPrice price, TobeMenuGroup tobeMenuGroup, boolean displayed,
+                    TobeMenuProducts tobeMenuProducts) {
         this.id = id;
         this.menuName = menuName;
         this.price = price;
@@ -96,7 +111,7 @@ public class TobeMenu {
         return displayed;
     }
 
-    public List<TobeMenuProduct> getTobeMenuProducts() {
+    public TobeMenuProducts getTobeMenuProducts() {
         return tobeMenuProducts;
     }
 

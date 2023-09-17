@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.application.dto;
 
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProducts;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class TobeMenuProductRequest {
         this.quantity = quantity;
     }
 
-    public static List<TobeMenuProductRequest> from(List<TobeMenuProduct> tobeMenuProducts) {
+    public static List<TobeMenuProductRequest> from(TobeMenuProducts tobeMenuProducts) {
         return tobeMenuProducts.stream()
                                .map(it -> new TobeMenuProductRequest(it.getProductId(), it.getQuantity().getQuantity()))
                                .collect(Collectors.toList());

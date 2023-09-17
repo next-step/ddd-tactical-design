@@ -10,17 +10,16 @@ import kitchenpos.menus.tobe.domain.menu.TobeMenu;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProductQuantity;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProducts;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,48 +46,39 @@ public class TobeMenuService {
 
     @Transactional
     public TobeMenuCreateResponse create(final TobeMenuCreateRequest request) {
+        final TobeMenuProducts tobeMenuProducts = getTobeMenuProducts(request.getTobeMenuProducts());
+        final MenuPrice menuPrice = new MenuPrice(request.getPrice());
+        menuPrice.checkSum(tobeMenuProducts.sum().getPrice());
+
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                                                            .orElseThrow(NoSuchElementException::new);
-        List<TobeMenuProductRequest> menuProductRequests = request.getTobeMenuProducts();
+        final TobeMenu menu = new TobeMenu(UUID.randomUUID(), new MenuName(request.getName(), purgomalumChecker),
+                                           new MenuPrice(request.getPrice()), menuGroup, request.isDisplayed(),
+                                           tobeMenuProducts);
+
+        return TobeMenuCreateResponse.of(menuRepository.save(menu));
+    }
+
+    private TobeMenuProducts getTobeMenuProducts(final List<TobeMenuProductRequest> menuProductRequests) {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<TobeMenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final TobeMenuProductRequest menuProductRequest : menuProductRequests) {
-            TobeMenuProductQuantity quantity = new TobeMenuProductQuantity(menuProductRequest.getQuantity());
 
-            final TobeProduct product = productRepository.findById(menuProductRequest.getProductId())
-                                                     .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                    product.getPrice().getPrice()
-                           .multiply(BigDecimal.valueOf(quantity.getQuantity()))
-            );
-            final TobeMenuProduct menuProduct = new TobeMenuProduct(product, quantity);
-            menuProducts.add(menuProduct);
-        }
-        MenuPrice menuPrice = new MenuPrice(request.getPrice());
-        menuPrice.checkSum(sum);
+        List<TobeMenuProduct> tobeMenuProducts = menuProductRequests.stream().map(it -> {
+            TobeMenuProductQuantity quantity = new TobeMenuProductQuantity(it.getQuantity());
+            final TobeProduct product = productRepository.findById(it.getProductId())
+                                                         .orElseThrow(NoSuchElementException::new);
+            return new TobeMenuProduct(product, quantity);
+        }).collect(Collectors.toList());
 
-        final TobeMenu menu = new TobeMenu(UUID.randomUUID(), new MenuName(request.getName(), purgomalumChecker),
-                                           new MenuPrice(request.getPrice()), menuGroup, request.isDisplayed(), menuProducts);
-        TobeMenu savedTobeMenu = menuRepository.save(menu);
-
-        return TobeMenuCreateResponse.of(savedTobeMenu);
+        return new TobeMenuProducts(tobeMenuProducts);
     }
 
     @Transactional
     public TobeMenu changePrice(final UUID menuId, BigDecimal price) {
         final TobeMenu menu = menuRepository.findById(menuId)
                                             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final TobeMenuProduct menuProduct : menu.getTobeMenuProducts()) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                               .getPrice().getPrice()
-                               .multiply(BigDecimal.valueOf(menuProduct.getQuantity().getQuantity()))
-            );
-        }
+        BigDecimal sum = menu.getTobeMenuProducts().sum().getPrice();
         MenuPrice menuPrice = new MenuPrice(price);
         menuPrice.checkSum(sum);
         menu.updatePrice(menuPrice);
@@ -99,17 +89,8 @@ public class TobeMenuService {
     public TobeMenu display(final UUID menuId) {
         final TobeMenu menu = menuRepository.findById(menuId)
                                         .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final TobeMenuProduct menuProduct : menu.getTobeMenuProducts()) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                               .getPrice().getPrice()
-                               .multiply(BigDecimal.valueOf(menuProduct.getQuantity().getQuantity()))
-            );
-        }
-        if (menu.getPrice().getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
+        BigDecimal sum = menu.getTobeMenuProducts().sum().getPrice();
+        menu.getPrice().checkSum(sum);
         menu.display();
         return menu;
     }
