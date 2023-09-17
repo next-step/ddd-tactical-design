@@ -18,12 +18,12 @@ public final class MenuName {
 
     public static MenuName create(String value, PurgomalumClient purgomalumClient) {
         if (isNull(value) || value.isEmpty()) {
-            throw new IllegalArgumentException("상품명은 비어있을 수 없습니다.");
+            throw new IllegalArgumentException("메뉴명은 비어있을 수 없습니다.");
         }
 
         boolean isContainingProfanity = purgomalumClient.containsProfanity(value);
         if (isContainingProfanity) {
-            throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
+            throw new IllegalArgumentException("메뉴명에 비속어가 포함되어 있습니다.");
         }
 
         MenuName menuName = new MenuName();
