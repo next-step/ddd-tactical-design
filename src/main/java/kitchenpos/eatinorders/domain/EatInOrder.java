@@ -34,7 +34,7 @@ public class EatInOrder {
     public EatInOrder(EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
         this.id = new EatInOrderId();
         this.status = EatInOrderStatus.WAITING;
-        this.orderDateTime = new OrderDateTime();
+        this.orderDateTime = OrderDateTime.now();
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
     }
@@ -42,7 +42,7 @@ public class EatInOrder {
     public EatInOrder(EatInOrderStatus status, EatInOrderLineItems eatInOrderLineItems, OrderTableId orderTableId) {
         this.id = new EatInOrderId();
         this.status = status;
-        this.orderDateTime = new OrderDateTime();
+        this.orderDateTime = OrderDateTime.now();
         this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
     }
