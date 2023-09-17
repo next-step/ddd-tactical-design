@@ -4,12 +4,11 @@ import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
-import kitchenpos.products.dto.ChangePriceRequest;
-import kitchenpos.products.dto.CreateReqeust;
-import kitchenpos.products.dto.ProductDto;
-import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.dto.ChangePriceRequest;
+import kitchenpos.products.dto.CreateRequest;
+import kitchenpos.products.dto.ProductDto;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDto create(final CreateReqeust request) {
+    public ProductDto create(final CreateRequest request) {
         final Name name = new Name(request.getName(), purgomalum);
         final Price price = new Price(request.getPrice());
         final Product product = new Product(name, price);
@@ -48,9 +47,9 @@ public class ProductService {
     public ProductDto changePrice(final UUID productId, final ChangePriceRequest request) {
         final Price price = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
         product.changePrice(price);
-        publisher.publishEvent(new ProductPriceChangeEvent(product.getId()));
+        productRepository.save(product);
         return ProductDto.from(product);
     }
 

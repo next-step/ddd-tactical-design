@@ -2,15 +2,15 @@ package kitchenpos.products.dto;
 
 import java.math.BigDecimal;
 
-public class CreateReqeust {
+public class CreateRequest {
 
     private String name;
     private BigDecimal price;
 
-    public CreateReqeust() {
+    public CreateRequest() {
     }
 
-    public CreateReqeust(String name, BigDecimal price) {
+    public CreateRequest(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }

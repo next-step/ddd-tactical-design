@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.infra;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
@@ -37,7 +37,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(final UUID productId) {
         return menus.values()
             .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
             .collect(Collectors.toList());
     }
 }

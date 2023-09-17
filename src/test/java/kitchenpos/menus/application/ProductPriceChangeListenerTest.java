@@ -2,27 +2,30 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.event.ProductPriceChangeEvent;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPriceChangeEvent;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static kitchenpos.Fixtures.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ProductPriceChangeListenerTest {
 
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
+    private MenuValidator menuValidator;
     private ProductPriceChangeListener productPriceChangeListener;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productPriceChangeListener = new ProductPriceChangeListener(menuRepository);
+        menuValidator = new MenuValidator(productRepository);
+        productPriceChangeListener = new ProductPriceChangeListener(menuValidator, menuRepository);
     }
 
     @Test

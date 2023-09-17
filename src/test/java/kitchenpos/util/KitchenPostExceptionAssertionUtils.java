@@ -3,7 +3,6 @@ package kitchenpos.util;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 import org.junit.jupiter.api.Assertions;
-
 import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
