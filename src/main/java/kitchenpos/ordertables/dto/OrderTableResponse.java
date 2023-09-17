@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class OrderTableResponse {
 
-    private UUID orderTableId;
+    private UUID id;
     private String name;
     private int numberOfGuest;
     private boolean occupied;
@@ -17,7 +17,7 @@ public class OrderTableResponse {
     }
 
     public OrderTableResponse(UUID orderTableId, String name, int numberOfGuest, boolean occupied) {
-        this.orderTableId = orderTableId;
+        this.id = orderTableId;
         this.name = name;
         this.numberOfGuest = numberOfGuest;
         this.occupied = occupied;
@@ -43,24 +43,15 @@ public class OrderTableResponse {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getNumberOfGuest() {
         return numberOfGuest;
     }
 
-    public void setNumberOfGuest(int numberOfGuest) {
-        this.numberOfGuest = numberOfGuest;
+    public UUID getId() {
+        return id;
     }
 
     public boolean isOccupied() {
         return occupied;
     }
-
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
-    }
-
 }

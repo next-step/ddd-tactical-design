@@ -24,21 +24,21 @@ public class OrderTableRestController {
 
     @PostMapping
     public ResponseEntity<OrderTableResponse> create(@RequestBody final OrderTableRequest request) {
-        final OrderTable response = orderTableService.create(request);
-        return ResponseEntity.created(URI.create("/api/order-tables/" + response.getIdValue()))
-                .body(OrderTableResponse.fromEntity(response));
+        final OrderTableResponse response = orderTableService.create(request);
+        return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
+                .body(response);
     }
 
     @PutMapping("/{orderTableId}/sit")
     public ResponseEntity<OrderTableResponse> sit(@PathVariable final UUID orderTableId) {
-        OrderTable response = orderTableService.sit(new OrderTableId(orderTableId));
-        return ResponseEntity.ok(OrderTableResponse.fromEntity(response));
+        OrderTableResponse response = orderTableService.sit(new OrderTableId(orderTableId));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{orderTableId}/clear")
     public ResponseEntity<OrderTableResponse> clear(@PathVariable final UUID orderTableId) {
-        OrderTable response = orderTableService.clear(new OrderTableId(orderTableId));
-        return ResponseEntity.ok(OrderTableResponse.fromEntity(response));
+        OrderTableResponse response = orderTableService.clear(new OrderTableId(orderTableId));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
@@ -47,13 +47,13 @@ public class OrderTableRestController {
             @RequestBody final ChangeNumberOfGuestRequest request
     ) {
         OrderTableId targetOrderTableId = new OrderTableId(orderTableId);
-        OrderTable response = orderTableService.changeNumberOfGuests(targetOrderTableId, request.getNumberOfGuest());
-        return ResponseEntity.ok(OrderTableResponse.fromEntity(response));
+        OrderTableResponse response = orderTableService.changeNumberOfGuests(targetOrderTableId, request.getNumberOfGuest());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<OrderTableResponse>> findAll() {
-        List<OrderTable> orderTables = orderTableService.findAll();
-        return ResponseEntity.ok(OrderTableResponse.fromEntities(orderTables));
+        List<OrderTableResponse> responses = orderTableService.findAll();
+        return ResponseEntity.ok(responses);
     }
 }

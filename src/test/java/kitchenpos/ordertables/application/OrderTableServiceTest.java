@@ -7,6 +7,7 @@ import kitchenpos.ordertables.application.service.DefaultEatInOrderStatusLoader;
 import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
 import kitchenpos.ordertables.dto.OrderTableRequest;
+import kitchenpos.ordertables.dto.OrderTableResponse;
 import kitchenpos.ordertables.exception.NumberOfGuestException;
 import kitchenpos.ordertables.exception.OrderTableException;
 import kitchenpos.ordertables.exception.OrderTableNameException;
@@ -47,12 +48,12 @@ class OrderTableServiceTest {
     @Test
     void create() {
         final OrderTableRequest expected = createOrderTableRequest("1번");
-        final OrderTable actual = orderTableService.create(expected);
+        final OrderTableResponse actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getNumberOfGuestValue()).isZero(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getNumberOfGuest()).isZero(),
                 () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
@@ -70,7 +71,7 @@ class OrderTableServiceTest {
     @Test
     void sit() {
         final OrderTableId orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
+        final OrderTableResponse actual = orderTableService.sit(orderTableId);
         assertThat(actual.isOccupied()).isTrue();
     }
 
@@ -78,9 +79,9 @@ class OrderTableServiceTest {
     @Test
     void clear() {
         final OrderTableId orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
+        final OrderTableResponse actual = orderTableService.clear(orderTableId);
         assertAll(
-                () -> assertThat(actual.getNumberOfGuestValue()).isZero(),
+                () -> assertThat(actual.getNumberOfGuest()).isZero(),
                 () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
@@ -101,16 +102,16 @@ class OrderTableServiceTest {
 
         @DisplayName("방문한 손님 수를 변경할 수 있다.")
         @Test
-        void changeNumberOfGuests() {
+        void changeNumberOfGuests1() {
             final OrderTableId orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-            final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, 4);
-            assertThat(actual.getNumberOfGuestValue()).isEqualTo(4);
+            final OrderTableResponse actual = orderTableService.changeNumberOfGuests(orderTableId, 4);
+            assertThat(actual.getNumberOfGuest()).isEqualTo(4);
         }
 
         @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
         @ValueSource(ints = -1)
         @ParameterizedTest
-        void changeNumberOfGuests(final int numberOfGuests) {
+        void changeNumberOfGuests2(final int numberOfGuests) {
             final OrderTableId orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
             assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, numberOfGuests))
                     .isInstanceOf(NumberOfGuestException.class);
@@ -131,7 +132,7 @@ class OrderTableServiceTest {
     @Test
     void findAll() {
         orderTableRepository.save(orderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
+        final List<OrderTableResponse> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
 

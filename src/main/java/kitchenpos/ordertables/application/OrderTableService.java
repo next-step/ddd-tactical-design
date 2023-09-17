@@ -5,6 +5,7 @@ import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
 import kitchenpos.ordertables.domain.OrderTableRepository;
 import kitchenpos.ordertables.dto.OrderTableRequest;
+import kitchenpos.ordertables.dto.OrderTableResponse;
 import kitchenpos.ordertables.exception.OrderTableErrorCode;
 import kitchenpos.ordertables.exception.OrderTableException;
 import org.springframework.stereotype.Service;
@@ -24,19 +25,20 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTableRequest request) {
-        return orderTableRepository.save(request.toEntity());
+    public OrderTableResponse create(final OrderTableRequest request) {
+        OrderTable response = orderTableRepository.save(request.toEntity());
+        return OrderTableResponse.fromEntity(response);
     }
 
     @Transactional
-    public OrderTable sit(final OrderTableId orderTableId) {
+    public OrderTableResponse sit(final OrderTableId orderTableId) {
         final OrderTable orderTable = findById(orderTableId);
         orderTable.sit();
-        return orderTable;
+        return OrderTableResponse.fromEntity(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final OrderTableId orderTableId) {
+    public OrderTableResponse clear(final OrderTableId orderTableId) {
         final OrderTable orderTable = findById(orderTableId);
 
         if (eatInOrderStatusLoader.areAllOrdersComplete(orderTableId.getId())) {
@@ -44,23 +46,23 @@ public class OrderTableService {
         }
 
         orderTable.clear();
-        return orderTable;
+        return OrderTableResponse.fromEntity(orderTable);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final OrderTableId orderTableId, int numberOfGuest) {
+    public OrderTableResponse changeNumberOfGuests(final OrderTableId orderTableId, int numberOfGuest) {
         OrderTable orderTable = findById(orderTableId);
         orderTable.changeNumberOfGuest(new NumberOfGuest(numberOfGuest));
-        return orderTable;
+        return OrderTableResponse.fromEntity(orderTable);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableResponse> findAll() {
+        List<OrderTable> responses = orderTableRepository.findAll();
+        return OrderTableResponse.fromEntities(responses);
     }
 
-    @Transactional(readOnly = true)
-    public OrderTable findById(final OrderTableId orderTableId) {
+    private OrderTable findById(final OrderTableId orderTableId) {
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
     }
