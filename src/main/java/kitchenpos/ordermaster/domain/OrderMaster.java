@@ -53,7 +53,6 @@ public class OrderMaster {
             throw new IllegalStateException("접수 대기 중인 주문만 접수할 수 있다.");
         }
         status = OrderStatus.ACCEPTED;
-        //도메인서비스에서 배달호출
     }
 
     public void serve() {
@@ -84,7 +83,6 @@ public class OrderMaster {
         validationOfDelivery();
         validationOfTakeOutAndEatIn();
         status = OrderStatus.COMPLETED;
-        //매장테이블 클리어 호출
     }
 
     private void validationOfTakeOutAndEatIn() {
