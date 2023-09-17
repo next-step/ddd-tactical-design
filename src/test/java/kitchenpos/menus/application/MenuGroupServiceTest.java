@@ -6,8 +6,8 @@ import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.common.values.Name;
 import kitchenpos.menus.dto.CreateRequest;
 import kitchenpos.menus.dto.MenuGroupDto;
-import kitchenpos.menus.tobe.infra.ToBeInMemoryMenuGroupRepository;
-import kitchenpos.menus.tobe.domain.ToBeMenuGroupRepository;
+import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,15 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MenuGroupServiceTest {
-    private ToBeMenuGroupRepository toBeMenuGroupRepository;
+    private MenuGroupRepository menuGroupRepository;
     private Purgomalum purgomalum;
     private MenuGroupService menuGroupService;
 
     @BeforeEach
     void setUp() {
-        toBeMenuGroupRepository = new ToBeInMemoryMenuGroupRepository();
+        menuGroupRepository = new InMemoryMenuGroupRepository();
         purgomalum = FakePurgomalum.create();
-        menuGroupService = new MenuGroupService(toBeMenuGroupRepository, purgomalum);
+        menuGroupService = new MenuGroupService(menuGroupRepository, purgomalum);
     }
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
@@ -59,7 +59,7 @@ class MenuGroupServiceTest {
     @Test
     void findAll() {
         Name name = new Name("두마리메뉴", purgomalum);
-        toBeMenuGroupRepository.save(menuGroup(name));
+        menuGroupRepository.save(menuGroup(name));
         final List<MenuGroupDto> actual = menuGroupService.findAll();
         assertThat(actual).hasSize(1);
     }

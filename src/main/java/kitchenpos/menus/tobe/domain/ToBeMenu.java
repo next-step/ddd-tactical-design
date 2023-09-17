@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,7 +26,7 @@ public class ToBeMenu {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private ToBeMenuGroup menuGroup;
+    private MenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -72,11 +71,11 @@ public class ToBeMenu {
         this.price = price;
     }
 
-    public ToBeMenuGroup getMenuGroup() {
+    public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(ToBeMenuGroup menuGroup) {
+    public void setMenuGroup(MenuGroup menuGroup) {
         this.menuGroup = menuGroup;
     }
 

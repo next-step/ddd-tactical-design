@@ -4,7 +4,7 @@ import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 import kitchenpos.common.infra.FakeApplicationEventPublisher;
 import kitchenpos.common.infra.FakePurgomalum;
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateRequest;

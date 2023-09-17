@@ -2,10 +2,12 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.common.infra.FakePurgomalum;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -42,7 +44,7 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalum = FakePurgomalum.create();
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalum);
-        menuGroupId = menuGroupRepository.save(asisMenuGroup()).getId();
+        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
 

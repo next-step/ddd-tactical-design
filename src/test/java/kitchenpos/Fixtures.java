@@ -1,13 +1,12 @@
 package kitchenpos;
 
+import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.common.infra.FakePurgomalum;
-import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
+import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
@@ -32,24 +31,18 @@ public class Fixtures {
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(asisMenuGroup());
+        menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
 
-    public static MenuGroup asisMenuGroup() {
-        MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName("후라이드+후라이드");
-        return menuGroup;
-    }
-    public static ToBeMenuGroup menuGroup() {
+    public static MenuGroup menuGroup() {
         return menuGroup(new Name("후라이드+후라이드", FakePurgomalum.create()));
     }
 
-    public static ToBeMenuGroup menuGroup(final Name name) {
-        return new ToBeMenuGroup(name);
+    public static MenuGroup menuGroup(final Name name) {
+        return new MenuGroup(name);
     }
 
     public static MenuProduct menuProduct() {

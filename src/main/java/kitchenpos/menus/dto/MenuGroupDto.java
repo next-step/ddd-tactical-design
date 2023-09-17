@@ -2,7 +2,6 @@ package kitchenpos.menus.dto;
 
 import kitchenpos.common.values.Name;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class MenuGroupDto {
     return name;
   }
 
-  public static MenuGroupDto from(ToBeMenuGroup savedResult) {
+  public static MenuGroupDto from(MenuGroup savedResult) {
     return new MenuGroupDto(savedResult.getId(), savedResult.getName());
   }
 
