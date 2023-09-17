@@ -18,4 +18,17 @@ public class ToBeMenuGroup {
     protected ToBeMenuGroup() {
     }
 
+    public ToBeMenuGroup(final Name name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Name getName() {
+        return name;
+    }
+
 }

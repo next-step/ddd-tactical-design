@@ -7,6 +7,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.common.infra.FakePurgomalum;
+import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
@@ -31,21 +32,24 @@ public class Fixtures {
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
+        menu.setMenuGroup(asisMenuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
 
-    public static MenuGroup menuGroup() {
-        return menuGroup("두마리메뉴");
+    public static MenuGroup asisMenuGroup() {
+        MenuGroup menuGroup = new MenuGroup();
+        menuGroup.setId(UUID.randomUUID());
+        menuGroup.setName("후라이드+후라이드");
+        return menuGroup;
+    }
+    public static ToBeMenuGroup menuGroup() {
+        return menuGroup(new Name("후라이드+후라이드", FakePurgomalum.create()));
     }
 
-    public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+    public static ToBeMenuGroup menuGroup(final Name name) {
+        return new ToBeMenuGroup(name);
     }
 
     public static MenuProduct menuProduct() {

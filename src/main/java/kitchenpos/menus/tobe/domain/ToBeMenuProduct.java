@@ -31,4 +31,19 @@ public class ToBeMenuProduct {
     protected ToBeMenuProduct() {
     }
 
+    public Long getSeq() {
+        return seq;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public UUID getProductId() {
+        return productId;
+    }
 }

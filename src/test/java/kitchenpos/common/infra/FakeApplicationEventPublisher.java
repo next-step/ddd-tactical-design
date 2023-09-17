@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.common.infra;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;

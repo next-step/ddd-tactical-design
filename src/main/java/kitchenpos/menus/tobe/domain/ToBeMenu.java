@@ -27,7 +27,7 @@ public class ToBeMenu {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private MenuGroup menuGroup;
+    private ToBeMenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -39,7 +39,7 @@ public class ToBeMenu {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> menuProducts;
+    private List<ToBeMenuProduct> menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -47,4 +47,60 @@ public class ToBeMenu {
     protected ToBeMenu() {
     }
 
+    public UUID getId() {
+
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public ToBeMenuGroup getMenuGroup() {
+        return menuGroup;
+    }
+
+    public void setMenuGroup(ToBeMenuGroup menuGroup) {
+        this.menuGroup = menuGroup;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        this.displayed = displayed;
+    }
+
+    public List<ToBeMenuProduct> getMenuProducts() {
+        return menuProducts;
+    }
+
+    public void setMenuProducts(List<ToBeMenuProduct> menuProducts) {
+        this.menuProducts = menuProducts;
+    }
+
+    public UUID getMenuGroupId() {
+        return menuGroupId;
+    }
+
+    public void setMenuGroupId(UUID menuGroupId) {
+        this.menuGroupId = menuGroupId;
+    }
 }

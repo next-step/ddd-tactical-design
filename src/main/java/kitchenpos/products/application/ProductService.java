@@ -5,7 +5,7 @@ import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 import kitchenpos.products.dto.ChangePriceRequest;
-import kitchenpos.products.dto.CreateReqeust;
+import kitchenpos.products.dto.CreateRequest;
 import kitchenpos.products.dto.ProductDto;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
@@ -36,7 +36,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDto create(final CreateReqeust request) {
+    public ProductDto create(final CreateRequest request) {
         final Name name = new Name(request.getName(), purgomalum);
         final Price price = new Price(request.getPrice());
         final Product product = new Product(name, price);

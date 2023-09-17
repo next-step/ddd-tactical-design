@@ -2,7 +2,7 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.infra.InMemoryProductRepository;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;

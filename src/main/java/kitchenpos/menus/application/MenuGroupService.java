@@ -1,36 +1,43 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.common.domain.Purgomalum;
+import kitchenpos.common.values.Name;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.dto.CreateRequest;
+import kitchenpos.menus.dto.MenuGroupDto;
+import kitchenpos.menus.tobe.domain.ToBeMenuGroup;
+import kitchenpos.menus.tobe.domain.ToBeMenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuGroupService {
-    private final MenuGroupRepository menuGroupRepository;
+    private final ToBeMenuGroupRepository toBeMenuGroupRepository;
+    private final Purgomalum purgomalum;
 
-    public MenuGroupService(final MenuGroupRepository menuGroupRepository) {
-        this.menuGroupRepository = menuGroupRepository;
+    public MenuGroupService(ToBeMenuGroupRepository toBeMenuGroupRepository,
+                            Purgomalum purgomalum) {
+        this.toBeMenuGroupRepository = toBeMenuGroupRepository;
+        this.purgomalum = purgomalum;
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    public MenuGroupDto create(final CreateRequest request) {
+        Name name = new Name(request.getName(), purgomalum);
+        final ToBeMenuGroup menuGroup = new ToBeMenuGroup(name);
+        ToBeMenuGroup savedResult = toBeMenuGroupRepository.save(menuGroup);
+        return MenuGroupDto.from(savedResult);
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupDto> findAll() {
+        return toBeMenuGroupRepository.findAll()
+          .stream()
+          .map(MenuGroupDto::from)
+          .collect(Collectors.toList());
     }
 }
