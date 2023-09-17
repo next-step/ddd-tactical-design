@@ -44,11 +44,11 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return MenuProduct.create(product(), MenuProductQuantity.create(2L));
+        return MenuProduct.create(product(), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return MenuProduct.create(product, MenuProductQuantity.create(quantity));
+        return MenuProduct.create(product, quantity);
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {

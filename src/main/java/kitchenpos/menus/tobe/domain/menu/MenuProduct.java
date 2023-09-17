@@ -4,7 +4,8 @@ package kitchenpos.menus.tobe.domain.menu;
 import kitchenpos.products.tobe.domain.Product;
 
 import javax.persistence.*;
-import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Table(name = "menu_product")
 @Entity
@@ -22,23 +23,22 @@ public class MenuProduct {
     )
     private Product product;
 
-    @Embedded
-    private MenuProductQuantity quantity;
-
-    @Transient
-    private UUID productId;
+    @Column(name = "quantity", nullable = false)
+    private Long quantity;
 
     protected MenuProduct() {
     }
 
-    protected MenuProduct(Product product, MenuProductQuantity quantity, UUID productId) {
+    protected MenuProduct(Product product, Long quantity) {
+        validateMenuProductQuantityIsNull(quantity);
+        validateMenuProductQuantityIsNegative(quantity);
+
         this.product = product;
         this.quantity = quantity;
-        this.productId = productId;
     }
 
-    public static MenuProduct create(Product product, MenuProductQuantity quantity) {
-        return new MenuProduct(product, quantity, product.getId());
+    public static MenuProduct create(Product product, Long quantity) {
+        return new MenuProduct(product, quantity);
     }
 
     public Long getSeq() {
@@ -50,10 +50,22 @@ public class MenuProduct {
     }
 
     public long getQuantity() {
-        return quantity.getValue();
+        return quantity;
     }
 
-    public UUID getProductId() {
-        return productId;
+    private static void validateMenuProductQuantityIsNegative(Long value) {
+        if (isNegative(value)) {
+            throw new IllegalArgumentException("메뉴 수량은 음수일 수 없습니다.");
+        }
+    }
+
+    private static void validateMenuProductQuantityIsNull(Long value) {
+        if (isNull(value)) {
+            throw new IllegalArgumentException("메뉴 수량은 비어있을 수 없습니다.");
+        }
+    }
+
+    private static boolean isNegative(Long value) {
+        return 0L > value;
     }
 }

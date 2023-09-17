@@ -50,7 +50,7 @@ class MenuServiceTest {
     }
 
     private static MenuProduct createMenuProductRequest(final Product product, final long quantity) {
-        return MenuProduct.create(product, MenuProductQuantity.create(quantity));
+        return MenuProduct.create(product, quantity);
     }
 
     @BeforeEach

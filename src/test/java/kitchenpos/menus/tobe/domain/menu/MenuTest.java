@@ -94,10 +94,10 @@ class MenuTest {
         @Test
         void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenThrowException() {
             final MenuProduct menuProduct1 = MenuProduct.create(
-                    product(), MenuProductQuantity.create(2L)
+                    product(), 2L
             );
             final MenuProduct menuProduct2 = MenuProduct.create(
-                    product(), MenuProductQuantity.create(3L)
+                    product(), 3L
             );
             final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
                     .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));
@@ -115,10 +115,10 @@ class MenuTest {
         @Test
         void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenSuccess() {
             final MenuProduct menuProduct1 = MenuProduct.create(
-                    product(), MenuProductQuantity.create(2L)
+                    product(), 2L
             );
             final MenuProduct menuProduct2 = MenuProduct.create(
-                    product(), MenuProductQuantity.create(3L)
+                    product(), 3L
             );
             final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
                     .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));

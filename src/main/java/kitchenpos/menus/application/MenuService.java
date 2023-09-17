@@ -59,7 +59,7 @@ public class MenuService {
         for (MenuProductElement menuProductElement : menuProductRequests) {
             final Product product = productRepository.findById(menuProductElement.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-            menuProducts.add(MenuProduct.create(product, MenuProductQuantity.create(menuProductElement.getQuantity())));
+            menuProducts.add(MenuProduct.create(product, menuProductElement.getQuantity()));
         }
 
         final Menu menu = Menu.create(
