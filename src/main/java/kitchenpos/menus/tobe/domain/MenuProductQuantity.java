@@ -25,13 +25,13 @@ public final class MenuProductQuantity {
 
     private static void validateMenuProductQuantityIsNegative(Long value) {
         if (isNegative(value)) {
-            throw new IllegalArgumentException("메뉴 가격은 음수일 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 수량은 음수일 수 없습니다.");
         }
     }
 
     private static void validateMenuProductQuantityIsNull(Long value) {
         if (isNull(value)) {
-            throw new IllegalArgumentException("메뉴 가격은 비어있을 수 없습니다.");
+            throw new IllegalArgumentException("메뉴 수량은 비어있을 수 없습니다.");
         }
     }
 
