@@ -21,28 +21,26 @@ public class TobeMenuProduct {
     )
     private TobeProduct product;
 
-    private MenuProductQuantity quantity;
+    private TobeMenuProductQuantity quantity;
 
     @Transient
     private UUID productId;
 
+    @Transient
+    private TobeMenuProductPrice price;
+
     protected TobeMenuProduct() {
     }
 
-    public TobeMenuProduct(TobeProduct product, MenuProductQuantity quantity) {
+    public TobeMenuProduct(TobeProduct product, TobeMenuProductQuantity quantity) {
         this.product = product;
         this.quantity = quantity;
     }
 
-    public TobeMenuProduct(Long seq, TobeProduct product, MenuProductQuantity quantity) {
+    public TobeMenuProduct(Long seq, TobeProduct product, TobeMenuProductQuantity quantity) {
         this.seq = seq;
         this.product = product;
         this.quantity = quantity;
-    }
-
-    public TobeMenuProduct(MenuProductQuantity quantity, UUID productId) {
-        this.quantity = quantity;
-        this.productId = productId;
     }
 
     public Long getSeq() {
@@ -53,7 +51,7 @@ public class TobeMenuProduct {
         return product;
     }
 
-    public MenuProductQuantity getQuantity() {
+    public TobeMenuProductQuantity getQuantity() {
         return quantity;
     }
 

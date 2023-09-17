@@ -10,7 +10,7 @@ import kitchenpos.menus.tobe.domain.menu.TobeMenu;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menuproduct.MenuProductQuantity;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
@@ -63,7 +64,7 @@ public class TobeMenuService {
         final List<TobeMenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
         for (final TobeMenuProductRequest menuProductRequest : menuProductRequests) {
-            MenuProductQuantity quantity = new MenuProductQuantity(menuProductRequest.getQuantity());
+            TobeMenuProductQuantity quantity = new TobeMenuProductQuantity(menuProductRequest.getQuantity());
 
             final TobeProduct product = productRepository.findById(menuProductRequest.getProductId())
                                                      .orElseThrow(NoSuchElementException::new);
@@ -82,6 +83,16 @@ public class TobeMenuService {
         TobeMenu savedTobeMenu = menuRepository.save(menu);
 
         return TobeMenuCreateResponse.of(savedTobeMenu);
+    }
+
+    private Map<UUID, TobeProduct> getProductMap(final List<TobeMenuProductRequest> menuProductRequests) {
+        final List<TobeProduct> products = productRepository.findAllByIdIn(
+                menuProductRequests.stream()
+                                   .map(TobeMenuProductRequest::getProductId)
+                                   .collect(Collectors.toList())
+        );
+        Map<UUID, TobeProduct> productMap = products.stream().collect(Collectors.toMap(TobeProduct::getId, x -> x));
+        return productMap;
     }
 
     @Transactional

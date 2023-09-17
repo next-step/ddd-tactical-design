@@ -7,7 +7,7 @@ import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupName;
-import kitchenpos.menus.tobe.domain.menuproduct.MenuProductQuantity;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 import kitchenpos.products.application.FakePurgomalumChecker;
 import kitchenpos.products.tobe.domain.ProductName;
@@ -45,11 +45,11 @@ public class TobeFixtures {
     }
 
     public static TobeMenuProduct menuProduct() {
-        return new TobeMenuProduct(new Random().nextLong(), product(), new MenuProductQuantity(2L));
+        return new TobeMenuProduct(new Random().nextLong(), product(), new TobeMenuProductQuantity(2L));
     }
 
     public static TobeMenuProduct menuProduct(final TobeProduct product, final long quantity) {
-        return new TobeMenuProduct(new Random().nextLong(), product, new MenuProductQuantity(quantity));
+        return new TobeMenuProduct(new Random().nextLong(), product, new TobeMenuProductQuantity(quantity));
     }
 
 //    public static Order order(final OrderStatus status, final String deliveryAddress) {

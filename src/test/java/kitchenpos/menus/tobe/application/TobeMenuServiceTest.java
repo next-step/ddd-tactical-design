@@ -72,7 +72,7 @@ class TobeMenuServiceTest {
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
-    void create(final List<TobeMenuProductRequest> menuProducts) {
+    void create01(final List<TobeMenuProductRequest> menuProducts) {
         TobeMenuCreateRequest request = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(request))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -81,8 +81,21 @@ class TobeMenuServiceTest {
     private static List<Arguments> menuProducts() {
         return Arrays.asList(
                 null,
-                Arguments.of(Collections.emptyList()),
-                Arguments.of(List.of(createMenuProductRequest(INVALID_ID, 2L)))
+                Arguments.of(Collections.emptyList())
+        );
+    }
+
+    @DisplayName("상품이 없으면 등록할 수 없다.")
+    @MethodSource("invalidMenuProducts")
+    @ParameterizedTest
+    void create04(final List<TobeMenuProductRequest> menuProducts) {
+        TobeMenuCreateRequest request = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
+        assertThatThrownBy(() -> menuService.create(request))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    private static List<Arguments> invalidMenuProducts() {
+        return List.of(Arguments.of(List.of(createMenuProductRequest(INVALID_ID, 2L)))
         );
     }
 
@@ -101,7 +114,7 @@ class TobeMenuServiceTest {
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
-    void create(final BigDecimal price) {
+    void create02(final BigDecimal price) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
@@ -124,7 +137,7 @@ class TobeMenuServiceTest {
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
     @NullSource
     @ParameterizedTest
-    void create(final UUID menuGroupId) {
+    void create03(final UUID menuGroupId) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
@@ -136,7 +149,7 @@ class TobeMenuServiceTest {
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
-    void create(final String name) {
+    void create04(final String name) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );

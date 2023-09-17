@@ -1,19 +1,16 @@
 package kitchenpos.menus.tobe.domain.menuproduct;
 
-import kitchenpos.products.tobe.domain.TobeProduct;
-
 import javax.persistence.*;
-import java.util.UUID;
 
 @Embeddable
-public class MenuProductQuantity {
+public class TobeMenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    protected MenuProductQuantity() {
+    protected TobeMenuProductQuantity() {
     }
 
-    public MenuProductQuantity(long quantity) {
+    public TobeMenuProductQuantity(long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException("메뉴 상품 수량은 0보다 작을 수 없습니다. 수량: " + quantity);
         }
