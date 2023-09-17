@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;

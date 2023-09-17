@@ -1,10 +1,10 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.MenuChangePriceRequest;
+import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.MenuProductPriceHandler;
-import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,23 +30,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private ProductRepository productRepository;
+    private InMemoryProductQueryService productQueryService;
     private DisplayNameChecker displayNameChecker;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
-    private MenuProductPriceHandler menuProductPriceHandler;
 
     @BeforeEach
     void setUp() {
         menuRepository = new NewInMemoryMenuRepository();
         menuGroupRepository = new NewInMemoryMenuGroupRepository();
-        productRepository = new InMemoryProductRepository();
         displayNameChecker = new FakeDisplayNameChecker();
-        menuProductPriceHandler = new MenuProductPriceHandler();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, displayNameChecker, menuProductPriceHandler);
+        productQueryService = new InMemoryProductQueryService();
+        menuService = new MenuService(menuRepository, menuGroupRepository, displayNameChecker, productQueryService);
         menuGroupId = menuGroupRepository.save(tobeMenuGroup("두마리메뉴")).getId();
-        product = productRepository.save(product("후라이드", 16_000L));
+        product = productQueryService.save(product("후라이드", 16_000L));
     }
 
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
@@ -227,7 +225,7 @@ class MenuServiceTest {
             final Long price,
             final UUID menuGroupId,
             final boolean displayed,
-            final MenuProductCreateRequest ... menuProductCreateRequests
+            final MenuProductCreateRequest... menuProductCreateRequests
     ) {
         if (price == null) {
             return MenuCreateRequest.create(null, menuGroupId, List.of(menuProductCreateRequests), name, displayed);

@@ -1,6 +1,6 @@
 package kitchenpos.menus.ui;
 
-import kitchenpos.menus.application.MenuChangePriceRequest;
+import kitchenpos.menus.application.dto.MenuChangePriceRequest;
 import kitchenpos.menus.application.MenuCreateRequest;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.NewMenu;

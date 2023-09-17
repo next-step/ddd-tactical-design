@@ -1,11 +1,10 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static kitchenpos.menus.exception.MenuProductExceptionMessage.NOT_EQUAL_MENU_PRODUCT_SIZE;
 
 public class MenuCreateRequest {
     private BigDecimal price;
@@ -28,14 +27,6 @@ public class MenuCreateRequest {
         return new MenuCreateRequest(price, menuGroupId, menuProductCreateRequests, name, displayed);
     }
 
-    public List<UUID> getProductIds() {
-        if (menuProducts == null || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException(NOT_EQUAL_MENU_PRODUCT_SIZE);
-        }
-        return menuProducts.stream()
-                .map(MenuProductCreateRequest::getProductId)
-                .collect(Collectors.toList());
-    }
 
     public BigDecimal getPrice() {
         return price;

@@ -1,13 +1,18 @@
 package kitchenpos.menus.tobe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kitchenpos.menus.application.MenuProductCreateRequest;
+import kitchenpos.common.domain.Price;
+import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static kitchenpos.menus.exception.MenuExceptionMessage.MENU_PRICE_MORE_PRODUCTS_SUM;
 
 @Embeddable
 public class MenuProducts {
@@ -20,7 +25,8 @@ public class MenuProducts {
     )
     private List<NewMenuProduct> newMenuProducts;
 
-    public MenuProducts() {}
+    public MenuProducts() {
+    }
 
     public MenuProducts(List<NewMenuProduct> newMenuProductList) {
         this.newMenuProducts = newMenuProductList;
@@ -35,6 +41,19 @@ public class MenuProducts {
 
     public static MenuProducts of(List<NewMenuProduct> newMenuProductList) {
         return new MenuProducts(newMenuProductList);
+    }
+
+    public void validateMenuPrice(Map<UUID, BigDecimal> productPriceMap, Price menuPrice) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (NewMenuProduct menuProduct : newMenuProducts) {
+            sum = sum.add(
+                    productPriceMap.get(menuProduct.getProductId()).multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            );
+        }
+        if (menuPrice.isGreaterThan(Price.of(sum))) {
+            throw new IllegalArgumentException(MENU_PRICE_MORE_PRODUCTS_SUM);
+        }
+
     }
 
     @JsonIgnore
@@ -61,4 +80,5 @@ public class MenuProducts {
     public int hashCode() {
         return Objects.hash(newMenuProducts);
     }
+
 }

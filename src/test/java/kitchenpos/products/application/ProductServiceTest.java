@@ -4,6 +4,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.NewInMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.NewMenu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.common.domain.DisplayNameChecker;
