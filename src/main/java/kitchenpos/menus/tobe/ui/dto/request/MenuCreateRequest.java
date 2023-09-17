@@ -1,26 +1,31 @@
 package kitchenpos.menus.tobe.ui.dto.request;
 
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.products.domain.PurgomalumClient;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MenuCreateRequest {
     private String name;
     private BigDecimal price;
     private UUID menuGroupId;
     private boolean displayed;
-    private List<MenuProductCreateRequest> menuProductCreateRequest;
+    private List<MenuProductCreateRequest> menuProductCreateRequests;
 
     public MenuCreateRequest() {
     }
 
     public MenuCreateRequest(String name, BigDecimal price, UUID menuGroupId, boolean displayed,
-                             List<MenuProductCreateRequest> menuProductCreateRequest) {
+                             List<MenuProductCreateRequest> menuProductCreateRequests) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
-        this.menuProductCreateRequest = menuProductCreateRequest;
+        this.menuProductCreateRequests = menuProductCreateRequests;
     }
 
     public String getName() {
@@ -39,29 +44,19 @@ public class MenuCreateRequest {
         return displayed;
     }
 
-    public List<MenuProductCreateRequest> getMenuProductCreateRequest() {
-        return menuProductCreateRequest;
+    public List<MenuProductCreateRequest> getMenuProductCreateRequests() {
+        return menuProductCreateRequests;
     }
 
-    public static class MenuProductCreateRequest {
-        private UUID productId;
-        private Long quantity;
-
-        public MenuProductCreateRequest() {
-        }
-
-        public MenuProductCreateRequest(UUID productId, Long quantity) {
-            this.productId = productId;
-            this.quantity = quantity;
-        }
-
-        public UUID getProductId() {
-            return productId;
-        }
-
-        public Long getQuantity() {
-            return quantity;
-        }
-
+    public Menu toMenu(PurgomalumClient purgomalumClient) {
+        toMenuProducts();
+        return new Menu(this.name, purgomalumClient, this.price, this.menuGroupId, this.displayed, toMenuProducts());
     }
+
+    private List<MenuProduct> toMenuProducts() {
+        return menuProductCreateRequests.stream()
+                .map(MenuProductCreateRequest::toMenuProduct)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -27,4 +27,8 @@ public class MenuPrice {
     public BigDecimal getValue() {
         return value;
     }
+
+    public int compareTo(BigDecimal price) {
+        return value.compareTo(price);
+    }
 }

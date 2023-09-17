@@ -52,10 +52,12 @@ public class ProductService {
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(menuProduct.getProduct().multiplyPrice(menuProduct.getQuantity()).getValue());
+                final Product findProductByMenuProduct = productRepository.findById(menuProduct.getProductId())
+                        .orElseThrow(NoSuchElementException::new);
+                sum = sum.add(findProductByMenuProduct.multiplyPrice(menuProduct.getQuantity()).getValue());
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+                menu.hide();
             }
         }
         return ProductChangePriceResponse.of(product);

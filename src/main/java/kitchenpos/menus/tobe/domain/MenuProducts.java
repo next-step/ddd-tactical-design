@@ -23,8 +23,16 @@ public class MenuProducts {
     public MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
+    public void addAll(List<MenuProduct> menuProducts) {
+        menuProducts
+                .forEach(menuProduct -> add(menuProduct));
         this.menuProducts = menuProducts;
+    }
+
+    private void add(MenuProduct menuProduct) {
+        if (!this.menuProducts.contains(menuProduct)) {
+            menuProducts.add(menuProduct);
+        }
     }
 
     public List<MenuProduct> get() {
