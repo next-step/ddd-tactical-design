@@ -1,7 +1,6 @@
-package kitchenpos.eatinorders.ui.response;
+package kitchenpos.eatinorders.application.response;
 
 import kitchenpos.eatinorders.domain.tobe.EatInOrderLineItem;
-import kitchenpos.eatinorders.ui.request.EatInOrderLineItemRequest;
 
 import java.math.BigDecimal;
 

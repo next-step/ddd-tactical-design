@@ -2,8 +2,8 @@ package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.domain.tobe.OrderTable;
-import kitchenpos.eatinorders.ui.request.OrderTableChangeGuestsRequest;
-import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.application.request.OrderTableChangeGuestsRequest;
+import kitchenpos.eatinorders.application.request.OrderTableCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

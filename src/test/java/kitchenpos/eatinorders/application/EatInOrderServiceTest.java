@@ -1,10 +1,9 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.tobe.*;
-import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.ui.request.EatInOrderLineItemRequest;
+import kitchenpos.eatinorders.application.request.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.application.request.EatInOrderLineItemRequest;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import static kitchenpos.Fixtures.*;

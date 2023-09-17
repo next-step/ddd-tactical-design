@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui.response;
+package kitchenpos.eatinorders.application.response;
 
 import kitchenpos.eatinorders.domain.tobe.EatInOrder;
 import kitchenpos.eatinorders.domain.tobe.OrderStatus;

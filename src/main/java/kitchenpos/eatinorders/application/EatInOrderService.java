@@ -1,8 +1,7 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.tobe.*;
-import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.application.request.EatInOrderCreateRequest;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import org.springframework.stereotype.Service;

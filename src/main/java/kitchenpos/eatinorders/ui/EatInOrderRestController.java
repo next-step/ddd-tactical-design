@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.EatInOrderService;
-import kitchenpos.eatinorders.ui.request.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.ui.response.EatInOrderResponse;
+import kitchenpos.eatinorders.application.request.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.application.response.EatInOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

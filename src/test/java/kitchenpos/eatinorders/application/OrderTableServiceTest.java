@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.tobe.*;
-import kitchenpos.eatinorders.ui.request.OrderTableChangeGuestsRequest;
-import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.application.request.OrderTableChangeGuestsRequest;
+import kitchenpos.eatinorders.application.request.OrderTableCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

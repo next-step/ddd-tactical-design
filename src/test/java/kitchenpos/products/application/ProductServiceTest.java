@@ -1,13 +1,12 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProductPurgomalumClient;
-import kitchenpos.products.ui.request.ProductChangePriceRequest;
-import kitchenpos.products.ui.request.ProductCreateRequest;
+import kitchenpos.products.application.request.ProductChangePriceRequest;
+import kitchenpos.products.application.request.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui.request;
+package kitchenpos.eatinorders.application.request;
 
 import javax.validation.constraints.NotNull;
 

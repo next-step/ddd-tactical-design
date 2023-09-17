@@ -40,7 +40,7 @@ public class OrderTable {
         occupied = true;
     }
 
-    public void guests(int guests) {
+    public void changeGuestsNumber(int guests) {
         if (!isOccupied()) {
             throw new IllegalStateException();
         }

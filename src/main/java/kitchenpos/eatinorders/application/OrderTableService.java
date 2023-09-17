@@ -1,14 +1,13 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.tobe.*;
-import kitchenpos.eatinorders.ui.request.OrderTableChangeGuestsRequest;
-import kitchenpos.eatinorders.ui.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.application.request.OrderTableChangeGuestsRequest;
+import kitchenpos.eatinorders.application.request.OrderTableCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -47,7 +46,7 @@ public class OrderTableService {
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableChangeGuestsRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.guests(request.getGuests());
+        orderTable.changeGuestsNumber(request.getGuests());
         return orderTable;
     }
 
