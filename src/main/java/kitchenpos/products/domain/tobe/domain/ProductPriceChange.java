@@ -26,7 +26,7 @@ public class ProductPriceChange {
         final ToBeProduct product = toBeProductRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(productPrice);
-        ProductPriceChangeRequest productPriceChangeRequest = new ProductPriceChangeRequest(productId, productPrice);
+        ProductPriceChangeRequest productPriceChangeRequest = new ProductPriceChangeRequest(productId);
         applicationEventPublisher.publishEvent(new ProductPriceChangeEvent(productPriceChangeRequest));
     }
 

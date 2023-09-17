@@ -10,22 +10,28 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import kitchenpos.products.domain.tobe.domain.ProductPriceChangeEvent;
 import kitchenpos.products.domain.tobe.domain.ProductPriceChangeRequest;
+import kitchenpos.products.domain.tobe.domain.ToBeProductRepository;
 
 @Component
 public class MenuDisplayListener {
     private final ToBeMenuRepository menuRepository;
+    private final ToBeProductRepository productRepository;
 
-    public MenuDisplayListener(ToBeMenuRepository menuRepository) {
+    public MenuDisplayListener(ToBeMenuRepository menuRepository, ToBeProductRepository productRepository) {
         this.menuRepository = menuRepository;
+        this.productRepository = productRepository;
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void changeDisplay(ProductPriceChangeEvent event) {
         ProductPriceChangeRequest request = (ProductPriceChangeRequest)event.getSource();
-        List<ToBeMenu> menus = menuRepository.findAllByProductId(request.getProductId());
-        for (ToBeMenu it : menus) {
-            it.changeProductPrice(request.getProductId(), request.getProductPrice());
-        }
+        productRepository.findById(request.getProductId())
+            .ifPresent(toBeProduct -> {
+                List<ToBeMenu> menus = menuRepository.findAllByProductId(request.getProductId());
+                for (ToBeMenu it : menus) {
+                    it.changeProductPrice(request.getProductId(), toBeProduct.getPrice().getValue());
+                }
+            });
     }
 }
