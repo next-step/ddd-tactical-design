@@ -3,9 +3,9 @@ package kitchenpos.menus.mapper;
 import kitchenpos.menus.dto.MenuDetailResponse;
 import kitchenpos.menus.dto.MenuGroupDetailResponse;
 import kitchenpos.menus.dto.MenuProductElement;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.support.event.ProductPriceChangedEvent;
 import org.springframework.stereotype.Service;

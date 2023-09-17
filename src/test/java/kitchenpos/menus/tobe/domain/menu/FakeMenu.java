@@ -1,5 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.support.infra.PurgomalumClient;
 
 import java.math.BigDecimal;

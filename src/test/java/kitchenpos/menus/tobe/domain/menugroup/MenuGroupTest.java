@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
