@@ -46,6 +46,10 @@ public class TobeProduct {
         return price;
     }
 
+    public BigDecimal getBigDecimalPrice() {
+        return price.getPrice();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

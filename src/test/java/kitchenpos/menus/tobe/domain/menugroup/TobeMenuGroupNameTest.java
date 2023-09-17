@@ -22,5 +22,4 @@ class TobeMenuGroupNameTest {
         assertThatThrownBy(() -> new TobeMenuGroupName(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-
 }
