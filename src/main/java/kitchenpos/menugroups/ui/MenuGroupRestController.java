@@ -1,7 +1,6 @@
 package kitchenpos.menugroups.ui;
 
 import kitchenpos.menugroups.application.MenuGroupService;
-import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.dto.MenuGroupCreateRequest;
 import kitchenpos.menugroups.dto.MenuGroupResponse;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/menu-groups")
 @RestController

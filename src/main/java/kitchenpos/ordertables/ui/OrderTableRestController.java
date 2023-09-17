@@ -1,7 +1,6 @@
 package kitchenpos.ordertables.ui;
 
 import kitchenpos.ordertables.application.OrderTableService;
-import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableId;
 import kitchenpos.ordertables.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.ordertables.dto.OrderTableRequest;

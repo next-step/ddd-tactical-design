@@ -3,6 +3,7 @@ package kitchenpos.menus.infra;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.ProductPriceLoader;
 import kitchenpos.products.application.ProductService;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ public class DefaultProductPriceLoader implements ProductPriceLoader {
 
     @Override
     public Price findPriceById(UUID productId) {
-        return productService.findById(new ProductId(productId))
-                .getPrice();
+        ProductResponse product = productService.findProductById(new ProductId(productId));
+        return new Price(product.getPrice());
     }
 }

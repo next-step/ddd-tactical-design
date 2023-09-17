@@ -1,7 +1,6 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.EatInOrderService;
-import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderId;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.dto.EatInOrderResponse;

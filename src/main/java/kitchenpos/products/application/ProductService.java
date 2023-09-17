@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.exception.ProductErrorCode;
 import kitchenpos.products.exception.ProductPriceException;
 import kitchenpos.products.publisher.ProductPriceChangedEvent;
@@ -32,13 +33,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final ProductRequest request) {
-        Product product = request.toEntity(profanityPolicy);
-        return productRepository.save(product);
+    public ProductResponse create(final ProductRequest request) {
+        Product response = productRepository.save(request.toEntity(profanityPolicy));
+        return ProductResponse.fromEntity(response);
     }
 
     @Transactional
-    public Product changePrice(final ProductId productId, BigDecimal price) {
+    public ProductResponse changePrice(final ProductId productId, BigDecimal price) {
         Product product = findById(productId);
         Price productPrice = new Price(price);
         product.changePrice(productPrice);
@@ -49,23 +50,30 @@ public class ProductService {
             throw new ProductPriceException(ProductErrorCode.FAIL_REFLACT_MENU_PRICE);
         }
 
-        return product;
+        return ProductResponse.fromEntity(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        List<Product> responses = productRepository.findAll();
+        return ProductResponse.fromEntities(responses);
     }
 
-    @Transactional(readOnly = true)
-    public Product findById(ProductId productId) {
+
+    private Product findById(ProductId productId) {
         return productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAllInById(List<ProductId> productIds) {
-        return productRepository.findAllByIdIn(productIds);
+    public List<ProductResponse> findAllInById(List<ProductId> productIds) {
+        List<Product> responses = productRepository.findAllByIdIn(productIds);
+        return ProductResponse.fromEntities(responses);
     }
 
+    @Transactional(readOnly = true)
+    public ProductResponse findProductById(ProductId productId) {
+        Product product = findById(productId);
+        return ProductResponse.fromEntity(product);
+    }
 }
