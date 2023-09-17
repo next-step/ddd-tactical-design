@@ -39,7 +39,7 @@ public class ToBeInMemoryMenuRepository implements ToBeMenuRepository {
     public List<ToBeMenu> findAllByProductId(final UUID productId) {
         return menus.values()
             .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
             .collect(Collectors.toList());
     }
 }

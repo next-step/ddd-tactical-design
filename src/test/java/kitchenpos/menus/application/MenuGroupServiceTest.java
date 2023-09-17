@@ -4,7 +4,7 @@ import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.common.values.Name;
-import kitchenpos.menus.dto.CreateRequest;
+import kitchenpos.menus.dto.CreateMenuGroupRequest;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.domain.MenuGroupRepository;
@@ -17,6 +17,8 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import java.util.List;
 
 import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
+import static kitchenpos.util.KitchenPostExceptionAssertionUtils.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -37,7 +39,7 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create() {
-        final CreateRequest request = createMenuGroupRequest("두마리메뉴");
+        final CreateMenuGroupRequest request = createMenuGroupRequest("두마리메뉴");
         final MenuGroupDto actual = menuGroupService.create(request);
         assertThat(actual).isNotNull();
         assertAll(
@@ -50,9 +52,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final CreateRequest request = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(request))
-            .isInstanceOf(KitchenPosException.class);
+        final CreateMenuGroupRequest request = createMenuGroupRequest(name);
+        assertThrows(BAD_REQUEST, () -> menuGroupService.create(request));
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
@@ -64,7 +65,7 @@ class MenuGroupServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private CreateRequest createMenuGroupRequest(final String name) {
-        return new CreateRequest(name);
+    private CreateMenuGroupRequest createMenuGroupRequest(final String name) {
+        return new CreateMenuGroupRequest(name);
     }
 }

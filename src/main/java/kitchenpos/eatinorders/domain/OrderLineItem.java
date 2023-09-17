@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.tobe.domain.ToBeMenu;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class OrderLineItem {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
     )
-    private Menu menu;
+    private ToBeMenu menu;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -42,11 +43,11 @@ public class OrderLineItem {
         this.seq = seq;
     }
 
-    public Menu getMenu() {
+    public ToBeMenu getMenu() {
         return menu;
     }
 
-    public void setMenu(final Menu menu) {
+    public void setMenu(final ToBeMenu menu) {
         this.menu = menu;
     }
 

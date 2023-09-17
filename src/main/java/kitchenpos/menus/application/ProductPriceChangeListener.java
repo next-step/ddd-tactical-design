@@ -2,6 +2,9 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.dto.MenuDto;
+import kitchenpos.menus.tobe.domain.ToBeMenu;
+import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -10,31 +13,34 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static kitchenpos.common.ComparisonUtils.greaterThan;
+import static kitchenpos.common.util.ComparisonUtils.greaterThan;
 
 @Component
 public class ProductPriceChangeListener {
 
-    private final MenuRepository menuRepository;
+    private final MenuValidator menuValidator;
+    private final ToBeMenuRepository menuRepository;
 
 
-    public ProductPriceChangeListener(MenuRepository menuRepository) {
+    public ProductPriceChangeListener(MenuValidator menuValidator, ToBeMenuRepository menuRepository) {
+        this.menuValidator = menuValidator;
         this.menuRepository = menuRepository;
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void hideMenuBasedOnMenuAndMenuProductPrice(ProductPriceChangeEvent event) {
-        final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
+        final List<ToBeMenu> menus = menuRepository.findAllByProductId(event.getProductId());
+
         menus.stream().filter(this::isMenuPriceGreaterThanSumOfMenuProducts)
-                .forEach(e -> e.setDisplayed(false)); // TODO 향후 Menu의 도메인 로직으로 이관
+                .forEach(ToBeMenu::hide);
     }
 
-    private boolean isMenuPriceGreaterThanSumOfMenuProducts(Menu menu) {
-        BigDecimal sum = menu.getMenuProducts().stream()
-                .reduce(BigDecimal.ZERO, (acc, e) -> {
-                    BigDecimal sumOfEachMenuProduct = e.getProduct().getPrice().multiply(e.getQuantity());
-                    return acc.add(sumOfEachMenuProduct);
-                }, BigDecimal::add);
-        return greaterThan(menu.getPrice(), sum);
+    private boolean isMenuPriceGreaterThanSumOfMenuProducts(ToBeMenu menu) {
+        try {
+            menuValidator.validatePrice(menu.getPrice(), menu.getMenuProducts());
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
     }
 }

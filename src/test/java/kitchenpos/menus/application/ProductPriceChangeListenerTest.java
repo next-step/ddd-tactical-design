@@ -3,6 +3,9 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.ToBeMenu;
+import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
+import kitchenpos.menus.tobe.infra.ToBeInMemoryMenuRepository;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.domain.Product;
@@ -16,20 +19,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductPriceChangeListenerTest {
 
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
+    private ToBeMenuRepository menuRepository;
+    private MenuValidator menuValidator;
     private ProductPriceChangeListener productPriceChangeListener;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        productPriceChangeListener = new ProductPriceChangeListener(menuRepository);
+        menuRepository = new ToBeInMemoryMenuRepository();
+        menuValidator = new MenuValidator(productRepository);
+        productPriceChangeListener = new ProductPriceChangeListener(menuValidator, menuRepository);
     }
 
     @Test
     void hideMenuBasedOnMenuAndMenuProductPrice() {
         final Product product = productRepository.save(product("후라이드", 8_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final ToBeMenu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         final ProductPriceChangeEvent event = new ProductPriceChangeEvent(product.getId());
 
         productPriceChangeListener.hideMenuBasedOnMenuAndMenuProductPrice(event);

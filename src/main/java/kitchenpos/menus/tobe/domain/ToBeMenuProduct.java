@@ -14,30 +14,40 @@ public class ToBeMenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
-
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
     @Transient
     private UUID productId;
 
-    protected ToBeMenuProduct() {
+
+    public ToBeMenuProduct(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+    public ToBeMenuProduct(Long seq, UUID productId, long quantity) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
+    }
+
+
+    public void setQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setProductId(UUID productId) {
+        this.productId = productId;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public Product getProduct() {
-        return product;
-    }
 
     public long getQuantity() {
         return quantity;

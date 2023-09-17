@@ -2,7 +2,7 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.values.Name;
-import kitchenpos.menus.dto.CreateRequest;
+import kitchenpos.menus.dto.CreateMenuGroupRequest;
 import kitchenpos.menus.dto.MenuGroupDto;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
@@ -24,7 +24,7 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroupDto create(final CreateRequest request) {
+    public MenuGroupDto create(final CreateMenuGroupRequest request) {
         Name name = new Name(request.getName(), purgomalum);
         final MenuGroup menuGroup = new MenuGroup(name);
         MenuGroup savedResult = menuGroupRepository.save(menuGroup);

@@ -1,9 +1,10 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
 import kitchenpos.menus.domain.MenuGroup;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,10 +16,10 @@ public class ToBeMenu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private Name name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -43,7 +44,16 @@ public class ToBeMenu {
     @Transient
     private UUID menuGroupId;
 
-    protected ToBeMenu() {
+    // TODO
+    public ToBeMenu() {
+    }
+    public ToBeMenu(Name name, Price price, MenuGroup menuGroup, List<ToBeMenuProduct> menuProducts, boolean displayed) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.menuProducts = menuProducts;
+        this.displayed = displayed;
     }
 
     public UUID getId() {
@@ -55,19 +65,19 @@ public class ToBeMenu {
         this.id = id;
     }
 
-    public String getName() {
+    public Name getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Name name) {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 
@@ -102,4 +112,13 @@ public class ToBeMenu {
     public void setMenuGroupId(UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
     }
+
+    public void display() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
 }

@@ -1,144 +1,117 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Purgomalum;
+import kitchenpos.common.exception.KitchenPosException;
+import kitchenpos.common.util.CollectionUtils;
+import kitchenpos.common.values.Name;
+import kitchenpos.common.values.Price;
 import kitchenpos.menus.domain.*;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.menus.dto.ChangePriceMenuRequest;
+import kitchenpos.menus.dto.CreateMenuProductRequest;
+import kitchenpos.menus.dto.CreateMenuRequest;
+import kitchenpos.menus.dto.MenuDto;
+import kitchenpos.menus.tobe.domain.ToBeMenu;
+import kitchenpos.menus.tobe.domain.ToBeMenuProduct;
+import kitchenpos.menus.tobe.domain.ToBeMenuRepository;
+import kitchenpos.products.application.ProductValidator;
 import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static kitchenpos.common.exception.KitchenPosExceptionType.BAD_REQUEST;
+import static kitchenpos.common.exception.KitchenPosExceptionType.NOT_FOUND;
+
 @Service
 public class MenuService {
+    private final MenuValidator menuValidator;
+    private final ProductValidator productValidator;
+    private final MenuProductService menuProductService;
     private final MenuRepository menuRepository;
+    private final ToBeMenuRepository toBeMenuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final Purgomalum purgomalum;
 
     public MenuService(
-        final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final Purgomalum purgomalum
+            final MenuValidator menuValidator,
+            final ProductValidator productValidator,
+            final MenuProductService menuProductService,
+            final MenuRepository menuRepository,
+            final ToBeMenuRepository toBeMenuRepository,
+            final MenuGroupRepository menuGroupRepository,
+            final ProductRepository productRepository,
+            final Purgomalum purgomalum
     ) {
+        this.menuValidator = menuValidator;
+        this.productValidator = productValidator;
+        this.menuProductService = menuProductService;
         this.menuRepository = menuRepository;
+        this.toBeMenuRepository = toBeMenuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
         this.purgomalum = purgomalum;
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public MenuDto create(final CreateMenuRequest request) {
+        List<CreateMenuProductRequest> menuProductRequests = request.getMenuProducts();
+        CollectionUtils.requireNonEmpty(menuProductRequests,new KitchenPosException("메뉴 구성 상품이 없으므로", BAD_REQUEST));
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-            .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList())
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴 그룹을", NOT_FOUND));
+
+        final Price price = new Price(request.getPrice());
+
+        productValidator.isExistProducts(
+                menuProductRequests.stream()
+                        .map(CreateMenuProductRequest::getProductId)
+                        .collect(Collectors.toList())
         );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalum.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+
+        final List<ToBeMenuProduct> menuProducts = menuProductService.create(menuProductRequests);
+        menuValidator.validatePrice(price, menuProducts);
+        final Name name = new Name(request.getName(), purgomalum);
+        final ToBeMenu menu = new ToBeMenu(name, price, menuGroup, menuProducts, request.isDisplayed());
+        ToBeMenu result = toBeMenuRepository.save(menu);
+        return MenuDto.from(result);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
+    public MenuDto changePrice(final UUID menuId, final ChangePriceMenuRequest request) {
+        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
+
+        Price price = new Price(request.getPrice());
+        menuValidator.validatePrice(price, menu.getMenuProducts());
         menu.setPrice(price);
-        return menu;
+        return MenuDto.from(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
+    public MenuDto display(final UUID menuId) {
+        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
+        menuValidator.validatePrice(menu.getPrice(), menu.getMenuProducts());
         menu.setDisplayed(true);
-        return menu;
+        return MenuDto.from(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+    public MenuDto hide(final UUID menuId) {
+        final ToBeMenu menu = toBeMenuRepository.findById(menuId)
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
         menu.setDisplayed(false);
-        return menu;
+        return MenuDto.from(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuDto> findAll() {
+        return toBeMenuRepository.findAll().stream()
+                .map(MenuDto::from)
+                .collect(Collectors.toList());
     }
 }
