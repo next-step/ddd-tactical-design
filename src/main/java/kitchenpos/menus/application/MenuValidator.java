@@ -30,7 +30,7 @@ public class MenuValidator {
         Map<UUID, Product> productMap = products.stream()
                 .collect(Collectors.toMap(Product::getId, product -> product));
         final Price sum = menuProducts.stream()
-                .map(e -> productMap.get(e.getProductId()).getPrice().multiply(e.getQuantity()))
+                .map(e -> productMap.get(e.getProductId()).getPrice().multiply(e.getQuantity().getValue()))
                 .reduce(Price.ZERO, Price::add);
 
         return price.isGreaterThan(sum);

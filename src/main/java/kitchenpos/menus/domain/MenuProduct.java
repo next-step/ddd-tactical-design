@@ -1,6 +1,8 @@
 package kitchenpos.menus.domain;
 
 
+import kitchenpos.common.values.Quantity;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -12,8 +14,8 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private Quantity quantity;
 
     @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
@@ -21,35 +23,23 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, long quantity) {
+    public MenuProduct(UUID productId, Quantity quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
-    public MenuProduct(Long seq, UUID productId, long quantity) {
+    public MenuProduct(Long seq, UUID productId, Quantity quantity) {
         this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;
     }
 
-    public void setSeq(Long seq) {
-        this.seq = seq;
-    }
-
-
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setProductId(UUID productId) {
-        this.productId = productId;
-    }
 
     public Long getSeq() {
         return seq;
     }
 
 
-    public long getQuantity() {
+    public Quantity getQuantity() {
         return quantity;
     }
 

@@ -1,6 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.common.exception.KitchenPosException;
+import kitchenpos.common.values.Quantity;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.ProductValidator;
@@ -34,7 +35,7 @@ public class MenuProductService {
         productValidator.isExistProducts(productIds);
 
         return request.stream()
-                .map(e -> new MenuProduct(e.getProductId(), e.getQuantity()))
+                .map(e -> new MenuProduct(e.getProductId(), new Quantity(e.getQuantity())))
                 .collect(Collectors.toList());
     }
 

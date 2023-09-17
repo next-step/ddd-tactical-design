@@ -3,6 +3,7 @@ package kitchenpos;
 import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
+import kitchenpos.common.values.Quantity;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.Menu;
@@ -49,7 +50,7 @@ public class Fixtures {
         return new MenuProduct(
                 new Random().nextLong(),
                 product().getId(),
-                2L
+                new Quantity(2L)
         );
     }
 
@@ -57,7 +58,7 @@ public class Fixtures {
         return new MenuProduct(
                 new Random().nextLong(),
                 product.getId(),
-                quantity
+                new Quantity(quantity)
         );
     }
 
