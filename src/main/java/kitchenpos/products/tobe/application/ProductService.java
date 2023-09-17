@@ -11,6 +11,7 @@ import kitchenpos.products.tobe.dto.ProductChangePriceResponse;
 import kitchenpos.products.tobe.dto.ProductCreateRequest;
 import kitchenpos.products.tobe.dto.ProductCreateResponse;
 import kitchenpos.products.tobe.dto.ProductResponse;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +25,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
-    ) {
+            final PurgomalumClient purgomalumClient,
+            ApplicationEventPublisher applicationEventPublisher) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
@@ -50,7 +53,8 @@ public class ProductService {
         product.changePrice(request.getPrice());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(menu -> menu.changePrice(request.getPrice()));
+//        menus.forEach(menu -> menu.changePrice(request.getPrice()));
+        menus.forEach(menu -> applicationEventPublisher.publishEvent(new MenuPriceChangeEvent(menu.getId(), request.getPrice())));
 
         return ProductChangePriceResponse.of(
                 product.getId(),

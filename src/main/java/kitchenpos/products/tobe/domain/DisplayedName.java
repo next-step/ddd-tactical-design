@@ -20,7 +20,7 @@ public class DisplayedName {
 
     private void validate(final String name, final PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new DisplayedNameValidateException(name);
+            throw new IllegalArgumentException(name);
         }
     }
 
