@@ -1,11 +1,11 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.ui.dto.request.MenuCreateRequest;
-import kitchenpos.menus.tobe.ui.dto.request.MenuProductCreateRequest;
-import kitchenpos.menus.tobe.ui.dto.response.MenuResponse;
+import kitchenpos.menus.ui.dto.request.MenuCreateRequest;
+import kitchenpos.menus.ui.dto.request.MenuProductCreateRequest;
+import kitchenpos.menus.ui.dto.response.MenuResponse;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;

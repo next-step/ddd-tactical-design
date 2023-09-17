@@ -1,10 +1,9 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.application.MenuGroupService;
-import kitchenpos.menus.tobe.ui.dto.request.MenuGroupCreateRequest;
-import kitchenpos.menus.tobe.ui.dto.response.MenuGroupCreateResponse;
-import kitchenpos.menus.tobe.ui.dto.response.MenuGroupResponse;
+import kitchenpos.menus.ui.dto.request.MenuGroupCreateRequest;
+import kitchenpos.menus.ui.dto.response.MenuGroupCreateResponse;
+import kitchenpos.menus.ui.dto.response.MenuGroupResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.ui.dto.response;
+package kitchenpos.menus.ui.dto.response;
 
-import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.domain.Menu;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,12 +15,19 @@ public class MenuResponse {
     private boolean displayed;
     private List<MenuProductResponse> menuProducts;
 
-    protected MenuResponse(UUID id, String name, BigDecimal price, UUID menuGroupId,
-                           List<MenuProductResponse> menuProducts) {
+    protected MenuResponse(
+            UUID id,
+            String name,
+            BigDecimal price,
+            UUID menuGroupId,
+            boolean displayed,
+            List<MenuProductResponse> menuProducts
+    ) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
+        this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
@@ -35,7 +42,7 @@ public class MenuResponse {
 
     public static MenuResponse from(Menu menu) {
         return new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(),
-                menu.getMenuGroupId(), MenuProductResponse.from(menu.getMenuProducts()));
+                menu.getMenuGroupId(), menu.isDisplayed(), MenuProductResponse.from(menu.getMenuProducts()));
     }
 
     public UUID getId() {

@@ -1,7 +1,7 @@
-package kitchenpos.menus.tobe.ui.dto.request;
+package kitchenpos.menus.ui.dto.request;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.PurgomalumClient;
 
 import java.math.BigDecimal;

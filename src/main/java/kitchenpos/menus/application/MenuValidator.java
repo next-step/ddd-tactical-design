@@ -1,8 +1,9 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuPrice;
-import kitchenpos.menus.tobe.ui.dto.request.MenuProductCreateRequest;
+import kitchenpos.menus.domain.MenuPrice;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.ui.dto.request.MenuProductCreateRequest;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Component;
@@ -58,6 +59,19 @@ public class MenuValidator {
                             .multiply(BigDecimal.valueOf(quantity))
                             .getValue()
             );
+        }
+        if (menuPrice.compareTo(sum) > 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void validateChangePrice(List<MenuProduct> menuProducts, BigDecimal price) {
+        MenuPrice menuPrice = new MenuPrice(price);
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            final Product product = productRepository.findById(menuProduct.getProductId())
+                    .orElseThrow(NoSuchElementException::new);
+            sum = sum.add(product.multiplyPrice(menuProduct.getQuantity()).getValue());
         }
         if (menuPrice.compareTo(sum) > 0) {
             throw new IllegalArgumentException();

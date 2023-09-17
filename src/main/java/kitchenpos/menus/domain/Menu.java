@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
 import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.PurgomalumClient;

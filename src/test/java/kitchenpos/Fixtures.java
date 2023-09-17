@@ -5,9 +5,9 @@ import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
 
@@ -41,18 +41,12 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProductId(product().getId());
-        menuProduct.setQuantity(2L);
+        final MenuProduct menuProduct = new MenuProduct(2L, product().getId());
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProductId(product.getId());
-        menuProduct.setQuantity(quantity);
+        final MenuProduct menuProduct = new MenuProduct(quantity, product.getId());
         return menuProduct;
     }
 

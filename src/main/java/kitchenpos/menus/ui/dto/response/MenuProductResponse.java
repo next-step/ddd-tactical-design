@@ -1,6 +1,6 @@
-package kitchenpos.menus.tobe.ui.dto.response;
+package kitchenpos.menus.ui.dto.response;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuProduct;
 
 import java.util.List;
 import java.util.UUID;

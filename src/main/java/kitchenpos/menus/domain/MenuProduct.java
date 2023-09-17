@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -35,23 +35,12 @@ public class MenuProduct {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public long getQuantity() {
         return quantity.getValue();
     }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = new Quantity(quantity);
-    }
-
+    
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
 }

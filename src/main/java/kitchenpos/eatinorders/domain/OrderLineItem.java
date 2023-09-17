@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.domain.Menu;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

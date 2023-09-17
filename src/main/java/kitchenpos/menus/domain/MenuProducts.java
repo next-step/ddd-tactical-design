@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
