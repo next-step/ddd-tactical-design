@@ -9,7 +9,6 @@ import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateRequest;
 import kitchenpos.products.dto.ProductDto;
-import kitchenpos.products.event.ProductPriceChangeEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
         product.changePrice(price);
-        publisher.publishEvent(new ProductPriceChangeEvent(product.getId()));
+        productRepository.save(product);
         return ProductDto.from(product);
     }
 

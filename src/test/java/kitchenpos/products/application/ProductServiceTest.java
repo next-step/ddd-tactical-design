@@ -5,11 +5,11 @@ import kitchenpos.common.exception.KitchenPosExceptionType;
 import kitchenpos.common.infra.FakeApplicationEventPublisher;
 import kitchenpos.common.infra.FakePurgomalum;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPriceChangeEvent;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.dto.ChangePriceRequest;
 import kitchenpos.products.dto.CreateRequest;
 import kitchenpos.products.dto.ProductDto;
-import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -98,7 +99,7 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
-        ProductPriceChangeEvent event = (ProductPriceChangeEvent) publisher.pop();
+        ProductPriceChangeEvent event = (ProductPriceChangeEvent) product.domainEvents().get(0);
         assertThat(event.getProductId()).isEqualTo(product.getId());
     }
 
