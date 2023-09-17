@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 import static kitchenpos.fixture.NewProductFixture.createNewProduct;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 public class NewProductTest {
     @DisplayName("비속어가 없는 상품을 생성한다")
@@ -29,8 +29,7 @@ public class NewProductTest {
         final Name name = new Name("name");
         final Price price = new Price(BigDecimal.ONE);
 
-        assertThatExceptionOfType(IllegalNewProductNameException.class)
-                .isThrownBy(() -> NewProduct.createWithoutProfanity(name, price, text -> true));
+        assertThatIllegalArgumentException().isThrownBy(() -> NewProduct.createWithoutProfanity(name, price, text -> true));
     }
 
     @DisplayName("상품의 가격을 변경 한다")

@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe.domain.port.inp;
+package kitchenpos.product.tobe.domain.port.in;
 
 import kitchenpos.product.tobe.domain.Price;
 

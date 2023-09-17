@@ -3,8 +3,7 @@ package kitchenpos.product.tobe.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 
 public class NameTest {
     @DisplayName("이름은 비어 있지 않으면 된다")
@@ -18,7 +17,6 @@ public class NameTest {
     @DisplayName("이름은 비어 있으면 안된다")
     @Test
     void test2() {
-        assertThatExceptionOfType(IllegalNewProductNameException.class)
-                .isThrownBy(() -> new Name(null));
+        assertThatIllegalArgumentException().isThrownBy(() -> new Name(null));
     }
 }

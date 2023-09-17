@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe.domain.port.inp;
+package kitchenpos.product.tobe.domain.port.in;
 
 import kitchenpos.fixture.MenuProductFixture;
 import kitchenpos.menu.domain.Menu;
@@ -10,7 +10,7 @@ import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductRepository;
 import kitchenpos.product.tobe.domain.NewProduct;
 import kitchenpos.product.tobe.domain.Price;
-import kitchenpos.product.tobe.domain.port.outp.NewProductRepository;
+import kitchenpos.product.tobe.domain.port.out.NewProductRepository;
 import kitchenpos.support.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

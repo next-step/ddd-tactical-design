@@ -1,10 +1,9 @@
-package kitchenpos.product.tobe.domain.port.inp;
+package kitchenpos.product.tobe.domain.port.in;
 
-import kitchenpos.product.tobe.domain.IllegalNewProductNameException;
 import kitchenpos.product.tobe.domain.Name;
 import kitchenpos.product.tobe.domain.NewProduct;
 import kitchenpos.product.tobe.domain.Price;
-import kitchenpos.product.tobe.domain.port.outp.NewProductRepository;
+import kitchenpos.product.tobe.domain.port.out.NewProductRepository;
 import kitchenpos.profanity.domain.PurgomalumChecker;
 import kitchenpos.support.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -56,7 +54,6 @@ public class NewProductCreatorTest extends BaseServiceTest {
 
         when(purgomalumChecker.containsProfanity(command.getName().getValue())).thenReturn(true);
 
-        assertThatExceptionOfType(IllegalNewProductNameException.class)
-                .isThrownBy(() -> newProductCreator.create(command));
+        assertThatIllegalArgumentException().isThrownBy(() -> newProductCreator.create(command));
     }
 }

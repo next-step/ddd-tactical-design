@@ -30,7 +30,7 @@ public class NewProduct {
 
     public static NewProduct createWithoutProfanity(final Name name, final Price price, final PurgomalumChecker purgomalumChecker) {
         if (purgomalumChecker.containsProfanity(name.getValue())) {
-            throw new IllegalNewProductNameException();
+            throw new IllegalArgumentException();
         }
 
         return new NewProduct(UUID.randomUUID(), name, price);

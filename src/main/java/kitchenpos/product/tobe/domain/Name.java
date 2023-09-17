@@ -14,7 +14,7 @@ public class Name {
 
     public Name(String value) {
         if (Objects.isNull(value)) {
-            throw new IllegalNewProductNameException();
+            throw new IllegalArgumentException();
         }
 
         this.value = value;
