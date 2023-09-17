@@ -8,8 +8,6 @@ import kitchenpos.menus.tobe.domain.menu.PurgomalumChecker;
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuRepository;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menuproduct.MenuProductQuantity;
-import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 import kitchenpos.products.tobe.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
@@ -29,9 +27,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.TobeFixtures.INVALID_ID;
-import static kitchenpos.TobeFixtures.menuGroup;
-import static kitchenpos.TobeFixtures.product;
+import static kitchenpos.TobeFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -149,66 +145,68 @@ class TobeMenuServiceTest {
                 .hasMessageContaining("메뉴의 이름은 비어있거나 비속어가 포함될 수 없습니다.");
     }
 
-//    @DisplayName("메뉴의 가격을 변경할 수 있다.")
-//    @Test
-//    void changePrice() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(16_000L);
-//        final Menu actual = menuService.changePrice(menuId, expected);
-//        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-//    }
-//
-//    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
-//    @ValueSource(strings = "-1000")
-//    @NullSource
-//    @ParameterizedTest
-//    void changePrice(final BigDecimal price) {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(price);
-//        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-//                .isInstanceOf(IllegalArgumentException.class);
-//    }
-//
-//    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-//    @Test
-//    void changePriceToExpensive() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-//        final Menu expected = changePriceRequest(33_000L);
-//        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-//                .isInstanceOf(IllegalArgumentException.class);
-//    }
-//
-//    @DisplayName("메뉴를 노출할 수 있다.")
-//    @Test
-//    void display() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-//        final Menu actual = menuService.display(menuId);
-//        assertThat(actual.isDisplayed()).isTrue();
-//    }
-//
-//    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-//    @Test
-//    void displayExpensiveMenu() {
-//        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
-//        assertThatThrownBy(() -> menuService.display(menuId))
-//                .isInstanceOf(IllegalStateException.class);
-//    }
-//
-//    @DisplayName("메뉴를 숨길 수 있다.")
-//    @Test
-//    void hide() {
-//        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-//        final Menu actual = menuService.hide(menuId);
-//        assertThat(actual.isDisplayed()).isFalse();
-//    }
-//
-//    @DisplayName("메뉴의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-//        final List<Menu> actual = menuService.findAll();
-//        assertThat(actual).hasSize(1);
-//    }
+    @DisplayName("메뉴의 가격을 변경할 수 있다.")
+    @Test
+    void changePrice() {
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final BigDecimal expected = BigDecimal.valueOf(16_000L);
+        final TobeMenu actual = menuService.changePrice(menuId, expected);
+        assertThat(actual.getPrice()).isEqualTo(new MenuPrice(expected));
+    }
+
+    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
+    @ValueSource(strings = "-1000")
+    @NullSource
+    @ParameterizedTest
+    void changePrice(final BigDecimal price) {
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        assertThatThrownBy(() -> menuService.changePrice(menuId, price))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("메뉴의 가격은 0원 이상이어야 합니다.");
+    }
+
+    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @Test
+    void changePriceToExpensive() {
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final BigDecimal expected = BigDecimal.valueOf(33_000L);
+
+        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다.");
+    }
+
+    @DisplayName("메뉴를 노출할 수 있다.")
+    @Test
+    void display() {
+        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
+        final TobeMenu actual = menuService.display(menuId);
+        assertThat(actual.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    void displayExpensiveMenu() {
+        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
+        assertThatThrownBy(() -> menuService.display(menuId))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("메뉴를 숨길 수 있다.")
+    @Test
+    void hide() {
+        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        final TobeMenu actual = menuService.hide(menuId);
+        assertThat(actual.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final List<TobeMenu> actual = menuService.findAll();
+        assertThat(actual).hasSize(1);
+    }
 
     private TobeMenuCreateRequest createMenuRequest(
             final String name,

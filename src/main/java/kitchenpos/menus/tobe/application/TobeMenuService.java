@@ -85,8 +85,7 @@ public class TobeMenuService {
     }
 
     @Transactional
-    public TobeMenu changePrice(final UUID menuId, final TobeMenu request) {
-        MenuPrice price = request.getPrice();
+    public TobeMenu changePrice(final UUID menuId, BigDecimal price) {
         final TobeMenu menu = menuRepository.findById(menuId)
                                             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
@@ -97,10 +96,9 @@ public class TobeMenuService {
                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity().getQuantity()))
             );
         }
-//        if (price.compareTo(sum) > 0) {
-//            throw new IllegalArgumentException();
-//        }
-        menu.updatePrice(price);
+        MenuPrice menuPrice = new MenuPrice(price);
+        menuPrice.checkSum(sum);
+        menu.updatePrice(menuPrice);
         return menu;
     }
 
@@ -116,9 +114,9 @@ public class TobeMenuService {
                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity().getQuantity()))
             );
         }
-//        if (menu.getPrice().compareTo(sum) > 0) {
-//            throw new IllegalStateException();
-//        }
+        if (menu.getPrice().getPrice().compareTo(sum) > 0) {
+            throw new IllegalStateException();
+        }
         menu.display();
         return menu;
     }
