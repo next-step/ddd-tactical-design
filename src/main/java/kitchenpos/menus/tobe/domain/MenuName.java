@@ -16,6 +16,10 @@ public final class MenuName {
     protected MenuName() {
     }
 
+    protected MenuName(String value) {
+        this.value = value;
+    }
+
     public static MenuName create(String value, PurgomalumClient purgomalumClient) {
         if (isNull(value) || value.isEmpty()) {
             throw new IllegalArgumentException("메뉴명은 비어있을 수 없습니다.");
@@ -26,9 +30,7 @@ public final class MenuName {
             throw new IllegalArgumentException("메뉴명에 비속어가 포함되어 있습니다.");
         }
 
-        MenuName menuName = new MenuName();
-        menuName.value = value;
-        return menuName;
+        return new MenuName(value);
     }
 
     protected String getValue() {

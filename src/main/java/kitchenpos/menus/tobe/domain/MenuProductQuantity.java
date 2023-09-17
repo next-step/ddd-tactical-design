@@ -14,13 +14,15 @@ public final class MenuProductQuantity {
     protected MenuProductQuantity() {
     }
 
+    protected MenuProductQuantity(Long value) {
+        this.value = value;
+    }
+
     public static MenuProductQuantity create(Long value) {
         validateMenuProductQuantityIsNull(value);
         validateMenuProductQuantityIsNegative(value);
 
-        MenuProductQuantity menuProductQuantity = new MenuProductQuantity();
-        menuProductQuantity.value = value;
-        return menuProductQuantity;
+        return new MenuProductQuantity(value);
     }
 
     private static void validateMenuProductQuantityIsNegative(Long value) {

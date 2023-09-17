@@ -31,12 +31,14 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
+    protected MenuProduct(Product product, MenuProductQuantity quantity, UUID productId) {
+        this.product = product;
+        this.quantity = quantity;
+        this.productId = productId;
+    }
+
     public static MenuProduct create(Product product, MenuProductQuantity quantity) {
-        MenuProduct menuProduct = new MenuProduct();
-        menuProduct.product = product;
-        menuProduct.quantity = quantity;
-        menuProduct.productId = product.getId();
-        return menuProduct;
+        return new MenuProduct(product, quantity, product.getId());
     }
 
     public Long getSeq() {

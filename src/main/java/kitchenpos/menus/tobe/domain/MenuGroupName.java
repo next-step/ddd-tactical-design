@@ -14,14 +14,16 @@ public final class MenuGroupName {
     protected MenuGroupName() {
     }
 
+    protected MenuGroupName(String value) {
+        this.value = value;
+    }
+
     public static MenuGroupName create(String value) {
         if (isNull(value) || value.isEmpty()) {
             throw new IllegalArgumentException("메뉴 그룹명은 비어있을 수 없습니다.");
         }
 
-        MenuGroupName menuGroupName = new MenuGroupName();
-        menuGroupName.value = value;
-        return menuGroupName;
+        return new MenuGroupName(value);
     }
 
     protected String getValue() {

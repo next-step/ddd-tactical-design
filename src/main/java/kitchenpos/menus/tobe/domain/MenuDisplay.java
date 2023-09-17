@@ -14,14 +14,16 @@ public final class MenuDisplay {
     protected MenuDisplay() {
     }
 
+    protected MenuDisplay(Boolean value) {
+        this.value = value;
+    }
+
     public static MenuDisplay create(Boolean displayed) {
         if (isNull(displayed)) {
             throw new IllegalArgumentException("메뉴 숨김 여부는 비어있을 수 없습니다.");
         }
 
-        MenuDisplay menuName = new MenuDisplay();
-        menuName.value = displayed;
-        return menuName;
+        return new MenuDisplay(displayed);
     }
 
     protected Boolean getValue() {

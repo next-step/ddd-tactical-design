@@ -15,13 +15,15 @@ public final class ProductPrice {
     protected ProductPrice() {
     }
 
+    protected ProductPrice(BigDecimal value) {
+        this.value = value;
+    }
+
     public static ProductPrice create(BigDecimal value) {
         validateProductPriceIsNull(value);
         validateProductPriceIsNegative(value);
 
-        ProductPrice productPrice = new ProductPrice();
-        productPrice.value = value;
-        return productPrice;
+        return new ProductPrice(value);
     }
 
     private static void validateProductPriceIsNegative(BigDecimal value) {

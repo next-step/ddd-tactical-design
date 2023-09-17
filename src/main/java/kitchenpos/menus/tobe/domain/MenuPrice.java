@@ -15,13 +15,15 @@ public final class MenuPrice {
     protected MenuPrice() {
     }
 
+    protected MenuPrice(BigDecimal value) {
+        this.value = value;
+    }
+
     public static MenuPrice create(BigDecimal value) {
         validateMenuPriceIsNull(value);
         validateMenuPriceIsNegative(value);
 
-        MenuPrice menuPrice = new MenuPrice();
-        menuPrice.value = value;
-        return menuPrice;
+        return new MenuPrice(value);
     }
 
     public static MenuPrice update(BigDecimal changedValue) {

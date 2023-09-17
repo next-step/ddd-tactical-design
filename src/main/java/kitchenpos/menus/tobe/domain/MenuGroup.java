@@ -17,13 +17,19 @@ public class MenuGroup extends AbstractAggregateRoot<MenuGroup> {
     private MenuGroupName name;
 
     protected MenuGroup() {
+
+    }
+
+    protected MenuGroup(UUID id, MenuGroupName name) {
+        this.id = id;
+        this.name = name;
     }
 
     public static MenuGroup create(final MenuGroupName name) {
-        MenuGroup menuGroup = new MenuGroup();
-        menuGroup.id = UUID.randomUUID();
-        menuGroup.name = name;
-        return menuGroup;
+        return new MenuGroup(
+                UUID.randomUUID(),
+                name
+        );
     }
 
     public UUID getId() {

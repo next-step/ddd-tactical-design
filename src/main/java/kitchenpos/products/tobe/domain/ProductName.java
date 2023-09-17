@@ -16,6 +16,10 @@ public final class ProductName {
     protected ProductName() {
     }
 
+    protected ProductName(String value) {
+        this.value = value;
+    }
+
     public static ProductName create(String value, PurgomalumClient purgomalumClient) {
         if (isNull(value) || value.isEmpty()) {
             throw new IllegalArgumentException("상품명은 비어있을 수 없습니다.");
@@ -26,9 +30,7 @@ public final class ProductName {
             throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
         }
 
-        ProductName productName = new ProductName();
-        productName.value = value;
-        return productName;
+        return new ProductName(value);
     }
 
     protected String getValue() {
