@@ -23,32 +23,32 @@ public class MenuRestController {
 
     @PostMapping
     public ResponseEntity<MenuResponse> create(@RequestBody final MenuCreateRequest request) {
-        final Menu response = menuService.create(request);
+        final MenuResponse response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
-                .body(MenuResponse.fromEntity(response));
+                .body(response);
     }
 
     @PutMapping("/{menuId}/price")
     public ResponseEntity<MenuResponse> changePrice(@PathVariable final MenuId menuId, @RequestBody final MenuChangePriceRequest request) {
-        Menu response = menuService.changePrice(menuId, request);
-        return ResponseEntity.ok(MenuResponse.fromEntity(response));
+        MenuResponse response = menuService.changePrice(menuId, request);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{menuId}/display")
     public ResponseEntity<MenuResponse> display(@PathVariable final MenuId menuId) {
-        Menu response = menuService.display(menuId);
-        return ResponseEntity.ok(MenuResponse.fromEntity(response));
+        MenuResponse response = menuService.display(menuId);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<MenuResponse> hide(@PathVariable final MenuId menuId) {
-        Menu response = menuService.hide(menuId);
-        return ResponseEntity.ok(MenuResponse.fromEntity(response));
+        MenuResponse response = menuService.hide(menuId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<MenuResponse>> findAll() {
-        List<Menu> responses = menuService.findAll();
-        return ResponseEntity.ok(MenuResponse.fromEntities(responses));
+        List<MenuResponse> responses = menuService.findAll();
+        return ResponseEntity.ok(responses);
     }
 }

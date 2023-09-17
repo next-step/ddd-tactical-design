@@ -11,8 +11,10 @@ import java.util.UUID;
 @Entity
 public class MenuProduct {
 
-    @EmbeddedId
-    private MenuProductId id;
+    @Column(name = "seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private long seq;
 
     @Embedded
     private ProductId productId;
@@ -57,8 +59,8 @@ public class MenuProduct {
         this.productPrice = price;
     }
 
-    public MenuProductId getId() {
-        return id;
+    public long getSeq() {
+        return seq;
     }
 
     public ProductId getProductId() {
@@ -81,11 +83,14 @@ public class MenuProduct {
 
         MenuProduct that = (MenuProduct) o;
 
-        return getId() != null ? getId().equals(that.getId()) : that.getId() == null;
+        if (getSeq() != that.getSeq()) return false;
+        return getProductId() != null ? getProductId().equals(that.getProductId()) : that.getProductId() == null;
     }
 
     @Override
     public int hashCode() {
-        return getId() != null ? getId().hashCode() : 0;
+        int result = (int) (getSeq() ^ (getSeq() >>> 32));
+        result = 31 * result + (getProductId() != null ? getProductId().hashCode() : 0);
+        return result;
     }
 }

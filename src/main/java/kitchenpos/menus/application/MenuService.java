@@ -5,6 +5,7 @@ import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.tobe.domain.menu.*;
@@ -35,7 +36,7 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final MenuCreateRequest request) {
+    public MenuResponse create(final MenuCreateRequest request) {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
         final Price price = new Price(request.getPrice());
 
@@ -57,7 +58,9 @@ public class MenuService {
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
         );
-        return menuRepository.save(menu);
+        Menu response = menuRepository.save(menu);
+
+        return MenuResponse.fromEntity(response);
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
@@ -75,31 +78,30 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final MenuId menuId, MenuChangePriceRequest request) {
-
+    public MenuResponse changePrice(final MenuId menuId, MenuChangePriceRequest request) {
         final Menu menu = findById(menuId);
         menu.changePrice(new Price(request.getPrice()));
-
-        return menu;
+        return MenuResponse.fromEntity(menu);
     }
 
     @Transactional
-    public Menu display(final MenuId menuId) {
+    public MenuResponse display(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.display();
-        return menu;
+        return MenuResponse.fromEntity(menu);
     }
 
     @Transactional
-    public Menu hide(final MenuId menuId) {
+    public MenuResponse hide(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.hide();
-        return menu;
+        return MenuResponse.fromEntity(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        List<Menu> responses = menuRepository.findAll();
+        return MenuResponse.fromEntities(responses);
     }
 
     @Transactional
@@ -110,7 +112,12 @@ public class MenuService {
     }
 
     @Transactional(readOnly = true)
-    public Menu findById(MenuId menuId) {
+    public MenuResponse findMenuById(MenuId menuId) {
+        Menu response = findById(menuId);
+        return MenuResponse.fromEntity(response);
+    }
+
+    private Menu findById(MenuId menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
     }

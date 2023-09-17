@@ -10,13 +10,13 @@ import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
 import kitchenpos.menus.infra.DefaultMenuGroupLoader;
 import kitchenpos.menus.infra.DefaultProductPriceLoader;
-import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.ProductId;
@@ -78,15 +78,15 @@ class MenuServiceTest {
             final MenuCreateRequest expected = createMenuRequest(
                     "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProduct(productId, 2L)
             );
-            final Menu actual = menuService.create(expected);
+            final MenuResponse actual = menuService.create(expected);
             assertThat(actual).isNotNull();
             assertAll(
                     () -> assertThat(actual.getId()).isNotNull(),
-                    () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName()),
-                    () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice()),
-                    () -> assertThat(actual.getMenuGroupIdValue()).isEqualTo(expected.getMenuGroupId()),
+                    () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                    () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
+                    () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
                     () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-                    () -> assertThat(actual.getMenuProducts().getValues()).hasSize(1)
+                    () -> assertThat(actual.getMenuProducts()).hasSize(1)
             );
         }
 
@@ -183,8 +183,8 @@ class MenuServiceTest {
     void changePrice() {
         final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getId();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
+        final MenuResponse actual = menuService.changePrice(menuId, expected);
+        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -211,7 +211,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final MenuId menuId = menuRepository.save(menu(19_000L, false, menuProduct(productId, productPrice, 2L))).getId();
-        final Menu actual = menuService.display(menuId);
+        final MenuResponse actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -228,7 +228,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final MenuId menuId = menuRepository.save(menu(19_000L, true, menuProduct(productId, productPrice, 2L))).getId();
-        final Menu actual = menuService.hide(menuId);
+        final MenuResponse actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 
@@ -236,7 +236,7 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(productId, productPrice, 2L)));
-        final List<Menu> actual = menuService.findAll();
+        final List<MenuResponse> actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 
@@ -292,8 +292,8 @@ class MenuServiceTest {
     }
 
 
-    private static MenuProductRequest createMenuProduct(ProductId productId, long l) {
-        return new MenuProductRequest(productId, l);
+    private static MenuProductRequest createMenuProduct(ProductId productId, long quantity) {
+        return new MenuProductRequest(productId, quantity);
     }
 
 

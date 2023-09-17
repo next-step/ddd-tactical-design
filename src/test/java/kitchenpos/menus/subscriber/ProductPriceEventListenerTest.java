@@ -4,15 +4,15 @@ import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.menugroups.application.InMemoryMenuGroupRepository;
 import kitchenpos.menugroups.application.MenuGroupService;
-import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.dto.MenuGroupResponse;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.application.MenuGroupLoader;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.application.ProductPriceLoader;
+import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.infra.DefaultMenuGroupLoader;
 import kitchenpos.menus.infra.DefaultProductPriceLoader;
-import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
@@ -28,7 +28,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 
 import static kitchenpos.menugroups.fixtures.MenuGroupFixture.menuGroup;
-import static kitchenpos.menus.application.fixtures.MenuFixture.*;
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuCreateRequest;
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,9 +80,9 @@ class ProductPriceEventListenerTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final MenuGroupResponse menuGroup = menuGroupService.create(menuGroup());
-        final Menu menu = menuService.create(menuCreateRequest(19_000L, true, menuGroup.getId(), menuProduct(product, 2L)));
+        final MenuResponse menu = menuService.create(menuCreateRequest(19_000L, true, menuGroup.getId(), menuProduct(product, 2L)));
         productService.changePrice(product.getId(), BigDecimal.valueOf(8_000L));
-        assertThat(menuService.findById(menu.getId()).isDisplayed()).isFalse();
+        assertThat(menuService.findMenuById(new MenuId(menu.getId())).isDisplayed()).isFalse();
     }
 
 }
