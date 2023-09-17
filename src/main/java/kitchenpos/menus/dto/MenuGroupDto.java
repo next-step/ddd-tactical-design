@@ -7,24 +7,24 @@ import java.util.UUID;
 
 public class MenuGroupDto {
 
-  private UUID id;
-  private Name name;
+    private UUID id;
+    private Name name;
 
-  public MenuGroupDto(UUID id, Name name) {
-    this.id = id;
-    this.name = name;
-  }
+    public MenuGroupDto(UUID id, Name name) {
+        this.id = id;
+        this.name = name;
+    }
 
-  public UUID getId() {
-    return id;
-  }
+    public static MenuGroupDto from(MenuGroup savedResult) {
+        return new MenuGroupDto(savedResult.getId(), savedResult.getName());
+    }
 
-  public Name getName() {
-    return name;
-  }
+    public UUID getId() {
+        return id;
+    }
 
-  public static MenuGroupDto from(MenuGroup savedResult) {
-    return new MenuGroupDto(savedResult.getId(), savedResult.getName());
-  }
+    public Name getName() {
+        return name;
+    }
 
 }

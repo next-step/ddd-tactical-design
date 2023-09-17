@@ -35,10 +35,11 @@ public class MenuValidator {
 
         return price.isGreaterThan(sum);
     }
+
     public void validatePrice(Price price, List<MenuProduct> menuProducts) {
         if (isMenuPriceGreaterThanSumOfMenuProducts(price, menuProducts)) {
             throw new KitchenPosException("메뉴 가격이 구성 상품 가격보다 작으므로", BAD_REQUEST);
         }
     }
-    
+
 }

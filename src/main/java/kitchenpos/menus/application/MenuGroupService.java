@@ -34,8 +34,8 @@ public class MenuGroupService {
     @Transactional(readOnly = true)
     public List<MenuGroupDto> findAll() {
         return menuGroupRepository.findAll()
-          .stream()
-          .map(MenuGroupDto::from)
-          .collect(Collectors.toList());
+                .stream()
+                .map(MenuGroupDto::from)
+                .collect(Collectors.toList());
     }
 }

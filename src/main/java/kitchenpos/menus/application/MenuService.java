@@ -5,15 +5,11 @@ import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.util.CollectionUtils;
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.*;
 import kitchenpos.menus.dto.ChangePriceMenuRequest;
 import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.dto.CreateMenuRequest;
 import kitchenpos.menus.dto.MenuDto;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.ProductValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +49,7 @@ public class MenuService {
     @Transactional
     public MenuDto create(final CreateMenuRequest request) {
         List<CreateMenuProductRequest> menuProductRequests = request.getMenuProducts();
-        CollectionUtils.requireNonEmpty(menuProductRequests,new KitchenPosException("메뉴 구성 상품이 없으므로", BAD_REQUEST));
+        CollectionUtils.requireNonEmpty(menuProductRequests, new KitchenPosException("메뉴 구성 상품이 없으므로", BAD_REQUEST));
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴 그룹을", NOT_FOUND));
 

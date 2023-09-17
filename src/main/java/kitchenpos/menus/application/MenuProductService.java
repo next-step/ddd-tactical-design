@@ -2,8 +2,8 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.values.Quantity;
-import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.dto.CreateMenuProductRequest;
 import kitchenpos.products.application.ProductValidator;
 import org.springframework.stereotype.Service;
 

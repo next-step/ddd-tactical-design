@@ -2,7 +2,6 @@ package kitchenpos.menus.dto;
 
 import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 
@@ -19,6 +18,18 @@ public class MenuDto {
     private UUID menuGroupId;
 
     public MenuDto() {
+    }
+
+    public static MenuDto from(Menu menu) {
+        final MenuDto menuDto = new MenuDto();
+        menuDto.id = menu.getId();
+        menuDto.name = menu.getName();
+        menuDto.price = menu.getPrice();
+        menuDto.displayed = menu.isDisplayed();
+        menuDto.menuProducts = menu.getMenuProducts();
+        menuDto.menuGroupId = menu.getMenuGroupId();
+
+        return menuDto;
     }
 
     public UUID getId() {
@@ -43,18 +54,6 @@ public class MenuDto {
 
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public static MenuDto from(Menu menu) {
-        final MenuDto menuDto = new MenuDto();
-        menuDto.id = menu.getId();
-        menuDto.name = menu.getName();
-        menuDto.price = menu.getPrice();
-        menuDto.displayed = menu.isDisplayed();
-        menuDto.menuProducts = menu.getMenuProducts();
-        menuDto.menuGroupId = menu.getMenuGroupId();
-
-        return menuDto;
     }
 
 }

@@ -28,7 +28,7 @@ public class Name {
             String message = String.format("이름이 %s 이므로", value);
             throw new KitchenPosException(message, KitchenPosExceptionType.BAD_REQUEST);
         }
-        if(purgomalum.containsProfanity(value)) {
+        if (purgomalum.containsProfanity(value)) {
             String message = String.format("이름=%s 에 비속어가 포함되어 있으므로", value);
             throw new KitchenPosException(message, KitchenPosExceptionType.BAD_REQUEST);
         }

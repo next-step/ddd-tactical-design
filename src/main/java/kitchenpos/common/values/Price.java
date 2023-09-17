@@ -26,6 +26,7 @@ public class Price {
     public Price(final Long value) {
         this(BigDecimal.valueOf(value));
     }
+
     public Price(final BigDecimal value) {
         validate(value);
         this.value = value;
@@ -67,11 +68,11 @@ public class Price {
     public Price multiply(long number) {
         return multiply(BigDecimal.valueOf(number));
     }
+
     public Price multiply(BigDecimal number) {
         BigDecimal result = value.multiply(number);
         return new Price(result);
     }
-
 
 
     public boolean isGreaterThan(Price price) {

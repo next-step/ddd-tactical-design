@@ -47,7 +47,7 @@ public class ProductService {
     public ProductDto changePrice(final UUID productId, final ChangePriceRequest request) {
         final Price price = new Price(request.getPrice());
         final Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
+                .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 상품을", NOT_FOUND));
         product.changePrice(price);
         productRepository.save(product);
         return ProductDto.from(product);

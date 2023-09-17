@@ -5,7 +5,6 @@ import kitchenpos.common.values.Name;
 import kitchenpos.common.values.Price;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")

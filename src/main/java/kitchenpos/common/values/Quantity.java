@@ -1,6 +1,5 @@
 package kitchenpos.common.values;
 
-import kitchenpos.common.domain.Purgomalum;
 import kitchenpos.common.exception.KitchenPosException;
 import kitchenpos.common.exception.KitchenPosExceptionType;
 

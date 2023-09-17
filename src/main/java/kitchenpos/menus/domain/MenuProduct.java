@@ -27,6 +27,7 @@ public class MenuProduct {
         this.productId = productId;
         this.quantity = quantity;
     }
+
     public MenuProduct(Long seq, UUID productId, Quantity quantity) {
         this.seq = seq;
         this.productId = productId;

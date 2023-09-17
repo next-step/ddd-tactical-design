@@ -25,7 +25,7 @@ public class ProductRestController {
     public ResponseEntity<ProductDto> create(@RequestBody final CreateRequest request) {
         final ProductDto response = productService.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{productId}/price")

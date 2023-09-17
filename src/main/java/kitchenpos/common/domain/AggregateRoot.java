@@ -3,13 +3,13 @@ package kitchenpos.common.domain;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 
+import javax.persistence.Transient;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface AggregateRoot {
 
+    @Transient
     ThreadLocal<List<Object>> threadLocal = ThreadLocal.withInitial(ArrayList::new);
 
     default Object register(Object event) {

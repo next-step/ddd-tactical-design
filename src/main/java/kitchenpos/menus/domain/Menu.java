@@ -25,10 +25,10 @@ public class Menu {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 
@@ -37,6 +37,7 @@ public class Menu {
 
     protected Menu() {
     }
+
     public Menu(Name name, Price price, UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed) {
         this.id = UUID.randomUUID();
         this.name = name;
