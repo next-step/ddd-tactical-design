@@ -10,10 +10,14 @@ import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.event.ProductPriceChangedEvent;
 import kitchenpos.support.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -96,6 +100,34 @@ public class MenuService {
                 .map(MenuMapper::toMenuDetailResponse)
                 .collect(toUnmodifiableList());
     }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void handleProductPriceChangedEvent(ProductPriceChangedEvent event) {
+        List<Menu> menus = findAllByProductId(event.getId());
+        checkMenuCouldBeDisplayedAfterProductPriceChanged(menus);
+    }
+
+    public List<Menu> findAllByProductId(UUID productId) {
+        return menuRepository.findAllByProductId(productId);
+    }
+
+    private void checkMenuCouldBeDisplayedAfterProductPriceChanged(List<Menu> menus) {
+        menus.forEach(menu -> {
+            BigDecimal totalMenuProductPrice = menu.getMenuProducts()
+                    .parallelStream()
+                    .map(menuProduct -> menuProduct.getProduct().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            if (isMenuPriceGreaterThanSumOfMenuProducts(menu, totalMenuProductPrice)) {
+                menu.hide();
+            }
+        });
+    }
+
+    private boolean isMenuPriceGreaterThanSumOfMenuProducts(Menu menu, BigDecimal totalMenuProductPrice) {
+        return menu.getPrice().compareTo(totalMenuProductPrice) > 0;
+    }
+
 
     private Menu getMenuById(UUID menuId) {
         return menuRepository.findById(menuId)

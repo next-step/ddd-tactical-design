@@ -1,8 +1,8 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuDomainService;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
@@ -52,7 +52,7 @@ class ProductServiceTest {
     @Autowired
     private ProductDomainService productDomainService;
     @SpyBean
-    private MenuDomainService menuDomainService;
+    private MenuService menuService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
@@ -129,7 +129,7 @@ class ProductServiceTest {
         final Product product = productRepository.findById(productDetailResponse.getId())
                 .orElseThrow(NoSuchElementException::new);
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        when(menuDomainService.findAllByProductId(product.getId()))
+        when(menuService.findAllByProductId(product.getId()))
                 .thenReturn(List.of(menu));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         TestTransaction.flagForCommit();
