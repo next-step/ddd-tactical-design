@@ -29,6 +29,7 @@ public class DeliveryOrder {
         if (orderMasterId == null) {
             throw new IllegalArgumentException("주문 master 가 없으면 등록 할 수 없습니다.");
         }
+        this.id = UUID.randomUUID();
         this.orderMasterId = orderMasterId;
         this.deliveryAddress = deliveryAddress;
     }
