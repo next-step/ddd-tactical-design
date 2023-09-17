@@ -64,9 +64,6 @@ public class Price {
         return new Price(result);
     }
 
-    public Price multiply(int number) {
-        return multiply(BigDecimal.valueOf(number));
-    }
     public Price multiply(long number) {
         return multiply(BigDecimal.valueOf(number));
     }
@@ -81,7 +78,4 @@ public class Price {
         return ComparisonUtils.greaterThan(value, price.value);
     }
 
-    public boolean isLessThan(Price price) {
-        return ComparisonUtils.lessThan(value, price.value);
-    }
 }

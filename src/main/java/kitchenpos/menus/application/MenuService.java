@@ -68,7 +68,7 @@ public class MenuService {
         final List<MenuProduct> menuProducts = menuProductService.create(menuProductRequests);
         menuValidator.validatePrice(price, menuProducts);
         final Name name = new Name(request.getName(), purgomalum);
-        final Menu menu = new Menu(name, price, menuGroup, menuProducts, request.isDisplayed());
+        final Menu menu = new Menu(name, price, menuGroup.getId(), menuProducts, request.isDisplayed());
         Menu result = menuRepository.save(menu);
         return MenuDto.from(result);
     }
@@ -80,7 +80,7 @@ public class MenuService {
 
         Price price = new Price(request.getPrice());
         menuValidator.validatePrice(price, menu.getMenuProducts());
-        menu.setPrice(price);
+        menu.changePrice(price);
         return MenuDto.from(menu);
     }
 
@@ -89,7 +89,7 @@ public class MenuService {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
         menuValidator.validatePrice(menu.getPrice(), menu.getMenuProducts());
-        menu.setDisplayed(true);
+        menu.display();
         return MenuDto.from(menu);
     }
 
@@ -97,7 +97,7 @@ public class MenuService {
     public MenuDto hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new KitchenPosException("요청하신 ID에 해당하는 메뉴를", NOT_FOUND));
-        menu.setDisplayed(false);
+        menu.hide();
         return MenuDto.from(menu);
     }
 

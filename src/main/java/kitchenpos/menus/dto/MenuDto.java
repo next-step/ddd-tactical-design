@@ -14,7 +14,6 @@ public class MenuDto {
     private UUID id;
     private Name name;
     private Price price;
-    private MenuGroup menuGroup;
     private boolean displayed;
     private List<MenuProduct> menuProducts;
     private UUID menuGroupId;
@@ -34,10 +33,6 @@ public class MenuDto {
         return price;
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
@@ -55,7 +50,6 @@ public class MenuDto {
         menuDto.id = menu.getId();
         menuDto.name = menu.getName();
         menuDto.price = menu.getPrice();
-        menuDto.menuGroup = menu.getMenuGroup();
         menuDto.displayed = menu.isDisplayed();
         menuDto.menuProducts = menu.getMenuProducts();
         menuDto.menuGroupId = menu.getMenuGroupId();

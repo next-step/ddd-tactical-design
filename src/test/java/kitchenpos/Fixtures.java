@@ -31,7 +31,7 @@ public class Fixtures {
         return new Menu(
                 createdName,
                 createdPrice,
-                menuGroup(),
+                menuGroup().getId(),
                 Arrays.asList(menuProducts),
                 displayed
         );

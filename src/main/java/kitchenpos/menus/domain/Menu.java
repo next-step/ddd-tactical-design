@@ -20,14 +20,6 @@ public class Menu {
     @Column(name = "price", nullable = false)
     private Price price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
-
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
@@ -40,17 +32,16 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    @Transient
+    @Column(name = "menu_group_id", insertable = false, updatable = false)
     private UUID menuGroupId;
 
-    // TODO
-    public Menu() {
+    protected Menu() {
     }
-    public Menu(Name name, Price price, MenuGroup menuGroup, List<MenuProduct> menuProducts, boolean displayed) {
+    public Menu(Name name, Price price, UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.displayed = displayed;
     }
@@ -60,56 +51,25 @@ public class Menu {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public Name getName() {
         return name;
-    }
-
-    public void setName(Name name) {
-        this.name = name;
     }
 
     public Price getPrice() {
         return price;
     }
 
-    public void setPrice(Price price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
+    public UUID getMenuGroupId() {
+        return this.menuGroupId;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(boolean displayed) {
-        this.displayed = displayed;
-    }
-
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-    public void setMenuProducts(List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 
     public void display() {
@@ -120,4 +80,7 @@ public class Menu {
         this.displayed = false;
     }
 
+    public void changePrice(Price price) {
+        this.price = price;
+    }
 }
