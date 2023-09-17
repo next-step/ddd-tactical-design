@@ -53,14 +53,6 @@ public class TobeMenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<TobeProduct> products = productRepository.findAllByIdIn(
-                menuProductRequests.stream()
-                                   .map(TobeMenuProductRequest::getProductId)
-                                   .collect(Collectors.toList())
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
         final List<TobeMenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
         for (final TobeMenuProductRequest menuProductRequest : menuProductRequests) {
@@ -83,16 +75,6 @@ public class TobeMenuService {
         TobeMenu savedTobeMenu = menuRepository.save(menu);
 
         return TobeMenuCreateResponse.of(savedTobeMenu);
-    }
-
-    private Map<UUID, TobeProduct> getProductMap(final List<TobeMenuProductRequest> menuProductRequests) {
-        final List<TobeProduct> products = productRepository.findAllByIdIn(
-                menuProductRequests.stream()
-                                   .map(TobeMenuProductRequest::getProductId)
-                                   .collect(Collectors.toList())
-        );
-        Map<UUID, TobeProduct> productMap = products.stream().collect(Collectors.toMap(TobeProduct::getId, x -> x));
-        return productMap;
     }
 
     @Transactional
