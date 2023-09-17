@@ -7,7 +7,7 @@ plugins {
 
 group = 'camp.nextstep.edu'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = "16"
+sourceCompatibility = '11'
 description = 'Kitchenpos project with domain-driven design'
 
 repositories {
@@ -25,7 +25,6 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 }
 
 test {
@@ -37,4 +36,3 @@ flyway {
     user = 'user'
     password = 'password'
 }
-targetCompatibility = JavaVersion.VERSION_16
