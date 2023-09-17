@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.dto.MenuCreateDto;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateCommand;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -62,18 +62,18 @@ public class NewMenu {
 
     public static NewMenu createMenu(
             List<UUID> productIds, Function<List<UUID>, Map<UUID, BigDecimal>> func, UUID id,
-            DisplayNameChecker displayNameChecker, UUID menuGroupId, MenuCreateDto menuCreateDto) {
+            DisplayNameChecker displayNameChecker, UUID menuGroupId, MenuCreateCommand menuCreateCommand) {
 
-        Price menuPrice = Price.of(menuCreateDto.getPrice());
-        DisplayedName menuName = DisplayedName.of(menuCreateDto.getName(), displayNameChecker);
+        Price menuPrice = Price.of(menuCreateCommand.getPrice());
+        DisplayedName menuName = DisplayedName.of(menuCreateCommand.getName(), displayNameChecker);
 
         Map<UUID, BigDecimal> productPriceMap = func.apply(productIds);
         validateExistProduct(productIds, productPriceMap);
 
-        MenuProducts menuProducts = MenuProducts.create(menuCreateDto.getProductQuantityMap());
+        MenuProducts menuProducts = MenuProducts.create(menuCreateCommand.getProductQuantityMap());
         menuProducts.validateMenuPrice(productPriceMap, menuPrice);
 
-        return NewMenu.create(id, menuGroupId, menuProducts, menuPrice, menuName, menuCreateDto.isDisplayed());
+        return NewMenu.create(id, menuGroupId, menuProducts, menuPrice, menuName, menuCreateCommand.isDisplayed());
     }
 
     private static void validateExistProduct(List<UUID> productIds, Map<UUID, BigDecimal> productPriceMap) {

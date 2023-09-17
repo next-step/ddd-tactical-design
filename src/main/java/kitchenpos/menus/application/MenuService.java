@@ -5,7 +5,7 @@ import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.menus.application.dto.*;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.application.dto.MenuCreateRequest;
-import kitchenpos.menus.tobe.domain.dto.MenuCreateDto;
+import kitchenpos.menus.tobe.domain.dto.MenuCreateCommand;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,11 +115,11 @@ public class MenuService {
         );
     }
 
-    private MenuCreateDto createMenuCreateDto(MenuCreateRequest request) {
+    private MenuCreateCommand createMenuCreateDto(MenuCreateRequest request) {
         List<MenuProductCreateRequest> menuProducts = request.getMenuProducts();
         Map<UUID, Long> productQuantityMap = menuProducts.stream()
                 .collect(Collectors.toMap(MenuProductCreateRequest::getProductId, MenuProductCreateRequest::getQuantity));
-        return MenuCreateDto.create(
+        return MenuCreateCommand.create(
                 request.getPrice(),
                 request.getMenuGroupId(),
                 request.getName(),

@@ -1,18 +1,17 @@
 package kitchenpos.menus.tobe.domain.dto;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class MenuCreateDto {
+public class MenuCreateCommand {
     private BigDecimal price;
     private UUID menuGroupId;
     private String name;
     private boolean displayed;
     private Map<UUID, Long> productQuantityMap;
 
-    public MenuCreateDto(BigDecimal price, UUID menuGroupId, String name, boolean displayed, Map<UUID, Long> productQuantityMap) {
+    public MenuCreateCommand(BigDecimal price, UUID menuGroupId, String name, boolean displayed, Map<UUID, Long> productQuantityMap) {
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.name = name;
@@ -20,8 +19,8 @@ public class MenuCreateDto {
         this.productQuantityMap = productQuantityMap;
     }
 
-    public static MenuCreateDto create(BigDecimal price, UUID menuGroupId, String name, boolean displayed, Map<UUID, Long> productQuantityMap) {
-        return new MenuCreateDto(price, menuGroupId, name, displayed, productQuantityMap);
+    public static MenuCreateCommand create(BigDecimal price, UUID menuGroupId, String name, boolean displayed, Map<UUID, Long> productQuantityMap) {
+        return new MenuCreateCommand(price, menuGroupId, name, displayed, productQuantityMap);
     }
 
     public BigDecimal getPrice() {
