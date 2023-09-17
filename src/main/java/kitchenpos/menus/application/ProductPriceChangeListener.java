@@ -25,16 +25,9 @@ public class ProductPriceChangeListener {
     public void hideMenuBasedOnMenuAndMenuProductPrice(ProductPriceChangeEvent event) {
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
 
-        menus.stream().filter(this::isMenuPriceGreaterThanSumOfMenuProducts)
+        menus.stream()
+                .filter(e -> menuValidator.isMenuPriceGreaterThanSumOfMenuProducts(e.getPrice(), e.getMenuProducts()))
                 .forEach(Menu::hide);
     }
 
-    private boolean isMenuPriceGreaterThanSumOfMenuProducts(Menu menu) {
-        try {
-            menuValidator.validatePrice(menu.getPrice(), menu.getMenuProducts());
-            return false;
-        } catch (Exception e) {
-            return true;
-        }
-    }
 }
