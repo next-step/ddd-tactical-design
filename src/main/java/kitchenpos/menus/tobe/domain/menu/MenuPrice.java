@@ -10,12 +10,12 @@ import static java.util.Objects.isNull;
 @Embeddable
 public final class MenuPrice {
     @Column(name = "price", nullable = false)
-    protected BigDecimal value;
+    BigDecimal value;
 
-    protected MenuPrice() {
+    MenuPrice() {
     }
 
-    protected MenuPrice(BigDecimal value) {
+    private MenuPrice(BigDecimal value) {
         this.value = value;
     }
 

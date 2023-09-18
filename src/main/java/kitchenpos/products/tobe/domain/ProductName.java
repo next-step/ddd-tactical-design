@@ -13,10 +13,10 @@ public final class ProductName {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected ProductName() {
+    private ProductName() {
     }
 
-    protected ProductName(String value) {
+    private ProductName(String value) {
         this.value = value;
     }
 

@@ -11,10 +11,10 @@ public final class MenuGroupName {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuGroupName() {
+    private MenuGroupName() {
     }
 
-    protected MenuGroupName(String value) {
+    private MenuGroupName(String value) {
         this.value = value;
     }
 

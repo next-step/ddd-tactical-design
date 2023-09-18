@@ -8,10 +8,10 @@ import kitchenpos.menus.mapper.MenuMapper;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.products.event.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.support.infra.PurgomalumClient;
-import kitchenpos.support.product.event.ProductPriceChangedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -61,7 +61,7 @@ public class MenuService {
             menuProducts.add(MenuProduct.create(
                     ProductInMenu.create(product.getId()),
                     menuProductElement.getQuantity()
-                    ));
+            ));
         }
 
         final Menu menu = Menu.create(
@@ -148,18 +148,14 @@ public class MenuService {
             );
         }
 
-        if (menu.getPrice().compareTo(sum) > 0) {
-            return true;
-        }
-
-        return false;
+        return menu.getPrice().compareTo(sum) > 0;
     }
 
     private void checkMenuCouldBeDisplayedAfterProductPriceChanged(List<Menu> menus) {
         menus.forEach(menu -> {
             final List<UUID> productIds = menu.getMenuProducts().stream().map(menuProduct -> menuProduct.getProduct().getId()).collect(toUnmodifiableList());
             final List<Product> products = productRepository.findAllByIdIn(productIds);
-            final BigDecimal totalMenuProductPrice =products.parallelStream()
+            final BigDecimal totalMenuProductPrice = products.parallelStream()
                     .map(Product::getPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 

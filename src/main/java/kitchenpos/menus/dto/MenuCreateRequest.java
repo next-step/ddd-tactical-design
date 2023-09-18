@@ -38,5 +38,5 @@ public final class MenuCreateRequest {
     public List<MenuProductElement> getMenuProducts() {
         return menuProducts;
     }
-    
+
 }

@@ -12,10 +12,10 @@ public final class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    protected ProductPrice() {
+    private ProductPrice() {
     }
 
-    protected ProductPrice(BigDecimal value) {
+    private ProductPrice(BigDecimal value) {
         this.value = value;
     }
 

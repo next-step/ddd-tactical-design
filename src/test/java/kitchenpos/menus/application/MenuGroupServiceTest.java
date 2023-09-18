@@ -35,8 +35,8 @@ class MenuGroupServiceTest {
         final MenuGroupDetailResponse actual = menuGroupService.create(new MenuGroupCreateRequest(expected.getName()));
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
 
@@ -45,7 +45,7 @@ class MenuGroupServiceTest {
     @ParameterizedTest
     void create(final String name) {
         assertThatThrownBy(() -> menuGroupService.create(new MenuGroupCreateRequest(name)))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")

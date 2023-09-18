@@ -1,4 +1,4 @@
-package kitchenpos.support.product.event;
+package kitchenpos.products.event;
 
 import java.math.BigDecimal;
 import java.util.UUID;

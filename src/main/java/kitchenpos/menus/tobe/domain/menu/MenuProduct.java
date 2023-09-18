@@ -15,9 +15,9 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private ProductInMenu product;
 
@@ -39,18 +39,6 @@ public class MenuProduct {
         return new MenuProduct(product, quantity);
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public ProductInMenu getProduct() {
-        return product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
     private static void validateMenuProductQuantityIsNegative(Long value) {
         if (isNegative(value)) {
             throw new IllegalArgumentException("메뉴 수량은 음수일 수 없습니다.");
@@ -65,5 +53,17 @@ public class MenuProduct {
 
     private static boolean isNegative(Long value) {
         return 0L > value;
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    public ProductInMenu getProduct() {
+        return product;
+    }
+
+    public long getQuantity() {
+        return quantity;
     }
 }

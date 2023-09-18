@@ -13,10 +13,10 @@ public final class MenuName {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuName() {
+    private MenuName() {
     }
 
-    protected MenuName(String value) {
+    private MenuName(String value) {
         this.value = value;
     }
 

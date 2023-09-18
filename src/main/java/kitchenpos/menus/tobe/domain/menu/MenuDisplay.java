@@ -11,10 +11,10 @@ public final class MenuDisplay {
     @Column(name = "displayed", nullable = false)
     private Boolean value;
 
-    protected MenuDisplay() {
+    private MenuDisplay() {
     }
 
-    protected MenuDisplay(Boolean value) {
+    private MenuDisplay(Boolean value) {
         this.value = value;
     }
 
