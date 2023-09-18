@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "eat_in_orders")
+@Table(name = "delivery_orders")
 @Entity
 public class DeliveryOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
