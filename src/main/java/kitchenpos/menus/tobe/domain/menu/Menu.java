@@ -58,12 +58,12 @@ public class Menu {
         if (isMenuPriceLowerThanMenuProductPriceSum(price, menuProducts)) {
             throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
         }
-        validateMenuProductsIsEmpty(menuProducts);
+        isMenuProductsEmpty(menuProducts);
 
         return new Menu(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts);
     }
 
-    private static void validateMenuProductsIsEmpty(List<MenuProduct> menuProducts) {
+    private static void isMenuProductsEmpty(List<MenuProduct> menuProducts) {
         if (isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴에는 1개 이상의 메뉴 상품이 포함되어야 합니다.");
         }
