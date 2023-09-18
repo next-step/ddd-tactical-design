@@ -112,4 +112,11 @@ public class ToBeMenu {
     public boolean isSamePrice(BigDecimal price) {
         return this.price.equals(MenuPrice.of(price));
     }
+
+    public boolean isSameMenuAndPrice(UUID menuId, BigDecimal price) {
+        if (this.id != menuId) {
+            return false;
+        }
+        return this.price.equals(MenuPrice.of(price));
+    }
 }
