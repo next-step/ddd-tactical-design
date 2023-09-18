@@ -55,20 +55,12 @@ public class Menu {
     }
 
     public static Menu create(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuDisplay displayed, final List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
-        menu.id = UUID.randomUUID();
-        menu.name = name;
-        menu.price = price;
-        menu.menuGroup = menuGroup;
-        menu.displayed = displayed;
-        menu.menuProducts = menuProducts;
-
-        if (isMenuPriceLowerThanMenuProductPriceSum(menu.price, menu.menuProducts)) {
+        if (isMenuPriceLowerThanMenuProductPriceSum(price, menuProducts)) {
             throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
         }
         validateMenuProductsIsEmpty(menuProducts);
 
-        return menu;
+        return new Menu(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts);
     }
 
     private static void validateMenuProductsIsEmpty(List<MenuProduct> menuProducts) {
