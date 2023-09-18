@@ -1,9 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuGroupRepository;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.MenuGroupService;
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
@@ -35,6 +32,7 @@ class ProductServiceTest {
     private MenuService menuService;
     private MenuGroupService menuGroupService;
     private ProductService productService;
+    private MenuCreateService menuCreateService;
     private PurgomalumClient purgomalumClient;
 
     @BeforeEach
@@ -44,7 +42,8 @@ class ProductServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuService = new MenuService(menuRepository, productService, menuGroupService, purgomalumClient);
+        menuService = new MenuService(menuRepository,  menuCreateService, menuGroupService, purgomalumClient);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient ));
         productService = new ProductService(productRepository, menuService, purgomalumClient);
     }
 

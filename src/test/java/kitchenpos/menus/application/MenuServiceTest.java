@@ -39,6 +39,7 @@ class MenuServiceTest {
     private UUID menuGroupId;
     private Product product;
     private MenuGroupService menuGroupService;
+    private MenuCreateService menuCreateService;
     private ProductService productService;
 
     @BeforeEach
@@ -48,8 +49,9 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient));
         productService = new ProductService(productRepository, menuService, purgomalumClient);
-        menuService = new MenuService(menuRepository, productService, menuGroupService, purgomalumClient);
+        menuService = new MenuService(menuRepository, menuCreateService, menuGroupService, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

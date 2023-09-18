@@ -1,13 +1,10 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.exception.InvalidMenuProductsSizeException;
 import kitchenpos.menus.domain.exception.NotFoundMenuException;
 import kitchenpos.menus.domain.model.MenuModel;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.vo.Products;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,29 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final ProductService productService;
+    private final MenuCreateService menuCreateService;
     private final MenuGroupService menuGroupService;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
             final MenuRepository menuRepository,
-            final ProductService productService,
+            final MenuCreateService menuCreateService,
             final MenuGroupService menuGroupService,
             final PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
-        this.productService = productService;
+        this.menuCreateService = menuCreateService;
         this.menuGroupService = menuGroupService;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Menu create(final Menu request) {
-        validMenuProduct(request);
+        menuCreateService.validMenuProduct(request);
         menuGroupService.findById(request.getMenuGroupId());
         Menu menu = new MenuModel(request, purgomalumClient).toMenu();
         return menuRepository.save(menu);
@@ -83,19 +79,7 @@ public class MenuService {
                 .orElseThrow(NotFoundMenuException::new);
     }
 
-    private void validMenuProduct(Menu request) {
-        List<MenuProduct> menuProducts = request.getMenuProducts();
-        if (menuProducts == null || menuProducts.isEmpty()) {
-            throw new InvalidMenuProductsSizeException();
-        }
-        Products products = productService.findAllByIdIn(menuProducts.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList()));
 
-        if (products.size() != menuProducts.size()) {
-            throw new InvalidMenuProductsSizeException();
-        }
-    }
 
 
 }
