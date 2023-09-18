@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.infra.PurgomalumClient;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,7 +13,11 @@ public final class ProductName {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected ProductName() {
+    private ProductName() {
+    }
+
+    private ProductName(String value) {
+        this.value = value;
     }
 
     public static ProductName create(String value, PurgomalumClient purgomalumClient) {
@@ -26,12 +30,10 @@ public final class ProductName {
             throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
         }
 
-        ProductName productName = new ProductName();
-        productName.value = value;
-        return productName;
+        return new ProductName(value);
     }
 
-    protected String getValue() {
+    public String getValue() {
         return value;
     }
 

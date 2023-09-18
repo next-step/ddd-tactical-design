@@ -15,6 +15,12 @@ Content-Type: application/json
   ]
 }
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 201, "Response status is wrong");
+    });
+%}
+
 ###
 PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/price
 Content-Type: application/json
@@ -23,11 +29,38 @@ Content-Type: application/json
   "price": 15000
 }
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
+
+
 ###
 PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/display
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
+
 
 ###
 PUT {{host}}/api/menus/f59b1e1c-b145-440a-aa6f-6095a0e2d63b/hide
 
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}
+
+
 ###
 GET {{host}}/api/menus
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is wrong");
+    });
+%}

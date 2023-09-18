@@ -12,25 +12,18 @@ public final class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    protected ProductPrice() {
+    private ProductPrice() {
+    }
+
+    private ProductPrice(BigDecimal value) {
+        this.value = value;
     }
 
     public static ProductPrice create(BigDecimal value) {
         validateProductPriceIsNull(value);
         validateProductPriceIsNegative(value);
 
-        ProductPrice productPrice = new ProductPrice();
-        productPrice.value = value;
-        return productPrice;
-    }
-
-    public static ProductPrice update(BigDecimal changedValue) {
-        validateProductPriceIsNull(changedValue);
-        validateProductPriceIsNegative(changedValue);
-
-        ProductPrice productPrice = new ProductPrice();
-        productPrice.value = changedValue;
-        return productPrice;
+        return new ProductPrice(value);
     }
 
     private static void validateProductPriceIsNegative(BigDecimal value) {
@@ -49,7 +42,7 @@ public final class ProductPrice {
         return BigDecimal.ZERO.compareTo(value) > 0;
     }
 
-    BigDecimal getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 

@@ -1,19 +1,19 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.event.ProductPriceChangedEvent;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuDomainService;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductDetailResponse;
+import kitchenpos.products.event.ProductPriceChangedEvent;
 import kitchenpos.products.infra.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductDomainService;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,8 +33,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -52,7 +51,7 @@ class ProductServiceTest {
     @Autowired
     private ProductDomainService productDomainService;
     @SpyBean
-    private MenuDomainService menuDomainService;
+    private MenuService menuService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
@@ -128,8 +127,8 @@ class ProductServiceTest {
         ProductDetailResponse productDetailResponse = productService.create(createProductRequest("후라이드", BigDecimal.valueOf(16_000L)));
         final Product product = productRepository.findById(productDetailResponse.getId())
                 .orElseThrow(NoSuchElementException::new);
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        when(menuDomainService.findAllByProductId(product.getId()))
+        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(convertProductToProductInMenu(product), 2L)));
+        when(menuService.findAllByProductId(product.getId()))
                 .thenReturn(List.of(menu));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         TestTransaction.flagForCommit();

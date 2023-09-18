@@ -1,15 +1,15 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.FakeMenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.FakeProduct;
 import kitchenpos.products.tobe.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -25,26 +25,14 @@ public class Fixtures {
         return menu(price, false, menuProducts);
     }
 
-    public static Menu menu(final long price, final boolean displayed, final MenuGroup menuGroup, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
-    }
-
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
+        return FakeMenu.create(
+                MenuName.create("후라이드+후라이드", new FakePurgomalumClient()),
+                MenuPrice.create(BigDecimal.valueOf(price)),
+                menuGroup(),
+                MenuDisplay.create(displayed),
+                List.of(menuProducts)
+        );
     }
 
     public static MenuGroup menuGroup() {
@@ -52,26 +40,15 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+        return FakeMenuGroup.createFake(name);
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
-        return menuProduct;
+        return MenuProduct.create(productInMenu(), 2L);
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+    public static MenuProduct menuProduct(final ProductInMenu product, final long quantity) {
+        return MenuProduct.create(product, quantity);
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
@@ -126,11 +103,23 @@ public class Fixtures {
         return orderTable;
     }
 
+    public static ProductInMenu productInMenu() {
+        return productInMenu(UUID.randomUUID());
+    }
+
+    public static ProductInMenu productInMenu(final UUID productId) {
+        return FakeProductInMenu.createFake(productId);
+    }
+
     public static Product product() {
         return product("후라이드", 16_000L);
     }
 
     public static Product product(final String name, final long price) {
         return FakeProduct.createFake(name, BigDecimal.valueOf(price));
+    }
+
+    public static ProductInMenu convertProductToProductInMenu(Product product) {
+        return productInMenu(product.getId());
     }
 }

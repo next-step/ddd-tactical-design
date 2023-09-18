@@ -25,12 +25,18 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     }
 
-    public static Product create(ProductName productName, ProductPrice price) {
-        Product product = new Product();
-        product.id = UUID.randomUUID();
-        product.name = productName;
-        product.price = price;
-        return product;
+    protected Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public static Product create(ProductName productName, ProductPrice productPrice) {
+        return new Product(
+                UUID.randomUUID(),
+                productName,
+                productPrice
+        );
     }
 
     public UUID getId() {
