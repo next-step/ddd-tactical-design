@@ -3,7 +3,7 @@ package kitchenpos.menus.ui;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.application.dto.MenuResponse;
-import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.application.dto.MenuCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.intrastructure;
 
-import kitchenpos.menus.tobe.domain.MenuDisplayedNameProfanities;
+import kitchenpos.menus.tobe.domain.menu.MenuDisplayedNameProfanities;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

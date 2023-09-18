@@ -1,6 +1,8 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
+import kitchenpos.menus.tobe.domain.menu.MenuDisplayedName;
+import kitchenpos.menus.tobe.domain.menu.MenuDisplayedNamePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

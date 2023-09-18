@@ -2,7 +2,9 @@ package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
-import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
 import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
 import kitchenpos.products.tobe.domain.ProductDisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.ProductDisplayedName;

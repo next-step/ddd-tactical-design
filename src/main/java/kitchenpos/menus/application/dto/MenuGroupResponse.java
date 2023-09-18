@@ -1,6 +1,6 @@
 package kitchenpos.menus.application.dto;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 import java.util.UUID;
 

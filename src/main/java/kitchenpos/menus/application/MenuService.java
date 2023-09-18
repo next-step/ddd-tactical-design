@@ -1,9 +1,11 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
-import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;

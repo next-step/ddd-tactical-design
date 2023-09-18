@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.domain.MenuDisplayedNameProfanities;
+import kitchenpos.menus.tobe.domain.menu.MenuDisplayedNameProfanities;
 
 import java.util.Arrays;
 import java.util.List;

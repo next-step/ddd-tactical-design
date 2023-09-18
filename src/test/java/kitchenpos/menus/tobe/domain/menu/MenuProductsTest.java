@@ -1,5 +1,8 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
+import kitchenpos.menus.tobe.domain.menu.MenuPrice;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +14,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MenuProductsTest {
 
