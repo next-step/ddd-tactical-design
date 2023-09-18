@@ -104,11 +104,11 @@ public class Fixtures {
     }
 
     public static ProductInMenu productInMenu() {
-        return productInMenu(UUID.randomUUID(), "후라이드", 16_000L);
+        return productInMenu(UUID.randomUUID());
     }
 
-    public static ProductInMenu productInMenu(final UUID productId, final String name, final long price) {
-        return FakeProductInMenu.createFake(productId, name, BigDecimal.valueOf(price));
+    public static ProductInMenu productInMenu(final UUID productId) {
+        return FakeProductInMenu.createFake(productId);
     }
 
     public static Product product() {
@@ -120,6 +120,6 @@ public class Fixtures {
     }
 
     public static ProductInMenu convertProductToProductInMenu(Product product) {
-        return productInMenu(product.getId(), product.getName(), product.getPrice().longValue());
+        return productInMenu(product.getId());
     }
 }

@@ -3,6 +3,9 @@ package kitchenpos.menus.tobe.domain.menu;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.products.infra.FakePurgomalumClient;
+import kitchenpos.products.tobe.domain.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.support.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +17,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import static kitchenpos.Fixtures.product;
 import static kitchenpos.Fixtures.productInMenu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,10 +28,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MenuTest {
 
     private PurgomalumClient purgomalumClient;
+    private ProductRepository productRepository;
+    private Product product1;
+    private Product product2;
 
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
+        productRepository = new InMemoryProductRepository();
+        product1 = productRepository.save(product());
+        product2 = productRepository.save(product());
     }
 
     @DisplayName("메뉴명 테스트")
@@ -92,36 +103,19 @@ class MenuTest {
     class TestCreateMenu {
         @DisplayName("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 한다")
         @Test
-        void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenThrowException() {
-            final MenuProduct menuProduct1 = MenuProduct.create(
-                    productInMenu(), 2L
-            );
-            final MenuProduct menuProduct2 = MenuProduct.create(
-                    productInMenu(), 3L
-            );
-            final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
-                    .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));
-            assertThatThrownBy(() -> Menu.create(
-                    MenuName.create("후라이드", purgomalumClient),
-                    MenuPrice.create(menuProductSum.add(BigDecimal.valueOf(100L))),
-                    MenuGroup.create(MenuGroupName.create("두마리메뉴")),
-                    MenuDisplay.create(true),
-                    List.of(menuProduct1, menuProduct2)
-            )).isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
-        }
-
-        @DisplayName("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 한다")
-        @Test
         void givenMenuPrice_whenMenuPriceIsLowerThanMenuProductPriceSum_thenSuccess() {
             final MenuProduct menuProduct1 = MenuProduct.create(
-                    productInMenu(), 2L
+                    productInMenu(product1.getId()), 2L
             );
             final MenuProduct menuProduct2 = MenuProduct.create(
-                    productInMenu(), 3L
+                    productInMenu(product2.getId()), 3L
             );
-            final BigDecimal menuProductSum = menuProduct1.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
-                    .add(menuProduct2.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));
+
+            final Product product1 = productRepository.findById(menuProduct1.getProduct().getId()).orElseThrow(NoSuchElementException::new);
+            final Product product2 = productRepository.findById(menuProduct2.getProduct().getId()).orElseThrow(NoSuchElementException::new);
+
+            final BigDecimal menuProductSum = product1.getPrice().multiply(BigDecimal.valueOf(menuProduct1.getQuantity()))
+                    .add(product2.getPrice().multiply(BigDecimal.valueOf(menuProduct2.getQuantity())));
 
             final MenuName menuName = MenuName.create("후라이드", purgomalumClient);
             final MenuPrice menuPrice = MenuPrice.create(menuProductSum);

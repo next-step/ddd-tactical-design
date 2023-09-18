@@ -1,59 +1,34 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.support.product.ProductAble;
-import kitchenpos.support.product.vo.ProductName;
-import kitchenpos.support.product.vo.ProductPrice;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class ProductInMenu implements ProductAble {
+public class ProductInMenu {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Embedded
-    private ProductName name;
-
-    @Embedded
-    private ProductPrice price;
-
     protected ProductInMenu() {
 
     }
 
-    protected ProductInMenu(UUID id, ProductName name, ProductPrice price) {
+    protected ProductInMenu(UUID id) {
         this.id = id;
-        this.name = name;
-        this.price = price;
     }
 
-    public static ProductInMenu create(UUID productId, ProductName productName, ProductPrice productPrice) {
-        return new ProductInMenu(
-                productId,
-                productName,
-                productPrice
-        );
+    public static ProductInMenu create(UUID productId) {
+        return new ProductInMenu(productId);
     }
 
-    @Override
     public UUID getId() {
         return id;
-    }
-
-    @Override
-    public String getName() {
-        return name.getValue();
-    }
-
-    @Override
-    public BigDecimal getPrice() {
-        return price.getValue();
     }
 
     @Override

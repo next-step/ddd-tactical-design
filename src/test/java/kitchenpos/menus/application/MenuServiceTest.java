@@ -140,8 +140,14 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
-        assertThatThrownBy(() -> createMenuRequest(
-                "후라이드+후라이드", 33_000L, menuGroup, true, createMenuProductRequest(product, 2L)))
+        final MenuCreateRequest menuCreateRequest = new MenuCreateRequest(
+                "후라이드+후라이드",
+                BigDecimal.valueOf(33_000L),
+                menuGroup.getId(),
+                true,
+                List.of(new MenuProductElement(product.getId(), 2L))
+        );
+        assertThatThrownBy(() -> menuService.create(menuCreateRequest))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

@@ -1,8 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.support.product.ProductAble;
-import kitchenpos.support.product.vo.ProductName;
-import kitchenpos.support.product.vo.ProductPrice;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
@@ -12,7 +9,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product extends AbstractAggregateRoot<Product> implements ProductAble {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

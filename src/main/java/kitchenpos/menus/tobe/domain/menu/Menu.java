@@ -55,9 +55,6 @@ public class Menu {
     }
 
     public static Menu create(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuDisplay displayed, final List<MenuProduct> menuProducts) {
-        if (isMenuPriceLowerThanMenuProductPriceSum(price, menuProducts)) {
-            throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
-        }
         isMenuProductsEmpty(menuProducts);
 
         return new Menu(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts);
@@ -104,40 +101,10 @@ public class Menu {
         }
 
         this.price = menuPrice;
-
-        if (isMenuPriceLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
-            throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
-        }
-
         return true;
     }
 
-    private static boolean isMenuPriceLowerThanMenuProductPriceSum(MenuPrice menuPrice, List<MenuProduct> menuProducts) {
-        if (isNull(menuProducts)) {
-            return true;
-        }
-
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                            .getPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-
-        if (menuPrice.getValue().compareTo(sum) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
     public void display() {
-        if (isMenuPriceLowerThanMenuProductPriceSum(this.price, this.menuProducts)) {
-            throw new IllegalStateException("메뉴 가격은 메뉴 상품 가격의 합보다 크면 메뉴를 노출할 수 없습니다.");
-        }
-
         this.displayed = MenuDisplay.create(true);
     }
 

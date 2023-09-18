@@ -12,19 +12,16 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.support.infra.PurgomalumClient;
 import kitchenpos.support.product.event.ProductPriceChangedEvent;
-import kitchenpos.support.product.vo.ProductName;
-import kitchenpos.support.product.vo.ProductPrice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static kitchenpos.menus.mapper.MenuMapper.toMenuDetailResponse;
 
@@ -62,11 +59,7 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductElement.getProductId())
                     .orElseThrow(NoSuchElementException::new);
             menuProducts.add(MenuProduct.create(
-                    ProductInMenu.create(
-                            product.getId(),
-                            ProductName.create(product.getName(), purgomalumClient),
-                            ProductPrice.create(product.getPrice())
-                    ),
+                    ProductInMenu.create(product.getId()),
                     menuProductElement.getQuantity()
                     ));
         }
@@ -78,6 +71,10 @@ public class MenuService {
                 MenuDisplay.create(request.isDisplayed()),
                 menuProducts
         );
+
+        if (isMenuPriceLowerThanMenuProductPriceSum(menu)) {
+            throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
+        }
         return toMenuDetailResponse(menuRepository.save(menu));
     }
 
@@ -85,6 +82,9 @@ public class MenuService {
     public MenuDetailResponse changePrice(final UUID menuId, final MenuChangePriceRequest request) {
         final Menu menu = getMenuById(menuId);
         menu.changePrice(MenuPrice.create(request.getPrice()));
+        if (isMenuPriceLowerThanMenuProductPriceSum(menu)) {
+            throw new IllegalArgumentException("메뉴 가격은 메뉴 상품 가격의 합보다 작거나 같아야 합니다.");
+        }
         return toMenuDetailResponse(menu);
     }
 
@@ -92,6 +92,9 @@ public class MenuService {
     public MenuDetailResponse display(final UUID menuId) {
         final Menu menu = getMenuById(menuId);
         menu.display();
+        if (isMenuPriceLowerThanMenuProductPriceSum(menu)) {
+            throw new IllegalStateException("메뉴 가격은 메뉴 상품 가격의 합보다 크면 메뉴를 노출할 수 없습니다.");
+        }
         return toMenuDetailResponse(menu);
     }
 
@@ -120,11 +123,44 @@ public class MenuService {
         return menuRepository.findAllByProductId(productId);
     }
 
+    private Map<UUID, Product> getProductsInMenu(Menu menu) {
+        final List<UUID> productIds = menu.getMenuProducts()
+                .parallelStream()
+                .map(menuProduct -> menuProduct.getProduct().getId())
+                .collect(toUnmodifiableList());
+
+        return productRepository.findAllByIdIn(productIds)
+                .parallelStream()
+                .collect(Collectors.toMap(Product::getId, product -> product));
+    }
+
+    private boolean isMenuPriceLowerThanMenuProductPriceSum(Menu menu) {
+        final Map<UUID, Product> productsInMenu = getProductsInMenu(menu);
+        if (isNull(productsInMenu)) {
+            return true;
+        }
+
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+            sum = sum.add(
+                    BigDecimal.valueOf(menuProduct.getQuantity())
+                            .multiply(productsInMenu.get(menuProduct.getProduct().getId()).getPrice())
+            );
+        }
+
+        if (menu.getPrice().compareTo(sum) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     private void checkMenuCouldBeDisplayedAfterProductPriceChanged(List<Menu> menus) {
         menus.forEach(menu -> {
-            BigDecimal totalMenuProductPrice = menu.getMenuProducts()
-                    .parallelStream()
-                    .map(menuProduct -> menuProduct.getProduct().getPrice())
+            final List<UUID> productIds = menu.getMenuProducts().stream().map(menuProduct -> menuProduct.getProduct().getId()).collect(toUnmodifiableList());
+            final List<Product> products = productRepository.findAllByIdIn(productIds);
+            final BigDecimal totalMenuProductPrice =products.parallelStream()
+                    .map(Product::getPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             if (isMenuPriceGreaterThanSumOfMenuProducts(menu, totalMenuProductPrice)) {

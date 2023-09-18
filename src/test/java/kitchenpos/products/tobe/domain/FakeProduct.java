@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.FakePurgomalumClient;
-import kitchenpos.support.product.vo.ProductName;
-import kitchenpos.support.product.vo.ProductPrice;
 
 import java.math.BigDecimal;
 

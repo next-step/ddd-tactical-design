@@ -2,8 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.support.infra.PurgomalumClient;
-import kitchenpos.support.product.vo.ProductName;
-import kitchenpos.support.product.vo.ProductPrice;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
