@@ -18,7 +18,7 @@ public class MenuFinder {
         this.menuRepository = menuRepository;
     }
 
-    public ToBeOrderLineItems find(final Order request) {
+    public ToBeOrderLineItems orderLineItemsGenerator(final Order request) {
 
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
@@ -29,7 +29,7 @@ public class MenuFinder {
             .map(it -> {
                 ToBeMenu menu = menuRepository.findById(it.getMenuId())
                     .orElseThrow(() -> new IllegalArgumentException("메뉴가 없으면 등록할 수 없습니다."));
-                if (!menu.isDisplayed()) {
+                if (menu.isHide()) {
                     throw new IllegalStateException("숨겨진 메뉴는 주문할 수 없습니다.");
                 }
                 if (!menu.isSamePrice(it.getPrice())) {

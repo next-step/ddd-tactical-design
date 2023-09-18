@@ -74,6 +74,10 @@ public class ToBeMenu {
         return displayed;
     }
 
+    public boolean isHide() {
+        return !displayed;
+    }
+
     private void validationOfPrice(BigDecimal price, ToBeMenuProducts menuProducts) {
         validationOfPrice(MenuPrice.of(price), menuProducts.sumOfProducts());
     }
