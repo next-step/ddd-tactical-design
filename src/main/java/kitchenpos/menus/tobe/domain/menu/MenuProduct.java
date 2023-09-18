@@ -22,7 +22,7 @@ public class MenuProduct {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    public MenuProduct() {
+    protected MenuProduct() {
     }
 
     public MenuProduct(UUID productId, BigDecimal price, long quantity) {
