@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.common.FakeApplicationEventPublisher;
-import kitchenpos.eatinorders.application.service.DefaultMenuPriceLoader;
+import kitchenpos.eatinorders.application.service.DefaultOrderLinePolicy;
 import kitchenpos.eatinorders.application.service.DefaultOrderTableStatusLoader;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
@@ -49,7 +49,7 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderService = new EatInOrderService(
                 eatInOrderRepository,
-                new DefaultMenuPriceLoader(menuRepository),
+                new DefaultOrderLinePolicy(menuRepository),
                 new DefaultOrderTableStatusLoader(orderTableRepository),
                 new FakeApplicationEventPublisher());
     }

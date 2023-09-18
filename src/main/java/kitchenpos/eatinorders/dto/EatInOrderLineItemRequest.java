@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.dto;
 
 import kitchenpos.common.domain.Price;
+import kitchenpos.eatinorders.application.OrderLinePolicy;
 import kitchenpos.eatinorders.domain.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.EatInOrderLineItemQuantity;
 import kitchenpos.eatinorders.domain.MenuId;
@@ -28,11 +29,12 @@ public class EatInOrderLineItemRequest {
     public EatInOrderLineItemRequest() {
     }
 
-    public EatInOrderLineItem toEntity() {
+    public EatInOrderLineItem toEntity(OrderLinePolicy policy) {
         return new EatInOrderLineItem(
                 new MenuId(menuId),
                 new EatInOrderLineItemQuantity(quantity),
-                new Price(price)
+                new Price(price),
+                policy
         );
     }
 

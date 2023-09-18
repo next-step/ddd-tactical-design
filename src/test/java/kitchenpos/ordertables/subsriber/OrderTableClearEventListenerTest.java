@@ -2,9 +2,9 @@ package kitchenpos.ordertables.subsriber;
 
 import kitchenpos.eatinorders.application.EatInOrderService;
 import kitchenpos.eatinorders.application.InMemoryEatInOrderRepository;
-import kitchenpos.eatinorders.application.MenuPriceLoader;
+import kitchenpos.eatinorders.application.OrderLinePolicy;
 import kitchenpos.eatinorders.application.OrderTableStatusLoader;
-import kitchenpos.eatinorders.application.service.DefaultMenuPriceLoader;
+import kitchenpos.eatinorders.application.service.DefaultOrderLinePolicy;
 import kitchenpos.eatinorders.application.service.DefaultOrderTableStatusLoader;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
         EatInOrderService.class,
         OrderTableService.class,
         DefaultEatInOrderStatusLoader.class,
-        DefaultMenuPriceLoader.class,
+        DefaultOrderLinePolicy.class,
         InMemoryMenuRepository.class,
         DefaultOrderTableStatusLoader.class
 })
@@ -64,7 +64,7 @@ class OrderTableClearEventListenerTest {
     EatInOrderStatusLoader eatInOrderStatusLoader;
 
     @Autowired
-    MenuPriceLoader menuPriceLoader;
+    OrderLinePolicy menuPriceLoader;
 
     @Autowired
     MenuRepository menuRepository;

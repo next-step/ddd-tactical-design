@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.common.domain.Price;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderId;
 import kitchenpos.eatinorders.domain.EatInOrderRepository;
@@ -21,36 +20,29 @@ import java.util.NoSuchElementException;
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
-    private final MenuPriceLoader menuPriceLoader;
+    private final OrderLinePolicy orderLinePolicy;
     private final OrderTableStatusLoader orderTableStatusLoader;
     private final ApplicationEventPublisher publisher;
 
-    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuPriceLoader menuPriceLoader, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
+    public EatInOrderService(EatInOrderRepository eatInOrderRepository, OrderLinePolicy orderLinePolicy, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
         this.eatInOrderRepository = eatInOrderRepository;
-        this.menuPriceLoader = menuPriceLoader;
+        this.orderLinePolicy = orderLinePolicy;
         this.orderTableStatusLoader = orderTableStatusLoader;
         this.publisher = publisher;
     }
 
     @Transactional
     public EatInOrderResponse create(final EatInOrderRequest request) {
+        // null, empty 검증
+        if (request.getOrderLineItems() == null || request.getOrderLineItems().isEmpty()) {
+            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
+        }
         // 주문 테이블 사용중 검증
         if (orderTableStatusLoader.isUnOccupied(request.getOrderTableId())) {
             throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_UNOCCUPIED);
         }
-        if (request.getOrderLineItems() == null || request.getOrderLineItems().isEmpty()) {
-            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
-        }
-        // 주문 금액 검증
-        request.getOrderLineItems()
-                .forEach(item -> {
-                    Price menuPrice = menuPriceLoader.findMenuPriceById(item.getMenuId());
-                    if (!menuPrice.equal(item.getPrice())) {
-                        throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_PRICE_EQUAL_MENU_PRICE);
-                    }
-                });
 
-        EatInOrder response = eatInOrderRepository.save(request.toEntity());
+        EatInOrder response = eatInOrderRepository.save(request.toEntity(orderLinePolicy));
         return EatInOrderResponse.fromEntity(response);
     }
 

@@ -46,30 +46,6 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public EatInOrderId getId() {
-        return id;
-    }
-
-    public UUID getIdValue() {
-        return id.getId();
-    }
-
-    public LocalDateTime getOrderDateTimeValue() {
-        return orderDateTime;
-    }
-
-    public UUID getOrderTableIdValue() {
-        return orderTableId.getValue();
-    }
-
-    public List<EatInOrderLineItem> getOrderLineItemValues() {
-        return eatInOrderLineItems.getEatInOrderLineItems();
-    }
-
-    public EatInOrderStatus getStatus() {
-        return status;
-    }
-
     public void accept() {
         if (!status.isWaiting()) {
             throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_WAITING);
@@ -93,5 +69,29 @@ public class EatInOrder {
 
     public OrderTableId getOrderTableId() {
         return orderTableId;
+    }
+
+    public UUID getOrderTableIdValue() {
+        return orderTableId.getValue();
+    }
+
+    public List<EatInOrderLineItem> getOrderLineItemValues() {
+        return eatInOrderLineItems.getEatInOrderLineItems();
+    }
+
+    public EatInOrderStatus getStatus() {
+        return status;
+    }
+
+    public EatInOrderId getId() {
+        return id;
+    }
+
+    public UUID getIdValue() {
+        return id.getId();
+    }
+
+    public LocalDateTime getOrderDateTimeValue() {
+        return orderDateTime;
     }
 }

@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.dto;
 
+import kitchenpos.eatinorders.application.OrderLinePolicy;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderLineItems;
 import kitchenpos.eatinorders.domain.OrderTableId;
@@ -18,10 +19,11 @@ public class EatInOrderRequest {
         this.orderLineItems = orderLineItems;
     }
 
-    public EatInOrder toEntity() {
+    public EatInOrder toEntity(OrderLinePolicy policy) {
         return new EatInOrder(
-                new EatInOrderLineItems(orderLineItems.stream()
-                        .map(EatInOrderLineItemRequest::toEntity)
+                new EatInOrderLineItems(
+                        orderLineItems.stream()
+                        .map(item -> item.toEntity(policy))
                         .collect(Collectors.toUnmodifiableList())),
                 new OrderTableId(orderTableId)
         );

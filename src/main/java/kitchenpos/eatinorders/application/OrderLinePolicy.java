@@ -4,6 +4,6 @@ import kitchenpos.common.domain.Price;
 
 import java.util.UUID;
 
-public interface MenuPriceLoader {
-    Price findMenuPriceById(UUID menuId);
+public interface OrderLinePolicy {
+    void validate(UUID menuId, Price price);
 }
