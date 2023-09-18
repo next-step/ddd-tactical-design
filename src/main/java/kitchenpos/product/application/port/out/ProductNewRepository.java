@@ -12,5 +12,7 @@ public interface ProductNewRepository {
     Optional<ProductNew> findById(final UUID id);
 
     List<ProductNew> findAll();
+
+    List<ProductNew> findAllByIdIn(final List<UUID> ids);
 }
 

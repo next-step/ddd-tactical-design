@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doThrow;
 
 import kitchenpos.product.Fixtures;
 import kitchenpos.product.application.exception.ContainsProfanityException;
+import kitchenpos.product.application.port.in.ProductDTO;
 import kitchenpos.product.application.port.in.ProductRegistrationUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
 import kitchenpos.product.domain.ProductNameAccessor;
@@ -65,7 +66,7 @@ class DefaultProductRegistrationUseCaseTest {
     @ValueSource(strings = "비속어가포함된이름")
     void register_음식이름후보에_비속어가_포함되어_있으면_예외를_발생시킨다(final String value) {
         // given
-        final Name profanityName = new Name(value);
+        final Name profanityName = Name.create(value);
         doThrow(ContainsProfanityException.class)
             .when(mockFactory)
             .create(profanityName);

@@ -53,13 +53,13 @@ class ProductNewTest {
     @Test
     void changePrice_productNew의_음식가격을_변경한다() {
         // given
-        final ProductNew product = Fixtures.create(1_000L);
+        final ProductNew product = Fixtures.create(1_000);
 
         // when
-        product.changePrice(ProductPrice.create(3_000L));
+        product.changePrice(ProductPrice.create(3_000));
 
         // then
         assertThat(product.getPrice())
-            .isEqualTo(ProductPrice.create(3_000L));
+            .isEqualTo(ProductPrice.create(3_000));
     }
 }

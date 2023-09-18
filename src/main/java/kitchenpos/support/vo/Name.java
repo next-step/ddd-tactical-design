@@ -4,16 +4,25 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import javax.persistence.Embeddable;
 import org.apache.logging.log4j.util.Strings;
 
-public final class Name {
+@Embeddable
+public class Name {
 
-    private final String value;
+    private String value;
 
-    public Name(final String value) {
+    protected Name() {
+    }
+
+    private Name(final String value) {
+        this.value = value;
+    }
+
+    public static Name create(final String value) {
         checkArgument(Strings.isNotEmpty(value), "name must not be empty. value: %s", value);
 
-        this.value = value;
+        return new Name(value);
     }
 
     @Override

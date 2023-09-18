@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import kitchenpos.product.Fixtures;
+import kitchenpos.product.application.port.in.ProductDTO;
 import kitchenpos.product.application.port.in.ProductFindUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
 import kitchenpos.product.domain.ProductNew;
@@ -34,8 +35,8 @@ class DefaultProductFindUseCaseTest {
     void findAll_저장된_모든_음식_목록을_dto로_변환하여_반환한다() {
 
         // given
-        final ProductNew product1 = repository.save(Fixtures.create("dummy1", 1_000L));
-        final ProductNew product2 = repository.save(Fixtures.create("dummy2", 3_000L));
+        final ProductNew product1 = repository.save(Fixtures.create("dummy1", 1_000));
+        final ProductNew product2 = repository.save(Fixtures.create("dummy2", 3_000));
 
         // when
         final List<ProductDTO> actual = useCase.findAll();

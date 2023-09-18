@@ -1,6 +1,5 @@
 package kitchenpos.product.application.port.in;
 
-import kitchenpos.product.application.ProductDTO;
 import kitchenpos.product.application.exception.ContainsProfanityException;
 import kitchenpos.product.domain.ProductPrice;
 import kitchenpos.support.vo.Name;

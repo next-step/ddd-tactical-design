@@ -9,16 +9,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ProductPrice {
 
-    private long value;
+    private int value;
 
     protected ProductPrice() {
     }
 
-    private ProductPrice(final long value) {
+    private ProductPrice(final int value) {
         this.value = value;
     }
 
-    public static ProductPrice create(final long value) {
+    public static ProductPrice create(final int value) {
         checkArgument(value >= 0, "price must be greater than and equal to 0. value : %s", value);
 
         return new ProductPrice(value);
@@ -41,4 +41,7 @@ public class ProductPrice {
         return Objects.hashCode(value);
     }
 
+    public int getValue() {
+        return value;
+    }
 }

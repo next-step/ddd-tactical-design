@@ -6,7 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.UUID;
-import kitchenpos.menu.adapter.in.MenuDisplayingRearranger;
+import kitchenpos.menu.adapter.menu.in.MenuProductPriceChangeEventListener;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,13 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class DefaultProductPriceChangeEventPublisherTest {
 
     @Mock
-    private MenuDisplayingRearranger mockRearranger;
+    private MenuProductPriceChangeEventListener mockEventListener;
 
     private ProductPriceChangeEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
-        publisher = new DefaultProductPriceChangeEventPublisher(mockRearranger);
+        publisher = new DefaultProductPriceChangeEventPublisher(mockEventListener);
     }
 
     @ParameterizedTest
@@ -43,7 +43,7 @@ class DefaultProductPriceChangeEventPublisherTest {
 
     @ParameterizedTest
     @NullSource
-    void publish_invalid_parameters_id가_null이면_rearranger는_실행되지_않는다(final UUID value) {
+    void publish_invalid_parameters_id가_null이면_listener는_실행되지_않는다(final UUID value) {
 
         // when
         try {
@@ -53,12 +53,12 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockRearranger, never())
-            .execute(any());
+        verify(mockEventListener, never())
+            .listen(any());
     }
 
     @Test
-    void publish_id를_인자로_rerranger가_실행된다() {
+    void publish_id를_인자로_listener가_실행된다() {
         // given
         final UUID id = UUID.randomUUID();
 
@@ -67,7 +67,7 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockRearranger)
-            .execute(id);
+        verify(mockEventListener)
+            .listen(id);
     }
 }

@@ -13,8 +13,8 @@ class ProductPriceTest {
 
 
     @ParameterizedTest
-    @ValueSource(longs = -1)
-    void of_가격은_음수일_수_없다(final long value) {
+    @ValueSource(ints = -1)
+    void of_가격은_음수일_수_없다(final int value) {
 
         // when & then
         assertThatThrownBy(() -> ProductPrice.create(value))
@@ -23,8 +23,8 @@ class ProductPriceTest {
 
 
     @ParameterizedTest
-    @ValueSource(longs = {0, 1})
-    void of_productPrice를_생성하여_반환한다(final long value) {
+    @ValueSource(ints = {0, 1})
+    void of_productPrice를_생성하여_반환한다(final int value) {
 
         // when
         final ProductPrice actual = ProductPrice.create(value);

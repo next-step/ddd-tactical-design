@@ -1,4 +1,4 @@
-package kitchenpos.product.application;
+package kitchenpos.product.application.port.in;
 
 import static kitchenpos.product.support.constant.Name.ENTITY;
 import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
@@ -34,5 +34,9 @@ public final class ProductDTO {
 
     public UUID getId() {
         return id;
+    }
+
+    public ProductPrice getPrice() {
+        return price;
     }
 }

@@ -179,7 +179,7 @@ docker compose -p kitchenpos up -d
 - `MenuGroupName`은 필수이다.
 
 ### 메뉴
-- `Menu`는 식별자와 `Menu Name`, `MenuPrice`, `MenuProducts`를 가진다.
+- `Menu`는 식별자와 `MenuName`, `MenuPrice`, `MenuProducts`를 가진다.
 - `MenuProducts`는 한개 이상의 `MenuProduct`를 가진다.
 - `MenuProduct`는 가격과 수량을 가진다.
 - `MenuName`은 필수이며 `Profanity`가 포함될 수 없다.
