@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.dto;
 
-import kitchenpos.eatinorders.application.OrderLinePolicy;
+import kitchenpos.eatinorders.application.MenuLoader;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.eatinorders.domain.EatInOrderLineItems;
 import kitchenpos.eatinorders.domain.OrderTableId;
@@ -19,7 +19,7 @@ public class EatInOrderRequest {
         this.orderLineItems = orderLineItems;
     }
 
-    public EatInOrder toEntity(OrderLinePolicy policy) {
+    public EatInOrder toEntity(MenuLoader policy) {
         return new EatInOrder(
                 new EatInOrderLineItems(
                         orderLineItems.stream()

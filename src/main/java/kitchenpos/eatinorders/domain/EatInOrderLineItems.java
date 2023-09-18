@@ -1,10 +1,5 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.eatinorders.application.OrderLinePolicy;
-import kitchenpos.eatinorders.dto.EatInOrderLineItemRequest;
-import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
-import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;

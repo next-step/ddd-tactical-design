@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.application.service;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.eatinorders.application.OrderLinePolicy;
+import kitchenpos.eatinorders.application.MenuLoader;
+import kitchenpos.eatinorders.domain.OrderedMenu;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
 import kitchenpos.menus.tobe.domain.menu.Menu;
@@ -13,15 +13,15 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Component
-public class DefaultOrderLinePolicy implements OrderLinePolicy {
+public class DefaultMenuLoader implements MenuLoader {
     private final MenuRepository menuRepository;
 
-    public DefaultOrderLinePolicy(MenuRepository menuRepository) {
+    public DefaultMenuLoader(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
     @Override
-    public void validate(UUID menuId, Price price) {
+    public OrderedMenu findMenuById(UUID menuId) {
         Menu menu = menuRepository.findById(new MenuId(menuId))
                 .orElseThrow(NoSuchElementException::new);
 
@@ -29,8 +29,6 @@ public class DefaultOrderLinePolicy implements OrderLinePolicy {
             throw new EatInOrderLineItemException(EatInOrderErrorCode.MENU_IS_HIDE);
         }
 
-        if (!menu.getPrice().equals(price)) {
-            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_PRICE_EQUAL_MENU_PRICE);
-        }
+        return new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice());
     }
 }

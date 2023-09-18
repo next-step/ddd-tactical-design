@@ -1,9 +1,6 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.EatInOrder;
-import kitchenpos.eatinorders.domain.EatInOrderId;
-import kitchenpos.eatinorders.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
@@ -20,29 +17,30 @@ import java.util.NoSuchElementException;
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
-    private final OrderLinePolicy orderLinePolicy;
+    private final MenuLoader menuLoader;
     private final OrderTableStatusLoader orderTableStatusLoader;
     private final ApplicationEventPublisher publisher;
 
-    public EatInOrderService(EatInOrderRepository eatInOrderRepository, OrderLinePolicy orderLinePolicy, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
+    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuLoader menuLoader, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
         this.eatInOrderRepository = eatInOrderRepository;
-        this.orderLinePolicy = orderLinePolicy;
+        this.menuLoader = menuLoader;
         this.orderTableStatusLoader = orderTableStatusLoader;
         this.publisher = publisher;
     }
 
     @Transactional
     public EatInOrderResponse create(final EatInOrderRequest request) {
-        // null, empty 검증
-        if (request.getOrderLineItems() == null || request.getOrderLineItems().isEmpty()) {
-            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
-        }
         // 주문 테이블 사용중 검증
         if (orderTableStatusLoader.isUnOccupied(request.getOrderTableId())) {
             throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_UNOCCUPIED);
         }
+        // null, empty 검증
+        if (request.getOrderLineItems() == null || request.getOrderLineItems().isEmpty()) {
+            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
+        }
 
-        EatInOrder response = eatInOrderRepository.save(request.toEntity(orderLinePolicy));
+
+        EatInOrder response = eatInOrderRepository.save(request.toEntity(menuLoader));
         return EatInOrderResponse.fromEntity(response);
     }
 

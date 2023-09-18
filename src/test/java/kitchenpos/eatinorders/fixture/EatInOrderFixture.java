@@ -1,9 +1,10 @@
 package kitchenpos.eatinorders.fixture;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.eatinorders.application.OrderLinePolicy;
+import kitchenpos.eatinorders.application.MenuLoader;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.ordertables.domain.OrderTable;
 
 import java.util.Arrays;
@@ -39,38 +40,31 @@ public class EatInOrderFixture {
     public static EatInOrderLineItem orderLineItem() {
         Menu menu = menu();
         return orderLineItem(
-                new MenuId(menu.getIdValue()),
+                menu,
                 1L,
                 menu.getPriceValue().longValue(),
-                (menuId, price) -> {}
+                (menuId) -> {
+                    return new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice());
+                }
         );
     }
 
-    public static EatInOrderLineItem orderLineItem(MenuId menuId, long price, OrderLinePolicy policy) {
-        return orderLineItem(
-                menuId,
-                1L,
-                price,
-                policy
-        );
-    }
-
-    public static EatInOrderLineItem orderLineItem(MenuId menuId, long quantity, long price, OrderLinePolicy policy) {
+    public static EatInOrderLineItem orderLineItem(Menu menu, long quantity, long price, MenuLoader menuLoader) {
         return new EatInOrderLineItem(
-                menuId,
+                menu.getIdValue(),
                 quantity,
                 new Price(price),
-                policy
+                menuLoader
         );
     }
-
-
-    public static EatInOrderLineItem orderLineItem(UUID menuId, long price, long quantity) {
+    public static EatInOrderLineItem orderLineItem(Menu menu, long quantity, long price) {
         return orderLineItem(
-                new MenuId(menuId),
+                menu,
                 quantity,
                 price,
-                (menuUUD, orderPrice) -> {}
+                (menuId) -> {
+                    return new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice());
+                }
         );
     }
 
