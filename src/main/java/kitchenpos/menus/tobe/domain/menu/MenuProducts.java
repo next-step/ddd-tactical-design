@@ -51,11 +51,15 @@ public class MenuProducts {
         productClient.validProductIds(productIds);
     }
 
-    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+    public void changeMenuProductsPrice(UUID productId, BigDecimal price) {
         for (final MenuProduct menuProduct : this.menuProducts) {
-            if (menuProduct.isSameProductId(productId)) {
-                menuProduct.changePrice(price);
-            }
+            changeMenuProductPrice(productId, price, menuProduct);
+        }
+    }
+
+    private static void changeMenuProductPrice(UUID productId, BigDecimal price, MenuProduct menuProduct) {
+        if (menuProduct.isSameProductId(productId)) {
+            menuProduct.changePrice(price);
         }
     }
 

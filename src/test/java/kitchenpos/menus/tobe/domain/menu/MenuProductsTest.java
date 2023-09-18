@@ -62,7 +62,7 @@ class MenuProductsTest {
                 ),
                 productClient
         );
-        menuProducts.changeMenuProductPrice(product.getId(), BigDecimal.valueOf(30000L));
+        menuProducts.changeMenuProductsPrice(product.getId(), BigDecimal.valueOf(30000L));
         assertThat(menuProducts.getMenuProducts()).extracting(MenuProduct::getPrice)
                 .containsExactly(BigDecimal.valueOf(30000L), BigDecimal.valueOf(30000L));
     }

@@ -58,7 +58,7 @@ public class Menu {
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
-        this.menuProducts.changeMenuProductPrice(productId, price);
+        this.menuProducts.changeMenuProductsPrice(productId, price);
         if (this.isPriceBiggerThanMenuProductsTotalAmount()) {
             this.displayed = false;
         }
