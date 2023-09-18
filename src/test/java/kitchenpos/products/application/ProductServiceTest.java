@@ -3,10 +3,9 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.tobe.domain.ProductDisplayedNameProfanities;
 import kitchenpos.products.application.dto.ProductChangePriceRequest;
 import kitchenpos.products.application.dto.ProductCreateRequest;
+import kitchenpos.products.tobe.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,9 +47,9 @@ class ProductServiceTest {
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), productDisplayedNamePolicy)),
-            () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), productDisplayedNamePolicy)),
+                () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
         );
     }
 
@@ -61,7 +60,7 @@ class ProductServiceTest {
     void createWithInvalidPrice(final BigDecimal price) {
         final ProductCreateRequest expected = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -71,7 +70,7 @@ class ProductServiceTest {
     void createWithInvalidDisplayedName(final String name) {
         final ProductCreateRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
@@ -91,7 +90,7 @@ class ProductServiceTest {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")

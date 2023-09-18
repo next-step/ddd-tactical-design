@@ -1,14 +1,16 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.application.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,10 +21,10 @@ public class MenuService {
     private final MenuDisplayedNamePolicy menuDisplayedNamePolicy;
 
     public MenuService(
-        final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
-        final ProductClient productClient,
-        final MenuDisplayedNamePolicy menuDisplayedNamePolicy
+            final MenuRepository menuRepository,
+            final MenuGroupRepository menuGroupRepository,
+            final ProductClient productClient,
+            final MenuDisplayedNamePolicy menuDisplayedNamePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
@@ -33,7 +35,7 @@ public class MenuService {
     @Transactional
     public Menu create(final MenuCreateRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (request.getMenuProducts() == null) {
             throw new IllegalArgumentException();
         }
@@ -55,7 +57,7 @@ public class MenuService {
     public Menu changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
         final MenuPrice price = MenuPrice.from(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         menu.changePrice(price);
         return menu;
     }
@@ -63,7 +65,7 @@ public class MenuService {
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         menu.display();
         return menu;
     }
@@ -71,7 +73,7 @@ public class MenuService {
     @Transactional
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         menu.hide();
         return menu;
     }

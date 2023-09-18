@@ -1,9 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.Fixtures;
 import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;

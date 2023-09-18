@@ -28,17 +28,17 @@ public class InMemoryMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
-            .stream()
-            .filter(menu -> ids.contains(menu.getId()))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(menu -> ids.contains(menu.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Menu> findAllByProductId(final UUID productId) {
         return menus.values()
-            .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.isSameProductId(productId)))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.isSameProductId(productId)))
+                .collect(Collectors.toList());
     }
 
     @Override

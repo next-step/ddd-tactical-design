@@ -19,9 +19,9 @@ public class MenuPurgomalumClient implements MenuDisplayedNameProfanities {
     @Override
     public boolean containsProfanity(final String text) {
         final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
-            .queryParam("text", text)
-            .build()
-            .toUri();
+                .queryParam("text", text)
+                .build()
+                .toUri();
         return Boolean.parseBoolean(restTemplate.getForObject(url, String.class));
     }
 }

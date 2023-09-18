@@ -1,8 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
-import kitchenpos.menus.tobe.domain.menu.MenuDisplayedName;
-import kitchenpos.menus.tobe.domain.menu.MenuDisplayedNamePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuDisplayedNameTest {
 

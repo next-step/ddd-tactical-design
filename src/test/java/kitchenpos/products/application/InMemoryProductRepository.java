@@ -28,8 +28,8 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public List<Product> findAllByIdIn(final List<UUID> ids) {
         return products.values()
-            .stream()
-            .filter(product -> ids.contains(product.getId()))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(product -> ids.contains(product.getId()))
+                .collect(Collectors.toList());
     }
 }
