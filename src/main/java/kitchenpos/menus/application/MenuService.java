@@ -2,13 +2,9 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.application.dto.MenuCreateRequest;
-import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,60 +15,40 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final ProductClient productClient;
     private final MenuDisplayedNamePolicy menuDisplayedNamePolicy;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
         final ProductClient productClient,
         final MenuDisplayedNamePolicy menuDisplayedNamePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.productClient = productClient;
         this.menuDisplayedNamePolicy = menuDisplayedNamePolicy;
     }
 
     @Transactional
     public Menu create(final MenuCreateRequest request) {
-        final MenuPrice price = MenuPrice.from(request.getPrice());
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProducts = getMenuProducts(request.getMenuProducts());
-        final MenuDisplayedName displayName = MenuDisplayedName.from(request.getName(), menuDisplayedNamePolicy);
+        if (request.getMenuProducts() == null) {
+            throw new IllegalArgumentException();
+        }
+        List<MenuProductMaterial> menuProductMaterials = request.getMenuProducts().stream()
+                .map(it -> new MenuProductMaterial(it.getProductId(), it.getQuantity()))
+                .collect(Collectors.toList());
         final Menu menu = new Menu(
                 UUID.randomUUID(),
-                displayName,
-                price,
+                MenuDisplayedName.from(request.getName(), menuDisplayedNamePolicy),
+                MenuPrice.from(request.getPrice()),
                 menuGroup,
                 request.isDisplayed(),
-                new MenuProducts(menuProducts)
+                MenuProducts.from(menuProductMaterials, productClient)
         );
         return menuRepository.save(menu);
-    }
-
-    private List<MenuProduct> getMenuProducts(final List<MenuProductCreateRequest> menuProductRequests) {
-        this.validateMenuProducts(menuProductRequests);
-        return menuProductRequests.stream()
-                .map(it -> MenuProduct.from(it.getProductId(), it.getQuantity(), productClient))
-                .collect(Collectors.toList());
-    }
-
-    private void validateMenuProducts(final List<MenuProductCreateRequest> menuProductRequests) {
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<UUID> productIds = menuProductRequests.stream()
-                .map(MenuProductCreateRequest::getProductId)
-                .collect(Collectors.toList());
-        final List<Product> products = productRepository.findAllByIdIn(productIds);
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Embeddable
@@ -31,6 +32,23 @@ public class MenuProducts {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static MenuProducts from(List<MenuProductMaterial> menuProductMaterials, ProductClient productClient) {
+        validateMenuProducts(menuProductMaterials, productClient);
+        return menuProductMaterials.stream()
+                .map(it -> MenuProduct.from(it.getProductId(), it.getQuantity(), productClient))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), MenuProducts::new));
+    }
+
+    private static void validateMenuProducts(final List<MenuProductMaterial> menuProductMaterials, ProductClient productClient) {
+        if (Objects.isNull(menuProductMaterials) || menuProductMaterials.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        final List<UUID> productIds = menuProductMaterials.stream()
+                .map(MenuProductMaterial::getProductId)
+                .collect(Collectors.toList());
+        productClient.validProductIds(productIds);
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
