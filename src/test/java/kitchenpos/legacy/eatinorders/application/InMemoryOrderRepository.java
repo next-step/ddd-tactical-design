@@ -1,13 +1,18 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.legacy.eatinorders.application;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import kitchenpos.legacy.eatinorders.domain.Order;
 import kitchenpos.legacy.eatinorders.domain.OrderRepository;
 import kitchenpos.legacy.eatinorders.domain.OrderStatus;
 import kitchenpos.legacy.eatinorders.domain.OrderTable;
 
-import java.util.*;
-
 public class InMemoryOrderRepository implements OrderRepository {
+
     private final Map<UUID, Order> orders = new HashMap<>();
 
     @Override
@@ -27,9 +32,11 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 
     @Override
-    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final OrderStatus status) {
+    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable,
+        final OrderStatus status) {
         return orders.values()
             .stream()
-            .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
+            .anyMatch(
+                order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
     }
 }

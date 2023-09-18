@@ -1,17 +1,18 @@
-package kitchenpos.eatinorders.application;
-
-import kitchenpos.legacy.deliveryorders.infra.KitchenridersClient;
+package kitchenpos.legacy.eatinorders.application;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.legacy.deliveryorders.infra.KitchenridersClient;
 
 public class FakeKitchenridersClient implements KitchenridersClient {
+
     private UUID orderId;
     private BigDecimal amount;
     private String deliveryAddress;
 
     @Override
-    public void requestDelivery(final UUID orderId, final BigDecimal amount, final String deliveryAddress) {
+    public void requestDelivery(final UUID orderId, final BigDecimal amount,
+        final String deliveryAddress) {
         this.orderId = orderId;
         this.amount = amount;
         this.deliveryAddress = deliveryAddress;

@@ -1,6 +1,13 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.legacy.eatinorders.application;
 
-import kitchenpos.legacy.eatinorders.application.OrderTableService;
+import static kitchenpos.legacy.Fixtures.order;
+import static kitchenpos.legacy.Fixtures.orderTable;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
+import java.util.UUID;
 import kitchenpos.legacy.eatinorders.domain.OrderRepository;
 import kitchenpos.legacy.eatinorders.domain.OrderStatus;
 import kitchenpos.legacy.eatinorders.domain.OrderTable;
@@ -12,16 +19,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-import java.util.UUID;
-
-import static kitchenpos.Fixtures.order;
-import static kitchenpos.Fixtures.orderTable;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class OrderTableServiceTest {
+
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
     private OrderTableService orderTableService;

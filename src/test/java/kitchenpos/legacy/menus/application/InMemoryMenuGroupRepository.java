@@ -1,11 +1,16 @@
-package kitchenpos.menus.application;
+package kitchenpos.legacy.menus.application;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import kitchenpos.legacy.menus.domain.MenuGroup;
 import kitchenpos.legacy.menus.domain.MenuGroupRepository;
 
-import java.util.*;
-
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {
+
     private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();
 
     @Override

@@ -1,5 +1,10 @@
-package kitchenpos;
+package kitchenpos.legacy;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
 import kitchenpos.legacy.eatinorders.domain.Order;
 import kitchenpos.legacy.eatinorders.domain.OrderLineItem;
 import kitchenpos.legacy.eatinorders.domain.OrderStatus;
@@ -10,13 +15,8 @@ import kitchenpos.legacy.menus.domain.MenuGroup;
 import kitchenpos.legacy.menus.domain.MenuProduct;
 import kitchenpos.legacy.products.domain.Product;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
-
 public class Fixtures {
+
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
     public static Menu menu() {
@@ -27,7 +27,8 @@ public class Fixtures {
         return menu(price, false, menuProducts);
     }
 
-    public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
+    public static Menu menu(final long price, final boolean displayed,
+        final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");

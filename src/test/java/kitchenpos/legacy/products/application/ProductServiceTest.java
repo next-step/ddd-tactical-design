@@ -1,7 +1,16 @@
-package kitchenpos.products.application;
+package kitchenpos.legacy.products.application;
 
-import kitchenpos.legacy.products.application.ProductService;
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import static kitchenpos.legacy.Fixtures.menu;
+import static kitchenpos.legacy.Fixtures.menuProduct;
+import static kitchenpos.legacy.Fixtures.product;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+import kitchenpos.legacy.menus.application.InMemoryMenuRepository;
 import kitchenpos.legacy.menus.domain.Menu;
 import kitchenpos.legacy.menus.domain.MenuRepository;
 import kitchenpos.legacy.products.domain.Product;
@@ -14,16 +23,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
-
-import static kitchenpos.Fixtures.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class ProductServiceTest {
+
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;

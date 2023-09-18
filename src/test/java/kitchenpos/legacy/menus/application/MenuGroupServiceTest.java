@@ -1,6 +1,11 @@
-package kitchenpos.menus.application;
+package kitchenpos.legacy.menus.application;
 
-import kitchenpos.legacy.menus.application.MenuGroupService;
+import static kitchenpos.legacy.Fixtures.menuGroup;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.util.List;
 import kitchenpos.legacy.menus.domain.MenuGroup;
 import kitchenpos.legacy.menus.domain.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,14 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import java.util.List;
-
-import static kitchenpos.Fixtures.menuGroup;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 class MenuGroupServiceTest {
+
     private MenuGroupRepository menuGroupRepository;
     private MenuGroupService menuGroupService;
 
