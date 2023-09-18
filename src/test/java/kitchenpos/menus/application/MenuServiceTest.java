@@ -5,6 +5,7 @@ import kitchenpos.menus.application.dto.MenuPriceChangeRequest;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
 import kitchenpos.products.application.FakeProductEventPublisher;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
@@ -38,7 +39,7 @@ class MenuServiceTest {
     private ProductDisplayedNameProfanities productDisplayedNameProfanities;
     private MenuDisplayedNamePolicy menuDisplayedNamePolicy;
     private MenuService menuService;
-    private MenuProductFactory menuProductFactory;
+    private ProductClient productClient;
     private ProductService productService;
     private UUID menuGroupId;
     private Product product;
@@ -49,9 +50,9 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         menuDisplayedNameProfanities = new FakeMenuDisplayedNameProfanities();
-        menuProductFactory = new MenuProductFactory(productRepository);
+        productClient = new ProductClientImpl(productRepository);
         menuDisplayedNamePolicy = new MenuDisplayedNamePolicy(menuDisplayedNameProfanities);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, menuProductFactory, menuDisplayedNamePolicy);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, productClient, menuDisplayedNamePolicy);
         productService = new ProductService(productRepository, new ProductDisplayedNamePolicy(productDisplayedNameProfanities), new FakeProductEventPublisher(productRepository, menuRepository));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));

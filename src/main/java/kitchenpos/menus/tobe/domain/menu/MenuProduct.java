@@ -25,12 +25,12 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, BigDecimal price, long quantity) {
+    private MenuProduct(UUID productId, BigDecimal price, long quantity) {
         this(null, productId, price, quantity);
     }
 
-    public MenuProduct(Long seq, UUID productId, BigDecimal price, long quantity) {
-        validate(quantity);
+    private MenuProduct(Long seq, UUID productId, BigDecimal price, long quantity) {
+        this.validate(quantity);
         this.seq = seq;
         this.productId = productId;
         this.price = price;
@@ -41,6 +41,10 @@ public class MenuProduct {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static MenuProduct from(UUID productId, long quantity, ProductClient productClient) {
+        return new MenuProduct(productId, productClient.getProductPrice(productId), quantity);
     }
 
     public BigDecimal calculateAmount() {

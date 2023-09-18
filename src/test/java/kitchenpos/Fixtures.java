@@ -5,7 +5,9 @@ import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
+import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
 import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
+import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductDisplayedNamePolicy;
 import kitchenpos.products.tobe.domain.ProductDisplayedName;
 import kitchenpos.products.tobe.domain.Product;
@@ -49,20 +51,22 @@ public class Fixtures {
 
     public static MenuProduct menuProduct() {
         final Product product = product();
-        return new MenuProduct(
-                new Random().nextLong(),
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        productRepository.save(product);
+        return MenuProduct.from(
                 product.getId(),
-                product.getPrice().getValue(),
-                2L
+                2L,
+                new ProductClientImpl(productRepository)
         );
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(
-                new Random().nextLong(),
+        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        productRepository.save(product);
+        return MenuProduct.from(
                 product.getId(),
-                product.getPrice().getValue(),
-                quantity
+                quantity,
+                new ProductClientImpl(productRepository)
         );
     }
 

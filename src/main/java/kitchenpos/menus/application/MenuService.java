@@ -6,6 +6,7 @@ import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -19,20 +20,20 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final MenuProductFactory menuProductFactory;
+    private final ProductClient productClient;
     private final MenuDisplayedNamePolicy menuDisplayedNamePolicy;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final MenuProductFactory menuProductFactory,
+        final ProductClient productClient,
         final MenuDisplayedNamePolicy menuDisplayedNamePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.menuProductFactory = menuProductFactory;
+        this.productClient = productClient;
         this.menuDisplayedNamePolicy = menuDisplayedNamePolicy;
     }
 
@@ -54,10 +55,10 @@ public class MenuService {
         return menuRepository.save(menu);
     }
 
-    private List<MenuProduct> getMenuProducts(List<MenuProductCreateRequest> menuProductRequests) {
+    private List<MenuProduct> getMenuProducts(final List<MenuProductCreateRequest> menuProductRequests) {
         this.validateMenuProducts(menuProductRequests);
         return menuProductRequests.stream()
-                .map(it -> menuProductFactory.create(it.getProductId(), it.getQuantity()))
+                .map(it -> MenuProduct.from(it.getProductId(), it.getQuantity(), productClient))
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +66,7 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        List<UUID> productIds = menuProductRequests.stream()
+        final List<UUID> productIds = menuProductRequests.stream()
                 .map(MenuProductCreateRequest::getProductId)
                 .collect(Collectors.toList());
         final List<Product> products = productRepository.findAllByIdIn(productIds);
