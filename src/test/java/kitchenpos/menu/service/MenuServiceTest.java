@@ -8,7 +8,7 @@ import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.menugroup.domain.MenuGroupRepository;
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductRepository;
-import kitchenpos.profanity.domain.PurgomalumClient;
+import kitchenpos.profanity.domain.PurgomalumChecker;
 import kitchenpos.support.BaseServiceTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class MenuServiceTest extends BaseServiceTest {
     private final ProductRepository productRepository;
 
     @MockBean
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumChecker purgomalumChecker;
 
     public MenuServiceTest(final MenuService menuService, final MenuRepository menuRepository, final MenuGroupRepository menuGroupRepository, final ProductRepository productRepository) {
         this.menuService = menuService;
@@ -77,7 +77,7 @@ class MenuServiceTest extends BaseServiceTest {
             final Product product = productRepository.save(createProduct(UUID.randomUUID()));
             final MenuProduct menuProduct = MenuProductFixture.createMenuProductWithDefaultId(product);
             final Menu menu = createMenu(menuGroup, List.of(menuProduct));
-            given(purgomalumClient.containsProfanity(menu.getName())).willReturn(false);
+            given(purgomalumChecker.containsProfanity(menu.getName())).willReturn(false);
 
             final Menu createdMenu = menuService.create(menu);
 
@@ -103,7 +103,7 @@ class MenuServiceTest extends BaseServiceTest {
             final Product product = productRepository.save(createProduct(UUID.randomUUID()));
             final MenuProduct menuProduct = MenuProductFixture.createMenuProductWithDefaultId(product);
             final Menu menu = createMenu(null, BigDecimal.ONE, menuGroup, List.of(menuProduct));
-            given(purgomalumClient.containsProfanity(menu.getName())).willReturn(false);
+            given(purgomalumChecker.containsProfanity(menu.getName())).willReturn(false);
 
             assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(menu));
         }
@@ -116,7 +116,7 @@ class MenuServiceTest extends BaseServiceTest {
             final MenuProduct menuProduct = MenuProductFixture.createMenuProductWithDefaultId(product);
             final Menu menu = createMenu("비속어", BigDecimal.ONE, menuGroup, List.of(menuProduct));
 
-            when(purgomalumClient.containsProfanity(menu.getName())).thenReturn(true);
+            when(purgomalumChecker.containsProfanity(menu.getName())).thenReturn(true);
 
             assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(menu));
         }
