@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static kitchenpos.Fixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderTableNameVOTest {
@@ -38,7 +39,7 @@ class OrderTableNameVOTest {
 
 
     private ToBeOrderTable createOrderTableRequest(final String name) {
-        final ToBeOrderTable orderTable = new ToBeOrderTable();
+        final ToBeOrderTable orderTable = orderTable(true,3);
         ReflectionTestUtils.setField(orderTable,"name", name);
 
         return orderTable;

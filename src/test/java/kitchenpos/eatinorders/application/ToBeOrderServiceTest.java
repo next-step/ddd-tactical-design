@@ -168,18 +168,16 @@ class ToBeOrderServiceTest {
     }
 
     private ToBeOrder createOrderRequest( final List<ToBeOrderLineItem> orderLineItems) {
-        final ToBeOrder order = new ToBeOrder();
-        ReflectionTestUtils.setField(order,"orderLineItems",Arrays.asList(orderLineItems));
-        return order;
+        return createOrderRequest(UUID.randomUUID(), (ToBeOrderLineItem) Arrays.asList(orderLineItems));
+
     }
 
     private ToBeOrder createOrderRequest(
         final UUID orderTableId,
         final ToBeOrderLineItem... orderLineItems
     ) {
-        final ToBeOrder order = new ToBeOrder();
+        final ToBeOrder order = new ToBeOrder(ToBeOrderStatus.WAITING,LocalDateTime.of(2020, 1, 1, 12, 0),Arrays.asList(orderLineItems));
         ReflectionTestUtils.setField(order,"tableId",orderTableId);
-        ReflectionTestUtils.setField(order,"orderLineItems",Arrays.asList(orderLineItems));
 
 
         return order;

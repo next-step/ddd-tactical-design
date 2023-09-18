@@ -56,11 +56,7 @@ public class Fixtures {
 
 
     public static ToBeOrder order(final ToBeOrderStatus status, final ToBeOrderTable orderTable, PurgomalumClient purgomalumClient) {
-        final ToBeOrder order = new ToBeOrder();
-        ReflectionTestUtils.setField(order,"id",UUID.randomUUID());
-        ReflectionTestUtils.setField(order,"status",status);
-        ReflectionTestUtils.setField(order,"orderDateTime",LocalDateTime.of(2020, 1, 1, 12, 0));
-        ReflectionTestUtils.setField(order,"orderLineItems",Arrays.asList(orderLineItem(purgomalumClient)));
+        final ToBeOrder order = new ToBeOrder(status,LocalDateTime.of(2020, 1, 1, 12, 0),Arrays.asList(orderLineItem(purgomalumClient)));
         order.setOrderTable(orderTable);
         return order;
     }
@@ -77,11 +73,7 @@ public class Fixtures {
     }
 
     public static ToBeOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final ToBeOrderTable orderTable = new ToBeOrderTable();
-        ReflectionTestUtils.setField(orderTable,"id",UUID.randomUUID());
-        ReflectionTestUtils.setField(orderTable,"name",new OrderTableName("1번"));
-        ReflectionTestUtils.setField(orderTable,"numberOfGuests",new NumberOfGuests(numberOfGuests));
-        ReflectionTestUtils.setField(orderTable,"occupied",occupied);
+        final ToBeOrderTable orderTable = new ToBeOrderTable(new OrderTableName("1번"),new NumberOfGuests(numberOfGuests),occupied);
 
         return orderTable;
     }

@@ -45,8 +45,7 @@ public class ToBeOrderService {
         for (final ToBeOrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
 
-            final ToBeMenu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
+            final ToBeMenu menu = getMenuById(orderLineItemRequest.getMenuId());
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
@@ -58,11 +57,7 @@ public class ToBeOrderService {
         }
         ToBeOrder order = new ToBeOrder(ToBeOrderStatus.WAITING, LocalDateTime.now(), orderLineItems);
 
-        final ToBeOrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-            .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
+        final ToBeOrderTable orderTable = getOrderTableById(request.getOrderTableId());
         order.setOrderTable(orderTable);
 
         return orderRepository.save(order);
@@ -70,8 +65,7 @@ public class ToBeOrderService {
 
     @Transactional
     public ToBeOrder accept(final UUID orderId) {
-        final ToBeOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+        final ToBeOrder order = getOrderById(orderId);
         if (order.getStatus() != ToBeOrderStatus.WAITING) {
             throw new IllegalStateException();
         }
@@ -81,8 +75,7 @@ public class ToBeOrderService {
 
     @Transactional
     public ToBeOrder serve(final UUID orderId) {
-        final ToBeOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+        final ToBeOrder order = getOrderById(orderId);
         if (order.getStatus() != ToBeOrderStatus.ACCEPTED) {
             throw new IllegalStateException();
         }
@@ -92,8 +85,7 @@ public class ToBeOrderService {
 
     @Transactional
     public ToBeOrder complete(final UUID orderId) {
-        final ToBeOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+        final ToBeOrder order = getOrderById(orderId);
         final ToBeOrderStatus status = order.getStatus();
         if (status != ToBeOrderStatus.SERVED) {
             throw new IllegalStateException();
@@ -101,15 +93,34 @@ public class ToBeOrderService {
 
         order.changeStatus(ToBeOrderStatus.COMPLETED);
         final ToBeOrderTable orderTable = order.getOrderTable();
-        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, ToBeOrderStatus.COMPLETED)) {
-            orderTable.zeroizeNumberOfGuests(new NumberOfGuests(0));
-            orderTable.changeOccupied(false);
-        }
+
+        tableClear(orderTable);
+        orderTable.zeroizeNumberOfGuests(new NumberOfGuests(0));
+        orderTable.changeOccupied(false);
+
         return order;
     }
 
     @Transactional(readOnly = true)
     public List<ToBeOrder> findAll() {
         return orderRepository.findAll();
+    }
+
+
+    private ToBeOrder getOrderById(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    }
+
+    private ToBeMenu getMenuById(UUID menuId) {
+        return menuRepository.findById(menuId).orElseThrow(NoSuchElementException::new);
+    }
+
+    private ToBeOrderTable getOrderTableById(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId).orElseThrow(NoSuchElementException::new);
+    }
+    private void tableClear(ToBeOrderTable orderTable) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, ToBeOrderStatus.COMPLETED)) {
+            throw new IllegalStateException();
+        }
     }
 }

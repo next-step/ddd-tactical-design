@@ -42,7 +42,7 @@ class NumberOfGuestsVOTest {
     @ValueSource(ints = -1)
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
+        final UUID orderTableId = orderTableRepository.save(orderTable(true, 1)).getId();
         assertThatThrownBy(() -> changeNumberOfGuestsRequest(numberOfGuests))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -59,8 +59,7 @@ class NumberOfGuestsVOTest {
 
 
     private ToBeOrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final ToBeOrderTable orderTable = new ToBeOrderTable();
-        ReflectionTestUtils.setField(orderTable,"numberOfGuests", new NumberOfGuests(numberOfGuests));
+        final ToBeOrderTable orderTable = orderTable(true,numberOfGuests);
 
         return orderTable;
     }

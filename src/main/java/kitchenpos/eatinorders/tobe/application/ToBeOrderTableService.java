@@ -31,19 +31,17 @@ public class ToBeOrderTableService {
 
     @Transactional
     public ToBeOrderTable sit(final UUID orderTableId) {
-        final ToBeOrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+        final ToBeOrderTable orderTable = getOrderTableById(orderTableId);
         orderTable.changeOccupied(true);
         return orderTable;
     }
 
     @Transactional
     public ToBeOrderTable clear(final UUID orderTableId) {
-        final ToBeOrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, ToBeOrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
+        final ToBeOrderTable orderTable = getOrderTableById(orderTableId);
+
+        tableClear(orderTable);
+
         orderTable.zeroizeNumberOfGuests(new NumberOfGuests(0));
         orderTable.changeOccupied(false);
         return orderTable;
@@ -55,8 +53,7 @@ public class ToBeOrderTableService {
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
-        final ToBeOrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+        final ToBeOrderTable orderTable = getOrderTableById(orderTableId);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
@@ -68,4 +65,17 @@ public class ToBeOrderTableService {
     public List<ToBeOrderTable> findAll() {
         return orderTableRepository.findAll();
     }
+
+    private ToBeOrderTable getOrderTableById(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId).orElseThrow(NoSuchElementException::new);
+    }
+
+    private void tableClear(ToBeOrderTable orderTable) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, ToBeOrderStatus.COMPLETED)) {
+            throw new IllegalStateException();
+        }
+    }
+
+
+
 }

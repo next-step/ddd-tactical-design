@@ -21,15 +21,17 @@ public class ToBeOrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public ToBeOrderTable() {
+    protected ToBeOrderTable() {
     }
 
     public ToBeOrderTable(OrderTableName name, NumberOfGuests numberOfGuests,boolean occupied){
         this.id = UUID.randomUUID();
         this.name = name;
         this.numberOfGuests = numberOfGuests;
+        if ((numberOfGuests.getNumberOfGuests()!=0) &&(!occupied)) {
+            throw new IllegalStateException();
+        }
         this.occupied = occupied;
-
     }
 
 

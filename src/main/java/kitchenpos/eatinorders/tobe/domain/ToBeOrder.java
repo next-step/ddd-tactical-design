@@ -28,7 +28,7 @@ public class ToBeOrder {
     )
     private List<ToBeOrderLineItem> orderLineItems;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "order_table_id",
         columnDefinition = "binary(16)",
@@ -39,7 +39,7 @@ public class ToBeOrder {
     @Transient
     private UUID orderTableId;
 
-    public ToBeOrder() {
+    protected ToBeOrder() {
     }
 
     public ToBeOrder(ToBeOrderStatus toBeOrderStatus, LocalDateTime localDateTime, List<ToBeOrderLineItem> orderLineItems){

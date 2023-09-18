@@ -125,15 +125,14 @@ class OrderTableServiceTest {
     }
 
     private ToBeOrderTable createOrderTableRequest(final String name) {
-        final ToBeOrderTable orderTable = new ToBeOrderTable();
+        final ToBeOrderTable orderTable = orderTable(true,3);
         ReflectionTestUtils.setField(orderTable,"name", name);
 
         return orderTable;
     }
 
     private ToBeOrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final ToBeOrderTable orderTable = new ToBeOrderTable();
-        ReflectionTestUtils.setField(orderTable,"numberOfGuests", new NumberOfGuests(numberOfGuests));
+        final ToBeOrderTable orderTable = orderTable(true,numberOfGuests);
 
         return orderTable;
     }
