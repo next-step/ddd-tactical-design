@@ -34,28 +34,34 @@ class MenuProductsTest {
     @DisplayName("MenuProducts를 생성할 수 있다.")
     @Test
     void create() {
-        MenuProducts menuProducts = new MenuProducts(List.of(
-                MenuProduct.from(product.getId(), 1L, productClient),
-                MenuProduct.from(product.getId(), 2L, productClient)
-        ));
+        final MenuProducts menuProducts = MenuProducts.from(
+                List.of(
+                        new MenuProductMaterial(product.getId(), 2L),
+                        new MenuProductMaterial(product.getId(), 2L)
+                ),
+                productClient
+        );
         assertThat(menuProducts.getMenuProducts()).hasSize(2);
     }
 
     @DisplayName("MenuProducts 생성 시 MenuProduct가 없으면 예외가 발생한다.")
     @ParameterizedTest
     @NullAndEmptySource
-    void createWithEmptyMenuProducts(List<MenuProduct> menuProducts) {
-        assertThatThrownBy(() -> new MenuProducts(menuProducts))
+    void createWithEmptyMenuProducts(List<MenuProductMaterial> menuProductMaterials) {
+        assertThatThrownBy(() -> MenuProducts.from(menuProductMaterials, productClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("MenuProducts의 내부에 ProductId 와 일치하는 MenuProduct의 가격을 변경할 수 있다.")
     @Test
     void changeMenuProductPrice() {
-        final MenuProducts menuProducts = new MenuProducts(List.of(
-                MenuProduct.from(product.getId(), 1L, productClient),
-                MenuProduct.from(product.getId(), 2L, productClient)
-        ));
+        final MenuProducts menuProducts = MenuProducts.from(
+                List.of(
+                        new MenuProductMaterial(product.getId(), 1L),
+                        new MenuProductMaterial(product.getId(), 2L)
+                ),
+                productClient
+        );
         menuProducts.changeMenuProductPrice(product.getId(), BigDecimal.valueOf(30000L));
         assertThat(menuProducts.getMenuProducts()).extracting(MenuProduct::getPrice)
                 .containsExactly(BigDecimal.valueOf(30000L), BigDecimal.valueOf(30000L));
@@ -64,10 +70,13 @@ class MenuProductsTest {
     @DisplayName("MenuProducts의 모든 amount를 합한 결과를 반환할 수 있다.")
     @Test
     void totalAmount() {
-        final MenuProducts menuProducts = new MenuProducts(List.of(
-                MenuProduct.from(product.getId(), 1L, productClient),
-                MenuProduct.from(product.getId(), 2L, productClient)
-        ));
+        final MenuProducts menuProducts = MenuProducts.from(
+                List.of(
+                        new MenuProductMaterial(product.getId(), 1L),
+                        new MenuProductMaterial(product.getId(), 2L)
+                ),
+                productClient
+        );
         assertThat(menuProducts.totalAmount()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(48000L)));
     }
 }

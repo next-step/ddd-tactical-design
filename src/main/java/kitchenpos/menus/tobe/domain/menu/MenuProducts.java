@@ -23,7 +23,7 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
+    private MenuProducts(List<MenuProduct> menuProducts) {
         this.validate(menuProducts);
         this.menuProducts = menuProducts;
     }

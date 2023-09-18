@@ -6,6 +6,7 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class ProductClientImpl implements ProductClient {
     @Override
     public void validProductIds(List<UUID> productIds) {
         final List<Product> products = productRepository.findAllByIdIn(productIds);
-        if (products.size() != productIds.size()) {
+        if (products.size() != new HashSet<>(productIds).size()) {
             throw new IllegalArgumentException();
         }
     }

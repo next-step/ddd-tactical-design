@@ -98,7 +98,7 @@ class ProductServiceTest {
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final Menu menu = menuRepository.save(menu(19_000L, true, productRepository, menuProductMaterial(product.getId(), 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
