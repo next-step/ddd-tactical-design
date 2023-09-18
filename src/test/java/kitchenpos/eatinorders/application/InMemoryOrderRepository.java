@@ -1,28 +1,28 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.tobe.EatInOrder;
+import kitchenpos.eatinorders.domain.tobe.OrderRepository;
+import kitchenpos.eatinorders.domain.tobe.OrderStatus;
+import kitchenpos.eatinorders.domain.tobe.OrderTable;
 
 import java.util.*;
 
 public class InMemoryOrderRepository implements OrderRepository {
-    private final Map<UUID, Order> orders = new HashMap<>();
+    private final Map<UUID, EatInOrder> orders = new HashMap<>();
 
     @Override
-    public Order save(final Order order) {
+    public EatInOrder save(final EatInOrder order) {
         orders.put(order.getId(), order);
         return order;
     }
 
     @Override
-    public Optional<Order> findById(final UUID id) {
+    public Optional<EatInOrder> findById(final UUID id) {
         return Optional.ofNullable(orders.get(id));
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<EatInOrder> findAll() {
         return new ArrayList<>(orders.values());
     }
 

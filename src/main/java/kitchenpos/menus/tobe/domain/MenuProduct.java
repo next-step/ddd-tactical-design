@@ -22,6 +22,7 @@ public class MenuProduct {
     }
 
     public MenuProduct(UUID id, BigDecimal price, long quantity) {
+        validateQuantity(quantity);
         this.id = id;
         this.price = new Price(price);
         this.quantity = quantity;
@@ -31,6 +32,10 @@ public class MenuProduct {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = new Price(price);
     }
 
     public UUID getId() {
