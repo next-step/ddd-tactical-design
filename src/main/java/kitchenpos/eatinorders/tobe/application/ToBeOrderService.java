@@ -57,9 +57,6 @@ public class ToBeOrderService {
         }
         ToBeOrder order = new ToBeOrder(ToBeOrderStatus.WAITING, LocalDateTime.now(), orderLineItems);
 
-        final ToBeOrderTable orderTable = getOrderTableById(request.getOrderTableId());
-        order.setOrderTable(orderTable);
-
         return orderRepository.save(order);
     }
 
@@ -92,7 +89,8 @@ public class ToBeOrderService {
         }
 
         order.changeStatus(ToBeOrderStatus.COMPLETED);
-        final ToBeOrderTable orderTable = order.getOrderTable();
+        final ToBeOrderTable orderTable = getOrderTableById(order.getOrderTableId());
+
 
         tableClear(orderTable);
         orderTable.zeroizeNumberOfGuests(new NumberOfGuests(0));

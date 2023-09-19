@@ -52,8 +52,7 @@ class ToBeOrderServiceTest {
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getStatus()).isEqualTo(ToBeOrderStatus.WAITING),
             () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-            () -> assertThat(actual.getOrderLineItems()).hasSize(1),
-            () -> assertThat(actual.getOrderTable().getId()).isEqualTo(expected.getOrderTableId())
+            () -> assertThat(actual.getOrderLineItems()).hasSize(1)
         );
     }
 

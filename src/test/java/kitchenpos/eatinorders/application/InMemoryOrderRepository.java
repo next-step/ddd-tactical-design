@@ -31,6 +31,6 @@ public class InMemoryOrderRepository implements ToBeOrderRepository {
     public boolean existsByOrderTableAndStatusNot(final ToBeOrderTable orderTable, final ToBeOrderStatus status) {
         return orders.values()
             .stream()
-            .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
+            .anyMatch(order -> order.getOrderTableId().equals(orderTable.getId()) && order.getStatus() != status);
     }
 }

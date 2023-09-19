@@ -57,7 +57,6 @@ public class Fixtures {
 
     public static ToBeOrder order(final ToBeOrderStatus status, final ToBeOrderTable orderTable, PurgomalumClient purgomalumClient) {
         final ToBeOrder order = new ToBeOrder(status,LocalDateTime.of(2020, 1, 1, 12, 0),Arrays.asList(orderLineItem(purgomalumClient)));
-        order.setOrderTable(orderTable);
         return order;
     }
 

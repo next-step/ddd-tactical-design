@@ -28,15 +28,6 @@ public class ToBeOrder {
     )
     private List<ToBeOrderLineItem> orderLineItems;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private ToBeOrderTable orderTable;
-
-    @Transient
     private UUID orderTableId;
 
     protected ToBeOrder() {
@@ -69,15 +60,7 @@ public class ToBeOrder {
     public List<ToBeOrderLineItem> getOrderLineItems() {
         return orderLineItems;
     }
-
-
-    public ToBeOrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(ToBeOrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
+    
 
     public UUID getOrderTableId() {
         return orderTableId;
