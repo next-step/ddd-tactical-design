@@ -6,7 +6,6 @@ import kitchenpos.products.application.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -44,12 +43,5 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public BigDecimal getPriceByProductId(UUID productId) {
-        return productRepository.findById(productId)
-            .map(Product::getPrice)
-            .orElseThrow(NoSuchElementException::new).getValue();
     }
 }
