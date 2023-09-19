@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ValueObject;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,7 +13,7 @@ import java.util.UUID;
  * 주문 시점의 메뉴
  */
 @Embeddable
-public class OrderedMenu {
+public class OrderedMenu extends ValueObject {
 
     @Column(name = "menu_id", nullable = false)
     private UUID id;
@@ -54,24 +55,4 @@ public class OrderedMenu {
         return menuPrice;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderedMenu)) return false;
-
-        OrderedMenu menu = (OrderedMenu) o;
-
-        if (getId() != null ? !getId().equals(menu.getId()) : menu.getId() != null) return false;
-        if (getDisplayName() != null ? !getDisplayName().equals(menu.getDisplayName()) : menu.getDisplayName() != null)
-            return false;
-        return getMenuPrice() != null ? getMenuPrice().equals(menu.getMenuPrice()) : menu.getMenuPrice() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getDisplayName() != null ? getDisplayName().hashCode() : 0);
-        result = 31 * result + (getMenuPrice() != null ? getMenuPrice().hashCode() : 0);
-        return result;
-    }
 }
