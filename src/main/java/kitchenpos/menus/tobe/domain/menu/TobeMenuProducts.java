@@ -41,8 +41,4 @@ public class TobeMenuProducts {
     public Stream<TobeMenuProduct> stream() {
         return this.tobeMenuProducts.stream();
     }
-
-    public List<TobeMenuProduct> getTobeMenuProducts() {
-        return tobeMenuProducts;
-    }
 }
