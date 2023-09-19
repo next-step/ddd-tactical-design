@@ -56,4 +56,8 @@ public class MenuPrice {
                     "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + price + " sum: " + sum);
         }
     }
+
+    public boolean greaterThan(final MenuPrice sumPrice) {
+        return price.compareTo(sumPrice.price) > 0;
+    }
 }

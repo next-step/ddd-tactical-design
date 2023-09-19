@@ -23,7 +23,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -267,13 +266,5 @@ class TobeMenuServiceTest {
 
     private static TobeMenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
         return new TobeMenuProductRequest(productId, quantity);
-    }
-
-    private TobeMenu changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private TobeMenu changePriceRequest(final BigDecimal price) {
-        return new TobeMenu(new MenuPrice(price));
     }
 }

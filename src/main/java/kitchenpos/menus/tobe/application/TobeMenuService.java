@@ -78,9 +78,7 @@ public class TobeMenuService {
     public TobeMenu changePrice(final UUID menuId, BigDecimal price) {
         final TobeMenu menu = menuRepository.findById(menuId)
                                             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = menu.getTobeMenuProducts().sum().getPrice();
         MenuPrice menuPrice = new MenuPrice(price);
-        menuPrice.checkSum(sum);
         menu.updatePrice(menuPrice);
         return menu;
     }
@@ -88,9 +86,7 @@ public class TobeMenuService {
     @Transactional
     public TobeMenu display(final UUID menuId) {
         final TobeMenu menu = menuRepository.findById(menuId)
-                                        .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = menu.getTobeMenuProducts().sum().getPrice();
-        menu.getPrice().checkSum(sum);
+                                            .orElseThrow(NoSuchElementException::new);
         menu.display();
         return menu;
     }
@@ -98,7 +94,7 @@ public class TobeMenuService {
     @Transactional
     public TobeMenu hide(final UUID menuId) {
         final TobeMenu menu = menuRepository.findById(menuId)
-                                        .orElseThrow(NoSuchElementException::new);
+                                            .orElseThrow(NoSuchElementException::new);
         menu.hide();
         return menu;
     }

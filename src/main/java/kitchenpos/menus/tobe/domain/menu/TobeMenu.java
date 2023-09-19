@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -57,11 +55,8 @@ public class TobeMenu {
         this.tobeMenuProducts = tobeMenuProducts;
     }
 
-    public TobeMenu(MenuPrice price) {
-        this.price = price;
-    }
-
     public void display() {
+        this.checkSum(price);
         this.displayed = true;
     }
 
@@ -70,6 +65,7 @@ public class TobeMenu {
     }
 
     public void updatePrice(MenuPrice price) {
+        this.checkSum(price);
         this.price = price;
     }
 
@@ -96,4 +92,11 @@ public class TobeMenu {
         return menuGroupId;
     }
 
+    public void checkSum(final MenuPrice menuPrice) {
+        MenuPrice sum = tobeMenuProducts.sum();
+        if (menuPrice.greaterThan(sum)) {
+            throw new IllegalArgumentException(
+                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + menuPrice + " sum: " + sum);
+        }
+    }
 }
