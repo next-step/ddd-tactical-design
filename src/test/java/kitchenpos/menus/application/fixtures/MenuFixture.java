@@ -25,6 +25,8 @@ public class MenuFixture {
 
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
+    private MenuFixture() {
+    }
 
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());

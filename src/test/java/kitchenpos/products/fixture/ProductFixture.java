@@ -11,6 +11,8 @@ public class ProductFixture {
 
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
+    private ProductFixture() {
+    }
 
     public static Product product() {
         return product("후라이드", 16_000L);
