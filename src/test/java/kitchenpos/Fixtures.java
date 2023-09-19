@@ -4,7 +4,9 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        return new Menu(UUID.randomUUID(), "후라이드+후라이드", BigDecimal.valueOf(price), menuGroup(), displayed, Arrays.asList(menuProducts), menuGroup().getId());
+        MenuGroup menuGroup = menuGroup();
+        return new Menu(UUID.randomUUID(), "후라이드+후라이드", BigDecimal.valueOf(price), menuGroup, displayed, Arrays.asList(menuProducts), menuGroup.getId(), new FakePurgomalumClient());
     }
 
     public static MenuGroup menuGroup() {
@@ -40,11 +43,11 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(new Random().nextLong(), product(), 2L, product().getId());
+        return new MenuProduct(product().getId(), BigDecimal.valueOf(16_000L), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(new Random().nextLong(), product, quantity, product.getId());
+        return new MenuProduct(product.getId(), product.getPrice(), quantity);
 
     }
 

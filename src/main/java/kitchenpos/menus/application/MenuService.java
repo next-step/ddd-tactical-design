@@ -3,8 +3,6 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.exception.NotFoundMenuException;
-import kitchenpos.menus.domain.model.MenuModel;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +32,13 @@ public class MenuService {
     @Transactional
     public Menu create(final Menu request) {
         menuCreateService.validMenuProduct(request);
-        menuGroupService.findById(request.getMenuGroupId());
-        Menu menu = new MenuModel(request, purgomalumClient).toMenu();
-        return menuRepository.save(menu);
+        menuGroupService.validMenuGroupId(request.getMenuGroupId());
+        return menuRepository.save(new Menu(request, purgomalumClient));
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final BigDecimal price) {
-        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
-                .changePrice(price)
-                .toMenu();
+        Menu menu = getMenu(menuId).changePrice(price);
         return this.menuRepository.save(menu);
     }
 
@@ -54,17 +49,13 @@ public class MenuService {
 
     @Transactional
     public Menu display(final UUID menuId) {
-        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
-                .displayed()
-                .toMenu();
+        Menu menu = getMenu(menuId).displayed();
         return this.menuRepository.save(menu);
     }
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        Menu menu = new MenuModel(getMenu(menuId), purgomalumClient)
-                .hide()
-                .toMenu();
+        Menu menu = getMenu(menuId).hide();
         return this.menuRepository.save(menu);
     }
 
@@ -75,11 +66,11 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public Menu getMenu(UUID menuId) {
-        return this.menuRepository.findById(menuId)
+        Menu menu = this.menuRepository.findById(menuId)
                 .orElseThrow(NotFoundMenuException::new);
+        menuGroupService.validMenuGroupId(menu.getMenuGroupId());
+        return menu;
     }
-
-
 
 
 }
