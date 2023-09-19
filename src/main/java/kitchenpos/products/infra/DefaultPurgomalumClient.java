@@ -7,6 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import kitchenpos.products.domain.PurgomalumClient;
+
 @Component
 public class DefaultPurgomalumClient implements PurgomalumClient {
     private final RestTemplate restTemplate;
