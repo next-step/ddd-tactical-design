@@ -101,19 +101,30 @@ docker compose -p kitchenpos up -d
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
 | 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
+| 가격 | price | 메뉴 가격의 기준이 되는 데이터 |
 | 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 비속어 | profanity | displayed name에 포함되선 안되는 언어 |
 
 ### 메뉴
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
 | 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
+| 가격 | price | 매장의 손익을 결정짓는 중요한 요소 |
+| 이름 | displayed name | 판매하는 메뉴가 어떤 음식인지 인지할 수 있는 중요한 요소 |
+| 비속어 | profanity | displayed name에 포함되선 안되는 언어 |
 | 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
+| 메뉴 상품들 | menu products | 메뉴가 가지는 여러 메뉴 상품들 |
+| 금액 | amount | 가격 * 수량 |
+| 총 금액 | total amount | 메뉴가 가진 모든 메뉴 상품의 (가격 * 수량) 총합 |
 | 노출된 메뉴 | displayed menu | 주문할 수 있는 노출된 메뉴 |
 | 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+
+### 메뉴 그룹
+| 한글명 | 영문명 | 설명 |
+| --- | --- | --- |
+| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
+| 이름 | displayed name | 메뉴의 카테고리를 의미하는 요소 (ex. 두 마리 치킨, 사이드메뉴, 식사류, 면류, 디저트, 등등..) |
 
 ### 매장 주문
 
@@ -161,18 +172,26 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
+- `Product`는 식별자와 `DisplayedName`, `Price`를 가진다.
+- `Price`는 음수가 될 수 없다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+
+### 메뉴 그룹
+- `MenuGroup`은 식별자와 `DisplayedName`을 가진다.
 
 ### 메뉴
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
+- `Menu`는 식별자와 `Displayed Name`, `Price`, `MenuProducts`를 가진다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 - `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `Menu`의 `Price`는 `MenuProducts`의 `TotalAmount`보다 적거나 같아야 한다.
+- `Menu`의 `Price`가 `MenuProducts`의 `TotalAmount`보다 크면 `NotDisplayedMenu`가 된다.
+- `MenuProduct`는 `Product의 식별자`와 가격과 수량을 가진다.
+- `Product`의 Price 가 변경되면 연관된 `MenuProduct`의 가격도 변경해야한다.
+    - 이떄도 `Menu`의 `Price`가 `MenuProducts`의 `TotalAmount`보다 크면 `NotDisplayedMenu`가 된다.
+- `Menu`를 `DisplayedMenu`로 변경할 수 있다.
+    - `Menu`의 `Price`가 `MenuProducts`의 `total amount`보다 크면 `DisplayedMenu`로 변경할 수 없다.
+- `Menu`를 `NotDisplayedMenu`로 변경할 수 있다.
 
 ### 매장 주문
 
