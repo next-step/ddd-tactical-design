@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,22 +10,22 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductDisplayedNameTest {
 
-    private PurgomalumClient purgomalumClient;
+    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
 
     @BeforeEach
     void setUp() {
-        purgomalumClient = new FakePurgomalumClient();
+        productDisplayedNameProfanities = new FakeProductDisplayedNameProfanities();
     }
 
     @DisplayName("상품 이름 생성")
     @Test
     void create() {
         final String name = "후라이드";
-        final ProductDisplayedName productDisplayedName = ProductDisplayedName.from(name, new DisplayedNamePolicy(purgomalumClient));
+        final ProductDisplayedName productDisplayedName = ProductDisplayedName.from(name, new ProductDisplayedNamePolicy(productDisplayedNameProfanities));
         assertAll(
                 () -> assertThat(productDisplayedName).isNotNull(),
                 () -> assertThat(name).isEqualTo(productDisplayedName.getValue())
@@ -37,7 +36,7 @@ class ProductDisplayedNameTest {
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
-        assertThatThrownBy(() -> ProductDisplayedName.from(name, new DisplayedNamePolicy(purgomalumClient)))
+        assertThatThrownBy(() -> ProductDisplayedName.from(name, new ProductDisplayedNamePolicy(productDisplayedNameProfanities)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -45,7 +44,7 @@ class ProductDisplayedNameTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {
-        assertThatThrownBy(() -> ProductDisplayedName.from(name, new DisplayedNamePolicy(purgomalumClient)))
+        assertThatThrownBy(() -> ProductDisplayedName.from(name, new ProductDisplayedNamePolicy(productDisplayedNameProfanities)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

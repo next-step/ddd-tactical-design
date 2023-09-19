@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -39,6 +40,10 @@ public class Product {
 
     public void changePrice(ProductPrice price) {
         this.price = price;
+    }
+
+    public BigDecimal getPriceValue() {
+        return this.price.getValue();
     }
 
     public UUID getId() {
