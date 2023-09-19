@@ -31,4 +31,17 @@ public class MenuPrice {
     public int compareTo(BigDecimal price) {
         return value.compareTo(price);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuPrice menuPrice = (MenuPrice) o;
+        return Objects.equals(value, menuPrice.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
