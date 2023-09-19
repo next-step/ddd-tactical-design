@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -70,19 +71,12 @@ class TobeMenuServiceTest {
     }
 
     @DisplayName("상품이 없으면 등록할 수 없다.")
-    @MethodSource("menuProducts")
+    @NullAndEmptySource
     @ParameterizedTest
     void create01(final List<TobeMenuProductRequest> menuProducts) {
         TobeMenuCreateRequest request = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(request))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    private static List<Arguments> menuProducts() {
-        return Arrays.asList(
-                null,
-                Arguments.of(Collections.emptyList())
-        );
     }
 
     @DisplayName("상품이 없으면 등록할 수 없다.")
