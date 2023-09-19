@@ -43,7 +43,7 @@ class ProductServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
         menuService = new MenuService(menuRepository,  menuCreateService, menuGroupService, purgomalumClient);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient ));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient ), menuGroupService);
         productService = new ProductService(productRepository, menuService, purgomalumClient);
     }
 

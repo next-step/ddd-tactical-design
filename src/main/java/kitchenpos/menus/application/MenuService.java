@@ -31,9 +31,8 @@ public class MenuService {
 
     @Transactional
     public Menu create(final Menu request) {
-        menuCreateService.validMenuProduct(request);
-        menuGroupService.validMenuGroupId(request.getMenuGroupId());
-        return menuRepository.save(new Menu(request, purgomalumClient));
+        this.menuCreateService.valid(request);
+        return this.menuRepository.save(new Menu(request, purgomalumClient));
     }
 
     @Transactional

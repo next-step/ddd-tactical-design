@@ -30,13 +30,7 @@ public class MenuGroupService {
 
     @Transactional(readOnly = true)
     public MenuGroup findById(final UUID menuGroupId) {
-        Optional<MenuGroup> byId = menuGroupRepository.findById(menuGroupId);
         return menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NotFoundMenuGroupException::new);
-    }
-
-    @Transactional(readOnly = true)
-    public void validMenuGroupId(final UUID menuGroupId) {
-        findById(menuGroupId);
     }
 }
