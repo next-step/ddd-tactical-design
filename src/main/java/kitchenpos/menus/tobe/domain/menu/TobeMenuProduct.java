@@ -27,7 +27,7 @@ public class TobeMenuProduct {
     private UUID productId;
 
     @Transient
-    private TobeMenuProductPrice price;
+    private MenuPrice price;
 
     protected TobeMenuProduct() {
     }
@@ -35,14 +35,14 @@ public class TobeMenuProduct {
     public TobeMenuProduct(TobeProduct product, TobeMenuProductQuantity quantity) {
         this.product = product;
         this.quantity = quantity;
-        this.price = TobeMenuProductPrice.multiply(product.getBigDecimalPrice(), quantity.getQuantity());
+        this.price = new MenuPrice(product.getBigDecimalPrice()).multiply(quantity.getQuantity());
     }
 
     public TobeMenuProduct(Long seq, TobeProduct product, TobeMenuProductQuantity quantity) {
         this.seq = seq;
         this.product = product;
         this.quantity = quantity;
-        this.price = TobeMenuProductPrice.multiply(product.getBigDecimalPrice(), quantity.getQuantity());
+        this.price = new MenuPrice(product.getBigDecimalPrice()).multiply(quantity.getQuantity());
     }
 
     public Long getSeq() {
@@ -61,7 +61,7 @@ public class TobeMenuProduct {
         return productId;
     }
 
-    public TobeMenuProductPrice getPrice() {
+    public MenuPrice getPrice() {
         return price;
     }
 }

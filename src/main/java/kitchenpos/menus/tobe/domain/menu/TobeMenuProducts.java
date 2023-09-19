@@ -32,10 +32,10 @@ public class TobeMenuProducts {
         this.tobeMenuProducts.addAll(tobeMenuProducts);
     }
 
-    public TobeMenuProductPrice sum() {
+    public MenuPrice sum() {
         return tobeMenuProducts.stream()
                                .map(TobeMenuProduct::getPrice)
-                               .reduce(TobeMenuProductPrice.zero(), TobeMenuProductPrice::sum);
+                               .reduce(MenuPrice.zero(), MenuPrice::sum);
     }
 
     public Stream<TobeMenuProduct> stream() {

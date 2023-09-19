@@ -21,6 +21,18 @@ public class MenuPrice {
         this.price = price;
     }
 
+    public MenuPrice multiply(final long quantity) {
+        return new MenuPrice(price.multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    public static MenuPrice zero() {
+        return new MenuPrice(BigDecimal.ZERO);
+    }
+
+    public MenuPrice sum(final MenuPrice price) {
+        return new MenuPrice(this.price.add(price.price));
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
