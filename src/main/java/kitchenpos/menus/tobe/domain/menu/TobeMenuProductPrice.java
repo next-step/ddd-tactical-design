@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.menuproduct;
+package kitchenpos.menus.tobe.domain.menu;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -34,7 +34,7 @@ public class TobeMenuProductPrice {
     }
 
     public TobeMenuProductPrice sum(final TobeMenuProductPrice price) {
-        return new TobeMenuProductPrice(this.price.add(price.getPrice()));
+        return new TobeMenuProductPrice(this.price.add(price.price));
     }
 
     public BigDecimal getPrice() {

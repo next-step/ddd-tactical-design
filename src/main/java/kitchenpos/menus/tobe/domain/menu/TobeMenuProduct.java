@@ -1,9 +1,8 @@
-package kitchenpos.menus.tobe.domain.menuproduct;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.products.tobe.domain.TobeProduct;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain.menuproduct;
+package kitchenpos.menus.tobe.domain.menu;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @Embeddable
-
 public class TobeMenuProducts {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(

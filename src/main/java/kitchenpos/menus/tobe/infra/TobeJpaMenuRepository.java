@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TobeJpaMenuRepository extends TobeMenuRepository, JpaRepository<TobeMenu, UUID> {
-    @Query("select m from TobeMenu m join m.menuProducts mp where mp.product.id = :productId")
+    @Query("select m from TobeMenu m join m.tobeMenuProducts.tobeMenuProducts mp where mp.product.id = :productId")
     @Override
     List<TobeMenu> findAllByProductId(@Param("productId") UUID productId);
 }

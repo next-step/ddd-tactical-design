@@ -9,10 +9,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class DefaultPurgomalumChecker implements PurgomalumChecker {
+public class DefaultMenuPurgomalumChecker implements PurgomalumChecker {
     private final RestTemplate restTemplate;
 
-    public DefaultPurgomalumChecker(final RestTemplateBuilder restTemplateBuilder) {
+    public DefaultMenuPurgomalumChecker(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

@@ -1,23 +1,16 @@
 package kitchenpos.menus.tobe.application.dto;
 
-import kitchenpos.menus.tobe.domain.menu.MenuName;
-import kitchenpos.menus.tobe.domain.menu.MenuPrice;
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupName;
-import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
-
-import javax.persistence.Embedded;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 public class TobeMenuCreateRequest {
-    private String name;
-    private BigDecimal price;
-    private ToBeMenuGroupRequest menuGroup;
-    private boolean displayed;
-    private List<TobeMenuProductRequest> tobeMenuProducts;
-    private UUID menuGroupId;
+    private final String name;
+    private final BigDecimal price;
+    private final ToBeMenuGroupRequest menuGroup;
+    private final boolean displayed;
+    private final List<TobeMenuProductRequest> tobeMenuProducts;
+    private final UUID menuGroupId;
 
     public TobeMenuCreateRequest(String name, BigDecimal price, ToBeMenuGroupRequest menuGroup, boolean displayed,
                                  List<TobeMenuProductRequest> tobeMenuProducts, UUID menuGroupId) {
