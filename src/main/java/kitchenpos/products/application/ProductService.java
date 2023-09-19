@@ -36,11 +36,11 @@ public class ProductService {
     public ProductResponse create(final ProductRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격이 0원 미만입니다.");
         }
         final String name = request.getName();
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("상품명이 없거나 비속어가 포함되어 있습니다.");
         }
         final Product product = new Product(request.getName(), purgomalumClient, request.getPrice());
         return new ProductResponse(productRepository.save(product));
@@ -50,12 +50,12 @@ public class ProductService {
     public ProductResponse changePrice(final UUID productId, final ProductRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격이 0원 미만입니다.");
         }
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다. [" + productId.toString()+ "]"));
         product.changePrice(price);
-        applicationEventPublisher.publishEvent(new ProductEvent(productId));
+        applicationEventPublisher.publishEvent(new ProductChangePriceEvent(productId));
         return new ProductResponse(product);
     }
 

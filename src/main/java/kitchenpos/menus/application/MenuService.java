@@ -34,13 +34,13 @@ public class MenuService {
     public Menu create(final Menu request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격이 0원 이하입니다.");
         }
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴에 상품이 없습니다.");
         }
         final List<Product> products = productRepository.findAllByIdIn(
             menuProductRequests.stream()
@@ -48,14 +48,14 @@ public class MenuService {
                 .collect(Collectors.toList())
         );
         if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴에 주문한 상품과 상품의 수량이 일치하지 않습니다.");
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("수량이 0개 미만입니다.");
             }
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
@@ -69,11 +69,11 @@ public class MenuService {
             menuProducts.add(menuProduct);
         }
         if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴의 가격이 일치하지 않습니다.");
         }
         final String name = request.getName();
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴 이름이 없거나 비속어가 포함되었습니다.");
         }
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
@@ -89,7 +89,7 @@ public class MenuService {
     public Menu changePrice(final UUID menuId, final Menu request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("가격이 비었거나 0원 미만입니다.");
         }
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
@@ -102,7 +102,7 @@ public class MenuService {
             );
         }
         if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴의 가격이 일치하지 않습니다.");
         }
         menu.setPrice(price);
         return menu;

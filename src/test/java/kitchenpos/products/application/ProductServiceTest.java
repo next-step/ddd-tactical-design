@@ -112,6 +112,40 @@ class ProductServiceTest {
         assertThat(actual).hasSize(2);
     }
 
+    @DisplayName("ProductPrice VO를 정상 생성한다.")
+    @Test
+    void createProductPrice() {
+        final ProductRequest expected = createProductRequest("후라이드", 16_000L);
+        final Product product = new Product(expected.getName(), purgomalumClient, expected.getPrice());
+        assertThat(product.getPrice()).isEqualTo(expected.getPrice());
+    }
+
+    @DisplayName("ProductPrice VO 생성시 가격이 0원 이하면 예외가 발생한다.")
+    @ValueSource(strings = "-1000")
+    @NullSource
+    @ParameterizedTest
+    void createProductPriceException(final BigDecimal price) {
+        final ProductRequest expected = createProductRequest("후라이드", price);
+        assertThatThrownBy(() -> new Product(expected.getName(), purgomalumClient, expected.getPrice()))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("ProductName VO를 정상 생성한다.")
+    @Test
+    void createProductName() {
+        final ProductRequest expected = createProductRequest("후라이드", 16_000L);
+        final Product product = new Product(expected.getName(), purgomalumClient, expected.getPrice());
+        assertThat(product.getName()).isEqualTo(expected.getName());
+    }
+
+    @DisplayName("ProductName VO 생성시 비속어가 포함되어 있으면 예외가 발생한다.")
+    @Test
+    void createProductNameException() {
+        final ProductRequest expected = createProductRequest("비속어", 16_000L);
+        assertThatThrownBy(() -> new Product(expected.getName(), purgomalumClient, expected.getPrice()))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
     private ProductRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
     }

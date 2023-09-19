@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.products.application.ProductEvent;
+import kitchenpos.products.application.ProductChangePriceEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class ProductEventListener {
     }
 
     @EventListener
-    public void changeDisplayed(final ProductEvent event) {
+    public void changeDisplayed(final ProductChangePriceEvent event) {
         menuService.changeDisplayed(event.getProductId());
     }
 }

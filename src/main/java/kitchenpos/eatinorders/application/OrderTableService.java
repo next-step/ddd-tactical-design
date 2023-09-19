@@ -26,7 +26,7 @@ public class OrderTableService {
     public OrderTable create(final OrderTable request) {
         final String name = request.getName();
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문 테이블 이름이 없습니다.");
         }
         final OrderTable orderTable = new OrderTable();
         orderTable.setId(UUID.randomUUID());
@@ -39,7 +39,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new NoSuchElementException("해당 주문테이블이 존재하지 않습니다. [" + orderTableId + "]"));
         orderTable.setOccupied(true);
         return orderTable;
     }
@@ -60,7 +60,7 @@ public class OrderTableService {
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
         final int numberOfGuests = request.getNumberOfGuests();
         if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("손님 수가 0명 미만입니다.");
         }
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
