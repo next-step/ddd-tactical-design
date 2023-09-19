@@ -37,6 +37,10 @@ public class MenuPrice {
         return price;
     }
 
+    public boolean greaterThan(final MenuPrice sumPrice) {
+        return price.compareTo(sumPrice.price) > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,14 +54,10 @@ public class MenuPrice {
         return Objects.hash(price);
     }
 
-    public void checkSum(BigDecimal sum) {
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException(
-                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + price + " sum: " + sum);
-        }
-    }
-
-    public boolean greaterThan(final MenuPrice sumPrice) {
-        return price.compareTo(sumPrice.price) > 0;
+    @Override
+    public String toString() {
+        return "MenuPrice{" +
+                "price=" + price +
+                '}';
     }
 }

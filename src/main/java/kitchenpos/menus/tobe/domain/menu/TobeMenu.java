@@ -33,26 +33,21 @@ public class TobeMenu {
 
     public TobeMenu(UUID id, MenuName menuName, MenuPrice price, UUID menuGroupId, boolean displayed,
                     List<TobeMenuProduct> tobeMenuProducts) {
-        if (Objects.isNull(tobeMenuProducts) || tobeMenuProducts.isEmpty()) {
-            throw new IllegalArgumentException("메뉴의 상품은 비어있을 수 없습니다.");
-        }
-
-        this.id = id;
-        this.menuName = menuName;
-        this.price = price;
-        this.menuGroupId = menuGroupId;
-        this.displayed = displayed;
-        this.tobeMenuProducts = new TobeMenuProducts(tobeMenuProducts);
+        this(id, menuName, price, menuGroupId, displayed, new TobeMenuProducts(tobeMenuProducts));
     }
 
     public TobeMenu(UUID id, MenuName menuName, MenuPrice price, UUID menuGroupId, boolean displayed,
                     TobeMenuProducts tobeMenuProducts) {
+        if (Objects.isNull(tobeMenuProducts) || tobeMenuProducts.isEmpty()) {
+            throw new IllegalArgumentException("메뉴의 상품은 비어있을 수 없습니다.");
+        }
         this.id = id;
         this.menuName = menuName;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.tobeMenuProducts = tobeMenuProducts;
+
     }
 
     public void display() {

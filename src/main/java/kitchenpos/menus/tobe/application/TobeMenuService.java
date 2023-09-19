@@ -48,7 +48,7 @@ public class TobeMenuService {
     public TobeMenuCreateResponse create(final TobeMenuCreateRequest request) {
         final TobeMenuProducts tobeMenuProducts = getTobeMenuProducts(request.getTobeMenuProducts());
         final MenuPrice menuPrice = new MenuPrice(request.getPrice());
-        menuPrice.checkSum(tobeMenuProducts.sum().getPrice());
+        validateMenuPrice(menuPrice, tobeMenuProducts.sum());
 
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                                                            .orElseThrow(NoSuchElementException::new);
@@ -72,6 +72,13 @@ public class TobeMenuService {
         }).collect(Collectors.toList());
 
         return new TobeMenuProducts(tobeMenuProducts);
+    }
+
+    private void validateMenuPrice(final MenuPrice menuPrice, MenuPrice sumPrice) {
+        if (menuPrice.greaterThan(sumPrice)) {
+            throw new IllegalArgumentException(
+                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + menuPrice + " sumPrice: " + sumPrice);
+        }
     }
 
     @Transactional

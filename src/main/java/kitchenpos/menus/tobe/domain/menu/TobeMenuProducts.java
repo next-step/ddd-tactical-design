@@ -41,4 +41,8 @@ public class TobeMenuProducts {
     public Stream<TobeMenuProduct> stream() {
         return this.tobeMenuProducts.stream();
     }
+
+    public boolean isEmpty() {
+        return tobeMenuProducts.isEmpty();
+    }
 }
