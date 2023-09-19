@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.event.OrderCreateRequested;
+import kitchenpos.eatinorders.tobe.domain.OrderCreateRequested;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 

@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -40,9 +41,16 @@ public class Order {
     @Embedded
     private OrderLineItems orderLineItems = new OrderLineItems();
 
-    public Order(OrderTable orderTable, OrderLineItems orderLineItems) {
+    public Order(OrderTable orderTable, OrderLineItems orderLineItems, EventPublisher eventPublisher) {
         checkOrerTableIsVacant(orderTable);
         checkOrderLineItemsIsEmpty(orderLineItems);
+
+        eventPublisher.publish(new OrderCreateRequested(
+            orderLineItems.getOrderLineItems()
+                .stream()
+                .map(OrderLineItem::getMenuId)
+                .collect(Collectors.toList())
+        ));
 
         orderLineItems.mapOrder(this);
         this.id = UUID.randomUUID();
