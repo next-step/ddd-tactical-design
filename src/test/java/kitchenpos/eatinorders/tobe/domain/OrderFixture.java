@@ -5,20 +5,22 @@ import java.util.UUID;
 
 public class OrderFixture {
 
+    private static final EventPublisher eventPublisher = new TestEventPublisher();
+
     public static Order order() {
-        return new Order(occupiedOrderTable(), orderLineItems());
+        return new Order(occupiedOrderTable(), orderLineItems(), eventPublisher);
     }
 
     public static Order order(OrderTable orderTable) {
-        return new Order(orderTable, orderLineItems());
+        return new Order(orderTable, orderLineItems(), eventPublisher);
     }
 
     public static Order order(OrderLineItems orderLineItems) {
-        return new Order(occupiedOrderTable(), orderLineItems);
+        return new Order(occupiedOrderTable(), orderLineItems, eventPublisher);
     }
 
     public static Order order(OrderTable orderTable, OrderLineItems orderLineItems) {
-        return new Order(orderTable, orderLineItems);
+        return new Order(orderTable, orderLineItems, eventPublisher);
     }
 
     public static Order acceptedOrder() {
@@ -39,7 +41,6 @@ public class OrderFixture {
 
         return order;
     }
-
 
 
     public static OrderLineItems orderLineItems() {
