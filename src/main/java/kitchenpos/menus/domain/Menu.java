@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
 import kitchenpos.menus.domain.vo.MenuName;
 import kitchenpos.menus.domain.vo.MenuPrice;
 import kitchenpos.menus.domain.vo.MenuProducts;
@@ -8,6 +9,7 @@ import kitchenpos.products.infra.PurgomalumClient;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -67,6 +69,9 @@ public class Menu {
     }
 
     public Menu changePrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidMenuPriceException();
+        }
         if (price.compareTo(menuProducts.totalAmount()) < 0) {
             this.displayed = false;
         }
