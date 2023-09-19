@@ -1,10 +1,10 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.request.MenuChangePriceRequest;
+import kitchenpos.menus.application.dto.request.MenuCreateRequest;
+import kitchenpos.menus.application.dto.response.MenuResponse;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.ui.dto.request.MenuChangePriceRequest;
-import kitchenpos.menus.ui.dto.request.MenuCreateRequest;
-import kitchenpos.menus.ui.dto.response.MenuResponse;
 import kitchenpos.products.domain.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

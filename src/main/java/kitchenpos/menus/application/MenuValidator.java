@@ -1,9 +1,9 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.request.MenuProductCreateRequest;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuPrice;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.ui.dto.request.MenuProductCreateRequest;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Component;
