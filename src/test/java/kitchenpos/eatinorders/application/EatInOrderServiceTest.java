@@ -19,10 +19,7 @@ import kitchenpos.ordertables.domain.OrderTable;
 import kitchenpos.ordertables.domain.OrderTableRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.*;
 
@@ -54,7 +51,6 @@ class EatInOrderServiceTest {
                 new FakeApplicationEventPublisher());
     }
 
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     @DisplayName("매장 주문 등록")
     class create {
@@ -82,7 +78,7 @@ class EatInOrderServiceTest {
 
 
         @DisplayName("메뉴가 없으면 등록할 수 없다.")
-        @MethodSource("orderLineItems")
+        @NullAndEmptySource
         @ParameterizedTest
         void create(final List<EatInOrderLineItemRequest> eatInOrderLineItems) {
             final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
@@ -93,13 +89,6 @@ class EatInOrderServiceTest {
 
             assertThatThrownBy(() -> orderService.create(request))
                     .isInstanceOf(EatInOrderLineItemException.class);
-        }
-
-        private List<Arguments> orderLineItems() {
-            return Arrays.asList(
-                    null,
-                    Arguments.of(Collections.emptyList())
-            );
         }
 
         @DisplayName("메뉴가 없으면 등록할 수 없다.")
