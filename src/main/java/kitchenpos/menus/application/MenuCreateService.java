@@ -21,6 +21,7 @@ public class MenuCreateService {
         validMenuProduct(menu);
         validMenuGroup(menu);
     }
+
     public void validMenuProduct(Menu menu) {
         MenuProducts menuProducts = menu.getMenuProducts();
 

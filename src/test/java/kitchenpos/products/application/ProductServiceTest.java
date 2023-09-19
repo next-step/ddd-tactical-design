@@ -34,6 +34,7 @@ class ProductServiceTest {
     private ProductService productService;
     private MenuCreateService menuCreateService;
     private PurgomalumClient purgomalumClient;
+    private MenuChangePriceService menuChangePriceService;
 
     @BeforeEach
     void setUp() {
@@ -42,8 +43,9 @@ class ProductServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuService = new MenuService(menuRepository,  menuCreateService, menuGroupService, purgomalumClient);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient ), menuGroupService);
+        menuChangePriceService = new MenuChangePriceService(productService);
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient), menuGroupService);
         productService = new ProductService(productRepository, menuService, purgomalumClient);
     }
 

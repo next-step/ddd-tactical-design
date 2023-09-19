@@ -15,30 +15,30 @@ import java.util.UUID;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuCreateService menuCreateService;
-    private final MenuGroupService menuGroupService;
+    private final MenuChangePriceService menuChangePriceService;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuCreateService menuCreateService,
-            final MenuGroupService menuGroupService,
+            final MenuChangePriceService menuChangePriceService,
             final PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.menuCreateService = menuCreateService;
-        this.menuGroupService = menuGroupService;
+        this.menuChangePriceService = menuChangePriceService;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Menu create(final Menu request) {
         this.menuCreateService.valid(request);
+        this.menuChangePriceService.valid(request.getMenuProducts(), request.getPrice());
         return this.menuRepository.save(new Menu(request, purgomalumClient));
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final BigDecimal price) {
-        Menu menu = getMenu(menuId).changePrice(price);
-        return this.menuRepository.save(menu);
+        return this.menuRepository.save(getMenu(menuId, price).changePrice(price));
     }
 
     public void changeProductPrice(final UUID productId, final BigDecimal price) {
@@ -48,8 +48,8 @@ public class MenuService {
 
     @Transactional
     public Menu display(final UUID menuId) {
-        Menu menu = getMenu(menuId).displayed();
-        return this.menuRepository.save(menu);
+        this.menuChangePriceService.valid(getMenu(menuId).getMenuProducts(), getMenu(menuId).getPrice());
+        return this.menuRepository.save(getMenu(menuId).displayed());
     }
 
     @Transactional
@@ -67,9 +67,16 @@ public class MenuService {
     public Menu getMenu(UUID menuId) {
         Menu menu = this.menuRepository.findById(menuId)
                 .orElseThrow(NotFoundMenuException::new);
-        menuGroupService.validMenuGroupId(menu.getMenuGroupId());
+        this.menuChangePriceService.valid(menu.getMenuProducts(), menu.getPrice());
         return menu;
     }
 
+    @Transactional(readOnly = true)
+    public Menu getMenu(UUID menuId, BigDecimal price) {
+        Menu menu = this.menuRepository.findById(menuId)
+                .orElseThrow(NotFoundMenuException::new);
+        this.menuChangePriceService.valid(menu.getMenuProducts(), price);
+        return menu;
+    }
 
 }
