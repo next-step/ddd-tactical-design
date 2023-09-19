@@ -6,6 +6,7 @@ import kitchenpos.menus.domain.exception.InvalidMenuProductQuantityException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.application.ProductPriceChangeService;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -38,6 +39,7 @@ class MenuServiceTest {
     private MenuGroupService menuGroupService;
     private MenuCreateService menuCreateService;
     private MenuChangePriceService menuChangePriceService;
+    private ProductPriceChangeService productPriceChangeService;
 
     @BeforeEach
     void setUp() {
@@ -46,9 +48,10 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient), menuGroupService);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, menuService, purgomalumClient));
-        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService,  purgomalumClient);
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
+        productPriceChangeService = new ProductPriceChangeService(menuService);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -76,7 +79,7 @@ class MenuServiceTest {
         assertThatThrownBy(() -> {
             final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
             menuService.create(expected);
-        })                .isInstanceOf(IllegalArgumentException.class);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     private static List<Arguments> menuProducts() {

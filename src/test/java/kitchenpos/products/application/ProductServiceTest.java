@@ -36,6 +36,8 @@ class ProductServiceTest {
     private PurgomalumClient purgomalumClient;
     private MenuChangePriceService menuChangePriceService;
 
+    private ProductPriceChangeService productPriceChangeService;
+
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
@@ -43,10 +45,11 @@ class ProductServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuChangePriceService = new MenuChangePriceService(productService);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, menuService, purgomalumClient), menuGroupService);
-        productService = new ProductService(productRepository, menuService, purgomalumClient);
+        productPriceChangeService = new ProductPriceChangeService(menuService);
+        productService = new ProductService(productRepository, productPriceChangeService, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -67,8 +70,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        Product expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> productService.create(expected))
+        assertThatThrownBy(() -> createProductRequest("후라이드", price))
                 .isInstanceOf(InvalidProductPriceException.class);
     }
 
@@ -77,8 +79,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
+        assertThatThrownBy(() -> createProductRequest(name, 16_000L))
                 .isInstanceOf(InvalidProductDisplayedNameException.class);
     }
 
@@ -96,9 +97,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        Product expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
+        assertThatThrownBy(() -> changePriceRequest(price))
                 .isInstanceOf(InvalidProductPriceException.class);
     }
 
@@ -125,7 +124,7 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price);
+        return new Product(UUID.randomUUID(), name, price, purgomalumClient);
     }
 
     private Product changePriceRequest(final long price) {
@@ -133,7 +132,7 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price);
+        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
         return product.changePrice(price);
     }
 }

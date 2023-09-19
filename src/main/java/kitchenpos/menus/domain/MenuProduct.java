@@ -21,7 +21,6 @@ public class MenuProduct {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-
     public MenuProduct(UUID productId, BigDecimal price, long quantity) {
         this.id = productId;
         this.price = price;

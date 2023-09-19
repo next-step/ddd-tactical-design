@@ -1,6 +1,11 @@
 package kitchenpos.products.domain;
 
+import kitchenpos.products.domain.vo.ProductDisplayedName;
+import kitchenpos.products.domain.vo.ProductPrice;
+import kitchenpos.products.infra.PurgomalumClient;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -10,24 +15,33 @@ public class Product {
     @Id
     private UUID id;
 
+    @Embedded
     @Column(name = "displayed_name", nullable = false)
-    private String displayedName;
+    private ProductDisplayedName displayedName;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private ProductPrice price;
 
     public Product() {
     }
 
-    public Product(UUID id, String displayedName, BigDecimal price) {
+    public Product(UUID id, String displayedName, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = id;
-        this.displayedName = displayedName;
-        this.price = price;
+        this.displayedName = new ProductDisplayedName(displayedName, purgomalumClient);
+        this.price = new ProductPrice(price);
     }
 
+    public Product(Product product, PurgomalumClient purgomalumClient) {
+        this(
+                product.getId(),
+                product.getDisplayedName().getDisplayedName(),
+                product.getPrice(),
+                purgomalumClient
+        );
+    }
 
     public Product changePrice(BigDecimal price) {
-        this.price = price;
+        this.price = this.price.changePrice(price);
         return this;
     }
 
@@ -35,11 +49,11 @@ public class Product {
         return id;
     }
 
-    public String getDisplayedName() {
+    public ProductDisplayedName getDisplayedName() {
         return displayedName;
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 }

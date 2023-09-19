@@ -6,7 +6,6 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -112,10 +111,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price);
+        return new Product(UUID.randomUUID(), name, price, new FakePurgomalumClient());
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
+        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price), new FakePurgomalumClient());
     }
 }

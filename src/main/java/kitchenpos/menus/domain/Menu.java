@@ -67,6 +67,9 @@ public class Menu {
     }
 
     public Menu changePrice(BigDecimal price) {
+        if (price.compareTo(menuProducts.totalAmount()) < 0) {
+            this.displayed = false;
+        }
         this.price = new MenuPrice(price);
         return this;
     }

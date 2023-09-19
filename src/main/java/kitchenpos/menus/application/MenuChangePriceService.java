@@ -29,10 +29,9 @@ public class MenuChangePriceService {
         }
     }
 
-    private static void validMenuProductsPrice(MenuProducts menuProducts, BigDecimal price) {
+    private void validMenuProductsPrice(MenuProducts menuProducts, BigDecimal price) {
         if (price.compareTo(menuProducts.totalAmount()) > 0) {
             throw new InvalidMenuProductsPriceException();
         }
     }
-
 }
