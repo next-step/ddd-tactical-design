@@ -41,12 +41,12 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct(2L, product().getId());
+        final MenuProduct menuProduct = new MenuProduct(2L, product().getId(), product().getPrice().getValue());
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct(quantity, product.getId());
+        final MenuProduct menuProduct = new MenuProduct(quantity, product.getId(), product().getPrice().getValue());
         return menuProduct;
     }
 

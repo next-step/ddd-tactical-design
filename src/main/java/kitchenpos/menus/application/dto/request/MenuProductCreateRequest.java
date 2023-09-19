@@ -2,6 +2,7 @@ package kitchenpos.menus.application.dto.request;
 
 import kitchenpos.menus.domain.MenuProduct;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuProductCreateRequest {
@@ -24,7 +25,7 @@ public class MenuProductCreateRequest {
         return quantity;
     }
 
-    public MenuProduct toMenuProduct() {
-        return new MenuProduct(this.quantity, this.productId);
+    public MenuProduct toMenuProduct(BigDecimal price) {
+        return new MenuProduct(this.quantity, this.productId, price);
     }
 }

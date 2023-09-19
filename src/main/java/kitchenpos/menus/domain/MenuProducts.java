@@ -5,6 +5,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,9 +25,14 @@ public class MenuProducts {
     }
 
     public void addAll(List<MenuProduct> menuProducts) {
-        menuProducts
-                .forEach(menuProduct -> add(menuProduct));
-        this.menuProducts = menuProducts;
+        validate(menuProducts);
+        menuProducts.forEach(this::add);
+    }
+
+    private void validate(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private void add(MenuProduct menuProduct) {
@@ -37,5 +43,11 @@ public class MenuProducts {
 
     public List<MenuProduct> get() {
         return Collections.unmodifiableList(menuProducts);
+    }
+
+    public BigDecimal sumOfPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

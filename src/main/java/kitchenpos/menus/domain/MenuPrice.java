@@ -32,6 +32,10 @@ public class MenuPrice {
         return value.compareTo(price);
     }
 
+    public BigDecimal multiply(long value) {
+        return this.value.multiply(BigDecimal.valueOf(value));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

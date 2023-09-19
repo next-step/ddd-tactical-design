@@ -7,7 +7,6 @@ import kitchenpos.products.domain.PurgomalumClient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MenuCreateRequest {
     private String name;
@@ -48,15 +47,7 @@ public class MenuCreateRequest {
         return menuProductCreateRequests;
     }
 
-    public Menu toMenu(PurgomalumClient purgomalumClient) {
-        toMenuProducts();
-        return new Menu(this.name, purgomalumClient, this.price, this.menuGroupId, this.displayed, toMenuProducts());
+    public Menu toMenu(PurgomalumClient purgomalumClient, List<MenuProduct> menuProducts) {
+        return new Menu(this.name, purgomalumClient, this.price, this.menuGroupId, this.displayed, menuProducts);
     }
-
-    private List<MenuProduct> toMenuProducts() {
-        return menuProductCreateRequests.stream()
-                .map(MenuProductCreateRequest::toMenuProduct)
-                .collect(Collectors.toList());
-    }
-
 }

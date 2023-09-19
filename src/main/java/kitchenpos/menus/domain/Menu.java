@@ -52,6 +52,7 @@ public class Menu {
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts.addAll(menuProducts);
+        validatePrice();
     }
 
     public UUID getId() {
@@ -83,10 +84,18 @@ public class Menu {
     }
 
     public void show() {
+        validatePrice();
         this.displayed = true;
     }
 
     public void changePrice(BigDecimal price) {
         this.price = new MenuPrice(price);
+        validatePrice();
+    }
+
+    private void validatePrice() {
+        if (this.price.compareTo(menuProducts.sumOfPrice()) > 0) {
+            throw new IllegalArgumentException();
+        }
     }
 }

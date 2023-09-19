@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -23,12 +24,15 @@ public class MenuProduct {
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
+    private MenuPrice price;
+
     public MenuProduct() {
     }
 
-    public MenuProduct(Long quantity, UUID productId) {
+    public MenuProduct(Long quantity, UUID productId, BigDecimal price) {
         this.quantity = new Quantity(quantity);
         this.productId = productId;
+        this.price = new MenuPrice(price);
     }
 
     public Long getSeq() {
@@ -38,9 +42,12 @@ public class MenuProduct {
     public long getQuantity() {
         return quantity.getValue();
     }
-    
+
     public UUID getProductId() {
         return productId;
     }
 
+    public BigDecimal getTotalPrice() {
+        return price.multiply(quantity.getValue());
+    }
 }
