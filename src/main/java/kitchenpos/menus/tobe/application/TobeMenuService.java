@@ -68,7 +68,7 @@ public class TobeMenuService {
             TobeMenuProductQuantity quantity = new TobeMenuProductQuantity(it.getQuantity());
             final TobeProduct product = productRepository.findById(it.getProductId())
                                                          .orElseThrow(NoSuchElementException::new);
-            return new TobeMenuProduct(product, quantity);
+            return new TobeMenuProduct(product.getId(), new MenuPrice(product.getBigDecimalPrice()), quantity);
         }).collect(Collectors.toList());
 
         return new TobeMenuProducts(tobeMenuProducts);

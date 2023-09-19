@@ -45,11 +45,15 @@ public class TobeFixtures {
     }
 
     public static TobeMenuProduct menuProduct() {
-        return new TobeMenuProduct(new Random().nextLong(), product(), new TobeMenuProductQuantity(2L));
+        return new TobeMenuProduct(new Random().nextLong(), product().getId(),
+                                   new MenuPrice(product().getBigDecimalPrice()), new TobeMenuProductQuantity(2L)
+        );
     }
 
     public static TobeMenuProduct menuProduct(final TobeProduct product, final long quantity) {
-        return new TobeMenuProduct(new Random().nextLong(), product, new TobeMenuProductQuantity(quantity));
+        return new TobeMenuProduct(new Random().nextLong(), product.getId(),
+                                   new MenuPrice(product().getBigDecimalPrice()), new TobeMenuProductQuantity(quantity)
+        );
     }
 
 //    public static Order order(final OrderStatus status, final String deliveryAddress) {

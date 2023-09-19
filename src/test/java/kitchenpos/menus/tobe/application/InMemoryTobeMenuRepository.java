@@ -43,9 +43,7 @@ public class InMemoryTobeMenuRepository implements TobeMenuRepository {
         return menus.values()
             .stream()
             .filter(menu -> menu.getTobeMenuProducts().stream()
-                                .anyMatch(menuProduct -> menuProduct.getProduct()
-                                                                    .getId()
-                                                                    .equals(productId)))
+                                .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
             .collect(Collectors.toList());
     }
 }

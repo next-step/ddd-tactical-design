@@ -1,8 +1,12 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.products.tobe.domain.TobeProduct;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -13,17 +17,9 @@ public class TobeMenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private TobeProduct product;
-
     private TobeMenuProductQuantity quantity;
 
-    @Transient
+    @Column(name = "product_id")
     private UUID productId;
 
     @Transient
@@ -32,25 +28,21 @@ public class TobeMenuProduct {
     protected TobeMenuProduct() {
     }
 
-    public TobeMenuProduct(TobeProduct product, TobeMenuProductQuantity quantity) {
-        this.product = product;
+    public TobeMenuProduct(UUID productId, MenuPrice menuPrice, TobeMenuProductQuantity quantity) {
+        this.productId = productId;
         this.quantity = quantity;
-        this.price = new MenuPrice(product.getBigDecimalPrice()).multiply(quantity.getQuantity());
+        this.price = menuPrice.multiply(quantity.getQuantity());
     }
 
-    public TobeMenuProduct(Long seq, TobeProduct product, TobeMenuProductQuantity quantity) {
+    public TobeMenuProduct(Long seq, UUID productId, MenuPrice menuPrice, TobeMenuProductQuantity quantity) {
         this.seq = seq;
-        this.product = product;
+        this.productId = productId;
         this.quantity = quantity;
-        this.price = new MenuPrice(product.getBigDecimalPrice()).multiply(quantity.getQuantity());
+        this.price = menuPrice.multiply(quantity.getQuantity());
     }
 
     public Long getSeq() {
         return seq;
-    }
-
-    public TobeProduct getProduct() {
-        return product;
     }
 
     public TobeMenuProductQuantity getQuantity() {
