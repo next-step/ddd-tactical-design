@@ -88,7 +88,7 @@ class TobeMenuServiceTest {
     @DisplayName("상품이 없으면 등록할 수 없다.")
     @MethodSource("invalidMenuProducts")
     @ParameterizedTest
-    void create04(final List<TobeMenuProductRequest> menuProducts) {
+    void create02(final List<TobeMenuProductRequest> menuProducts) {
         TobeMenuCreateRequest request = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(request))
                 .isInstanceOf(NoSuchElementException.class);
@@ -114,7 +114,7 @@ class TobeMenuServiceTest {
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
-    void create02(final BigDecimal price) {
+    void create03(final BigDecimal price) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
@@ -137,7 +137,7 @@ class TobeMenuServiceTest {
     @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
     @NullSource
     @ParameterizedTest
-    void create03(final UUID menuGroupId) {
+    void create04(final UUID menuGroupId) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
@@ -147,15 +147,25 @@ class TobeMenuServiceTest {
 
     @DisplayName("메뉴의 이름이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
     @ParameterizedTest
-    void create04(final String name) {
+    void create05(final String name) {
         final TobeMenuCreateRequest expected = createMenuRequest(
                 name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("메뉴의 이름은 비어있거나 비속어가 포함될 수 없습니다.");
+                .hasMessageContaining("메뉴의 이름은 비속어가 포함될 수 없습니다.");
+    }
+
+    @DisplayName("메뉴의 이름은 비어있을 수 없다.")
+    @Test
+    void create06() {
+        final TobeMenuCreateRequest expected = createMenuRequest(
+                null, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+        );
+        assertThatThrownBy(() -> menuService.create(expected))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("메뉴의 이름은 비어있을 수 없습니다.");
     }
 
     @DisplayName("메뉴의 가격을 변경할 수 있다.")

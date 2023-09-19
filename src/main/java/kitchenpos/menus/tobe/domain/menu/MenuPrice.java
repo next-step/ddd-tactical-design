@@ -29,7 +29,7 @@ public class MenuPrice {
         return new MenuPrice(BigDecimal.ZERO);
     }
 
-    public MenuPrice sum(final MenuPrice price) {
+    public MenuPrice add(final MenuPrice price) {
         return new MenuPrice(this.price.add(price.price));
     }
 
