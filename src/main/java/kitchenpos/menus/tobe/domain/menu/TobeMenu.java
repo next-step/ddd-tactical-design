@@ -20,37 +20,20 @@ public class TobeMenu {
     @Embedded
     private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private TobeMenuGroup tobeMenuGroup;
+    @Column(name = "menu_group_id")
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
-
-//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinColumn(
-//        name = "menu_id",
-//        nullable = false,
-//        columnDefinition = "binary(16)",
-//        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-//    )
-//    private List<TobeMenuProduct> tobeMenuProducts;
 
     @Embedded
     private TobeMenuProducts tobeMenuProducts = new TobeMenuProducts();
 
 
-    @Transient
-    private UUID menuGroupId;
-
     protected TobeMenu() {
     }
 
-    public TobeMenu(UUID id, MenuName menuName, MenuPrice price, TobeMenuGroup tobeMenuGroup, boolean displayed,
+    public TobeMenu(UUID id, MenuName menuName, MenuPrice price, UUID menuGroupId, boolean displayed,
                     List<TobeMenuProduct> tobeMenuProducts) {
         if (Objects.isNull(tobeMenuProducts) || tobeMenuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴의 상품은 비어있을 수 없습니다.");
@@ -59,17 +42,17 @@ public class TobeMenu {
         this.id = id;
         this.menuName = menuName;
         this.price = price;
-        this.tobeMenuGroup = tobeMenuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.tobeMenuProducts = new TobeMenuProducts(tobeMenuProducts);
     }
 
-    public TobeMenu(UUID id, MenuName menuName, MenuPrice price, TobeMenuGroup tobeMenuGroup, boolean displayed,
+    public TobeMenu(UUID id, MenuName menuName, MenuPrice price, UUID menuGroupId, boolean displayed,
                     TobeMenuProducts tobeMenuProducts) {
         this.id = id;
         this.menuName = menuName;
         this.price = price;
-        this.tobeMenuGroup = tobeMenuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.tobeMenuProducts = tobeMenuProducts;
     }
@@ -99,10 +82,6 @@ public class TobeMenu {
     }
     public MenuPrice getPrice() {
         return price;
-    }
-
-    public TobeMenuGroup getTobeMenuGroup() {
-        return tobeMenuGroup;
     }
 
     public boolean isDisplayed() {

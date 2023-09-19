@@ -53,10 +53,10 @@ public class TobeMenuService {
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                                                            .orElseThrow(NoSuchElementException::new);
         final TobeMenu menu = new TobeMenu(UUID.randomUUID(), new MenuName(request.getName(), purgomalumChecker),
-                                           new MenuPrice(request.getPrice()), menuGroup, request.isDisplayed(),
+                                           new MenuPrice(request.getPrice()), menuGroup.getId(), request.isDisplayed(),
                                            tobeMenuProducts);
 
-        return TobeMenuCreateResponse.of(menuRepository.save(menu));
+        return TobeMenuCreateResponse.of(menuRepository.save(menu), menuGroup);
     }
 
     private TobeMenuProducts getTobeMenuProducts(final List<TobeMenuProductRequest> menuProductRequests) {

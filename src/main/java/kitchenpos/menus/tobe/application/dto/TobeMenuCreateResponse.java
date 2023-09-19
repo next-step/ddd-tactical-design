@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.application.dto;
 
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
+import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,10 +25,10 @@ public class TobeMenuCreateResponse {
         this.menuProducts = menuProducts;
     }
 
-    public static TobeMenuCreateResponse of(TobeMenu tobeMenu) {
+    public static TobeMenuCreateResponse of(TobeMenu tobeMenu, final TobeMenuGroup menuGroup) {
         return new TobeMenuCreateResponse(tobeMenu.getId(), tobeMenu.getMenuName().getName(),
                                           tobeMenu.getPrice().getPrice(),
-                                          ToBeMenuGroupRequest.from(tobeMenu.getTobeMenuGroup()),
+                                          ToBeMenuGroupRequest.from(menuGroup),
                                           tobeMenu.isDisplayed(),
                                           TobeMenuProductRequest.from(tobeMenu.getTobeMenuProducts()));
     }

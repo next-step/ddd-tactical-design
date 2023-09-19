@@ -32,7 +32,7 @@ public class TobeFixtures {
 
     public static TobeMenu menu(final long price, final boolean displayed, final TobeMenuProduct... menuProducts) {
         return new TobeMenu(UUID.randomUUID(), new MenuName("후라이드+후라이드", new FakeMenuPurgomalumChecker()),
-                            new MenuPrice(BigDecimal.valueOf(price)), menuGroup(), displayed,
+                            new MenuPrice(BigDecimal.valueOf(price)), menuGroup().getId(), displayed,
                             Arrays.asList(menuProducts));
     }
 
