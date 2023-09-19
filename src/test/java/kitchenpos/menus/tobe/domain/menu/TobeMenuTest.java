@@ -29,12 +29,12 @@ class TobeMenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    @DisplayName("메뉴 숨김")
+    @DisplayName("가격 변경")
     @Test
     void updatePrice() {
         TobeMenu menu = menu(19_000L, false, menuProduct());
         menu.updatePrice(new MenuPrice(BigDecimal.valueOf(20_000L)));
 
-        assertThat(menu.isDisplayed()).isFalse();
+        assertThat(menu.getPrice()).isEqualTo(new MenuPrice(BigDecimal.valueOf(20_000L)));
     }
 }
