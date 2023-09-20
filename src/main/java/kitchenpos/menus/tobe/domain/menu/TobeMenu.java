@@ -64,13 +64,21 @@ public class TobeMenu {
         this.price = price;
     }
 
+    private void checkSum(final MenuPrice menuPrice) {
+        MenuPrice sum = tobeMenuProducts.sum();
+        if (menuPrice.greaterThan(sum)) {
+            throw new IllegalArgumentException(
+                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + menuPrice + " sum: " + sum);
+        }
+    }
+
     public UUID getId() {
         return id;
     }
-
     public MenuName getMenuName() {
         return menuName;
     }
+
     public MenuPrice getPrice() {
         return price;
     }
@@ -85,13 +93,5 @@ public class TobeMenu {
 
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public void checkSum(final MenuPrice menuPrice) {
-        MenuPrice sum = tobeMenuProducts.sum();
-        if (menuPrice.greaterThan(sum)) {
-            throw new IllegalArgumentException(
-                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + menuPrice + " sum: " + sum);
-        }
     }
 }

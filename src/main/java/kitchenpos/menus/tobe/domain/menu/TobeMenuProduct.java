@@ -41,6 +41,10 @@ public class TobeMenuProduct {
         this.price = menuPrice.multiply(quantity.getQuantity());
     }
 
+    public MenuPrice getMenuPriceSum() {
+        return price.multiply(quantity.getQuantity());
+    }
+
     public Long getSeq() {
         return seq;
     }
