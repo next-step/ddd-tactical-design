@@ -37,7 +37,7 @@ class OrderTableServiceTest {
         orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
         orderTableSitService = new OrderTableSitService(orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService,  orderTableChangeGuestService, orderTableSitService, orderTableClearService);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderTableChangeGuestService, orderTableSitService, orderTableClearService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

@@ -44,7 +44,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, String deliveryAddress, OrderTable orderTable) {
+    public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, String deliveryAddress, OrderTable orderTable, UUID orderTableId) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -52,7 +52,7 @@ public class Order {
         this.orderLineItems = orderLineItems;
         this.deliveryAddress = deliveryAddress;
         this.orderTable = orderTable;
-        this.orderTableId = orderTable.getId();
+        this.orderTableId = orderTableId;
     }
 
     public UUID getId() {

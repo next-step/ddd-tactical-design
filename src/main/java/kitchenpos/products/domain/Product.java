@@ -1,4 +1,3 @@
-
 package kitchenpos.products.domain;
 
 import kitchenpos.products.domain.vo.ProductDisplayedName;

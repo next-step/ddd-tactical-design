@@ -41,6 +41,18 @@ class MenuServiceTest {
     private MenuChangePriceService menuChangePriceService;
     private ProductPriceChangeService productPriceChangeService;
 
+    private static List<Arguments> menuProducts() {
+        return Arrays.asList(
+                null,
+                Arguments.of(Collections.emptyList()),
+                Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
+        );
+    }
+
+    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
+        return new MenuProduct(productId, BigDecimal.valueOf(16_000L), quantity);
+    }
+
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
@@ -82,14 +94,6 @@ class MenuServiceTest {
             menuService.create(expected);
         }).isInstanceOf(IllegalArgumentException.class);
 
-    }
-
-    private static List<Arguments> menuProducts() {
-        return Arrays.asList(
-                null,
-                Arguments.of(Collections.emptyList()),
-                Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
-        );
     }
 
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
@@ -240,10 +244,6 @@ class MenuServiceTest {
             final List<MenuProduct> menuProducts
     ) {
         return new Menu(UUID.randomUUID(), name, price, menuGroup(menuGroupId), displayed, menuProducts, menuGroupId, purgomalumClient);
-    }
-
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        return new MenuProduct(productId, BigDecimal.valueOf(16_000L), quantity);
     }
 
     private Menu changePriceRequest(final long price) {

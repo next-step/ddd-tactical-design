@@ -80,14 +80,15 @@ public class Fixtures {
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
         order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
         order.setOrderTable(orderTable);
+        order.setOrderTableId(orderTable.getId());
         return order;
     }
 
-    public static EatInOrderLineItem orderLineItem() {
-        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
-        eatInOrderLineItem.setSeq(new Random().nextLong());
-        eatInOrderLineItem.setMenu(menu());
-        return eatInOrderLineItem;
+    public static OrderLineItem orderLineItem() {
+        final OrderLineItem orderLineItem = new OrderLineItem();
+        orderLineItem.setSeq(new Random().nextLong());
+        orderLineItem.setMenu(menu());
+        return orderLineItem;
     }
 
     public static OrderTable orderTable() {
@@ -95,7 +96,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        return  new OrderTable(UUID.randomUUID(), "1번", numberOfGuests, occupied);
+        return new OrderTable(UUID.randomUUID(), "1번", numberOfGuests, occupied);
     }
 
     public static Product product() {

@@ -49,6 +49,7 @@ public class MenuCreateService {
             throw new InvalidMenuProductsPriceException();
         }
     }
+
     public void validMenuGroup(Menu menu) {
         menuGroupService.findById(menu.getMenuGroupId());
     }

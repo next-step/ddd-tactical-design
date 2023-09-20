@@ -5,7 +5,6 @@ import kitchenpos.menus.domain.MenuChangePriceService;
 import kitchenpos.menus.domain.MenuCreateService;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.exception.NotFoundMenuException;
-import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

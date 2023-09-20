@@ -21,6 +21,7 @@ public class MenuChangePriceService {
         valid(menu.getMenuProducts(), price);
         return menu.changePrice(price);
     }
+
     private void valid(MenuProducts menuProducts, BigDecimal price) {
         validMenuProductsPrice(menuProducts, price);
         validMenuProductsSize(menuProducts);

@@ -17,10 +17,10 @@ public class OrderTableClearService {
     }
 
     public OrderTable clear(final OrderTable orderTable) {
-        if (orderStatusService.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+        if (!orderStatusService.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+            orderTableRepository.save(orderTable.clear());
         }
-        return orderTableRepository.save(orderTable.clear());
+        return orderTable;
     }
 
 }

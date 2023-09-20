@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.ui;
 
-import kitchenpos.eatinorders.application.EatInOrderService;
+import kitchenpos.eatinorders.application.OrderService;
 import kitchenpos.eatinorders.domain.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,27 +12,27 @@ import java.util.UUID;
 @RequestMapping("/api/orders")
 @RestController
 public class OrderRestController {
-    private final EatInOrderService eatInOrderService;
+    private final OrderService orderService;
 
-    public OrderRestController(final EatInOrderService eatInOrderService) {
-        this.eatInOrderService = eatInOrderService;
+    public OrderRestController(final OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody final Order request) {
-        final Order response = eatInOrderService.create(request);
+        final Order response = orderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
                 .body(response);
     }
 
     @PutMapping("/{orderId}/accept")
     public ResponseEntity<Order> accept(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(eatInOrderService.accept(orderId));
+        return ResponseEntity.ok(orderService.accept(orderId));
     }
 
     @PutMapping("/{orderId}/serve")
     public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(eatInOrderService.serve(orderId));
+        return ResponseEntity.ok(orderService.serve(orderId));
     }
 
 //    @PutMapping("/{orderId}/start-delivery")
@@ -47,11 +47,11 @@ public class OrderRestController {
 
     @PutMapping("/{orderId}/complete")
     public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(eatInOrderService.complete(orderId));
+        return ResponseEntity.ok(orderService.complete(orderId));
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> findAll() {
-        return ResponseEntity.ok(eatInOrderService.findAll());
+        return ResponseEntity.ok(orderService.findAll());
     }
 }

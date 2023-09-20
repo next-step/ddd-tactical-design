@@ -1,37 +1,35 @@
 package kitchenpos.eatinorders.domain.vo;
 
-import kitchenpos.eatinorders.domain.EatInOrderLineItem;
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.support.ValueObject;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Embeddable
 public class OrderLineItems extends ValueObject {
-    private List<EatInOrderLineItem> eatInOrderLineItems;
+    private List<OrderLineItem> orderLineItems;
 
     public OrderLineItems() {
     }
 
-    public OrderLineItems(List<EatInOrderLineItem> eatInOrderLineItems) {
-        if (Objects.isNull(eatInOrderLineItems) || eatInOrderLineItems.isEmpty()) {
+    public OrderLineItems(List<OrderLineItem> orderLineItems) {
+        if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        this.eatInOrderLineItems = eatInOrderLineItems;
+        this.orderLineItems = orderLineItems;
     }
 
     public BigDecimal sum() {
-        return this.eatInOrderLineItems.stream()
-                .map(EatInOrderLineItem::multiply)
+        return this.orderLineItems.stream()
+                .map(OrderLineItem::multiply)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public List<EatInOrderLineItem> getOrderLineItems() {
-        return eatInOrderLineItems;
+    public List<OrderLineItem> getOrderLineItems() {
+        return orderLineItems;
     }
 }
