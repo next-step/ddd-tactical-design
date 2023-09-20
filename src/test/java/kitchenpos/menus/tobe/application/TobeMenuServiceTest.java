@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -188,7 +189,7 @@ class TobeMenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void changePriceToExpensive() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 1L))).getId();
+        final UUID menuId = menuRepository.save(menu(15_000L, menuProduct(product, 1L))).getId();
         final BigDecimal expected = BigDecimal.valueOf(33_000L);
 
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
@@ -206,8 +207,13 @@ class TobeMenuServiceTest {
 
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
-    void displayExpensiveMenu() {
-        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 1L))).getId();
+    void displayExpensiveMenu() throws NoSuchFieldException, IllegalAccessException {
+        TobeMenu menu = menu(15_000L, false, menuProduct(product, 1L));
+        final UUID menuId = menuRepository.save(menu).getId();
+        Field field = TobeMenu.class.getDeclaredField("price");
+        field.setAccessible(true);
+        field.set(menu, new MenuPrice(new BigDecimal(17_000L)));
+
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(IllegalArgumentException.class);
     }

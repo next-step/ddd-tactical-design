@@ -41,6 +41,12 @@ public class TobeMenu {
         if (Objects.isNull(tobeMenuProducts) || tobeMenuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴의 상품은 비어있을 수 없습니다.");
         }
+
+        if (price.greaterThan(tobeMenuProducts.sumOfMenuProductPrices())) {
+            throw new IllegalArgumentException(
+                    "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + price + " sumPrice: " + tobeMenuProducts.sumOfMenuProductPrices());
+        }
+
         this.id = id;
         this.menuName = menuName;
         this.price = price;
