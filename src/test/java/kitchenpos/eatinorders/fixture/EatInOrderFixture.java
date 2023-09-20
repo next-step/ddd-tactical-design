@@ -1,15 +1,12 @@
 package kitchenpos.eatinorders.fixture;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.eatinorders.application.EatInOrderService;
 import kitchenpos.eatinorders.application.MenuLoader;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.ordertables.domain.OrderTable;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 import static kitchenpos.menus.application.fixtures.MenuFixture.menu;
 
@@ -60,6 +57,7 @@ public class EatInOrderFixture {
                 menuLoader
         );
     }
+
     public static EatInOrderLineItem orderLineItem(Menu menu, long quantity, long price) {
         return orderLineItem(
                 menu,

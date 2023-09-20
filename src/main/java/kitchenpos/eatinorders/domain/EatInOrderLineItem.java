@@ -45,9 +45,9 @@ public class EatInOrderLineItem {
 
     public EatInOrderLineItem(UUID menuId, long quantity, Price price, MenuLoader policy) {
         this(menuId,
-             new EatInOrderLineItemQuantity(quantity),
-             price,
-             policy);
+                new EatInOrderLineItemQuantity(quantity),
+                price,
+                policy);
     }
 
     public long getSeqValue() {

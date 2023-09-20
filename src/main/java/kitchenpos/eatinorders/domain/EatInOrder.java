@@ -69,8 +69,9 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
         this.status = EatInOrderStatus.COMPLETED;
         completed();
     }
+
     @PostUpdate
-    private void completed(){
+    private void completed() {
         registerEvent(new EatInOrderCompletedEvent(this, orderTableId.getValue()));
     }
 

@@ -27,6 +27,7 @@ public class ProductResponse {
                 product.getNameValue(),
                 product.getPriceValue());
     }
+
     public static List<ProductResponse> fromEntities(List<Product> products) {
         return products.stream()
                 .map(ProductResponse::fromEntity)

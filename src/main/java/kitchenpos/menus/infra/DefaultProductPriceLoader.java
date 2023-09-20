@@ -7,7 +7,6 @@ import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Component

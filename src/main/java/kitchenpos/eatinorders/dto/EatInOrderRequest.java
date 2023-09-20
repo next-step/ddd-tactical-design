@@ -23,8 +23,8 @@ public class EatInOrderRequest {
         return new EatInOrder(
                 new EatInOrderLineItems(
                         orderLineItems.stream()
-                        .map(item -> item.toEntity(policy))
-                        .collect(Collectors.toUnmodifiableList())),
+                                .map(item -> item.toEntity(policy))
+                                .collect(Collectors.toUnmodifiableList())),
                 new OrderTableId(orderTableId)
         );
     }

@@ -46,6 +46,7 @@ public class OrderTableService {
         }
 
         orderTable.clear();
+
         return OrderTableResponse.fromEntity(orderTable);
     }
 

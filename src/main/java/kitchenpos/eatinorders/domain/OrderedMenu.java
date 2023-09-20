@@ -5,7 +5,6 @@ import kitchenpos.common.domain.ValueObject;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -39,6 +38,7 @@ public class OrderedMenu extends ValueObject {
         this.displayName = displayName;
         this.menuPrice = menuPrice.getValue();
     }
+
     public UUID getId() {
         return id;
     }
