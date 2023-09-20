@@ -63,13 +63,23 @@ create table order_line_item
     primary key (seq)
 ) engine = InnoDB;
 
-create table to_be_order_line_item
+create table eat_in_order_line_item
 (
     seq      bigint     not null auto_increment,
     quantity bigint     not null,
     menu_id  binary(16) not null,
     menu_price decimal(19, 2) not null,
-    order_id binary(16) not null,
+    eat_in_order_id binary(16) not null,
+    primary key (seq)
+) engine = InnoDB;
+
+create table delivery_order_line_item
+(
+    seq      bigint     not null auto_increment,
+    quantity bigint     not null,
+    menu_id  binary(16) not null,
+    menu_price decimal(19, 2) not null,
+    delivery_order_id binary(16) not null,
     primary key (seq)
 ) engine = InnoDB;
 
@@ -100,6 +110,15 @@ create table eat_in_orders
     order_date_time  datetime(6)  not null,
     status           varchar(255) not null,
     order_table_id   binary(16)   not null,
+    primary key (id)
+) engine = InnoDB;
+
+create table delivery_orders
+(
+    id               binary(16)   not null,
+    order_date_time  datetime(6)  not null,
+    status           varchar(255) not null,
+    delivery_address  varchar(255)   not null,
     primary key (id)
 ) engine = InnoDB;
 

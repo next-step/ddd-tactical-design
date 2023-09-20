@@ -1,5 +1,6 @@
 package kitchenpos.deliveryorders.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -24,6 +25,21 @@ public class DeliveryOrderMenu {
         }
         this.menuId = menuId;
         this.menuPrice = menuPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        DeliveryOrderMenu that = (DeliveryOrderMenu)o;
+        return Objects.equals(menuId, that.menuId) && Objects.equals(menuPrice, that.menuPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(menuId, menuPrice);
     }
 
     public DeliveryOrderMenuPrice menuPrice() {
