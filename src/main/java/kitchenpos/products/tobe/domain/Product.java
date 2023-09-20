@@ -50,7 +50,7 @@ public class Product {
         return id;
     }
 
-    public ProductName getDisplayedName() {
+    public ProductName getProductName() {
         return productName;
     }
 

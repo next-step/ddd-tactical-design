@@ -1,5 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-public interface MenuDisplayedNameProfanities {
+public interface MenuNameProfanities {
     boolean containsProfanity(String text);
 }

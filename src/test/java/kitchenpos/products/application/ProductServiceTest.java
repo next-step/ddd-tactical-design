@@ -48,7 +48,7 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductName.from(expected.getName(), productNamePolicy)),
+                () -> assertThat(actual.getProductName()).isEqualTo(ProductName.from(expected.getName(), productNamePolicy)),
                 () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
         );
     }
@@ -67,7 +67,7 @@ class ProductServiceTest {
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
-    void createWithInvalidDisplayedName(final String name) {
+    void createWithInvalidName(final String name) {
         final ProductCreateRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class);

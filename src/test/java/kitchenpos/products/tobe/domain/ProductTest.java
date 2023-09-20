@@ -31,7 +31,7 @@ class ProductTest {
                 ProductPrice.from(BigDecimal.valueOf(16_000L)));
         assertAll(
                 () -> assertThat(product.getId()).isNotNull(),
-                () -> assertThat(product.getDisplayedName()).isEqualTo(ProductName.from("후라이드", productNamePolicy)),
+                () -> assertThat(product.getProductName()).isEqualTo(ProductName.from("후라이드", productNamePolicy)),
                 () -> assertThat(product.getPrice()).isEqualTo(ProductPrice.from(BigDecimal.valueOf(16_000L)))
         );
     }

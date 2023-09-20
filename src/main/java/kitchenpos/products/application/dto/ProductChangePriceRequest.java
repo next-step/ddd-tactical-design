@@ -5,12 +5,12 @@ import java.util.UUID;
 
 public class ProductChangePriceRequest {
     private final UUID id;
-    private final String displayedName;
+    private final String name;
     private final BigDecimal price;
 
-    public ProductChangePriceRequest(UUID id, String displayedName, BigDecimal price) {
+    public ProductChangePriceRequest(UUID id, String name, BigDecimal price) {
         this.id = id;
-        this.displayedName = displayedName;
+        this.name = name;
         this.price = price;
     }
 
@@ -18,8 +18,8 @@ public class ProductChangePriceRequest {
         return id;
     }
 
-    public String getDisplayedName() {
-        return displayedName;
+    public String getName() {
+        return name;
     }
 
     public BigDecimal getPrice() {

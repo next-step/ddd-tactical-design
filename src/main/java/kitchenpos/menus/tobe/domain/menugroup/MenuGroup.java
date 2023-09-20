@@ -12,12 +12,12 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    private MenuGroupDisplayedName name;
+    private MenuGroupName name;
 
     protected MenuGroup() {
     }
 
-    public MenuGroup(UUID id, MenuGroupDisplayedName name) {
+    public MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;
         this.name = name;
     }
@@ -26,7 +26,7 @@ public class MenuGroup {
         return id;
     }
 
-    public MenuGroupDisplayedName getName() {
+    public MenuGroupName getName() {
         return name;
     }
 

@@ -35,9 +35,9 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private MenuDisplayedNameProfanities menuDisplayedNameProfanities;
+    private MenuNameProfanities menuNameProfanities;
     private ProductNameProfanities productNameProfanities;
-    private MenuDisplayedNamePolicy menuDisplayedNamePolicy;
+    private MenuNamePolicy menuNamePolicy;
     private MenuService menuService;
     private ProductClient productClient;
     private ProductService productService;
@@ -49,10 +49,10 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        menuDisplayedNameProfanities = new FakeMenuDisplayedNameProfanities();
+        menuNameProfanities = new FakeMenuNameProfanities();
         productClient = new ProductClientImpl(productRepository);
-        menuDisplayedNamePolicy = new MenuDisplayedNamePolicy(menuDisplayedNameProfanities);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, menuDisplayedNamePolicy);
+        menuNamePolicy = new MenuNamePolicy(menuNameProfanities);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, menuNamePolicy);
         productService = new ProductService(productRepository, new ProductNamePolicy(productNameProfanities), new FakeProductEventPublisher(productRepository, menuRepository));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
@@ -68,7 +68,7 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getDisplayedName()).isEqualTo(MenuDisplayedName.from(expected.getName(), menuDisplayedNamePolicy)),
+                () -> assertThat(actual.getName()).isEqualTo(MenuName.from(expected.getName(), menuNamePolicy)),
                 () -> assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice())),
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
@@ -189,7 +189,7 @@ class MenuServiceTest {
     @Test
     void displayExpensiveMenu() {
         final UUID menuId = menuRepository.save(menu(32_000L, false, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
-        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getDisplayedName().getValue(), BigDecimal.valueOf(15_000L)));
+        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getProductName().getValue(), BigDecimal.valueOf(15_000L)));
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(IllegalStateException.class);
     }

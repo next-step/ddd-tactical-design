@@ -1,10 +1,10 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
+import kitchenpos.menus.application.FakeMenuNameProfanities;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
 import kitchenpos.products.application.FakeProductNameProfanities;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -31,7 +31,7 @@ public class Fixtures {
         MenuProductMaterial menuProductMaterial = menuProductMaterial(product.getId());
         return new Menu(
                 UUID.randomUUID(),
-                MenuDisplayedName.from("후라이드+후라이드", menuDisplayedNamePolicy()),
+                MenuName.from("후라이드+후라이드", menuNamePolicy()),
                 MenuPrice.from(BigDecimal.valueOf(price)),
                 menuGroup(),
                 displayed,
@@ -48,7 +48,7 @@ public class Fixtures {
         productRepository.save(product);
         return new Menu(
                 UUID.randomUUID(),
-                MenuDisplayedName.from("후라이드+후라이드", menuDisplayedNamePolicy()),
+                MenuName.from("후라이드+후라이드", menuNamePolicy()),
                 MenuPrice.from(BigDecimal.valueOf(price)),
                 menuGroup(),
                 displayed,
@@ -61,7 +61,7 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        return new MenuGroup(UUID.randomUUID(), new MenuGroupDisplayedName(name));
+        return new MenuGroup(UUID.randomUUID(), new MenuGroupName(name));
     }
 
     public static MenuProductMaterial menuProductMaterial() {
@@ -161,7 +161,7 @@ public class Fixtures {
         return new ProductNamePolicy(new FakeProductNameProfanities());
     }
 
-    public static MenuDisplayedNamePolicy menuDisplayedNamePolicy() {
-        return new MenuDisplayedNamePolicy(new FakeMenuDisplayedNameProfanities());
+    public static MenuNamePolicy menuNamePolicy() {
+        return new MenuNamePolicy(new FakeMenuNameProfanities());
     }
 }

@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.intrastructure;
 
-import kitchenpos.menus.tobe.domain.menu.MenuDisplayedNameProfanities;
+import kitchenpos.menus.tobe.domain.menu.MenuNameProfanities;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class MenuPurgomalumClient implements MenuDisplayedNameProfanities {
+public class MenuPurgomalumClient implements MenuNameProfanities {
     private final RestTemplate restTemplate;
 
     public MenuPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {

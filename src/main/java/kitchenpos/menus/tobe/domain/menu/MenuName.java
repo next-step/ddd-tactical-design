@@ -1,27 +1,25 @@
-package kitchenpos.menus.tobe.domain.menugroup;
+package kitchenpos.menus.tobe.domain.menu;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuGroupDisplayedName {
-
-    @Column(name = "displayed_name", nullable = false)
+public class MenuName {
+    @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuGroupDisplayedName() {
+    protected MenuName() {
     }
 
-    public MenuGroupDisplayedName(String value) {
-        this.validate(value);
+    private MenuName(final String value) {
         this.value = value;
     }
 
-    private void validate(String value) {
-        if (Objects.isNull(value) || value.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+    public static MenuName from(final String value, final MenuNamePolicy menuNamePolicy) {
+        MenuName menuName = new MenuName(value);
+        menuNamePolicy.validateName(menuName);
+        return menuName;
     }
 
     public String getValue() {
@@ -32,7 +30,7 @@ public class MenuGroupDisplayedName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuGroupDisplayedName that = (MenuGroupDisplayedName) o;
+        MenuName that = (MenuName) o;
         return Objects.equals(value, that.value);
     }
 

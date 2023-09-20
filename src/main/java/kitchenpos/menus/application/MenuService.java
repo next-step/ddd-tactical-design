@@ -18,18 +18,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductClient productClient;
-    private final MenuDisplayedNamePolicy menuDisplayedNamePolicy;
+    private final MenuNamePolicy menuNamePolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final ProductClient productClient,
-            final MenuDisplayedNamePolicy menuDisplayedNamePolicy
+            final MenuNamePolicy menuNamePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productClient = productClient;
-        this.menuDisplayedNamePolicy = menuDisplayedNamePolicy;
+        this.menuNamePolicy = menuNamePolicy;
     }
 
     @Transactional
@@ -44,7 +44,7 @@ public class MenuService {
                 .collect(Collectors.toList());
         final Menu menu = new Menu(
                 UUID.randomUUID(),
-                MenuDisplayedName.from(request.getName(), menuDisplayedNamePolicy),
+                MenuName.from(request.getName(), menuNamePolicy),
                 MenuPrice.from(request.getPrice()),
                 menuGroup,
                 request.isDisplayed(),

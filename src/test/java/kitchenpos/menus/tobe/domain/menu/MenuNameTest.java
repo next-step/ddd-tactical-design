@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.application.FakeMenuDisplayedNameProfanities;
+import kitchenpos.menus.application.FakeMenuNameProfanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,26 +12,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MenuDisplayedNameTest {
+class MenuNameTest {
 
 
-    private FakeMenuDisplayedNameProfanities menuDisplayedNameProfanities;
-    private MenuDisplayedNamePolicy menuDisplayedNamePolicy;
+    private FakeMenuNameProfanities menuNameProfanities;
+    private MenuNamePolicy menuNamePolicy;
 
     @BeforeEach
     void setUp() {
-        menuDisplayedNameProfanities = new FakeMenuDisplayedNameProfanities();
-        menuDisplayedNamePolicy = new MenuDisplayedNamePolicy(menuDisplayedNameProfanities);
+        menuNameProfanities = new FakeMenuNameProfanities();
+        menuNamePolicy = new MenuNamePolicy(menuNameProfanities);
     }
 
     @DisplayName("메뉴 이름 생성")
     @Test
     void create() {
         final String name = "후라이드";
-        final MenuDisplayedName menuDisplayedName = MenuDisplayedName.from(name, menuDisplayedNamePolicy);
+        final MenuName menuName = MenuName.from(name, menuNamePolicy);
         assertAll(
-                () -> assertThat(menuDisplayedName).isNotNull(),
-                () -> assertThat(menuDisplayedName.getValue()).isEqualTo(name)
+                () -> assertThat(menuName).isNotNull(),
+                () -> assertThat(menuName.getValue()).isEqualTo(name)
         );
     }
 
@@ -39,7 +39,7 @@ class MenuDisplayedNameTest {
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
-        assertThatThrownBy(() -> MenuDisplayedName.from(name, menuDisplayedNamePolicy))
+        assertThatThrownBy(() -> MenuName.from(name, menuNamePolicy))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -47,7 +47,7 @@ class MenuDisplayedNameTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {
-        assertThatThrownBy(() -> MenuDisplayedName.from(name, menuDisplayedNamePolicy))
+        assertThatThrownBy(() -> MenuName.from(name, menuNamePolicy))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

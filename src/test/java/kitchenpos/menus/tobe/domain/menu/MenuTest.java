@@ -31,7 +31,7 @@ class MenuTest {
         Menu menu = menu(30000L, true, productRepository, menuProductMaterial(product.getId()));
         assertAll(
                 () -> assertThat(menu.getId()).isNotNull(),
-                () -> assertThat(menu.getDisplayedName()).isEqualTo(MenuDisplayedName.from("후라이드+후라이드", menuDisplayedNamePolicy())),
+                () -> assertThat(menu.getName()).isEqualTo(MenuName.from("후라이드+후라이드", menuNamePolicy())),
                 () -> assertThat(menu.getPrice()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(30000L))),
                 () -> assertThat(menu.isDisplayed()).isTrue(),
                 () -> assertThat(menu.getMenuGroup().getName()).isEqualTo(menuGroup().getName()),

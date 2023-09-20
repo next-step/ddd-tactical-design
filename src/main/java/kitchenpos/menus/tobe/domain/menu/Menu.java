@@ -15,7 +15,7 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuDisplayedName displayedName;
+    private MenuName name;
 
     @Embedded
     private MenuPrice price;
@@ -37,14 +37,14 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuDisplayedName displayedName, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
-        this(null, displayedName, price, menuGroup, displayed, menuProducts);
+    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        this(null, name, price, menuGroup, displayed, menuProducts);
     }
 
-    public Menu(UUID id, MenuDisplayedName displayedName, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         this.validate(price, menuProducts);
         this.id = id;
-        this.displayedName = displayedName;
+        this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
@@ -96,8 +96,8 @@ public class Menu {
     }
 
 
-    public MenuDisplayedName getDisplayedName() {
-        return displayedName;
+    public MenuName getName() {
+        return name;
     }
 
 
