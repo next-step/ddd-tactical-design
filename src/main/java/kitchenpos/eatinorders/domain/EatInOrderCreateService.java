@@ -1,12 +1,12 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.domain.exception.NotFoundOrderTableException;
 import kitchenpos.eatinorders.domain.vo.OrderLineItems;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Objects;
+import java.util.UUID;
 
 @Component
 public class EatInOrderCreateService {
@@ -22,11 +22,6 @@ public class EatInOrderCreateService {
     }
 
     public Order create(Order order) {
-        final OrderType type = order.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
-
         Order eatInOrder = new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), getOrderLineItems(order), null, getOrderTable(order));
         return orderRepository.save(eatInOrder);
     }

@@ -27,6 +27,9 @@ class EatInOrderServiceTest {
     private EatInOrderService eatInOrderService;
     private EatInOrderCreateService eatInOrderCreateService;
     private EatInOrderLineItemsService eatInOrderLineItemsService;
+    private EatInOrderAcceptService eatInOrderAcceptService;
+    private EatInOrderServeService eatInOrderServeService;
+    private EatInOrderCompleteService eatInOrderCompleteService;
 
     @BeforeEach
     void setUp() {
@@ -37,7 +40,10 @@ class EatInOrderServiceTest {
         eatInOrderLineItemsService = new EatInOrderLineItemsService(menuRepository);
 
         eatInOrderCreateService = new EatInOrderCreateService(orderRepository, orderTableRepository, eatInOrderLineItemsService);
-        eatInOrderService = new EatInOrderService(orderRepository, kitchenridersClient, eatInOrderCreateService);
+        eatInOrderAcceptService = new EatInOrderAcceptService(orderRepository);
+        eatInOrderServeService = new EatInOrderServeService(orderRepository);
+        eatInOrderCompleteService = new EatInOrderCompleteService(orderRepository, new OrderTableClearService(orderTableRepository, new OrderStatusService(orderRepository)));
+        eatInOrderService = new EatInOrderService(orderRepository,  eatInOrderCreateService, eatInOrderAcceptService, eatInOrderServeService, eatInOrderCompleteService);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
