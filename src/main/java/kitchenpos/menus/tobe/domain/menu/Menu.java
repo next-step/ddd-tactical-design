@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
