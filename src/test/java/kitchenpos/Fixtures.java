@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.order.deliveryorder.domain.DeliveryOrder;
 import kitchenpos.order.deliveryorder.domain.DeliveryOrderLineItem;
@@ -157,10 +157,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
     }
 }

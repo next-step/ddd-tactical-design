@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.product.tobe.domain.Product;
@@ -42,22 +42,17 @@ public class ProductService {
         if (Objects.isNull(name) || profanityClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+        final Product product = new Product(UUID.randomUUID(), name, price);
         return productRepository.save(product);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final ChangeProductPriceRequestDto request) {
         final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
+
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -72,6 +67,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
+
         return product;
     }
 

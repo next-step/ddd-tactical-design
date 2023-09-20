@@ -115,10 +115,7 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+        return new Product(UUID.randomUUID(), name, price);
     }
 
     private ChangeProductPriceRequestDto changePriceRequest(final long price) {

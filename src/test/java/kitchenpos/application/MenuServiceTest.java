@@ -18,7 +18,7 @@ import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.application.MenuService;
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.menugroup.domain.MenuGroupRepository;
 import kitchenpos.product.tobe.domain.Product;

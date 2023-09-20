@@ -1,6 +1,7 @@
 package kitchenpos.product.tobe.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,30 +22,32 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Product() {
+    protected Product() {
+    }
+
+    public Product(UUID id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public void changePrice(BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("상품 가격은 없거나 0보다 작은 값으로 변경할 수 없습니다.");
+        }
+
+        this.price = price;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
