@@ -34,43 +34,28 @@ public class ToBeOrderLineItem {
     public ToBeOrderLineItem() {
     }
 
-    public Long getSeq() {
-        return seq;
+    public ToBeOrderLineItem(ToBeMenu menu, long quantity){
+        this.menu = menu;
+        this.quantity = quantity;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
+    public Long getSeq() {
+        return seq;
     }
 
     public ToBeMenu getMenu() {
         return menu;
     }
 
-    public void setMenu(final ToBeMenu menu) {
-        this.menu = menu;
-    }
-
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
