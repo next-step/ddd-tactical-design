@@ -59,7 +59,7 @@ public class EatInOrder {
 
     public void complete() {
         if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.");
+            throw new IllegalStateException("서빙된 주문만 완료할 수 있다.");
         }
         status = status.nextStatus();
     }
