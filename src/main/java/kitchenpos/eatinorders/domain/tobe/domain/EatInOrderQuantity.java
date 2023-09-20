@@ -1,4 +1,4 @@
-package kitchenpos.ordermaster.domain;
+package kitchenpos.eatinorders.domain.tobe.domain;
 
 import java.util.Objects;
 
@@ -8,14 +8,14 @@ import javax.persistence.Embeddable;
 import kitchenpos.eatinorders.domain.OrderType;
 
 @Embeddable
-public class OrderQuantity {
+public class EatInOrderQuantity {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    protected OrderQuantity() {
+    protected EatInOrderQuantity() {
     }
 
-    private OrderQuantity(long quantity) {
+    private EatInOrderQuantity(long quantity) {
         this.quantity = quantity;
     }
 
@@ -25,7 +25,7 @@ public class OrderQuantity {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        OrderQuantity quantity1 = (OrderQuantity)o;
+        EatInOrderQuantity quantity1 = (EatInOrderQuantity)o;
         return quantity == quantity1.quantity;
     }
 
@@ -34,9 +34,9 @@ public class OrderQuantity {
         return Objects.hash(quantity);
     }
 
-    public static OrderQuantity of(long quantity, OrderType orderType) {
+    public static EatInOrderQuantity of(long quantity, OrderType orderType) {
         validationOfQuantity(quantity, orderType);
-        return new OrderQuantity(quantity);
+        return new EatInOrderQuantity(quantity);
     }
 
     private static void validationOfQuantity(long quantity, kitchenpos.eatinorders.domain.OrderType orderType) {

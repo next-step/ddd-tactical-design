@@ -19,7 +19,7 @@ public class ToBeOrderTable {
     private OrderTableName name;
 
     @Embedded
-    private NumberOfGuest numberOfGuest;
+    private EatInNumberOfGuest eatInNumberOfGuest;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
@@ -49,15 +49,15 @@ public class ToBeOrderTable {
             throw new IllegalStateException("빈 테이블이면 손님 수를 변경 할 수 없다.");
         }
 
-        numberOfGuest = numberOfGuest.changeNumberOfGuest(number);
+        eatInNumberOfGuest = eatInNumberOfGuest.changeNumberOfGuest(number);
     }
 
     public boolean isOccupied() {
         return occupied;
     }
 
-    public NumberOfGuest getNumberOfGuest() {
-        return numberOfGuest;
+    public EatInNumberOfGuest getNumberOfGuest() {
+        return eatInNumberOfGuest;
     }
 
     public void validationForEatInOrder() {
@@ -67,7 +67,7 @@ public class ToBeOrderTable {
     }
 
     public void initOrderTable() {
-        numberOfGuest = NumberOfGuest.defaultNumber();
+        eatInNumberOfGuest = EatInNumberOfGuest.defaultNumber();
         occupied = false;
     }
 }

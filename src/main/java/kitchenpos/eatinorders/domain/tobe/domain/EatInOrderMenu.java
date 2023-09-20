@@ -1,4 +1,4 @@
-package kitchenpos.ordermaster.domain;
+package kitchenpos.eatinorders.domain.tobe.domain;
 
 import java.util.UUID;
 
@@ -6,16 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class OrderMenu {
+public class EatInOrderMenu {
     @Column(name = "menu_id", columnDefinition = "binary(16)")
     private UUID menuId;
     @Column(name = "menu_price")
-    private OrderMenuPrice menuPrice;
+    private EatInOrderMenuPrice menuPrice;
 
-    protected OrderMenu() {
+    protected EatInOrderMenu() {
     }
 
-    public OrderMenu(UUID menuId, OrderMenuPrice menuPrice) {
+    public EatInOrderMenu(UUID menuId, EatInOrderMenuPrice menuPrice) {
         if (menuId == null) {
             throw new IllegalArgumentException("메뉴가 없으면 등록할 수 없습니다.");
         }
@@ -26,7 +26,7 @@ public class OrderMenu {
         this.menuPrice = menuPrice;
     }
 
-    public OrderMenuPrice menuPrice() {
+    public EatInOrderMenuPrice menuPrice() {
         return menuPrice;
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ToBeMenus {
-    private List<ToBeMenu> value;
+    private final List<ToBeMenu> value;
 
     public ToBeMenus(List<ToBeMenu> value) {
         if (value == null || value.isEmpty()) {

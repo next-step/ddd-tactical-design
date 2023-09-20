@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import kitchenpos.eatinorders.domain.tobe.domain.NumberOfGuest;
+import kitchenpos.eatinorders.domain.tobe.domain.EatInNumberOfGuest;
 import kitchenpos.eatinorders.domain.tobe.domain.ToBeOrderTable;
 
 class ToBeOrderTableTest {
@@ -44,7 +44,7 @@ class ToBeOrderTableTest {
         orderTable.emptyTable(false);
         assertAll(
             () -> assertThat(orderTable.isOccupied()).isFalse(),
-            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(NumberOfGuest.defaultNumber())
+            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(EatInNumberOfGuest.defaultNumber())
         );
     }
 
@@ -63,7 +63,7 @@ class ToBeOrderTableTest {
     void changeNumberOfGuests1() {
         orderTable.sit();
         orderTable.changeNumberOfGuests(14);
-        assertThat(orderTable.getNumberOfGuest()).isEqualTo(NumberOfGuest.of(14));
+        assertThat(orderTable.getNumberOfGuest()).isEqualTo(EatInNumberOfGuest.of(14));
     }
 
     @DisplayName("빈테이블 손님수를 변경할 수 없다.")
@@ -82,7 +82,7 @@ class ToBeOrderTableTest {
         orderTable.initOrderTable();
         assertAll(
             () -> assertThat(orderTable.isOccupied()).isFalse(),
-            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(NumberOfGuest.of(0))
+            () -> assertThat(orderTable.getNumberOfGuest()).isEqualTo(EatInNumberOfGuest.of(0))
         );
     }
 }

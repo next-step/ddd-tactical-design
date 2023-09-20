@@ -1,4 +1,4 @@
-package kitchenpos.ordermaster.domain;
+package kitchenpos.eatinorders.domain.tobe.domain;
 
 import static kitchenpos.common.Currency.*;
 
@@ -13,39 +13,39 @@ import javax.persistence.Enumerated;
 import kitchenpos.common.Currency;
 
 @Embeddable
-public class OrderMenuPrice {
-    public static OrderMenuPrice ZERO = OrderMenuPrice.of(0L);
+public class EatInOrderMenuPrice {
+    public static EatInOrderMenuPrice ZERO = EatInOrderMenuPrice.of(0L);
     @Column(name = "price", nullable = false)
     private BigDecimal price;
     @Column(name = "currency", nullable = false)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    private OrderMenuPrice(BigDecimal price) {
+    private EatInOrderMenuPrice(BigDecimal price) {
         validationOfPrice(price);
         this.price = price;
         this.currency = defaultCurrency();
     }
 
-    protected OrderMenuPrice() {
+    protected EatInOrderMenuPrice() {
 
     }
 
-    public static OrderMenuPrice of(BigDecimal price) {
-        return new OrderMenuPrice(price);
+    public static EatInOrderMenuPrice of(BigDecimal price) {
+        return new EatInOrderMenuPrice(price);
     }
 
-    public static OrderMenuPrice of(long price) {
-        return new OrderMenuPrice(BigDecimal.valueOf(price));
+    public static EatInOrderMenuPrice of(long price) {
+        return new EatInOrderMenuPrice(BigDecimal.valueOf(price));
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof OrderMenuPrice))
+        if (!(o instanceof EatInOrderMenuPrice))
             return false;
-        OrderMenuPrice that = (OrderMenuPrice)o;
+        EatInOrderMenuPrice that = (EatInOrderMenuPrice)o;
         return Objects.equals(price, that.price) && Objects.equals(currency, that.currency);
     }
 
@@ -63,24 +63,24 @@ public class OrderMenuPrice {
         }
     }
 
-    public OrderMenuPrice add(OrderMenuPrice price) {
-        return new OrderMenuPrice(this.price.add(price.price));
+    public EatInOrderMenuPrice add(EatInOrderMenuPrice price) {
+        return new EatInOrderMenuPrice(this.price.add(price.price));
     }
 
     public boolean isGreaterThan(BigDecimal comparePrice) {
         return price.compareTo(comparePrice) > 0;
     }
 
-    public OrderMenuPrice changePrice(BigDecimal newPrice) {
-        return new OrderMenuPrice(newPrice);
+    public EatInOrderMenuPrice changePrice(BigDecimal newPrice) {
+        return new EatInOrderMenuPrice(newPrice);
     }
 
-    public OrderMenuPrice changePrice(Long newPrice) {
-        return new OrderMenuPrice(BigDecimal.valueOf(newPrice));
+    public EatInOrderMenuPrice changePrice(Long newPrice) {
+        return new EatInOrderMenuPrice(BigDecimal.valueOf(newPrice));
     }
 
-    public OrderMenuPrice multiply(long value) {
-        return new OrderMenuPrice(this.price.multiply(BigDecimal.valueOf(value)));
+    public EatInOrderMenuPrice multiply(long value) {
+        return new EatInOrderMenuPrice(this.price.multiply(BigDecimal.valueOf(value)));
     }
 
     public BigDecimal getValue() {

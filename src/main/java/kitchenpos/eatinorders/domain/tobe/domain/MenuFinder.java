@@ -1,4 +1,4 @@
-package kitchenpos.ordermaster.domain;
+package kitchenpos.eatinorders.domain.tobe.domain;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +19,10 @@ public class MenuFinder {
         this.menuRepository = menuRepository;
     }
 
-    public ToBeOrderLineItems orderLineItemsGenerator(final Order request) {
+    public EatInOrderLineItems orderLineItemsGenerator(final Order request) {
         validationOfNull(request);
-        ToBeMenus menu = findMenu(request.getOrderLineItems());
-        List<ToBeOrderLineItem> orderLineItem = request.getOrderLineItems().stream()
+        ToBeMenus menu = findMenu(request);
+        List<EatInOrderLineItem> orderLineItem = request.getOrderLineItems().stream()
             .map(it -> {
                 if (menu.hasHiddenMenu()) {
                     throw new IllegalStateException("숨겨진 메뉴는 주문할 수 없습니다.");
@@ -30,12 +30,12 @@ public class MenuFinder {
                 if (menu.isNotMatchByMenuAndPrice(it.getMenuId(), it.getPrice())) {
                     throw new IllegalStateException("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 합니다다.");
                 }
-                return new ToBeOrderLineItem(
-                    new OrderMenu(it.getMenuId(), OrderMenuPrice.of(it.getPrice())),
-                    OrderQuantity.of(it.getQuantity(), request.getType()));
+                return new EatInOrderLineItem(
+                    new EatInOrderMenu(it.getMenuId(), EatInOrderMenuPrice.of(it.getPrice())),
+                    EatInOrderQuantity.of(it.getQuantity(), request.getType()));
             })
             .collect(Collectors.toList());
-        return new ToBeOrderLineItems(orderLineItem);
+        return new EatInOrderLineItems(orderLineItem);
     }
 
     private void validationOfNull(final Order request) {
@@ -45,8 +45,8 @@ public class MenuFinder {
         }
     }
 
-    private ToBeMenus findMenu(List<OrderLineItem> orderLineItemRequests) {
-        List<ToBeMenu> menuList = menuRepository.findAllByIdIn(orderLineItemRequests.stream()
+    private ToBeMenus findMenu(final Order request) {
+        List<ToBeMenu> menuList = menuRepository.findAllByIdIn(request.getOrderLineItems().stream()
             .map(OrderLineItem::getMenuId)
             .collect(Collectors.toList()));
         return new ToBeMenus(menuList);

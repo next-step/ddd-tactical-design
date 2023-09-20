@@ -93,19 +93,12 @@ create table orders
     primary key (id)
 ) engine = InnoDB;
 
-create table orders_master
+
+create table eat_in_orders
 (
     id               binary(16)   not null,
     order_date_time  datetime(6)  not null,
     status           varchar(255) not null,
-    type             varchar(255) not null,
-    primary key (id)
-) engine = InnoDB;
-
-create table eat_in_order
-(
-    id               binary(16)   not null,
-    orders_master_id binary(16)   not null,
     order_table_id   binary(16)   not null,
     primary key (id)
 ) engine = InnoDB;
@@ -157,7 +150,8 @@ alter table orders
     add constraint fk_orders_to_order_table
         foreign key (order_table_id)
             references order_table (id);
-alter table orders_master
-    add constraint fk_to_be_orders_line_item_to_orders
-        foreign key (orders_master_id)
-            references orders_master (id);
+
+alter table eat_in_order_line_item
+    add constraint fk_eat_in_order_line_item_to_orders
+        foreign key (eat_in_order_id)
+            references eat_in_orders(id)

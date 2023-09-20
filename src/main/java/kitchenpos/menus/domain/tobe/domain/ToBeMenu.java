@@ -62,10 +62,6 @@ public class ToBeMenu {
         this.displayed = false;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public MenuPrice getPrice() {
         return price;
     }

@@ -6,37 +6,37 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class NumberOfGuest {
+public class EatInNumberOfGuest {
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
 
-    protected NumberOfGuest() {
+    protected EatInNumberOfGuest() {
     }
 
-    private NumberOfGuest(int numberOfGuests) {
+    private EatInNumberOfGuest(int numberOfGuests) {
         this.numberOfGuests = numberOfGuests;
     }
 
-    public static NumberOfGuest of(int numberOfGuests) {
-        return new NumberOfGuest(numberOfGuests);
+    public static EatInNumberOfGuest of(int numberOfGuests) {
+        return new EatInNumberOfGuest(numberOfGuests);
     }
 
-    public static NumberOfGuest defaultNumber() {
-        return new NumberOfGuest(0);
+    public static EatInNumberOfGuest defaultNumber() {
+        return new EatInNumberOfGuest(0);
     }
 
-    public NumberOfGuest changeNumberOfGuest(int numberOfGuests) {
+    public EatInNumberOfGuest changeNumberOfGuest(int numberOfGuests) {
         validationOfNumber(numberOfGuests);
-        return new NumberOfGuest(numberOfGuests);
+        return new EatInNumberOfGuest(numberOfGuests);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof NumberOfGuest))
+        if (!(o instanceof EatInNumberOfGuest))
             return false;
-        NumberOfGuest that = (NumberOfGuest)o;
+        EatInNumberOfGuest that = (EatInNumberOfGuest)o;
         return numberOfGuests == that.numberOfGuests;
     }
 

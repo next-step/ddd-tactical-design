@@ -1,6 +1,6 @@
 package kitchenpos.ordermaster.domain;
 
-import static kitchenpos.ordermaster.domain.OrderFixture.*;
+import static kitchenpos.eatinorders.domain.EatInOrderFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;

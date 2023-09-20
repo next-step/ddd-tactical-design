@@ -9,20 +9,15 @@ import kitchenpos.common.DomainService;
 
 @DomainService
 public class EatInOrderCompleteListener {
-    private final EatInOrderRepository orderRepository;
     private final ToBeOrderTableRepository orderTableRepository;
 
-    public EatInOrderCompleteListener(EatInOrderRepository orderRepository,
-        ToBeOrderTableRepository orderTableRepository) {
-        this.orderRepository = orderRepository;
+    public EatInOrderCompleteListener(ToBeOrderTableRepository orderTableRepository) {
         this.orderTableRepository = orderTableRepository;
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void clear(UUID orderMasterId) {
-        EatInOrder eatInOrder = orderRepository.findByOrderMasterId(orderMasterId)
-            .orElseThrow(() -> new IllegalArgumentException("매장 식사 주문 정보를 찾을 수 없습니다."));
-        orderTableRepository.findById(eatInOrder.getOrderTableId())
+    public void clear(UUID orderTableId) {
+        orderTableRepository.findById(orderTableId)
             .ifPresent(ToBeOrderTable::initOrderTable);
     }
 }

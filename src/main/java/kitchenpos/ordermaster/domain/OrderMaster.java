@@ -7,14 +7,12 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Table(name = "orders_master")
-@Entity
+import kitchenpos.eatinorders.domain.tobe.domain.EatInOrderLineItems;
+
 public class OrderMaster {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -32,12 +30,12 @@ public class OrderMaster {
     private LocalDateTime orderDateTime;
 
     @Embedded
-    private ToBeOrderLineItems orderLineItems;
+    private EatInOrderLineItems orderLineItems;
 
     protected OrderMaster() {
     }
 
-    public OrderMaster(OrderType type, ToBeOrderLineItems orderLineItems) {
+    public OrderMaster(OrderType type, EatInOrderLineItems orderLineItems) {
         if (!OrderType.isValid(type)) {
             throw new IllegalArgumentException("주문 유형이 올바르지 않습니다.");
         }

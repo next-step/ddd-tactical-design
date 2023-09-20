@@ -1,4 +1,4 @@
-package kitchenpos.ordermaster.domain;
+package kitchenpos.eatinorders.domain.tobe.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -8,28 +8,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "to_be_order_line_item")
+@Table(name = "eat_in_order_line_item")
 @Entity
-public class ToBeOrderLineItem {
+public class EatInOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
     @Embedded
-    private OrderMenu orderMenu;
+    private EatInOrderMenu eatInOrderMenu;
     @Embedded
-    private OrderQuantity quantity;
+    private EatInOrderQuantity quantity;
 
-    protected ToBeOrderLineItem() {
+    protected EatInOrderLineItem() {
     }
 
-    public ToBeOrderLineItem(OrderMenu orderMenu, OrderQuantity quantity) {
-        this.orderMenu = orderMenu;
+    public EatInOrderLineItem(EatInOrderMenu eatInOrderMenu, EatInOrderQuantity quantity) {
+        this.eatInOrderMenu = eatInOrderMenu;
         this.quantity = quantity;
     }
 
-    public OrderMenuPrice menuPrice() {
-        return orderMenu.menuPrice()
+    public EatInOrderMenuPrice menuPrice() {
+        return eatInOrderMenu.menuPrice()
             .multiply(quantity.value());
     }
 
