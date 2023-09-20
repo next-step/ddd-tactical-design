@@ -6,16 +6,20 @@ import java.util.Objects;
 @Embeddable
 public class DeliveryAddress {
 
-    private String deliveryAddress;
+    private String address;
 
     protected DeliveryAddress() {
     }
 
-    public DeliveryAddress(final String deliveryAddress) {
-        if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
+    public DeliveryAddress(final String address) {
+        if (Objects.isNull(address) || address.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        this.deliveryAddress = deliveryAddress;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     @Override
@@ -25,11 +29,11 @@ public class DeliveryAddress {
 
         DeliveryAddress that = (DeliveryAddress) o;
 
-        return deliveryAddress.equals(that.deliveryAddress);
+        return address.equals(that.address);
     }
 
     @Override
     public int hashCode() {
-        return deliveryAddress.hashCode();
+        return address.hashCode();
     }
 }

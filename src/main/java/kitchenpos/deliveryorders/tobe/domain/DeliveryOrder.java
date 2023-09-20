@@ -3,6 +3,7 @@ package kitchenpos.deliveryorders.tobe.domain;
 import kitchenpos.menus.tobe.domain.Menu;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +49,32 @@ public class DeliveryOrder {
         this.deliveryAddress = deliveryAddress;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
+    }
+
+    public List<OrderLineItem> getOrderLineItemList() {
+        return orderLineItems.getOrderLineItemList();
+    }
+
+    public DeliveryAddress getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public String getStringDeliveryAddress() {
+        return deliveryAddress.getAddress();
     }
 
     public static DeliveryOrder create(
@@ -82,6 +107,10 @@ public class DeliveryOrder {
         if (!menu.isDisplayed()) {
             throw new IllegalStateException();
         }
+    }
+
+    public BigDecimal getSumOfOrderLineItemPrice(List<Menu> menus) {
+        return orderLineItems.getSumOfOrderLineItemPrice(menus);
     }
 
     public void accept() {

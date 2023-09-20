@@ -58,4 +58,8 @@ public class OrderLineItem {
     public BigDecimal getPrice() {
         return price;
     }
+
+    public long getLongQuantity() {
+        return quantity.getQuantity();
+    }
 }

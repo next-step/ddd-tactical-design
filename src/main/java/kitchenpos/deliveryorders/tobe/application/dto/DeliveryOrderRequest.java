@@ -1,26 +1,24 @@
-package kitchenpos.deliveryorders.tobe.application;
-
-import kitchenpos.eatinorders.domain.OrderLineItem;
+package kitchenpos.deliveryorders.tobe.application.dto;
 
 import java.util.List;
 import java.util.Objects;
 
-public class DeliveryRequest {
+public class DeliveryOrderRequest {
 
-    private List<OrderLineItem> orderLineItems;
+    private List<OrderLineItemRequest> orderLineItems;
 
     private String deliveryAddress;
 
-    public DeliveryRequest(final List<OrderLineItem> orderLineItems, final String deliveryAddress) {
+    public DeliveryOrderRequest(final List<OrderLineItemRequest> orderLineItems, final String deliveryAddress) {
         this.orderLineItems = orderLineItems;
         this.deliveryAddress = deliveryAddress;
     }
 
-    public List<OrderLineItem> getOrderLineItems() {
+    public List<OrderLineItemRequest> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
+    public void setOrderLineItems(final List<OrderLineItemRequest> orderLineItems) {
         this.orderLineItems = orderLineItems;
     }
 

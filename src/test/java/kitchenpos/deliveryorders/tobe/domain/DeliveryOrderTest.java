@@ -1,26 +1,21 @@
 package kitchenpos.deliveryorders.tobe.domain;
 
 import kitchenpos.Fixtures;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProducts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.deliveryorders.tobe.DeliveryOrderFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DeliveryOrderTest {
 
-    private final UUID menuId = Fixtures.orderLineItem().getMenuId();
-    private final String deliveryAddress = "주소";
+    private final String deliveryAddress = "서울시 송파구 위례성대로 2";
 
     @Test
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다")
@@ -30,7 +25,7 @@ class DeliveryOrderTest {
                 List.of(orderLineItem(UUID.randomUUID())),
                 deliveryAddress
             )
-        ).isExactlyInstanceOf(NoSuchElementException.class);
+        ).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
@@ -167,83 +162,5 @@ class DeliveryOrderTest {
         DeliveryOrder deliveryOrder = deliveredOrder();
         deliveryOrder.complete();
         assertThat(deliveryOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
-    }
-
-    private Menu menu() {
-        return menu(menuId, true, 18_000L);
-    }
-
-    private Menu menu(final boolean displayed) {
-        return menu(menuId, displayed, 18_000L);
-    }
-
-    private Menu menu(final long price) {
-        return menu(menuId, true, price);
-    }
-
-    private Menu menu(final UUID id, final boolean displayed, long price) {
-        return Menu.create(
-            id,
-            "후라이드+후라이드",
-            BigDecimal.valueOf(price),
-            UUID.randomUUID(),
-            displayed,
-            new MenuProducts(List.of(menuProduct())),
-            (name) -> false
-        );
-    }
-
-    private OrderLineItem orderLineItem() {
-        return orderLineItem(18_000L, menuId);
-    }
-
-    private OrderLineItem orderLineItem(final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, 18_000L);
-    }
-
-    private OrderLineItem orderLineItem(final long quantity) {
-        return OrderLineItem.create(quantity, menuId, 18_000L);
-    }
-
-    private OrderLineItem orderLineItem(final Long price, final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, price);
-    }
-
-    private DeliveryOrder deliveryOrder() {
-        return DeliveryOrder.create(
-            List.of(menu()),
-            List.of(orderLineItem()),
-            "주소"
-        );
-    }
-
-    private DeliveryOrder acceptedOrder() {
-        DeliveryOrder deliveryOrder = deliveryOrder();
-        deliveryOrder.accept();
-        return deliveryOrder;
-    }
-
-    private DeliveryOrder servedOrder() {
-        DeliveryOrder deliveryOrder = acceptedOrder();
-        deliveryOrder.serve();
-        return deliveryOrder;
-    }
-
-    private DeliveryOrder deliveringOrder() {
-        DeliveryOrder deliveryOrder = servedOrder();
-        deliveryOrder.startDelivery();
-        return deliveryOrder;
-    }
-
-    private DeliveryOrder deliveredOrder() {
-        DeliveryOrder deliveryOrder = deliveringOrder();
-        deliveryOrder.completeDelivery();
-        return deliveryOrder;
-    }
-
-    private DeliveryOrder completedOrder() {
-        DeliveryOrder deliveryOrder = deliveredOrder();
-        deliveryOrder.complete();
-        return deliveryOrder;
     }
 }

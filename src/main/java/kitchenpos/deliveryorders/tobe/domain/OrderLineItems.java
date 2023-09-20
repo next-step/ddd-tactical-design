@@ -3,9 +3,9 @@ package kitchenpos.deliveryorders.tobe.domain;
 import kitchenpos.menus.tobe.domain.Menu;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Embeddable
@@ -35,7 +35,7 @@ public class OrderLineItems {
 
     private void validateMenu(final Menu menu) {
         if (menu == null) {
-            throw new NoSuchElementException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -43,5 +43,18 @@ public class OrderLineItems {
         if (menu.getBigDecimalPrice().compareTo(orderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public List<OrderLineItem> getOrderLineItemList() {
+        return orderLineItemList;
+    }
+
+    public BigDecimal getSumOfOrderLineItemPrice(List<Menu> menus) {
+        return orderLineItemList.stream()
+            .map(orderLineItem -> {
+                Menu menu = menus.stream().findFirst().orElseThrow();
+                return menu.multiplyPrice(BigDecimal.valueOf(orderLineItem.getLongQuantity()));
+            })
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

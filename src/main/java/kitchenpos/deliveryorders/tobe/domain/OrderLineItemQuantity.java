@@ -18,6 +18,10 @@ public class OrderLineItemQuantity {
         this.quantity = quantity;
     }
 
+    public long getQuantity() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
