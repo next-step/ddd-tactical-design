@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
+import kitchenpos.products.application.FakeProductNameProfanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductTest {
 
-    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
-    private ProductDisplayedNamePolicy productDisplayedNamePolicy;
+    private ProductNameProfanities productNameProfanities;
+    private ProductNamePolicy productNamePolicy;
 
     @BeforeEach
     void setUp() {
-        productDisplayedNameProfanities = new FakeProductDisplayedNameProfanities();
-        productDisplayedNamePolicy = new ProductDisplayedNamePolicy(productDisplayedNameProfanities);
+        productNameProfanities = new FakeProductNameProfanities();
+        productNamePolicy = new ProductNamePolicy(productNameProfanities);
     }
 
     @DisplayName("상품을 생성할 수 있다.")
@@ -27,11 +27,11 @@ class ProductTest {
     void create() {
         final Product product = new Product(
                 UUID.randomUUID(),
-                ProductDisplayedName.from("후라이드", productDisplayedNamePolicy),
+                ProductName.from("후라이드", productNamePolicy),
                 ProductPrice.from(BigDecimal.valueOf(16_000L)));
         assertAll(
                 () -> assertThat(product.getId()).isNotNull(),
-                () -> assertThat(product.getDisplayedName()).isEqualTo(ProductDisplayedName.from("후라이드", productDisplayedNamePolicy)),
+                () -> assertThat(product.getDisplayedName()).isEqualTo(ProductName.from("후라이드", productNamePolicy)),
                 () -> assertThat(product.getPrice()).isEqualTo(ProductPrice.from(BigDecimal.valueOf(16_000L)))
         );
     }
@@ -40,7 +40,7 @@ class ProductTest {
     @Test
     void giveId() {
         final Product product = new Product(
-                ProductDisplayedName.from("후라이드", productDisplayedNamePolicy),
+                ProductName.from("후라이드", productNamePolicy),
                 ProductPrice.from(BigDecimal.valueOf(16_000L)));
         final Product result = product.giveId();
         assertThat(result.getId()).isNotNull();
@@ -51,7 +51,7 @@ class ProductTest {
     void changePrice() {
         final Product product = new Product(
                 UUID.randomUUID(),
-                ProductDisplayedName.from("후라이드", productDisplayedNamePolicy),
+                ProductName.from("후라이드", productNamePolicy),
                 ProductPrice.from(BigDecimal.valueOf(16_000L)));
         final ProductPrice newPrice = ProductPrice.from(BigDecimal.valueOf(17_000L));
         product.changePrice(newPrice);

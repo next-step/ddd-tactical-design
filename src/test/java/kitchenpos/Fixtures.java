@@ -6,7 +6,7 @@ import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
 import kitchenpos.menus.tobe.intrastructure.ProductClientImpl;
-import kitchenpos.products.application.FakeProductDisplayedNameProfanities;
+import kitchenpos.products.application.FakeProductNameProfanities;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.*;
 
@@ -154,11 +154,11 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), ProductDisplayedName.from(name, productDisplayedNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
+        return new Product(UUID.randomUUID(), ProductName.from(name, productNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
     }
 
-    public static ProductDisplayedNamePolicy productDisplayedNamePolicy() {
-        return new ProductDisplayedNamePolicy(new FakeProductDisplayedNameProfanities());
+    public static ProductNamePolicy productNamePolicy() {
+        return new ProductNamePolicy(new FakeProductNameProfanities());
     }
 
     public static MenuDisplayedNamePolicy menuDisplayedNamePolicy() {

@@ -12,7 +12,7 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductDisplayedName productDisplayedName;
+    private ProductName productName;
 
     @Embedded
     private ProductPrice price;
@@ -24,18 +24,18 @@ public class Product {
         this.price = price;
     }
 
-    public Product(ProductDisplayedName productDisplayedName, ProductPrice price) {
-        this(null, productDisplayedName, price);
+    public Product(ProductName productName, ProductPrice price) {
+        this(null, productName, price);
     }
 
-    public Product(UUID id, ProductDisplayedName productDisplayedName, ProductPrice price) {
+    public Product(UUID id, ProductName productName, ProductPrice price) {
         this.id = id;
-        this.productDisplayedName = productDisplayedName;
+        this.productName = productName;
         this.price = price;
     }
 
     public Product giveId() {
-        return new Product(UUID.randomUUID(), productDisplayedName, price);
+        return new Product(UUID.randomUUID(), productName, price);
     }
 
     public void changePrice(ProductPrice price) {
@@ -50,8 +50,8 @@ public class Product {
         return id;
     }
 
-    public ProductDisplayedName getDisplayedName() {
-        return productDisplayedName;
+    public ProductName getDisplayedName() {
+        return productName;
     }
 
     public ProductPrice getPrice() {

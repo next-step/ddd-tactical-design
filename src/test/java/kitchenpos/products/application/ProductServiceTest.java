@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
-    private ProductDisplayedNamePolicy productDisplayedNamePolicy;
+    private ProductNameProfanities productNameProfanities;
+    private ProductNamePolicy productNamePolicy;
     private ProductService productService;
     private ProductEventPublisher eventPublisher;
 
@@ -34,10 +34,10 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productDisplayedNameProfanities = new FakeProductDisplayedNameProfanities();
-        productDisplayedNamePolicy = new ProductDisplayedNamePolicy(productDisplayedNameProfanities);
+        productNameProfanities = new FakeProductNameProfanities();
+        productNamePolicy = new ProductNamePolicy(productNameProfanities);
         eventPublisher = new FakeProductEventPublisher(productRepository, menuRepository);
-        productService = new ProductService(productRepository, productDisplayedNamePolicy, eventPublisher);
+        productService = new ProductService(productRepository, productNamePolicy, eventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -48,7 +48,7 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), productDisplayedNamePolicy)),
+                () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductName.from(expected.getName(), productNamePolicy)),
                 () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
         );
     }

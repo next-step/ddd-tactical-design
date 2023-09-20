@@ -1,5 +1,5 @@
 package kitchenpos.products.tobe.domain;
 
-public interface ProductDisplayedNameProfanities {
+public interface ProductNameProfanities {
     boolean containsProfanity(String text);
 }

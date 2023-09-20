@@ -1,6 +1,6 @@
 package kitchenpos.products.infra;
 
-import kitchenpos.products.tobe.domain.ProductDisplayedNameProfanities;
+import kitchenpos.products.tobe.domain.ProductNameProfanities;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class ProductPurgomalumClient implements ProductDisplayedNameProfanities {
+public class ProductPurgomalumClient implements ProductNameProfanities {
     private final RestTemplate restTemplate;
 
     public ProductPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {

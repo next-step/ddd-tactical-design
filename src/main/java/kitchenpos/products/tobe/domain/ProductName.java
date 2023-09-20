@@ -5,21 +5,21 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductDisplayedName {
-    @Column(name = "displayed_name", nullable = false)
+public class ProductName {
+    @Column(name = "name", nullable = false)
     private String value;
 
-    protected ProductDisplayedName() {
+    protected ProductName() {
     }
 
-    private ProductDisplayedName(final String value) {
+    private ProductName(final String value) {
         this.value = value;
     }
 
-    public static ProductDisplayedName from(final String value, final ProductDisplayedNamePolicy productDisplayedNamePolicy) {
-        ProductDisplayedName productDisplayedName = new ProductDisplayedName(value);
-        productDisplayedNamePolicy.validateDisplayName(productDisplayedName);
-        return productDisplayedName;
+    public static ProductName from(final String value, final ProductNamePolicy productNamePolicy) {
+        ProductName productName = new ProductName(value);
+        productNamePolicy.validateDisplayName(productName);
+        return productName;
     }
 
     public String getValue() {
@@ -30,7 +30,7 @@ public class ProductDisplayedName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductDisplayedName that = (ProductDisplayedName) o;
+        ProductName that = (ProductName) o;
         return Objects.equals(value, that.value);
     }
 
