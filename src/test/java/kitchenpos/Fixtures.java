@@ -1,6 +1,7 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.vo.OrderLineItems;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
@@ -56,7 +57,7 @@ public class Fixtures {
         order.setType(OrderType.DELIVERY);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
         order.setDeliveryAddress(deliveryAddress);
         return order;
     }
@@ -67,7 +68,7 @@ public class Fixtures {
         order.setType(OrderType.TAKEOUT);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
         return order;
     }
 
@@ -77,7 +78,7 @@ public class Fixtures {
         order.setType(OrderType.EAT_IN);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
         order.setOrderTable(orderTable);
         return order;
     }

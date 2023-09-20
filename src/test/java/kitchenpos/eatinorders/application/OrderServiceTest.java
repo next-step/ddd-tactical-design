@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.vo.OrderLineItems;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class OrderServiceTest {
                 () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
                 () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-                () -> assertThat(actual.getOrderLineItems()).hasSize(1),
+                () -> assertThat(actual.getOrderLineItems().getOrderLineItems()).hasSize(1),
                 () -> assertThat(actual.getDeliveryAddress()).isEqualTo(expected.getDeliveryAddress())
         );
     }
@@ -65,7 +66,7 @@ class OrderServiceTest {
                 () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
                 () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-                () -> assertThat(actual.getOrderLineItems()).hasSize(1)
+                () -> assertThat(actual.getOrderLineItems().getOrderLineItems()).hasSize(1)
         );
     }
 
@@ -82,7 +83,7 @@ class OrderServiceTest {
                 () -> assertThat(actual.getType()).isEqualTo(expected.getType()),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
                 () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-                () -> assertThat(actual.getOrderLineItems()).hasSize(1),
+                () -> assertThat(actual.getOrderLineItems().getOrderLineItems()).hasSize(1),
                 () -> assertThat(actual.getOrderTable().getId()).isEqualTo(expected.getOrderTableId())
         );
     }
@@ -339,7 +340,7 @@ class OrderServiceTest {
         final Order order = new Order();
         order.setType(type);
         order.setDeliveryAddress(deliveryAddress);
-        order.setOrderLineItems(Arrays.asList(orderLineItems));
+        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItems)));
         return order;
     }
 
@@ -350,7 +351,7 @@ class OrderServiceTest {
     private Order createOrderRequest(final OrderType orderType, final List<OrderLineItem> orderLineItems) {
         final Order order = new Order();
         order.setType(orderType);
-        order.setOrderLineItems(orderLineItems);
+        order.setOrderLineItems(new OrderLineItems(orderLineItems));
         return order;
     }
 
@@ -362,7 +363,7 @@ class OrderServiceTest {
         final Order order = new Order();
         order.setType(type);
         order.setOrderTableId(orderTableId);
-        order.setOrderLineItems(Arrays.asList(orderLineItems));
+        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItems)));
         return order;
     }
 

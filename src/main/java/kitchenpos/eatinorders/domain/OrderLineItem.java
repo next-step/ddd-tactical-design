@@ -73,4 +73,8 @@ public class OrderLineItem {
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
+
+    public BigDecimal multiply() {
+        return this.menu.getPrice().multiply(BigDecimal.valueOf(this.quantity));
+    }
 }

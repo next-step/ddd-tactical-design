@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.vo.OrderLineItems;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,8 @@ public class OrderService {
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException();
         }
-        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
+
+        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems().getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -75,7 +77,7 @@ public class OrderService {
         order.setType(type);
         order.setStatus(OrderStatus.WAITING);
         order.setOrderDateTime(LocalDateTime.now());
-        order.setOrderLineItems(orderLineItems);
+        order.setOrderLineItems(new OrderLineItems(orderLineItems));
         if (type == OrderType.DELIVERY) {
             final String deliveryAddress = request.getDeliveryAddress();
             if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
@@ -102,12 +104,7 @@ public class OrderService {
             throw new IllegalStateException();
         }
         if (order.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
+            BigDecimal sum = order.getOrderLineItems().sum();
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);
