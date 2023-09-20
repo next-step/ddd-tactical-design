@@ -2,6 +2,8 @@ package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
+import kitchenpos.eatinorders.publisher.EatInOrderCompletedEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.util.UUID;
 
 @Table(name = "eat_in_order")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @EmbeddedId
     private EatInOrderId id;
 
@@ -65,6 +67,11 @@ public class EatInOrder {
             throw new EatInOrderException(EatInOrderErrorCode.IS_NOT_SERVED);
         }
         this.status = EatInOrderStatus.COMPLETED;
+        completed();
+    }
+    @PostUpdate
+    private void completed(){
+        registerEvent(new EatInOrderCompletedEvent(this, orderTableId.getValue()));
     }
 
     public OrderTableId getOrderTableId() {

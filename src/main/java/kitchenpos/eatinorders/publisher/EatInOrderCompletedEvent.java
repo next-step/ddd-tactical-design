@@ -4,11 +4,11 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.UUID;
 
-public class OrderTableClearEvent extends ApplicationEvent {
+public class EatInOrderCompletedEvent extends ApplicationEvent {
 
     private final UUID orderTableId;
 
-    public OrderTableClearEvent(Object source, UUID orderTableId) {
+    public EatInOrderCompletedEvent(Object source, UUID orderTableId) {
         super(source);
         this.orderTableId = orderTableId;
     }

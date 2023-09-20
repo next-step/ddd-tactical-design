@@ -1,12 +1,13 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.EatInOrderId;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
 import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
-import kitchenpos.eatinorders.publisher.OrderTableClearEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,16 +64,6 @@ public class EatInOrderService {
     public EatInOrderResponse complete(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.complete();
-
-        if (!eatInOrderRepository.existsByOrderTableAndStatusNot
-                (order.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
-            try {
-                publisher.publishEvent(new OrderTableClearEvent(this, order.getOrderTableIdValue()));
-            } catch (RuntimeException ex) {
-                throw new EatInOrderException(EatInOrderErrorCode.ORDER_TABLE_CANNOT_CLEAR);
-            }
-        }
-
         return EatInOrderResponse.fromEntity(order);
     }
 

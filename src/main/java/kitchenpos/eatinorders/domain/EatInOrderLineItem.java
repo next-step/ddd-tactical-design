@@ -16,7 +16,7 @@ public class EatInOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long seq;
+    private long seq;
 
     @Embedded
     private OrderedMenu menu;
@@ -50,11 +50,11 @@ public class EatInOrderLineItem {
              policy);
     }
 
-    public Long getSeqValue() {
+    public long getSeqValue() {
         return this.seq;
     }
 
-    public Long getQuantityValue() {
+    public long getQuantityValue() {
         return this.quantity.getValue();
     }
 
