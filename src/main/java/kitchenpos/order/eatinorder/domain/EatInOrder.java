@@ -21,7 +21,7 @@ import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
 @Entity
 public class EatInOrder {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
+    @Column(name = "eat_in_order_id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
@@ -36,8 +36,7 @@ public class EatInOrder {
     @JoinColumn(
         name = "eat_in_order_id",
         nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_orders")
+        columnDefinition = "binary(16)"
     )
     private List<EatInOrderLineItem> orderLineItems;
 

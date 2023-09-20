@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 public class TakeOutOrder {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
+    @Column(name = "take_out_order_id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
@@ -33,8 +33,7 @@ public class TakeOutOrder {
     @JoinColumn(
         name = "take_out_order_id",
         nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_takeout_order_line_item_to_orders")
+        columnDefinition = "binary(16)"
     )
     private List<TakeOutOrderLineItem> orderLineItems;
 

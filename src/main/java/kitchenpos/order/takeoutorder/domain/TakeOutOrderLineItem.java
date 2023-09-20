@@ -26,8 +26,7 @@ public class TakeOutOrderLineItem {
     @ManyToOne(optional = false)
     @JoinColumn(
         name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_take_out_order_line_item_to_menu")
+        columnDefinition = "binary(16)"
     )
     private Menu menu;
 
