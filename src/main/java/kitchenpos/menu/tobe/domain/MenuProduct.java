@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,6 +38,10 @@ public class MenuProduct {
     private UUID productId;
 
     public MenuProduct() {
+    }
+
+    public BigDecimal calculatePrice() {
+        return product.multiplyPrice(quantity);
     }
 
     public Long getSeq() {

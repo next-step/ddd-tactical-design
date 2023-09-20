@@ -56,6 +56,16 @@ public class Menu {
     public Menu() {
     }
 
+    public void checkPrice() {
+        var sum = menuProducts.stream()
+            .map(MenuProduct::calculatePrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (price.compareTo(sum) > 0) {
+            displayed = false;
+        }
+    }
+
     public UUID getId() {
         return id;
     }

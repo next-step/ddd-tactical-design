@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.product.tobe.domain.Product;
@@ -48,25 +47,12 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final ChangeProductPriceRequestDto request) {
-        final BigDecimal price = request.getPrice();
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(price);
+        product.changePrice(request.getPrice());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        menus.forEach(Menu::checkPrice);
 
         return product;
     }
