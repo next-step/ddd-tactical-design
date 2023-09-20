@@ -7,6 +7,7 @@ import kitchenpos.eatinorders.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.domain.orders.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.orders.OrderStatus;
+import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.domain.ordertables.OrderTableRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
@@ -194,7 +195,7 @@ class EatInOrderServiceTest {
         assertAll(
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
-                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(NumberOfGuests.ZERO)
         );
     }
 
@@ -208,7 +209,7 @@ class EatInOrderServiceTest {
         assertAll(
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
                 () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isTrue(),
-                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(new NumberOfGuests(4))
         );
     }
 

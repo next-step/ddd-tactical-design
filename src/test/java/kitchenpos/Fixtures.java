@@ -1,6 +1,8 @@
 package kitchenpos;
 
+import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
+import kitchenpos.eatinorders.domain.ordertables.OrderTableName;
 import kitchenpos.menus.application.FakeMenuNameProfanities;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -100,12 +102,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return new OrderTable(UUID.randomUUID(), new OrderTableName("1번"), new NumberOfGuests(numberOfGuests), occupied);
     }
 
     public static Product product() {

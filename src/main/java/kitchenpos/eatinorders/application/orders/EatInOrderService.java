@@ -107,8 +107,7 @@ public class EatInOrderService {
         eatInOrder.setStatus(OrderStatus.COMPLETED);
         final OrderTable orderTable = eatInOrder.getOrderTable();
         if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            orderTable.setNumberOfGuests(0);
-            orderTable.setOccupied(false);
+            orderTable.clear();
         }
         return eatInOrder;
     }

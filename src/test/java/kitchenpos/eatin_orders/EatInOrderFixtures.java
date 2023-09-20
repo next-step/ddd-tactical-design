@@ -3,7 +3,9 @@ package kitchenpos.eatin_orders;
 import kitchenpos.eatinorders.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.domain.orders.EatInOrderLineItem;
 import kitchenpos.eatinorders.domain.orders.OrderStatus;
+import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
+import kitchenpos.eatinorders.domain.ordertables.OrderTableName;
 import kitchenpos.products.tobe.domain.ProductRepository;
 
 import java.time.LocalDateTime;
@@ -38,11 +40,6 @@ public class EatInOrderFixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return new OrderTable(UUID.randomUUID(), new OrderTableName("1번"), new NumberOfGuests(numberOfGuests), occupied);
     }
 }

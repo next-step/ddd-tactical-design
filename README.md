@@ -133,7 +133,7 @@ docker compose -p kitchenpos up -d
 | 매장테이블 | OrderTable | 매장 주문을 한 고객이 앉을 수 있는 테이블을 의미 |
 | 이름 | Name | 매장 테이블의 이름 |
 | 손님 수 | Number Of Guests | 매장 테이블에 앉은 손님 수 |
-| 사용 여부 | Occupied | 매장 테이블의 사용 여부 |
+| 사용 여부 | Occupied | 매장 테이블의 사용 여부. 참이면 사용 중, 거짓이면 미사용 중 을 의미 |
 | 사용 | Sit | 매장 테이블 사용 상태 |
 | 미사용 | Clear | 매장 테이블 미사용 상태 |
 
