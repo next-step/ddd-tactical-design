@@ -51,24 +51,19 @@ public class MenuService {
                 .map(MenuProduct::getProductId)
                 .collect(Collectors.toList())
         );
-        if (menuProducts.checkEqualsSize(products.size())) {
-            throw new IllegalArgumentException();
-        }
+        menuProducts.checkEqualsSize(products.size());
 
         BigDecimal productSumPridce = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProducts.getList()) {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
-            productSumPridce = productSumPridce.add(menuProductRequest.getAmount(product.getPrice()));
+            productSumPridce = productSumPridce.add(
+                menuProductRequest.getAmount(product.getPrice()));
         }
         if (menuPrice.getValue().compareTo(productSumPridce) > 0) {
             throw new IllegalArgumentException();
         }
-        return menuRepository.save(Menu.of(new MenuName(request.getName(), purgomalumClient),
-            menuPrice,
-            menuGroup,
-            request.isDisplayed(),
-            menuProducts));
+        return menuRepository.save(request);
     }
 
     @Transactional
@@ -76,13 +71,13 @@ public class MenuService {
         MenuPrice menuPrice = new MenuPrice(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal productSumPrice = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             final Product product = productRepository.findById(menuProduct.getProductId())
                 .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(menuProduct.getAmount(product.getPrice()));
+            productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
         }
-        if (menuPrice.getValue().compareTo(sum) > 0) {
+        if (menuPrice.getValue().compareTo(productSumPrice) > 0) {
             throw new IllegalArgumentException();
         }
         menu.changePrice(menuPrice);
@@ -93,13 +88,13 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal productSumPrice = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             final Product product = productRepository.findById(menuProduct.getProductId())
                 .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(menuProduct.getAmount(product.getPrice()));
+            productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
         }
-        if (menu.getPrice().compareTo(sum) > 0) {
+        if (menu.getPrice().compareTo(productSumPrice) > 0) {
             throw new IllegalStateException();
         }
         menu.changeDisplay(true);
@@ -118,13 +113,13 @@ public class MenuService {
     public void checkMenuPrice(final UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
+            BigDecimal productSumPridce = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 final Product product = productRepository.findById(menuProduct.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-                sum = sum.add(menuProduct.getAmount(product.getPrice()));
+                productSumPridce = productSumPridce.add(menuProduct.getAmount(product.getPrice()));
             }
-            if (menu.getPrice().compareTo(sum) > 0) {
+            if (menu.getPrice().compareTo(productSumPridce) > 0) {
                 menu.changeDisplay(false);
             }
         }
@@ -134,7 +129,6 @@ public class MenuService {
     public List<Menu> findAll() {
         return menuRepository.findAll();
     }
-
 
 
 }

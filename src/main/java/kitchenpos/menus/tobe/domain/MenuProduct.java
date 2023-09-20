@@ -30,15 +30,8 @@ public class MenuProduct {
     }
 
     public MenuProduct(UUID productId, MenuProductQuantity quantity) {
-//        if(isQuantityNegative(quantity)) {
-//            throw new MenuException(MenuErrorCode.QUANTITY_IS_NEGATIVE);
-//        }
         this.productId = productId;
         this.quantity = quantity;
-    }
-
-    private boolean isQuantityNegative(MenuProductQuantity quantity) {
-        return quantity.getValue() < 0;
     }
 
     public UUID getProductId() {

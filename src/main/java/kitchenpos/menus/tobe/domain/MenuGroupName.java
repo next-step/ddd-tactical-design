@@ -14,13 +14,13 @@ public class MenuGroupName {
     }
 
     public MenuGroupName(String name) {
-        if (isNullOrEmpty()) {
+        if (isNullOrEmpty(name)) {
             throw new MenuException(MenuErrorCode.NAME_IS_NOT_EMPTY_OR_NULL);
         }
         this.name = name;
     }
 
-    public boolean isNullOrEmpty() {
+    public boolean isNullOrEmpty(String name) {
         return name == null || name.isEmpty();
     }
 

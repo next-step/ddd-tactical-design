@@ -49,9 +49,10 @@ public class MenuProducts {
         return menuProducts;
     }
 
-    public boolean checkEqualsSize(int productSize) {
-        return productSize != menuProducts.size();
-
+    public void checkEqualsSize(int productSize) {
+        if (productSize != menuProducts.size()) {
+            throw new MenuException(MenuErrorCode.MENU_PRODUCT_SIZE_AND_PRODUCT_SIZE_NOT_EQUALS);
+        }
     }
 
 }
