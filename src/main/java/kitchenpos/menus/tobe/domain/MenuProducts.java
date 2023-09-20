@@ -6,11 +6,11 @@ import kitchenpos.common.domain.Price;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static kitchenpos.menus.exception.MenuExceptionMessage.EMPTY_MENU_PRODUCT;
 import static kitchenpos.menus.exception.MenuExceptionMessage.MENU_PRICE_MORE_PRODUCTS_SUM;
 
 @Embeddable
@@ -28,32 +28,29 @@ public class MenuProducts {
     }
 
     public MenuProducts(List<NewMenuProduct> newMenuProductList) {
+        if (newMenuProductList == null || newMenuProductList.isEmpty()) {
+            throw new IllegalArgumentException(EMPTY_MENU_PRODUCT);
+        }
         this.newMenuProducts = newMenuProductList;
     }
 
-    public static MenuProducts create(Map<UUID, Long> productQuantityMap) {
-        List<NewMenuProduct> newMenuProductList = productQuantityMap.entrySet()
-                .stream()
-                .map(entry -> NewMenuProduct.create(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-        return new MenuProducts(newMenuProductList);
-    }
 
     public static MenuProducts of(List<NewMenuProduct> newMenuProductList) {
         return new MenuProducts(newMenuProductList);
     }
 
-    public void validateMenuPrice(Map<UUID, BigDecimal> productPriceMap, Price menuPrice) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (NewMenuProduct menuProduct : newMenuProducts) {
-            sum = sum.add(
-                    productPriceMap.get(menuProduct.getProductId()).multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
+    public static MenuProducts create(List<NewMenuProduct> menuProductList) {
+        return new MenuProducts(menuProductList);
+    }
+
+    public void validateMenuPrice(List<NewProduct> productList, Price menuPrice) {
+        BigDecimal sum = productList.stream()
+                .map(NewProduct::getPriceValue)
+                .reduce(BigDecimal::add)
+                .get();
         if (menuPrice.isGreaterThan(Price.of(sum))) {
             throw new IllegalArgumentException(MENU_PRICE_MORE_PRODUCTS_SUM);
         }
-
     }
 
     @JsonIgnore

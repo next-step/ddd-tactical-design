@@ -5,6 +5,7 @@ import kitchenpos.menus.application.dto.*;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.tobe.domain.NewProduct;
 import kitchenpos.products.application.FakeDisplayNameChecker;
 import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,21 +31,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private InMemoryProductQueryService productQueryService;
+    private InMemoryProductRepository productRepository;
     private DisplayNameChecker displayNameChecker;
     private MenuService menuService;
     private UUID menuGroupId;
-    private Product product;
+    private NewProduct product;
 
     @BeforeEach
     void setUp() {
         menuRepository = new NewInMemoryMenuRepository();
         menuGroupRepository = new NewInMemoryMenuGroupRepository();
         displayNameChecker = new FakeDisplayNameChecker();
-        productQueryService = new InMemoryProductQueryService();
-        menuService = new MenuService(menuRepository, menuGroupRepository, displayNameChecker, productQueryService);
+        productRepository = new InMemoryProductRepository();
+        menuService = new MenuService(menuRepository, menuGroupRepository, displayNameChecker, productRepository);
         menuGroupId = menuGroupRepository.save(tobeMenuGroup("두마리메뉴")).getId();
-        product = productQueryService.save(product("후라이드", 16_000L));
+        product = productRepository.save(newProduct(19_000L));
     }
 
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")

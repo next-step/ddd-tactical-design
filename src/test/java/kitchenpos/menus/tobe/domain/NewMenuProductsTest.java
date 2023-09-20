@@ -17,35 +17,21 @@ class NewMenuProductsTest {
     @DisplayName("메뉴상품목록 생성 성공")
     @Test
     void create() {
-        MenuProducts menuProducts = MenuProducts.create(Map.of(UUID.randomUUID(), 1L));
-        assertThat(menuProducts).isEqualTo(MenuProducts.create(Map.of(UUID.randomUUID(), 1L)));
-    }
-
-    @DisplayName("수량이 0보다 작은 메뉴상품이 있으면 예외를 반환한다.")
-    @Test
-    void quantity() {
-        Map<UUID, Long> productQuantityMap = Map.of(
-                UUID.randomUUID(), -2L,
-                UUID.randomUUID(), 1L,
-                UUID.randomUUID(), 1L
-        );
-
-        assertThatThrownBy(() -> MenuProducts.create(productQuantityMap))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ILLEGAL_QUANTITY);
+        MenuProducts menuProducts = MenuProducts.create(List.of(NewMenuProduct.create(UUID.randomUUID(), 1L)));
+        assertThat(menuProducts).isEqualTo(MenuProducts.create(List.of(NewMenuProduct.create(UUID.randomUUID(), 1L))));
     }
 
     @DisplayName("메뉴상품의 상품ID를 반환한다.")
     @Test
     void getMenuProductIds() {
         List<UUID> uuids = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        Map<UUID, Long> productQuantityMap = Map.of(
-                uuids.get(0), 1L,
-                uuids.get(1), 5L,
-                uuids.get(2), 10L
+        List<NewMenuProduct> newMenuProducts = List.of(
+                NewMenuProduct.create(uuids.get(0), 1L),
+                NewMenuProduct.create(uuids.get(1), 5L),
+                NewMenuProduct.create(uuids.get(2), 10L)
         );
 
-        MenuProducts menuProducts = MenuProducts.create(productQuantityMap);
+        MenuProducts menuProducts = MenuProducts.create(newMenuProducts);
 
         List<UUID> result = menuProducts.getMenuProductIds();
 

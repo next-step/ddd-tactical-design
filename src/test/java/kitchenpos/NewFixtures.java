@@ -2,10 +2,7 @@ package kitchenpos;
 
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.NewMenu;
-import kitchenpos.menus.tobe.domain.NewMenuGroup;
-import kitchenpos.menus.tobe.domain.NewMenuProduct;
-import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeDisplayNameChecker;
 import kitchenpos.products.domain.Product;
 
@@ -29,9 +26,9 @@ public class NewFixtures {
         return NewMenu.create(
                 UUID.randomUUID(),
                 menuGroup().getId(),
-                MenuProducts.of(Arrays.asList(newMenuProducts)),
-                Price.of(BigDecimal.valueOf(price)),
                 DisplayedName.of("후라이드+후라이드", new FakeDisplayNameChecker()),
+                Price.of(BigDecimal.valueOf(price)),
+                MenuProducts.of(Arrays.asList(newMenuProducts)),
                 displayed);
     }
 
@@ -51,11 +48,19 @@ public class NewFixtures {
         return NewMenuProduct.create(new Random().nextLong(), UUID.randomUUID(), 2L);
     }
 
+    public static NewMenuProduct menuProduct(final NewProduct product, final long quantity) {
+        return NewMenuProduct.create(new Random().nextLong(), product.getId(), quantity);
+    }
+
     public static NewMenuProduct menuProduct(final Product product, final long quantity) {
         return NewMenuProduct.create(new Random().nextLong(), product.getId(), quantity);
     }
 
     public static Product product(final String name, final long price) {
         return Product.create(UUID.randomUUID(), BigDecimal.valueOf(price), name, new FakeDisplayNameChecker());
+    }
+
+    public static NewProduct newProduct(final long price) {
+        return NewProduct.create(UUID.randomUUID(), BigDecimal.valueOf(price));
     }
 }
