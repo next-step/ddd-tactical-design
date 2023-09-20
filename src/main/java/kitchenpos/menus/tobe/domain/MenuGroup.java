@@ -12,7 +12,6 @@ public class MenuGroup {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    @Embedded
     private String name;
 
     public MenuGroup() {

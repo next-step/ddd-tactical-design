@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.tobe.domain.Product;
 
@@ -15,14 +15,14 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private Long quantity;
 
     @Transient
     private UUID productId;
@@ -30,35 +30,28 @@ public class MenuProduct {
     public MenuProduct() {
     }
 
-    public Long getSeq() {
-        return seq;
+    public MenuProduct(Product product, Long quantity, UUID productId) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.product = product;
+        this.quantity = quantity;
+        this.productId = productId;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
+    public Long getSeq() {
+        return seq;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
+    public Long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }
