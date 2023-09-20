@@ -49,14 +49,13 @@ public class Menu {
     }
 
     public Menu(String name, Long price, MenuGroup menuGroup, boolean displayed,
-                List<MenuProduct> menuProducts, UUID menuGroupId, PurgomalumClient purgomalumClient) {
+                List<MenuProduct> menuProducts, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
         this.name = new DisplayedName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
         validateIfMenuPriceIsGreaterThanSumOfProductPrice();
     }
 

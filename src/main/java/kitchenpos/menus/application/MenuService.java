@@ -61,8 +61,8 @@ public class MenuService {
                 })
                 .collect(Collectors.toList());
 
-        final Menu menu = new Menu(request.getName(), request.getPrice(), menuGroup, request.isDisplayed(),
-                menuProducts, request.getMenuGroupId(), purgomalumClient);
+        final Menu menu = new Menu(request.getName(), request.getPrice(),
+                menuGroup, request.isDisplayed(), menuProducts, purgomalumClient);
 
         return menuRepository.save(menu);
     }
