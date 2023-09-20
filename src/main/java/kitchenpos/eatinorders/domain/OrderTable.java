@@ -1,9 +1,8 @@
 package kitchenpos.eatinorders.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import kitchenpos.eatinorders.domain.vo.OrderTableName;
+
+import javax.persistence.*;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -13,8 +12,8 @@ public class OrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private OrderTableName name;
 
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
@@ -25,35 +24,49 @@ public class OrderTable {
     public OrderTable() {
     }
 
+    public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+        this.id = id;
+        this.name = new OrderTableName(name);
+        this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
+    }
+
+    public OrderTable(OrderTable orderTable) {
+        this(orderTable.getId(),
+                orderTable.getName().getName(),
+                orderTable.getNumberOfGuests(),
+                orderTable.isOccupied());
+    }
+
+    public OrderTable sit() {
+        this.occupied = true;
+        return this;
+    }
+
+    public OrderTable clear() {
+        this.numberOfGuests = 0;
+        this.occupied = false;
+        return this;
+    }
+
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public OrderTableName getName() {
         return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
+    public OrderTable setNumberOfGuests(int numberOfGuests) {
         this.numberOfGuests = numberOfGuests;
+        return this;
     }
 
     public boolean isOccupied() {
         return occupied;
-    }
-
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
     }
 }

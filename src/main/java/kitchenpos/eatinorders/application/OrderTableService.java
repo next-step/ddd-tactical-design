@@ -1,78 +1,64 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderTableRepository;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.exception.NotFoundOrderTableException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
     private final OrderRepository orderRepository;
+    private final OrderTableCreateService orderTableCreateService;
+    private final OrderTableChangeGuestService orderTableChangeGuestService;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository,
+                             final OrderTableCreateService orderTableCreateService,
+                             final OrderRepository orderRepository,
+                             final OrderTableChangeGuestService orderTableChangeGuestService) {
         this.orderTableRepository = orderTableRepository;
+        this.orderTableCreateService = orderTableCreateService;
         this.orderRepository = orderRepository;
+        this.orderTableChangeGuestService = orderTableChangeGuestService;
     }
 
     @Transactional
     public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTableRepository.save(orderTable);
+        return this.orderTableCreateService.create(request);
     }
 
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
-        return orderTable;
+        OrderTable orderTable = getOrderTable(orderTableId).sit();
+        return this.orderTableRepository.save(orderTable);
     }
+
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
+        final OrderTable orderTable = getOrderTable(orderTableId);
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
+
+        return this.orderTableRepository.save(orderTable.clear());
     }
 
     @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        return this.orderTableChangeGuestService.changeNumberOfGuests(getOrderTable(orderTableId), request.getNumberOfGuests());
     }
 
     @Transactional(readOnly = true)
     public List<OrderTable> findAll() {
         return orderTableRepository.findAll();
+    }
+
+    private OrderTable getOrderTable(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(NotFoundOrderTableException::new);
     }
 }

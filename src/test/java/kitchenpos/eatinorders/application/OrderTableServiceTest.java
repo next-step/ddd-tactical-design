@@ -1,9 +1,7 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.exception.InvalidOrderTableNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +22,16 @@ class OrderTableServiceTest {
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
     private OrderTableService orderTableService;
+    private OrderTableCreateService orderTableCreateService;
+    private OrderTableChangeGuestService orderTableChangeGuestService;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        orderTableCreateService = new OrderTableCreateService(orderTableRepository);
+        orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderRepository, orderTableChangeGuestService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
@@ -50,9 +52,8 @@ class OrderTableServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
-        assertThatThrownBy(() -> orderTableService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createOrderTableRequest(name))
+                .isInstanceOf(InvalidOrderTableNameException.class);
     }
 
     @DisplayName("빈 테이블을 해지할 수 있다.")
@@ -121,9 +122,7 @@ class OrderTableServiceTest {
     }
 
     private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+        return new OrderTable(UUID.randomUUID(), name, 0, false);
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
