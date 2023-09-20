@@ -103,6 +103,7 @@ docker compose -p kitchenpos up -d
 | 상품 | Product | 메뉴를 구성하는 최소 단위 |
 | 이름 | Name | 상품의 이름 |
 | 가격 | Price | 상품의 가격 |
+| 비속어 | profanity | 고객에게 불쾌함을 줄 수 있는 언어. 상품의 이름은 비속어를 포함하지 않아야한다. |
 
 ### MenuGroup (메뉴그룹)
 
@@ -116,11 +117,14 @@ docker compose -p kitchenpos up -d
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
 | 메뉴 | Menu | 메뉴 그룹에 속하는 실제 주문 가능 단위. 하나의 메뉴는 하나이상의 상품으로 구성 |
-| 가격 | Price | 메뉴의 가격 |
+| 가격 | Price | 메뉴의 가격. `메뉴의 가격 <= 총 금액`을 지켜야한다. |
 | 메뉴상품 | Menu Product | 메뉴에 포함된 상품. 수량을 가지고 있디. 각 메뉴 상품의 가격은 (상품가격 * 수량) 이다 |
+| 금액 | Amount | 메뉴 상품의 가격 * 수량의 결과. |
+| 총 금액 | Total Amount | 메뉴가 가진 모든 메뉴 상품의 (가격 * 수량) 총합. |
 | 이름 | Name | 메뉴의 이름 |
 | 노출 | Display | 메뉴를 고객에게 노출 |
-| 비노출 | Hide | 메뉴를 고객에게 비노출 |
+| 비노출 | Hide | 메뉴를 고객에게 비노출. 메뉴의 가격이 메뉴 상품들의 총 금액 높은경우 비노출된 상태가 될 수 있다. |
+| 비속어 | profanity | 고객에게 불쾌함을 줄 수 있는 언어. 메뉴의 이름은 비속어를 포함하지 않아야한다. |
 
 ### OrderTable (매장테이블)
 
@@ -246,16 +250,13 @@ docker compose -p kitchenpos up -d
 - Number Of Guests를 변경할 수 있다.
   - Clear 된 OrderTable은 Number Of Guests를 변경할 수 없다.
 
-### Order (주문)
+### Delivery Order (배달주문)
 #### 속성
 - OrderType을 가진다.
 - OrderStatus를 가진다.
 - DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
 - OrderDateTime을 가진다.
-- 각각의 주문들은 Hide된 Menu를 주문할 수 없다.
-
-### Delivery Order (배달주문)
-#### 속성
+- 주문은 Hide된 Menu를 주문할 수 없다.
 - Order Line Item 1개 이상 가진다.
 - Delivery Address는 필수값이다.
 - Take-Out Order는 Waiting, Accepted, Served, Delivering, Delivered, Completed 6개의 OrderStatus를 가진다.
@@ -273,6 +274,11 @@ docker compose -p kitchenpos up -d
 
 ### Take-Out Order (포장주문)
 #### 속성
+- OrderType을 가진다.
+- OrderStatus를 가진다.
+- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- OrderDateTime을 가진다.
+- 주문은 Hide된 Menu를 주문할 수 없다.
 - Order Line Item 1개 이상 가진다.
 - Take-Out Order는 Waiting, Accepted, Served, Completed 4개의 OrderStatus를 가진다
 
@@ -286,6 +292,12 @@ docker compose -p kitchenpos up -d
 
 ### Eat-In Order (매장주문)
 #### 속성
+- OrderType을 가진다.
+- OrderStatus를 가진다.
+- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- OrderDateTime을 가진다.
+- 주문은 Hide된 Menu를 주문할 수 없다.
+- Order Line Item 1개 이상 가진다.
 - OrderTable이 필수다.
 - Eat-In Order는 Waiting, Accepted, Served, Completed 4개의 OrderStatus를 가진다.
 
