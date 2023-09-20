@@ -15,10 +15,13 @@ import kitchenpos.menus.tobe.domain.MenuPrice;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.event.ProductPriceChangedEvent;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 public class MenuService {
@@ -109,9 +112,11 @@ public class MenuService {
         return menu;
     }
 
+    @EventListener
     @Transactional
-    public void checkMenuPrice(final UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+    public void checkMenuPrice(ProductPriceChangedEvent event) {
+        System.out.println("event = " + event.getProductId());
+        final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
             BigDecimal productSumPridce = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {

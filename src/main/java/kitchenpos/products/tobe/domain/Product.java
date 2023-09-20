@@ -8,12 +8,14 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.products.event.ProductPriceChangedEvent;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.hibernate.internal.build.AllowPrintStacktrace;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Id
     @Column(name = "id", columnDefinition = "varbinary(16)")
@@ -40,6 +42,7 @@ public class Product {
 
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
+        registerEvent(new ProductPriceChangedEvent(id, price));
     }
     public UUID getId() {
         return id;
