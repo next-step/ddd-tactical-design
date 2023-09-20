@@ -48,9 +48,7 @@ public class EatInOrderFixture {
                 menu,
                 1L,
                 menu.getPriceValue().longValue(),
-                (menuId) -> {
-                    return new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice());
-                }
+                (menuId) -> new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice())
         );
     }
 

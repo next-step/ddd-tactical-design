@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.products.publisher.ProductPriceChangedEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,7 +12,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @EmbeddedId
     private ProductId id;

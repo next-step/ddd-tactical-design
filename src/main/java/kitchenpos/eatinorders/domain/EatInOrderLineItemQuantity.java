@@ -2,14 +2,17 @@ package kitchenpos.eatinorders.domain;
 
 import kitchenpos.common.domain.ValueObject;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 
 @Embeddable
 public class EatInOrderLineItemQuantity extends ValueObject {
-    private long value;
 
-    public EatInOrderLineItemQuantity(long value) {
+    @Column(name = "quantity")
+    private Long value;
+
+    public EatInOrderLineItemQuantity(Long value) {
         this.value = value;
     }
 
