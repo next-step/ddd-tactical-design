@@ -41,7 +41,7 @@ public class MenuFinder {
     private void validationOfNull(final Order request) {
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문내역을 찾을 수 없습니다.");
         }
     }
 

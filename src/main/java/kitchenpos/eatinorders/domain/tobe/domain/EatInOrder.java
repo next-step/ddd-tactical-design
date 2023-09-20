@@ -47,24 +47,20 @@ public class EatInOrder {
         if (status != EatInOrderStatus.WAITING) {
             throw new IllegalStateException("접수 대기 중인 주문만 접수할 수 있다.");
         }
-        nextStatus();
+        status = status.nextStatus();
     }
 
     public void serve() {
         if (status != EatInOrderStatus.ACCEPTED) {
             throw new IllegalStateException("접수된 주문만 서빙할 수 있다.");
         }
-        nextStatus();
+        status = status.nextStatus();
     }
 
     public void complete() {
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.");
         }
-        nextStatus();
-    }
-
-    private void nextStatus() {
         status = status.nextStatus();
     }
 
@@ -72,7 +68,4 @@ public class EatInOrder {
         return status == orderStatus;
     }
 
-    public UUID getOrderTableId() {
-        return orderTableId;
-    }
 }

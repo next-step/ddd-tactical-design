@@ -22,6 +22,10 @@ public enum EatInOrderStatus {
             .orElseThrow(() -> new IllegalArgumentException("주문 상태가 잘못 되었습니다."));
     }
 
+    public int getOrder() {
+        return order;
+    }
+
     public static EatInOrderStatus initialOrderStatus() {
         return WAITING;
     }

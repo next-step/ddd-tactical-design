@@ -35,17 +35,7 @@ public class EatInOrderQuantity {
     }
 
     public static EatInOrderQuantity of(long quantity, OrderType orderType) {
-        validationOfQuantity(quantity, orderType);
         return new EatInOrderQuantity(quantity);
-    }
-
-    private static void validationOfQuantity(long quantity, kitchenpos.eatinorders.domain.OrderType orderType) {
-        if (orderType == OrderType.EAT_IN) {
-            return;
-        }
-        if (quantity < 0) {
-            throw new IllegalArgumentException("수량은 0보다 작을 수 없습니다.");
-        }
     }
 
     public long value() {

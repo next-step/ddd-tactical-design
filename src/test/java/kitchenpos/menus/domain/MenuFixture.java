@@ -25,6 +25,16 @@ public class MenuFixture {
         );
     }
 
+    public static ToBeMenu createMenuForNullMenuGroup(final String name, final long price, final boolean displayed) {
+        return createMenu(name,
+            price,
+            null,
+            displayed,
+            false,
+            createMenuProduct(8000, 1)
+        );
+    }
+
     public static ToBeMenu createMenuForNullProduct(final String name, final long price) {
         return createMenu(name,
             price,
