@@ -65,7 +65,7 @@ public class TobeMenu {
     }
 
     private void checkSum(final MenuPrice menuPrice) {
-        MenuPrice sum = tobeMenuProducts.sum();
+        MenuPrice sum = tobeMenuProducts.sumOfMenuProductPrices();
         if (menuPrice.greaterThan(sum)) {
             throw new IllegalArgumentException(
                     "메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 합니다. " + "price: " + menuPrice + " sum: " + sum);

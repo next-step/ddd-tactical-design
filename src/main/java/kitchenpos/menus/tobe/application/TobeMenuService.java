@@ -48,7 +48,7 @@ public class TobeMenuService {
     public TobeMenuCreateResponse create(final TobeMenuCreateRequest request) {
         final TobeMenuProducts tobeMenuProducts = getTobeMenuProducts(request.getTobeMenuProducts());
         final MenuPrice menuPrice = new MenuPrice(request.getPrice());
-        validateMenuPrice(menuPrice, tobeMenuProducts.sum());
+        validateMenuPrice(menuPrice, tobeMenuProducts.sumOfMenuProductPrices());
 
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                                                            .orElseThrow(NoSuchElementException::new);

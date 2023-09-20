@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.products.tobe.domain.TobeProduct;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
@@ -34,7 +32,7 @@ public class TobeMenuProducts {
         this.tobeMenuProducts.addAll(tobeMenuProducts);
     }
 
-    public MenuPrice sum() {
+    public MenuPrice sumOfMenuProductPrices() {
         return tobeMenuProducts.stream()
                                .map(TobeMenuProduct::getMenuPriceSum)
                                .reduce(MenuPrice.zero(), MenuPrice::add);
