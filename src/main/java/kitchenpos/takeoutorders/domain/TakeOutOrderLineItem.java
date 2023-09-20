@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.takeoutorders.domain;
 
 import kitchenpos.menus.domain.Menu;
 
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity
-public class OrderLineItem {
+public class TakeOutOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -31,7 +31,18 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
-    public OrderLineItem() {
+    public TakeOutOrderLineItem() {
+    }
+
+    public TakeOutOrderLineItem(Long seq, Menu menu, long quantity, UUID menuId, BigDecimal price) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.seq = seq;
+        this.menu = menu;
+        this.quantity = quantity;
+        this.menuId = menuId;
+        this.price = price;
     }
 
     public Long getSeq() {
@@ -77,4 +88,6 @@ public class OrderLineItem {
     public BigDecimal multiply() {
         return this.menu.getPrice().multiply(BigDecimal.valueOf(this.quantity));
     }
+
+
 }

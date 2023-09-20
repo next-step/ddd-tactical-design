@@ -26,6 +26,7 @@ class OrderTableServiceTest {
     private OrderTableChangeGuestService orderTableChangeGuestService;
     private OrderTableClearService orderTableClearService;
     private OrderStatusService orderStatusService;
+    private OrderTableSitService orderTableSitService;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,8 @@ class OrderTableServiceTest {
         orderTableCreateService = new OrderTableCreateService(orderTableRepository);
         orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
-        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderRepository, orderTableChangeGuestService, orderTableClearService, orderStatusService);
+        orderTableSitService = new OrderTableSitService(orderTableRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService,  orderTableChangeGuestService, orderTableSitService, orderTableClearService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

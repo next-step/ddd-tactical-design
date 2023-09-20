@@ -11,23 +11,20 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
     private final OrderTableCreateService orderTableCreateService;
     private final OrderTableChangeGuestService orderTableChangeGuestService;
+    private final OrderTableSitService orderTableSitService;
     private final OrderTableClearService orderTableClearService;
-
-    private final OrderStatusService orderStatusService;
 
     public OrderTableService(final OrderTableRepository orderTableRepository,
                              final OrderTableCreateService orderTableCreateService,
-                             final OrderRepository orderRepository,
-                             final OrderTableChangeGuestService orderTableChangeGuestService, OrderTableClearService orderTableClearService, OrderStatusService orderStatusService) {
+                             final OrderTableChangeGuestService orderTableChangeGuestService,
+                             OrderTableSitService orderTableSitService, final OrderTableClearService orderTableClearService) {
         this.orderTableRepository = orderTableRepository;
         this.orderTableCreateService = orderTableCreateService;
-        this.orderRepository = orderRepository;
         this.orderTableChangeGuestService = orderTableChangeGuestService;
+        this.orderTableSitService = orderTableSitService;
         this.orderTableClearService = orderTableClearService;
-        this.orderStatusService = orderStatusService;
     }
 
     @Transactional
@@ -37,8 +34,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable sit(final UUID orderTableId) {
-        OrderTable orderTable = getOrderTable(orderTableId).sit();
-        return this.orderTableRepository.save(orderTable);
+        return orderTableSitService.sit(getOrderTable(orderTableId));
     }
 
 

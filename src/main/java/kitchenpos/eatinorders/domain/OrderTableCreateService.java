@@ -14,5 +14,4 @@ public class OrderTableCreateService {
     public OrderTable create(final OrderTable orderTable) {
         return orderTableRepository.save(new OrderTable(orderTable));
     }
-
 }

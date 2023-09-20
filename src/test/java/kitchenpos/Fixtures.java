@@ -83,11 +83,11 @@ public class Fixtures {
         return order;
     }
 
-    public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+    public static EatInOrderLineItem orderLineItem() {
+        final EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem();
+        eatInOrderLineItem.setSeq(new Random().nextLong());
+        eatInOrderLineItem.setMenu(menu());
+        return eatInOrderLineItem;
     }
 
     public static OrderTable orderTable() {

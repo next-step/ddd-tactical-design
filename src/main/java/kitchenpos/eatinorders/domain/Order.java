@@ -4,7 +4,6 @@ import kitchenpos.eatinorders.domain.vo.OrderLineItems;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "orders")
@@ -43,6 +42,17 @@ public class Order {
     private UUID orderTableId;
 
     public Order() {
+    }
+
+    public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, String deliveryAddress, OrderTable orderTable) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.deliveryAddress = deliveryAddress;
+        this.orderTable = orderTable;
+        this.orderTableId = orderTable.getId();
     }
 
     public UUID getId() {

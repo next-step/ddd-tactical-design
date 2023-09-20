@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "type": "EAT_IN",
   "orderTableId": "8d710043-29b6-420e-8452-233f5a035520",
-  "orderLineItems": [
+  "eatInOrderLineItems": [
     {
       "menuId": "f59b1e1c-b145-440a-aa6f-6095a0e2d63b",
       "price": 16000,
