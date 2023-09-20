@@ -27,7 +27,7 @@ public class MenuRestController {
 
     @PutMapping("/{menuId}/price")
     public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
-        return ResponseEntity.ok(menuService.changePrice(menuId, request));
+        return ResponseEntity.ok(menuService.changePrice(menuId, request.getPrice()));
     }
 
     @PutMapping("/{menuId}/display")

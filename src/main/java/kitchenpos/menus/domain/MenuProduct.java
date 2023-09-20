@@ -1,65 +1,41 @@
 package kitchenpos.menus.domain;
 
 
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.menus.domain.vo.MenuProductQuantity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
 @Entity
 public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Id
-    private Long seq;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
-
+    private UUID id;
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID productId;
+    public MenuProduct(UUID productId, BigDecimal price, long quantity) {
+        this.id = productId;
+        this.price = price;
+        this.quantity = new MenuProductQuantity(quantity).getQuantity();
+    }
 
     public MenuProduct() {
+
     }
 
-    public Long getSeq() {
-        return seq;
+    public UUID getId() {
+        return id;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public BigDecimal amount() {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 }

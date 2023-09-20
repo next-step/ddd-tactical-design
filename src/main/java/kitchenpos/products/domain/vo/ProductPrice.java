@@ -1,10 +1,11 @@
-package kitchenpos.products.tobe.domain.vo;
+package kitchenpos.products.domain.vo;
 
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.domain.exception.InvalidProductPriceException;
+import kitchenpos.support.ValueObject;
 
 import java.math.BigDecimal;
 
-public class ProductPrice {
+public class ProductPrice extends ValueObject {
     private final BigDecimal price;
 
     public ProductPrice(BigDecimal price) {
@@ -16,5 +17,9 @@ public class ProductPrice {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public ProductPrice changePrice(BigDecimal price) {
+        return new ProductPrice(price);
     }
 }

@@ -1,11 +1,14 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.*;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.exception.InvalidProductDisplayedNameException;
+import kitchenpos.products.domain.exception.InvalidProductPriceException;
+import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,13 +28,28 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
+    private MenuGroupRepository menuGroupRepository;
+    private MenuService menuService;
+    private MenuGroupService menuGroupService;
     private ProductService productService;
+    private MenuCreateService menuCreateService;
+    private PurgomalumClient purgomalumClient;
+    private MenuChangePriceService menuChangePriceService;
+
+    private ProductPriceChangeService productPriceChangeService;
 
     @BeforeEach
     void setUp() {
+        purgomalumClient = new FakePurgomalumClient();
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository);
+        menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuGroupService = new MenuGroupService(menuGroupRepository);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
+        productPriceChangeService = new ProductPriceChangeService(menuService);
+        productService = new ProductService(productRepository, productPriceChangeService, purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -56,15 +74,14 @@ class ProductServiceTest {
                 .isInstanceOf(InvalidProductPriceException.class);
     }
 
-//    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
-//    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-//    @NullSource
-//    @ParameterizedTest
-//    void create(final String name) {
-//        final Product expected = createProductRequest(name, 16_000L);
-//        assertThatThrownBy(() -> productService.create(expected))
-//                .isInstanceOf(InvalidProductDisplayedNameException.class);
-//    }
+    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
+    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
+    @NullSource
+    @ParameterizedTest
+    void create(final String name) {
+        assertThatThrownBy(() -> createProductRequest(name, 16_000L))
+                .isInstanceOf(InvalidProductDisplayedNameException.class);
+    }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
@@ -80,7 +97,6 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         assertThatThrownBy(() -> changePriceRequest(price))
                 .isInstanceOf(InvalidProductPriceException.class);
     }
@@ -108,7 +124,7 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price);
+        return new Product(UUID.randomUUID(), name, price, purgomalumClient);
     }
 
     private Product changePriceRequest(final long price) {
@@ -116,7 +132,7 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price);
+        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
         return product.changePrice(price);
     }
 }
