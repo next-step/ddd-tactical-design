@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.domain;
 
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsSizeException;
@@ -17,7 +17,11 @@ public class MenuChangePriceService {
         this.productService = productService;
     }
 
-    public void valid(MenuProducts menuProducts, BigDecimal price) {
+    public Menu changePrice(Menu menu, BigDecimal price) {
+        valid(menu.getMenuProducts(), price);
+        return menu.changePrice(price);
+    }
+    private void valid(MenuProducts menuProducts, BigDecimal price) {
         validMenuProductsPrice(menuProducts, price);
         validMenuProductsSize(menuProducts);
     }

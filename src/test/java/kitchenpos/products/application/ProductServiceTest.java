@@ -1,9 +1,7 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.exception.InvalidProductDisplayedNameException;
@@ -47,8 +45,8 @@ class ProductServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
         menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
-        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService, purgomalumClient);
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
         productPriceChangeService = new ProductPriceChangeService(menuService);
         productService = new ProductService(productRepository, productPriceChangeService, purgomalumClient);
     }

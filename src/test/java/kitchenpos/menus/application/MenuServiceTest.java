@@ -48,9 +48,9 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService, purgomalumClient);
         menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
-        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
         productPriceChangeService = new ProductPriceChangeService(menuService);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));

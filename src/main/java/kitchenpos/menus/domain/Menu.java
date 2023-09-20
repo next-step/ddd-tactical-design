@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain;
 
 import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.vo.MenuName;
 import kitchenpos.menus.domain.vo.MenuPrice;
 import kitchenpos.menus.domain.vo.MenuProducts;
@@ -104,12 +105,14 @@ public class Menu {
         return menuProducts;
     }
 
-
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
     public Menu displayed() {
+        if (price.getPrice().compareTo(menuProducts.totalAmount()) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
         this.displayed = true;
         return this;
     }
