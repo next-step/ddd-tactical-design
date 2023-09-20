@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 

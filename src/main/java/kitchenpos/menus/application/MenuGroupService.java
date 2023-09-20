@@ -1,13 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.shared.dto.MenuGroupDto;
+import kitchenpos.menus.shared.dto.request.MenuGroupCreateRequest;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.shared.util.ConvertUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class MenuGroupService {
@@ -18,19 +20,13 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    public MenuGroupDto create(final MenuGroupCreateRequest request) {
+        final MenuGroup menuGroup = MenuGroup.from(new MenuGroupName(request.getName()));
+        return ConvertUtil.convert(menuGroupRepository.save(menuGroup), MenuGroupDto.class);
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupDto> findAll() {
+        return ConvertUtil.convertList(menuGroupRepository.findAll(), MenuGroupDto.class);
     }
 }

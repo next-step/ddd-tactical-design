@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.products.tobe.domain.Product;
 
@@ -13,52 +13,36 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private Product product;
-
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
     private UUID productId;
+    @Embedded
+    private MenuProductQuantity quantity;
 
-    public MenuProduct() {
+    public MenuProduct(UUID productId, MenuProductQuantity quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    protected MenuProduct() {
+    }
+
+    public static MenuProduct of(UUID productId, MenuProductQuantity quantity) {
+        return new MenuProduct(productId, quantity);
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return quantity.getMenuProductQuantity();
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

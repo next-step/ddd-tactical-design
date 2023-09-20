@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.products.shared.dto.request.ProductChangePriceRequest;
 import kitchenpos.products.shared.dto.request.ProductCreateRequest;
 import kitchenpos.products.shared.dto.response.ProductDto;
@@ -9,7 +9,6 @@ import kitchenpos.products.tobe.domain.ProductMenuService;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.shared.util.ConvertUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +20,15 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
     private final ProductMenuService productMenuService;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
             final PurgomalumClient purgomalumClient,
             final ProductMenuService productMenuService
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
         this.productMenuService = productMenuService;
     }
