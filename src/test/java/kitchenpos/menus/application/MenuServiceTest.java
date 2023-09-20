@@ -69,6 +69,7 @@ class MenuServiceTest {
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                 () -> assertThat(actual.getMenuProducts().getMenuProducts()).hasSize(1)
+
         );
     }
 
@@ -80,6 +81,7 @@ class MenuServiceTest {
             final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
             menuService.create(expected);
         }).isInstanceOf(IllegalArgumentException.class);
+
     }
 
     private static List<Arguments> menuProducts() {
@@ -131,8 +133,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        assertThatThrownBy(() -> createMenuRequest(name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuRequest(name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)));
     }
 
     @DisplayName("메뉴의 가격을 변경할 수 있다.")

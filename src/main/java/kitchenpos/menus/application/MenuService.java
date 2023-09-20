@@ -44,6 +44,7 @@ public class MenuService {
     public void changeProductPrice(final UUID productId, final BigDecimal price) {
         this.menuRepository.findAllByProductId(productId)
                 .forEach(menu -> changePrice(menu.getId(), price));
+
     }
 
     @Transactional

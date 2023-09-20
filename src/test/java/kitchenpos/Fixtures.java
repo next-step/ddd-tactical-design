@@ -111,6 +111,7 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final BigDecimal price) {
+
         return new Product(UUID.randomUUID(), name, price, new FakePurgomalumClient());
     }
 

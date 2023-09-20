@@ -38,6 +38,7 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
+
     @Embedded
     private MenuProducts menuProducts;
 

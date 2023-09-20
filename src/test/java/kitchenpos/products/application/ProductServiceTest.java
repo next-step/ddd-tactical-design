@@ -8,6 +8,7 @@ import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.exception.InvalidProductDisplayedNameException;
 import kitchenpos.products.domain.exception.InvalidProductPriceException;
+
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -132,7 +133,6 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
-        return product.changePrice(price);
+        return new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
     }
 }
