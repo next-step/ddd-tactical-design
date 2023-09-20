@@ -176,6 +176,7 @@ docker compose -p kitchenpos up -d
 #### 속성
 - `Product`는 식별자, `Displayed Name` 와 `Price`를 갖는다.
 - `Displayed Name`은 이름을 갖는다.
+  - 이름은 없거나 빈 값일 수 없다.
   - 이름은 `Slang`를 포함할 수 없다.
 - `Price`는 가격을 갖는다.
   - 가격은 0원 이상이어야 한다.
