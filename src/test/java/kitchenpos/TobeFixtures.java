@@ -1,6 +1,5 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.menus.tobe.application.FakeMenuPurgomalumChecker;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
@@ -46,13 +45,13 @@ public class TobeFixtures {
 
     public static TobeMenuProduct menuProduct() {
         return new TobeMenuProduct(new Random().nextLong(), product().getId(),
-                                   new MenuPrice(product().getBigDecimalPrice()), new TobeMenuProductQuantity(2L)
+                                   new MenuPrice(product().getPriceValue()), new TobeMenuProductQuantity(2L)
         );
     }
 
     public static TobeMenuProduct menuProduct(final TobeProduct product, final long quantity) {
         return new TobeMenuProduct(new Random().nextLong(), product.getId(),
-                                   new MenuPrice(product().getBigDecimalPrice()), new TobeMenuProductQuantity(quantity)
+                                   new MenuPrice(product().getPriceValue()), new TobeMenuProductQuantity(quantity)
         );
     }
 

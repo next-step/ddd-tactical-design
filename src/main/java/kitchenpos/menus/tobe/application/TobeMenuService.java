@@ -7,14 +7,13 @@ import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.PurgomalumChecker;
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
-import kitchenpos.menus.tobe.domain.menu.TobeMenuRepository;
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menu.TobeMenuProducts;
-import kitchenpos.products.tobe.domain.TobeProduct;
-import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.menus.tobe.domain.menu.TobeMenuRepository;
+import kitchenpos.menus.tobe.domain.menu.TobeProductClient;
+import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,19 +28,18 @@ import java.util.stream.Collectors;
 public class TobeMenuService {
     private final TobeMenuRepository menuRepository;
     private final TobeMenuGroupRepository menuGroupRepository;
-    private final TobeProductRepository productRepository;
     private final PurgomalumChecker purgomalumChecker;
+    private final TobeProductClient tobeProductClient;
 
     public TobeMenuService(
             final TobeMenuRepository menuRepository,
             final TobeMenuGroupRepository menuGroupRepository,
-            final TobeProductRepository productRepository,
-            final PurgomalumChecker purgomalumChecker
-    ) {
+            final PurgomalumChecker purgomalumChecker,
+            final TobeProductClient tobeProductClient) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.purgomalumChecker = purgomalumChecker;
+        this.tobeProductClient = tobeProductClient;
     }
 
     @Transactional
@@ -66,9 +64,8 @@ public class TobeMenuService {
 
         List<TobeMenuProduct> tobeMenuProducts = menuProductRequests.stream().map(it -> {
             TobeMenuProductQuantity quantity = new TobeMenuProductQuantity(it.getQuantity());
-            final TobeProduct product = productRepository.findById(it.getProductId())
-                                                         .orElseThrow(NoSuchElementException::new);
-            return new TobeMenuProduct(product.getId(), new MenuPrice(product.getBigDecimalPrice()), quantity);
+            BigDecimal productPrice = tobeProductClient.getProductPrice(it.getProductId());
+            return new TobeMenuProduct(it.getProductId(), new MenuPrice(productPrice), quantity);
         }).collect(Collectors.toList());
 
         return new TobeMenuProducts(tobeMenuProducts);

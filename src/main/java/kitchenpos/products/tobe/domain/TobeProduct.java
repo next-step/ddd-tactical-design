@@ -46,7 +46,7 @@ public class TobeProduct {
         return price;
     }
 
-    public BigDecimal getBigDecimalPrice() {
+    public BigDecimal getPriceValue() {
         return price.getPrice();
     }
 
