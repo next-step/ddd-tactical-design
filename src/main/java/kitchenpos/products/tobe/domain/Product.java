@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.products.publisher.ProductPriceChangedEvent;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
@@ -44,6 +45,12 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     public void changePrice(Price price) {
         this.price = price;
+        changedPrice();
+    }
+
+    @PostUpdate
+    private void changedPrice() {
+        registerEvent(new ProductPriceChangedEvent(this, id.getValue()));
     }
 
     public ProductId getId() {

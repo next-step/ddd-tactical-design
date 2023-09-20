@@ -42,13 +42,9 @@ public class ProductService {
     public ProductResponse changePrice(final ProductId productId, BigDecimal price) {
         Product product = findById(productId);
         Price productPrice = new Price(price);
-        product.changePrice(productPrice);
 
-        try {
-            publisher.publishEvent(new ProductPriceChangedEvent(this, productId.getValue()));
-        } catch (RuntimeException ex) {
-            throw new ProductPriceException(ProductErrorCode.FAIL_REFLACT_MENU_PRICE);
-        }
+        product.changePrice(productPrice);
+        productRepository.save(product);
 
         return ProductResponse.fromEntity(product);
     }

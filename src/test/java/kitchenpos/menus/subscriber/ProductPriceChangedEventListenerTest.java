@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RecordApplicationEvents
 @SpringBootTest
 @DisplayName("상품 가격 변경 이벤트 발행")
-class ProductPriceEventListenerTest {
+class ProductPriceChangedEventListenerTest {
 
     @Autowired
     private ProductService productService;
@@ -28,7 +28,7 @@ class ProductPriceEventListenerTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductPriceEventListener eventListener;
+    private ProductPriceChangedEventListener eventListener;
 
 
     @Autowired
