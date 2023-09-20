@@ -5,7 +5,6 @@ import kitchenpos.menus.tobe.domain.Menu;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Embeddable
@@ -35,7 +34,7 @@ public class OrderLineItems {
 
     private void validateMenu(final Menu menu) {
         if (menu == null) {
-            throw new NoSuchElementException();
+            throw new IllegalArgumentException();
         }
     }
 
@@ -43,5 +42,9 @@ public class OrderLineItems {
         if (menu.getBigDecimalPrice().compareTo(orderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public List<OrderLineItem> getOrderLineItemList() {
+        return orderLineItemList;
     }
 }
