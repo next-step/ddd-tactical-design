@@ -18,7 +18,7 @@ import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrder;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderStatus;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.tobe.domain.Product;
 
 public class Fixtures {
 

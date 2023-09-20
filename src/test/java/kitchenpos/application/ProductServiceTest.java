@@ -13,9 +13,10 @@ import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.application.ProductService;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.product.tobe.application.ProductService;
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequestDto;
+import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
+        final ChangeProductPriceRequestDto expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
@@ -86,7 +87,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
+        final ChangeProductPriceRequestDto expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -120,13 +121,11 @@ class ProductServiceTest {
         return product;
     }
 
-    private Product changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
+    private ChangeProductPriceRequestDto changePriceRequest(final long price) {
+        return new ChangeProductPriceRequestDto(BigDecimal.valueOf(price));
     }
 
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
+    private ChangeProductPriceRequestDto changePriceRequest(final BigDecimal price) {
+        return new ChangeProductPriceRequestDto(price);
     }
 }

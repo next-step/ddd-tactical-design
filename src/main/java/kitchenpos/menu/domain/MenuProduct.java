@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.tobe.domain.Product;
 
 @Table(name = "menu_product")
 @Entity
