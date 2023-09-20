@@ -1,5 +1,7 @@
 package kitchenpos.deliveryorders.domain;
 
+import static kitchenpos.deliveryorders.domain.DeliveryOrderStatus.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -38,7 +40,9 @@ public class DeliveryOrder {
 
     public DeliveryOrder(DeliveryOrderLineItems orderLineItems, DeliveryAddress deliveryAddress) {
         this.id = UUID.randomUUID();
+        this.orderLineItems = orderLineItems;
         this.deliveryAddress = deliveryAddress;
+        this.status = initialOrderStatus();
     }
 
     public UUID getId() {
@@ -83,6 +87,10 @@ public class DeliveryOrder {
             throw new IllegalStateException("배달 완료된 주문만 완료할 수 있다.");
         }
         status = status.nextStatus();
+    }
+
+    public boolean isSameStatus(DeliveryOrderStatus orderStatus) {
+        return status == orderStatus;
     }
 
 }

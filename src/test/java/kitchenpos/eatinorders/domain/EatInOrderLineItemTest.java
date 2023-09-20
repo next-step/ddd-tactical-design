@@ -16,7 +16,7 @@ class EatInOrderLineItemTest {
 
     @BeforeEach
     void setUp() {
-        EatInOrderQuantity quantity = EatInOrderQuantity.of(3, OrderType.DELIVERY);
+        EatInOrderQuantity quantity = EatInOrderQuantity.of(3);
         주문1 = new EatInOrderLineItem(createOrderMenu(13_000L), quantity);
     }
 

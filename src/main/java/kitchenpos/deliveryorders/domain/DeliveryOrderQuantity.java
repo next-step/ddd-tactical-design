@@ -5,8 +5,6 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import kitchenpos.eatinorders.domain.OrderType;
-
 @Embeddable
 public class DeliveryOrderQuantity {
     @Column(name = "quantity", nullable = false)
@@ -37,7 +35,7 @@ public class DeliveryOrderQuantity {
         return Objects.hash(quantity);
     }
 
-    public static DeliveryOrderQuantity of(long quantity, OrderType orderType) {
+    public static DeliveryOrderQuantity of(long quantity) {
         return new DeliveryOrderQuantity(quantity);
     }
 

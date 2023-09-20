@@ -14,6 +14,6 @@ class EatInOrderQuantityTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, -13000})
     void of1(int quantity) {
-        assertThatNoException().isThrownBy(() -> EatInOrderQuantity.of(quantity, OrderType.EAT_IN));
+        assertThatNoException().isThrownBy(() -> EatInOrderQuantity.of(quantity));
     }
 }

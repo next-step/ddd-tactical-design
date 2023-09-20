@@ -79,6 +79,6 @@ class EatInOrderTest {
         eatIn.accept();
         assertThatThrownBy(() -> eatIn.complete())
             .isInstanceOf(IllegalStateException.class)
-            .hasMessage("포장 및 매장 주문의 경우 서빙된 주문만 완료할 수 있다.");
+            .hasMessage("서빙된 주문만 완료할 수 있다.");
     }
 }

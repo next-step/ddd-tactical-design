@@ -6,9 +6,10 @@ public enum DeliveryOrderStatus {
 
     WAITING(1),
     ACCEPTED(2),
-    DELIVERING(3),
-    DELIVERED(4),
-    SERVED(5),
+    SERVED(3),
+    DELIVERING(4),
+    DELIVERED(5),
+
     COMPLETED(6);
 
     private int order;
