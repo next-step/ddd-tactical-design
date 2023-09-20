@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.ui;
 
-import kitchenpos.eatinorders.application.OrderTableService;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.application.orderTables.OrderTableService;
+import kitchenpos.eatinorders.domain.ordertables.OrderTable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class OrderTableRestController {
     public ResponseEntity<OrderTable> create(@RequestBody final OrderTable request) {
         final OrderTable response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{orderTableId}/sit")
@@ -37,8 +37,8 @@ public class OrderTableRestController {
 
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
-        @PathVariable final UUID orderTableId,
-        @RequestBody final OrderTable request
+            @PathVariable final UUID orderTableId,
+            @RequestBody final OrderTable request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }
