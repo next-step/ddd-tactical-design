@@ -14,15 +14,20 @@ public class OrderTableService {
     private final OrderRepository orderRepository;
     private final OrderTableCreateService orderTableCreateService;
     private final OrderTableChangeGuestService orderTableChangeGuestService;
+    private final OrderTableClearService orderTableClearService;
+
+    private final OrderStatusService orderStatusService;
 
     public OrderTableService(final OrderTableRepository orderTableRepository,
                              final OrderTableCreateService orderTableCreateService,
                              final OrderRepository orderRepository,
-                             final OrderTableChangeGuestService orderTableChangeGuestService) {
+                             final OrderTableChangeGuestService orderTableChangeGuestService, OrderTableClearService orderTableClearService, OrderStatusService orderStatusService) {
         this.orderTableRepository = orderTableRepository;
         this.orderTableCreateService = orderTableCreateService;
         this.orderRepository = orderRepository;
         this.orderTableChangeGuestService = orderTableChangeGuestService;
+        this.orderTableClearService = orderTableClearService;
+        this.orderStatusService = orderStatusService;
     }
 
     @Transactional
@@ -39,12 +44,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = getOrderTable(orderTableId);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-
-        return this.orderTableRepository.save(orderTable.clear());
+        return this.orderTableClearService.clear(getOrderTable(orderTableId));
     }
 
     @Transactional
@@ -57,7 +57,8 @@ public class OrderTableService {
         return orderTableRepository.findAll();
     }
 
-    private OrderTable getOrderTable(UUID orderTableId) {
+    @Transactional(readOnly = true)
+    public OrderTable getOrderTable(UUID orderTableId) {
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NotFoundOrderTableException::new);
     }

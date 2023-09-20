@@ -24,14 +24,18 @@ class OrderTableServiceTest {
     private OrderTableService orderTableService;
     private OrderTableCreateService orderTableCreateService;
     private OrderTableChangeGuestService orderTableChangeGuestService;
+    private OrderTableClearService orderTableClearService;
+    private OrderStatusService orderStatusService;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
+        orderStatusService = new OrderStatusService(orderRepository);
         orderTableCreateService = new OrderTableCreateService(orderTableRepository);
         orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderRepository, orderTableChangeGuestService);
+        orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderRepository, orderTableChangeGuestService, orderTableClearService, orderStatusService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
