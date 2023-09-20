@@ -57,7 +57,7 @@ public class MenuService {
                 .map(menuProduct -> {
                     Product product = productRepository.findById(menuProduct.getProductId())
                             .orElseThrow(NoSuchElementException::new);
-                    return new MenuProduct(product, menuProduct.getQuantity(), menuProduct.getProductId());
+                    return new MenuProduct(product, menuProduct.getQuantity());
                 })
                 .collect(Collectors.toList());
 

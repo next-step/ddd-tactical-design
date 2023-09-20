@@ -30,13 +30,12 @@ public class MenuProduct {
     public MenuProduct() {
     }
 
-    public MenuProduct(Product product, Long quantity, UUID productId) {
+    public MenuProduct(Product product, Long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
         this.product = product;
         this.quantity = quantity;
-        this.productId = productId;
     }
 
     public Long getSeq() {
