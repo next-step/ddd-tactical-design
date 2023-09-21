@@ -40,6 +40,13 @@ class PriceTest {
     }
 
     @Test
+    void 가격을_서로_더할_수_있다() {
+        Price price = new Price(1000);
+
+        assertThat(price.sum(price)).isEqualTo(new Price(2000));
+    }
+
+    @Test
     void Price_동등성_비교() {
         Price actual = new Price(0);
 

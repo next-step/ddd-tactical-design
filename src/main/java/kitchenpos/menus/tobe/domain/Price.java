@@ -20,6 +20,10 @@ public class Price {
         return new Price(price.longValue() * quantity.intValue());
     }
 
+    public Price sum(Price other) {
+        return new Price(price.longValue() + other.price.longValue());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
