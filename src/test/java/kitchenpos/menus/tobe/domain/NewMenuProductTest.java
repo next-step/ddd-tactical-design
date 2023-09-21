@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.NewFixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,17 +18,17 @@ class NewMenuProductTest {
     @DisplayName("메뉴상품 생성 테스트")
     @Test
     void create() {
-        UUID id = UUID.randomUUID();
-        NewMenuProduct newMenuProduct = NewMenuProduct.create(id, 3L);
-        assertThat(newMenuProduct).isEqualTo(NewMenuProduct.create(id, 3L));
+        NewProduct newProduct = NewFixtures.newProduct(1_000L);
+        NewMenuProduct newMenuProduct = NewMenuProduct.create(newProduct, 3L);
+        assertThat(newMenuProduct).isEqualTo(NewMenuProduct.create(newProduct, 3L));
     }
 
     @DisplayName("수량이 0보다 작으면 예외를 반환한다.")
     @ValueSource(longs = {-2L,-1L})
     @ParameterizedTest
     void quantity(Long input) {
-        UUID id = UUID.randomUUID();
-        assertThatThrownBy(() -> NewMenuProduct.create(id, input))
+        NewProduct newProduct = NewFixtures.newProduct(1_000L);
+        assertThatThrownBy(() -> NewMenuProduct.create(newProduct, input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ILLEGAL_QUANTITY);
     }

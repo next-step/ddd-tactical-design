@@ -14,10 +14,6 @@ import java.util.UUID;
 public class NewFixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static NewMenu menu() {
-        return menu(19_000L, true, menuProduct());
-    }
-
     public static NewMenu menu(final long price, final NewMenuProduct... newMenuProducts) {
         return menu(price, false, newMenuProducts);
     }
@@ -44,16 +40,15 @@ public class NewFixtures {
         return NewMenuGroup.create(UUID.randomUUID(), name);
     }
 
-    public static NewMenuProduct menuProduct() {
-        return NewMenuProduct.create(new Random().nextLong(), UUID.randomUUID(), 2L);
-    }
-
     public static NewMenuProduct menuProduct(final NewProduct product, final long quantity) {
-        return NewMenuProduct.create(new Random().nextLong(), product.getId(), quantity);
+        return NewMenuProduct.create(new Random().nextLong(), product, quantity);
     }
 
     public static NewMenuProduct menuProduct(final Product product, final long quantity) {
-        return NewMenuProduct.create(new Random().nextLong(), product.getId(), quantity);
+        return NewMenuProduct.create(
+                new Random().nextLong(),
+                NewProduct.create(product.getId(), product.getPrice()),
+                quantity);
     }
 
     public static Product product(final String name, final long price) {

@@ -106,11 +106,11 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @DisplayName("메뉴의 가격은 메뉴에 속한 상품 금액의 합보다 작거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
         final MenuCreateRequest expected = createMenuRequest(
-                "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
+                "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 1L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -167,7 +167,7 @@ class MenuServiceTest {
         @Test
         void changePriceToExpensive() {
             final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-            final MenuChangePriceRequest expected = changePriceRequest(33_000L);
+            final MenuChangePriceRequest expected = changePriceRequest(50_000L);
             assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
                     .isInstanceOf(IllegalArgumentException.class);
         }
@@ -182,15 +182,6 @@ class MenuServiceTest {
             final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
             final MenuDisplayResponse actual = menuService.display(menuId);
             assertThat(actual.isDisplayed()).isTrue();
-        }
-
-        @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-        @Test
-        void displayExpensiveMenu() {
-            final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
-            assertThatThrownBy(() -> menuService.display(menuId))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage(MENU_PRICE_MORE_PRODUCTS_SUM);
         }
 
         @DisplayName("메뉴를 숨길 수 있다.")

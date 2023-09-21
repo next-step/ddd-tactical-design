@@ -7,10 +7,7 @@ import kitchenpos.common.domain.Price;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-
-import static kitchenpos.menus.exception.MenuProductExceptionMessage.NOT_EQUAL_MENU_PRODUCT_SIZE;
 
 @Table(name = "menu")
 @Entity
@@ -39,6 +36,8 @@ public class NewMenu {
     }
 
     private NewMenu(UUID id, DisplayedName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        menuProducts.validateMenuPrice(price);
+
         this.id = id;
         this.name = name;
         this.price = price;
@@ -51,8 +50,8 @@ public class NewMenu {
         return new NewMenu(menuId, name, price, menuGroupId, displayed, menuProducts);
     }
 
-    public void displayed(List<NewProduct> productList) {
-        menuProducts.validateMenuPrice(productList, price);
+    public void displayed() {
+        menuProducts.validateMenuPrice(price);
         this.displayed = true;
     }
 
@@ -65,8 +64,8 @@ public class NewMenu {
         return displayed;
     }
 
-    public void changePrice(List<NewProduct> productList, Price price) {
-        menuProducts.validateMenuPrice(productList, price);
+    public void changePrice(Price price) {
+        menuProducts.validateMenuPrice(price);
         this.price = price;
     }
 
@@ -95,7 +94,4 @@ public class NewMenu {
         return menuGroupId;
     }
 
-    public MenuProducts getMenuProducts() {
-        return menuProducts;
-    }
 }

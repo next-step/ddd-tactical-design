@@ -1,6 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.common.domain.Price;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,12 +17,13 @@ public class NewMenuProduct {
     @Id
     private Long seq;
 
+    @ManyToOne
     @JoinColumn(
-            name = "product_id",
+            name = "product_id",// 에러발생해서 주석처리 Table [menu_product] contains physical column name [product_id] referred to by multiple logical column names: [product_id], [productId]
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private UUID productId;
+    private NewProduct newProduct;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -27,33 +31,37 @@ public class NewMenuProduct {
     public NewMenuProduct() {
     }
 
-    private NewMenuProduct(UUID productId, long quantity) {
+    private NewMenuProduct(NewProduct newProduct, long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException(ILLEGAL_QUANTITY);
         }
-        this.productId = productId;
+        this.newProduct = newProduct;
         this.quantity = quantity;
     }
 
-    private NewMenuProduct(Long seq, UUID productId, long quantity) {
+    private NewMenuProduct(Long seq, NewProduct newProduct, long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException(ILLEGAL_QUANTITY);
         }
         this.seq = seq;
-        this.productId = productId;
+        this.newProduct = newProduct;
         this.quantity = quantity;
     }
 
-    public static NewMenuProduct create(UUID productId, long quantity) {
-        return new NewMenuProduct(productId, quantity);
+    public static NewMenuProduct create(NewProduct product, long quantity) {
+        return new NewMenuProduct(product, quantity);
     }
 
-    public static NewMenuProduct create(Long seq, UUID productId, long quantity) {
-        return new NewMenuProduct(seq, productId, quantity);
+    public static NewMenuProduct create(Long seq, NewProduct product, long quantity) {
+        return new NewMenuProduct(seq, product, quantity);
     }
 
-    public UUID getProductId() {
-        return productId;
+    public Price calculateTotalPrice() {
+        return newProduct.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public NewProduct getNewProduct() {
+        return newProduct;
     }
 
     public long getQuantity() {
@@ -71,5 +79,9 @@ public class NewMenuProduct {
     @Override
     public int hashCode() {
         return Objects.hash(seq);
+    }
+
+    public UUID getProductId() {
+        return newProduct.getId();
     }
 }

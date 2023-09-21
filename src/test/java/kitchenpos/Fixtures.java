@@ -55,10 +55,6 @@ public class Fixtures {
         return MenuProduct.of(new Random().nextLong(), product().getId(), 2L);
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return MenuProduct.of(new Random().nextLong(), product.getId(), quantity);
-    }
-
     public static Order order(final OrderStatus status, final String deliveryAddress) {
         final Order order = new Order();
         order.setId(UUID.randomUUID());

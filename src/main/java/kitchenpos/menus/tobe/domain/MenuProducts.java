@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.Price;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class MenuProducts {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<NewMenuProduct> newMenuProducts;
+    private List<NewMenuProduct> newMenuProducts = new ArrayList<>();
 
     public MenuProducts() {
     }
@@ -43,12 +43,12 @@ public class MenuProducts {
         return new MenuProducts(menuProductList);
     }
 
-    public void validateMenuPrice(List<NewProduct> productList, Price menuPrice) {
-        BigDecimal sum = productList.stream()
-                .map(NewProduct::getPriceValue)
-                .reduce(BigDecimal::add)
-                .get();
-        if (menuPrice.isGreaterThan(Price.of(sum))) {
+    public void validateMenuPrice(Price targetMenuPrice) {
+        Price sumOfmenuProductPrice = newMenuProducts.stream()
+                .map(NewMenuProduct::calculateTotalPrice)
+                .reduce(Price.ZERO, Price::plus);
+
+        if (targetMenuPrice.isGreaterThan(sumOfmenuProductPrice)) {
             throw new IllegalArgumentException(MENU_PRICE_MORE_PRODUCTS_SUM);
         }
     }

@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.NewFixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,18 +18,23 @@ class NewMenuProductsTest {
     @DisplayName("메뉴상품목록 생성 성공")
     @Test
     void create() {
-        MenuProducts menuProducts = MenuProducts.create(List.of(NewMenuProduct.create(UUID.randomUUID(), 1L)));
-        assertThat(menuProducts).isEqualTo(MenuProducts.create(List.of(NewMenuProduct.create(UUID.randomUUID(), 1L))));
+        NewProduct newProduct = NewFixtures.newProduct(1_000L);
+        MenuProducts menuProducts = MenuProducts.create(List.of(NewMenuProduct.create(newProduct, 1L)));
+        assertThat(menuProducts).isEqualTo(MenuProducts.create(List.of(NewMenuProduct.create(newProduct, 1L))));
     }
 
     @DisplayName("메뉴상품의 상품ID를 반환한다.")
     @Test
     void getMenuProductIds() {
-        List<UUID> uuids = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        List<NewProduct> products = List.of(
+                NewFixtures.newProduct(1_000L),
+                NewFixtures.newProduct(2_000L),
+                NewFixtures.newProduct(3_000L)
+        );
         List<NewMenuProduct> newMenuProducts = List.of(
-                NewMenuProduct.create(uuids.get(0), 1L),
-                NewMenuProduct.create(uuids.get(1), 5L),
-                NewMenuProduct.create(uuids.get(2), 10L)
+                NewMenuProduct.create(products.get(0), 1L),
+                NewMenuProduct.create(products.get(1), 5L),
+                NewMenuProduct.create(products.get(2), 10L)
         );
 
         MenuProducts menuProducts = MenuProducts.create(newMenuProducts);

@@ -11,11 +11,12 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
+//    @JoinColumn(
+//            name = "product_id",
+//            columnDefinition = "binary(16)",
+//            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+//    )
+    @Column(name = "product_id")
     private UUID productId;
 
     @Column(name = "quantity", nullable = false)

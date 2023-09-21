@@ -9,13 +9,11 @@ import kitchenpos.menus.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static kitchenpos.menus.exception.MenuExceptionMessage.MENU_PRICE_MORE_PRODUCTS_SUM;
 import static kitchenpos.menus.exception.MenuProductExceptionMessage.NOT_EQUAL_MENU_PRODUCT_SIZE;
 
 @Service
@@ -40,14 +38,17 @@ public class MenuService {
     @Transactional
     public MenuInfoResponse create(final MenuCreateRequest request) {
         final NewMenuGroup newMenuGroup = findById(request.getMenuGroupId());
-        validate(request);
+        List<UUID> productIds = getProductIds(request.getMenuProducts());
+        List<NewProduct> products = productRepostiory.findAllByIdIn(productIds);
+        validateExistsProduct(productIds, products);
+
         NewMenu savedMenu = menuRepository.save(
                 NewMenu.create(
                         UUID.randomUUID(),
                         newMenuGroup.getId(),
                         DisplayedName.of(request.getName(), displayNameChecker),
                         Price.of(request.getPrice()),
-                        MenuProducts.create(createMenuProductList(request.getMenuProducts())),
+                        MenuProducts.create(createMenuProductList(products, request.getMenuProducts())),
                         request.isDisplayed()
                 ));
         return createResponse(savedMenu);
@@ -56,16 +57,14 @@ public class MenuService {
     @Transactional
     public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
         final NewMenu newMenu = findMenuById(menuId);
-        List<NewProduct> productList = productRepostiory.findAllByIdIn(newMenu.getMenuProductIds());
-        newMenu.changePrice(productList, Price.of(request.getPrice()));
+        newMenu.changePrice(Price.of(request.getPrice()));
         return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPrice());
     }
 
     @Transactional
     public MenuDisplayResponse display(final UUID menuId) {
         final NewMenu newMenu = findMenuById(menuId);
-        List<NewProduct> productList = productRepostiory.findAllByIdIn(newMenu.getMenuProductIds());
-        newMenu.displayed(productList);
+        newMenu.displayed();
         return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
     }
 
@@ -94,26 +93,9 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private void validate(MenuCreateRequest request) {
-        List<UUID> productIds = getProductIds(request.getMenuProducts());
-        List<NewProduct> productList = productRepostiory.findAllByIdIn(productIds);
-        validateExistsProduct(productIds, productList);
-        validatePrice(request, productList);
-    }
-
     private void validateExistsProduct(List<UUID> productIds, List<NewProduct> productList) {
         if (productIds.size() != productList.size()) {
             throw new IllegalArgumentException(NOT_EQUAL_MENU_PRODUCT_SIZE);
-        }
-    }
-
-    private void validatePrice(MenuCreateRequest request, List<NewProduct> productList) {
-        BigDecimal sum = productList.stream()
-                .map(NewProduct::getPriceValue)
-                .reduce(BigDecimal::add)
-                .get();
-        if (Price.of(request.getPrice()).isGreaterThan(Price.of(sum))) {
-            throw new IllegalArgumentException(MENU_PRICE_MORE_PRODUCTS_SUM);
         }
     }
 
@@ -140,10 +122,17 @@ public class MenuService {
         );
     }
 
-    private List<NewMenuProduct> createMenuProductList(List<MenuProductCreateRequest> requests) {
+    private List<NewMenuProduct> createMenuProductList(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
         return requests.stream()
-                .map(k -> NewMenuProduct.create(k.getProductId(), k.getQuantity()))
+                .map(k -> NewMenuProduct.create(findByProductId(products, k.getProductId()), k.getQuantity()))
                 .collect(Collectors.toList());
+    }
+
+    private NewProduct findByProductId(List<NewProduct> products, UUID productId) {
+        return products.stream()
+                .filter(p -> productId.equals(p.getId()))
+                .findAny()
+                .orElseThrow(NoSuchElementException::new);
     }
 
 }

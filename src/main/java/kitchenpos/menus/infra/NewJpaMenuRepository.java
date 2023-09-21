@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NewJpaMenuRepository extends MenuRepository, JpaRepository<NewMenu, UUID> {
-    @Query("select m from NewMenu m join m.menuProducts.newMenuProducts mp where mp.productId = :productId")
+    @Query("select m from NewMenu m join m.menuProducts.newMenuProducts mp where mp.newProduct.id = :productId")
     @Override
     List<NewMenu> findAllByProductId(@Param("productId") UUID productId);
 }

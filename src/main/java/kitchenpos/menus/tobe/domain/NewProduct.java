@@ -1,7 +1,5 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.common.domain.DisplayNameChecker;
-import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
 
 import javax.persistence.*;
@@ -37,5 +35,9 @@ public class NewProduct {
 
     public BigDecimal getPriceValue() {
         return price.getPrice();
+    }
+
+    public Price getPrice() {
+        return price;
     }
 }
