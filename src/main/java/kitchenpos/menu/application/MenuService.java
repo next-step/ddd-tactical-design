@@ -9,12 +9,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.menugroup.domain.MenuGroupRepository;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +69,8 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
+                    .multiply(quantity)
+                    .getValue()
             );
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
@@ -106,7 +107,8 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(menuProduct.getQuantity())
+                    .getValue()
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -125,7 +127,8 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(menuProduct.getQuantity())
+                    .getValue()
             );
         }
         if (menu.getPrice().compareTo(sum) > 0) {

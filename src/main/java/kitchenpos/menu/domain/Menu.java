@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menugroup.domain.MenuGroup;
 
 @Table(name = "menu")
@@ -53,6 +54,16 @@ public class Menu {
     private UUID menuGroupId;
 
     public Menu() {
+    }
+
+    public void checkPrice() {
+        var sum = menuProducts.stream()
+            .map(MenuProduct::calculatePrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (price.compareTo(sum) > 0) {
+            displayed = false;
+        }
     }
 
     public UUID getId() {

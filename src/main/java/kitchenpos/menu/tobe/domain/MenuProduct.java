@@ -1,5 +1,6 @@
-package kitchenpos.menu.domain;
+package kitchenpos.menu.tobe.domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.product.domain.Product;
+import kitchenpos.product.tobe.domain.Product;
 
 @Table(name = "menu_product")
 @Entity
@@ -37,6 +38,10 @@ public class MenuProduct {
     private UUID productId;
 
     public MenuProduct() {
+    }
+
+    public BigDecimal calculatePrice() {
+        return product.multiplyPrice(quantity).getValue();
     }
 
     public Long getSeq() {

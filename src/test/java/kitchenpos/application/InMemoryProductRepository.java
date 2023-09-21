@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductRepository;
 
 public class InMemoryProductRepository implements ProductRepository {
 

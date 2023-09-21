@@ -2,6 +2,7 @@ package kitchenpos.application;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import kitchenpos.common.profanity.ProfanityClient;
 
 public class FakeProfanityClient implements ProfanityClient {
@@ -14,7 +15,11 @@ public class FakeProfanityClient implements ProfanityClient {
 
     @Override
     public boolean containsProfanity(final String text) {
+        if (Objects.isNull(text)) {
+            return false;
+        }
+
         return profanities.stream()
-            .anyMatch(profanity -> text.contains(profanity));
+            .anyMatch(text::contains);
     }
 }
