@@ -28,4 +28,8 @@ public class Price {
     public int hashCode() {
         return Objects.hash(price);
     }
+
+    public String stringValue() {
+        return price.toString();
+    }
 }
