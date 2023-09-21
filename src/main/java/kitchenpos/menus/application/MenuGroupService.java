@@ -1,13 +1,11 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class MenuGroupService {
@@ -19,13 +17,7 @@ public class MenuGroupService {
 
     @Transactional
     public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+        final MenuGroup menuGroup = new MenuGroup(request.getName());
         return menuGroupRepository.save(menuGroup);
     }
 

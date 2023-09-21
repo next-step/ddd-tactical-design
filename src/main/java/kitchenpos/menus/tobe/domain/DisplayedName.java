@@ -1,8 +1,9 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 
 import java.util.Objects;
+
 
 public class DisplayedName {
     private String name;

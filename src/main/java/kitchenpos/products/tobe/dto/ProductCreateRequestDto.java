@@ -1,7 +1,5 @@
 package kitchenpos.products.tobe.dto;
 
-import java.math.BigDecimal;
-
 public class ProductCreateRequestDto {
     private String name;
     private Long price;
