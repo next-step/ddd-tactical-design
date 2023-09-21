@@ -13,8 +13,7 @@
 - `Menu Products`는 `MenuProduct`를 갖는다.
   - `Menu Product`는 1개 이상이어야 한다.
 - `Menu`는 특정 `Menu Group`에 속해야 한다.
-- `Menu Group`은 이름을 갖는다.
-    - 이름은 존재해야 한다.
+- `Menu Group`은 식별자, 이름을 갖는다.
 #### 기능
 - `Register Menu`를 할 수 있다.
     - `Register Menu` 시, `Displayed Name`, `Price`, `Menu Products`는 필수여야 한다.
