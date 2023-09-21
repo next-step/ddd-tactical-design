@@ -15,9 +15,10 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Entity
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -41,16 +42,9 @@ public class Order {
     @Embedded
     private OrderLineItems orderLineItems = new OrderLineItems();
 
-    public Order(OrderTable orderTable, OrderLineItems orderLineItems, EventPublisher eventPublisher) {
+    public Order(OrderTable orderTable, OrderLineItems orderLineItems) {
         checkOrerTableIsVacant(orderTable);
         checkOrderLineItemsIsEmpty(orderLineItems);
-
-        eventPublisher.publish(new OrderCreateRequested(
-            orderLineItems.getOrderLineItems()
-                .stream()
-                .map(OrderLineItem::getMenuId)
-                .collect(Collectors.toList())
-        ));
 
         orderLineItems.mapOrder(this);
         this.id = UUID.randomUUID();
@@ -58,6 +52,15 @@ public class Order {
         this.orderDateTime = LocalDateTime.now();
         this.orderTable = orderTable;
         this.orderLineItems = orderLineItems;
+
+        this.registerEvent(
+            new OrderCreateRequested(
+                orderLineItems.getOrderLineItems()
+                    .stream()
+                    .map(OrderLineItem::getMenuId)
+                    .collect(Collectors.toList())
+            )
+        );
     }
 
     protected Order() {
