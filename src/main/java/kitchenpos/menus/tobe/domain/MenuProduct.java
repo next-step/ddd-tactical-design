@@ -6,10 +6,12 @@ import java.util.UUID;
 public class MenuProduct {
     private UUID productId;
     private Quantity quantity;
+    private Price price;
 
-    public MenuProduct(UUID productId, Quantity quantity) {
+    public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
         this.productId = productId;
         this.quantity = quantity;
+        this.price = productPrice.multiplyQuantity(quantity);
     }
 
     @Override

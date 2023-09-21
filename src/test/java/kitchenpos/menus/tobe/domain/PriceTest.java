@@ -32,6 +32,14 @@ class PriceTest {
     }
 
     @Test
+    void 가격에_수량을_곱한_가격을_구할_수_있다() {
+        Price price = new Price(1000);
+        Quantity quantity = new Quantity(2);
+
+        assertThat(price.multiplyQuantity(quantity)).isEqualTo(new Price(2000));
+    }
+
+    @Test
     void Price_동등성_비교() {
         Price actual = new Price(0);
 

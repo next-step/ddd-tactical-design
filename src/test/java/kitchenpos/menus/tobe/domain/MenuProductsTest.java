@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class MenuProductsTest {
     @Test
     void MenuProducts는_MenuProduct를_1개_이상_갖는다() {
-        assertDoesNotThrow(() -> new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0)))));
+        assertDoesNotThrow(() -> new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)))));
     }
 
     @Test
@@ -24,8 +24,8 @@ class MenuProductsTest {
 
     @Test
     void MenuProducts_동등성_비교() {
-        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0)));
-        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0)));
+        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
+        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
 
         MenuProducts actual = new MenuProducts(menuProducts);
 
@@ -40,8 +40,8 @@ class MenuProductsTest {
 
     @Test
     void MenuProducts_hashCode() {
-        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0)));
-        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0)));
+        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
+        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
         
         MenuProducts actual = new MenuProducts(menuProducts);
 

@@ -16,6 +16,10 @@ public class Price {
         return price.compareTo(other.price) <= 0;
     }
 
+    public Price multiplyQuantity(Quantity quantity) {
+        return new Price(price.longValue() * quantity.intValue());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

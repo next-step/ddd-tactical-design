@@ -24,4 +24,8 @@ public class Quantity {
     public int hashCode() {
         return Objects.hash(quantity);
     }
+
+    public int intValue() {
+        return quantity;
+    }
 }
