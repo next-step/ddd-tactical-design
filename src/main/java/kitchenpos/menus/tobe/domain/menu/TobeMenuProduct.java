@@ -29,9 +29,7 @@ public class TobeMenuProduct {
     }
 
     public TobeMenuProduct(UUID productId, MenuPrice menuPrice, TobeMenuProductQuantity quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = menuPrice.multiply(quantity.getQuantity());
+        this(null,  productId, menuPrice, quantity);
     }
 
     public TobeMenuProduct(Long seq, UUID productId, MenuPrice menuPrice, TobeMenuProductQuantity quantity) {
