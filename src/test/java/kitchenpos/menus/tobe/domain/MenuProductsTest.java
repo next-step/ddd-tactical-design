@@ -23,6 +23,18 @@ class MenuProductsTest {
     }
 
     @Test
+    void MenuProduct들의_총합_가격을_구할_수_있다() {
+        MenuProducts menuProducts = new MenuProducts(
+                List.of(
+                        new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(1000)),
+                        new MenuProduct(UUID.randomUUID(), new Quantity(2), new Price(2000))
+                )
+        );
+
+        assertThat(menuProducts.totalPrice()).isEqualTo(new Price(5000));
+    }
+
+    @Test
     void MenuProducts_동등성_비교() {
         List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
         List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));

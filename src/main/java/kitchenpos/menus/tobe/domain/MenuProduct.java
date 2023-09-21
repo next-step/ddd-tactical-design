@@ -14,6 +14,10 @@ public class MenuProduct {
         this.price = productPrice.multiplyQuantity(quantity);
     }
 
+    public Price getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

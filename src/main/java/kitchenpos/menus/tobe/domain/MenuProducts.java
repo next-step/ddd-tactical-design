@@ -13,6 +13,12 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
+    public Price totalPrice() {
+        return menuProducts.stream()
+                .map(MenuProduct::getPrice)
+                .reduce(new Price(0), Price::sum);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
