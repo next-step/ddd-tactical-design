@@ -1,24 +1,20 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain.menugroup;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class ProductName {
+public class TobeMenuGroupName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected ProductName() {
+    protected TobeMenuGroupName() {
     }
 
-    public ProductName(String name, PurgomalumChecker purgomalumChecker) {
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException("상품의 이름은 비어 있을 수 없습니다.");
-        }
-
-        if (purgomalumChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException("이름에는 비속어가 포함될 수 없습니다. name: " + name);
+    public TobeMenuGroupName(String name) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException("메뉴그룹의 이름은 비어있을 수 없습니다.");
         }
 
         this.name = name;
@@ -32,7 +28,7 @@ public class ProductName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductName that = (ProductName) o;
+        TobeMenuGroupName that = (TobeMenuGroupName) o;
         return Objects.equals(name, that.name);
     }
 

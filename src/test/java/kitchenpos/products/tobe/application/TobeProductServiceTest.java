@@ -1,11 +1,12 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.application.FakePurgomalumChecker;
+import kitchenpos.products.tobe.domain.PurgomalumChecker;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.event.ProductChangedPriceEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TobeProductServiceTest {
     private TobeProductRepository tobeProductRepository;
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumChecker purgomalumChecker;
     private TobeProductService tobeProductService;
-
     private InMemoryApplicationEventPublisher publisher;
 
 
@@ -33,8 +33,8 @@ class TobeProductServiceTest {
     void setUp() {
         publisher = new InMemoryApplicationEventPublisher();
         tobeProductRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        tobeProductService = new TobeProductService(tobeProductRepository, purgomalumClient, publisher);
+        purgomalumChecker = new FakePurgomalumChecker();
+        tobeProductService = new TobeProductService(tobeProductRepository, purgomalumChecker, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -75,7 +75,8 @@ class TobeProductServiceTest {
         final TobeProduct expected = changePriceRequest(15_000L);
         final TobeProduct actual = tobeProductService.changePrice(productId, BigDecimal.valueOf(15_000L));
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-        assertThat(actual).isEqualTo(publisher.poll());
+        ProductChangedPriceEvent poll = (ProductChangedPriceEvent) publisher.poll();
+        assertThat(actual.getId()).isEqualTo(poll.getProductId());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -122,7 +123,7 @@ class TobeProductServiceTest {
     }
 
     public TobeProduct product(final String name, final BigDecimal price) {
-        return new TobeProduct(UUID.randomUUID(), new ProductName(name, purgomalumClient),
+        return new TobeProduct(UUID.randomUUID(), new ProductName(name, purgomalumChecker),
                                new ProductPrice(price));
     }
 }

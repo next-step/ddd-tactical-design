@@ -5,7 +5,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.PurgomalumChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,15 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private PurgomalumChecker purgomalumChecker;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        purgomalumChecker = new FakePurgomalumChecker();
+        productService = new ProductService(productRepository, menuRepository, purgomalumChecker);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
