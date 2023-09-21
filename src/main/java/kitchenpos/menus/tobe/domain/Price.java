@@ -12,6 +12,10 @@ public class Price {
         this.price = new BigDecimal(price);
     }
 
+    public boolean isSmallerOrEqualTo(Price other) {
+        return price.compareTo(other.price) <= 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

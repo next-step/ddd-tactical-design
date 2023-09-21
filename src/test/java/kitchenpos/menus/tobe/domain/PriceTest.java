@@ -23,6 +23,15 @@ class PriceTest {
     }
 
     @Test
+    void 가격을_서로_비교할_수_있다() {
+        Price one = new Price(1);
+        Price ten = new Price(10);
+
+        assertThat(one.isSmallerOrEqualTo(ten)).isTrue();
+        assertThat(ten.isSmallerOrEqualTo(one)).isFalse();
+    }
+
+    @Test
     void Price_동등성_비교() {
         Price actual = new Price(0);
 
