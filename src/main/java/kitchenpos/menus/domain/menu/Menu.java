@@ -1,4 +1,6 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.domain.menu;
+
+import kitchenpos.menus.domain.menugroup.MenuGroup;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,11 +14,11 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,7 +43,16 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    protected Menu() {
+    }
+
+    public Menu(final MenuGroup menuGroup, final MenuName name, final BigDecimal price, final boolean displayed, List<MenuProduct> menuProducts) {
+        this.id = UUID.randomUUID();
+        this.menuGroup = menuGroup;
+        this.name = name;
+        this.price = MenuPrice.of(price);
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
     public UUID getId() {
@@ -53,19 +64,19 @@ public class Menu {
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public MenuPrice getMenuPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public BigDecimal getPrice() {
+        return price.getPrice();
+    }
+
+    public void changePrice(final MenuPrice menuPrice) {
+        this.price = menuPrice;
     }
 
     public MenuGroup getMenuGroup() {

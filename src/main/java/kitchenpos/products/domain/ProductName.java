@@ -16,12 +16,12 @@ public class ProductName {
         this.name = name;
     }
 
-    public static ProductName of(final String name, PurgomalumClient purgomalumClient) {
+    public static ProductName of(final String name, ProductPurgomalumClient purgomalumClient) {
         validateName(name, purgomalumClient);
         return new ProductName(name);
     }
 
-    private static void validateName(final String name, PurgomalumClient purgomalumClient) {
+    private static void validateName(final String name, ProductPurgomalumClient purgomalumClient) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("상품명이 입력되지 않았습니다.");
         }

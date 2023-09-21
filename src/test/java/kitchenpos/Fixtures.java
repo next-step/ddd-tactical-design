@@ -1,10 +1,10 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menugroup.MenuGroup;
+import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.products.application.FakeProductPurgomalumClient;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
@@ -121,6 +121,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), ProductName.of(name, new FakePurgomalumClient()), ProductPrice.of(BigDecimal.valueOf(price)));
+        return new Product(UUID.randomUUID(), ProductName.of(name, new FakeProductPurgomalumClient()), ProductPrice.of(BigDecimal.valueOf(price)));
     }
 }

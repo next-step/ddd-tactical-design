@@ -1,4 +1,6 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.domain.menugroup;
+
+import kitchenpos.menus.domain.menugroup.MenuGroup;
 
 import java.util.List;
 import java.util.Optional;

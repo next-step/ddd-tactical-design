@@ -1,14 +1,15 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.menus.application.menu.MenuService;
+import kitchenpos.menus.application.menu.dto.MenuProductRequest;
+import kitchenpos.menus.application.menu.dto.MenuRequest;
+import kitchenpos.menus.application.menu.dto.MenuResponse;
+import kitchenpos.menus.domain.menu.*;
+import kitchenpos.menus.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.infra.DefaultProductClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,8 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
+    private MenuPurgomalumClient purgomalumClient;
+    private ProductClient productClient;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -40,8 +42,9 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        purgomalumClient = new FakeMenuPurgomalumClient();
+        productClient = new DefaultProductClient(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, purgomalumClient, productClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -49,18 +52,18 @@ class MenuServiceTest {
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
     @Test
     void create() {
-        final Menu expected = createMenuRequest(
+        final MenuRequest expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
-        final Menu actual = menuService.create(expected);
+        final MenuResponse actual = menuService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
             () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
+            () -> assertThat(actual.getMenuGroupId()).isEqualTo(expected.getMenuGroupId()),
             () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts()).hasSize(1)
+            () -> assertThat(actual.getMenuProductsResponse()).hasSize(1)
         );
     }
 
@@ -197,57 +200,81 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private Menu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final MenuProduct... menuProducts
+//    private MenuRequest createMenuRequest(
+//            final String name,
+//            final long price,
+//            final UUID menuGroupId,
+//            final boolean displayed,
+//            final MenuProduct... menuProducts
+//    ) {
+//        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+//    }
+//
+//    private Menu createMenuRequest(
+//        final String name,
+//        final long price,
+//        final UUID menuGroupId,
+//        final boolean displayed,
+//        final MenuProduct... menuProducts
+//    ) {
+//        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+//    }
+//
+//    private Menu createMenuRequest(
+//        final String name,
+//        final BigDecimal price,
+//        final UUID menuGroupId,
+//        final boolean displayed,
+//        final MenuProduct... menuProducts
+//    ) {
+//        return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
+//    }
+//
+//    private Menu createMenuRequest(
+//        final String name,
+//        final long price,
+//        final UUID menuGroupId,
+//        final boolean displayed,
+//        final List<MenuProduct> menuProducts
+//    ) {
+//        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+//    }
+//
+//    private Menu createMenuRequest(
+//        final String name,
+//        final BigDecimal price,
+//        final UUID menuGroupId,
+//        final boolean displayed,
+//        final List<MenuProduct> menuProducts
+//    ) {
+//        final Menu menu = new Menu();
+//        menu.setName(name);
+//        menu.setPrice(price);
+//        menu.setMenuGroupId(menuGroupId);
+//        menu.setDisplayed(displayed);
+//        menu.setMenuProducts(menuProducts);
+//        return menu;
+//    }
+//
+    private MenuRequest createMenuRequest(
+            final String name,
+            final BigDecimal price,
+            final UUID menuGroupId,
+            final boolean displayed,
+            final List<MenuProductRequest> menuProductRequests
     ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
+        return new MenuRequest(name, price, menuGroupId, displayed, menuProductRequests);
     }
 
-    private Menu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final MenuProduct... menuProducts
-    ) {
-        return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
-    }
+//    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
+//        final MenuProduct menuProduct = new MenuProduct();
+//        menuProduct.setProductId(productId);
+//        menuProduct.setQuantity(quantity);
+//        return menuProduct;
+//    }
 
-    private Menu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<MenuProduct> menuProducts
-    ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
-    }
-
-    private Menu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<MenuProduct> menuProducts
-    ) {
-        final Menu menu = new Menu();
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(menuProducts);
-        return menu;
-    }
-
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setProductId(productId);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+    private static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
+        return new MenuProductRequest(productId, quantity);
     }
 
     private Menu changePriceRequest(final long price) {

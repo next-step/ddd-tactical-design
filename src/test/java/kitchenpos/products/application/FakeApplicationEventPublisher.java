@@ -1,15 +1,15 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.menus.application.menu.MenuService;
+import kitchenpos.menus.domain.menu.MenuRepository;
+import kitchenpos.menus.domain.menu.ProductClient;
 import org.springframework.context.ApplicationEventPublisher;
 
 public class FakeApplicationEventPublisher implements ApplicationEventPublisher {
     private final MenuService menuService;
 
-    public FakeApplicationEventPublisher(ProductRepository productRepository, MenuRepository menuRepository) {
-        this.menuService = new MenuService(menuRepository, null, productRepository, null);
+    public FakeApplicationEventPublisher(MenuRepository menuRepository, ProductClient productClient) {
+        this.menuService = new MenuService(menuRepository, null,null, productClient);
     }
 
     @Override

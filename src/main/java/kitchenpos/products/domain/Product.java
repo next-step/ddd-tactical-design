@@ -26,13 +26,13 @@ public class Product {
         this.price = price;
     }
 
-    public Product(final UUID id, final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
+    public Product(final UUID id, final String name, ProductPurgomalumClient purgomalumClient, final BigDecimal price) {
         this.id = id;
         this.name = ProductName.of(name, purgomalumClient);
         this.price = ProductPrice.of(price);
     }
 
-    public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
+    public Product(final String name, ProductPurgomalumClient purgomalumClient, final BigDecimal price) {
         this.id = UUID.randomUUID();
         this.name = ProductName.of(name, purgomalumClient);
         this.price = ProductPrice.of(price);

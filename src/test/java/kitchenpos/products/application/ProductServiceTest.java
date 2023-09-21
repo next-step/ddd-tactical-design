@@ -1,13 +1,15 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menu.MenuRepository;
+import kitchenpos.menus.domain.menu.ProductClient;
+import kitchenpos.menus.infra.DefaultProductClient;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPurgomalumClient;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,16 +31,18 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private ProductService productService;
-    private PurgomalumClient purgomalumClient;
+    private ProductClient productClient;
+    private ProductPurgomalumClient productPurgomalumClient;
     private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        applicationEventPublisher = new FakeApplicationEventPublisher(productRepository, menuRepository);
-        productService = new ProductService(productRepository, purgomalumClient, applicationEventPublisher);
+        productClient = new DefaultProductClient(productRepository);
+        productPurgomalumClient = new FakeProductPurgomalumClient();
+        applicationEventPublisher = new FakeApplicationEventPublisher(menuRepository, productClient);
+        productService = new ProductService(productRepository, productPurgomalumClient, applicationEventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -116,7 +120,7 @@ class ProductServiceTest {
     @Test
     void createProductPrice() {
         final ProductRequest expected = createProductRequest("후라이드", 16_000L);
-        final Product product = new Product(expected.getName(), purgomalumClient, expected.getPrice());
+        final Product product = new Product(expected.getName(), productPurgomalumClient, expected.getPrice());
         assertThat(product.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -126,7 +130,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void createProductPriceException(final BigDecimal price) {
         final ProductRequest expected = createProductRequest("후라이드", price);
-        assertThatThrownBy(() -> new Product(expected.getName(), purgomalumClient, expected.getPrice()))
+        assertThatThrownBy(() -> new Product(expected.getName(), productPurgomalumClient, expected.getPrice()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -134,7 +138,7 @@ class ProductServiceTest {
     @Test
     void createProductName() {
         final ProductRequest expected = createProductRequest("후라이드", 16_000L);
-        final Product product = new Product(expected.getName(), purgomalumClient, expected.getPrice());
+        final Product product = new Product(expected.getName(), productPurgomalumClient, expected.getPrice());
         assertThat(product.getName()).isEqualTo(expected.getName());
     }
 
@@ -142,7 +146,7 @@ class ProductServiceTest {
     @Test
     void createProductNameException() {
         final ProductRequest expected = createProductRequest("비속어", 16_000L);
-        assertThatThrownBy(() -> new Product(expected.getName(), purgomalumClient, expected.getPrice()))
+        assertThatThrownBy(() -> new Product(expected.getName(), productPurgomalumClient, expected.getPrice()))
             .isInstanceOf(IllegalArgumentException.class);
     }
 

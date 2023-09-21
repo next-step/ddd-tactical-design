@@ -1,5 +1,5 @@
 package kitchenpos.products.domain;
 
-public interface PurgomalumClient {
+public interface ProductPurgomalumClient {
     boolean containsProfanity(String text);
 }

@@ -1,5 +1,6 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.listener;
 
+import kitchenpos.menus.application.menu.MenuService;
 import kitchenpos.products.application.ProductChangePriceEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
