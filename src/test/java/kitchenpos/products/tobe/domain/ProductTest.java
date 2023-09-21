@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.domain.DisplayedName;
+import kitchenpos.products.domain.Price;
+import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

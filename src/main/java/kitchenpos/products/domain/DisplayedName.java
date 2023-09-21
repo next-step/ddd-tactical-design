@@ -1,11 +1,15 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.domain;
 
-import kitchenpos.products.domain.PurgomalumClient;
-
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class DisplayedName {
-    private final String name;
+    private String name;
+
+    protected DisplayedName() {
+    }
+
     public DisplayedName(String name, PurgomalumClient purgomalumClient) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException(String.format("이름은 없거나 빈 값일 수 없습니다. 현재 값: %s", name));

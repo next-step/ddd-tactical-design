@@ -1,13 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.PurgomalumClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
