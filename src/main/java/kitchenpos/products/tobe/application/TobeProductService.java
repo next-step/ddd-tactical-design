@@ -5,6 +5,7 @@ import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.event.ProductChangedPriceEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,8 @@ public class TobeProductService {
                                                          .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
 
-        eventPublisher.publishEvent(product);
+        ProductChangedPriceEvent event = new ProductChangedPriceEvent(product.getId(), product.getPriceValue());
+        eventPublisher.publishEvent(event);
 
         return product;
     }

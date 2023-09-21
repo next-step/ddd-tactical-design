@@ -6,6 +6,7 @@ import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.event.ProductChangedPriceEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ class TobeProductServiceTest {
     private TobeProductRepository tobeProductRepository;
     private PurgomalumChecker purgomalumChecker;
     private TobeProductService tobeProductService;
-
     private InMemoryApplicationEventPublisher publisher;
 
 
@@ -75,7 +75,8 @@ class TobeProductServiceTest {
         final TobeProduct expected = changePriceRequest(15_000L);
         final TobeProduct actual = tobeProductService.changePrice(productId, BigDecimal.valueOf(15_000L));
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-        assertThat(actual).isEqualTo(publisher.poll());
+        ProductChangedPriceEvent poll = (ProductChangedPriceEvent) publisher.poll();
+        assertThat(actual.getId()).isEqualTo(poll.getProductId());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")

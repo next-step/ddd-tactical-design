@@ -3,7 +3,6 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.event.ProductChangedPriceEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -22,9 +21,7 @@ public class MenuEventService {
 
     @TransactionalEventListener(ProductChangedPriceEvent.class)
     public void createCoupon(ProductChangedPriceEvent event) {
-        TobeProduct product = event.getProduct();
-
-        final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
+        final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -38,6 +35,6 @@ public class MenuEventService {
                 menu.setDisplayed(false);
             }
         }
-
     }
+
 }
