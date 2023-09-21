@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.domain.MenuPricePolicy;
+import kitchenpos.menus.domain.Price;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

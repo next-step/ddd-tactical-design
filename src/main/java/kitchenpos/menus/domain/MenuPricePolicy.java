@@ -1,4 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
+
+import kitchenpos.menus.domain.Price;
 
 public class MenuPricePolicy {
     public void follow(Price menuPrice, Price menuProductsTotalPrice) {

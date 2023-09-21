@@ -1,10 +1,24 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Embeddable
 public class MenuProducts {
-    private final List<MenuProduct> menuProducts;
+
+    @ElementCollection
+    @CollectionTable(name = "study_group_member",
+            joinColumns = @JoinColumn(
+                    name = "menu_id",
+                    nullable = false,
+                    columnDefinition = "binary(16)",
+                    foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            ))
+    private List<MenuProduct> menuProducts;
+
+    protected MenuProducts() {
+    }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
         if (menuProducts.size() < 1) {

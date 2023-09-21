@@ -1,5 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.domain.PurgomalumClient;
+
 import java.util.Arrays;
 import java.util.List;
 

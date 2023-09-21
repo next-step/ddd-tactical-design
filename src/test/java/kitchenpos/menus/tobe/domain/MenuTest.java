@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
+import kitchenpos.menus.domain.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

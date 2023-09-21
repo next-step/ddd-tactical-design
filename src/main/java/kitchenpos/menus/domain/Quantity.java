@@ -1,9 +1,14 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class Quantity {
-    private final int quantity;
+    private int quantity;
+
+    protected Quantity() {
+    }
 
     public Quantity(int quantity) {
         if (quantity < 0) {
