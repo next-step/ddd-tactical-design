@@ -56,14 +56,14 @@ public class MenuService {
         );
         menuProducts.checkEqualsSize(products.size());
 
-        BigDecimal productSumPridce = BigDecimal.ZERO;
+        BigDecimal productSumPrice = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProducts.getList()) {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
-            productSumPridce = productSumPridce.add(
+            productSumPrice = productSumPrice.add(
                 menuProductRequest.getAmount(product.getPrice()));
         }
-        if (menuPrice.getValue().compareTo(productSumPridce) > 0) {
+        if (menuPrice.getValue().compareTo(productSumPrice) > 0) {
             throw new IllegalArgumentException();
         }
         return menuRepository.save(request);
@@ -115,18 +115,19 @@ public class MenuService {
     @EventListener
     @Transactional
     public void checkMenuPrice(ProductPriceChangedEvent event) {
-        System.out.println("event = " + event.getProductId());
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
-            BigDecimal productSumPridce = BigDecimal.ZERO;
+            BigDecimal productSumPrice = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 final Product product = productRepository.findById(menuProduct.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-                productSumPridce = productSumPridce.add(menuProduct.getAmount(product.getPrice()));
+                productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
             }
-            if (menu.getPrice().compareTo(productSumPridce) > 0) {
+
+            if (menu.getPrice().compareTo(productSumPrice) > 0) {
                 menu.changeDisplay(false);
             }
+            menuRepository.save(menu);
         }
     }
 
