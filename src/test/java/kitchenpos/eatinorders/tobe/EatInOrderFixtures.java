@@ -115,6 +115,12 @@ public class EatInOrderFixtures {
         return eatInOrder;
     }
 
+    public static EatInOrder acceptedOrder(OrderTable orderTable) {
+        EatInOrder eatInOrder = eatInOrder(orderTable);
+        eatInOrder.accept();
+        return eatInOrder;
+    }
+
     public static EatInOrder acceptedOrder(Menu menu, OrderTable orderTable) {
         EatInOrder eatInOrder = eatInOrder(menu, orderTable);
         eatInOrder.accept();

@@ -35,6 +35,10 @@ public class OrderTable {
         return id;
     }
 
+    public OrderTableName getName() {
+        return name;
+    }
+
     public boolean isOccupied() {
         return occupied;
     }
