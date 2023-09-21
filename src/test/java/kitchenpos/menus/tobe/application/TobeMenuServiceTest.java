@@ -12,6 +12,7 @@ import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupRepository;
 import kitchenpos.products.tobe.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.TobeProduct;
 import kitchenpos.products.tobe.domain.TobeProductRepository;
+import kitchenpos.products.tobe.domain.event.ProductChangedPriceEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +40,7 @@ class TobeMenuServiceTest {
     private TobeProductRepository productRepository;
     private PurgomalumChecker purgomalumChecker;
     private TobeProductClient tobeProductClient;
+    private TobeMenuEventService tobeMenuEventService;
     private TobeMenuService menuService;
     private UUID menuGroupId;
     private TobeProduct product;
@@ -53,6 +54,7 @@ class TobeMenuServiceTest {
         tobeProductClient = new InMemoryProductClient(productRepository);
         menuService = new TobeMenuService(menuRepository, menuGroupRepository, purgomalumChecker,
                                           tobeProductClient);
+        tobeMenuEventService = new TobeMenuEventService(menuRepository, tobeProductClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -207,12 +209,10 @@ class TobeMenuServiceTest {
 
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
-    void displayExpensiveMenu() throws NoSuchFieldException, IllegalAccessException {
+    void displayExpensiveMenu() {
         TobeMenu menu = menu(15_000L, false, menuProduct(product, 1L));
         final UUID menuId = menuRepository.save(menu).getId();
-        Field field = TobeMenu.class.getDeclaredField("price");
-        field.setAccessible(true);
-        field.set(menu, new MenuPrice(new BigDecimal(17_000L)));
+        tobeMenuEventService.updatePrice(new ProductChangedPriceEvent(product.getId(), BigDecimal.valueOf(14_000L)));
 
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(IllegalArgumentException.class);

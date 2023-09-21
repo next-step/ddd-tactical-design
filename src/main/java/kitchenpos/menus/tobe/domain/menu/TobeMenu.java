@@ -53,7 +53,6 @@ public class TobeMenu {
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.tobeMenuProducts = tobeMenuProducts;
-
     }
 
     public void display() {

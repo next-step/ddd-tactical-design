@@ -57,6 +57,10 @@ public class TobeMenuProduct {
         return productId;
     }
 
+    public void updatePrice(MenuPrice menuPrice) {
+        this.price = menuPrice;
+    }
+
     public MenuPrice getPrice() {
         return price;
     }
