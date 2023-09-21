@@ -23,6 +23,14 @@ class ToBeMenuProductsTest {
         돈가스 = new ToBeMenuProduct(UUID.randomUUID(), 13_000L, 1);
     }
 
+    @DisplayName("menuProduct 일급 컬렉션은 상품이 필수다")
+    @Test
+    void ToBeMenuProducts() {
+        assertThatThrownBy(() -> new ToBeMenuProducts(List.of()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("상품이 없으면 등록할 수 없다.");
+    }
+
     @DisplayName("메뉴에 속한 상품 전체 합계금액 조회")
     @Test
     void sumOfProducts() {

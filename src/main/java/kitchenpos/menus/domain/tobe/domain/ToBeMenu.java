@@ -70,6 +70,10 @@ public class ToBeMenu {
         return displayed;
     }
 
+    public boolean isHide() {
+        return !displayed;
+    }
+
     private void validationOfPrice(BigDecimal price, ToBeMenuProducts menuProducts) {
         validationOfPrice(MenuPrice.of(price), menuProducts.sumOfProducts());
     }
@@ -99,5 +103,16 @@ public class ToBeMenu {
         if (price.isGreaterThan(menuProducts.sumOfProducts())) {
             hide();
         }
+    }
+
+    public boolean isSamePrice(BigDecimal price) {
+        return this.price.equals(MenuPrice.of(price));
+    }
+
+    public boolean isSameMenuAndPrice(UUID menuId, BigDecimal price) {
+        if (this.id != menuId) {
+            return false;
+        }
+        return this.price.equals(MenuPrice.of(price));
     }
 }

@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe.domain;
+package kitchenpos.common;
 
 public enum Currency {
     WON("원"),

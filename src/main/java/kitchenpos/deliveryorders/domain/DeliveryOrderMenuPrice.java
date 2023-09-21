@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain.tobe.domain;
+package kitchenpos.deliveryorders.domain;
 
 import static kitchenpos.common.Currency.*;
 
@@ -13,38 +13,39 @@ import javax.persistence.Enumerated;
 import kitchenpos.common.Currency;
 
 @Embeddable
-public class MenuPrice {
+public class DeliveryOrderMenuPrice {
+    public static DeliveryOrderMenuPrice ZERO = DeliveryOrderMenuPrice.of(0L);
     @Column(name = "price", nullable = false)
     private BigDecimal price;
     @Column(name = "currency", nullable = false)
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    private MenuPrice(BigDecimal price) {
+    private DeliveryOrderMenuPrice(BigDecimal price) {
         validationOfPrice(price);
         this.price = price;
         this.currency = defaultCurrency();
     }
 
-    protected MenuPrice() {
+    protected DeliveryOrderMenuPrice() {
 
     }
 
-    public static MenuPrice of(BigDecimal price) {
-        return new MenuPrice(price);
+    public static DeliveryOrderMenuPrice of(BigDecimal price) {
+        return new DeliveryOrderMenuPrice(price);
     }
 
-    public static MenuPrice of(long price) {
-        return new MenuPrice(BigDecimal.valueOf(price));
+    public static DeliveryOrderMenuPrice of(long price) {
+        return new DeliveryOrderMenuPrice(BigDecimal.valueOf(price));
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof MenuPrice))
+        if (!(o instanceof DeliveryOrderMenuPrice))
             return false;
-        MenuPrice that = (MenuPrice)o;
+        DeliveryOrderMenuPrice that = (DeliveryOrderMenuPrice)o;
         return Objects.equals(price, that.price) && Objects.equals(currency, that.currency);
     }
 
@@ -62,20 +63,24 @@ public class MenuPrice {
         }
     }
 
-    public MenuPrice add(MenuPrice price) {
-        return new MenuPrice(this.price.add(price.price));
+    public DeliveryOrderMenuPrice add(DeliveryOrderMenuPrice price) {
+        return new DeliveryOrderMenuPrice(this.price.add(price.price));
     }
 
     public boolean isGreaterThan(BigDecimal comparePrice) {
         return price.compareTo(comparePrice) > 0;
     }
 
-    public MenuPrice changePrice(BigDecimal newPrice) {
-        return new MenuPrice(newPrice);
+    public DeliveryOrderMenuPrice changePrice(BigDecimal newPrice) {
+        return new DeliveryOrderMenuPrice(newPrice);
     }
 
-    public MenuPrice changePrice(Long newPrice) {
-        return new MenuPrice(BigDecimal.valueOf(newPrice));
+    public DeliveryOrderMenuPrice changePrice(Long newPrice) {
+        return new DeliveryOrderMenuPrice(BigDecimal.valueOf(newPrice));
+    }
+
+    public DeliveryOrderMenuPrice multiply(long value) {
+        return new DeliveryOrderMenuPrice(this.price.multiply(BigDecimal.valueOf(value)));
     }
 
     public BigDecimal getValue() {
