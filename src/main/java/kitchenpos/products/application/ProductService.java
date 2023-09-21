@@ -3,14 +3,14 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.dto.request.ProductChangePriceRequest;
+import kitchenpos.products.application.dto.request.ProductCreateRequest;
+import kitchenpos.products.application.dto.response.ProductChangePriceResponse;
+import kitchenpos.products.application.dto.response.ProductCreateResponse;
+import kitchenpos.products.application.dto.response.ProductResponse;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.ui.dto.ProductChangePriceRequest;
-import kitchenpos.products.ui.dto.ProductChangePriceResponse;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
-import kitchenpos.products.ui.dto.ProductCreateResponse;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.domain.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,11 +40,7 @@ public class ProductService {
     public ProductCreateResponse create(final ProductCreateRequest request) {
         final Product product = new Product(request.getName(), purgomalumClient, request.getPrice());
         Product saveProduct = productRepository.save(product);
-        return ProductCreateResponse.of(
-                saveProduct.getId(),
-                saveProduct.getName().getValue(),
-                saveProduct.getPrice().getValue())
-                ;
+        return ProductCreateResponse.of(saveProduct);
     }
 
     @Transactional
@@ -56,27 +52,21 @@ public class ProductService {
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                                .getValue()
-                );
+                final Product findProductByMenuProduct = productRepository.findById(menuProduct.getProductId())
+                        .orElseThrow(NoSuchElementException::new);
+                sum = sum.add(findProductByMenuProduct.multiplyPrice(menuProduct.getQuantity()).getValue());
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+                menu.hide();
             }
         }
-        return ProductChangePriceResponse.of(
-                product.getId(),
-                product.getName().getValue(),
-                product.getPrice().getValue());
+        return ProductChangePriceResponse.of(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         return productRepository.findAll().stream()
-                .map(product -> ProductResponse.of(product.getId(), product.getName().getValue(), product.getPrice().getValue()))
+                .map(ProductResponse::of)
                 .collect(Collectors.toList());
     }
 }

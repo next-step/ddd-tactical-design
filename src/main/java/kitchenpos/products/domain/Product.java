@@ -1,7 +1,5 @@
 package kitchenpos.products.domain;
 
-import kitchenpos.products.infra.PurgomalumClient;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -46,5 +44,9 @@ public class Product {
 
     public void changePrice(final BigDecimal price) {
         this.price = new Price(price);
+    }
+
+    public Price multiplyPrice(final long quantity) {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 }

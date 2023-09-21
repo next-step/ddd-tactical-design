@@ -1,4 +1,6 @@
-package kitchenpos.products.ui.dto;
+package kitchenpos.products.application.dto.response;
+
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -17,9 +19,10 @@ public class ProductChangePriceResponse {
         this.price = price;
     }
 
-    public static ProductChangePriceResponse of(UUID id, String name, BigDecimal price) {
-        return new ProductChangePriceResponse(id, name, price);
+    public static ProductChangePriceResponse of(Product product) {
+        return new ProductChangePriceResponse(product.getId(), product.getName().getValue(), product.getPrice().getValue());
     }
+
 
     public UUID getId() {
         return id;

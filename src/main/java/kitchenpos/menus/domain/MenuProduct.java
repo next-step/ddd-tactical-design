@@ -1,8 +1,13 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.Product;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -13,52 +18,36 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Embedded
+    private Quantity quantity;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
+    private MenuPrice price;
+
     public MenuProduct() {
+    }
+
+    public MenuProduct(Long quantity, UUID productId, BigDecimal price) {
+        this.quantity = new Quantity(quantity);
+        this.productId = productId;
+        this.price = new MenuPrice(price);
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return quantity.getValue();
     }
 
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public BigDecimal getTotalPrice() {
+        return price.multiply(quantity.getValue());
     }
 }

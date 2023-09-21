@@ -1,13 +1,15 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.menus.application.dto.request.MenuGroupCreateRequest;
+import kitchenpos.menus.application.dto.response.MenuGroupCreateResponse;
+import kitchenpos.menus.application.dto.response.MenuGroupResponse;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuGroupService {
@@ -18,19 +20,15 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    public MenuGroupCreateResponse create(final MenuGroupCreateRequest request) {
+        final MenuGroup menuGroup = new MenuGroup(request.getName());
+        return MenuGroupCreateResponse.of(menuGroupRepository.save(menuGroup));
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupResponse> findAll() {
+        return menuGroupRepository.findAll().stream()
+                .map(MenuGroupResponse::of)
+                .collect(Collectors.toList());
     }
 }
