@@ -1,17 +1,12 @@
 package kitchenpos.takeoutorders.tobe.domain;
 
-import kitchenpos.Fixtures;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProducts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.takeoutorders.tobe.TakeOutOrderFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -24,7 +19,7 @@ class TakeOutOrderTest {
                 List.of(menu()),
                 List.of(orderLineItem(UUID.randomUUID()))
             )
-        ).isExactlyInstanceOf(NoSuchElementException.class);
+        ).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -70,116 +65,48 @@ class TakeOutOrderTest {
     @Test
     @DisplayName("접수 대기 중인 주문만 접수할 수 있다")
     void acceptFailed() {
-        TakeOutOrder eatInOrder = acceptedOrder();
-        assertThatThrownBy(eatInOrder::accept)
+        TakeOutOrder takeOutOrder = acceptedOrder();
+        assertThatThrownBy(takeOutOrder::accept)
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("주문을 접수한다")
     void accept() {
-        TakeOutOrder eatInOrder = eatInOrder();
-        eatInOrder.accept();
-        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
+        TakeOutOrder takeOutOrder = takeOutOrder();
+        takeOutOrder.accept();
+        assertThat(takeOutOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
     @Test
     @DisplayName("접수된 주문만 서빙할 수 있다")
     void serveFailed() {
-        TakeOutOrder eatInOrder = servedOrder();
-        assertThatThrownBy(eatInOrder::serve)
+        TakeOutOrder takeOutOrder = servedOrder();
+        assertThatThrownBy(takeOutOrder::serve)
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("주문을 서빙한다")
     void serve() {
-        TakeOutOrder eatInOrder = acceptedOrder();
-        eatInOrder.serve();
-        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
+        TakeOutOrder takeOutOrder = acceptedOrder();
+        takeOutOrder.serve();
+        assertThat(takeOutOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
     @Test
     @DisplayName("서빙 완료된 주문만 완료할 수 있다")
     void completeFailed() {
-        TakeOutOrder eatInOrder = completedOrder();
-        assertThatThrownBy(eatInOrder::complete)
+        TakeOutOrder takeOutOrder = completedOrder();
+        assertThatThrownBy(takeOutOrder::complete)
             .isExactlyInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("주문을 완료한다")
     void complete() {
-        TakeOutOrder eatInOrder = servedOrder();
-        eatInOrder.complete();
-        assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
-    }
-
-    private final UUID menuId = Fixtures.orderLineItem().getMenuId();
-
-    private Menu menu() {
-        return menu(menuId, true, 18_000L);
-    }
-
-    private Menu menu(final boolean displayed) {
-        return menu(menuId, displayed, 18_000L);
-    }
-
-    private Menu menu(final long price) {
-        return menu(menuId, true, price);
-    }
-
-    private Menu menu(final UUID id, final boolean displayed, long price) {
-        return Menu.create(
-            id,
-            "후라이드+후라이드",
-            BigDecimal.valueOf(price),
-            UUID.randomUUID(),
-            displayed,
-            new MenuProducts(List.of(menuProduct())),
-            (name) -> false
-        );
-    }
-
-    private OrderLineItem orderLineItem() {
-        return orderLineItem(18_000L, menuId);
-    }
-
-    private OrderLineItem orderLineItem(final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, 18_000L);
-    }
-
-
-    private OrderLineItem orderLineItem(final long quantity) {
-        return OrderLineItem.create(quantity, menuId, 18_000L);
-    }
-
-    private OrderLineItem orderLineItem(final Long price, final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, price);
-    }
-
-    private TakeOutOrder eatInOrder() {
-        return TakeOutOrder.create(
-            List.of(menu()),
-            List.of(orderLineItem())
-        );
-    }
-
-    private TakeOutOrder acceptedOrder() {
-        TakeOutOrder eatInOrder = eatInOrder();
-        eatInOrder.accept();
-        return eatInOrder;
-    }
-
-    private TakeOutOrder servedOrder() {
-        TakeOutOrder eatInOrder = acceptedOrder();
-        eatInOrder.serve();
-        return eatInOrder;
-    }
-
-    private TakeOutOrder completedOrder() {
-        TakeOutOrder eatInOrder = servedOrder();
-        eatInOrder.complete();
-        return eatInOrder;
+        TakeOutOrder takeOutOrder = servedOrder();
+        takeOutOrder.complete();
+        assertThat(takeOutOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 }

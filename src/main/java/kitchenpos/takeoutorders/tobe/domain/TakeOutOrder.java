@@ -27,9 +27,6 @@ public class TakeOutOrder {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @Transient
-    private UUID orderTableId;
-
     protected TakeOutOrder() {
 
     }
@@ -44,6 +41,18 @@ public class TakeOutOrder {
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
     }
 
     public OrderStatus getStatus() {
