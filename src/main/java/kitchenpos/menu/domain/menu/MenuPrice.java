@@ -23,7 +23,12 @@ public class MenuPrice {
         return new MenuPrice(value);
     }
 
+    boolean isGreaterThan(final MenuProducts menuProducts) {
+        return menuProducts.totalAmount() < value;
+    }
+
     @Override
+
     public boolean equals(final Object o) {
         if (this == o) {
             return true;

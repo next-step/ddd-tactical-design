@@ -1,7 +1,8 @@
 package kitchenpos.menu.adapter.menu.in;
 
-import java.util.UUID;
 import kitchenpos.menu.application.menu.port.in.MenuProductPriceUpdateUseCase;
+import kitchenpos.product.adapter.out.ProductPriceChangeEvent;
+import org.springframework.context.event.EventListener;
 
 public class MenuProductPriceChangeEventListener {
 
@@ -13,7 +14,8 @@ public class MenuProductPriceChangeEventListener {
         this.menuProductPriceUpdateUseCase = menuProductPriceUpdateUseCase;
     }
 
-    public void listen(final UUID productId) {
-        menuProductPriceUpdateUseCase.update(productId);
+    @EventListener
+    public void listen(final ProductPriceChangeEvent event) {
+        menuProductPriceUpdateUseCase.update(event.getId());
     }
 }

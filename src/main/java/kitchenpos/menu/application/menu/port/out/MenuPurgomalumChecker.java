@@ -1,4 +1,4 @@
-package kitchenpos.menu.adapter.menu.out;
+package kitchenpos.menu.application.menu.port.out;
 
 import kitchenpos.support.vo.Name;
 

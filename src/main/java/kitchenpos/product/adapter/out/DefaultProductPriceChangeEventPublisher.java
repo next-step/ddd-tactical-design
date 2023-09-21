@@ -3,24 +3,25 @@ package kitchenpos.product.adapter.out;
 import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import java.util.UUID;
-import kitchenpos.menu.adapter.menu.in.MenuProductPriceChangeEventListener;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
 import kitchenpos.product.support.constant.Name;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class DefaultProductPriceChangeEventPublisher implements ProductPriceChangeEventPublisher {
 
-    private final MenuProductPriceChangeEventListener menuProductPriceChangeEvent;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
 
     public DefaultProductPriceChangeEventPublisher(
-        final MenuProductPriceChangeEventListener menuProductPriceChangeEvent) {
+        final ApplicationEventPublisher applicationEventPublisher) {
 
-        this.menuProductPriceChangeEvent = menuProductPriceChangeEvent;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
     public void publish(final UUID id) {
         checkNotNull(id, Name.ID);
 
-        menuProductPriceChangeEvent.listen(id);
+        applicationEventPublisher.publishEvent(new ProductPriceChangeEvent(id));
     }
 }

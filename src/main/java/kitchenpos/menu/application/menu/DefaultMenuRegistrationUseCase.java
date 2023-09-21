@@ -24,7 +24,6 @@ public class DefaultMenuRegistrationUseCase implements MenuRegistrationUseCase {
     private final MenuNameFactory menuNameFactory;
     private final ProductFindPort productFindPort;
 
-
     public DefaultMenuRegistrationUseCase(final MenuRepository repository,
         final MenuGroupRepository menuGroupRepository,
         final MenuNameFactory menuNameFactory,

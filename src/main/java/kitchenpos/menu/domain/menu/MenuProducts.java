@@ -36,6 +36,12 @@ public class MenuProducts {
             .sum();
     }
 
+    boolean isTotalAmountLessThan(final MenuPrice menuPrice) {
+        return values.stream()
+            .mapToInt(MenuProductNew::amount)
+            .sum() <= menuPrice.getValue();
+    }
+
     public List<MenuProductNew> getValues() {
         return values;
     }

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.UUID;
-import kitchenpos.menu.adapter.menu.in.MenuProductPriceChangeEventListener;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -17,19 +16,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
 class DefaultProductPriceChangeEventPublisherTest {
 
     @Mock
-    private MenuProductPriceChangeEventListener mockEventListener;
+    private ApplicationEventPublisher mockEventPublisher;
 
     private ProductPriceChangeEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
-        publisher = new DefaultProductPriceChangeEventPublisher(mockEventListener);
+        publisher = new DefaultProductPriceChangeEventPublisher(mockEventPublisher);
     }
 
     @ParameterizedTest
@@ -53,8 +53,8 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockEventListener, never())
-            .listen(any());
+        verify(mockEventPublisher, never())
+            .publishEvent(any());
     }
 
     @Test
@@ -67,7 +67,7 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockEventListener)
-            .listen(id);
+        verify(mockEventPublisher)
+            .publishEvent(new ProductPriceChangeEvent(id));
     }
 }

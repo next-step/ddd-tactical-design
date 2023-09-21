@@ -60,7 +60,7 @@ public class MenuNew {
     public static MenuNew create(final MenuName name, final MenuPrice price,
         final MenuProducts menuProducts, final MenuGroupNew menuGroup) {
 
-        if (menuProducts.totalAmount() < price.getValue()) {
+        if (menuProducts.isTotalAmountLessThan(price)) {
             throw new IllegalArgumentException("price is greater than menuProducts' totalAmount");
         }
 
@@ -82,7 +82,7 @@ public class MenuNew {
     }
 
     private void rearrangeDisplaying() {
-        if (menuProducts.totalAmount() < price.getValue()) {
+        if (menuProducts.isTotalAmountLessThan(price)) {
             hide();
         }
     }
@@ -98,7 +98,7 @@ public class MenuNew {
     }
 
     private void checkCanDisplay() {
-        if (menuProducts.totalAmount() < price.getValue()) {
+        if (menuProducts.isTotalAmountLessThan(price)) {
             throw new IllegalStateException(String.format(
                 "price is bigger than menuProducts totalAmount. totalAmount: %s, price: %s",
                 menuProducts.totalAmount(), price));
