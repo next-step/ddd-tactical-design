@@ -1,6 +1,5 @@
 package kitchenpos.product.tobe.application;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -34,15 +33,12 @@ public class ProductService {
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final String name = request.getName();
         if (Objects.isNull(name) || profanityClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product(UUID.randomUUID(), name, price);
+
+        final Product product = new Product(UUID.randomUUID(), name, request.getPrice());
         return productRepository.save(product);
     }
 

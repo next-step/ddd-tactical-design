@@ -1,9 +1,9 @@
 package kitchenpos.product.tobe.domain;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,8 +19,8 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     protected Product() {
     }
@@ -28,19 +28,21 @@ public class Product {
     public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
         this.name = name;
+        this.price = new ProductPrice(price);
+    }
+
+    public Product(UUID id, String name, ProductPrice price) {
+        this.id = id;
+        this.name = name;
         this.price = price;
     }
 
     public void changePrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품 가격은 없거나 0보다 작은 값으로 변경할 수 없습니다.");
-        }
-
-        this.price = price;
+        this.price = new ProductPrice(price);
     }
 
-    public BigDecimal multiplyPrice(long quantity) {
-        return price.multiply(BigDecimal.valueOf(quantity));
+    public ProductPrice multiplyPrice(long quantity) {
+        return price.multiply(quantity);
     }
 
     public UUID getId() {
@@ -51,7 +53,7 @@ public class Product {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 }

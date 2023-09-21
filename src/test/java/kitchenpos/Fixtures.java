@@ -153,7 +153,11 @@ public class Fixtures {
     }
 
     public static Product product() {
-        return product("후라이드", 16_000L);
+        return product(16_000L);
+    }
+
+    public static Product product(final long price) {
+        return product("후라이드", price);
     }
 
     public static Product product(final String name, final long price) {

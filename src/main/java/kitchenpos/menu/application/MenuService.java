@@ -69,7 +69,8 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
+                    .multiply(quantity)
+                    .getValue()
             );
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
@@ -106,7 +107,8 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(menuProduct.getQuantity())
+                    .getValue()
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -125,7 +127,8 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    .multiply(menuProduct.getQuantity())
+                    .getValue()
             );
         }
         if (menu.getPrice().compareTo(sum) > 0) {
