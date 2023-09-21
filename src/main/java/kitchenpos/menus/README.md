@@ -17,10 +17,8 @@
 #### 기능
 - `Register Menu`를 할 수 있다.
     - `Register Menu` 시, `Displayed Name`, `Price`, `Menu Products`는 필수여야 한다.
-    - `Register Menu` 시, 1개 이상의 `Product` 로 구성되어야 한다.
     - `Register Menu` 시, Menu Price Policy를 따른다.
 - `Change the price`를 할 수 있다.
-    - `Change the price` 시, 변경될 `Price`는 0원 이상이여야 한다.
     - `Change the price` 시, Menu Price Policy를 따른다.
 - `Menu`를 `Display Menu` 또는 `Hide Menu`를 할 수 있다.
 - `View All Menus`를 할 수 있다.
