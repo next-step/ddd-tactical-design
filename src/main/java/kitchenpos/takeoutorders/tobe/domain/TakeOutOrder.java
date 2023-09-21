@@ -61,13 +61,13 @@ public class TakeOutOrder {
 
     public static TakeOutOrder create(
         final List<Menu> menus,
-        final List<OrderLineItem> orderLineItemList
+        final List<TakeOutOrderLineItem> takeOutOrderLineItemList
     ) {
         return new TakeOutOrder(
             UUID.randomUUID(),
             OrderStatus.WAITING,
             LocalDateTime.now(),
-            new OrderLineItems(orderLineItemList, createMenuMap(menus))
+            new OrderLineItems(takeOutOrderLineItemList, createMenuMap(menus))
         );
     }
 

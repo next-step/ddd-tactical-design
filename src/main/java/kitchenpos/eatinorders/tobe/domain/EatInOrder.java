@@ -25,9 +25,8 @@ public class EatInOrder {
     private LocalDateTime orderDateTime;
 
     @Embedded
-    private OrderLineItems orderLineItems;
+    private EatInOrderLineItems eatInOrderLineItems;
 
-    @Transient
     private UUID orderTableId;
 
     protected EatInOrder() {
@@ -38,13 +37,13 @@ public class EatInOrder {
         final UUID id,
         final OrderStatus status,
         final LocalDateTime orderDateTime,
-        final OrderLineItems orderLineItems,
+        final EatInOrderLineItems eatInOrderLineItems,
         final UUID orderTableId
     ) {
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
+        this.eatInOrderLineItems = eatInOrderLineItems;
         this.orderTableId = orderTableId;
     }
 
@@ -60,12 +59,12 @@ public class EatInOrder {
         return orderDateTime;
     }
 
-    public OrderLineItems getOrderLineItems() {
-        return orderLineItems;
+    public EatInOrderLineItems getOrderLineItems() {
+        return eatInOrderLineItems;
     }
 
-    public List<OrderLineItem> getOrderLineItemList() {
-        return orderLineItems.getOrderLineItemList();
+    public List<EatInOrderLineItem> getOrderLineItemList() {
+        return eatInOrderLineItems.getOrderLineItemList();
     }
 
     public UUID getOrderTableId() {
@@ -74,7 +73,7 @@ public class EatInOrder {
 
     public static EatInOrder create(
         final List<Menu> menus,
-        final List<OrderLineItem> orderLineItemList,
+        final List<EatInOrderLineItem> eatInOrderLineItemList,
         final OrderTable orderTable
     ) {
         validateOrderTable(orderTable);
@@ -82,7 +81,7 @@ public class EatInOrder {
             UUID.randomUUID(),
             OrderStatus.WAITING,
             LocalDateTime.now(),
-            new OrderLineItems(orderLineItemList, createMenuMap(menus)),
+            new EatInOrderLineItems(eatInOrderLineItemList, createMenuMap(menus)),
             orderTable.getId()
         );
     }

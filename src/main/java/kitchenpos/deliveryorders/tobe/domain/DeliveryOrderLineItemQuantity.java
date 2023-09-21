@@ -3,15 +3,15 @@ package kitchenpos.deliveryorders.tobe.domain;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class OrderLineItemQuantity {
+public class DeliveryOrderLineItemQuantity {
 
     private long quantity;
 
-    protected OrderLineItemQuantity() {
+    protected DeliveryOrderLineItemQuantity() {
 
     }
 
-    public OrderLineItemQuantity(final long quantity) {
+    public DeliveryOrderLineItemQuantity(final long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
@@ -27,7 +27,7 @@ public class OrderLineItemQuantity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderLineItemQuantity that = (OrderLineItemQuantity) o;
+        DeliveryOrderLineItemQuantity that = (DeliveryOrderLineItemQuantity) o;
 
         return quantity == that.quantity;
     }

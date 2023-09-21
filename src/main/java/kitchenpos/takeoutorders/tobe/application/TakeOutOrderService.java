@@ -4,8 +4,8 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.takeoutorders.tobe.application.dto.OrderLineItemRequest;
 import kitchenpos.takeoutorders.tobe.application.dto.TakeOutOrderRequest;
-import kitchenpos.takeoutorders.tobe.domain.OrderLineItem;
 import kitchenpos.takeoutorders.tobe.domain.TakeOutOrder;
+import kitchenpos.takeoutorders.tobe.domain.TakeOutOrderLineItem;
 import kitchenpos.takeoutorders.tobe.domain.TakeOutOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +29,15 @@ public class TakeOutOrderService {
     public TakeOutOrder create(final TakeOutOrderRequest request) {
         request.validate();
 
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems()
+        final List<TakeOutOrderLineItem> takeOutOrderLineItems = request.getOrderLineItems()
             .stream()
             .map(OrderLineItemRequest::toOrderLineItem)
             .collect(Collectors.toList());
-        final List<Menu> menus = findMenus(orderLineItems);
+        final List<Menu> menus = findMenus(takeOutOrderLineItems);
 
         return TakeOutOrder.create(
             menus,
-            orderLineItems
+            takeOutOrderLineItems
         );
     }
 
@@ -72,10 +72,10 @@ public class TakeOutOrderService {
             .orElseThrow(NoSuchElementException::new);
     }
 
-    private List<Menu> findMenus(final List<OrderLineItem> orderLineItems) {
+    private List<Menu> findMenus(final List<TakeOutOrderLineItem> takeOutOrderLineItems) {
         return menuRepository.findAllByIdIn(
-            orderLineItems.stream()
-                .map(OrderLineItem::getMenuId)
+            takeOutOrderLineItems.stream()
+                .map(TakeOutOrderLineItem::getMenuId)
                 .collect(Collectors.toList())
         );
     }

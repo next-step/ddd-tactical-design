@@ -26,7 +26,7 @@ public class DeliveryOrder {
     private LocalDateTime orderDateTime;
 
     @Embedded
-    private OrderLineItems orderLineItems;
+    private DeliveryOrderLineItems deliveryOrderLineItems;
 
     @Embedded
     @Column(name = "delivery_address")
@@ -39,13 +39,13 @@ public class DeliveryOrder {
         final UUID id,
         final OrderStatus status,
         final LocalDateTime orderDateTime,
-        final OrderLineItems orderLineItems,
+        final DeliveryOrderLineItems deliveryOrderLineItems,
         final DeliveryAddress deliveryAddress
     ) {
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
+        this.deliveryOrderLineItems = deliveryOrderLineItems;
         this.deliveryAddress = deliveryAddress;
     }
 
@@ -61,12 +61,12 @@ public class DeliveryOrder {
         return orderDateTime;
     }
 
-    public OrderLineItems getOrderLineItems() {
-        return orderLineItems;
+    public DeliveryOrderLineItems getOrderLineItems() {
+        return deliveryOrderLineItems;
     }
 
-    public List<OrderLineItem> getOrderLineItemList() {
-        return orderLineItems.getOrderLineItemList();
+    public List<DeliveryOrderLineItem> getOrderLineItemList() {
+        return deliveryOrderLineItems.getOrderLineItemList();
     }
 
     public DeliveryAddress getDeliveryAddress() {
@@ -79,14 +79,14 @@ public class DeliveryOrder {
 
     public static DeliveryOrder create(
         final List<Menu> menus,
-        final List<OrderLineItem> orderLineItemList,
+        final List<DeliveryOrderLineItem> deliveryOrderLineItemList,
         final String deliveryAddress
     ) {
         return new DeliveryOrder(
             UUID.randomUUID(),
             OrderStatus.WAITING,
             LocalDateTime.now(),
-            new OrderLineItems(orderLineItemList, createMenuMap(menus)),
+            new DeliveryOrderLineItems(deliveryOrderLineItemList, createMenuMap(menus)),
             new DeliveryAddress(deliveryAddress)
         );
     }
@@ -110,7 +110,7 @@ public class DeliveryOrder {
     }
 
     public BigDecimal getSumOfOrderLineItemPrice(List<Menu> menus) {
-        return orderLineItems.getSumOfOrderLineItemPrice(menus);
+        return deliveryOrderLineItems.getSumOfOrderLineItemPrice(menus);
     }
 
     public void accept() {

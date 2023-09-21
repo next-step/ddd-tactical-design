@@ -1,6 +1,6 @@
 package kitchenpos.deliveryorders.tobe.application.dto;
 
-import kitchenpos.deliveryorders.tobe.domain.OrderLineItem;
+import kitchenpos.deliveryorders.tobe.domain.DeliveryOrderLineItem;
 
 import java.util.UUID;
 
@@ -45,7 +45,7 @@ public class OrderLineItemRequest {
         this.price = price;
     }
 
-    public OrderLineItem toOrderLineItem() {
-        return OrderLineItem.create(quantity, menuId, price);
+    public DeliveryOrderLineItem toOrderLineItem() {
+        return DeliveryOrderLineItem.create(quantity, menuId, price);
     }
 }

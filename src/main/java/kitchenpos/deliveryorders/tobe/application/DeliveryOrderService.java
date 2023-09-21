@@ -3,8 +3,8 @@ package kitchenpos.deliveryorders.tobe.application;
 import kitchenpos.deliveryorders.tobe.application.dto.DeliveryOrderRequest;
 import kitchenpos.deliveryorders.tobe.application.dto.OrderLineItemRequest;
 import kitchenpos.deliveryorders.tobe.domain.DeliveryOrder;
+import kitchenpos.deliveryorders.tobe.domain.DeliveryOrderLineItem;
 import kitchenpos.deliveryorders.tobe.domain.DeliveryOrderRepository;
-import kitchenpos.deliveryorders.tobe.domain.OrderLineItem;
 import kitchenpos.deliveryorders.tobe.infra.KitchenridersClient;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
@@ -37,16 +37,16 @@ public class DeliveryOrderService {
     public DeliveryOrder create(final DeliveryOrderRequest request) {
         request.validate();
 
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems()
+        final List<DeliveryOrderLineItem> deliveryOrderLineItems = request.getOrderLineItems()
             .stream()
             .map(OrderLineItemRequest::toOrderLineItem)
             .collect(Collectors.toList());
 
-        final List<Menu> menus = findMenus(orderLineItems);
+        final List<Menu> menus = findMenus(deliveryOrderLineItems);
 
         return DeliveryOrder.create(
             menus,
-            orderLineItems,
+            deliveryOrderLineItems,
             request.getDeliveryAddress()
         );
     }
@@ -100,10 +100,10 @@ public class DeliveryOrderService {
             .orElseThrow(NoSuchElementException::new);
     }
 
-    private List<Menu> findMenus(final List<OrderLineItem> orderLineItems) {
+    private List<Menu> findMenus(final List<DeliveryOrderLineItem> deliveryOrderLineItems) {
         return menuRepository.findAllByIdIn(
-            orderLineItems.stream()
-                .map(OrderLineItem::getMenuId)
+            deliveryOrderLineItems.stream()
+                .map(DeliveryOrderLineItem::getMenuId)
                 .collect(Collectors.toList())
         );
     }

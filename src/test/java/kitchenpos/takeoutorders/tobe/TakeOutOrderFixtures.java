@@ -2,8 +2,8 @@ package kitchenpos.takeoutorders.tobe;
 
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.takeoutorders.tobe.domain.OrderLineItem;
 import kitchenpos.takeoutorders.tobe.domain.TakeOutOrder;
+import kitchenpos.takeoutorders.tobe.domain.TakeOutOrderLineItem;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,25 +39,25 @@ public class TakeOutOrderFixtures {
         );
     }
 
-    public static OrderLineItem orderLineItem() {
+    public static TakeOutOrderLineItem orderLineItem() {
         return orderLineItem(18_000L, menuId);
     }
 
-    public static OrderLineItem orderLineItem(final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, 18_000L);
+    public static TakeOutOrderLineItem orderLineItem(final UUID menuId) {
+        return TakeOutOrderLineItem.create(1L, menuId, 18_000L);
     }
 
-    public static OrderLineItem orderLineItem(final UUID menuId, final BigDecimal price) {
-        return OrderLineItem.create(1L, menuId, price.toBigInteger().longValue());
+    public static TakeOutOrderLineItem orderLineItem(final UUID menuId, final BigDecimal price) {
+        return TakeOutOrderLineItem.create(1L, menuId, price.toBigInteger().longValue());
     }
 
 
-    public static OrderLineItem orderLineItem(final long quantity) {
-        return OrderLineItem.create(quantity, menuId, 18_000L);
+    public static TakeOutOrderLineItem orderLineItem(final long quantity) {
+        return TakeOutOrderLineItem.create(quantity, menuId, 18_000L);
     }
 
-    public static OrderLineItem orderLineItem(final Long price, final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, price);
+    public static TakeOutOrderLineItem orderLineItem(final Long price, final UUID menuId) {
+        return TakeOutOrderLineItem.create(1L, menuId, price);
     }
 
     public static TakeOutOrder takeOutOrder() {

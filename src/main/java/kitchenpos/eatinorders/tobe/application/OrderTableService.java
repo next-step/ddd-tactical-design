@@ -39,7 +39,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = findOrderTable(orderTableId);
-        if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (eatInOrderRepository.existsByOrderTableIdAndStatusNot(orderTable.getId(), OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();

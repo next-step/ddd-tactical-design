@@ -1,21 +1,20 @@
-package kitchenpos.deliveryorders.tobe.domain;
+package kitchenpos.eatinorders.tobe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
 
-@Table(name = "order_line_item")
+@Table(name = "eat_in_order_line_item")
 @Entity
-public class OrderLineItem {
+public class EatInOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
 
-    @Embedded
     @Column(name = "quantity", nullable = false)
-    private OrderLineItemQuantity quantity;
+    private long quantity;
 
     @Transient
     private UUID menuId;
@@ -23,29 +22,20 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
-    protected OrderLineItem() {
+    protected EatInOrderLineItem() {
     }
 
-    public OrderLineItem(
-        final Long seq,
-        final OrderLineItemQuantity quantity,
-        final UUID menuId,
-        final BigDecimal price
-    ) {
+    public EatInOrderLineItem(final Long seq, final long quantity, final UUID menuId, final BigDecimal price) {
         this.seq = seq;
         this.quantity = quantity;
         this.menuId = menuId;
         this.price = price;
     }
 
-    public static OrderLineItem create(
-        final long quantity,
-        final UUID menuId,
-        final long price
-    ) {
-        return new OrderLineItem(
+    public static EatInOrderLineItem create(final long quantity, final UUID menuId, final long price) {
+        return new EatInOrderLineItem(
             new Random().nextLong(),
-            new OrderLineItemQuantity(quantity),
+            quantity,
             menuId,
             BigDecimal.valueOf(price)
         );
@@ -57,9 +47,5 @@ public class OrderLineItem {
 
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public long getLongQuantity() {
-        return quantity.getQuantity();
     }
 }

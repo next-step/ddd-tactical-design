@@ -38,25 +38,25 @@ public class EatInOrderFixtures {
         );
     }
 
-    public static OrderLineItem orderLineItem() {
+    public static EatInOrderLineItem orderLineItem() {
         return orderLineItem(18_000L, menuId);
     }
 
-    public static OrderLineItem orderLineItem(final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, 18_000L);
+    public static EatInOrderLineItem orderLineItem(final UUID menuId) {
+        return EatInOrderLineItem.create(1L, menuId, 18_000L);
     }
 
-    public static OrderLineItem orderLineItem(final UUID menuId, final BigDecimal price) {
-        return OrderLineItem.create(1L, menuId, price.toBigInteger().longValue());
+    public static EatInOrderLineItem orderLineItem(final UUID menuId, final BigDecimal price) {
+        return EatInOrderLineItem.create(1L, menuId, price.toBigInteger().longValue());
     }
 
 
-    public static OrderLineItem orderLineItem(final long quantity) {
-        return OrderLineItem.create(quantity, menuId, 18_000L);
+    public static EatInOrderLineItem orderLineItem(final long quantity) {
+        return EatInOrderLineItem.create(quantity, menuId, 18_000L);
     }
 
-    public static OrderLineItem orderLineItem(final Long price, final UUID menuId) {
-        return OrderLineItem.create(1L, menuId, price);
+    public static EatInOrderLineItem orderLineItem(final Long price, final UUID menuId) {
+        return EatInOrderLineItem.create(1L, menuId, price);
     }
 
     public static OrderTable orderTable(final int numberOfGuests, final boolean occupied) {

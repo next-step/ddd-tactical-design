@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Embeddable
-public class OrderLineItems {
+public class DeliveryOrderLineItems {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -18,18 +18,18 @@ public class OrderLineItems {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItemList;
+    private List<DeliveryOrderLineItem> deliveryOrderLineItemList;
 
-    public OrderLineItems(final List<OrderLineItem> orderLineItemList, final Map<UUID, Menu> menuMap) {
-        orderLineItemList.forEach(orderLineItem -> {
+    public DeliveryOrderLineItems(final List<DeliveryOrderLineItem> deliveryOrderLineItemList, final Map<UUID, Menu> menuMap) {
+        deliveryOrderLineItemList.forEach(orderLineItem -> {
             Menu menu = menuMap.get(orderLineItem.getMenuId());
             validateMenu(menu);
             validateMenuPrice(orderLineItem, menu);
         });
-        this.orderLineItemList = orderLineItemList;
+        this.deliveryOrderLineItemList = deliveryOrderLineItemList;
     }
 
-    protected OrderLineItems() {
+    protected DeliveryOrderLineItems() {
 
     }
 
@@ -39,18 +39,18 @@ public class OrderLineItems {
         }
     }
 
-    private void validateMenuPrice(final OrderLineItem orderLineItem, final Menu menu) {
-        if (menu.getBigDecimalPrice().compareTo(orderLineItem.getPrice()) != 0) {
+    private void validateMenuPrice(final DeliveryOrderLineItem deliveryOrderLineItem, final Menu menu) {
+        if (menu.getBigDecimalPrice().compareTo(deliveryOrderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
     }
 
-    public List<OrderLineItem> getOrderLineItemList() {
-        return orderLineItemList;
+    public List<DeliveryOrderLineItem> getOrderLineItemList() {
+        return deliveryOrderLineItemList;
     }
 
     public BigDecimal getSumOfOrderLineItemPrice(List<Menu> menus) {
-        return orderLineItemList.stream()
+        return deliveryOrderLineItemList.stream()
             .map(orderLineItem -> {
                 Menu menu = menus.stream().findFirst().orElseThrow();
                 return menu.multiplyPrice(BigDecimal.valueOf(orderLineItem.getLongQuantity()));

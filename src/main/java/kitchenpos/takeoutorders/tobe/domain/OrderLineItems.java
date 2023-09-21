@@ -17,15 +17,15 @@ public class OrderLineItems {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItemList;
+    private List<TakeOutOrderLineItem> takeOutOrderLineItemList;
 
-    public OrderLineItems(final List<OrderLineItem> orderLineItemList, final Map<UUID, Menu> menuMap) {
-        orderLineItemList.forEach(orderLineItem -> {
+    public OrderLineItems(final List<TakeOutOrderLineItem> takeOutOrderLineItemList, final Map<UUID, Menu> menuMap) {
+        takeOutOrderLineItemList.forEach(orderLineItem -> {
             Menu menu = menuMap.get(orderLineItem.getMenuId());
             validateMenu(menu);
             validateMenuPrice(orderLineItem, menu);
         });
-        this.orderLineItemList = orderLineItemList;
+        this.takeOutOrderLineItemList = takeOutOrderLineItemList;
     }
 
     protected OrderLineItems() {
@@ -38,8 +38,8 @@ public class OrderLineItems {
         }
     }
 
-    private void validateMenuPrice(final OrderLineItem orderLineItem, final Menu menu) {
-        if (menu.getBigDecimalPrice().compareTo(orderLineItem.getPrice()) != 0) {
+    private void validateMenuPrice(final TakeOutOrderLineItem takeOutOrderLineItem, final Menu menu) {
+        if (menu.getBigDecimalPrice().compareTo(takeOutOrderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
     }

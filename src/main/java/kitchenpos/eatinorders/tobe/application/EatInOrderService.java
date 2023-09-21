@@ -29,16 +29,16 @@ public class EatInOrderService {
     public EatInOrder create(final EatInOrderRequest request) {
         request.validate();
 
-        final List<OrderLineItem> orderLineItems = request.getOrderLineItems()
+        final List<EatInOrderLineItem> eatInOrderLineItems = request.getOrderLineItems()
             .stream()
             .map(OrderLineItemRequest::toOrderLineItem)
             .collect(Collectors.toList());
-        final List<Menu> menus = findMenus(orderLineItems);
+        final List<Menu> menus = findMenus(eatInOrderLineItems);
         final OrderTable orderTable = findOrderTable(request.getOrderTableId());
 
         return EatInOrder.create(
             menus,
-            orderLineItems,
+            eatInOrderLineItems,
             orderTable
         );
     }
@@ -62,7 +62,7 @@ public class EatInOrderService {
         final EatInOrder order = findOrder(orderId);
         order.complete();
         final OrderTable orderTable = findOrderTable(order.getOrderTableId());
-        if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (!eatInOrderRepository.existsByOrderTableIdAndStatusNot(orderTable.getId(), OrderStatus.COMPLETED)) {
             orderTable.clear();
         }
         return order;
@@ -78,10 +78,10 @@ public class EatInOrderService {
             .orElseThrow(NoSuchElementException::new);
     }
 
-    private List<Menu> findMenus(final List<OrderLineItem> orderLineItems) {
+    private List<Menu> findMenus(final List<EatInOrderLineItem> eatInOrderLineItems) {
         return menuRepository.findAllByIdIn(
-            orderLineItems.stream()
-                .map(OrderLineItem::getMenuId)
+            eatInOrderLineItems.stream()
+                .map(EatInOrderLineItem::getMenuId)
                 .collect(Collectors.toList())
         );
     }

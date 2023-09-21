@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Embeddable
-public class OrderLineItems {
+public class EatInOrderLineItems {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -17,18 +17,18 @@ public class OrderLineItems {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItemList;
+    private List<EatInOrderLineItem> eatInOrderLineItemList;
 
-    public OrderLineItems(final List<OrderLineItem> orderLineItemList, final Map<UUID, Menu> menuMap) {
-        orderLineItemList.forEach(orderLineItem -> {
+    public EatInOrderLineItems(final List<EatInOrderLineItem> eatInOrderLineItemList, final Map<UUID, Menu> menuMap) {
+        eatInOrderLineItemList.forEach(orderLineItem -> {
             Menu menu = menuMap.get(orderLineItem.getMenuId());
             validateMenu(menu);
             validateMenuPrice(orderLineItem, menu);
         });
-        this.orderLineItemList = orderLineItemList;
+        this.eatInOrderLineItemList = eatInOrderLineItemList;
     }
 
-    protected OrderLineItems() {
+    protected EatInOrderLineItems() {
 
     }
 
@@ -38,13 +38,13 @@ public class OrderLineItems {
         }
     }
 
-    private void validateMenuPrice(final OrderLineItem orderLineItem, final Menu menu) {
-        if (menu.getBigDecimalPrice().compareTo(orderLineItem.getPrice()) != 0) {
+    private void validateMenuPrice(final EatInOrderLineItem eatInOrderLineItem, final Menu menu) {
+        if (menu.getBigDecimalPrice().compareTo(eatInOrderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
     }
 
-    public List<OrderLineItem> getOrderLineItemList() {
-        return orderLineItemList;
+    public List<EatInOrderLineItem> getOrderLineItemList() {
+        return eatInOrderLineItemList;
     }
 }

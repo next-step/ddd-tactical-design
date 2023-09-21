@@ -1,6 +1,6 @@
 package kitchenpos.takeoutorders.tobe.application.dto;
 
-import kitchenpos.takeoutorders.tobe.domain.OrderLineItem;
+import kitchenpos.takeoutorders.tobe.domain.TakeOutOrderLineItem;
 
 import java.util.UUID;
 
@@ -45,7 +45,7 @@ public class OrderLineItemRequest {
         this.price = price;
     }
 
-    public OrderLineItem toOrderLineItem() {
-        return OrderLineItem.create(quantity, menuId, price);
+    public TakeOutOrderLineItem toOrderLineItem() {
+        return TakeOutOrderLineItem.create(quantity, menuId, price);
     }
 }

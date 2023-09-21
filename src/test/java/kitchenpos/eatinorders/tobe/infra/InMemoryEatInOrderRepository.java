@@ -3,7 +3,6 @@ package kitchenpos.eatinorders.tobe.infra;
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.OrderTable;
 
 import java.util.*;
 
@@ -28,9 +27,9 @@ public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     }
 
     @Override
-    public boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status) {
+    public boolean existsByOrderTableIdAndStatusNot(UUID orderTableId, OrderStatus status) {
         return orders.values()
             .stream()
-            .anyMatch(order -> order.getOrderTableId().equals(orderTable.getId()) && order.getStatus() != status);
+            .anyMatch(order -> order.getOrderTableId().equals(orderTableId) && order.getStatus() != status);
     }
 }

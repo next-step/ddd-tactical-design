@@ -11,5 +11,5 @@ public interface EatInOrderRepository {
 
     List<EatInOrder> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
+    boolean existsByOrderTableIdAndStatusNot(UUID orderTableId, OrderStatus status);
 }
