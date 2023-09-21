@@ -1,25 +1,27 @@
 package kitchenpos.menus.domain.tobe;
 
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.infra.PurgomalumClient;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
 class DisplayedNameTest {
+    private final PurgomalumClient profanities = new FakeProfanities();
     @Test
-    void constructor() {
-        final Profanities profanities = new FakeProfanities();
-
+    @DisplayName("비속어로 이름을 생성할 수 없다. ")
+    void createDisplayNameSuccess() {
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> new DisplayedName("욕설", profanities));
-        assertThatNoException()
-                .isThrownBy(() -> new DisplayedName("치킨", profanities));
+                .isThrownBy(() ->
+                        new DisplayedName("욕설", profanities));
     }
 
     @Test
-    void equals() {
-        final Profanities profanities = new FakeProfanities();
-        final DisplayedName name1 = new DisplayedName("치킨", profanities);
-        final DisplayedName name2 = new DisplayedName("치킨", profanities);
-        assertThat(name1).isEqualTo(name2);
+    @DisplayName("비속어가 아닌 내용으로 이름을 생성할 수 있다. ")
+    void createDisplayNameFail() {
+        assertThatNoException()
+                .isThrownBy(() ->
+                        new DisplayedName("치킨", profanities));
     }
 }

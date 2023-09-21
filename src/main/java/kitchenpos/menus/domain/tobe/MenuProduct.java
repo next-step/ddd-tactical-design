@@ -1,20 +1,21 @@
 package kitchenpos.menus.domain.tobe;
 
+import kitchenpos.common.domain.Price;
+
 import java.util.UUID;
 
 public class MenuProduct {
     private final UUID productId;
-    private final int price;
-    private final int quantity;
+    private final Price price;
+    private final Quantity quantity;
 
-    public MenuProduct(UUID productId, int price, int quantity) {
+    public MenuProduct(final UUID productId, final Price price, final Quantity quantity) {
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
     }
 
-
-    public int amount() {
-        return this.price * this.quantity;
+    public Price amount() {
+        return this.price.multiply(quantity);
     }
 }

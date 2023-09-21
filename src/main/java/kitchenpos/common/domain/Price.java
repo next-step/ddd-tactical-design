@@ -1,4 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
+
+import kitchenpos.menus.domain.tobe.Quantity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -28,7 +30,15 @@ public class Price {
         return value;
     }
 
-    public Price multiply(BigDecimal price) {
-        return new Price(this.getValue().multiply(price));
+    public Price multiply(Quantity quantity) {
+        return multiply(new BigDecimal(quantity.getValue()));
+    }
+
+    private Price multiply(BigDecimal value) {
+        return new Price(this.getValue().multiply(value));
+    }
+
+    public Boolean isGreaterThan(Price price) {
+        return this.value.compareTo(price.getValue()) > 0;
     }
 }

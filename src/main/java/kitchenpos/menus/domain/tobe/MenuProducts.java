@@ -1,5 +1,8 @@
 package kitchenpos.menus.domain.tobe;
 
+import kitchenpos.common.domain.Price;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,11 @@ public class MenuProducts {
         this.menuProducts = new ArrayList<>(menuProducts);
     }
 
-    public int totalAmount() {
-        return menuProducts.stream()
-                .mapToInt(MenuProduct::amount)
-                .sum();
+    public Price totalAmount() {
+        BigDecimal sum = menuProducts.stream()
+                .map(menuProduct -> menuProduct.amount().getValue())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new Price(sum);
     }
 }
