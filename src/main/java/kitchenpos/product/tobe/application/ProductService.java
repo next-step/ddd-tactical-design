@@ -2,7 +2,6 @@ package kitchenpos.product.tobe.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
@@ -34,7 +33,7 @@ public class ProductService {
     @Transactional
     public Product create(final CreateProductRequest request) {
         final String name = request.getName();
-        if (Objects.isNull(name) || profanityClient.containsProfanity(name)) {
+        if (profanityClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
 
