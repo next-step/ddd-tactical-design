@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.domain.orders;
 
+import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -27,10 +29,9 @@ public class EatInOrderLineItems {
 
     public static EatInOrderLineItems from(List<EatInOrderLineItemMaterial> orderLineItemMaterials, MenuClient menuClient) {
         validate(orderLineItemMaterials, menuClient);
-        List<EatInOrderLineItem> orderLineItems = orderLineItemMaterials.stream()
+        return orderLineItemMaterials.stream()
                 .map(it -> EatInOrderLineItem.from(it, menuClient))
-                .collect(Collectors.toList());
-        return new EatInOrderLineItems(orderLineItems);
+                .collect(Collectors.collectingAndThen(Collectors.toList(), EatInOrderLineItems::new));
     }
 
     private static void validate(List<EatInOrderLineItemMaterial> orderLineItemMaterials, MenuClient menuClient) {
