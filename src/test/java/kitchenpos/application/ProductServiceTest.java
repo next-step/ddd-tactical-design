@@ -14,7 +14,7 @@ import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.ProductService;
-import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequestDto;
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +76,7 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequestDto expected = changePriceRequest(15_000L);
+        final ChangeProductPriceRequest expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
@@ -87,7 +87,7 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ChangeProductPriceRequestDto expected = changePriceRequest(price);
+        final ChangeProductPriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -118,11 +118,11 @@ class ProductServiceTest {
         return new Product(UUID.randomUUID(), name, price);
     }
 
-    private ChangeProductPriceRequestDto changePriceRequest(final long price) {
-        return new ChangeProductPriceRequestDto(BigDecimal.valueOf(price));
+    private ChangeProductPriceRequest changePriceRequest(final long price) {
+        return new ChangeProductPriceRequest(BigDecimal.valueOf(price));
     }
 
-    private ChangeProductPriceRequestDto changePriceRequest(final BigDecimal price) {
-        return new ChangeProductPriceRequestDto(price);
+    private ChangeProductPriceRequest changePriceRequest(final BigDecimal price) {
+        return new ChangeProductPriceRequest(price);
     }
 }

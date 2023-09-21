@@ -8,7 +8,8 @@ import java.util.UUID;
 import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequestDto;
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
+import kitchenpos.product.tobe.application.dto.CreateProductRequest;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
+    public Product create(final CreateProductRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -46,7 +47,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ChangeProductPriceRequestDto request) {
+    public Product changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
