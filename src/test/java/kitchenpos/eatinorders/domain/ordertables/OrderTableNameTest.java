@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTableNameTest {
@@ -20,10 +21,11 @@ class OrderTableNameTest {
         );
     }
 
-    @DisplayName("주문 테이블 값이 올바르지 않으면 생성할 수 없다.")
+    @DisplayName("주문 테이블 이름 값이 올바르지 않으면 생성할 수 없다.")
     @ParameterizedTest
     @NullAndEmptySource
     void createWithInvalidName(String name) {
-        assertThrows(IllegalArgumentException.class, () -> new OrderTableName(name));
+        assertThatThrownBy(() -> new OrderTableName(name))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

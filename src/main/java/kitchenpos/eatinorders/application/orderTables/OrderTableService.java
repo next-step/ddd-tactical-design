@@ -16,11 +16,9 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final EatInOrderRepository eatInOrderRepository;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderRepository eatInOrderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository) {
         this.orderTableRepository = orderTableRepository;
-        this.eatInOrderRepository = eatInOrderRepository;
     }
 
     @Transactional
@@ -34,17 +32,6 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         orderTable.sit();
-        return orderTable;
-    }
-
-    @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(NoSuchElementException::new);
-        if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.clear();
         return orderTable;
     }
 

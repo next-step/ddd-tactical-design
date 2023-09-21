@@ -1,38 +1,97 @@
 package kitchenpos.eatin_orders;
 
-import kitchenpos.eatinorders.domain.orders.EatInOrder;
-import kitchenpos.eatinorders.domain.orders.EatInOrderLineItem;
-import kitchenpos.eatinorders.domain.orders.OrderStatus;
+import kitchenpos.eatinorders.domain.orders.*;
 import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.domain.ordertables.OrderTableName;
+import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.products.tobe.domain.ProductRepository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.menu;
 
 public class EatInOrderFixtures {
 
-    public static EatInOrder order(final OrderStatus status, final OrderTable orderTable, final ProductRepository productRepository) {
-        final EatInOrder order = new EatInOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(eatInOrderLineItem(productRepository)));
-        order.setOrderTable(orderTable);
+    public static EatInOrder waitingOrder(
+            final OrderTable orderTable,
+            final Menu menu,
+            final MenuClient menuClient,
+            final OrderTableClient orderTableClient
+    ) {
+        return EatInOrder.waitingOrder(
+                UUID.randomUUID(),
+                LocalDateTime.of(2020, 1, 1, 12, 0),
+                EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
+                orderTable.getId(),
+                orderTableClient
+        );
+    }
+
+    public static EatInOrder acceptedOrder(
+            final OrderTable orderTable,
+            final Menu menu,
+            final MenuClient menuClient,
+            final OrderTableClient orderTableClient
+    ) {
+        final EatInOrder order = waitingOrder(
+                orderTable,
+                menu,
+                menuClient,
+                orderTableClient
+        );
+        order.accept();
         return order;
     }
 
-    public static EatInOrderLineItem eatInOrderLineItem(final ProductRepository productRepository) {
-        final EatInOrderLineItem orderLineItem = new EatInOrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu(productRepository));
-        return orderLineItem;
+    public static EatInOrder servedOrder(
+            final OrderTable orderTable,
+            final Menu menu,
+            final MenuClient menuClient,
+            final OrderTableClient orderTableClient
+    ) {
+        EatInOrder order = waitingOrder(
+                orderTable,
+                menu,
+                menuClient,
+                orderTableClient
+        );
+        order.accept();
+        order.served();
+        return order;
+    }
+
+    public static EatInOrder completedOrder(
+            final OrderTable orderTable,
+            final Menu menu,
+            final MenuClient menuClient,
+            final OrderTableClient orderTableClient
+    ) {
+        EatInOrder order = waitingOrder(
+                orderTable,
+                menu,
+                menuClient,
+                orderTableClient
+        );
+        order.accept();
+        order.served();
+        order.complete(orderTableClient);
+        return order;
+    }
+
+    public static EatInOrderLineItem eatInOrderLineItem(final MenuClient menuClient, final ProductRepository productRepository) {
+        final Menu menu = menu(productRepository);
+        return EatInOrderLineItem.from(eatInOrderLineItemMaterial(menu.getId()), menuClient);
+    }
+
+    public static EatInOrderLineItemMaterial eatInOrderLineItemMaterial(UUID menuId) {
+        return new EatInOrderLineItemMaterial(menuId, 1L);
+    }
+
+    public static EatInOrderLineItemMaterial eatInOrderLineItemMaterial(UUID menuId, long quantity) {
+        return new EatInOrderLineItemMaterial(menuId, quantity);
     }
 
     public static OrderTable orderTable() {

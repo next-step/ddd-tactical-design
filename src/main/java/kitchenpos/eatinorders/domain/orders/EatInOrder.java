@@ -1,15 +1,14 @@
 package kitchenpos.eatinorders.domain.orders;
 
-import kitchenpos.eatinorders.domain.ordertables.OrderTable;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "eat_in_orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -21,74 +20,73 @@ public class EatInOrder {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "order_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_eat_in_orders")
-    )
-    private List<EatInOrderLineItem> orderLineItems;
-
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    @Embedded
+    private EatInOrderLineItems orderLineItems;
 
     @Transient
     private UUID orderTableId;
 
-    public EatInOrder() {
+    protected EatInOrder() {
+    }
+
+    private EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, EatInOrderLineItems orderLineItems, UUID orderTableId) {
+        this.id = id;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
+    }
+
+    public static EatInOrder waitingOrder(
+            UUID uuid,
+            LocalDateTime orderDateTime,
+            EatInOrderLineItems orderLineItems,
+            UUID orderTableId,
+            OrderTableClient orderTableClient
+    ) {
+        orderTableClient.validOrderTableIdForOrder(orderTableId);
+        return new EatInOrder(uuid, OrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
+    }
+
+    public void accept() {
+        if (this.status != OrderStatus.WAITING) {
+            throw new IllegalStateException("대기 상태가 아닌 주문은 승인 상태로 변경할 수 없습니다. 주문상태: " + this.status);
+        }
+        this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void served() {
+        if (this.status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException("승인 상태가 아닌 주문은 서빙 완료상태로 변경할 수 없습니다. 주문상태: " + this.status);
+        }
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void complete(OrderTableClient orderTableClient) {
+        if (this.status != OrderStatus.SERVED) {
+            throw new IllegalStateException("서빙 완료가 아닌 주문은 완료상태로 변경할 수 없습니다. 주문상태: " + this.status);
+        }
+        this.status = OrderStatus.COMPLETED;
+        orderTableClient.clearOrderTable(this.orderTableId);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final OrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
-    public List<EatInOrderLineItem> getOrderLineItems() {
+    public EatInOrderLineItems getOrderLineItems() {
         return orderLineItems;
-    }
-
-    public void setOrderLineItems(List<EatInOrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
     }
 
     public UUID getOrderTableId() {
         return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }

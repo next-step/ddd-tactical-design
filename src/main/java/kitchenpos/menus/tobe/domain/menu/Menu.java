@@ -91,6 +91,14 @@ public class Menu {
         return this.price.multiplyByQuantity(quantity).getValue();
     }
 
+    public boolean isHide() {
+        return !this.displayed;
+    }
+
+    public BigDecimal getPriceValue() {
+        return this.price.getValue();
+    }
+
     public UUID getId() {
         return id;
     }
@@ -104,7 +112,6 @@ public class Menu {
     public MenuPrice getPrice() {
         return price;
     }
-
 
     public MenuGroup getMenuGroup() {
         return menuGroup;

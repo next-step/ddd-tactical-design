@@ -1,9 +1,8 @@
 package kitchenpos.eatinorders.domain.orders;
 
-import kitchenpos.menus.tobe.domain.menu.Menu;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "eat_in_order_line_item")
@@ -14,63 +13,66 @@ public class EatInOrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
-
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
+    @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
-    @Transient
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public EatInOrderLineItem() {
+    protected EatInOrderLineItem() {
+    }
+
+    private EatInOrderLineItem(long quantity, UUID menuId, BigDecimal price) {
+        this(null, quantity, menuId, price);
+    }
+
+    private EatInOrderLineItem(Long seq, long quantity, UUID menuId, BigDecimal price) {
+        this.seq = seq;
+        this.quantity = quantity;
+        this.menuId = menuId;
+        this.price = price;
+    }
+
+    public static EatInOrderLineItem from(EatInOrderLineItemMaterial orderLineItemMaterial, MenuClient menuClient) {
+        if (menuClient.isHide(orderLineItemMaterial.getMenuId())) {
+            throw new IllegalStateException("비노출된 메뉴는 주문할 수 없습니다. menuId = " + orderLineItemMaterial.getMenuId());
+        }
+        return new EatInOrderLineItem(
+                orderLineItemMaterial.getQuantity(),
+                orderLineItemMaterial.getMenuId(),
+                menuClient.getMenuPrice(orderLineItemMaterial.getMenuId())
+        );
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
-
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrderLineItem that = (EatInOrderLineItem) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq);
     }
 }

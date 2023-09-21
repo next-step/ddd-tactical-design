@@ -12,7 +12,4 @@ public interface EatInOrderRepository {
     Optional<EatInOrder> findById(UUID id);
 
     List<EatInOrder> findAll();
-
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
 }
-

@@ -1,76 +1,42 @@
 package kitchenpos.eatinorders.application.orders;
 
-import kitchenpos.eatinorders.domain.orders.EatInOrder;
-import kitchenpos.eatinorders.domain.orders.EatInOrderLineItem;
-import kitchenpos.eatinorders.domain.orders.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.orders.OrderStatus;
-import kitchenpos.eatinorders.domain.ordertables.OrderTable;
-import kitchenpos.eatinorders.domain.ordertables.OrderTableRepository;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.eatinorders.application.orders.dto.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.domain.orders.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
-    private final MenuRepository menuRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final MenuClient menuClient;
+    private final OrderTableClient orderTableClient;
 
     public EatInOrderService(
             final EatInOrderRepository eatInOrderRepository,
-            final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository
+            final MenuClient menuClient,
+            final OrderTableClient orderTableClient
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
-        this.menuRepository = menuRepository;
-        this.orderTableRepository = orderTableRepository;
+        this.menuClient = menuClient;
+        this.orderTableClient = orderTableClient;
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrder request) {
-        final List<EatInOrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-                orderLineItemRequests.stream()
-                        .map(EatInOrderLineItem::getMenuId)
-                        .collect(Collectors.toList())
+    public EatInOrder create(final EatInOrderCreateRequest request) {
+        final List<EatInOrderLineItemMaterial> orderLineItemMaterials = request.getOrderLineItems();
+        final EatInOrderLineItems orderLineItems = EatInOrderLineItems.from(orderLineItemMaterials, menuClient);
+        EatInOrder eatInOrder = EatInOrder.waitingOrder(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                orderLineItems,
+                request.getOrderTableId(),
+                orderTableClient
         );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<EatInOrderLineItem> orderLineItems = new ArrayList<>();
-        for (final EatInOrderLineItem orderLineItemRequest : orderLineItemRequests) {
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                    .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().getValue().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final EatInOrderLineItem orderLineItem = new EatInOrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(orderLineItemRequest.getQuantity());
-            orderLineItems.add(orderLineItem);
-        }
-        EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(OrderStatus.WAITING);
-        eatInOrder.setOrderDateTime(LocalDateTime.now());
-        eatInOrder.setOrderLineItems(orderLineItems);
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setOrderTable(orderTable);
         return eatInOrderRepository.save(eatInOrder);
     }
 
@@ -78,10 +44,7 @@ public class EatInOrderService {
     public EatInOrder accept(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(OrderStatus.ACCEPTED);
+        eatInOrder.accept();
         return eatInOrder;
     }
 
@@ -89,10 +52,7 @@ public class EatInOrderService {
     public EatInOrder serve(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(OrderStatus.SERVED);
+        eatInOrder.served();
         return eatInOrder;
     }
 
@@ -100,15 +60,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderStatus status = eatInOrder.getStatus();
-        if (status != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(OrderStatus.COMPLETED);
-        final OrderTable orderTable = eatInOrder.getOrderTable();
-        if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            orderTable.clear();
-        }
+        eatInOrder.complete(orderTableClient);
         return eatInOrder;
     }
 

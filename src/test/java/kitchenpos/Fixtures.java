@@ -97,14 +97,6 @@ public class Fixtures {
         );
     }
 
-    public static OrderTable orderTable() {
-        return orderTable(false, 0);
-    }
-
-    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        return new OrderTable(UUID.randomUUID(), new OrderTableName("1번"), new NumberOfGuests(numberOfGuests), occupied);
-    }
-
     public static Product product() {
         return product("후라이드", 16_000L);
     }
