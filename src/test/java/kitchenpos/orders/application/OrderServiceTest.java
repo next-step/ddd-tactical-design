@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.orders.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
