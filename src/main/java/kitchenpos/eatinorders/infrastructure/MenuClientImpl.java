@@ -1,15 +1,17 @@
 package kitchenpos.eatinorders.infrastructure;
 
 import kitchenpos.eatinorders.domain.orders.MenuClient;
+import kitchenpos.eatinorders.domain.orders.OrderedMenu;
+import kitchenpos.eatinorders.domain.orders.OrderedMenus;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class MenuClientImpl implements MenuClient {
@@ -20,17 +22,9 @@ public class MenuClientImpl implements MenuClient {
     }
 
     @Override
-    public void validMenuIds(List<UUID> menuIds) {
-        final List<Menu> menus = menuRepository.findAllByIdIn(menuIds);
-        if (menus.size() != new HashSet<>(menuIds).size()) {
-            throw new IllegalArgumentException("Menu가 존재하지 않는 메뉴를 포함하고 있습니다.");
-        }
-    }
-
-    @Override
     public boolean isHide(UUID menuId) {
         Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new NoSuchElementException("Menu를 조회할 수 없습니다. Menu가 존재하지 않습니다. menuId: " + menuId));
+                .orElseThrow(() -> new IllegalArgumentException("Menu를 조회할 수 없습니다. Menu가 존재하지 않습니다. menuId: " + menuId));
         return menu.isHide();
     }
 
@@ -39,5 +33,12 @@ public class MenuClientImpl implements MenuClient {
         return menuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("Menu 가격을 조회할 수 없습니다. Menu Id가 존재하지 않습니다. menuId: " + menuId))
                 .getPriceValue();
+    }
+
+    @Override
+    public OrderedMenus getOrderedMenuByMenuIds(List<UUID> menuIds) {
+        return menuRepository.findAllByIdIn(menuIds).stream()
+                .map(it -> new OrderedMenu(it.getId(), it.getPriceValue()))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), OrderedMenus::new));
     }
 }

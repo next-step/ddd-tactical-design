@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -36,8 +38,10 @@ class EatInOrderLineItemTest {
     void create() {
         // from 정적 팩터리 메소드를 사용해서 생성하는 테스트
         final Menu menu = menuRepository.save(menu(productRepository));
+        final OrderedMenus orderedMenus = menuClient.getOrderedMenuByMenuIds(List.of(menu.getId()));
         final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(menu.getId(), 2L),
+                orderedMenus,
                 menuClient
         );
         assertAll(
@@ -53,8 +57,9 @@ class EatInOrderLineItemTest {
     void createWithNotExistsMenu() {
         assertThatThrownBy(() -> EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(UUID.randomUUID(), 2L),
+                new OrderedMenus(Collections.emptyList()),
                 menuClient
-        )).isInstanceOf(NoSuchElementException.class);
+        )).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("EatInOrderLineItem 생성 시 메뉴가 비노출 상태이면 예외를 던진다.")
@@ -62,8 +67,10 @@ class EatInOrderLineItemTest {
     void createWithNotDisplayedMenu() {
         final Menu menu = menuRepository.save(menu(productRepository));
         menu.hide();
+        OrderedMenus orderedMenus = menuClient.getOrderedMenuByMenuIds(List.of(menu.getId()));
         assertThatThrownBy(() -> EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(menu.getId(), 2L),
+                orderedMenus,
                 menuClient
         )).isInstanceOf(IllegalStateException.class);
     }

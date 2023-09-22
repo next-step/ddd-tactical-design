@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.domain.orders;
 
-import kitchenpos.menus.tobe.domain.menu.MenuProducts;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -28,20 +26,24 @@ public class EatInOrderLineItems {
     }
 
     public static EatInOrderLineItems from(List<EatInOrderLineItemMaterial> orderLineItemMaterials, MenuClient menuClient) {
-        validate(orderLineItemMaterials, menuClient);
+        validate(orderLineItemMaterials);
+        final OrderedMenus orderedMenus = orderedMenus(orderLineItemMaterials, menuClient);
         return orderLineItemMaterials.stream()
-                .map(it -> EatInOrderLineItem.from(it, menuClient))
+                .map(it -> EatInOrderLineItem.from(it, orderedMenus, menuClient))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), EatInOrderLineItems::new));
     }
 
-    private static void validate(List<EatInOrderLineItemMaterial> orderLineItemMaterials, MenuClient menuClient) {
-        if (Objects.isNull(orderLineItemMaterials) || orderLineItemMaterials.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        List<UUID> menuIds = orderLineItemMaterials.stream()
+    private static OrderedMenus orderedMenus(List<EatInOrderLineItemMaterial> orderLineItemMaterials, MenuClient menuClient) {
+        final List<UUID> menuIds = orderLineItemMaterials.stream()
                 .map(EatInOrderLineItemMaterial::getMenuId)
                 .collect(Collectors.toList());
-        menuClient.validMenuIds(menuIds);
+        return menuClient.getOrderedMenuByMenuIds(menuIds);
+    }
+
+    private static void validate(List<EatInOrderLineItemMaterial> orderLineItemMaterials) {
+        if (Objects.isNull(orderLineItemMaterials) || orderLineItemMaterials.isEmpty()) {
+            throw new IllegalArgumentException("주문 항목은 비어있을 수 없습니다. 1개 이상의 주문 항목이 필요합니다.");
+        }
     }
 
     public List<EatInOrderLineItem> getOrderLineItems() {

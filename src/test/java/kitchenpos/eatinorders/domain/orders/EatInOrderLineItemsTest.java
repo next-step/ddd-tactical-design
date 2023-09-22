@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.menu;
@@ -38,7 +39,7 @@ class EatInOrderLineItemsTest {
     @DisplayName("EatInOrderLineItems를 생성할 수 있다.")
     @Test
     void create() {
-        final Menu menu = menuRepository.save(menu(productRepository));
+        final Menu menu = menuRepository.save(menu(true, productRepository));
         final EatInOrderLineItems eatInOrderLineItems = EatInOrderLineItems.from(
                 List.of(eatInOrderLineItemMaterial(menu.getId())),
                 menuClient

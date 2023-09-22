@@ -6,9 +6,9 @@ import java.util.UUID;
 
 public interface MenuClient {
 
-    void validMenuIds(List<UUID> menuIds);
-
     boolean isHide(UUID menuId);
 
     BigDecimal getMenuPrice(UUID menuId);
+
+    OrderedMenus getOrderedMenuByMenuIds(List<UUID> menuIds);
 }

@@ -19,10 +19,16 @@ import java.util.UUID;
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-    public static Menu menu(ProductRepository productRepository) {
+    public static Menu menu(final ProductRepository productRepository) {
         final Product product = product();
         productRepository.save(product);
         return menu(19_000L, true, productRepository, menuProductMaterial(product.getId()));
+    }
+
+    public static Menu menu(final boolean displayed, final ProductRepository productRepository) {
+        final Product product = product();
+        productRepository.save(product);
+        return menu(19_000L, displayed, productRepository, menuProductMaterial(product.getId()));
     }
 
     public static Menu menu(final long price, final boolean displayed, ProductRepository productRepository) {
