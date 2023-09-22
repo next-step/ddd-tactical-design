@@ -1,6 +1,6 @@
 package kitchenpos.order.domain;
 
-import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
+import kitchenpos.order.domain.vo.OrderLineItems;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

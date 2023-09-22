@@ -2,8 +2,7 @@ package kitchenpos.order.domain;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
-import kitchenpos.support.ValueObject;
+import kitchenpos.order.domain.vo.OrderLineItems;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,16 +10,15 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
-public class OrderLineItemsService extends ValueObject {
+public class OrderLineItemsService {
 
     private final MenuRepository menuRepository;
-
 
     public OrderLineItemsService(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
-    private static void validQuantity(List<OrderLineItem> orderLineItems, OrderType orderType) {
+    private void validQuantity(List<OrderLineItem> orderLineItems, OrderType orderType) {
         if (orderType != OrderType.EAT_IN) {
             orderLineItems.stream()
                     .map(OrderLineItem::getQuantity)

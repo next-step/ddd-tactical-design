@@ -5,7 +5,7 @@ import kitchenpos.order.domain.OrderLineItemsService;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.eatinorders.domain.exception.NotFoundOrderTableException;
-import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
+import kitchenpos.order.domain.vo.OrderLineItems;
 import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.stereotype.Component;
 

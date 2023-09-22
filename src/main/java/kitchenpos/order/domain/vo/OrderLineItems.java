@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorders.domain.vo;
+package kitchenpos.order.domain.vo;
 
 import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.support.ValueObject;
