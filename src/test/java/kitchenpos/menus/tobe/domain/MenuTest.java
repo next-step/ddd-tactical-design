@@ -79,7 +79,7 @@ class MenuTest {
     }
 
     @Test
-    void 메뉴를_노출할_수_있다() {
+    void 메뉴를_노출할_때_메뉴가격정책을_따른다() {
         Menu menu = new Menu(UUID.randomUUID(),
                 new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                 new Price(10000),
@@ -88,7 +88,7 @@ class MenuTest {
                 menuPricePolicy
         );
 
-        menu.display();
+        menu.display(menuPricePolicy);
 
         assertThat(menu.isDisplayed()).isTrue();
     }

@@ -55,7 +55,8 @@ public class Menu {
         menuDisplayPolicy.follow(this);
     }
 
-    public void display() {
+    public void display(MenuPricePolicy menuPricePolicy) {
+        menuPricePolicy.follow(price, menuProducts.totalPrice());
         displayed = true;
     }
 

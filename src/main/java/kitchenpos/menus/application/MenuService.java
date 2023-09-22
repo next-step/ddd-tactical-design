@@ -87,7 +87,7 @@ public class MenuService {
                 .orElseThrow(IllegalArgumentException::new)
                 .getPrice();
     }
-//
+
 //    @Transactional
 //    public Menu changePrice(final UUID menuId, final Menu request) {
 //        final BigDecimal price = request.getPrice();
@@ -110,33 +110,23 @@ public class MenuService {
 //        menu.setPrice(price);
 //        return menu;
 //    }
-//
-//    @Transactional
-//    public Menu display(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//            sum = sum.add(
-//                menuProduct.getProduct()
-//                    .getPrice()
-//                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//            );
-//        }
-//        if (menu.getPrice().compareTo(sum) > 0) {
-//            throw new IllegalStateException();
-//        }
-//        menu.setDisplayed(true);
-//        return menu;
-//    }
-//
-//    @Transactional
-//    public Menu hide(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        menu.setDisplayed(false);
-//        return menu;
-//    }
+
+    @Transactional
+    public Menu display(final UUID menuId) {
+        final Menu menu = menuRepository.findById(menuId)
+            .orElseThrow(NoSuchElementException::new);
+
+        menu.display(menuPricePolicy);
+        return menu;
+    }
+
+    @Transactional
+    public Menu hide(final UUID menuId) {
+        final Menu menu = menuRepository.findById(menuId)
+            .orElseThrow(NoSuchElementException::new);
+        menu.hide();
+        return menu;
+    }
 
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
