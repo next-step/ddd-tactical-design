@@ -9,7 +9,10 @@ import javax.persistence.Embeddable;
 public class ProductPrice {
 
     @Column(name = "price", nullable = false)
-    private final BigDecimal value;
+    private BigDecimal value;
+
+    protected ProductPrice() {
+    }
 
     public ProductPrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {

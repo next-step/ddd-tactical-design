@@ -6,7 +6,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class ProductName {
 
-    private final String value;
+    private String value;
+
+    protected ProductName() {
+    }
 
     public ProductName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
