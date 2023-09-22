@@ -6,4 +6,11 @@ public class ChangePriceRequest {
     public Long getPrice() {
         return price;
     }
+
+    public ChangePriceRequest() {
+    }
+
+    public ChangePriceRequest(Long price) {
+        this.price = price;
+    }
 }
