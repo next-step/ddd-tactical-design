@@ -10,6 +10,17 @@ public class CreateMenuRequest {
     private boolean displayed;
     private List<MenuProductDto> menuProducts;
 
+    public CreateMenuRequest() {
+    }
+
+    public CreateMenuRequest(String name, Long price, UUID menuGroupId, boolean displayed, List<MenuProductDto> menuProducts) {
+        this.name = name;
+        this.price = price;
+        this.menuGroupId = menuGroupId;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
     public String getName() {
         return name;
     }

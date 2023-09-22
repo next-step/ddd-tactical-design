@@ -69,6 +69,9 @@ public class MenuService {
      * - menuProductsRequest의 productId가 모두 존재하는지 확인한다. (getPrice)
      */
     private MenuProducts createMenuProducts(List<MenuProductDto> menuProductsRequest) {
+        if (menuProductsRequest == null) {
+            throw new IllegalArgumentException();
+        }
         List<ProductDto> products = productApiService.findAllByIdIn(menuProductsRequest.stream()
                 .map(MenuProductDto::getProductId)
                 .collect(Collectors.toList()));
