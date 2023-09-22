@@ -9,24 +9,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.products.domain.ChangedProductPriceEvent;
+import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.PurgomalumClient;
 
 @Service
 public class ProductService {
+    private final PurgomalumClient purgomalumClient;
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher publisher;
 
     public ProductService(
+            final PurgomalumClient purgomalumClient,
             final ProductRepository productRepository,
             final ApplicationEventPublisher publisher) {
+        this.purgomalumClient = purgomalumClient;
         this.productRepository = productRepository;
         this.publisher = publisher;
     }
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        return productRepository.save(new Product(UUID.randomUUID(), request.getDisplayedName(), request.getPrice()));
+        return productRepository.save(new Product(UUID.randomUUID(), new DisplayedName(request.getName(), purgomalumClient), request.getPrice()));
     }
 
     @Transactional
