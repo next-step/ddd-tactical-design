@@ -1,14 +1,12 @@
 package kitchenpos.eatinorders.domain.orders;
 
-import org.springframework.data.domain.AbstractAggregateRoot;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table(name = "eat_in_orders")
 @Entity
-public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
+public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -23,7 +21,7 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Embedded
     private EatInOrderLineItems orderLineItems;
 
-    @Transient
+    @Column(name = "order_table_id", nullable = false, columnDefinition = "binary(16)")
     private UUID orderTableId;
 
     protected EatInOrder() {
