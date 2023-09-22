@@ -19,6 +19,7 @@ import kitchenpos.order.takeoutorder.domain.TakeOutOrder;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderStatus;
 import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductName;
 
 public class Fixtures {
 
@@ -161,6 +162,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), name, BigDecimal.valueOf(price));
+        return new Product(UUID.randomUUID(), new ProductName(name), BigDecimal.valueOf(price));
     }
 }

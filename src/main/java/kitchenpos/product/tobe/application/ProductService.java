@@ -3,7 +3,6 @@ package kitchenpos.product.tobe.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
@@ -11,7 +10,9 @@ import kitchenpos.product.tobe.application.dto.ChangeProductPriceResponse;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
 import kitchenpos.product.tobe.application.dto.CreateProductResponse;
 import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductName;
 import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.service.ProductNamePolicy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,26 +21,17 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityClient profanityClient;
+    private final ProductNamePolicy productNamePolicy;
 
-    public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final ProfanityClient profanityClient
-    ) {
+    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, ProductNamePolicy productNamePolicy) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.profanityClient = profanityClient;
+        this.productNamePolicy = productNamePolicy;
     }
 
     @Transactional
     public CreateProductResponse create(final CreateProductRequest request) {
-        final String name = request.getName();
-        if (profanityClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-
-        final Product product = new Product(UUID.randomUUID(), name, request.getPrice());
+        final Product product = new Product(UUID.randomUUID(), ProductName.of(request.getName(), productNamePolicy), request.getPrice());
         return CreateProductResponse.of(productRepository.save(product));
     }
 

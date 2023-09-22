@@ -3,6 +3,7 @@ package kitchenpos.product.tobe.domain;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.product.tobe.domain.service.ProductNamePolicy;
 
 @Embeddable
 public class ProductName {
@@ -14,10 +15,14 @@ public class ProductName {
     }
 
     public ProductName(String value) {
-        if (Objects.isNull(value) || value.isBlank()) {
-            throw new IllegalArgumentException("상품 이름은 null 또는 공백을 허용하지 않습니다.");
-        }
         this.value = value;
+    }
+
+    public static ProductName of(String value, ProductNamePolicy productNamePolicy) {
+        ProductName productName = new ProductName(value);
+        productNamePolicy.validate(productName);
+
+        return productName;
     }
 
     public String getValue() {

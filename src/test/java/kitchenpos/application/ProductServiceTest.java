@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.ProductService;
@@ -18,6 +17,8 @@ import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.service.ProductNameNormalPolicy;
+import kitchenpos.product.tobe.domain.service.ProductNamePolicy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,15 +30,16 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProfanityClient profanityClient;
+    private ProductNamePolicy productNamePolicy;
+
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        profanityClient = new FakeProfanityClient();
-        productService = new ProductService(productRepository, menuRepository, profanityClient);
+        productNamePolicy = new ProductNameNormalPolicy(new FakeProfanityClient());
+        productService = new ProductService(productRepository, menuRepository, productNamePolicy);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
