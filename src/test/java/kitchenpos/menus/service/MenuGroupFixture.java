@@ -5,13 +5,12 @@ import java.util.UUID;
 import kitchenpos.menus.domain.MenuGroup;
 
 public class MenuGroupFixture {
-
-    private final MenuGroup menuGroup;
+    private UUID id;
+    private String name;
 
     public MenuGroupFixture() {
-        this.menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName("추천 메뉴");
+        id = UUID.randomUUID();
+        name = "추천 메뉴";
     }
 
     public static MenuGroupFixture builder() {
@@ -19,12 +18,11 @@ public class MenuGroupFixture {
     }
 
     public MenuGroupFixture name(String name) {
-        menuGroup.setName(name);
+        this.name = name;
         return this;
     }
 
-
     public MenuGroup build() {
-        return menuGroup;
+        return new MenuGroup(id, name);
     }
 }
