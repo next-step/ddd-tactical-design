@@ -279,7 +279,7 @@ docker compose -p kitchenpos up -d
 ### Eat-In Order (매장 주문)
 #### 속성
 - OrderStatus를 가진다.
-- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- Eat-In Order는 Order Line Item 1개 이상 가진다.
 - OrderDateTime을 가진다.
 - OrderLineItem 1개 이상 가진다.
 - OrderTableId는 필수다.
@@ -289,12 +289,12 @@ docker compose -p kitchenpos up -d
 - Eat-In Order의 OrderStatus는 Waiting → Accepted → Served → Completed 순서를 가진다.
   - 명시된 순서를 지키지 않으면 Order Status는 변경할 수 없다.
 - Eat-In Order가 들어오면 Order Status는 Waiting이다.
+  - Eat-In Order는 Hide된 Menu를 주문할 수 없다.
+  - Eat-In Order는 빈 테이블에 주문할 수 없다.
 - Waiting Order를 Accepted 한다.
 - Accepted Order를 Served한다.
 - Served Order를 Completed한다.
   - 주문이 Completed된 OrderTable을 Clear한다.
-- Eat-In Order은 Hide된 Menu를 주문할 수 없다.
-- Eat-In Order은 빈 테이블에 주문할 수 없다.
 - OrderLineItem은 주문할 당시의 메뉴 가격을 가진다.
   - 주문 후에 Menu의 가격이 변경되더라도 주문의 가격은 변경이 없어야한다.
 
@@ -303,7 +303,7 @@ docker compose -p kitchenpos up -d
 ### Delivery Order (배달주문)
 #### 속성
 - OrderStatus를 가진다.
-- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- DeliveryOrder Order Line Item 1개 이상 가진다.
 - OrderDateTime을 가진다.
 - 주문은 Hide된 Menu를 주문할 수 없다.
 - Order Line Item 1개 이상 가진다.
@@ -326,7 +326,7 @@ docker compose -p kitchenpos up -d
 ### Take-Out Order (포장주문)
 #### 속성
 - OrderStatus를 가진다.
-- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- DeliveryOrder Order Line Item 1개 이상 가진다.
 - OrderDateTime을 가진다.
 - 주문은 Hide된 Menu를 주문할 수 없다.
 - Order Line Item 1개 이상 가진다.
