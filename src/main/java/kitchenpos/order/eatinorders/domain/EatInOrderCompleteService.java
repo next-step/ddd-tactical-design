@@ -26,7 +26,7 @@ public class EatInOrderCompleteService {
             throw new IllegalStateException();
         }
         this.publisher.publishEvent(new OrderStatusChangeEvent(order.getId(), OrderStatus.COMPLETED));
-        this.orderTableClearService.clear(order.getOrderTable());
+        this.orderTableClearService.clear(order);
         return orderRepository.save(order);
     }
 }
