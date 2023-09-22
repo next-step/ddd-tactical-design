@@ -21,7 +21,7 @@ public class OrderLineItemsService {
     public OrderLineItems getOrderLineItems(List<OrderLineItem> orderLineItems) {
         validMenuSize(orderLineItems);
         return new OrderLineItems(orderLineItems.stream()
-                .map(eatInOrderLineItem -> new OrderLineItem(getMenu(eatInOrderLineItem), eatInOrderLineItem.getQuantity(), eatInOrderLineItem.getPrice()))
+                .map(eatInOrderLineItem -> new OrderLineItem(getMenu(eatInOrderLineItem).getId(), eatInOrderLineItem.getQuantity(), eatInOrderLineItem.getPrice()))
                 .collect(Collectors.toList()));
     }
 

@@ -1,7 +1,5 @@
 package kitchenpos.order.domain;
 
-import kitchenpos.menus.domain.Menu;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,31 +11,18 @@ public class OrderLineItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
-
+    private UUID menuId;
     @Column(name = "quantity", nullable = false)
     private long quantity;
-
-    @Transient
-    private UUID menuId;
-
     @Transient
     private BigDecimal price;
 
     public OrderLineItem() {
     }
 
-    public OrderLineItem(Menu menu, long quantity, BigDecimal price) {
-        this.menu = menu;
+    public OrderLineItem(UUID menuId, long quantity, BigDecimal price) {
         this.quantity = quantity;
-        this.menuId = menu.getId();
+        this.menuId = menuId;
         this.price = price;
     }
 
@@ -45,45 +30,20 @@ public class OrderLineItem {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
 
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
     public BigDecimal multiply() {
-        return this.menu.getPrice().multiply(BigDecimal.valueOf(this.quantity));
+        return this.price.multiply(BigDecimal.valueOf(this.quantity));
     }
-
-
 }
