@@ -6,7 +6,6 @@ import kitchenpos.menus.domain.exception.InvalidMenuProductQuantityException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.application.ProductPriceChangeService;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -19,6 +18,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -39,7 +39,8 @@ class MenuServiceTest {
     private MenuGroupService menuGroupService;
     private MenuCreateService menuCreateService;
     private MenuChangePriceService menuChangePriceService;
-    private ProductPriceChangeService productPriceChangeService;
+
+    ApplicationEventPublisher publisher;
 
     private static List<Arguments> menuProducts() {
         return Arrays.asList(
@@ -60,10 +61,10 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService, purgomalumClient);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
+
+        menuCreateService = new MenuCreateService(new ProductService(productRepository,  purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository,  purgomalumClient, publisher));
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
-        productPriceChangeService = new ProductPriceChangeService(menuService);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,7 +38,7 @@ class ProductServiceTest {
     private PurgomalumClient purgomalumClient;
     private MenuChangePriceService menuChangePriceService;
 
-    private ProductPriceChangeService productPriceChangeService;
+    ApplicationEventPublisher publisher = null;
 
     @BeforeEach
     void setUp() {
@@ -46,11 +47,11 @@ class ProductServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService, purgomalumClient);
+
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository,  purgomalumClient, publisher));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository,  purgomalumClient, publisher), menuGroupService, purgomalumClient);
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
-        productPriceChangeService = new ProductPriceChangeService(menuService);
-        productService = new ProductService(productRepository, productPriceChangeService, purgomalumClient);
+        productService = new ProductService(productRepository,  purgomalumClient, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

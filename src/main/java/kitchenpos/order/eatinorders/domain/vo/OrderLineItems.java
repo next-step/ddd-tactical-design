@@ -3,13 +3,20 @@ package kitchenpos.order.eatinorders.domain.vo;
 import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.support.ValueObject;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 @Embeddable
 public class OrderLineItems extends ValueObject {
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "order_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+    )
     private List<OrderLineItem> orderLineItems;
 
     public OrderLineItems() {

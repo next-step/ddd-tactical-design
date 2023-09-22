@@ -15,8 +15,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static kitchenpos.Fixtures.*;
@@ -51,6 +53,7 @@ class OrderServiceTest {
     private DeliveryOrderCompleteDeliveryService deliveryOrderCompleteDeliveryService;
     private DeliveryOrderService deliveryOrderService;
     private OrderStrategy orderStrategy;
+    private ApplicationEventPublisher publisher = null;
 
     private static List<Arguments> orderLineItems() {
         return Arrays.asList(
@@ -78,26 +81,25 @@ class OrderServiceTest {
         orderLineItemsService = new OrderLineItemsService(menuRepository);
 
         eatInOrderCreateService = new EatInOrderCreateService(orderRepository, orderTableRepository, orderLineItemsService);
-        eatInOrderAcceptService = new EatInOrderAcceptService(orderRepository);
-        eatInOrderServeService = new EatInOrderServeService(orderRepository);
-        eatInOrderCompleteService = new EatInOrderCompleteService(orderRepository, new OrderTableClearService(orderTableRepository, new OrderStatusService(orderRepository)));
+        eatInOrderAcceptService = new EatInOrderAcceptService(orderRepository, publisher);
+        eatInOrderServeService = new EatInOrderServeService(orderRepository, publisher);
+        eatInOrderCompleteService = new EatInOrderCompleteService(orderRepository, new OrderTableClearService(orderTableRepository, new OrderStatusService(orderRepository)), publisher);
 
         eatInOrderService = new EatInOrderService(eatInOrderCreateService, eatInOrderAcceptService, eatInOrderServeService, eatInOrderCompleteService);
 
         takeOutOrderCreateService = new TakeOutOrderCreateService(orderRepository, orderLineItemsService);
-        takeOutOrderAcceptService = new TakeOutOrderAcceptService(orderRepository);
-        takeOutOrderServeService = new TakeOutOrderServeService(orderRepository);
-        takeOutOrderCompleteService = new TakeOutOrderCompleteService(orderRepository);
+        takeOutOrderAcceptService = new TakeOutOrderAcceptService(orderRepository, publisher);
+        takeOutOrderServeService = new TakeOutOrderServeService(orderRepository, publisher);
+        takeOutOrderCompleteService = new TakeOutOrderCompleteService(orderRepository, publisher);
 
         takeOutOrderService = new TakeOutOrderService(takeOutOrderCreateService, takeOutOrderAcceptService, takeOutOrderServeService, takeOutOrderCompleteService);
 
-
         deliveryOrderCreateService = new DeliveryOrderCreateService(orderRepository, orderLineItemsService);
-        deliveryOrderAcceptService = new DeliveryOrderAcceptService(orderRepository, kitchenridersClient);
-        deliveryOrderServeService = new DeliveryOrderServeService(orderRepository);
-        deliveryOrderCompleteService = new DeliveryOrderCompleteService(orderRepository);
-        deliveryOrderStartDeliveryService = new DeliveryOrderStartDeliveryService(orderRepository);
-        deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository);
+        deliveryOrderAcceptService = new DeliveryOrderAcceptService(orderRepository, null, kitchenridersClient);
+        deliveryOrderServeService = new DeliveryOrderServeService(orderRepository, publisher);
+        deliveryOrderCompleteService = new DeliveryOrderCompleteService(orderRepository, publisher);
+        deliveryOrderStartDeliveryService = new DeliveryOrderStartDeliveryService(orderRepository, publisher);
+        deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository, publisher);
         deliveryOrderService = new DeliveryOrderService(deliveryOrderCreateService, deliveryOrderAcceptService, deliveryOrderServeService, deliveryOrderCompleteService, deliveryOrderStartDeliveryService, deliveryOrderCompleteDeliveryService);
 
         orderStrategy = new OrderStrategy(new ArrayList<>(Arrays.asList(eatInOrderService, takeOutOrderService, deliveryOrderService)));
@@ -399,11 +401,7 @@ class OrderServiceTest {
             final String deliveryAddress,
             final OrderLineItem... orderLineItems
     ) {
-        final Order order = new Order();
-        order.setType(type);
-        order.setDeliveryAddress(deliveryAddress);
-        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItems)));
-        return order;
+        return new Order(UUID.randomUUID(), type, OrderStatus.WAITING, LocalDateTime.now(), new OrderLineItems(Arrays.asList(orderLineItems)), deliveryAddress, null, null);
     }
 
     private Order createOrderRequest(final OrderType orderType, final OrderLineItem... orderLineItems) {
@@ -411,11 +409,8 @@ class OrderServiceTest {
     }
 
     private Order createOrderRequest(final OrderType orderType, final List<OrderLineItem> orderLineItems) {
-        final Order order = new Order();
-        order.setType(orderType);
-        order.setOrderLineItems(new OrderLineItems(orderLineItems));
-        order.setOrderTable(orderTable(false, 0));
-        return order;
+        OrderTable orderTable = orderTable(false, 0);
+        return new Order(UUID.randomUUID(), orderType, OrderStatus.WAITING, LocalDateTime.now(), new OrderLineItems(orderLineItems), null, orderTable, orderTable.getId());
     }
 
     private Order createOrderRequest(
@@ -423,10 +418,6 @@ class OrderServiceTest {
             final UUID orderTableId,
             final OrderLineItem... orderLineItems
     ) {
-        final Order order = new Order();
-        order.setType(type);
-        order.setOrderTableId(orderTableId);
-        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItems)));
-        return order;
+        return new Order(UUID.randomUUID(), type, OrderStatus.WAITING, LocalDateTime.now(), new OrderLineItems(Arrays.asList(orderLineItems)), null, null, orderTableId);
     }
 }

@@ -52,36 +52,15 @@ public class Fixtures {
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
+        return new Order(UUID.randomUUID(), OrderType.DELIVERY, status, LocalDateTime.of(2020, 1, 1, 12, 0), new OrderLineItems(Arrays.asList(orderLineItem())), deliveryAddress, null, null);
     }
 
     public static Order order(final OrderStatus status) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
-        return order;
+        return new Order(UUID.randomUUID(), OrderType.TAKEOUT, status, LocalDateTime.of(2020, 1, 1, 12, 0), new OrderLineItems(Arrays.asList(orderLineItem())), null, null, null);
     }
 
     public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(new OrderLineItems(Arrays.asList(orderLineItem())));
-        order.setOrderTable(orderTable);
-        order.setOrderTableId(orderTable.getId());
-        return order;
+        return new Order(UUID.randomUUID(), OrderType.EAT_IN, status, LocalDateTime.of(2020, 1, 1, 12, 0), new OrderLineItems(Arrays.asList(orderLineItem())), null, orderTable, orderTable.getId());
     }
 
     public static OrderLineItem orderLineItem() {

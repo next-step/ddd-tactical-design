@@ -4,7 +4,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
 import kitchenpos.support.ValueObject;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +13,13 @@ import java.util.stream.Collectors;
 
 @Embeddable
 public class MenuProducts extends ValueObject {
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
     List<MenuProduct> menuProducts;
 
     public MenuProducts() {
