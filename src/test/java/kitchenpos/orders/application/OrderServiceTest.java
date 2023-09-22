@@ -56,7 +56,7 @@ class OrderServiceTest {
         kitchenridersClient = new FakeKitchenridersClient();
         orderLineItemsService = new OrderLineItemsService(menuRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository);
-        publisher = new FakeApplicationEventPublisher(orderRepository);
+        publisher = new FakeOrderApplicationEventPublisher(orderRepository);
         orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService);
     }
 

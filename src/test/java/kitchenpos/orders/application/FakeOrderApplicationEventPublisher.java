@@ -5,10 +5,10 @@ import kitchenpos.order.event.OrderStatusChangeEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
-public class FakeApplicationEventPublisher implements ApplicationEventPublisher {
+public class FakeOrderApplicationEventPublisher implements ApplicationEventPublisher {
     private final OrderRepository orderRepository;
 
-    public FakeApplicationEventPublisher(OrderRepository orderRepository) {
+    public FakeOrderApplicationEventPublisher(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

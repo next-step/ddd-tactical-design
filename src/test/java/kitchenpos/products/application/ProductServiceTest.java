@@ -28,16 +28,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
-    ApplicationEventPublisher publisher = null;
+    private ApplicationEventPublisher publisher;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private MenuService menuService;
     private MenuGroupService menuGroupService;
     private ProductService productService;
     private MenuCreateService menuCreateService;
     private PurgomalumClient purgomalumClient;
     private MenuChangePriceService menuChangePriceService;
+    private MenuService menuService;
 
     @BeforeEach
     void setUp() {
@@ -45,11 +45,11 @@ class ProductServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
-        menuGroupService = new MenuGroupService(menuGroupRepository);
-
         menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, purgomalumClient, publisher));
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
+        menuGroupService = new MenuGroupService(menuGroupRepository);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        publisher = new FakeProductApplicationEventPublisher(menuService);
         productService = new ProductService(productRepository, purgomalumClient, publisher);
     }
 
