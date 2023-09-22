@@ -9,7 +9,6 @@ import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.domain.ordertables.OrderTableRepository;
 import kitchenpos.eatinorders.infrastructure.MenuClientImpl;
-import kitchenpos.eatinorders.infrastructure.OrderTableClientImpl;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -37,7 +36,7 @@ class EatInOrderServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private MenuClient menuClient;
-    private OrderTableClient orderTableClient;
+    private EatInOrderPolicy eatInOrderPolicy;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService eatInOrderService;
 
@@ -47,9 +46,9 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         menuRepository = new InMemoryMenuRepository();
         menuClient = new MenuClientImpl(menuRepository);
-        orderTableClient = new OrderTableClientImpl(orderTableRepository);
+        eatInOrderPolicy = new EatInOrderPolicy(orderTableRepository);
         productRepository = new InMemoryProductRepository();
-        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuClient, orderTableClient);
+        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuClient, eatInOrderPolicy);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -126,7 +125,7 @@ class EatInOrderServiceTest {
     void accept() {
         final Menu menu = menuRepository.save(menu(true, productRepository));
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final UUID orderId = eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, orderTableClient)).getId();
+        final UUID orderId = eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy)).getId();
         final EatInOrder actual = eatInOrderService.accept(orderId);
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
@@ -145,9 +144,9 @@ class EatInOrderServiceTest {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         return Arrays.asList(
-                acceptedOrder(orderTable, menu, menuClient, orderTableClient),
-                servedOrder(orderTable, menu, menuClient, orderTableClient),
-                completedOrder(orderTable, menu, menuClient, orderTableClient)
+                acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                servedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
         );
     }
 
@@ -156,7 +155,7 @@ class EatInOrderServiceTest {
     void serve() {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final UUID orderId = eatInOrderRepository.save(acceptedOrder(orderTable, menu, menuClient, orderTableClient)).getId();
+        final UUID orderId = eatInOrderRepository.save(acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy)).getId();
         final EatInOrder actual = eatInOrderService.serve(orderId);
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
@@ -175,9 +174,9 @@ class EatInOrderServiceTest {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         return Arrays.asList(
-                waitingOrder(orderTable, menu, menuClient, orderTableClient),
-                servedOrder(orderTable, menu, menuClient, orderTableClient),
-                completedOrder(orderTable, menu, menuClient, orderTableClient)
+                waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                servedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
         );
     }
 
@@ -186,7 +185,7 @@ class EatInOrderServiceTest {
     void complete() {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final EatInOrder expected = eatInOrderRepository.save(servedOrder(orderTable, menu, menuClient, orderTableClient));
+        final EatInOrder expected = eatInOrderRepository.save(servedOrder(orderTable, menu, menuClient, eatInOrderPolicy));
         final EatInOrder actual = eatInOrderService.complete(expected.getId());
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
@@ -205,9 +204,9 @@ class EatInOrderServiceTest {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         return Arrays.asList(
-                waitingOrder(orderTable, menu, menuClient, orderTableClient),
-                acceptedOrder(orderTable, menu, menuClient, orderTableClient),
-                completedOrder(orderTable, menu, menuClient, orderTableClient)
+                waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
         );
     }
 
@@ -216,7 +215,7 @@ class EatInOrderServiceTest {
     void completeEatInOrder() {
         final Menu menu = menuRepository.save(menu(productRepository));
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final EatInOrder expected = eatInOrderRepository.save(servedOrder(orderTable, menu, menuClient, orderTableClient));
+        final EatInOrder expected = eatInOrderRepository.save(servedOrder(orderTable, menu, menuClient, eatInOrderPolicy));
         final EatInOrder actual = eatInOrderService.complete(expected.getId());
         assertAll(
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
@@ -230,7 +229,7 @@ class EatInOrderServiceTest {
     void completeNotTable() {
         final Menu menu = menuRepository.save(menu(productRepository));
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final EatInOrder order = eatInOrderRepository.save(acceptedOrder(orderTable, menu, menuClient, orderTableClient));
+        final EatInOrder order = eatInOrderRepository.save(acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy));
         order.served();
         assertAll(
                 () -> assertThat(order.getStatus()).isEqualTo(OrderStatus.SERVED),
@@ -244,8 +243,8 @@ class EatInOrderServiceTest {
     void findAll() {
         final Menu menu = menuRepository.save(menu(productRepository));
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, orderTableClient));
-        eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, orderTableClient));
+        eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy));
+        eatInOrderRepository.save(waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy));
         final List<EatInOrder> actual = eatInOrderService.findAll();
         assertThat(actual).hasSize(2);
     }

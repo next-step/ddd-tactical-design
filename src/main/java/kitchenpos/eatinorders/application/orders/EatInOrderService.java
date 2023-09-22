@@ -14,16 +14,16 @@ import java.util.UUID;
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuClient menuClient;
-    private final OrderTableClient orderTableClient;
+    private final EatInOrderPolicy eatInOrderPolicy;
 
     public EatInOrderService(
             final EatInOrderRepository eatInOrderRepository,
             final MenuClient menuClient,
-            final OrderTableClient orderTableClient
+            final EatInOrderPolicy eatInOrderPolicy
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuClient = menuClient;
-        this.orderTableClient = orderTableClient;
+        this.eatInOrderPolicy = eatInOrderPolicy;
     }
 
     @Transactional
@@ -35,7 +35,7 @@ public class EatInOrderService {
                 LocalDateTime.now(),
                 orderLineItems,
                 request.getOrderTableId(),
-                orderTableClient
+                eatInOrderPolicy
         );
         return eatInOrderRepository.save(eatInOrder);
     }
@@ -60,7 +60,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        eatInOrder.complete(orderTableClient);
+        eatInOrder.complete(eatInOrderPolicy);
         return eatInOrder;
     }
 

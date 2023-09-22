@@ -40,9 +40,9 @@ public class EatInOrder {
             LocalDateTime orderDateTime,
             EatInOrderLineItems orderLineItems,
             UUID orderTableId,
-            OrderTableClient orderTableClient
+            EatInOrderPolicy eatInOrderPolicy
     ) {
-        orderTableClient.validOrderTableIdForOrder(orderTableId);
+        eatInOrderPolicy.validOrderTableIdForOrder(orderTableId);
         return new EatInOrder(uuid, OrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
     }
 
@@ -60,12 +60,12 @@ public class EatInOrder {
         this.status = OrderStatus.SERVED;
     }
 
-    public void complete(OrderTableClient orderTableClient) {
+    public void complete(EatInOrderPolicy eatInOrderPolicy) {
         if (this.status != OrderStatus.SERVED) {
             throw new IllegalStateException("서빙 완료가 아닌 주문은 완료상태로 변경할 수 없습니다. 주문상태: " + this.status);
         }
         this.status = OrderStatus.COMPLETED;
-        orderTableClient.clearOrderTable(this.orderTableId);
+        eatInOrderPolicy.clearOrderTable(this);
     }
 
     public UUID getId() {

@@ -4,7 +4,6 @@ import kitchenpos.eatin_orders.infrastructure.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.domain.ordertables.OrderTableRepository;
 import kitchenpos.eatinorders.infrastructure.MenuClientImpl;
-import kitchenpos.eatinorders.infrastructure.OrderTableClientImpl;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -34,7 +33,7 @@ class EatInOrderTest {
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private MenuClient menuClient;
-    private OrderTableClient orderTableClient;
+    private EatInOrderPolicy eatInOrderPolicy;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +41,7 @@ class EatInOrderTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         menuClient = new MenuClientImpl(menuRepository);
-        orderTableClient = new OrderTableClientImpl(orderTableRepository);
+        eatInOrderPolicy = new EatInOrderPolicy(orderTableRepository);
     }
 
     @DisplayName("승인 대기 중인 주문을 생성할 수 있다.")
@@ -55,7 +54,7 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         );
         assertAll(
                 () -> assertNotNull(eatInOrder),
@@ -74,7 +73,7 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 UUID.randomUUID(),
-                orderTableClient
+                eatInOrderPolicy
         )).isInstanceOf(NoSuchElementException.class);
     }
 
@@ -88,7 +87,7 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         )).isInstanceOf(IllegalStateException.class);
     }
 
@@ -102,7 +101,7 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         );
         eatInOrder.accept();
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
@@ -120,9 +119,9 @@ class EatInOrderTest {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         return Arrays.asList(
-                acceptedOrder(orderTable, menu, menuClient, orderTableClient),
-                servedOrder(orderTable, menu, menuClient, orderTableClient),
-                completedOrder(orderTable, menu, menuClient, orderTableClient)
+                acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                servedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
         );
     }
 
@@ -136,7 +135,7 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         );
         eatInOrder.accept();
         eatInOrder.served();
@@ -155,9 +154,9 @@ class EatInOrderTest {
         final Menu menu = menuRepository.save(menu(productRepository));
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         return Arrays.asList(
-                waitingOrder(orderTable, menu, menuClient, orderTableClient),
-                servedOrder(orderTable, menu, menuClient, orderTableClient),
-                completedOrder(orderTable, menu, menuClient, orderTableClient)
+                waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                servedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
         );
     }
 
@@ -171,11 +170,11 @@ class EatInOrderTest {
                 LocalDateTime.of(2020, 1, 1, 12, 0, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         );
         eatInOrder.accept();
         eatInOrder.served();
-        eatInOrder.complete(orderTableClient);
+        eatInOrder.complete(eatInOrderPolicy);
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 }

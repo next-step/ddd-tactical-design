@@ -19,14 +19,14 @@ public class EatInOrderFixtures {
             final OrderTable orderTable,
             final Menu menu,
             final MenuClient menuClient,
-            final OrderTableClient orderTableClient
+            final EatInOrderPolicy eatInOrderPolicy
     ) {
         return EatInOrder.waitingOrder(
                 UUID.randomUUID(),
                 LocalDateTime.of(2020, 1, 1, 12, 0),
                 EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
                 orderTable.getId(),
-                orderTableClient
+                eatInOrderPolicy
         );
     }
 
@@ -34,13 +34,13 @@ public class EatInOrderFixtures {
             final OrderTable orderTable,
             final Menu menu,
             final MenuClient menuClient,
-            final OrderTableClient orderTableClient
+            final EatInOrderPolicy eatInOrderPolicy
     ) {
         final EatInOrder order = waitingOrder(
                 orderTable,
                 menu,
                 menuClient,
-                orderTableClient
+                eatInOrderPolicy
         );
         order.accept();
         return order;
@@ -50,13 +50,13 @@ public class EatInOrderFixtures {
             final OrderTable orderTable,
             final Menu menu,
             final MenuClient menuClient,
-            final OrderTableClient orderTableClient
+            final EatInOrderPolicy eatInOrderPolicy
     ) {
         EatInOrder order = waitingOrder(
                 orderTable,
                 menu,
                 menuClient,
-                orderTableClient
+                eatInOrderPolicy
         );
         order.accept();
         order.served();
@@ -67,17 +67,17 @@ public class EatInOrderFixtures {
             final OrderTable orderTable,
             final Menu menu,
             final MenuClient menuClient,
-            final OrderTableClient orderTableClient
+            final EatInOrderPolicy eatInOrderPolicy
     ) {
         EatInOrder order = waitingOrder(
                 orderTable,
                 menu,
                 menuClient,
-                orderTableClient
+                eatInOrderPolicy
         );
         order.accept();
         order.served();
-        order.complete(orderTableClient);
+        order.complete(eatInOrderPolicy);
         return order;
     }
 

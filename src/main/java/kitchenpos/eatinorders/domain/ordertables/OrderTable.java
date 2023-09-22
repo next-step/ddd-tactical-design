@@ -49,6 +49,10 @@ public class OrderTable {
         this.numberOfGuests = numberOfGuests;
     }
 
+    public boolean isClear() {
+        return !this.occupied;
+    }
+
     private boolean isClearTable() {
         return !this.occupied;
     }
