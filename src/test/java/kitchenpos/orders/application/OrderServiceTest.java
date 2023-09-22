@@ -153,11 +153,11 @@ class OrderServiceTest {
     @ParameterizedTest
     void createWithoutEatInOrder(final long quantity) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final Order expected = createOrderRequest(
-                OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, quantity)
-        );
-        assertThatThrownBy(() -> orderService.create(expected))
-                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThatThrownBy(() -> {
+            final Order expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, quantity));
+            orderService.create(expected);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("배달 주소가 올바르지 않으면 배달 주문을 등록할 수 없다.")

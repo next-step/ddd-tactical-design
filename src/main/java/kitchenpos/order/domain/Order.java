@@ -52,7 +52,7 @@ public class Order {
     }
 
     public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, String deliveryAddress, OrderTable orderTable, UUID orderTableId) {
-        validateOrderLineItems(orderLineItems);
+        validateOrderLineItems(type, orderLineItems);
         this.id = id;
         this.type = type;
         this.status = status;
@@ -67,8 +67,8 @@ public class Order {
         this.status = status;
     }
 
-    public void validateOrderLineItems(OrderLineItems orderLineItems) {
-        if (this.type != OrderType.EAT_IN) {
+    public void validateOrderLineItems(OrderType type, OrderLineItems orderLineItems) {
+        if (type != OrderType.EAT_IN) {
             orderLineItems.getOrderLineItems().stream()
                     .map(OrderLineItem::getQuantity)
                     .forEach(quantity -> {
@@ -117,18 +117,20 @@ public class Order {
     }
 
     public Order complete(ApplicationEventPublisher publisher, OrderTableClearService orderTableClearService) {
-        if (getStatus() != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        if (getType() == OrderType.EAT_IN) {
-            orderTableClearService.clear(this);
-        } else if (getType() == OrderType.DELIVERY) {
-            if (status != OrderStatus.DELIVERED) {
+        if (getType() == OrderType.DELIVERY) {
+            if (getStatus() != OrderStatus.DELIVERED) {
                 throw new IllegalStateException();
             }
         }
-
+        if (getType() == OrderType.EAT_IN || getType() == OrderType.TAKEOUT) {
+            if (getStatus() != OrderStatus.SERVED) {
+                throw new IllegalStateException();
+            }
+        }
         publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.COMPLETED));
+        if (getType() == OrderType.EAT_IN) {
+            orderTableClearService.clear(this);
+        }
         return this;
     }
 

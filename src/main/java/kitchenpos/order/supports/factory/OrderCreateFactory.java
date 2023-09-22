@@ -18,10 +18,10 @@ public class OrderCreateFactory {
     }
 
     public static Order takeOutOrder(OrderLineItems orderLineItems) {
-        return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, null, null);
+        return new Order(UUID.randomUUID(), OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, null, null);
     }
 
     public static Order eatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-        return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, orderTable, orderTable.getId());
+        return new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, orderTable, orderTable.getId());
     }
 }
