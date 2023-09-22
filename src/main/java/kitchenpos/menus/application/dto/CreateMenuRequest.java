@@ -3,14 +3,12 @@ package kitchenpos.menus.application.dto;
 import java.util.List;
 import java.util.UUID;
 
-import kitchenpos.menus.domain.MenuProduct;
-
 public class CreateMenuRequest {
     private String name;
     private Long price;
     private UUID menuGroupId;
     private boolean displayed;
-    private List<MenuProduct> menuProducts;
+    private List<MenuProductDto> menuProducts;
 
     public String getName() {
         return name;
@@ -28,7 +26,7 @@ public class CreateMenuRequest {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public List<MenuProductDto> getMenuProducts() {
         return menuProducts;
     }
 }

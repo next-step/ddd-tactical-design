@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
 import kitchenpos.menus.application.dto.CreateMenuRequest;
+import kitchenpos.menus.application.dto.MenuProductDto;
 import kitchenpos.menus.application.dto.ProductDto;
 import kitchenpos.menus.domain.DisplayedName;
 import kitchenpos.menus.domain.Menu;
@@ -21,6 +22,7 @@ import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.Price;
 import kitchenpos.menus.domain.PurgomalumClient;
+import kitchenpos.menus.domain.Quantity;
 import kitchenpos.menus.infra.DefaultProductApiService;
 
 @Service
@@ -66,9 +68,9 @@ public class MenuService {
      * menuProductsRequest로 MenuProducts를 만든다.
      * - menuProductsRequest의 productId가 모두 존재하는지 확인한다. (getPrice)
      */
-    private MenuProducts createMenuProducts(List<MenuProduct> menuProductsRequest) {
+    private MenuProducts createMenuProducts(List<MenuProductDto> menuProductsRequest) {
         List<ProductDto> products = productApiService.findAllByIdIn(menuProductsRequest.stream()
-                .map(MenuProduct::getProductId)
+                .map(MenuProductDto::getProductId)
                 .collect(Collectors.toList()));
 
         return new MenuProducts(menuProductsRequest.stream()
@@ -77,12 +79,12 @@ public class MenuService {
         );
     }
 
-    private MenuProduct createMenuProduct(List<ProductDto> products, MenuProduct menuProduct) {
+    private MenuProduct createMenuProduct(List<ProductDto> products, MenuProductDto menuProduct) {
         UUID productId = menuProduct.getProductId();
         ProductDto productDto = findProductDto(products, productId);
         return new MenuProduct(
                 productId,
-                menuProduct.getQuantity(),
+                new Quantity(menuProduct.getQuantity()),
                 new Price(productDto.getPrice())
         );
     }
