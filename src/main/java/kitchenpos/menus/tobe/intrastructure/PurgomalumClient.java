@@ -9,10 +9,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class MenuPurgomalumClient implements MenuNameProfanities {
+public class PurgomalumClient implements MenuNameProfanities {
     private final RestTemplate restTemplate;
 
-    public MenuPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
+    public PurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

@@ -5,21 +5,21 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuName {
+public class Name {
     @Column(name = "name", nullable = false)
     private String value;
 
-    protected MenuName() {
+    protected Name() {
     }
 
-    private MenuName(final String value) {
+    private Name(final String value) {
         this.value = value;
     }
 
-    public static MenuName from(final String value, final MenuNamePolicy menuNamePolicy) {
-        MenuName menuName = new MenuName(value);
-        menuNamePolicy.validateName(menuName);
-        return menuName;
+    public static Name from(final String value, final MenuNamePolicy menuNamePolicy) {
+        Name name = new Name(value);
+        menuNamePolicy.validateName(name);
+        return name;
     }
 
     public String getValue() {
@@ -30,7 +30,7 @@ public class MenuName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuName that = (MenuName) o;
+        Name that = (Name) o;
         return Objects.equals(value, that.value);
     }
 

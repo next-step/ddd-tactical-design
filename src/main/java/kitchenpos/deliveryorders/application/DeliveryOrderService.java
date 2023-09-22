@@ -52,7 +52,7 @@ public class DeliveryOrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().getValue().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (menu.getPriceValue().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final DeliveryOrderLineItem orderLineItem = new DeliveryOrderLineItem();
@@ -83,7 +83,7 @@ public class DeliveryOrderService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final DeliveryOrderLineItem orderLineItem : order.getOrderLineItems()) {
             sum = orderLineItem.getMenu()
-                    .getPrice().getValue()
+                    .getPriceValue()
                     .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
         }
         kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());

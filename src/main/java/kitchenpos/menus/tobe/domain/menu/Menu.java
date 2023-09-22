@@ -15,10 +15,10 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName name;
+    private Name name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -37,11 +37,11 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public Menu(Name name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         this(null, name, price, menuGroup, displayed, menuProducts);
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public Menu(UUID id, Name name, Price price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         this.validate(price, menuProducts);
         this.id = id;
         this.name = name;
@@ -51,7 +51,18 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    private void validate(MenuPrice price, MenuProducts menuProducts) {
+    public static Menu from(UUID id, String name, MenuNamePolicy menuNamePolicy, BigDecimal price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        return new Menu(
+                id,
+                Name.from(name, menuNamePolicy),
+                Price.from(price),
+                menuGroup,
+                displayed,
+                menuProducts
+        );
+    }
+
+    private void validate(Price price, MenuProducts menuProducts) {
         if (price.isBiggerThan(menuProducts.totalAmount())) {
             throw new IllegalArgumentException();
         }
@@ -65,15 +76,16 @@ public class Menu {
     }
 
     private boolean isPriceBiggerThanMenuProductsTotalAmount() {
-        MenuPrice totalAmount = this.menuProducts.totalAmount();
+        Price totalAmount = this.menuProducts.totalAmount();
         return this.price.isBiggerThan(totalAmount);
     }
 
-    public void changePrice(MenuPrice price) {
-        if (price.isBiggerThan(this.menuProducts.totalAmount())) {
+    public void changePrice(BigDecimal price) {
+        Price menuPrice = Price.from(price);
+        if (menuPrice.isBiggerThan(this.menuProducts.totalAmount())) {
             throw new IllegalArgumentException();
         }
-        this.price = price;
+        this.price = menuPrice;
     }
 
     public void display() {
@@ -99,17 +111,21 @@ public class Menu {
         return this.price.getValue();
     }
 
+    public String getNameValue() {
+        return this.name.getValue();
+    }
+
     public UUID getId() {
         return id;
     }
 
 
-    public MenuName getName() {
+    public Name getName() {
         return name;
     }
 
 
-    public MenuPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 

@@ -68,8 +68,8 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(MenuName.from(expected.getName(), menuNamePolicy)),
-                () -> assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice())),
+                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName(), menuNamePolicy),
+                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice()),
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                 () -> assertThat(actual.getMenuProducts().getMenuProducts()).hasSize(1)
@@ -154,7 +154,7 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
         final MenuPriceChangeRequest expected = changePriceRequest(16_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice()));
+        assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")

@@ -1,8 +1,5 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.ordertables.NumberOfGuests;
-import kitchenpos.eatinorders.domain.ordertables.OrderTable;
-import kitchenpos.eatinorders.domain.ordertables.OrderTableName;
 import kitchenpos.menus.application.FakeMenuNameProfanities;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -35,10 +32,10 @@ public class Fixtures {
         final Product product = product();
         productRepository.save(product);
         MenuProductMaterial menuProductMaterial = menuProductMaterial(product.getId());
-        return new Menu(
+        return Menu.from(
                 UUID.randomUUID(),
-                MenuName.from("후라이드+후라이드", menuNamePolicy()),
-                MenuPrice.from(BigDecimal.valueOf(price)),
+                "후라이드+후라이드", menuNamePolicy(),
+                BigDecimal.valueOf(price),
                 menuGroup(),
                 displayed,
                 MenuProducts.from(List.of(menuProductMaterial), new ProductClientImpl(productRepository))
@@ -52,10 +49,11 @@ public class Fixtures {
     public static Menu menu(final long price, final boolean displayed, ProductRepository productRepository, final MenuProductMaterial... menuProductMaterials) {
         final Product product = product();
         productRepository.save(product);
-        return new Menu(
+        return Menu.from(
                 UUID.randomUUID(),
-                MenuName.from("후라이드+후라이드", menuNamePolicy()),
-                MenuPrice.from(BigDecimal.valueOf(price)),
+                "후라이드+후라이드",
+                menuNamePolicy(),
+                BigDecimal.valueOf(price),
                 menuGroup(),
                 displayed,
                 MenuProducts.from(List.of(menuProductMaterials), new ProductClientImpl(productRepository))

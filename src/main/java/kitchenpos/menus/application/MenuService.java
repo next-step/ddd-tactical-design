@@ -42,10 +42,11 @@ public class MenuService {
         List<MenuProductMaterial> menuProductMaterials = request.getMenuProducts().stream()
                 .map(it -> new MenuProductMaterial(it.getProductId(), it.getQuantity()))
                 .collect(Collectors.toList());
-        final Menu menu = new Menu(
+        final Menu menu = Menu.from(
                 UUID.randomUUID(),
-                MenuName.from(request.getName(), menuNamePolicy),
-                MenuPrice.from(request.getPrice()),
+                request.getName(),
+                menuNamePolicy,
+                request.getPrice(),
                 menuGroup,
                 request.isDisplayed(),
                 MenuProducts.from(menuProductMaterials, productClient)
@@ -55,10 +56,9 @@ public class MenuService {
 
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuPriceChangeRequest request) {
-        final MenuPrice price = MenuPrice.from(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(price);
+        menu.changePrice(request.getPrice());
         return menu;
     }
 

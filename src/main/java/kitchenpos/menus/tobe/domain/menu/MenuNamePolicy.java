@@ -12,13 +12,13 @@ public class MenuNamePolicy {
         this.menuNameProfanities = menuNameProfanities;
     }
 
-    public void validateName(MenuName displayName) {
+    public void validateName(Name displayName) {
         if (Objects.isNull(displayName.getValue()) || this.containsProfanity(displayName)) {
             throw new IllegalArgumentException();
         }
     }
 
-    private boolean containsProfanity(MenuName name) {
+    private boolean containsProfanity(Name name) {
         return menuNameProfanities.containsProfanity(name.getValue());
     }
 }

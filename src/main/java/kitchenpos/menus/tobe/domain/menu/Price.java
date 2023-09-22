@@ -4,16 +4,16 @@ import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class MenuPrice {
+class Price {
 
-    public static final MenuPrice ZERO = MenuPrice.from(BigDecimal.ZERO);
+    public static final Price ZERO = Price.from(BigDecimal.ZERO);
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    protected MenuPrice() {
+    protected Price() {
     }
 
-    private MenuPrice(BigDecimal value) {
+    private Price(BigDecimal value) {
         this.validate(value);
         this.value = value;
     }
@@ -28,20 +28,20 @@ public class MenuPrice {
         return value.compareTo(BigDecimal.ZERO) < 0;
     }
 
-    public static MenuPrice from(BigDecimal value) {
-        return new MenuPrice(value);
+    public static Price from(BigDecimal value) {
+        return new Price(value);
     }
 
-    public MenuPrice add(MenuPrice menuPrice) {
-        return new MenuPrice(this.value.add(menuPrice.value));
+    public Price add(Price price) {
+        return new Price(this.value.add(price.value));
     }
 
-    public MenuPrice multiplyByQuantity(long quantity) {
-        return new MenuPrice(this.value.multiply(BigDecimal.valueOf(quantity)));
+    public Price multiplyByQuantity(long quantity) {
+        return new Price(this.value.multiply(BigDecimal.valueOf(quantity)));
     }
 
-    public boolean isBiggerThan(MenuPrice menuPrice) {
-        return this.value.compareTo(menuPrice.value) > 0;
+    public boolean isBiggerThan(Price price) {
+        return this.value.compareTo(price.value) > 0;
     }
 
     public BigDecimal getValue() {
@@ -52,8 +52,8 @@ public class MenuPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuPrice menuPrice = (MenuPrice) o;
-        return Objects.equals(value, menuPrice.value);
+        Price price = (Price) o;
+        return Objects.equals(value, price.value);
     }
 
     @Override

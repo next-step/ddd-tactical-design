@@ -77,6 +77,6 @@ class MenuProductsTest {
                 ),
                 productClient
         );
-        assertThat(menuProducts.totalAmount()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(48000L)));
+        assertThat(menuProducts.totalAmount()).isEqualTo(Price.from(BigDecimal.valueOf(48000L)));
     }
 }

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MenuNameTest {
+class NameTest {
 
 
     private FakeMenuNameProfanities menuNameProfanities;
@@ -28,7 +28,7 @@ class MenuNameTest {
     @Test
     void create() {
         final String name = "후라이드";
-        final MenuName menuName = MenuName.from(name, menuNamePolicy);
+        final Name menuName = Name.from(name, menuNamePolicy);
         assertAll(
                 () -> assertThat(menuName).isNotNull(),
                 () -> assertThat(menuName.getValue()).isEqualTo(name)
@@ -39,7 +39,7 @@ class MenuNameTest {
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
-        assertThatThrownBy(() -> MenuName.from(name, menuNamePolicy))
+        assertThatThrownBy(() -> Name.from(name, menuNamePolicy))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -47,7 +47,7 @@ class MenuNameTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {
-        assertThatThrownBy(() -> MenuName.from(name, menuNamePolicy))
+        assertThatThrownBy(() -> Name.from(name, menuNamePolicy))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

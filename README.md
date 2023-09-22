@@ -104,6 +104,7 @@ docker compose -p kitchenpos up -d
 | --- | --- | --- |
 | 상품 | Product | 메뉴를 구성하는 최소 단위 |
 | 이름 | Name | 상품의 이름 |
+| 이름 정책 | Name Policy | 상품의 이름을 만드는 정책. |
 | 가격 | Price | 상품의 가격 |
 | 비속어 | profanity | 고객에게 불쾌함을 줄 수 있는 언어. 상품의 이름은 비속어를 포함하지 않아야한다. |
 

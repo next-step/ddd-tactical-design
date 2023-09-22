@@ -31,8 +31,8 @@ class MenuTest {
         Menu menu = menu(30000L, true, productRepository, menuProductMaterial(product.getId()));
         assertAll(
                 () -> assertThat(menu.getId()).isNotNull(),
-                () -> assertThat(menu.getName()).isEqualTo(MenuName.from("후라이드+후라이드", menuNamePolicy())),
-                () -> assertThat(menu.getPrice()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(30000L))),
+                () -> assertThat(menu.getName()).isEqualTo(Name.from("후라이드+후라이드", menuNamePolicy())),
+                () -> assertThat(menu.getPrice()).isEqualTo(Price.from(BigDecimal.valueOf(30000L))),
                 () -> assertThat(menu.isDisplayed()).isTrue(),
                 () -> assertThat(menu.getMenuGroup().getName()).isEqualTo(menuGroup().getName()),
                 () -> assertThat(menu.getMenuProducts().getMenuProducts()).extracting("productId").containsExactly(product.getId())
@@ -78,8 +78,8 @@ class MenuTest {
         Product product = product();
         productRepository.save(product);
         Menu menu = menu(30000L, true, productRepository, menuProductMaterial(product.getId()));
-        menu.changePrice(MenuPrice.from(BigDecimal.valueOf(20000L)));
-        assertThat(menu.getPrice()).isEqualTo(MenuPrice.from(BigDecimal.valueOf(20000L)));
+        menu.changePrice(BigDecimal.valueOf(20000L));
+        assertThat(menu.getPriceValue()).isEqualTo(BigDecimal.valueOf(20000L));
     }
 
     @DisplayName("Menu의 가격을 변경할 때 Menu의 가격이 Menu Product의 총 가격보다 커진다면 예외를 던진다.")
@@ -89,7 +89,7 @@ class MenuTest {
         productRepository.save(product);
         MenuProductMaterial menuProductMaterial = menuProductMaterial(product.getId(), 2L);
         Menu menu = menu(30001L, true, productRepository, menuProductMaterial);
-        assertThatThrownBy(() -> menu.changePrice(MenuPrice.from(BigDecimal.valueOf(32001L))))
+        assertThatThrownBy(() -> menu.changePrice(BigDecimal.valueOf(32001L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

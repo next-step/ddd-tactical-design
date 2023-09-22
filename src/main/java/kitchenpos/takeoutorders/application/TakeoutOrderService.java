@@ -51,7 +51,7 @@ public class TakeoutOrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().getValue().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (menu.getPriceValue().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final TakeoutOrderLineItem orderLineItem = new TakeoutOrderLineItem();

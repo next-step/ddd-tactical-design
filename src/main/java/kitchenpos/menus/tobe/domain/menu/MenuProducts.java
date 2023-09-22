@@ -63,10 +63,10 @@ public class MenuProducts {
         }
     }
 
-    public MenuPrice totalAmount() {
-        MenuPrice totalAmount = MenuPrice.ZERO;
+    public Price totalAmount() {
+        Price totalAmount = Price.ZERO;
         for (final MenuProduct menuProduct : this.menuProducts) {
-            totalAmount = totalAmount.add(MenuPrice.from(menuProduct.calculateAmount()));
+            totalAmount = totalAmount.add(Price.from(menuProduct.calculateAmount()));
         }
         return totalAmount;
     }
