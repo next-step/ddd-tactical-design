@@ -1,11 +1,9 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.Price;
-
 public class ChangeMenuPriceRequest {
-    private Price price;
+    private Long price;
 
-    public Price getPrice() {
+    public Long getPrice() {
         return price;
     }
 }

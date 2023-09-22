@@ -51,7 +51,7 @@ public class MenuService {
         final Menu menu = new Menu(
                 UUID.randomUUID(),
                 new DisplayedName(request.getName(), purgomalumClient),
-                request.getPrice(),
+                new Price(request.getPrice()),
                 menuGroup,
                 menuProducts,
                 menuPricePolicy
@@ -91,7 +91,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = findById(menuId);
-        menu.changePrice(request.getPrice(), menuPricePolicy);
+        menu.changePrice(new Price(request.getPrice()), menuPricePolicy);
         return menu;
     }
 

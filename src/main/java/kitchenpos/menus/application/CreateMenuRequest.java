@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.Price;
 
 public class CreateMenuRequest {
     private String name;
-    private Price price;
+    private Long price;
     private UUID menuGroupId;
     private boolean displayed;
     private List<MenuProduct> menuProducts;
@@ -17,7 +16,7 @@ public class CreateMenuRequest {
         return name;
     }
 
-    public Price getPrice() {
+    public Long getPrice() {
         return price;
     }
 

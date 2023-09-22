@@ -1,16 +1,14 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.Price;
-
 public class CreateProductRequest {
     private String name;
-    private Price price;
+    private Long price;
 
     public String getName() {
         return name;
     }
 
-    public Price getPrice() {
+    public Long getPrice() {
         return price;
     }
 }

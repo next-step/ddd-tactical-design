@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.products.domain.ChangedProductPriceEvent;
 import kitchenpos.products.domain.DisplayedName;
+import kitchenpos.products.domain.Price;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
@@ -31,14 +32,14 @@ public class ProductService {
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        return productRepository.save(new Product(UUID.randomUUID(), new DisplayedName(request.getName(), purgomalumClient), request.getPrice()));
+        return productRepository.save(new Product(UUID.randomUUID(), new DisplayedName(request.getName(), purgomalumClient), new Price(request.getPrice())));
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final ChangePriceRequest request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.changePrice(request.getPrice());
+        product.changePrice(new Price(request.getPrice()));
         publisher.publishEvent(new ChangedProductPriceEvent(product.getId(), product.getPrice()));
         return product;
     }
