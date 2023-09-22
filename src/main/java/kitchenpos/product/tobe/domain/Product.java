@@ -16,7 +16,7 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private ProductName name;
 
     @Embedded

@@ -1,11 +1,13 @@
 package kitchenpos.product.tobe.domain;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class ProductName {
 
+    @Column(name = "name", nullable = false)
     private String value;
 
     protected ProductName() {
