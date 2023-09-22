@@ -18,21 +18,8 @@ public class OrderLineItemsService {
         this.menuRepository = menuRepository;
     }
 
-    private void validQuantity(List<OrderLineItem> orderLineItems, OrderType orderType) {
-        if (orderType != OrderType.EAT_IN) {
-            orderLineItems.stream()
-                    .map(OrderLineItem::getQuantity)
-                    .forEach(quantity -> {
-                        if (quantity < 0) {
-                            throw new IllegalArgumentException();
-                        }
-                    });
-        }
-    }
-
-    public OrderLineItems getOrderLineItems(List<OrderLineItem> orderLineItems, OrderType orderType) {
+    public OrderLineItems getOrderLineItems(List<OrderLineItem> orderLineItems) {
         validMenuSize(orderLineItems);
-        validQuantity(orderLineItems, orderType);
         return new OrderLineItems(orderLineItems.stream()
                 .map(eatInOrderLineItem -> new OrderLineItem(getMenu(eatInOrderLineItem), eatInOrderLineItem.getQuantity(), eatInOrderLineItem.getPrice()))
                 .collect(Collectors.toList()));

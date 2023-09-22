@@ -28,7 +28,7 @@ public class EatInOrderCreateService {
     }
 
     private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems(), order.getType());
+        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
     }
 
     private OrderTable getOrderTable(Order order) {

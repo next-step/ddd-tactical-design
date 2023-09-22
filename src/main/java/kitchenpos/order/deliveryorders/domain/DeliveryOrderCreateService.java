@@ -26,7 +26,7 @@ public class DeliveryOrderCreateService {
     }
 
     private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems(), order.getType());
+        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
     }
 
     private void validDeliveryAddress(Order order) {

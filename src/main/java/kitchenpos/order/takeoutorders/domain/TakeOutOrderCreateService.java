@@ -23,6 +23,6 @@ public class TakeOutOrderCreateService {
     }
 
     private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems(), order.getType());
+        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
     }
 }

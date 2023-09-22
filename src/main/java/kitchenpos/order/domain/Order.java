@@ -45,6 +45,7 @@ public class Order {
     }
 
     public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, String deliveryAddress, OrderTable orderTable, UUID orderTableId) {
+        validateOrderLineItems();
         this.id = id;
         this.type = type;
         this.status = status;
@@ -57,6 +58,18 @@ public class Order {
 
     public void chageStatus(final OrderStatus status) {
         this.status = status;
+    }
+
+    public void validateOrderLineItems() {
+        if (this.type != OrderType.EAT_IN) {
+            this.orderLineItems.getOrderLineItems().stream()
+                    .map(OrderLineItem::getQuantity)
+                    .forEach(quantity -> {
+                        if (quantity < 0) {
+                            throw new IllegalArgumentException();
+                        }
+                    });
+        }
     }
 
     public UUID getId() {
