@@ -8,7 +8,7 @@ import java.util.UUID;
 @Embeddable
 public class MenuProducts {
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ElementCollection
     @JoinColumn(
             name = "menu_id",
             nullable = false,
