@@ -1,16 +1,24 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.menus.domain.*;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.Test;
+
+import kitchenpos.menus.domain.DisplayedName;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuPricePolicy;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuProducts;
+import kitchenpos.menus.domain.Price;
+import kitchenpos.menus.domain.Quantity;
 
 class MenuTest {
+    private final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), "베스트 메뉴");
     private final MenuPricePolicy menuPricePolicy = new MenuPricePolicy();
 
     @Test
@@ -19,6 +27,7 @@ class MenuTest {
                 new Menu(UUID.randomUUID(),
                         new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                         new Price(10000),
+                        menuGroup,
                         new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(10000)))),
                         menuPricePolicy
                 )
@@ -30,6 +39,7 @@ class MenuTest {
         assertThatThrownBy(() -> new Menu(UUID.randomUUID(),
                         new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                         new Price(10001),
+                        menuGroup,
                         new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(10000)))),
                         menuPricePolicy
                 )
@@ -43,6 +53,7 @@ class MenuTest {
         Menu menu = new Menu(UUID.randomUUID(),
                 new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                 new Price(15000),
+                menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(20000)))),
                 menuPricePolicy
         );
@@ -57,6 +68,7 @@ class MenuTest {
         Menu menu = new Menu(UUID.randomUUID(),
                 new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                 new Price(15000),
+                menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(20000)))),
                 menuPricePolicy
         );
@@ -71,6 +83,7 @@ class MenuTest {
         Menu menu = new Menu(UUID.randomUUID(),
                 new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                 new Price(10000),
+                menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(10000)))),
                 menuPricePolicy
         );
@@ -85,6 +98,7 @@ class MenuTest {
         Menu menu = new Menu(UUID.randomUUID(),
                 new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
                 new Price(10000),
+                menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(10000)))),
                 menuPricePolicy
         );

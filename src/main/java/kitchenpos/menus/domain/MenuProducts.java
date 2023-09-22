@@ -33,6 +33,11 @@ public class MenuProducts {
                 .reduce(new Price(0), Price::sum);
     }
 
+    public void changeProductPrice(UUID productId, Price price) {
+        menuProducts.stream().filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .forEach(menuProduct -> menuProduct.changeProductPrice(price));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,10 +49,5 @@ public class MenuProducts {
     @Override
     public int hashCode() {
         return Objects.hash(menuProducts);
-    }
-
-    public void changeProductPrice(UUID productId, Price price) {
-        menuProducts.stream().filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.changeProductPrice(price));
     }
 }

@@ -37,6 +37,10 @@ public class MenuProduct {
         return price;
     }
 
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

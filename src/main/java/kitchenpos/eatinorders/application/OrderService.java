@@ -69,9 +69,9 @@ public class OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
+//            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+//                throw new IllegalArgumentException();
+//            }
             final OrderLineItem orderLineItem = new OrderLineItem();
             orderLineItem.setMenu(menu);
             orderLineItem.setQuantity(quantity);
@@ -110,11 +110,11 @@ public class OrderService {
         }
         if (order.getType() == OrderType.DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
+//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
+//                sum = orderLineItem.getMenu()
+//                    .getPrice()
+//                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
+//            }
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);

@@ -32,17 +32,15 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     protected Menu() {
     }
 
-    public Menu(UUID id, DisplayedName name, Price price, MenuProducts menuProducts, MenuPricePolicy menuPricePolicy) {
+    public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup, MenuProducts menuProducts, MenuPricePolicy menuPricePolicy) {
         menuPricePolicy.follow(price, menuProducts.totalPrice());
         this.id = id;
         this.name = name;
         this.price = price;
+        this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
         this.displayed = true;
     }
@@ -50,6 +48,11 @@ public class Menu {
     public void changePrice(Price price, MenuPricePolicy menuPricePolicy) {
         menuPricePolicy.follow(price, menuProducts.totalPrice());
         this.price = price;
+    }
+
+    public void changeProductPrice(UUID productId, Price price, MenuDisplayPolicy menuDisplayPolicy) {
+        menuProducts.changeProductPrice(productId, price);
+        menuDisplayPolicy.follow(this);
     }
 
     public void display() {
@@ -64,6 +67,10 @@ public class Menu {
         return menuProducts.totalPrice();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public Price getPrice() {
         return price;
     }
@@ -72,9 +79,4 @@ public class Menu {
         return displayed;
     }
 
-
-    public void changeProductPrice(UUID productId, Price price, MenuDisplayPolicy menuDisplayPolicy) {
-        menuProducts.changeProductPrice(productId, price);
-        menuDisplayPolicy.follow(this);
-    }
 }
