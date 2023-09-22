@@ -20,7 +20,9 @@
     - `Register Menu` 시, Menu Price Policy를 따른다.
 - `Change the price`를 할 수 있다.
     - `Change the price` 시, Menu Price Policy를 따른다.
-- `Menu`를 `Display Menu` 또는 `Hide Menu`를 할 수 있다.
+- `Menu`를 `Display Menu` 할 수 있다.
+    - `Display Menu` 시, Menu Price Policy를 따른다.
+- `Menu`를 `Hide Menu` 할 수 있다.
 - `View All Menus`를 할 수 있다.
 
 #### 정책
