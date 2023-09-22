@@ -96,6 +96,8 @@ docker compose -p kitchenpos up -d
 
 ## 용어 사전
 
+## Product (상품)
+
 ### Product (상품)
 
 | 한글명 | 영문명 | 설명 |
@@ -104,6 +106,8 @@ docker compose -p kitchenpos up -d
 | 이름 | Name | 상품의 이름 |
 | 가격 | Price | 상품의 가격 |
 | 비속어 | profanity | 고객에게 불쾌함을 줄 수 있는 언어. 상품의 이름은 비속어를 포함하지 않아야한다. |
+
+## 메뉴
 
 ### MenuGroup (메뉴그룹)
 
@@ -126,22 +130,13 @@ docker compose -p kitchenpos up -d
 | 비노출 | Hide | 메뉴를 고객에게 비노출. 메뉴의 가격이 메뉴 상품들의 총 금액 높은경우 비노출된 상태가 될 수 있다. |
 | 비속어 | profanity | 고객에게 불쾌함을 줄 수 있는 언어. 메뉴의 이름은 비속어를 포함하지 않아야한다. |
 
-### OrderTable (매장테이블)
+## Delivery Order (배달 주문)
+
+### Delivery Order (배달 주문)
+주문 상태 흐름 : 승인 대기 중 → 승인 → 조리 완료 → 배달 중 → 배달 완료 → 주문 완료
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 매장테이블 | OrderTable | 매장 주문을 한 고객이 앉을 수 있는 테이블을 의미 |
-| 이름 | Name | 매장 테이블의 이름 |
-| 손님 수 | Number Of Guests | 매장 테이블에 앉은 손님 수 |
-| 사용 여부 | Occupied | 매장 테이블의 사용 여부. 참이면 사용 중, 거짓이면 미사용 중 을 의미 |
-| 사용 | Sit | 매장 테이블 사용 상태 |
-| 미사용 | Clear | 매장 테이블 미사용 상태 |
-
-### Order (주문)
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 주문 유형 | Order Type | 주문의 유형 |
 | 주문 상태 | Order Status | 주문의 상태 |
 | 주문 품목 | Order Line Item | 주문안에 포함된 품목 |
 | 주문 일시 | Order DateTime | 주문이 요청 시간 |
@@ -149,13 +144,6 @@ docker compose -p kitchenpos up -d
 | 주문 품목 개수 | Quantity | 하나의 주문 품목이 몇 개 주문했는지를 의미. 주문 품목 금액을 결정짓는 중요한 요소 |
 | 주문 품목 금액 | Amount | 하나의 주문 품목 금액. `Price`에 `Quantity`를 곱한 결과이다.(`Price` x `Quantity`). 주문의 총 금액을 결정짓는 중요한 요소 |
 | 총 금액 | Total Amount | 주문의 최종 금액. 주문 내 모든 주문 품목의 Amount 를 더한 결과이다. |
-
-### Delivery Order (배달 주문)
-
-주문 상태 흐름 : 승인 대기 중 → 승인 → 조리 완료 → 배달 중 → 배달 완료 → 주문 완료
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
 | 배달 주문 | Delivery Order | 손님이 요청한 배달 주문. 메뉴 정보와 배달 정보를 가지고있다. |
 | 배달 주소 | Delivery Address | 배달 요청 주소지 |
 | 배달 기사 | Kitchen Rider | 배달하는 기사 |
@@ -166,24 +154,51 @@ docker compose -p kitchenpos up -d
 | 배달 완료 | Delivered | 고객에게 전달되어 배달 완료된 상태 |
 | 주문 완료 | Completed | 주문 완료 상태 |
 
-### Eat-In Order (매장 주문)
+## Eat-In Order (매장 주문)
 
+### OrderTable (매장테이블)
+
+| 한글명 | 영문명 | 설명 |
+| --- | --- | --- |
+| 매장테이블 | OrderTable | 매장 주문을 한 고객이 앉을 수 있는 테이블을 의미. 매장 주문이 매장의 어느 주문 테이블에서 이뤄진 것인지 알기위한 요소 |
+| 이름 | Name | 매장 테이블의 이름. 매장 테이블을 익숙한 언어로 구분할 수 있게해주는 요소. |
+| 손님 수 | Number Of Guests | 매장 테이블에 앉은 손님 수. |
+| 사용 여부 | Occupied | 매장 테이블의 사용 여부. 참이면 사용 중, 거짓이면 미사용 중 을 의미 |
+| 사용 | Sit | 매장 테이블 사용 상태 |
+| 미사용 | Clear | 매장 테이블 미사용 상태 |
+
+### Eat-In Order (매장 주문)
 주문 상태 흐름 : 승인 대기 중 → 승인 → 서빙 완료 → 주문 완료
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
+| 주문 상태 | Order Status | 주문의 상태 |
+| 주문 품목 | Order Line Item | 주문안에 포함된 품목 |
+| 주문 일시 | Order DateTime | 주문이 요청 시간 |
+| 주문 품목 가격 | Price | 하나의 주문 품목 가격. 주문 품목 금액을 결정짓는 중요한 요소. 연관된 Menu의 Total Amount 와 같다. |
+| 주문 품목 개수 | Quantity | 하나의 주문 품목이 몇 개 주문했는지를 의미. 주문 품목 금액을 결정짓는 중요한 요소 |
+| 주문 품목 금액 | Amount | 하나의 주문 품목 금액. `Price`에 `Quantity`를 곱한 결과이다.(`Price` x `Quantity`). 주문의 총 금액을 결정짓는 중요한 요소 |
+| 총 금액 | Total Amount | 주문의 최종 금액. 주문 내 모든 주문 품목의 Amount 를 더한 결과이다. |
 | 매장 주문 | Eat-In Order | 매장을 이용하는 주문 |
 | 승인 대기 중 | Waiting | 주문 승인 대기 중인 상태 |
 | 승인 | Accepted | 주문 승인 상태 |
 | 서빙 완료 | Served | 조리가 완료되어 손님에게 서빙이 완료된 상태 |
 | 주문 완료 | Completed | 주문 완료 상태 |
 
-### Take-Out Order (포장 주문)
+## Take-Out Order (포장 주문)
 
+### Take-Out Order (포장 주문)
 주문 상태 흐름 : 승인 대기중 → 승인 → 포장 완료 → 주문 완료
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
+| 주문 상태 | Order Status | 주문의 상태 |
+| 주문 품목 | Order Line Item | 주문안에 포함된 품목 |
+| 주문 일시 | Order DateTime | 주문이 요청 시간 |
+| 주문 품목 가격 | Price | 하나의 주문 품목 가격. 주문 품목 금액을 결정짓는 중요한 요소. 연관된 Menu의 Total Amount 와 같다. |
+| 주문 품목 개수 | Quantity | 하나의 주문 품목이 몇 개 주문했는지를 의미. 주문 품목 금액을 결정짓는 중요한 요소 |
+| 주문 품목 금액 | Amount | 하나의 주문 품목 금액. `Price`에 `Quantity`를 곱한 결과이다.(`Price` x `Quantity`). 주문의 총 금액을 결정짓는 중요한 요소 |
+| 총 금액 | Total Amount | 주문의 최종 금액. 주문 내 모든 주문 품목의 Amount 를 더한 결과이다. |
 | 포장 주문 | Take-Out Order | 포장을 이용하는 주문 |
 | 승인 대기 중 | Waiting | 주문 승인 대기 중인 상태 |
 | 승인 | Accepted | 주문 승인 상태 |
@@ -200,6 +215,8 @@ docker compose -p kitchenpos up -d
 
 ## 모델링
 
+## Product (상품)
+
 ### Product (상품)
 
 #### 속성
@@ -212,6 +229,8 @@ docker compose -p kitchenpos up -d
 - Price는 변경할 수 있다.
   - Price가 변경될 때 해당 Product가 포함된 Menu의 Price가 Menu에 속한 Product Price의 총합보다 비싸진 경우 Menu를 Hide한다.
     - 요약. (Product가 속한 메뉴의 현재 가격 > 해당 Menu에 속한 Product Price의 총합)인 경우 Menu를 Hide 한다.
+
+## Menu (메뉴)
 
 ### MenuGroup (메뉴 그룹)
 #### 속성
@@ -239,6 +258,8 @@ docker compose -p kitchenpos up -d
 - Menu를 Hide한다.
   - Menu의 Price가 Menu에 속한 Product Price의 합보다 높을 경우 Menu를 Hide한다.
 
+## Eat-In Order (매장 주문)
+
 ### OrderTable (매장 테이블)
 #### 속성
 - Name은 필수값이다.
@@ -253,6 +274,30 @@ docker compose -p kitchenpos up -d
   - 식사를 완료했다면 Clear할 수있다.
 - Number Of Guests를 변경할 수 있다.
   - Clear 된 OrderTable은 Number Of Guests를 변경할 수 없다.
+
+### Eat-In Order (매장 주문)
+#### 속성
+- OrderStatus를 가진다.
+- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
+- OrderDateTime을 가진다.
+- OrderLineItem 1개 이상 가진다.
+- OrderTableId는 필수다.
+- Eat-In Order는 Waiting, Accepted, Served, Completed 4개의 OrderStatus를 가진다.
+
+#### 행위
+- Eat-In Order의 OrderStatus는 Waiting → Accepted → Served → Completed 순서를 가진다.
+  - 명시된 순서를 지키지 않으면 Order Status는 변경할 수 없다.
+- Eat-In Order가 들어오면 Order Status는 Waiting이다.
+- Waiting Order를 Accepted 한다.
+- Accepted Order를 Served한다.
+- Served Order를 Completed한다.
+  - 주문이 Completed된 OrderTable을 Clear한다.
+- Eat-In Order은 Hide된 Menu를 주문할 수 없다.
+- Eat-In Order은 빈 테이블에 주문할 수 없다.
+- OrderLineItem은 주문할 당시의 메뉴 가격을 가진다.
+  - 주문 후에 Menu의 가격이 변경되더라도 주문의 가격은 변경이 없어야한다.
+
+## Delivery Order (배달주문)
 
 ### Delivery Order (배달주문)
 #### 속성
@@ -275,6 +320,8 @@ docker compose -p kitchenpos up -d
 - Delivering Order를 손님이 받으면 Delivered한다.
 - Delivered Order를 Completed한다.
 
+## Take-Out Order (포장주문)
+
 ### Take-Out Order (포장주문)
 #### 속성
 - OrderStatus를 가진다.
@@ -292,25 +339,3 @@ docker compose -p kitchenpos up -d
 - Accepted Order를 Served한다.
 - Served Order를 Completed한다.
 - Order Line Item 의 가격은 실제 Menu의 가격과 일치해야 한다.
-
-### Eat-In Order (매장주문)
-#### 속성
-- OrderStatus를 가진다.
-- DeliveryOrder, TakeOutOrder은 Order Line Item 1개 이상 가진다.
-- OrderDateTime을 가진다.
-- OrderLineItem 1개 이상 가진다.
-- OrderTableId는 필수다.
-- Eat-In Order는 Waiting, Accepted, Served, Completed 4개의 OrderStatus를 가진다.
-
-#### 행위
-- Eat-In Order의 OrderStatus는 Waiting → Accepted → Served → Completed 순서를 가진다.
-  - 명시된 순서를 지키지 않으면 Order Status는 변경할 수 없다.
-- Eat-In Order가 들어오면 Order Status는 Waiting이다.
-- Waiting Order를 Accepted 한다.
-- Accepted Order를 Served한다.
-- Served Order를 Completed한다.
-  - 주문이 Completed된 OrderTable을 Clear한다.
-- Eat-In Order은 Hide된 Menu를 주문할 수 없다.
-- Eat-In Order은 빈 테이블에 주문할 수 없다.
-- OrderLineItem은 주문할 당시의 메뉴 가격을 가진다.
-  - 주문 후에 Menu의 가격이 변경되더라도 주문의 가격은 변경이 없어야한다.
