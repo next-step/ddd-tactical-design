@@ -7,7 +7,9 @@ import kitchenpos.common.profanity.ProfanityClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceResponse;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
+import kitchenpos.product.tobe.application.dto.CreateProductResponse;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -31,18 +33,18 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final CreateProductRequest request) {
+    public CreateProductResponse create(final CreateProductRequest request) {
         final String name = request.getName();
         if (profanityClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
 
         final Product product = new Product(UUID.randomUUID(), name, request.getPrice());
-        return productRepository.save(product);
+        return CreateProductResponse.of(productRepository.save(product));
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ChangeProductPriceRequest request) {
+    public ChangeProductPriceResponse changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
@@ -50,7 +52,7 @@ public class ProductService {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         menus.forEach(Menu::checkPrice);
 
-        return product;
+        return ChangeProductPriceResponse.of(product);
     }
 
     @Transactional(readOnly = true)

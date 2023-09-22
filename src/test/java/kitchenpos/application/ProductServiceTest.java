@@ -44,7 +44,7 @@ class ProductServiceTest {
     @Test
     void create() {
         final var expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final var actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -78,7 +78,7 @@ class ProductServiceTest {
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ChangeProductPriceRequest expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
+        final var actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice().getValue()).isEqualTo(expected.getPrice());
     }
 
