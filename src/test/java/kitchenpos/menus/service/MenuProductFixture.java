@@ -1,17 +1,21 @@
 package kitchenpos.menus.service;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.Price;
+import kitchenpos.menus.domain.Quantity;
 import kitchenpos.products.domain.Product;
 
 public class MenuProductFixture {
-    private final MenuProduct menuProduct;
-    private AtomicLong seq = new AtomicLong();
+    private UUID productId;
+    private int quantity;
+    private long price;
 
     public MenuProductFixture() {
-        menuProduct = new MenuProduct();
-        menuProduct.setSeq(seq.incrementAndGet());
+        productId = null;
+        quantity = 1;
+        price = 0L;
     }
 
     public static MenuProductFixture builder() {
@@ -21,23 +25,29 @@ public class MenuProductFixture {
     public static MenuProductFixture builder(Product product) {
         return new MenuProductFixture()
                 .product(product)
-                .quantity(1L);
+                .quantity(1);
     }
 
     public MenuProductFixture product(Product product) {
-        menuProduct.setProduct(product);
+        this.productId = null;
         if (product != null) {
-            menuProduct.setProductId(product.getId());
+            this.productId = product.getId();
+            this.price = product.getPrice().longValue();
         }
         return this;
     }
 
-    public MenuProductFixture quantity(long quantity) {
-        menuProduct.setQuantity(quantity);
+    public MenuProductFixture quantity(int quantity) {
+        this.quantity = quantity;
+        return this;
+    }
+
+    public MenuProductFixture price(long price) {
+        this.price = price;
         return this;
     }
 
     public MenuProduct build() {
-        return menuProduct;
+        return new MenuProduct(productId, new Quantity(quantity), new Price(price));
     }
 }
