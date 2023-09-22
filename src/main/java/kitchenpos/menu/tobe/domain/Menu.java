@@ -1,4 +1,4 @@
-package kitchenpos.menu.domain;
+package kitchenpos.menu.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menugroup.domain.MenuGroup;
 
 @Table(name = "menu")

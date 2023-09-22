@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.Fixtures;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menu.tobe.domain.MenuRepository;
 import kitchenpos.order.takeoutorder.application.TakeoutOrderService;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrder;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
