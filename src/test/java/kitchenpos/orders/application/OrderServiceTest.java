@@ -36,7 +36,7 @@ class OrderServiceTest {
     private OrderLineItemsService orderLineItemsService;
     private OrderTableClearService orderTableClearService;
     private OrderStatusService orderStatusService;
-    private ApplicationEventPublisher publisher = null;
+    private ApplicationEventPublisher publisher;
 
     private static List<Arguments> orderLineItems() {
         return Arrays.asList(
@@ -59,6 +59,7 @@ class OrderServiceTest {
         orderStatusService = new OrderStatusService(orderRepository);
         orderLineItemsService = new OrderLineItemsService(menuRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
+        publisher = new FakeApplicationEventPublisher(orderRepository);
         orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService);
     }
 
