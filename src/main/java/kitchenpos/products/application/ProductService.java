@@ -34,7 +34,13 @@ public class ProductService {
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        return productRepository.save(new Product(UUID.randomUUID(), new DisplayedName(request.getName(), purgomalumClient), new Price(request.getPrice())));
+        return productRepository.save(
+                new Product(
+                        UUID.randomUUID(),
+                        new DisplayedName(request.getName(), purgomalumClient),
+                        request.getPrice()
+                )
+        );
     }
 
     @Transactional

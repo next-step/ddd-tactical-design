@@ -22,6 +22,10 @@ public class Product {
     protected Product() {
     }
 
+    public Product(UUID id, DisplayedName name, long price) {
+        this(id, name, new Price(price));
+    }
+
     public Product(UUID id, DisplayedName name, Price price) {
         this.id = id;
         this.name = name;
