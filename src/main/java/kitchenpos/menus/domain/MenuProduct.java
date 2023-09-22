@@ -4,8 +4,14 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-@Embeddable
+@Table(name = "menu_product")
+@Entity
 public class MenuProduct {
+    @Column(name = "seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long seq;
+
     private UUID productId;
 
     @Column(name = "quantity", nullable = false)
