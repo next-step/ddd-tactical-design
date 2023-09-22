@@ -22,6 +22,10 @@ public class ProductPrice {
         this.value = value;
     }
 
+    public ProductPrice multiply(long quantity) {
+        return new ProductPrice(this.value.multiply(BigDecimal.valueOf(quantity)));
+    }
+
     public BigDecimal getValue() {
         return value;
     }
@@ -41,9 +45,5 @@ public class ProductPrice {
     @Override
     public int hashCode() {
         return Objects.hash(value);
-    }
-
-    public ProductPrice multiply(long quantity) {
-        return new ProductPrice(this.value.multiply(BigDecimal.valueOf(quantity)));
     }
 }
