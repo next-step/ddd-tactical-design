@@ -1,18 +1,31 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.Product;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuName;
+import kitchenpos.menus.tobe.domain.MenuPrice;
+import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.event.ProductPriceChangedEvent;
+import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Service
 public class MenuService {
+
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
@@ -32,79 +45,45 @@ public class MenuService {
 
     @Transactional
     public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+        MenuPrice menuPrice = new MenuPrice(request.getPrice());
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+        final MenuProducts menuProducts = new MenuProducts(request.getMenuProducts());
         final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
+            menuProducts.getList().stream()
                 .map(MenuProduct::getProductId)
                 .collect(Collectors.toList())
         );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
+        menuProducts.checkEqualsSize(products.size());
+
+        BigDecimal productSumPrice = BigDecimal.ZERO;
+        for (final MenuProduct menuProductRequest : menuProducts.getList()) {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
+            productSumPrice = productSumPrice.add(
+                menuProductRequest.getAmount(product.getPrice()));
         }
-        if (price.compareTo(sum) > 0) {
+        if (menuPrice.getValue().compareTo(productSumPrice) > 0) {
             throw new IllegalArgumentException();
         }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+        return menuRepository.save(request);
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+        MenuPrice menuPrice = new MenuPrice(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal productSumPrice = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
+            final Product product = productRepository.findById(menuProduct.getProductId())
+                .orElseThrow(NoSuchElementException::new);
+            productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
         }
-        if (price.compareTo(sum) > 0) {
+        if (menuPrice.getValue().compareTo(productSumPrice) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(price);
+        menu.changePrice(menuPrice);
         return menu;
     }
 
@@ -112,18 +91,16 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal productSumPrice = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
+            final Product product = productRepository.findById(menuProduct.getProductId())
+                .orElseThrow(NoSuchElementException::new);
+            productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
         }
-        if (menu.getPrice().compareTo(sum) > 0) {
+        if (menu.getPrice().compareTo(productSumPrice) > 0) {
             throw new IllegalStateException();
         }
-        menu.setDisplayed(true);
+        menu.changeDisplay(true);
         return menu;
     }
 
@@ -131,25 +108,26 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.changeDisplay(false);
         return menu;
     }
 
+    @EventListener
     @Transactional
-    public void checkMenuPrice(final UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+    public void checkMenuPrice(ProductPriceChangedEvent event) {
+        final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
+            BigDecimal productSumPrice = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
+                final Product product = productRepository.findById(menuProduct.getProductId())
+                    .orElseThrow(NoSuchElementException::new);
+                productSumPrice = productSumPrice.add(menuProduct.getAmount(product.getPrice()));
             }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+
+            if (menu.getPrice().compareTo(productSumPrice) > 0) {
+                menu.changeDisplay(false);
             }
+            menuRepository.save(menu);
         }
     }
 
@@ -157,7 +135,6 @@ public class MenuService {
     public List<Menu> findAll() {
         return menuRepository.findAll();
     }
-
 
 
 }
