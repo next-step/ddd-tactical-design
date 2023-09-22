@@ -1,8 +1,8 @@
 package kitchenpos.order.eatinorders.domain;
 
+import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.order.domain.OrderTable;
-import kitchenpos.order.eatinorders.application.OrderStatusService;
 import org.springframework.stereotype.Component;
 
 

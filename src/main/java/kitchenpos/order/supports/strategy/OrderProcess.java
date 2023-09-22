@@ -1,4 +1,4 @@
-package kitchenpos.order.strategy;
+package kitchenpos.order.supports.strategy;
 
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderType;

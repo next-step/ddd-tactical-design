@@ -1,8 +1,9 @@
-package kitchenpos.order.deliveryorders.domain;
+package kitchenpos.order.deliveryorders.application;
 
+import kitchenpos.order.deliveryorders.domain.*;
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderType;
-import kitchenpos.order.strategy.OrderProcess;
+import kitchenpos.order.supports.strategy.OrderProcess;
 import org.springframework.stereotype.Component;
 
 @Component

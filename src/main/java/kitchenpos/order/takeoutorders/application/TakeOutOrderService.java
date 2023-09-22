@@ -1,8 +1,12 @@
-package kitchenpos.order.takeoutorders.domain;
+package kitchenpos.order.takeoutorders.application;
 
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderType;
-import kitchenpos.order.strategy.OrderProcess;
+import kitchenpos.order.supports.strategy.OrderProcess;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderAcceptService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderCompleteService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderCreateService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderServeService;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,8 +1,12 @@
-package kitchenpos.order.eatinorders.domain;
+package kitchenpos.order.eatinorders.application;
 
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderType;
-import kitchenpos.order.strategy.OrderProcess;
+import kitchenpos.order.eatinorders.domain.EatInOrderAcceptService;
+import kitchenpos.order.eatinorders.domain.EatInOrderCompleteService;
+import kitchenpos.order.eatinorders.domain.EatInOrderCreateService;
+import kitchenpos.order.eatinorders.domain.EatInOrderServeService;
+import kitchenpos.order.supports.strategy.OrderProcess;
 import org.springframework.stereotype.Component;
 
 @Component

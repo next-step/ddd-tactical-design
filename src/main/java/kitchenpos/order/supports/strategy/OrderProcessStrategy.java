@@ -1,4 +1,4 @@
-package kitchenpos.order.strategy;
+package kitchenpos.order.supports.strategy;
 
 import kitchenpos.order.domain.OrderType;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class OrderStrategy {
+public class OrderProcessStrategy {
 
     final List<OrderProcess> orderTypes;
 
-    public OrderStrategy(List<OrderProcess> orderProcesses) {
+    public OrderProcessStrategy(List<OrderProcess> orderProcesses) {
         this.orderTypes = orderProcesses;
     }
 

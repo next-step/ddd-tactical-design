@@ -1,12 +1,13 @@
 package kitchenpos.order.deliveryorders.domain;
 
-import kitchenpos.order.domain.*;
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderLineItemsService;
+import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
+import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
 @Component
 public class DeliveryOrderCreateService {
@@ -21,8 +22,7 @@ public class DeliveryOrderCreateService {
 
     public Order create(Order order) {
         validDeliveryAddress(order);
-        Order eatInOrder = new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), getOrderLineItems(order), order.getDeliveryAddress(), null, null);
-        return orderRepository.save(eatInOrder);
+        return orderRepository.save(OrderCreateFactory.deliveryOrder(getOrderLineItems(order), order.getDeliveryAddress()));
     }
 
     private OrderLineItems getOrderLineItems(Order order) {

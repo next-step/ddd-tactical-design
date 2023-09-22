@@ -1,8 +1,8 @@
-package kitchenpos.order.eatinorders.application;
+package kitchenpos.order.application;
 
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderRepository;
-import kitchenpos.order.strategy.OrderStrategy;
+import kitchenpos.order.supports.strategy.OrderProcessStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,48 +13,48 @@ import java.util.UUID;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final OrderStrategy orderStrategy;
+    private final OrderProcessStrategy orderProcessStrategy;
 
     public OrderService(
             final OrderRepository orderRepository,
-            final OrderStrategy orderStrategy) {
+            final OrderProcessStrategy orderProcessStrategy) {
         this.orderRepository = orderRepository;
-        this.orderStrategy = orderStrategy;
+        this.orderProcessStrategy = orderProcessStrategy;
     }
 
     @Transactional
     public Order create(final Order request) {
-        return this.orderStrategy.get(request.getType()).create(request);
+        return this.orderProcessStrategy.get(request.getType()).create(request);
     }
 
     @Transactional
     public Order accept(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderStrategy.get(order.getType()).accept(order);
+        return this.orderProcessStrategy.get(order.getType()).accept(order);
     }
 
     @Transactional
     public Order serve(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderStrategy.get(order.getType()).serve(order);
+        return this.orderProcessStrategy.get(order.getType()).serve(order);
     }
 
     @Transactional
     public Order complete(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderStrategy.get(order.getType()).complete(order);
+        return this.orderProcessStrategy.get(order.getType()).complete(order);
     }
 
     @Transactional
     public Order startDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderStrategy.get(order.getType()).startDelivery(order);
+        return this.orderProcessStrategy.get(order.getType()).startDelivery(order);
     }
 
     @Transactional
     public Order completeDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderStrategy.get(order.getType()).completeDelivery(order);
+        return this.orderProcessStrategy.get(order.getType()).completeDelivery(order);
     }
 
     @Transactional(readOnly = true)

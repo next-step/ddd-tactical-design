@@ -1,11 +1,11 @@
 package kitchenpos.order.takeoutorders.domain;
 
-import kitchenpos.order.domain.*;
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderLineItemsService;
+import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
+import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 public class TakeOutOrderCreateService {
@@ -19,8 +19,7 @@ public class TakeOutOrderCreateService {
     }
 
     public Order create(Order order) {
-        Order eatInOrder = new Order(UUID.randomUUID(), OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), getOrderLineItems(order), null, null, null);
-        return orderRepository.save(eatInOrder);
+        return orderRepository.save(OrderCreateFactory.takeOutOrder(getOrderLineItems(order)));
     }
 
     private OrderLineItems getOrderLineItems(Order order) {

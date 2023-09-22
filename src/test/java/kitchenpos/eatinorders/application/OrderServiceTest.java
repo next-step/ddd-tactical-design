@@ -1,14 +1,17 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.order.deliveryorders.application.DeliveryOrderService;
 import kitchenpos.order.domain.*;
-import kitchenpos.order.eatinorders.application.OrderService;
-import kitchenpos.order.eatinorders.application.OrderStatusService;
+import kitchenpos.order.eatinorders.application.EatInOrderService;
+import kitchenpos.order.application.OrderService;
+import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.eatinorders.domain.*;
-import kitchenpos.order.strategy.OrderStrategy;
+import kitchenpos.order.supports.strategy.OrderProcessStrategy;
 import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.deliveryorders.domain.*;
+import kitchenpos.order.takeoutorders.application.TakeOutOrderService;
 import kitchenpos.order.takeoutorders.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +55,7 @@ class OrderServiceTest {
     private DeliveryOrderStartDeliveryService deliveryOrderStartDeliveryService;
     private DeliveryOrderCompleteDeliveryService deliveryOrderCompleteDeliveryService;
     private DeliveryOrderService deliveryOrderService;
-    private OrderStrategy orderStrategy;
+    private OrderProcessStrategy orderProcessStrategy;
     private ApplicationEventPublisher publisher = null;
 
     private static List<Arguments> orderLineItems() {
@@ -102,8 +105,8 @@ class OrderServiceTest {
         deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository, publisher);
         deliveryOrderService = new DeliveryOrderService(deliveryOrderCreateService, deliveryOrderAcceptService, deliveryOrderServeService, deliveryOrderCompleteService, deliveryOrderStartDeliveryService, deliveryOrderCompleteDeliveryService);
 
-        orderStrategy = new OrderStrategy(new ArrayList<>(Arrays.asList(eatInOrderService, takeOutOrderService, deliveryOrderService)));
-        orderService = new OrderService(orderRepository, orderStrategy);
+        orderProcessStrategy = new OrderProcessStrategy(new ArrayList<>(Arrays.asList(eatInOrderService, takeOutOrderService, deliveryOrderService)));
+        orderService = new OrderService(orderRepository, orderProcessStrategy);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")

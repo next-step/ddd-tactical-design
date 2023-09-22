@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorders.application;
+package kitchenpos.order.application;
 
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderStatus;

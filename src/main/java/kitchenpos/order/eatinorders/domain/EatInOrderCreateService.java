@@ -1,12 +1,13 @@
 package kitchenpos.order.eatinorders.domain;
 
-import kitchenpos.order.domain.*;
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderLineItemsService;
+import kitchenpos.order.domain.OrderRepository;
+import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.eatinorders.domain.exception.NotFoundOrderTableException;
 import kitchenpos.order.eatinorders.domain.vo.OrderLineItems;
+import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 public class EatInOrderCreateService {
@@ -23,8 +24,7 @@ public class EatInOrderCreateService {
 
     public Order create(Order order) {
         OrderTable orderTable = getOrderTable(order);
-        Order eatInOrder = new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), getOrderLineItems(order), null, orderTable, orderTable.getId());
-        return orderRepository.save(eatInOrder);
+        return orderRepository.save(OrderCreateFactory.eatInOrder(getOrderLineItems(order), orderTable));
     }
 
     private OrderLineItems getOrderLineItems(Order order) {
