@@ -30,4 +30,8 @@ public class Price {
     public int hashCode() {
         return Objects.hash(price);
     }
+
+    public long longValue() {
+        return price.longValue();
+    }
 }

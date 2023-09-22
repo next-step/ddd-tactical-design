@@ -60,11 +60,21 @@ public class Menu {
         displayed = false;
     }
 
+    public Price totalPrice() {
+        return menuProducts.totalPrice();
+    }
+
     public Price getPrice() {
         return price;
     }
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+
+    public void changeProductPrice(UUID productId, Price price, MenuDisplayPolicy menuDisplayPolicy) {
+        menuProducts.changeProductPrice(productId, price);
+        menuDisplayPolicy.follow(this);
     }
 }

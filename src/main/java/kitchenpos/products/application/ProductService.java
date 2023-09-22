@@ -1,35 +1,27 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.PurgomalumClient;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
+import kitchenpos.products.domain.ChangedProductPriceEvent;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
-    ) {
+            final ProductRepository productRepository,
+            final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -40,22 +32,9 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, final ChangePriceRequest request) {
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        publisher.publishEvent(new ChangedProductPriceEvent(product.getId(), product.getPrice()));
         return product;
     }
 

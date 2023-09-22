@@ -1,7 +1,8 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.menus.domain.Price;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MenuPricePolicy {
     public void follow(Price menuPrice, Price menuProductsTotalPrice) {
         if (menuPrice.isSmallerOrEqualTo(menuProductsTotalPrice)) {

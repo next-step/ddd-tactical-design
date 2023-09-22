@@ -4,7 +4,8 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-@Embeddable
+@Table(name = "menu_product")
+@Entity
 public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,7 @@ public class MenuProduct {
     @Embedded
     private Quantity quantity;
 
+    @Column(name = "price", nullable = false)
     private Price price;
 
     protected MenuProduct() {
@@ -26,6 +28,14 @@ public class MenuProduct {
         this.productId = productId;
         this.quantity = quantity;
         this.price = productPrice.multiplyQuantity(quantity);
+    }
+
+    public void changeProductPrice(Price productPrice) {
+        this.price = productPrice.multiplyQuantity(quantity);
+    }
+
+    public UUID getProductId() {
+        return productId;
     }
 
     public Price getPrice() {

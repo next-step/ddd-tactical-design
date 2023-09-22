@@ -3,18 +3,18 @@ package kitchenpos.menus.domain;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class MenuProducts {
 
-    @ElementCollection
-    @CollectionTable(name = "study_group_member",
-            joinColumns = @JoinColumn(
-                    name = "menu_id",
-                    nullable = false,
-                    columnDefinition = "binary(16)",
-                    foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-            ))
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
     private List<MenuProduct> menuProducts;
 
     protected MenuProducts() {
@@ -44,5 +44,10 @@ public class MenuProducts {
     @Override
     public int hashCode() {
         return Objects.hash(menuProducts);
+    }
+
+    public void changeProductPrice(UUID productId, Price price) {
+        menuProducts.stream().filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .forEach(menuProduct -> menuProduct.changeProductPrice(price));
     }
 }
