@@ -3,7 +3,7 @@ package kitchenpos.order.deliveryorders.domain;
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderLineItemsService;
 import kitchenpos.order.domain.OrderRepository;
-import kitchenpos.order.domain.vo.OrderLineItems;
+import kitchenpos.order.domain.OrderLineItems;
 import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.stereotype.Component;
 

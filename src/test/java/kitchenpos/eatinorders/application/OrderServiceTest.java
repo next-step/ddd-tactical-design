@@ -7,7 +7,7 @@ import kitchenpos.order.application.OrderService;
 import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.eatinorders.domain.*;
 import kitchenpos.order.supports.strategy.OrderProcessStrategy;
-import kitchenpos.order.domain.vo.OrderLineItems;
+import kitchenpos.order.domain.OrderLineItems;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.deliveryorders.domain.*;

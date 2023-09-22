@@ -1,7 +1,5 @@
 package kitchenpos.order.domain;
 
-import kitchenpos.order.domain.vo.OrderLineItems;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;

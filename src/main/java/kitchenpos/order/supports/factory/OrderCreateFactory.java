@@ -4,7 +4,7 @@ import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.domain.OrderType;
-import kitchenpos.order.domain.vo.OrderLineItems;
+import kitchenpos.order.domain.OrderLineItems;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

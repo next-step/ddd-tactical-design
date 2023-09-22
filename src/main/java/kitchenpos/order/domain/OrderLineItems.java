@@ -1,4 +1,4 @@
-package kitchenpos.order.domain.vo;
+package kitchenpos.order.domain;
 
 import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.support.ValueObject;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Embeddable
-public class OrderLineItems extends ValueObject {
+public class OrderLineItems {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
             name = "order_id",
