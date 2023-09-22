@@ -2,7 +2,6 @@ package kitchenpos.products.service;
 
 import kitchenpos.products.application.dto.ChangePriceRequest;
 import kitchenpos.products.application.dto.CreateProductRequest;
-import kitchenpos.products.domain.Price;
 
 public class ProductRequestFixture {
     private String name;
@@ -31,7 +30,7 @@ public class ProductRequestFixture {
         return new CreateProductRequest(name, price);
     }
 
-    public ChangePriceRequest changePriceRequest() {
+    public ChangePriceRequest buildChangePriceRequest() {
         return new ChangePriceRequest(price);
     }
 

@@ -3,7 +3,6 @@ package kitchenpos.products.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -110,7 +109,7 @@ class ProductServiceTest {
         UUID productId = 강정치킨.getId();
         ChangePriceRequest request = ProductRequestFixture.builder()
                 .price(null)
-                .changePriceRequest();
+                .buildChangePriceRequest();
 
         assertThatThrownBy(() -> productService.changePrice(productId, request))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -121,7 +120,7 @@ class ProductServiceTest {
         UUID productId = 강정치킨.getId();
         ChangePriceRequest request = ProductRequestFixture.builder()
                 .price(-1L)
-                .changePriceRequest();
+                .buildChangePriceRequest();
 
         assertThatThrownBy(() -> productService.changePrice(productId, request))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -132,7 +131,7 @@ class ProductServiceTest {
         UUID productId = UUID.randomUUID();
         ChangePriceRequest request = ProductRequestFixture.builder()
                 .price(0L)
-                .changePriceRequest();
+                .buildChangePriceRequest();
 
         assertThatThrownBy(() -> productService.changePrice(productId, request))
                 .isInstanceOf(NoSuchElementException.class);
@@ -143,7 +142,7 @@ class ProductServiceTest {
         UUID productId = 강정치킨.getId();
         ChangePriceRequest request = ProductRequestFixture.builder()
                 .price(999L)
-                .changePriceRequest();
+                .buildChangePriceRequest();
 
         assertDoesNotThrow(() -> productService.changePrice(productId, request));
         Menu menuOfProduct = menuRepository.findById(오늘의치킨.getId()).get();
@@ -155,7 +154,7 @@ class ProductServiceTest {
         UUID productId = 강정치킨.getId();
         ChangePriceRequest request = ProductRequestFixture.builder()
                 .price(1001L)
-                .changePriceRequest();
+                .buildChangePriceRequest();
 
         assertDoesNotThrow(() -> productService.changePrice(productId, request));
         Menu menuOfProduct = menuRepository.findById(오늘의치킨.getId()).get();
