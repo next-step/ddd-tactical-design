@@ -10,14 +10,18 @@ import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalRestControllerExceptionHandler {
+    @ExceptionHandler(NoSuchElementException.class)
+    public HttpEntity<String> handleException(final NoSuchElementException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public HttpEntity<String> handleException(final IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public HttpEntity<String> handleException(final NoSuchElementException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    @ExceptionHandler(IllegalStateException.class)
+    public HttpEntity<String> handleException(final IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
     }
 }

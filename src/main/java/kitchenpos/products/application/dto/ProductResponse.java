@@ -12,7 +12,7 @@ public class ProductResponse {
 
     private final BigDecimal price;
 
-    public ProductResponse(Product product) {
+    public ProductResponse(final Product product) {
         this.productId = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();

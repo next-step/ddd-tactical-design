@@ -1,9 +1,13 @@
 package kitchenpos;
 
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.application.FakeMenuPurgomalumClient;
 import kitchenpos.menus.domain.menu.Menu;
-import kitchenpos.menus.domain.menugroup.MenuGroup;
+import kitchenpos.menus.domain.menu.MenuName;
+import kitchenpos.menus.domain.menu.MenuPrice;
 import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.menugroup.MenuGroup;
+import kitchenpos.menus.domain.menugroup.MenuGroupName;
 import kitchenpos.products.application.FakeProductPurgomalumClient;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
@@ -27,14 +31,14 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
-        return menu;
+        return new Menu(
+                menuGroup(),
+                MenuName.of("후라이드+후라이드",
+                new FakeMenuPurgomalumClient()),
+                MenuPrice.of(BigDecimal.valueOf(price)),
+                displayed,
+                Arrays.asList(menuProducts)
+        );
     }
 
     public static MenuGroup menuGroup() {
@@ -42,26 +46,25 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(MenuGroupName.of(name));
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
-        return menuProduct;
+        return new MenuProduct(
+                new Random().nextLong(),
+                product().getId(),
+                2L,
+                kitchenpos.menus.domain.menu.ProductPrice.of(product().getPrice())
+        );
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
+        return new MenuProduct(
+                new Random().nextLong(),
+                product.getId(),
+                quantity,
+                kitchenpos.menus.domain.menu.ProductPrice.of(product.getPrice())
+        );
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
@@ -121,6 +124,9 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), ProductName.of(name, new FakeProductPurgomalumClient()), ProductPrice.of(BigDecimal.valueOf(price)));
+        return new Product(
+                ProductName.of(name, new FakeProductPurgomalumClient()),
+                ProductPrice.of(BigDecimal.valueOf(price))
+        );
     }
 }

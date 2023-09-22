@@ -1,7 +1,5 @@
 package kitchenpos.menus.domain.menu;
 
-import kitchenpos.menus.domain.menu.Menu;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

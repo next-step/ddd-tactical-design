@@ -16,7 +16,7 @@ public class MenuProductResponse {
         this.quantity = quantity;
     }
 
-    public static List<MenuProductResponse> ofList(List<MenuProduct> menuProducts) {
+    public static List<MenuProductResponse> ofList(final List<MenuProduct> menuProducts) {
         return menuProducts.stream()
                 .map(menuProduct -> new MenuProductResponse(menuProduct.getProductId(), menuProduct.getQuantity()))
                 .collect(Collectors.toList());

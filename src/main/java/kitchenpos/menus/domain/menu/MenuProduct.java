@@ -1,10 +1,7 @@
 package kitchenpos.menus.domain.menu;
 
-import kitchenpos.products.domain.Product;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -22,45 +19,41 @@ public class MenuProduct {
     private long quantity;
 
     @Transient
-    private BigDecimal productPrice;
+    private ProductPrice productPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(final UUID productId, final long quantity) {
+    public MenuProduct(final Long seq, final UUID productId, final long quantity, final ProductPrice price) {
+        this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;
+        this.productPrice = price;
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
-    }
-
-    public void setProductPrice(final BigDecimal productPrice) {
-        this.productPrice = productPrice;
-    }
-
     public BigDecimal getProductPrice() {
-        return productPrice;
+        return productPrice.getPrice();
+    }
+
+    public void changeProductPrice(final ProductPrice productPrice) {
+        if (productPrice == null) {
+            throw new IllegalArgumentException("상품 가격이 없습니다.");
+        }
+
+        if (!this.productPrice.equals(productPrice)) {
+            this.productPrice = productPrice;
+        }
     }
 }

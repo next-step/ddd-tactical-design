@@ -19,7 +19,7 @@ public class MenuResponse {
 
     private final List<MenuProductResponse> menuProductsResponse;
 
-    public MenuResponse(Menu menu) {
+    public MenuResponse(final Menu menu) {
         this.id = menu.getId();
         this.name = menu.getName();
         this.price = menu.getPrice();

@@ -20,30 +20,14 @@ public class Product {
     protected Product() {
     }
 
-    public Product(final UUID id, final ProductName name, final ProductPrice price) {
-        this.id = id;
+    public Product(final ProductName name, final ProductPrice price) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
 
-    public Product(final UUID id, final String name, ProductPurgomalumClient purgomalumClient, final BigDecimal price) {
-        this.id = id;
-        this.name = ProductName.of(name, purgomalumClient);
-        this.price = ProductPrice.of(price);
-    }
-
-    public Product(final String name, ProductPurgomalumClient purgomalumClient, final BigDecimal price) {
-        this.id = UUID.randomUUID();
-        this.name = ProductName.of(name, purgomalumClient);
-        this.price = ProductPrice.of(price);
-    }
-
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,8 +38,7 @@ public class Product {
         return price.getPrice();
     }
 
-    public void changePrice(final BigDecimal price) {
-        this.price = ProductPrice.of(price);
+    public void changePrice(final ProductPrice price) {
+        this.price = price;
     }
-
 }

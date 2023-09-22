@@ -23,7 +23,7 @@ public class ProductName {
 
     private static void validateName(final String name, ProductPurgomalumClient purgomalumClient) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("상품명이 입력되지 않았습니다.");
+            throw new IllegalArgumentException("상품명이 비어 있습니다.");
         }
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException("상품명에 비속어가 포함되었습니다.");

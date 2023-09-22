@@ -23,7 +23,7 @@ public class MenuGroupName {
 
     private static void validateName(final String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("메뉴명이 입력되지 않았습니다.");
+            throw new IllegalArgumentException("메뉴 그룹명이 입력되지 않았습니다.");
         }
     }
 

@@ -1,7 +1,8 @@
 package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.menugroup.MenuGroupService;
-import kitchenpos.menus.domain.menugroup.MenuGroup;
+import kitchenpos.menus.application.menugroup.dto.MenuGroupRequest;
+import kitchenpos.menus.application.menugroup.dto.MenuGroupResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +19,14 @@ public class MenuGroupRestController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroup request) {
-        final MenuGroup response = menuGroupService.create(request);
+    public ResponseEntity<MenuGroupResponse> create(@RequestBody final MenuGroupRequest request) {
+        final MenuGroupResponse response = menuGroupService.create(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
             .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuGroup>> findAll() {
+    public ResponseEntity<List<MenuGroupResponse>> findAll() {
         return ResponseEntity.ok(menuGroupService.findAll());
     }
 }

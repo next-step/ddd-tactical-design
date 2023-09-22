@@ -3,6 +3,7 @@ package kitchenpos.menus.infra;
 import kitchenpos.menus.domain.menu.MenuPrice;
 import kitchenpos.menus.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.menu.ProductClient;
+import kitchenpos.menus.domain.menu.ProductPrice;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,14 @@ public class DefaultProductClient implements ProductClient {
 
     public DefaultProductClient(final ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    @Override
+    public ProductPrice getProductPrice(final UUID productId) {
+        return productRepository.findById(productId)
+                .map(Product::getPrice)
+                .map(ProductPrice::of)
+                .orElse(null);
     }
 
     @Override
@@ -42,18 +51,12 @@ public class DefaultProductClient implements ProductClient {
 
     @Override
     public void validateMenuPrice(final List<MenuProduct> menuProducts, final MenuPrice menuPrice) {
-        menuProducts.forEach(menuProduct -> {
-            menuProduct.setProductPrice(productRepository.findById(menuProduct.getProductId())
-                    .orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품입니다. [" + menuProduct.getProductId() + "]"))
-                    .getPrice());
-        });
-
         BigDecimal sum = menuProducts.stream()
                 .map(menuProduct -> menuProduct.getProductPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (menuPrice.getPrice().compareTo(sum) > 0) {
-            throw new IllegalArgumentException("메뉴의 가격이 메뉴 상품의 가격보다 작습니다.");
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 큽니다.");
         }
     }
 

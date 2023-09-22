@@ -8,14 +8,14 @@ import org.springframework.context.ApplicationEventPublisher;
 public class FakeApplicationEventPublisher implements ApplicationEventPublisher {
     private final MenuService menuService;
 
-    public FakeApplicationEventPublisher(MenuRepository menuRepository, ProductClient productClient) {
+    public FakeApplicationEventPublisher(final MenuRepository menuRepository, final ProductClient productClient) {
         this.menuService = new MenuService(menuRepository, null,null, productClient);
     }
 
     @Override
-    public void publishEvent(Object event) {
+    public void publishEvent(final Object event) {
         if (event instanceof ProductChangePriceEvent) {
-            menuService.changeDisplayed(((ProductChangePriceEvent) event).getProductId());
+            menuService.hideIfMenuPriceGraterThanProduct(((ProductChangePriceEvent) event).getProductId());
         }
     }
 }

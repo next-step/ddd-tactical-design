@@ -6,25 +6,25 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class MenuPrice {
+public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected MenuPrice() {
+    protected ProductPrice() {
     }
 
-    private MenuPrice(final BigDecimal price) {
+    private ProductPrice(final BigDecimal price) {
         this.price = price;
     }
 
-    public static MenuPrice of(final BigDecimal price) {
+    public static ProductPrice of(final BigDecimal price) {
         validatePrice(price);
-        return new MenuPrice(price);
+        return new ProductPrice(price);
     }
 
     private static void validatePrice(final BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("메뉴 가격이 비어 있거나 0원 미만입니다.");
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("상품 가격이 입력되지 않았거나 0원 미만입니다.");
         }
     }
 
@@ -36,7 +36,7 @@ public class MenuPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuPrice that = (MenuPrice) o;
+        ProductPrice that = (ProductPrice) o;
         return Objects.equals(price, that.price);
     }
 

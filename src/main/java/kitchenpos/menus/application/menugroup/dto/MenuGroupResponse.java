@@ -1,32 +1,24 @@
 package kitchenpos.menus.application.menugroup.dto;
 
-import kitchenpos.products.domain.Product;
+import kitchenpos.menus.domain.menugroup.MenuGroup;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuGroupResponse {
-    private final UUID productId;
+    private final UUID id;
 
     private final String name;
 
-    private final BigDecimal price;
-
-    public MenuGroupResponse(Product product) {
-        this.productId = product.getId();
-        this.name = product.getName();
-        this.price = product.getPrice();
+    public MenuGroupResponse(final MenuGroup menuGroup) {
+        this.id = menuGroup.getId();
+        this.name = menuGroup.getName();
     }
 
-    public UUID getProductId() {
-        return productId;
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 }

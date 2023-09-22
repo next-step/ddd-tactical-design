@@ -24,7 +24,7 @@ public class ProductPrice {
 
     private static void validatePrice(final BigDecimal price) {
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품 가격이 입력되지 않았거나 0원 미만입니다.");
+            throw new IllegalArgumentException("상품 가격이 비어 있거나 0원 미만입니다.");
         }
     }
 

@@ -46,21 +46,18 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final MenuGroup menuGroup, final MenuName name, final BigDecimal price, final boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(final MenuGroup menuGroup, final MenuName name, final MenuPrice price, final boolean displayed, List<MenuProduct> menuProducts) {
         this.id = UUID.randomUUID();
         this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroup.getId();
         this.name = name;
-        this.price = MenuPrice.of(price);
+        this.price = price;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -83,31 +80,24 @@ public class Menu {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
+    public void display() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
 }
