@@ -3,22 +3,25 @@ package kitchenpos.product.adapter.out;
 import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import java.util.UUID;
-import kitchenpos.menu.adapter.in.MenuDisplayingRearranger;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
 import kitchenpos.product.support.constant.Name;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class DefaultProductPriceChangeEventPublisher implements ProductPriceChangeEventPublisher {
 
-    private final MenuDisplayingRearranger rearranger;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public DefaultProductPriceChangeEventPublisher(final MenuDisplayingRearranger rearranger) {
-        this.rearranger = rearranger;
+
+    public DefaultProductPriceChangeEventPublisher(
+        final ApplicationEventPublisher applicationEventPublisher) {
+
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
     public void publish(final UUID id) {
         checkNotNull(id, Name.ID);
 
-        rearranger.execute(id);
+        applicationEventPublisher.publishEvent(new ProductPriceChangeEvent(id));
     }
 }

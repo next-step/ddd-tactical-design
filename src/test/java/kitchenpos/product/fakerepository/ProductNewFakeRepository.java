@@ -12,8 +12,7 @@ import kitchenpos.product.domain.ProductNew;
 public class ProductNewFakeRepository implements ProductNewRepository {
 
     private final Map<UUID, ProductNew> products = new HashMap<>();
-
-
+    
     @Override
     public ProductNew save(final ProductNew entity) {
         products.put(entity.getId(), entity);
@@ -30,6 +29,14 @@ public class ProductNewFakeRepository implements ProductNewRepository {
     public List<ProductNew> findAll() {
         return products.values()
             .stream()
+            .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<ProductNew> findAllByIdIn(final List<UUID> ids) {
+        return ids.stream()
+            .filter(id -> products.get(id) != null)
+            .map(products::get)
             .collect(Collectors.toUnmodifiableList());
     }
 }

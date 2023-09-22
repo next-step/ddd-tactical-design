@@ -44,7 +44,7 @@ class DefaultProductNameFactoryTest {
     @ValueSource(strings = "비속어포함된이름")
     void create_이름후보에_비속어가_포함되어있으면_예외를_발생시킨다(final String value) {
         // given
-        final Name profanityName = new Name(value);
+        final Name profanityName = Name.create(value);
         doReturn(true)
             .when(mockChecker)
             .containsProfanity(profanityName);
@@ -59,7 +59,7 @@ class DefaultProductNameFactoryTest {
     @ValueSource(strings = "dummy")
     void create_이름후보의_값을_가지고_음식이름을_만들어서_반환한다(final String value) {
         // given
-        final Name name = new Name(value);
+        final Name name = Name.create(value);
 
         // when
         final ProductName actual = factory.create(name);

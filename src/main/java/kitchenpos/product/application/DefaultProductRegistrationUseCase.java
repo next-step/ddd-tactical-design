@@ -3,6 +3,7 @@ package kitchenpos.product.application;
 import static kitchenpos.product.support.constant.Name.PRICE;
 import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
+import kitchenpos.product.application.port.in.ProductDTO;
 import kitchenpos.product.application.port.in.ProductRegistrationUseCase;
 import kitchenpos.product.application.port.out.ProductNewRepository;
 import kitchenpos.product.domain.ProductName;

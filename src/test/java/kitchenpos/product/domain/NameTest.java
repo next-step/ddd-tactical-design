@@ -18,7 +18,7 @@ class NameTest {
     void constructor_이름은_비어있을_수_없다(final String value) {
 
         // when & then
-        assertThatThrownBy(() -> new Name(value))
+        assertThatThrownBy(() -> Name.create(value))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -28,10 +28,10 @@ class NameTest {
     void constructor_이름을_생성하여_반환한다(final String value) {
 
         // when
-        final Name actual = new Name(value);
+        final Name actual = Name.create(value);
 
         // then
-        final Name expected = new Name(value);
+        final Name expected = Name.create(value);
         assertThat(actual).isEqualTo(expected);
     }
 }

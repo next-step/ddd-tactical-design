@@ -92,23 +92,24 @@ class DefaultProductPriceChangeUseCaseTest {
     @Test
     void change_입력받은_가격으로_음식_가격을_변경시킨다() {
         // given
-        final ProductNew product = repository.save(Fixtures.create(5_000L));
+        final ProductNew product = repository.save(Fixtures.create(5_000));
 
         // when
-        useCase.change(product.getId(), ProductPrice.create(10_000L));
+        useCase.change(product.getId(), ProductPrice.create(10_000));
 
         // then
         assertThat(product.getPrice())
-            .isEqualTo(ProductPrice.create(10_000L));
+            .isEqualTo(ProductPrice.create(10_000));
     }
 
     @Test
     void change_가격이_변경되면_가격변경_이벤트를_발행한다() {
         // given
-        final ProductNew product = repository.save(Fixtures.create(5_000L));
+        final ProductNew product = repository.save(Fixtures.create(5_000));
 
         // when
-        useCase.change(product.getId(), ProductPrice.create(10_000L));
+        useCase.change(product.getId(), ProductPrice.create(10_000));
+
         // then
         // verify
         verify(mockEventPublisher)

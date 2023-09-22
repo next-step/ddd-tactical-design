@@ -6,7 +6,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.UUID;
-import kitchenpos.menu.adapter.in.MenuDisplayingRearranger;
 import kitchenpos.product.application.port.out.ProductPriceChangeEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -17,19 +16,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
 class DefaultProductPriceChangeEventPublisherTest {
 
     @Mock
-    private MenuDisplayingRearranger mockRearranger;
+    private ApplicationEventPublisher mockEventPublisher;
 
     private ProductPriceChangeEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
-        publisher = new DefaultProductPriceChangeEventPublisher(mockRearranger);
+        publisher = new DefaultProductPriceChangeEventPublisher(mockEventPublisher);
     }
 
     @ParameterizedTest
@@ -43,7 +43,7 @@ class DefaultProductPriceChangeEventPublisherTest {
 
     @ParameterizedTest
     @NullSource
-    void publish_invalid_parameters_id가_null이면_rearranger는_실행되지_않는다(final UUID value) {
+    void publish_invalid_parameters_id가_null이면_listener는_실행되지_않는다(final UUID value) {
 
         // when
         try {
@@ -53,12 +53,12 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockRearranger, never())
-            .execute(any());
+        verify(mockEventPublisher, never())
+            .publishEvent(any());
     }
 
     @Test
-    void publish_id를_인자로_rerranger가_실행된다() {
+    void publish_id를_인자로_listener가_실행된다() {
         // given
         final UUID id = UUID.randomUUID();
 
@@ -67,7 +67,7 @@ class DefaultProductPriceChangeEventPublisherTest {
 
         // then
         // verify
-        verify(mockRearranger)
-            .execute(id);
+        verify(mockEventPublisher)
+            .publishEvent(new ProductPriceChangeEvent(id));
     }
 }

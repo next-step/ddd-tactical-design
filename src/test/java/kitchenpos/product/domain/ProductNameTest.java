@@ -29,7 +29,7 @@ class ProductNameTest {
     void of_name의_값으로_productName을_만들어_반환한다(final String value) {
 
         // given
-        final Name name = new Name(value);
+        final Name name = Name.create(value);
 
         // when
         final ProductName actual = ProductName.create(name);
