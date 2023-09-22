@@ -48,6 +48,6 @@ public class MenuProductFixture {
     }
 
     public MenuProduct build() {
-        return new MenuProduct(productId, new Quantity(quantity), new Price(price));
+        return new MenuProduct(productId, quantity, price);
     }
 }

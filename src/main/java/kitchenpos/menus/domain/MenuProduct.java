@@ -19,6 +19,10 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
+    public MenuProduct(UUID productId, int quantity, Long productPrice) {
+        this(productId, new Quantity(quantity), new Price(productPrice));
+    }
+
     public MenuProduct(UUID productId, Quantity quantity, Price productPrice) {
         this.productId = productId;
         this.quantity = quantity;

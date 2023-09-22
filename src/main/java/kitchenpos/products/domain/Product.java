@@ -22,7 +22,7 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, DisplayedName name, long price) {
+    public Product(UUID id, DisplayedName name, Long price) {
         this(id, name, new Price(price));
     }
 

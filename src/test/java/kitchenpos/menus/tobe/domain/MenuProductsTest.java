@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class MenuProductsTest {
     @Test
     void MenuProducts는_MenuProduct를_1개_이상_갖는다() {
-        assertDoesNotThrow(() -> new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)))));
+        assertDoesNotThrow(() -> new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 0, 1000L))));
     }
 
     @Test
@@ -30,18 +30,18 @@ class MenuProductsTest {
     void MenuProduct들의_총합_가격을_구할_수_있다() {
         MenuProducts menuProducts = new MenuProducts(
                 List.of(
-                        new MenuProduct(UUID.randomUUID(), new Quantity(1), new Price(1000)),
-                        new MenuProduct(UUID.randomUUID(), new Quantity(2), new Price(2000))
+                        new MenuProduct(UUID.randomUUID(), 1, 1000L),
+                        new MenuProduct(UUID.randomUUID(), 2, 2000L)
                 )
         );
 
-        assertThat(menuProducts.totalPrice()).isEqualTo(new Price(5000));
+        assertThat(menuProducts.totalPrice()).isEqualTo(new Price(5000L));
     }
 
     @Test
     void MenuProducts_동등성_비교() {
-        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
-        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
+        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), 0, 1000L));
+        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), 0, 1000L));
 
         MenuProducts actual = new MenuProducts(menuProducts);
 
@@ -56,8 +56,8 @@ class MenuProductsTest {
 
     @Test
     void MenuProducts_hashCode() {
-        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
-        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), new Quantity(0), new Price(1000)));
+        List<MenuProduct> menuProducts = List.of(new MenuProduct(UUID.randomUUID(), 0, 1000L));
+        List<MenuProduct> otherMenuProducts = List.of(new MenuProduct(UUID.randomUUID(), 0, 1000L));
         
         MenuProducts actual = new MenuProducts(menuProducts);
 
