@@ -1,39 +1,39 @@
 package kitchenpos.products.service;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
+import kitchenpos.products.domain.DisplayedName;
+import kitchenpos.products.domain.Price;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.FakePurgomalumClient;
 
 public class ProductFixture {
-    private final Product product;
+    private UUID id;
+    private String name;
+    private long price;
 
     public ProductFixture() {
-        product = new Product();
-        product.setId(UUID.randomUUID());
+        id = UUID.randomUUID();
+        name = "치킨";
+        price = 0L;
     }
 
     public static ProductFixture builder() {
-        return new ProductFixture()
-                .price(0L);
+        return new ProductFixture();
     }
 
     public ProductFixture name(String name) {
-        product.setName(name);
-        return this;
-    }
-
-    public ProductFixture price(BigDecimal price) {
-        product.setPrice(price);
+        this.name = name;
         return this;
     }
 
     public ProductFixture price(long price) {
-        return price(new BigDecimal(price));
+        this.price = price;
+        return this;
     }
 
     public Product build() {
-        return product;
+        return new Product(id, new DisplayedName(name, new FakePurgomalumClient()), new Price(price));
     }
 
     public static class Data {
