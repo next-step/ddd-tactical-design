@@ -2,13 +2,11 @@ package kitchenpos.menus.application.dto;
 
 import java.util.UUID;
 
-import kitchenpos.menus.domain.Price;
-
 public class ProductDto {
     private final UUID productId;
-    private final Price price;
+    private final Long price;
 
-    public ProductDto(UUID productId, Price price) {
+    public ProductDto(UUID productId, Long price) {
         this.productId = productId;
         this.price = price;
     }
@@ -17,7 +15,7 @@ public class ProductDto {
         return productId;
     }
 
-    public Price getPrice() {
+    public Long getPrice() {
         return price;
     }
 }

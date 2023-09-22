@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import kitchenpos.menus.application.ProductApiService;
 import kitchenpos.menus.application.dto.ProductDto;
-import kitchenpos.menus.domain.Price;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 
@@ -26,7 +25,7 @@ public class DefaultProductApiService implements ProductApiService {
         return products.stream()
                 .map(product -> new ProductDto(
                                 product.getId(),
-                                new Price(product.getPrice().longValue())
+                                product.getPrice().longValue()
                         )
                 )
                 .collect(Collectors.toList());

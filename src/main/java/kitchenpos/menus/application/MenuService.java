@@ -72,23 +72,26 @@ public class MenuService {
                 .collect(Collectors.toList()));
 
         return new MenuProducts(menuProductsRequest.stream()
-                .map(menuProduct ->
-                        new MenuProduct(
-                                menuProduct.getProductId(),
-                                menuProduct.getQuantity(),
-                                getPrice(products, menuProduct)
-                        )
-                )
+                .map(menuProduct -> createMenuProduct(products, menuProduct))
                 .collect(Collectors.toList())
         );
     }
 
-    private Price getPrice(List<ProductDto> products, MenuProduct menuProduct) {
+    private MenuProduct createMenuProduct(List<ProductDto> products, MenuProduct menuProduct) {
+        UUID productId = menuProduct.getProductId();
+        ProductDto productDto = findProductDto(products, productId);
+        return new MenuProduct(
+                productId,
+                menuProduct.getQuantity(),
+                new Price(productDto.getPrice())
+        );
+    }
+
+    private ProductDto findProductDto(List<ProductDto> products, UUID productId) {
         return products.stream()
-                .filter(productDto -> productDto.getProductId().equals(menuProduct.getProductId()))
+                .filter(productDto -> productDto.getProductId().equals(productId))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new)
-                .getPrice();
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Transactional
