@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import kitchenpos.deliveryorders.domain.KitchenridersClient;
+
 @Component
 public class DefaultKitchenridersClient implements KitchenridersClient {
     @Override

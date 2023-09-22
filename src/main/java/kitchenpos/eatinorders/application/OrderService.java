@@ -1,9 +1,16 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.OrderRepository;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.deliveryorders.domain.KitchenridersClient;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,9 +69,9 @@ public class OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
+//            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+//                throw new IllegalArgumentException();
+//            }
             final OrderLineItem orderLineItem = new OrderLineItem();
             orderLineItem.setMenu(menu);
             orderLineItem.setQuantity(quantity);
@@ -103,11 +110,11 @@ public class OrderService {
         }
         if (order.getType() == OrderType.DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
+//            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
+//                sum = orderLineItem.getMenu()
+//                    .getPrice()
+//                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
+//            }
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);

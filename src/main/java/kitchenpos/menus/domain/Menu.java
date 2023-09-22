@@ -1,8 +1,6 @@
 package kitchenpos.menus.domain;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -13,90 +11,73 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
+    protected Menu() {
+    }
 
-    public Menu() {
+    public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup, MenuProducts menuProducts, MenuPricePolicy menuPricePolicy) {
+        menuPricePolicy.follow(price, menuProducts.totalPrice());
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.menuProducts = menuProducts;
+        this.displayed = true;
+    }
+
+    public void changePrice(Price price, MenuPricePolicy menuPricePolicy) {
+        menuPricePolicy.follow(price, menuProducts.totalPrice());
+        this.price = price;
+    }
+
+    public void changeProductPrice(UUID productId, Price price, MenuDisplayPolicy menuDisplayPolicy) {
+        menuProducts.changeProductPrice(productId, price);
+        menuDisplayPolicy.follow(this);
+    }
+
+    public void display(MenuPricePolicy menuPricePolicy) {
+        menuPricePolicy.follow(price, menuProducts.totalPrice());
+        displayed = true;
+    }
+
+    public void hide() {
+        displayed = false;
+    }
+
+    public Price totalPrice() {
+        return menuProducts.totalPrice();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
 }

@@ -96,106 +96,134 @@ docker compose -p kitchenpos up -d
 
 ## 용어 사전
 
-### 상품
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
-
-### 메뉴
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
-
 ### 매장 주문
-
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
-
-### 배달 주문
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 테이블 | Table | 매장 주문을 위해 방문한 손님들이 차지해야하는 테이블 |
+| 손님 수 | Number of Guests | 테이블을 사용하고 있는 손님 수를 말한다 |
+| 테이블 상태 | TableStatus | 테이블 사용유무 |
+| 사용중 | In Use | 테이블을 사용하는 상태 |
+| 사용안함 | Not In Use | 테이블을 사용하지 않는 상태 |
+| 테이블 정리 | Clean Table | 테이블 상태를 사용안함으로 변경하는 것 |
+| 테이블 착석 | Seat on Table | 테이블 상태를 사용중으로 변경하는 것 |
+| 테이블 목록 조회 | View All Tables| 전체 테이블을 조회하는 것을 말한다 |
+| 주문 | Eat In Order | 음식을 매장에서 먹고갈 경우에 하는 주문 |
+| 주문 항목 | Order Line Item | 한 번의 주문에 1개 이상의 메뉴로 주문할 수 있는데, 각각의 주문한 메뉴 항목을 말한다 |
+| 주문 항목들 | Order Line Items | Order Line item 의 묶음을 말한다 |
+| 주문 상태 | OrderStatus | 주문의 진행상태 |
+| 대기중 | Waiting | 매장 주문의 처음 상태 |
+| 접수됨 | Accepted | 접수 대기 중인 주문을 확인하고 주문을 접수한 상태 |
+| 서빙됨 | Served | 접수된 주문을 음식을 준비하여 서빙한 상태 |
+| 완료됨 | Completed | 주문의 마지막 상태. 주문이 손님에게 제공 완료되었음을 의미한다 |
 
 ### 포장 주문
-
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 주문 | Takeout Order | 음식을 매장에서 먹지 않고 포장 요구하는 주문 |
+| 주문 항목 | Order Line Item | 한 번의 주문에 1개 이상의 메뉴로 주문할 수 있는데, 각각의 주문한 메뉴 항목을 말한다 |
+| 주문 항목들 | Order Line Items | Order Line item 의 묶음을 말한다 |
+| 주문 상태 | OrderStatus | 주문의 진행상태 |
+| 대기중 | Waiting | 주문의 처음 상태 |
+| 접수됨 | Accepted | 접수 대기 중인 주문을 확인하고 주문을 접수한 상태 |
+| 서빙됨 | Served | 접수된 주문을 음식을 준비하여 서빙한 상태 |
+| 완료됨 | Completed | 주문의 마지막 상태. 주문이 손님에게 제공 완료되었음을 의미한다 |
+
+### 배달 주문
+| 한글명 | 영문명 | 설명 |
+| --- | --- | --- |
+| 주문 | Delivery Order | 음식을 배달 주소에 가져다 주는 주문 |
+| 배달 주소 | Delivery Address | 배달 주문의 음식 도착지 |
+| 배달 대행사 | Kitchen Riders | 음식을 배달 주소에 운반해주는 업체 |
+| 주문 항목 | Order Line Item | 한 번의 주문에 1개 이상의 메뉴로 주문할 수 있는데, 각각의 주문한 메뉴 항목을 말한다 |
+| 주문 항목들 | Order Line Items | Order Line item 의 묶음을 말한다 |
+| 주문 상태 | Order Status | 주문의 진행상태 |
+| 대기중 | Waiting | 주문의 처음 상태 |
+| 접수됨 | Accepted | 접수 대기 중인 주문을 확인하고 주문을 접수한 상태 |
+| 서빙됨 | Served | 접수된 주문을 음식을 준비하여 서빙한 상태 |
+| 배달중 | Delivering | 배달 대행사가 음식을 배달 주소에 운반하고 있는 상태 |
+| 배달 완료됨 | Delivery Completed | 배달 대행사가 음식을 배달 주소에 운반 완료한 상태 |
+| 완료됨 | Completed | 주문의 마지막 상태. 주문이 손님에게 제공 완료되었음을 의미한다 |
 
 ## 모델링
 
-### 상품
-
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
-
-### 메뉴
-
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
-
 ### 매장 주문
+#### 속성
+- `Table`은 식별자, 이름, `손님 수`를 갖는다.
+#### 기능
+- `Table`을 등록할 수 있다.
+  - `Table` 등록 시, 테이블 상태는 `Not In Use`이다.
+- `Table`의 `손님 수`를 변경 할 수 있다.
+  - `Table`의 `손님 수` 변경 시, `손님 수`는 0명 이상이여야 한다.
+- `Table`은 `Clean Table` 할 수 있다.
+  - 테이블 상태를 `Not In Use`로 변경과 `손님 수`를 0으로 만든다.
+- `Table`은 `Seat on Table` 할 수 있다.
+  - 테이블 상태를 `In Use`로 변경한다.
 
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
 
-### 배달 주문
+#### 속성
+- `EatInOrder`는 `Table`의 식별자, `OrderStatus`, 주문시각, `OrderLineItems`를 갖는다.
+- `OrderStatus`는 `Waiting`, `Accepted`, `Served`, `Completed` 을 갖는다.
+  - `OrderStatus`는 순서를 갖는데, (`Waiting` > `Accepted` > `Served` > `Completed`)와 같이 진행된다.
+- Quantity는 수량을 갖는다.
+  - 수량은 0개 이상이어야 한다.
+- `OrderLineItems`는 `OrderLineItem`을 갖는다.
+- `OrderLineItem`은 `Menu`의 식별자, `Price`, Quantity를 갖는다.
+  - `OrderLineItem`의 `Price`와 `Menu`의 `Price`는 같아야한다.
+#### 기능
+- `EatInOrder`는 생성할 수 있다.
+  - `EatInOrder` 생성 시, `Table`은  `In Use` 여야 한다.
+  - `Menu`는 Displayed Menu 여야 한다.
+- `EatInOrder`는 접수할 수 있다.
+- `EatInOrder`는 서빙할 수 있다.
+- `EatInOrder`는 완료할 수 있다.
+  - `EatInOrder`가 완료될 때, EatInOrder Complete Policy를 따른다.
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+#### 정책
+- 매장주문완료정책(EatInOrderCompletePolicy)
+  - `EatInOrder`가 Complete 되었을때, 해당 `EatInOrder`와 관련된 `Table`의 모든 `EatInOrder`가 `Completed`면 `Clean Table`한다
+
 
 ### 포장 주문
+#### 속성
+- `TakeOutOrder`는 `OrderStatus`, 주문시각, `OrderLineItems`를 갖는다.
+- `OrderStatus`는 `Waiting`, `Accepted`, `Served`, `Completed` 을 갖는다.
+  - `OrderStatus`는 순서를 갖는데, (`Waiting` > `Accepted` > `Served` > `Completed`)와 같이 진행된다.
+- Quantity는 수량을 갖는다.
+  - 수량은 0개 이상이어야 한다.
+- `OrderLineItems`는 `OrderLineItem`을 갖는다.
+- `OrderLineItem`은 `Menu`의 id, `Price`, Quantity를 갖는다.
+- `OrderLineItem`의 `Price`와 `Menu`의 `Price`는 같아야한다.
+#### 기능
+- `TakeOutOrder`는 생성할 수 있다.
+  - `Menu`는 Displayed Menu 여야 한다.
+- `TakeOutOrder`는 접수할 수 있다.
+- `TakeOutOrder`는 서빙할 수 있다.
+- `TakeOutOrder`는 완료할 수 있다.
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+
+### 배달 주문
+#### 속성
+- `DeliveryOrder`는 `DeliveryAddress`, `OrderStatus`, 주문시각, `OrderLineItems`를 갖는다.
+- `DeliveryAddress`는 주소를 갖는다.
+  - 주소는 존재해야한다.
+- `OrderStatus`는 `Waiting`, `Accepted`, `Served`, `Delivering`, `Delivery Completed`, `Completed` 을 갖는다.
+  - `OrderStatus`는 순서를 갖는데, (`Waiting` > `Accepted` > `Served` > `Delivering` > `Delivery Completed` > `Completed`)와 같이 진행된다.
+- Quantity는 수량을 갖는다.
+  - 수량은 0개 이상이어야 한다.
+- `OrderLineItems`는 `OrderLineItem`을 갖는다.
+- `OrderLineItem`은 `Menu`의 id, `Price`, Quantity를 갖는다.
+- `OrderLineItem`의 `Price`와 `Menu`의 `Price`는 같아야한다.
+#### 기능
+- `DeliveryOrder`는 생성할 수 있다.
+  - `Menu`는 Displayed Menu 여야 한다.
+  - `DeliveryOrder` 생성 시, `DeliveryAddress` 존재해야한다.
+- `DeliveryOrder`는 접수할 수 있다.
+  - `DeliveryOrder`가 접수되었을 때, DeliveryOrder Accept Policy를 따른다.
+- `DeliveryOrder`는 서빙할 수 있다.
+- `DeliveryOrder`는 배달시작할 수 있다.
+- `DeliveryOrder`는 배달완료할 수 있다.
+- `DeliveryOrder`는 완료할 수 있다.
+
+#### 정책
+- 배달주문접수정책(Delivery Order Accept Policy)
+  - `DeliveryOrder`가 접수 되었을 때, `Kitchen Riders`에게 배달 요청을 한다.
