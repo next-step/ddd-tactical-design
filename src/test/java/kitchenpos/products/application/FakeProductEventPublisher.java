@@ -25,7 +25,7 @@ public class FakeProductEventPublisher extends ProductEventPublisher {
                 .orElseThrow();
         List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (Menu menu : menus) {
-            menu.changeMenuProductPrice(product.getId(), product.getPrice().getValue());
+            menu.changeMenuProductPrice(product.getId(), product.getPriceValue());
         }
     }
 }

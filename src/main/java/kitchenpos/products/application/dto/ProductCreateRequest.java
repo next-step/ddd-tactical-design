@@ -1,9 +1,7 @@
 package kitchenpos.products.application.dto;
 
-import kitchenpos.products.tobe.domain.ProductNamePolicy;
-import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.ProductNamePolicy;
 
 import java.math.BigDecimal;
 
@@ -17,7 +15,7 @@ public class ProductCreateRequest {
     }
 
     public Product toProduct(ProductNamePolicy productNamePolicy) {
-        return new Product(ProductName.from(name, productNamePolicy), ProductPrice.from(price));
+        return Product.from(name, price, productNamePolicy);
     }
 
     public String getName() {

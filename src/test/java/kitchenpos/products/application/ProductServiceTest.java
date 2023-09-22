@@ -48,8 +48,8 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getProductName()).isEqualTo(ProductName.from(expected.getName(), productNamePolicy)),
-                () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
+                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName(), productNamePolicy),
+                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -79,7 +79,7 @@ class ProductServiceTest {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()));
+        assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")

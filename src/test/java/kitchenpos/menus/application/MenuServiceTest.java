@@ -189,7 +189,7 @@ class MenuServiceTest {
     @Test
     void displayExpensiveMenu() {
         final UUID menuId = menuRepository.save(menu(32_000L, false, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
-        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getProductName().getValue(), BigDecimal.valueOf(15_000L)));
+        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getNameValue(), BigDecimal.valueOf(15_000L)));
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(IllegalStateException.class);
     }

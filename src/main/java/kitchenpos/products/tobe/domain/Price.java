@@ -6,15 +6,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
-    public static final ProductPrice ZERO = ProductPrice.from(BigDecimal.ZERO);
+class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal value;
 
-    protected ProductPrice() {
+    protected Price() {
     }
 
-    private ProductPrice(BigDecimal value) {
+    private Price(BigDecimal value) {
         this.validate(value);
         this.value = value;
     }
@@ -29,16 +28,16 @@ public class ProductPrice {
         return value.compareTo(BigDecimal.ZERO) < 0;
     }
 
-    public static ProductPrice from(BigDecimal value) {
-        return new ProductPrice(value);
+    public static Price from(BigDecimal value) {
+        return new Price(value);
     }
 
-    public ProductPrice add(ProductPrice productPrice) {
-        return new ProductPrice(this.value.add(productPrice.value));
+    public Price add(Price price) {
+        return new Price(this.value.add(price.value));
     }
 
-    public ProductPrice multiplyQuantity(BigDecimal quantity) {
-        return new ProductPrice(this.value.multiply(quantity));
+    public Price multiplyQuantity(BigDecimal quantity) {
+        return new Price(this.value.multiply(quantity));
     }
 
     public BigDecimal getValue() {
@@ -49,7 +48,7 @@ public class ProductPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
+        Price that = (Price) o;
         return Objects.equals(value, that.value);
     }
 

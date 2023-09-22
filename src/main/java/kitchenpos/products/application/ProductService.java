@@ -32,10 +32,9 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
-        final ProductPrice changePrice = ProductPrice.from(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(changePrice);
+        product.changePrice(request.getPrice());
         productEventPublisher.changePrice(new ProductPriceChangeEvent(product.getId()));
         return product;
     }

@@ -108,7 +108,7 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(UUID.randomUUID(), ProductName.from(name, productNamePolicy()), ProductPrice.from(BigDecimal.valueOf(price)));
+        return Product.from(UUID.randomUUID(), name, BigDecimal.valueOf(price), productNamePolicy());
     }
 
     public static ProductNamePolicy productNamePolicy() {

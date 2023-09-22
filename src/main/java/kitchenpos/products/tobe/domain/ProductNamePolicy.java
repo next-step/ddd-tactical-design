@@ -12,13 +12,13 @@ public class ProductNamePolicy {
         this.productNameProfanities = productNameProfanities;
     }
 
-    public void validateDisplayName(ProductName displayName) {
+    public void validateDisplayName(Name displayName) {
         if (Objects.isNull(displayName.getValue()) || this.containsProfanity(displayName)) {
             throw new IllegalArgumentException();
         }
     }
 
-    private boolean containsProfanity(ProductName productName) {
-        return productNameProfanities.containsProfanity(productName.getValue());
+    private boolean containsProfanity(Name name) {
+        return productNameProfanities.containsProfanity(name.getValue());
     }
 }

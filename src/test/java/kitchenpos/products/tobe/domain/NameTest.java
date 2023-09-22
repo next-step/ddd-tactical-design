@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ProductNameTest {
+class NameTest {
 
     private ProductNameProfanities productNameProfanities;
 
@@ -25,7 +25,7 @@ class ProductNameTest {
     @Test
     void create() {
         final String name = "후라이드";
-        final ProductName productName = ProductName.from(name, new ProductNamePolicy(productNameProfanities));
+        final Name productName = Name.from(name, new ProductNamePolicy(productNameProfanities));
         assertAll(
                 () -> assertThat(productName).isNotNull(),
                 () -> assertThat(name).isEqualTo(productName.getValue())
@@ -36,7 +36,7 @@ class ProductNameTest {
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
-        assertThatThrownBy(() -> ProductName.from(name, new ProductNamePolicy(productNameProfanities)))
+        assertThatThrownBy(() -> Name.from(name, new ProductNamePolicy(productNameProfanities)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -44,7 +44,7 @@ class ProductNameTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {
-        assertThatThrownBy(() -> ProductName.from(name, new ProductNamePolicy(productNameProfanities)))
+        assertThatThrownBy(() -> Name.from(name, new ProductNamePolicy(productNameProfanities)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
