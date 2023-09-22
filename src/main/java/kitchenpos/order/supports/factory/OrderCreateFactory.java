@@ -1,16 +1,19 @@
 package kitchenpos.order.supports.factory;
 
-import kitchenpos.order.domain.Order;
-import kitchenpos.order.domain.OrderStatus;
-import kitchenpos.order.domain.OrderTable;
-import kitchenpos.order.domain.OrderType;
-import kitchenpos.order.domain.OrderLineItems;
+import kitchenpos.order.domain.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
+@Component
 public class OrderCreateFactory {
+
     public static Order deliveryOrder(OrderLineItems orderLineItems, String deliveryAddress) {
+        if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, deliveryAddress, null, null);
     }
 

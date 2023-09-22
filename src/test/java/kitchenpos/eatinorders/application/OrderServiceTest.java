@@ -1,18 +1,12 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.order.deliveryorders.application.DeliveryOrderService;
-import kitchenpos.order.domain.*;
-import kitchenpos.order.eatinorders.application.EatInOrderService;
-import kitchenpos.order.application.OrderService;
-import kitchenpos.order.application.OrderStatusService;
-import kitchenpos.order.eatinorders.domain.*;
-import kitchenpos.order.supports.strategy.OrderProcessStrategy;
-import kitchenpos.order.domain.OrderLineItems;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.order.deliveryorders.domain.*;
-import kitchenpos.order.takeoutorders.application.TakeOutOrderService;
-import kitchenpos.order.takeoutorders.domain.*;
+import kitchenpos.order.application.OrderService;
+import kitchenpos.order.application.OrderStatusService;
+import kitchenpos.order.domain.*;
+import kitchenpos.order.eatinorders.domain.OrderTableClearService;
+import kitchenpos.order.eatinorders.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +16,10 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,26 +33,9 @@ class OrderServiceTest {
     private OrderTableRepository orderTableRepository;
     private FakeKitchenridersClient kitchenridersClient;
     private OrderService orderService;
-    private EatInOrderCreateService eatInOrderCreateService;
     private OrderLineItemsService orderLineItemsService;
-    private EatInOrderAcceptService eatInOrderAcceptService;
-    private EatInOrderServeService eatInOrderServeService;
-    private EatInOrderCompleteService eatInOrderCompleteService;
-    private EatInOrderService eatInOrderService;
-    private TakeOutOrderCreateService takeOutOrderCreateService;
-    private TakeOutOrderAcceptService takeOutOrderAcceptService;
-    private TakeOutOrderServeService takeOutOrderServeService;
-    private TakeOutOrderCompleteService takeOutOrderCompleteService;
-    private TakeOutOrderService takeOutOrderService;
-
-    private DeliveryOrderCreateService deliveryOrderCreateService;
-    private DeliveryOrderAcceptService deliveryOrderAcceptService;
-    private DeliveryOrderServeService deliveryOrderServeService;
-    private DeliveryOrderCompleteService deliveryOrderCompleteService;
-    private DeliveryOrderStartDeliveryService deliveryOrderStartDeliveryService;
-    private DeliveryOrderCompleteDeliveryService deliveryOrderCompleteDeliveryService;
-    private DeliveryOrderService deliveryOrderService;
-    private OrderProcessStrategy orderProcessStrategy;
+    private OrderTableClearService orderTableClearService;
+    private OrderStatusService orderStatusService;
     private ApplicationEventPublisher publisher = null;
 
     private static List<Arguments> orderLineItems() {
@@ -67,12 +47,7 @@ class OrderServiceTest {
     }
 
     private static OrderLineItem createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenuId(menuId);
-        orderLineItem.setPrice(BigDecimal.valueOf(price));
-        orderLineItem.setQuantity(quantity);
-        return orderLineItem;
+        return new OrderLineItem(menuId, quantity, BigDecimal.valueOf(price));
     }
 
     @BeforeEach
@@ -81,32 +56,10 @@ class OrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
+        orderStatusService = new OrderStatusService(orderRepository);
         orderLineItemsService = new OrderLineItemsService(menuRepository);
-
-        eatInOrderCreateService = new EatInOrderCreateService(orderRepository, orderTableRepository, orderLineItemsService);
-        eatInOrderAcceptService = new EatInOrderAcceptService(orderRepository, publisher);
-        eatInOrderServeService = new EatInOrderServeService(orderRepository, publisher);
-        eatInOrderCompleteService = new EatInOrderCompleteService(orderRepository, new OrderTableClearService(orderTableRepository, new OrderStatusService(orderRepository)), publisher);
-
-        eatInOrderService = new EatInOrderService(eatInOrderCreateService, eatInOrderAcceptService, eatInOrderServeService, eatInOrderCompleteService);
-
-        takeOutOrderCreateService = new TakeOutOrderCreateService(orderRepository, orderLineItemsService);
-        takeOutOrderAcceptService = new TakeOutOrderAcceptService(orderRepository, publisher);
-        takeOutOrderServeService = new TakeOutOrderServeService(orderRepository, publisher);
-        takeOutOrderCompleteService = new TakeOutOrderCompleteService(orderRepository, publisher);
-
-        takeOutOrderService = new TakeOutOrderService(takeOutOrderCreateService, takeOutOrderAcceptService, takeOutOrderServeService, takeOutOrderCompleteService);
-
-        deliveryOrderCreateService = new DeliveryOrderCreateService(orderRepository, orderLineItemsService);
-        deliveryOrderAcceptService = new DeliveryOrderAcceptService(orderRepository, null, kitchenridersClient);
-        deliveryOrderServeService = new DeliveryOrderServeService(orderRepository, publisher);
-        deliveryOrderCompleteService = new DeliveryOrderCompleteService(orderRepository, publisher);
-        deliveryOrderStartDeliveryService = new DeliveryOrderStartDeliveryService(orderRepository, publisher);
-        deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository, publisher);
-        deliveryOrderService = new DeliveryOrderService(deliveryOrderCreateService, deliveryOrderAcceptService, deliveryOrderServeService, deliveryOrderCompleteService, deliveryOrderStartDeliveryService, deliveryOrderCompleteDeliveryService);
-
-        orderProcessStrategy = new OrderProcessStrategy(new ArrayList<>(Arrays.asList(eatInOrderService, takeOutOrderService, deliveryOrderService)));
-        orderService = new OrderService(orderRepository, orderProcessStrategy);
+        orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
+        orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")

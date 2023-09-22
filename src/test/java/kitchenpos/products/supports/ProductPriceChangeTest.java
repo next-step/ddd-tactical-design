@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.order;
 import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 

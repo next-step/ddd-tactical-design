@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
+    ApplicationEventPublisher publisher;
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
@@ -39,8 +40,6 @@ class MenuServiceTest {
     private MenuGroupService menuGroupService;
     private MenuCreateService menuCreateService;
     private MenuChangePriceService menuChangePriceService;
-
-    ApplicationEventPublisher publisher;
 
     private static List<Arguments> menuProducts() {
         return Arrays.asList(
@@ -62,8 +61,8 @@ class MenuServiceTest {
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
 
-        menuCreateService = new MenuCreateService(new ProductService(productRepository,  purgomalumClient, publisher), menuGroupService, purgomalumClient);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository,  purgomalumClient, publisher));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, purgomalumClient, publisher));
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));

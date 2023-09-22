@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
+    ApplicationEventPublisher publisher = null;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
@@ -38,8 +39,6 @@ class ProductServiceTest {
     private PurgomalumClient purgomalumClient;
     private MenuChangePriceService menuChangePriceService;
 
-    ApplicationEventPublisher publisher = null;
-
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
@@ -48,10 +47,10 @@ class ProductServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         menuGroupService = new MenuGroupService(menuGroupRepository);
 
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository,  purgomalumClient, publisher));
-        menuCreateService = new MenuCreateService(new ProductService(productRepository,  purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, purgomalumClient, publisher));
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
         menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
-        productService = new ProductService(productRepository,  purgomalumClient, publisher);
+        productService = new ProductService(productRepository, purgomalumClient, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

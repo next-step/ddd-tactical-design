@@ -1,8 +1,5 @@
 package kitchenpos.order.domain;
 
-import kitchenpos.order.domain.OrderLineItem;
-import kitchenpos.support.ValueObject;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;

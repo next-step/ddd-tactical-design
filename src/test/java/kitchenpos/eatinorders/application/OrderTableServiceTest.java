@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.order.domain.OrderTable;
-import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.eatinorders.application.OrderTableService;
 import kitchenpos.order.eatinorders.domain.*;
 import kitchenpos.order.eatinorders.domain.exception.InvalidOrderTableNameException;

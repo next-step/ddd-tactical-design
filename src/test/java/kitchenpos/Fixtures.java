@@ -1,17 +1,15 @@
 package kitchenpos;
 
-import kitchenpos.order.domain.*;
-import kitchenpos.order.domain.OrderLineItems;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.order.domain.*;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.UUID;
 
 public class Fixtures {
@@ -64,10 +62,7 @@ public class Fixtures {
     }
 
     public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+        return new OrderLineItem(menu().getId(), 2L, BigDecimal.valueOf(32_000L));
     }
 
     public static OrderTable orderTable() {
