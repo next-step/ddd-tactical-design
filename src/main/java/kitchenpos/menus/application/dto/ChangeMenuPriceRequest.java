@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.dto;
 
 public class ChangeMenuPriceRequest {
     private Long price;

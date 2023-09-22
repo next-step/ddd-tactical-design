@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.application.dto;
 
 public class CreateProductRequest {
     private String name;

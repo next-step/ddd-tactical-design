@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kitchenpos.products.application.dto.ChangePriceRequest;
+import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.ChangedProductPriceEvent;
 import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.Price;

@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.dto;
 
 import java.util.List;
 import java.util.UUID;
