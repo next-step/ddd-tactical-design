@@ -88,42 +88,23 @@ public class MenuService {
                 .getPrice();
     }
 
-//    @Transactional
-//    public Menu changePrice(final UUID menuId, final Menu request) {
-//        final BigDecimal price = request.getPrice();
-//        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//            sum = sum.add(
-//                menuProduct.getProduct()
-//                    .getPrice()
-//                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//            );
-//        }
-//        if (price.compareTo(sum) > 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        menu.setPrice(price);
-//        return menu;
-//    }
+    @Transactional
+    public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
+        final Menu menu = findById(menuId);
+        menu.changePrice(request.getPrice(), menuPricePolicy);
+        return menu;
+    }
 
     @Transactional
     public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
-
+        final Menu menu = findById(menuId);
         menu.display(menuPricePolicy);
         return menu;
     }
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+        final Menu menu = findById(menuId);
         menu.hide();
         return menu;
     }
@@ -131,5 +112,10 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    private Menu findById(UUID menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
