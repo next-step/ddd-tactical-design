@@ -14,8 +14,8 @@ public class Price {
     protected Price() {
     }
 
-    public Price(long price) {
-        if (price < 0) {
+    public Price(Long price) {
+        if (price == null || price < 0) {
             throw new IllegalArgumentException(String.format("가격은 0원 이상이어야 합니다. 현재 값: %s", price));
         }
         this.price = new BigDecimal(price);

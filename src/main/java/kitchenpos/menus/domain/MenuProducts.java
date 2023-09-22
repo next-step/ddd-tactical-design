@@ -30,7 +30,7 @@ public class MenuProducts {
     public Price totalPrice() {
         return menuProducts.stream()
                 .map(MenuProduct::getPrice)
-                .reduce(new Price(0), Price::sum);
+                .reduce(new Price(0L), Price::sum);
     }
 
     public void changeProductPrice(UUID productId, Price price) {
