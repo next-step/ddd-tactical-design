@@ -1,5 +1,7 @@
 package kitchenpos.order.eatinorders.application;
 
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.eatinorders.domain.*;
 import kitchenpos.order.eatinorders.domain.exception.NotFoundOrderTableException;
@@ -16,16 +18,20 @@ public class OrderTableService {
     private final OrderTableChangeGuestService orderTableChangeGuestService;
     private final OrderTableSitService orderTableSitService;
     private final OrderTableClearService orderTableClearService;
+    private final OrderRepository orderRepository;
 
     public OrderTableService(final OrderTableRepository orderTableRepository,
                              final OrderTableCreateService orderTableCreateService,
                              final OrderTableChangeGuestService orderTableChangeGuestService,
-                             OrderTableSitService orderTableSitService, final OrderTableClearService orderTableClearService) {
+                             final OrderTableSitService orderTableSitService,
+                             final OrderTableClearService orderTableClearService,
+                             final OrderRepository orderRepository) {
         this.orderTableRepository = orderTableRepository;
         this.orderTableCreateService = orderTableCreateService;
         this.orderTableChangeGuestService = orderTableChangeGuestService;
         this.orderTableSitService = orderTableSitService;
         this.orderTableClearService = orderTableClearService;
+        this.orderRepository = orderRepository;
     }
 
     @Transactional
@@ -41,7 +47,8 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable clear(final UUID orderTableId) {
-        return this.orderTableClearService.clear(getOrderTable(orderTableId));
+        Order order = this.orderRepository.findByOrderTableId(orderTableId).orElseThrow(NotFoundOrderTableException::new);
+        return this.orderTableClearService.clear(order);
     }
 
     @Transactional

@@ -3,7 +3,6 @@ package kitchenpos.orders.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.application.OrderService;
-import kitchenpos.order.application.OrderStatusService;
 import kitchenpos.order.domain.*;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
 import kitchenpos.order.eatinorders.domain.OrderTableRepository;
@@ -35,7 +34,6 @@ class OrderServiceTest {
     private OrderService orderService;
     private OrderLineItemsService orderLineItemsService;
     private OrderTableClearService orderTableClearService;
-    private OrderStatusService orderStatusService;
     private ApplicationEventPublisher publisher;
 
     private static List<Arguments> orderLineItems() {
@@ -56,9 +54,8 @@ class OrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
-        orderStatusService = new OrderStatusService(orderRepository);
         orderLineItemsService = new OrderLineItemsService(menuRepository);
-        orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
+        orderTableClearService = new OrderTableClearService(orderTableRepository);
         publisher = new FakeApplicationEventPublisher(orderRepository);
         orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService);
     }

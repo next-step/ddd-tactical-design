@@ -1,6 +1,6 @@
 package kitchenpos.orders.application;
 
-import kitchenpos.order.application.OrderStatusService;
+import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.order.domain.OrderTable;
@@ -30,19 +30,17 @@ class OrderTableServiceTest {
     private OrderTableCreateService orderTableCreateService;
     private OrderTableChangeGuestService orderTableChangeGuestService;
     private OrderTableClearService orderTableClearService;
-    private OrderStatusService orderStatusService;
     private OrderTableSitService orderTableSitService;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
-        orderStatusService = new OrderStatusService(orderRepository);
         orderTableCreateService = new OrderTableCreateService(orderTableRepository);
         orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
-        orderTableClearService = new OrderTableClearService(orderTableRepository, orderStatusService);
+        orderTableClearService = new OrderTableClearService(orderTableRepository);
         orderTableSitService = new OrderTableSitService(orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderTableChangeGuestService, orderTableSitService, orderTableClearService);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderTableChangeGuestService, orderTableSitService, orderTableClearService, orderRepository);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
@@ -78,7 +76,8 @@ class OrderTableServiceTest {
     @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
     void clear() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
+        final Order order = orderRepository.save(order(OrderStatus.COMPLETED, orderTable(true, 4)));
+        final UUID orderTableId = orderTableRepository.save(order.getOrderTable()).getId();
         final OrderTable actual = orderTableService.clear(orderTableId);
         assertAll(
                 () -> assertThat(actual.getNumberOfGuests()).isZero(),

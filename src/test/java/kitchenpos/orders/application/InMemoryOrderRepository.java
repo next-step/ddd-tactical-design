@@ -27,6 +27,14 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 
     @Override
+    public Optional<Order> findByOrderTableId(UUID id) {
+        return orders.values()
+                .stream()
+                .filter(order -> order.getOrderTableId().equals(id))
+                .findFirst();
+    }
+
+    @Override
     public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final OrderStatus status) {
         return orders.values()
                 .stream()

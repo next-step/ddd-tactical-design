@@ -167,6 +167,10 @@ public class Order {
         return orderTable;
     }
 
+    public boolean isCompleted() {
+        return this.status == OrderStatus.COMPLETED;
+    }
+
     public UUID getId() {
         return id;
     }
