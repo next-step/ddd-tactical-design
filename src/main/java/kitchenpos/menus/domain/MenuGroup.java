@@ -28,6 +28,10 @@ public class MenuGroup {
         this.name = name;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
