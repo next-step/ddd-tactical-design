@@ -153,7 +153,7 @@ public class OrderServiceTest {
 
     @Test
     void 주문_생성_실패__메뉴가_숨김임() {
-        오늘의치킨.setDisplayed(false);
+        오늘의치킨.hide();
         menuRepository.save(오늘의치킨);
 
         Order request = OrderFixture.builder(오늘의치킨).build();

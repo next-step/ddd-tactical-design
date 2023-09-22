@@ -21,7 +21,7 @@ public class OrderLineItemFixture {
     public static OrderLineItemFixture builder(Menu menu) {
         return builder()
                 .menu(menu)
-                .price(menu.getPrice());
+                .price(menu.getPrice().longValue());
     }
 
     public OrderLineItem build() {

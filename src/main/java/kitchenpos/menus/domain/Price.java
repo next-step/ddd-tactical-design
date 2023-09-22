@@ -33,6 +33,14 @@ public class Price {
         return new Price(price.longValue() + other.price.longValue());
     }
 
+    public String stringValue() {
+        return price.toString();
+    }
+
+    public long longValue() {
+        return price.longValue();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,9 +52,5 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hash(price);
-    }
-
-    public String stringValue() {
-        return price.toString();
     }
 }
