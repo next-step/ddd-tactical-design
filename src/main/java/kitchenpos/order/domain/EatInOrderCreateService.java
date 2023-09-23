@@ -8,22 +8,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class EatInOrderCreateService {
 
-    private final OrderLineItemsService orderLineItemsService;
+    private final OrderLineItemsValidService orderLineItemsValidService;
     private final OrderTableRepository orderTableRepository;
 
-    public EatInOrderCreateService(OrderLineItemsService orderLineItemsService, OrderTableRepository orderTableRepository) {
-        this.orderLineItemsService = orderLineItemsService;
+    public EatInOrderCreateService(OrderLineItemsValidService orderLineItemsValidService, OrderTableRepository orderTableRepository) {
+        this.orderLineItemsValidService = orderLineItemsValidService;
         this.orderTableRepository = orderTableRepository;
     }
 
     public Order create(Order order) {
         OrderTable orderTable = getOrderTable(order);
-        return OrderCreateFactory.eatInOrder(getOrderLineItems(order), orderTable);
+        orderLineItemsValidService.valid(order.getOrderLineItems());
+        return OrderCreateFactory.eatInOrder(order, orderTable);
     }
 
-    private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
-    }
 
     private OrderTable getOrderTable(Order order) {
         final OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())

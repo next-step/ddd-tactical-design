@@ -9,33 +9,35 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
-public class OrderLineItemsService {
+public class OrderLineItemsValidService {
 
     private final MenuRepository menuRepository;
 
-    public OrderLineItemsService(MenuRepository menuRepository) {
+    public OrderLineItemsValidService(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
-    public OrderLineItems getOrderLineItems(List<OrderLineItem> orderLineItems) {
+    public void valid(OrderLineItems orderLineItems) {
+        validMenu(orderLineItems);
         validMenuSize(orderLineItems);
-        return new OrderLineItems(orderLineItems.stream()
-                .map(eatInOrderLineItem -> new OrderLineItem(getMenu(eatInOrderLineItem).getId(), eatInOrderLineItem.getQuantity(), eatInOrderLineItem.getPrice()))
-                .collect(Collectors.toList()));
+
     }
 
-    private void validMenuSize(List<OrderLineItem> orderLineItems) {
+    private void validMenuSize(OrderLineItems orderLineItems) {
         final List<Menu> menus = menuRepository.findAllByIdIn(
-                orderLineItems.stream()
+                orderLineItems.getOrderLineItems().stream()
                         .map(OrderLineItem::getMenuId)
                         .collect(Collectors.toList()));
-        if (menus.size() != orderLineItems.size()) {
+        if (menus.size() != orderLineItems.getOrderLineItems().size()) {
             throw new IllegalArgumentException();
         }
     }
 
+    private void validMenu(OrderLineItems orderLineItems) {
+        orderLineItems.getOrderLineItems().forEach(this::validMenu);
+    }
 
-    private Menu getMenu(OrderLineItem orderLineItem) {
+    private void validMenu(OrderLineItem orderLineItem) {
         final Menu menu = menuRepository.findById(orderLineItem.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
         if (!menu.isDisplayed()) {
@@ -44,6 +46,5 @@ public class OrderLineItemsService {
         if (menu.getPrice().compareTo(orderLineItem.getPrice()) != 0) {
             throw new IllegalArgumentException();
         }
-        return menu;
     }
 }

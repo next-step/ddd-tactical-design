@@ -1,19 +1,20 @@
 package kitchenpos.order.domain;
 
 import kitchenpos.order.supports.factory.OrderCreateFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TakeOutOrderCreateService {
-    private final OrderLineItemsService orderLineItemsService;
+    private final OrderLineItemsValidService orderLineItemsValidService;
 
-    public TakeOutOrderCreateService(OrderLineItemsService orderLineItemsService) {
-        this.orderLineItemsService = orderLineItemsService;
+    public TakeOutOrderCreateService(OrderLineItemsValidService orderLineItemsValidService) {
+        this.orderLineItemsValidService = orderLineItemsValidService;
     }
 
     public Order create(Order order) {
-        return OrderCreateFactory.takeOutOrder(getOrderLineItems(order));
+        orderLineItemsValidService.valid(order.getOrderLineItems());
+        return OrderCreateFactory.takeOutOrder(order);
     }
 
-    private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
-    }
+
 }

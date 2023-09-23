@@ -19,16 +19,16 @@ public class OrderCreateFactory {
         this.deliveryOrderCreateService = deliveryOrderCreateService;
     }
 
-    public static Order deliveryOrder(OrderLineItems orderLineItems, String deliveryAddress) {
-        return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, deliveryAddress, null, null);
+    public static Order deliveryOrder(Order order, String deliveryAddress) {
+        return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), deliveryAddress, null, null);
     }
 
-    public static Order takeOutOrder(OrderLineItems orderLineItems) {
-        return new Order(UUID.randomUUID(), OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, null, null);
+    public static Order takeOutOrder(Order order) {
+        return new Order(UUID.randomUUID(), OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), null, null, null);
     }
 
-    public static Order eatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-        return new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, null, orderTable, orderTable.getId());
+    public static Order eatInOrder(Order order, OrderTable orderTable) {
+        return new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), null, orderTable, orderTable.getId());
     }
 
     public Order createOrder(Order order) {

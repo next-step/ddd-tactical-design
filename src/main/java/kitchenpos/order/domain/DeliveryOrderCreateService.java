@@ -8,19 +8,16 @@ import java.util.Objects;
 @Service
 public class DeliveryOrderCreateService {
 
-    private final OrderLineItemsService orderLineItemsService;
+    private final OrderLineItemsValidService orderLineItemsValidService;
 
-    public DeliveryOrderCreateService(OrderLineItemsService orderLineItemsService) {
-        this.orderLineItemsService = orderLineItemsService;
+    public DeliveryOrderCreateService(OrderLineItemsValidService orderLineItemsValidService) {
+        this.orderLineItemsValidService = orderLineItemsValidService;
     }
 
     public Order create(Order order) {
         validDeliveryAddress(order.getDeliveryAddress());
-        return OrderCreateFactory.deliveryOrder(getOrderLineItems(order), order.getDeliveryAddress());
-    }
-
-    private OrderLineItems getOrderLineItems(Order order) {
-        return orderLineItemsService.getOrderLineItems(order.getOrderLineItems().getOrderLineItems());
+        orderLineItemsValidService.valid(order.getOrderLineItems());
+        return OrderCreateFactory.deliveryOrder(order, order.getDeliveryAddress());
     }
 
     private void validDeliveryAddress(String deliveryAddress) {

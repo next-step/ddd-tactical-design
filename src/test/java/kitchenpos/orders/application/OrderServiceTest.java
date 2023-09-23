@@ -33,7 +33,7 @@ class OrderServiceTest {
     private OrderTableRepository orderTableRepository;
     private FakeKitchenridersClient kitchenridersClient;
     private OrderService orderService;
-    private OrderLineItemsService orderLineItemsService;
+    private OrderLineItemsValidService orderLineItemsValidService;
     private OrderTableClearService orderTableClearService;
     private ApplicationEventPublisher publisher;
     private OrderCreateFactory orderCreateFactory;
@@ -56,13 +56,13 @@ class OrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
-        orderLineItemsService = new OrderLineItemsService(menuRepository);
+        orderLineItemsValidService = new OrderLineItemsValidService(menuRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository);
         publisher = new FakeOrderApplicationEventPublisher(orderRepository);
 
-        EatInOrderCreateService eatInOrderCreateService = new EatInOrderCreateService(orderLineItemsService, orderTableRepository);
-        TakeOutOrderCreateService takeOutOrderCreateService = new TakeOutOrderCreateService(orderLineItemsService);
-        DeliveryOrderCreateService deliveryOrderCreateService = new DeliveryOrderCreateService(orderLineItemsService);
+        EatInOrderCreateService eatInOrderCreateService = new EatInOrderCreateService(orderLineItemsValidService, orderTableRepository);
+        TakeOutOrderCreateService takeOutOrderCreateService = new TakeOutOrderCreateService(orderLineItemsValidService);
+        DeliveryOrderCreateService deliveryOrderCreateService = new DeliveryOrderCreateService(orderLineItemsValidService);
         orderCreateFactory = new OrderCreateFactory(eatInOrderCreateService, takeOutOrderCreateService, deliveryOrderCreateService);
 
         orderService = new OrderService(orderRepository, kitchenridersClient, orderTableClearService, orderCreateFactory);
