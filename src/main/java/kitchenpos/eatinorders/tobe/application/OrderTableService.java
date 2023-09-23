@@ -1,15 +1,14 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.tobe.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -24,15 +23,7 @@ public class OrderTableService {
 
     @Transactional
     public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+        final OrderTable orderTable = new OrderTable(request.getName(), 0, false);
         return orderTableRepository.save(orderTable);
     }
 
@@ -40,7 +31,7 @@ public class OrderTableService {
     public OrderTable sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
+        orderTable.occupied();
         return orderTable;
     }
 
@@ -51,23 +42,18 @@ public class OrderTableService {
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+        orderTable.clear();
         return orderTable;
     }
 
     @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(numberOfGuests);
+        orderTable.changeNumberOfGuests(request.getNumberOfGuests());
         return orderTable;
     }
 

@@ -5,9 +5,9 @@ import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Service;
@@ -180,8 +180,7 @@ public class OrderService {
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
+                orderTable.clear();
             }
         }
         return order;

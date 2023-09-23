@@ -2,8 +2,9 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.application.OrderTableService;
+import kitchenpos.eatinorders.tobe.domain.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -121,14 +122,11 @@ class OrderTableServiceTest {
     }
 
     private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+        return new OrderTable(name, 0, false);
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setNumberOfGuests(numberOfGuests);
+        final OrderTable orderTable = new OrderTable("테스트2", numberOfGuests, true);
         return orderTable;
     }
 }
