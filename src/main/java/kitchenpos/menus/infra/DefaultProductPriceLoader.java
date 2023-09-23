@@ -1,7 +1,7 @@
 package kitchenpos.menus.infra;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.application.ProductPriceLoader;
+import kitchenpos.menus.application.loader.ProductPriceLoader;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.ProductId;

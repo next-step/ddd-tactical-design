@@ -35,22 +35,6 @@ public class MenuResponse {
         this.menuProducts = menuProducts;
     }
 
-    public static MenuResponse fromEntity(Menu menu) {
-        return new MenuResponse(
-                menu.getId(),
-                menu.getNameValue(),
-                menu.getPriceValue(),
-                menu.getMenuGroupIdValue(),
-                menu.isDisplayed(),
-                MenuProductResponse.fromEntities(menu.getMenuProducts())
-        );
-    }
-
-    public static List<MenuResponse> fromEntities(List<Menu> menus) {
-        return menus.stream()
-                .map(MenuResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
-    }
 
     public UUID getId() {
         return id;

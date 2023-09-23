@@ -6,6 +6,7 @@ import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.common.exception.PriceException;
 import kitchenpos.menugroups.application.InMemoryMenuGroupRepository;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menus.application.loader.MenuGroupLoader;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;

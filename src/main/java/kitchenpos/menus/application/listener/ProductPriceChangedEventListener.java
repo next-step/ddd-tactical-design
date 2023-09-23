@@ -1,4 +1,4 @@
-package kitchenpos.menus.listener;
+package kitchenpos.menus.application.listener;
 
 import kitchenpos.common.events.ProductPriceChangedEvent;
 import kitchenpos.menus.application.MenuService;

@@ -1,4 +1,4 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.loader;
 
 import kitchenpos.common.domain.Price;
 

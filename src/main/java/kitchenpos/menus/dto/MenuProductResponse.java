@@ -23,21 +23,6 @@ public class MenuProductResponse {
         this.quantity = quantity;
     }
 
-    public static MenuProductResponse fromEntity(MenuProduct menuProduct) {
-        return new MenuProductResponse(
-                menuProduct.getSeq(),
-                menuProduct.getProductId(),
-                menuProduct.getQuantityValue()
-        );
-    }
-
-    public static List<MenuProductResponse> fromEntities(MenuProducts menuProducts) {
-        return menuProducts.getValues()
-                .stream()
-                .map(MenuProductResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
     public long getSeq() {
         return seq;
     }

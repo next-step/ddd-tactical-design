@@ -1,5 +1,6 @@
 package kitchenpos.menus.listener;
 
+import kitchenpos.menus.application.listener.ProductPriceChangedEventListener;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.common.events.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;

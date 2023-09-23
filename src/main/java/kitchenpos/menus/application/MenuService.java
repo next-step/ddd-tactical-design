@@ -2,6 +2,9 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.menus.application.loader.MenuGroupLoader;
+import kitchenpos.menus.application.loader.ProductPriceLoader;
+import kitchenpos.menus.application.mapper.MenuMapper;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductRequest;
@@ -61,7 +64,7 @@ public class MenuService {
 
         menuRepository.save(menu);
 
-        return MenuResponse.fromEntity(menu);
+        return MenuMapper.toDto(menu);
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
@@ -82,27 +85,27 @@ public class MenuService {
     public MenuResponse changePrice(final MenuId menuId, MenuChangePriceRequest request) {
         final Menu menu = findById(menuId);
         menu.changePrice(new Price(request.getPrice()));
-        return MenuResponse.fromEntity(menu);
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional
     public MenuResponse display(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.display();
-        return MenuResponse.fromEntity(menu);
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional
     public MenuResponse hide(final MenuId menuId) {
         final Menu menu = findById(menuId);
         menu.hide();
-        return MenuResponse.fromEntity(menu);
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
         List<Menu> menus = menuRepository.findAll();
-        return MenuResponse.fromEntities(menus);
+        return MenuMapper.toDtos(menus);
     }
 
     @Transactional
@@ -115,7 +118,7 @@ public class MenuService {
     @Transactional(readOnly = true)
     public MenuResponse findMenuById(MenuId menuId) {
         Menu menu = findById(menuId);
-        return MenuResponse.fromEntity(menu);
+        return MenuMapper.toDto(menu);
     }
 
     private Menu findById(MenuId menuId) {

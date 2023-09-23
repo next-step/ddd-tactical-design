@@ -2,7 +2,7 @@ package kitchenpos.menus.infra;
 
 import kitchenpos.menugroups.domain.MenuGroupId;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
-import kitchenpos.menus.application.MenuGroupLoader;
+import kitchenpos.menus.application.loader.MenuGroupLoader;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
