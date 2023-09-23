@@ -1,6 +1,5 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.common.FakeApplicationEventPublisher;
 import kitchenpos.eatinorders.application.service.DefaultMenuLoader;
 import kitchenpos.eatinorders.application.service.DefaultOrderTableStatusLoader;
 import kitchenpos.eatinorders.domain.EatInOrder;
@@ -55,8 +54,7 @@ class EatInOrderServiceTest {
         orderService = new EatInOrderService(
                 eatInOrderRepository,
                 new DefaultMenuLoader(menuRepository),
-                new DefaultOrderTableStatusLoader(orderTableRepository),
-                new FakeApplicationEventPublisher());
+                new DefaultOrderTableStatusLoader(orderTableRepository));
     }
 
     @Nested

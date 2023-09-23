@@ -6,7 +6,6 @@ import kitchenpos.products.dto.ProductRequest;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +17,12 @@ import java.util.NoSuchElementException;
 public class ProductService {
     private final kitchenpos.products.tobe.domain.ProductRepository productRepository;
     private final ProfanityPolicy profanityPolicy;
-    private final ApplicationEventPublisher publisher;
 
     public ProductService(
             final kitchenpos.products.tobe.domain.ProductRepository productRepository,
-            final ProfanityPolicy profanityPolicy,
-            final ApplicationEventPublisher publisher) {
+            final ProfanityPolicy profanityPolicy) {
         this.productRepository = productRepository;
         this.profanityPolicy = profanityPolicy;
-        this.publisher = publisher;
     }
 
     @Transactional
@@ -58,11 +54,6 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    @Transactional(readOnly = true)
-    public List<ProductResponse> findAllInById(List<ProductId> productIds) {
-        List<Product> responses = productRepository.findAllByIdIn(productIds);
-        return ProductResponse.fromEntities(responses);
-    }
 
     @Transactional(readOnly = true)
     public ProductResponse findProductById(ProductId productId) {

@@ -8,7 +8,6 @@ import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.eatinorders.exception.EatInOrderException;
 import kitchenpos.eatinorders.exception.EatInOrderLineItemException;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +19,11 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuLoader menuLoader;
     private final OrderTableStatusLoader orderTableStatusLoader;
-    private final ApplicationEventPublisher publisher;
 
-    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuLoader menuLoader, OrderTableStatusLoader orderTableStatusLoader, ApplicationEventPublisher publisher) {
+    public EatInOrderService(EatInOrderRepository eatInOrderRepository, MenuLoader menuLoader, OrderTableStatusLoader orderTableStatusLoader) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuLoader = menuLoader;
         this.orderTableStatusLoader = orderTableStatusLoader;
-        this.publisher = publisher;
     }
 
     @Transactional

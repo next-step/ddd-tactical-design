@@ -1,6 +1,5 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.FakeApplicationEventPublisher;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
@@ -58,7 +57,7 @@ class MenuServiceTest {
         kitchenpos.products.tobe.domain.ProductRepository productRepository = new InMemoryProductRepository();
         MenuGroupLoader menuGroupLoader = new DefaultMenuGroupLoader(menuGroupRepository);
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        ProductService productService = new ProductService(productRepository, profanityPolicy, new FakeApplicationEventPublisher());
+        ProductService productService = new ProductService(productRepository, profanityPolicy);
         DefaultProductPriceLoader productPriceLoader = new DefaultProductPriceLoader(productService);
         menuService = new MenuService(menuRepository, menuGroupLoader, productPriceLoader, profanityPolicy);
         menuGroupId = menuGroupRepository.save(menuGroup()).getIdValue();

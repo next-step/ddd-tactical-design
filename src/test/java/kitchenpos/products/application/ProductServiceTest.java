@@ -14,9 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,14 +32,11 @@ class ProductServiceTest {
 
     private ProductService productService;
 
-    @Spy
-    private ApplicationEventPublisher publisher;
-
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        productService = new ProductService(productRepository, profanityPolicy, publisher);
+        productService = new ProductService(productRepository, profanityPolicy);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
