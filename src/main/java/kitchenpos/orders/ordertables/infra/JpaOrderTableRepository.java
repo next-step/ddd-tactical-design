@@ -1,9 +1,9 @@
 package kitchenpos.orders.ordertables.infra;
 
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
-import kitchenpos.orders.ordertables.domain.OrderTableRepository;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
+import kitchenpos.orders.ordertables.domain.OrderTableRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

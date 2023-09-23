@@ -1,12 +1,12 @@
 package kitchenpos.orders.eatinorders.application.loader;
 
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuId;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.orders.eatinorders.application.MenuLoader;
 import kitchenpos.orders.eatinorders.domain.OrderedMenu;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;

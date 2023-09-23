@@ -1,5 +1,6 @@
 package kitchenpos.menugroups.application;
 
+import kitchenpos.menugroups.application.mapper.MenuGroupMapper;
 import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.domain.MenuGroupId;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
@@ -21,20 +22,20 @@ public class MenuGroupService {
     @Transactional
     public MenuGroupResponse create(final MenuGroup request) {
         MenuGroup menuGroup = menuGroupRepository.save(request);
-        return MenuGroupResponse.fromEntity(menuGroup);
+        return MenuGroupMapper.toDto(menuGroup);
     }
 
     @Transactional(readOnly = true)
     public List<MenuGroupResponse> findAll() {
         List<MenuGroup> menuGroups = menuGroupRepository.findAll();
-        return MenuGroupResponse.fromEntities(menuGroups);
+        return MenuGroupMapper.toDtos(menuGroups);
     }
 
     @Transactional(readOnly = true)
     public MenuGroupResponse findById(MenuGroupId menuGroupId) {
         MenuGroup menuGroup = menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NoSuchElementException::new);
-        return MenuGroupResponse.fromEntity(menuGroup);
+        return MenuGroupMapper.toDto(menuGroup);
     }
 
 }

@@ -1,8 +1,8 @@
 package kitchenpos.menus.listener;
 
+import kitchenpos.common.events.ProductPriceChangedEvent;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.menu.ProductId;
-import kitchenpos.common.events.ProductPriceChangedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

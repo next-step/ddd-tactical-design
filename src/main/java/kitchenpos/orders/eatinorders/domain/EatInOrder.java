@@ -1,8 +1,8 @@
 package kitchenpos.orders.eatinorders.domain;
 
+import kitchenpos.common.events.EatInOrderCompletedEvent;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.orders.eatinorders.exception.EatInOrderException;
-import kitchenpos.common.events.EatInOrderCompletedEvent;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
