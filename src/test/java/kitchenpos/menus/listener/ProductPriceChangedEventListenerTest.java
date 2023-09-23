@@ -1,7 +1,6 @@
 package kitchenpos.menus.listener;
 
 import kitchenpos.common.events.ProductPriceChangedEvent;
-import kitchenpos.menus.application.listener.ProductPriceChangedEventListener;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -29,10 +28,6 @@ class ProductPriceChangedEventListenerTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductPriceChangedEventListener eventListener;
-
-
-    @Autowired
     private ApplicationEvents events;
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
@@ -40,7 +35,7 @@ class ProductPriceChangedEventListenerTest {
     void changePrice() {
         assertThat(events.stream(ProductPriceChangedEvent.class)).hasSize(0);
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        productService.changePrice(product.getId(), BigDecimal.valueOf(8_000L));
+        productService.changePrice(product.getIdValue(), BigDecimal.valueOf(8_000L));
         assertThat(events.stream(ProductPriceChangedEvent.class)).hasSize(1);
     }
 

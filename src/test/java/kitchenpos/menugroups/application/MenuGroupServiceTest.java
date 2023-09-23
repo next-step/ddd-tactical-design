@@ -44,7 +44,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create2(final String name) {
-        assertThatThrownBy(() -> createMenuGroupRequest(name))
+        MenuGroupCreateRequest request = createMenuGroupRequest(name);
+        assertThatThrownBy(() -> menuGroupService.create(request) )
                 .isInstanceOf(MenuDisplayedNameException.class);
     }
 
