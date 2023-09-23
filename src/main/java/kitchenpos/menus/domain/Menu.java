@@ -45,13 +45,13 @@ public class Menu {
                 boolean displayed,
                 List<MenuProduct> menuProducts
     ) {
+        validatePrice(price);
         this.id = UUID.randomUUID();
         this.name = new MenuDisplayedName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts.addAll(menuProducts);
-        validatePrice();
     }
 
     public UUID getId() {
@@ -83,17 +83,17 @@ public class Menu {
     }
 
     public void show() {
-        validatePrice();
+        validatePrice(this.price.getValue());
         this.displayed = true;
     }
 
     public void changePrice(BigDecimal price) {
+        validatePrice(price);
         this.price = new MenuPrice(price);
-        validatePrice();
     }
 
-    private void validatePrice() {
-        if (menuProducts.hasTotalPriceLowerThan(this.price.getValue())) {
+    private void validatePrice(BigDecimal price) {
+        if (menuProducts.hasTotalPriceLowerThan(price)) {
             throw new IllegalArgumentException();
         }
     }

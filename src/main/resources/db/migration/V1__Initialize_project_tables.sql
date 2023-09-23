@@ -26,10 +26,11 @@ create table menu_product
 
 create table order_line_item
 (
-    seq      bigint     not null auto_increment,
-    quantity bigint     not null,
-    menu_id  binary(16) not null,
-    order_id binary(16) not null,
+    seq      bigint         not null auto_increment,
+    quantity bigint         not null,
+    menu_id  binary(16)     not null,
+    order_id binary(16)     not null,
+    price    decimal(19, 2) not null,
     primary key (seq)
 ) engine = InnoDB;
 

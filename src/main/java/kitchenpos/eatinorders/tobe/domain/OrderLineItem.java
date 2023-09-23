@@ -1,17 +1,12 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.menus.domain.Menu;
-
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -23,63 +18,37 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
+    @Embedded
+    private Quantity quantity;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
+    @Column(name = "menu_id", nullable = false)
     private UUID menuId;
 
-    @Transient
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
     public OrderLineItem() {
+    }
+
+    public OrderLineItem(UUID menuId, BigDecimal price, long quantity) {
+        this.menuId = menuId;
+        this.price = new Price(price);
+        this.quantity = new Quantity(quantity);
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
-
     public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+        return quantity.getValue();
     }
 
     public UUID getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+        return price.getValue();
     }
 }
