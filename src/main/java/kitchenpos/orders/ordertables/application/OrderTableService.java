@@ -1,5 +1,6 @@
 package kitchenpos.orders.ordertables.application;
 
+import kitchenpos.orders.ordertables.application.mapper.OrderTableMapper;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;
 import kitchenpos.orders.ordertables.exception.OrderTableException;
 import kitchenpos.orders.ordertables.domain.NumberOfGuest;
@@ -27,14 +28,14 @@ public class OrderTableService {
     @Transactional
     public OrderTableResponse create(final OrderTableRequest request) {
         OrderTable orderTable = orderTableRepository.save(request.toEntity());
-        return OrderTableResponse.fromEntity(orderTable);
+        return OrderTableMapper.toDto(orderTable);
     }
 
     @Transactional
     public OrderTableResponse sit(final OrderTableId orderTableId) {
         final OrderTable orderTable = findById(orderTableId);
         orderTable.sit();
-        return OrderTableResponse.fromEntity(orderTable);
+        return OrderTableMapper.toDto(orderTable);
     }
 
     @Transactional
@@ -47,26 +48,25 @@ public class OrderTableService {
 
         orderTable.clear();
 
-        return OrderTableResponse.fromEntity(orderTable);
+        return OrderTableMapper.toDto(orderTable);
     }
 
     @Transactional
     public OrderTableResponse changeNumberOfGuests(final OrderTableId orderTableId, int numberOfGuest) {
         OrderTable orderTable = findById(orderTableId);
         orderTable.changeNumberOfGuest(new NumberOfGuest(numberOfGuest));
-        return OrderTableResponse.fromEntity(orderTable);
+        return OrderTableMapper.toDto(orderTable);
     }
 
     @Transactional(readOnly = true)
     public List<OrderTableResponse> findAll() {
         List<OrderTable> orderTables = orderTableRepository.findAll();
-        return OrderTableResponse.fromEntities(orderTables);
+        return OrderTableMapper.toDtos(orderTables);
     }
 
     private OrderTable findById(final OrderTableId orderTableId) {
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
     }
-
 
 }

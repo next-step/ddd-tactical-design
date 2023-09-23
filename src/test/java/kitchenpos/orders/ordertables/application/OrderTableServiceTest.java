@@ -3,7 +3,7 @@ package kitchenpos.orders.ordertables.application;
 import kitchenpos.orders.eatinorders.application.InMemoryEatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
-import kitchenpos.orders.ordertables.application.service.DefaultEatInOrderStatusLoader;
+import kitchenpos.orders.ordertables.application.loader.DefaultEatInOrderStatusLoader;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;

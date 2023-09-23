@@ -23,22 +23,6 @@ public class OrderTableResponse {
         this.occupied = occupied;
     }
 
-    public static OrderTableResponse fromEntity(OrderTable orderTable) {
-        return new OrderTableResponse(
-                orderTable.getIdValue(),
-                orderTable.getNameValue(),
-                orderTable.getNumberOfGuestValue(),
-                orderTable.isOccupied()
-        );
-    }
-
-    public static List<OrderTableResponse> fromEntities(List<OrderTable> orderTables) {
-        return orderTables.stream()
-                .map(OrderTableResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-
     public String getName() {
         return name;
     }
