@@ -94,7 +94,7 @@ public class Menu {
     }
 
     private void validatePrice() {
-        if (this.price.compareTo(menuProducts.sumOfPrice()) > 0) {
+        if (menuProducts.hasTotalPriceLowerThan(this.price.getValue())) {
             throw new IllegalArgumentException();
         }
     }

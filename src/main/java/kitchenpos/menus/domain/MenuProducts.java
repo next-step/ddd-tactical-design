@@ -45,9 +45,10 @@ public class MenuProducts {
         return Collections.unmodifiableList(menuProducts);
     }
 
-    public BigDecimal sumOfPrice() {
-        return menuProducts.stream()
-                .map(MenuProduct::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    public boolean hasTotalPriceLowerThan(BigDecimal price) {
+        BigDecimal sum = menuProducts.stream()
+            .map(MenuProduct::getTotalPrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return price.compareTo(sum) > 0;
     }
 }
