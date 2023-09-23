@@ -3,6 +3,8 @@ package kitchenpos.eatinorders.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,13 +15,13 @@ class OrderTableTest {
 
     @BeforeEach
     void init() {
-        orderTable = new OrderTable("1번 테이블");
+        orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블");
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     void OrderTable의_이름은_없거나_빈_값일_수_없다(String nullAndEmpty) {
-        assertThatThrownBy(() -> new OrderTable(nullAndEmpty))
+        assertThatThrownBy(() -> new OrderTable(UUID.randomUUID(), nullAndEmpty))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(String.format("이름은 없거나 빈 값일 수 없습니다. 현재 값: %s", nullAndEmpty));
     }
@@ -27,7 +29,7 @@ class OrderTableTest {
     @Test
     void OrderTable을_등록할_수_있다() {
         assertDoesNotThrow(() -> {
-            orderTable = new OrderTable("1번 테이블");
+            orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블");
         });
 
         assertThat(orderTable.getNumberOfGuests()).isEqualTo(0);

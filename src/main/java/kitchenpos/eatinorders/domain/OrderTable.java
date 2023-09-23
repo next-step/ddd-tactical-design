@@ -28,10 +28,11 @@ public class OrderTable {
     public OrderTable() {
     }
 
-    public OrderTable(String name) {
+    public OrderTable(UUID id, String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException(String.format("이름은 없거나 빈 값일 수 없습니다. 현재 값: %s", name));
         }
+        this.id = id;
         this.name = name;
         this.numberOfGuests = NumberOfGuests.ZERO;
         this.occupied = false;
