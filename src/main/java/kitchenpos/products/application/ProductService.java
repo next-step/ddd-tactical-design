@@ -27,8 +27,8 @@ public class ProductService {
 
     @Transactional
     public ProductResponse create(final ProductRequest request) {
-        Product response = productRepository.save(request.toEntity(profanityPolicy));
-        return ProductResponse.fromEntity(response);
+        Product product = productRepository.save(request.toEntity(profanityPolicy));
+        return ProductResponse.fromEntity(product);
     }
 
     @Transactional
@@ -44,8 +44,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
-        List<Product> responses = productRepository.findAll();
-        return ProductResponse.fromEntities(responses);
+        List<Product> products = productRepository.findAll();
+        return ProductResponse.fromEntities(products);
     }
 
 

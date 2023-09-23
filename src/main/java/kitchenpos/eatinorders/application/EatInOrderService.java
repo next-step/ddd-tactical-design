@@ -38,8 +38,8 @@ public class EatInOrderService {
         }
 
 
-        EatInOrder response = eatInOrderRepository.save(request.toEntity(menuLoader));
-        return EatInOrderResponse.fromEntity(response);
+        EatInOrder eatInOrder = eatInOrderRepository.save(request.toEntity(menuLoader));
+        return EatInOrderResponse.fromEntity(eatInOrder);
     }
 
     @Transactional
@@ -66,8 +66,8 @@ public class EatInOrderService {
 
     @Transactional(readOnly = true)
     public List<EatInOrderResponse> findAll() {
-        List<EatInOrder> responses = eatInOrderRepository.findAll();
-        return EatInOrderResponse.fromEntities(responses);
+        List<EatInOrder> eatInOrders = eatInOrderRepository.findAll();
+        return EatInOrderResponse.fromEntities(eatInOrders);
     }
 
     private EatInOrder findById(EatInOrderId eatInOrderId) {

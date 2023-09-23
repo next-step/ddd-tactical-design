@@ -54,14 +54,14 @@ class MenuTest {
         @Test
         void create1() {
             //when
-            Menu response = new Menu("정상",
+            Menu menu = new Menu("정상",
                     new FakeMenuProfanityPolicy(),
                     8000,
                     menuGroupId,
                     true,
                     menuProducts);
             //then
-            assertThat(response.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
+            assertThat(menu.getPriceValue()).isEqualTo(BigDecimal.valueOf(8000));
         }
 
         @DisplayName("[실패] 메뉴 생성 - 메뉴 가격은 메뉴 상품 금액의 합보다 작거나 같다.")

@@ -20,21 +20,21 @@ public class MenuGroupService {
 
     @Transactional
     public MenuGroupResponse create(final MenuGroup request) {
-        MenuGroup response = menuGroupRepository.save(request);
-        return MenuGroupResponse.fromEntity(response);
+        MenuGroup menuGroup = menuGroupRepository.save(request);
+        return MenuGroupResponse.fromEntity(menuGroup);
     }
 
     @Transactional(readOnly = true)
     public List<MenuGroupResponse> findAll() {
-        List<MenuGroup> responses = menuGroupRepository.findAll();
-        return MenuGroupResponse.fromEntities(responses);
+        List<MenuGroup> menuGroups = menuGroupRepository.findAll();
+        return MenuGroupResponse.fromEntities(menuGroups);
     }
 
     @Transactional(readOnly = true)
     public MenuGroupResponse findById(MenuGroupId menuGroupId) {
-        MenuGroup response = menuGroupRepository.findById(menuGroupId)
+        MenuGroup menuGroup = menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NoSuchElementException::new);
-        return MenuGroupResponse.fromEntity(response);
+        return MenuGroupResponse.fromEntity(menuGroup);
     }
 
 }

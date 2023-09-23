@@ -26,8 +26,8 @@ public class OrderTableService {
 
     @Transactional
     public OrderTableResponse create(final OrderTableRequest request) {
-        OrderTable response = orderTableRepository.save(request.toEntity());
-        return OrderTableResponse.fromEntity(response);
+        OrderTable orderTable = orderTableRepository.save(request.toEntity());
+        return OrderTableResponse.fromEntity(orderTable);
     }
 
     @Transactional
@@ -59,8 +59,8 @@ public class OrderTableService {
 
     @Transactional(readOnly = true)
     public List<OrderTableResponse> findAll() {
-        List<OrderTable> responses = orderTableRepository.findAll();
-        return OrderTableResponse.fromEntities(responses);
+        List<OrderTable> orderTables = orderTableRepository.findAll();
+        return OrderTableResponse.fromEntities(orderTables);
     }
 
     private OrderTable findById(final OrderTableId orderTableId) {

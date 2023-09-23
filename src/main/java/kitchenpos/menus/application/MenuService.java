@@ -58,9 +58,10 @@ public class MenuService {
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
         );
-        Menu response = menuRepository.save(menu);
 
-        return MenuResponse.fromEntity(response);
+        menuRepository.save(menu);
+
+        return MenuResponse.fromEntity(menu);
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
@@ -100,8 +101,8 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
-        List<Menu> responses = menuRepository.findAll();
-        return MenuResponse.fromEntities(responses);
+        List<Menu> menus = menuRepository.findAll();
+        return MenuResponse.fromEntities(menus);
     }
 
     @Transactional
@@ -113,8 +114,8 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public MenuResponse findMenuById(MenuId menuId) {
-        Menu response = findById(menuId);
-        return MenuResponse.fromEntity(response);
+        Menu menu = findById(menuId);
+        return MenuResponse.fromEntity(menu);
     }
 
     private Menu findById(MenuId menuId) {
