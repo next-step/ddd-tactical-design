@@ -1,15 +1,15 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.ui.dto.request;
 
 import java.math.BigDecimal;
 
-public class MenuChangePriceRequest {
+public class MenuChangePriceRestRequest {
     final private BigDecimal price;
 
-    public MenuChangePriceRequest(BigDecimal price) {
+    public MenuChangePriceRestRequest(BigDecimal price) {
         this.price = price;
     }
 
-    public MenuChangePriceRequest(long price) {
+    public MenuChangePriceRestRequest(long price) {
         this.price = BigDecimal.valueOf(price);
     }
 

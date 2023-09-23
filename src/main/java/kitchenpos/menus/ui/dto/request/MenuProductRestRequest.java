@@ -1,21 +1,21 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.ui.dto.request;
 
 
 import kitchenpos.menus.tobe.domain.menu.ProductId;
 
 import java.util.UUID;
 
-public class MenuProductRequest {
+public class MenuProductRestRequest {
 
     final private UUID productId;
     final private long quantity;
 
-    public MenuProductRequest(UUID productId, long quantity) {
+    public MenuProductRestRequest(UUID productId, long quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
 
-    public MenuProductRequest(ProductId productId, long quantity) {
+    public MenuProductRestRequest(ProductId productId, long quantity) {
         this.productId = productId.getValue();
         this.quantity = quantity;
     }

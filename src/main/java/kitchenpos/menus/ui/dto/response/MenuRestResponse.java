@@ -1,4 +1,4 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.ui.dto.response;
 
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class MenuResponse {
+public class MenuRestResponse {
 
     final private UUID id;
 
@@ -19,9 +19,9 @@ public class MenuResponse {
 
     final private boolean displayed;
 
-    final private List<MenuProductResponse> menuProducts;
+    final private List<MenuProductRestResponse> menuProducts;
 
-    public MenuResponse(UUID id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductResponse> menuProducts) {
+    public MenuRestResponse(UUID id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductRestResponse> menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,7 +30,7 @@ public class MenuResponse {
         this.menuProducts = menuProducts;
     }
 
-    public MenuResponse(MenuId id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductResponse> menuProducts) {
+    public MenuRestResponse(MenuId id, String name, BigDecimal price, UUID menuGroupId, boolean displayed, List<MenuProductRestResponse> menuProducts) {
         this.id = id.getValue();
         this.name = name;
         this.price = price;
@@ -60,7 +60,7 @@ public class MenuResponse {
         return displayed;
     }
 
-    public List<MenuProductResponse> getMenuProducts() {
+    public List<MenuProductRestResponse> getMenuProducts() {
         return Collections.unmodifiableList(menuProducts);
     }
 

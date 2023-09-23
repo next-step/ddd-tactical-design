@@ -11,13 +11,12 @@ import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.application.dto.MenuResponse;
 import kitchenpos.menus.application.loader.MenuGroupLoader;
+import kitchenpos.menus.application.loader.impl.DefaultMenuGroupLoader;
+import kitchenpos.menus.application.loader.impl.DefaultProductPriceLoader;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import kitchenpos.menus.exception.MenuException;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.exception.MenuProductQuantityException;
-import kitchenpos.menus.infra.DefaultMenuGroupLoader;
-import kitchenpos.menus.infra.DefaultProductPriceLoader;
-import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.ProductId;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -181,7 +180,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getIdValue();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(16_000L);
         final MenuResponse actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -192,7 +191,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getIdValue();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(price);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
                 .isInstanceOf(PriceException.class);
@@ -201,7 +200,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void changePriceToExpensive() {
-        final MenuId menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(productId, productPrice, 2L))).getIdValue();
         final MenuChangePriceRequest expected = new MenuChangePriceRequest(50_000L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
                 .isInstanceOf(MenuException.class);
@@ -210,7 +209,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 노출할 수 있다.")
     @Test
     void display() {
-        final MenuId menuId = menuRepository.save(menu(19_000L, false, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(productId, productPrice, 2L))).getIdValue();
         final MenuResponse actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
@@ -218,7 +217,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
     void displayExpensiveMenu() {
-        final MenuId menuId = menuRepository.save(menu(19_000L, false, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(productId, productPrice, 2L))).getIdValue();
         menuService.changePrice(menuId, new MenuChangePriceRequest(33_000L));
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(MenuException.class);
@@ -227,7 +226,7 @@ class MenuServiceTest {
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
     void hide() {
-        final MenuId menuId = menuRepository.save(menu(19_000L, true, menuProduct(productId, productPrice, 2L))).getId();
+        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(productId, productPrice, 2L))).getIdValue();
         final MenuResponse actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }

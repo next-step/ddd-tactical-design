@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,22 +83,22 @@ public class MenuService {
     }
 
     @Transactional
-    public MenuResponse changePrice(final MenuId menuId, MenuChangePriceRequest request) {
-        final Menu menu = findById(menuId);
+    public MenuResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.changePrice(new Price(request.getPrice()));
         return MenuMapper.toDto(menu);
     }
 
     @Transactional
-    public MenuResponse display(final MenuId menuId) {
-        final Menu menu = findById(menuId);
+    public MenuResponse display(final UUID menuId) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.display();
         return MenuMapper.toDto(menu);
     }
 
     @Transactional
-    public MenuResponse hide(final MenuId menuId) {
-        final Menu menu = findById(menuId);
+    public MenuResponse hide(final UUID menuId) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.hide();
         return MenuMapper.toDto(menu);
     }

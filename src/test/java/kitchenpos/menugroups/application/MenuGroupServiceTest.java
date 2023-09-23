@@ -2,7 +2,6 @@ package kitchenpos.menugroups.application;
 
 import kitchenpos.menugroups.application.dto.MenuGroupCreateRequest;
 import kitchenpos.menugroups.application.dto.MenuGroupResponse;
-import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
