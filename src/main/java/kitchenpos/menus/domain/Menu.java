@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.PurgomalumClient;
 
 import javax.persistence.Column;
@@ -20,7 +19,7 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private DisplayedName name;
+    private MenuDisplayedName name;
 
     @Column(name = "price", nullable = false)
     private MenuPrice price;
@@ -47,7 +46,7 @@ public class Menu {
                 List<MenuProduct> menuProducts
     ) {
         this.id = UUID.randomUUID();
-        this.name = new DisplayedName(name, purgomalumClient);
+        this.name = new MenuDisplayedName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
