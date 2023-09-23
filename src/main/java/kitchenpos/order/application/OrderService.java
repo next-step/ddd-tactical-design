@@ -6,6 +6,7 @@ import kitchenpos.order.domain.OrderLineItemsService;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
 import kitchenpos.order.eatinorders.domain.OrderTableRepository;
+import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class OrderService {
     private final OrderLineItemsService orderLineItemsService;
     private final OrderTableRepository orderTableRepository;
     private final OrderTableClearService orderTableClearService;
+    private final OrderCreateFactory orderCreateFactory;
 
     public OrderService(
             final OrderRepository orderRepository,
@@ -29,18 +31,21 @@ public class OrderService {
             final KitchenridersClient kitchenridersClient,
             final OrderLineItemsService orderLineItemsService,
             final OrderTableRepository orderTableRepository,
-            final OrderTableClearService orderTableClearService) {
+            final OrderTableClearService orderTableClearService,
+            final OrderCreateFactory orderCreateFactory) {
         this.orderRepository = orderRepository;
         this.publisher = publisher;
         this.kitchenridersClient = kitchenridersClient;
         this.orderLineItemsService = orderLineItemsService;
         this.orderTableRepository = orderTableRepository;
         this.orderTableClearService = orderTableClearService;
+        this.orderCreateFactory = orderCreateFactory;
     }
 
     @Transactional
     public Order create(final Order request) {
-        return orderRepository.save(request.create(orderLineItemsService, orderTableRepository));
+        Order order = orderCreateFactory.createOrder(request);
+        return orderRepository.save(order);
     }
 
     @Transactional

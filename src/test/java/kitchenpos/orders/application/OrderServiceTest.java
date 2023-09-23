@@ -6,6 +6,7 @@ import kitchenpos.order.application.OrderService;
 import kitchenpos.order.domain.*;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
 import kitchenpos.order.eatinorders.domain.OrderTableRepository;
+import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ class OrderServiceTest {
     private OrderLineItemsService orderLineItemsService;
     private OrderTableClearService orderTableClearService;
     private ApplicationEventPublisher publisher;
+    private OrderCreateFactory orderCreateFactory;
 
     private static List<Arguments> orderLineItems() {
         return Arrays.asList(
@@ -57,7 +59,13 @@ class OrderServiceTest {
         orderLineItemsService = new OrderLineItemsService(menuRepository);
         orderTableClearService = new OrderTableClearService(orderTableRepository);
         publisher = new FakeOrderApplicationEventPublisher(orderRepository);
-        orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService);
+
+        EatInOrderCreateService eatInOrderCreateService = new EatInOrderCreateService(orderLineItemsService, orderTableRepository);
+        TakeOutOrderCreateService takeOutOrderCreateService = new TakeOutOrderCreateService(orderLineItemsService);
+        DeliveryOrderCreateService deliveryOrderCreateService = new DeliveryOrderCreateService(orderLineItemsService);
+        orderCreateFactory = new OrderCreateFactory(eatInOrderCreateService, takeOutOrderCreateService, deliveryOrderCreateService);
+
+        orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService, orderCreateFactory);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")

@@ -2,10 +2,7 @@ package kitchenpos.order.domain;
 
 import kitchenpos.order.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-import kitchenpos.order.eatinorders.domain.OrderTableRepository;
-import kitchenpos.order.eatinorders.domain.exception.NotFoundOrderTableException;
 import kitchenpos.order.event.OrderStatusChangeEvent;
-import kitchenpos.order.supports.factory.OrderCreateFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 import javax.persistence.*;
@@ -79,23 +76,6 @@ public class Order {
         }
     }
 
-    public Order create(OrderLineItemsService orderLineItemsService, OrderTableRepository orderTableRepository) {
-        OrderLineItems orderLineItems = orderLineItemsService.getOrderLineItems(getOrderLineItems().getOrderLineItems());
-
-        if (getType() == OrderType.EAT_IN) {
-            return OrderCreateFactory.eatInOrder(orderLineItems, getOrderTable(orderTableRepository));
-
-        } else if (getType() == OrderType.TAKEOUT) {
-            return OrderCreateFactory.takeOutOrder(orderLineItems);
-
-        } else if (getType() == OrderType.DELIVERY) {
-            return OrderCreateFactory.deliveryOrder(orderLineItems, getDeliveryAddress());
-        }
-
-        throw new IllegalArgumentException("주문 타입이 올바르지 않습니다.");
-
-    }
-
     public Order accept(ApplicationEventPublisher publisher, KitchenridersClient kitchenridersClient) {
         if (getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
@@ -156,16 +136,6 @@ public class Order {
         return this;
     }
 
-
-    private OrderTable getOrderTable(OrderTableRepository orderRepository) {
-        final OrderTable orderTable = orderRepository.findById(getOrderTableId())
-                .orElseThrow(NotFoundOrderTableException::new);
-
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        return orderTable;
-    }
 
     public boolean isCompleted() {
         return this.status == OrderStatus.COMPLETED;
