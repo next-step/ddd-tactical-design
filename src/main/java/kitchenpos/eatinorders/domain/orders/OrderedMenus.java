@@ -20,7 +20,7 @@ public class OrderedMenus {
         return this.orderedMenus.stream()
                 .filter(orderedMenu -> orderedMenu.isSameMenuId(menuId))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("주문된 메뉴가 존재하지 않습니다. menuId: " + menuId));
+                .orElseThrow(() -> new IllegalArgumentException("주문할 수 없는 메뉴입니다. 존재하지 않는 메뉴입니다. menuId = " + menuId));
     }
 
     @Override

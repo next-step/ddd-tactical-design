@@ -38,7 +38,7 @@ public class MenuClientImpl implements MenuClient {
     @Override
     public OrderedMenus getOrderedMenuByMenuIds(List<UUID> menuIds) {
         return menuRepository.findAllByIdIn(menuIds).stream()
-                .map(it -> new OrderedMenu(it.getId(), it.getPriceValue()))
+                .map(it -> new OrderedMenu(it.getId(), it.getPriceValue(), it.isDisplayed()))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), OrderedMenus::new));
     }
 }

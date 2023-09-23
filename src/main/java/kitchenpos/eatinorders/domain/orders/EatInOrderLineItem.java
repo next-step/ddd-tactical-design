@@ -36,8 +36,8 @@ public class EatInOrderLineItem {
         this.price = price;
     }
 
-    public static EatInOrderLineItem from(final EatInOrderLineItemMaterial orderLineItemMaterial, final OrderedMenus orderedMenus, final MenuClient menuClient) {
-        validate(orderLineItemMaterial, orderedMenus, menuClient);
+    public static EatInOrderLineItem from(final EatInOrderLineItemMaterial orderLineItemMaterial, final OrderedMenus orderedMenus) {
+        validate(orderLineItemMaterial, orderedMenus);
         return new EatInOrderLineItem(
                 orderLineItemMaterial.getQuantity(),
                 orderLineItemMaterial.getMenuId(),
@@ -45,12 +45,10 @@ public class EatInOrderLineItem {
         );
     }
 
-    private static void validate(EatInOrderLineItemMaterial orderLineItemMaterial, OrderedMenus orderedMenus, MenuClient menuClient) {
-        if (menuClient.isHide(orderLineItemMaterial.getMenuId())) {
+    private static void validate(EatInOrderLineItemMaterial orderLineItemMaterial, OrderedMenus orderedMenus) {
+        OrderedMenu orderedMenu = orderedMenus.getOrderedMenuByMenuId((orderLineItemMaterial.getMenuId()));
+        if (orderedMenu.isHide()) {
             throw new IllegalStateException("비노출된 메뉴는 주문할 수 없습니다. menuId = " + orderLineItemMaterial.getMenuId());
-        }
-        if (!orderedMenus.containsMenuId(orderLineItemMaterial.getMenuId())) {
-            throw new IllegalStateException("주문할 수 없는 메뉴입니다. 존재하지 않는 메뉴입니다. menuId = " + orderLineItemMaterial.getMenuId());
         }
     }
 

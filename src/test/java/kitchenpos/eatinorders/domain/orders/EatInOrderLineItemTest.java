@@ -41,8 +41,7 @@ class EatInOrderLineItemTest {
         final OrderedMenus orderedMenus = menuClient.getOrderedMenuByMenuIds(List.of(menu.getId()));
         final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(menu.getId(), 2L),
-                orderedMenus,
-                menuClient
+                orderedMenus
         );
         assertAll(
                 () -> assertThat(eatInOrderLineItem).isNotNull(),
@@ -57,8 +56,7 @@ class EatInOrderLineItemTest {
     void createWithNotExistsMenu() {
         assertThatThrownBy(() -> EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(UUID.randomUUID(), 2L),
-                new OrderedMenus(Collections.emptyList()),
-                menuClient
+                new OrderedMenus(Collections.emptyList())
         )).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -70,8 +68,7 @@ class EatInOrderLineItemTest {
         OrderedMenus orderedMenus = menuClient.getOrderedMenuByMenuIds(List.of(menu.getId()));
         assertThatThrownBy(() -> EatInOrderLineItem.from(
                 new EatInOrderLineItemMaterial(menu.getId(), 2L),
-                orderedMenus,
-                menuClient
+                orderedMenus
         )).isInstanceOf(IllegalStateException.class);
     }
 }

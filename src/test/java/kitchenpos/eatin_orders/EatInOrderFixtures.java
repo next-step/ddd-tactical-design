@@ -84,7 +84,7 @@ public class EatInOrderFixtures {
     public static EatInOrderLineItem eatInOrderLineItem(final MenuClient menuClient, final ProductRepository productRepository) {
         final Menu menu = menu(productRepository);
         OrderedMenus orderedMenus = menuClient.getOrderedMenuByMenuIds(List.of(menu.getId()));
-        return EatInOrderLineItem.from(eatInOrderLineItemMaterial(menu.getId()), orderedMenus, menuClient);
+        return EatInOrderLineItem.from(eatInOrderLineItemMaterial(menu.getId()), orderedMenus);
     }
 
     public static EatInOrderLineItemMaterial eatInOrderLineItemMaterial(UUID menuId) {

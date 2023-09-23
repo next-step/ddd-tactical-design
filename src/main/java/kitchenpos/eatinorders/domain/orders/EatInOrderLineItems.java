@@ -29,7 +29,7 @@ public class EatInOrderLineItems {
         validate(orderLineItemMaterials);
         final OrderedMenus orderedMenus = orderedMenus(orderLineItemMaterials, menuClient);
         return orderLineItemMaterials.stream()
-                .map(it -> EatInOrderLineItem.from(it, orderedMenus, menuClient))
+                .map(it -> EatInOrderLineItem.from(it, orderedMenus))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), EatInOrderLineItems::new));
     }
 
