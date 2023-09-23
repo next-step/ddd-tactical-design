@@ -42,7 +42,7 @@ class TakeoutOrderServiceTest {
         orderService = new TakeoutOrderService(orderRepository, menuRepository);
     }
 
-    @DisplayName("1개 이상의 등록된 메뉴로 포장 주문을 등록할 수 있다.")
+    @DisplayName("1개 이상의 TakeoutOrderLineItem으로 TakeoutOrder를 등록할 수 있다.")
     @Test
     void createTakeoutOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
@@ -57,7 +57,7 @@ class TakeoutOrderServiceTest {
         );
     }
 
-    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @DisplayName("TakeoutOrderLineItem이 없으면 TakeoutOrder는 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
     void create(final List<TakeoutOrderLineItem> orderLineItems) {
@@ -74,7 +74,7 @@ class TakeoutOrderServiceTest {
         );
     }
 
-    @DisplayName("포장 주문의 주문 항목 수량은 0 이상이어야 한다.")
+    @DisplayName("TakeoutOrder의 TakeoutOrderLineItem 수량은 0개 이상이어야 한다.")
     @ValueSource(longs = -1L)
     @ParameterizedTest
     void createWithoutEatInOrder(final long quantity) {
@@ -86,7 +86,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    @DisplayName("Hide된 Menu를 포함한 TakeoutOrderLineItem은 주문할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, productRepository)).getId();
@@ -95,7 +95,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
+    @DisplayName("TakeoutOrderLineItem의 Price은 주문 당시 Menu의 Price과 일치해야 한다.")
     @Test
     void createNotMatchedMenuPriceOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
@@ -104,7 +104,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("주문을 접수한다.")
+    @DisplayName("TakeoutOrder을 Accept한다.")
     @Test
     void accept() {
         final UUID orderId = orderRepository.save(order(OrderStatus.WAITING, productRepository)).getId();
@@ -112,7 +112,7 @@ class TakeoutOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
-    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
+    @DisplayName("Waiting인 TakeoutOrder만 Accept할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void accept(final OrderStatus status) {
@@ -121,7 +121,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 서빙한다.")
+    @DisplayName("TakeoutOrder을 Serve한다.")
     @Test
     void serve() {
         final UUID orderId = orderRepository.save(order(OrderStatus.ACCEPTED, productRepository)).getId();
@@ -129,7 +129,7 @@ class TakeoutOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    @DisplayName("접수된 주문만 서빙할 수 있다.")
+    @DisplayName("Accepted된 TakeoutOrder만 Serve할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void serve(final OrderStatus status) {
@@ -138,7 +138,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 완료한다.")
+    @DisplayName("TakeoutOrder을 Complete한다.")
     @Test
     void complete() {
         final TakeoutOrder expected = orderRepository.save(order(OrderStatus.SERVED, productRepository));
@@ -146,7 +146,7 @@ class TakeoutOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
-    @DisplayName("포장 주문의 경우 서빙된 주문만 완료할 수 있다.")
+    @DisplayName("Served된 TakeoutOrder만 Complete할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void completeTakeoutAndEatInOrder(final OrderStatus status) {
@@ -155,7 +155,7 @@ class TakeoutOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문의 목록을 조회할 수 있다.")
+    @DisplayName("TakeoutOrder의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         orderRepository.save(order(OrderStatus.SERVED, productRepository));
