@@ -54,8 +54,8 @@ public class MenuService {
 
         final Menu menu = new Menu(
                 UUID.randomUUID(),
-                new DisplayedName(request.getName(), purgomalumClient),
-                new Price(request.getPrice()),
+                request.getName(), purgomalumClient,
+                request.getPrice(),
                 menuGroup,
                 menuProducts,
                 menuPricePolicy

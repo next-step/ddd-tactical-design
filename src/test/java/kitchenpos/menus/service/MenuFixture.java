@@ -3,13 +3,11 @@ package kitchenpos.menus.service;
 import java.util.List;
 import java.util.UUID;
 
-import kitchenpos.menus.domain.DisplayedName;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuPricePolicy;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuProducts;
-import kitchenpos.menus.domain.Price;
 import kitchenpos.menus.tobe.domain.FakePurgomalumClient;
 import kitchenpos.products.domain.Product;
 
@@ -83,11 +81,10 @@ public class MenuFixture {
     public Menu build() {
         return new Menu(
                 id,
-                new DisplayedName(name, new FakePurgomalumClient()),
-                new Price(price),
+                name, new FakePurgomalumClient(),
+                price,
                 new MenuGroup(menuGroupId, menuGroupName),
                 new MenuProducts(menuProducts), new MenuPricePolicy()
         );
     }
-
 }

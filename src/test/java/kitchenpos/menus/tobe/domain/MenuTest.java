@@ -25,8 +25,8 @@ class MenuTest {
     void 메뉴를_등록할_때_메뉴가격정책을_따른다() {
         assertDoesNotThrow(() ->
                 new Menu(UUID.randomUUID(),
-                        new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                        new Price(10000L),
+                        "내일의 치킨", new FakePurgomalumClient(),
+                        10000L,
                         menuGroup,
                         new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 10000L))),
                         menuPricePolicy
@@ -37,8 +37,8 @@ class MenuTest {
     @Test
     void 메뉴를_등록할_때_메뉴가격정책을_따르지_못하면_예외가_발생한다() {
         assertThatThrownBy(() -> new Menu(UUID.randomUUID(),
-                        new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                        new Price(10001L),
+                        "내일의 치킨", new FakePurgomalumClient(),
+                        10001L,
                         menuGroup,
                         new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 10000L))),
                         menuPricePolicy
@@ -51,8 +51,8 @@ class MenuTest {
     @Test
     void 가격을_변경할_때_메뉴가격정책을_따른다() {
         Menu menu = new Menu(UUID.randomUUID(),
-                new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                new Price(15000L),
+                "내일의 치킨", new FakePurgomalumClient(),
+                15000L,
                 menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 20000L))),
                 menuPricePolicy
@@ -66,8 +66,8 @@ class MenuTest {
     @Test
     void 가격을_변경할_때_메뉴가격정책을_따르지_못하면_예외가_발생한다() {
         Menu menu = new Menu(UUID.randomUUID(),
-                new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                new Price(15000L),
+                "내일의 치킨", new FakePurgomalumClient(),
+                15000L,
                 menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 20000L))),
                 menuPricePolicy
@@ -81,8 +81,8 @@ class MenuTest {
     @Test
     void 메뉴를_노출할_때_메뉴가격정책을_따른다() {
         Menu menu = new Menu(UUID.randomUUID(),
-                new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                new Price(10000L),
+                "내일의 치킨", new FakePurgomalumClient(),
+                10000L,
                 menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 10000L))),
                 menuPricePolicy
@@ -96,8 +96,8 @@ class MenuTest {
     @Test
     void 메뉴를_숨길_수_있다() {
         Menu menu = new Menu(UUID.randomUUID(),
-                new DisplayedName("내일의 치킨", new FakePurgomalumClient()),
-                new Price(10000L),
+                "내일의 치킨", new FakePurgomalumClient(),
+                10000L,
                 menuGroup,
                 new MenuProducts(List.of(new MenuProduct(UUID.randomUUID(), 1, 10000L))),
                 menuPricePolicy

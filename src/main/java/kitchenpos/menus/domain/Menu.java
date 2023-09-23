@@ -1,7 +1,15 @@
 package kitchenpos.menus.domain;
 
-import javax.persistence.*;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Table(name = "menu")
 @Entity
@@ -33,6 +41,10 @@ public class Menu {
     private MenuProducts menuProducts;
 
     protected Menu() {
+    }
+
+    public Menu(UUID id, String name, PurgomalumClient purgomalumClient, Long price, MenuGroup menuGroup, MenuProducts menuProducts, MenuPricePolicy menuPricePolicy) {
+        this(id, new DisplayedName(name, purgomalumClient), new Price(price), menuGroup, menuProducts, menuPricePolicy);
     }
 
     public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup, MenuProducts menuProducts, MenuPricePolicy menuPricePolicy) {
