@@ -1,10 +1,12 @@
 package kitchenpos.eatinorders.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
@@ -17,12 +19,46 @@ public class OrderTable {
     private String name;
 
     @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private NumberOfGuests numberOfGuests;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
     public OrderTable() {
+    }
+
+    public OrderTable(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException(String.format("이름은 없거나 빈 값일 수 없습니다. 현재 값: %s", name));
+        }
+        this.name = name;
+        this.numberOfGuests = NumberOfGuests.ZERO;
+        this.occupied = false;
+    }
+
+    public void use() {
+        occupied = true;
+    }
+
+    public void clean() {
+        numberOfGuests = NumberOfGuests.ZERO;
+        occupied = false;
+    }
+
+    public void changeNumberOfGuests(int numberOfGuests) {
+        if (isNotInUse()) {
+            throw new IllegalStateException(String.format("사용중이어야 손님 수를 변경할 수 있습니다. 현재 값: %s", occupied));
+        }
+        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+    }
+
+    public boolean isInUse() {
+        return occupied;
+    }
+
+    public boolean isNotInUse() {
+        return !isInUse();
     }
 
     public UUID getId() {
@@ -42,11 +78,11 @@ public class OrderTable {
     }
 
     public int getNumberOfGuests() {
-        return numberOfGuests;
+        return numberOfGuests.intValue();
     }
 
     public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
+        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
     }
 
     public boolean isOccupied() {

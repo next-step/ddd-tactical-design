@@ -24,22 +24,22 @@ class NumberOfGuestsTest {
 
     @Test
     void NumberOfGuests_동등성_비교() {
-        NumberOfGuests actual = new NumberOfGuests(0);
+        NumberOfGuests actual = NumberOfGuests.ZERO;
 
         assertThat(actual.equals(actual)).isTrue();
 
         assertThat(actual.equals(null)).isFalse();
         assertThat(actual.equals("wrong class")).isFalse();
 
-        assertThat(actual.equals(new NumberOfGuests(0))).isTrue();
+        assertThat(actual.equals(NumberOfGuests.ZERO)).isTrue();
         assertThat(actual.equals(new NumberOfGuests(1))).isFalse();
     }
 
     @Test
     void NumberOfGuests_hashCode() {
-        NumberOfGuests actual = new NumberOfGuests(0);
+        NumberOfGuests actual = NumberOfGuests.ZERO;
 
-        assertThat(actual.hashCode()).isEqualTo(new NumberOfGuests(0).hashCode());
+        assertThat(actual.hashCode()).isEqualTo(NumberOfGuests.ZERO.hashCode());
         assertThat(actual.hashCode()).isNotEqualTo(new NumberOfGuests(1).hashCode());
     }
 }

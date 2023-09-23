@@ -8,11 +8,13 @@
 #### 기능
 - `OrderTable`을 등록할 수 있다.
   - `OrderTable` 등록 시, 테이블 상태는 `Not In Use`이다.
-- `OrderTable`의 `Number Of Guests`를 변경 할 수 있다.
-- `OrderTable`은 `Clean Table` 할 수 있다.
-  - 테이블 상태를 `Not In Use`로 변경과 `Number Of Guests`를 0으로 만든다.
-- `OrderTable`은 `Seat on Table` 할 수 있다.
+- `OrderTable`은 `Use Table` 할 수 있다.
   - 테이블 상태를 `In Use`로 변경한다.
+- `OrderTable`은 `Clean Table` 할 수 있다.
+  - `Clean Table` 시 Eat In Order Complete Policy를 따른다.
+  - 테이블 상태를 `Not In Use`로 변경과 `Number Of Guests`를 0으로 만든다.
+- `OrderTable`의 `Number Of Guests`를 변경 할 수 있다.
+  - 테이블 상태가 `In Use`이어야 변경할 수 있다.
   
 #### 속성
 - `EatInOrder`는 `OrderTable`의 식별자, `OrderStatus`, 주문시각, `OrderLineItems`를 갖는다.
@@ -46,7 +48,7 @@
 | 사용중 | In Use | 테이블을 사용하는 상태 |
 | 사용안함 | Not In Use | 테이블을 사용하지 않는 상태 |
 | 테이블 정리 | Clean Table | 테이블 상태를 사용안함으로 변경하는 것 |
-| 테이블 착석 | Seat on Table | 테이블 상태를 사용중으로 변경하는 것 |
+| 테이블 사용 | Use Table | 테이블 상태를 사용중으로 변경하는 것 |
 | 테이블 목록 조회 | View All Tables | 전체 테이블을 조회하는 것을 말한다 |
 | 주문 | Eat In Order | 음식을 매장에서 먹고갈 경우에 하는 주문 |
 | 주문 항목 | Order Line Item | 한 번의 주문에 1개 이상의 메뉴로 주문할 수 있는데, 각각의 주문한 메뉴 항목을 말한다 |
