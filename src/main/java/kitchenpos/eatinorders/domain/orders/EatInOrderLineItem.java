@@ -37,17 +37,21 @@ public class EatInOrderLineItem {
     }
 
     public static EatInOrderLineItem from(final EatInOrderLineItemMaterial orderLineItemMaterial, final OrderedMenus orderedMenus, final MenuClient menuClient) {
+        validate(orderLineItemMaterial, orderedMenus, menuClient);
+        return new EatInOrderLineItem(
+                orderLineItemMaterial.getQuantity(),
+                orderLineItemMaterial.getMenuId(),
+                orderedMenus.getOrderedMenuByMenuId(orderLineItemMaterial.getMenuId()).getPrice()
+        );
+    }
+
+    private static void validate(EatInOrderLineItemMaterial orderLineItemMaterial, OrderedMenus orderedMenus, MenuClient menuClient) {
         if (menuClient.isHide(orderLineItemMaterial.getMenuId())) {
             throw new IllegalStateException("비노출된 메뉴는 주문할 수 없습니다. menuId = " + orderLineItemMaterial.getMenuId());
         }
         if (!orderedMenus.containsMenuId(orderLineItemMaterial.getMenuId())) {
             throw new IllegalStateException("주문할 수 없는 메뉴입니다. 존재하지 않는 메뉴입니다. menuId = " + orderLineItemMaterial.getMenuId());
         }
-        return new EatInOrderLineItem(
-                orderLineItemMaterial.getQuantity(),
-                orderLineItemMaterial.getMenuId(),
-                orderedMenus.getOrderedMenuByMenuId(orderLineItemMaterial.getMenuId()).getPrice()
-        );
     }
 
     public Long getSeq() {

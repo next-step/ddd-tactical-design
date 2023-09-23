@@ -22,7 +22,7 @@ class ProductTest {
         productNamePolicy = new ProductNamePolicy(productNameProfanities);
     }
 
-    @DisplayName("상품을 생성할 수 있다.")
+    @DisplayName("Product을 생성할 수 있다.")
     @Test
     void create() {
         final Product product = new Product(
@@ -36,7 +36,7 @@ class ProductTest {
         );
     }
 
-    @DisplayName("상품에 임의의 ID를 부여할 수 있다.")
+    @DisplayName("Product에 임의의 ID를 부여할 수 있다.")
     @Test
     void giveId() {
         final Product product = new Product(
@@ -46,7 +46,7 @@ class ProductTest {
         assertThat(result.getId()).isNotNull();
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @DisplayName("Product의 Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         final Product product = new Product(

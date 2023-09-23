@@ -52,7 +52,7 @@ class MenuProductsTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("MenuProducts의 내부에 ProductId 와 일치하는 MenuProduct의 가격을 변경할 수 있다.")
+    @DisplayName("MenuProducts의 내부에 ProductId 와 일치하는 MenuProduct의 Price를 변경할 수 있다.")
     @Test
     void changeMenuProductPrice() {
         final MenuProducts menuProducts = MenuProducts.from(
@@ -67,7 +67,7 @@ class MenuProductsTest {
                 .containsExactly(BigDecimal.valueOf(30000L), BigDecimal.valueOf(30000L));
     }
 
-    @DisplayName("MenuProducts의 모든 amount를 합한 결과를 반환할 수 있다.")
+    @DisplayName("MenuProducts의 모든 Amount를 합한 결과를 반환할 수 있다.")
     @Test
     void totalAmount() {
         final MenuProducts menuProducts = MenuProducts.from(

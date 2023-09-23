@@ -52,7 +52,7 @@ class EatInOrderLineItemTest {
         );
     }
 
-    @DisplayName("EatInOrderLineItem 생성 시 메뉴가 없으면 예외를 던진다.")
+    @DisplayName("EatInOrderLineItem 생성 시 EatInOrderLineItemMaterial이 비어있으면 예외를 던진다.")
     @Test
     void createWithNotExistsMenu() {
         assertThatThrownBy(() -> EatInOrderLineItem.from(
@@ -62,7 +62,7 @@ class EatInOrderLineItemTest {
         )).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("EatInOrderLineItem 생성 시 메뉴가 비노출 상태이면 예외를 던진다.")
+    @DisplayName("EatInOrderLineItem 생성 시 Menu가 Not Displayed 상태면 예외를 던진다.")
     @Test
     void createWithNotDisplayedMenu() {
         final Menu menu = menuRepository.save(menu(productRepository));

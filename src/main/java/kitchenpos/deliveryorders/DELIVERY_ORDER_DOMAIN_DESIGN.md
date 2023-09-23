@@ -7,8 +7,8 @@
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
-| 주문 상태 | Order Status | 주문의 상태 |
-| 주문 품목 | Order Line Item | 주문안에 포함된 품목 |
+
+| 주문 품목 | Delivery Order Line Item | 주문안에 포함된 품목 |
 | 주문 일시 | Order DateTime | 주문이 요청 시간 |
 | 주문 품목 가격 | Price | 하나의 주문 품목 가격. 주문 품목 금액을 결정짓는 중요한 요소. 연관된 Menu의 Total Amount 와 같다. |
 | 주문 품목 개수 | Quantity | 하나의 주문 품목이 몇 개 주문했는지를 의미. 주문 품목 금액을 결정짓는 중요한 요소 |
@@ -17,6 +17,7 @@
 | 배달 주문 | Delivery Order | 손님이 요청한 배달 주문. 메뉴 정보와 배달 정보를 가지고있다. |
 | 배달 주소 | Delivery Address | 배달 요청 주소지 |
 | 배달 기사 | Kitchen Rider | 배달하는 기사 |
+| 배달 주문 상태 | Order Status | 배달 주문의 현재 상태를 의미. 6가지 상태를 가진다(Waiting, Accepted, Served, Delivering, Delivered, Completed) |
 | 승인 대기 중 | Waiting | 주문 승인 대기 중인 상태 |
 | 승인 | Accepted | 주문 승인 상태 |
 | 조리 완료 | Served | 조리가 완료되어 배달 기사가 가져갈 수 있는 상태 |

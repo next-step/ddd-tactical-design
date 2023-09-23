@@ -50,7 +50,7 @@ class MenuTest {
     }
 
 
-    @DisplayName("Menu Product의 가격을 변경할 수 있다.")
+    @DisplayName("MenuProduct의 Price를 변경할 수 있다.")
     @Test
     void changeMenuProductPrice() {
         Product product = product("후라이드", 16000L);
@@ -61,7 +61,7 @@ class MenuTest {
         assertThat(menu.getMenuProducts().getMenuProducts().get(0).getPrice()).isEqualTo(BigDecimal.valueOf(15000L));
     }
 
-    @DisplayName("Menu Product의 가격을 변경한 후 Menu의 가격이 Menu Product의 총 가격보다 커지면 Menu를 숨겨진 메뉴로 변경한다.")
+    @DisplayName("MenuProduct의 Price를 변경한 후 Menu의 Price가 MenuProduct의 Total Amount보다 커지면 Menu를 Hide한다.")
     @Test
     void changeMenuProductPriceWhenMenuPriceIsLessThanMenuProductsTotalAmount() {
         Product product = product("후라이드", 16000L);
@@ -72,7 +72,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    @DisplayName("Menu의 가격을 변경할 수 있다.")
+    @DisplayName("Menu의 Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         Product product = product();
@@ -82,7 +82,7 @@ class MenuTest {
         assertThat(menu.getPriceValue()).isEqualTo(BigDecimal.valueOf(20000L));
     }
 
-    @DisplayName("Menu의 가격을 변경할 때 Menu의 가격이 Menu Product의 총 가격보다 커진다면 예외를 던진다.")
+    @DisplayName("Menu의 Price를 변경할 때 Menu의 Price가 MenuProduct의 Total Amount보다 커진다면 예외를 던진다.")
     @Test
     void changePriceThrowException() {
         Product product = product("후라이드", 16000L);
@@ -93,7 +93,7 @@ class MenuTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("Menu를 display 상태로 변경할 수 있다.")
+    @DisplayName("Menu를 Display 상태로 변경할 수 있다.")
     @Test
     void display() {
         Product product = product("후라이드", 16000L);
@@ -103,7 +103,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isTrue();
     }
 
-    @DisplayName("Menu를 display 상태로 변경할 때 Menu의 가격이 Menu Product의 총 가격보다 크다면 예외를 던진다.")
+    @DisplayName("Menu를 Display 상태로 변경할 때 Menu의 Price가 MenuProduct의 Total Amount보다 크다면 예외를 던진다.")
     @Test
     void displayThrowException() {
         Product product = product("후라이드", 16000L);
@@ -115,7 +115,7 @@ class MenuTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("Menu를 숨김 상태로 변경할 수 있다.")
+    @DisplayName("Menu를 Hide 상태로 변경할 수 있다.")
     @Test
     void hide() {
         Product product = product("후라이드", 16000L);
@@ -123,15 +123,5 @@ class MenuTest {
         Menu menu = menu(30000L, true, productRepository, menuProductMaterial(product.getId()));
         menu.hide();
         assertThat(menu.isDisplayed()).isFalse();
-    }
-
-    @DisplayName("Menu의 가격을 Menu Product의 총 가격과 Menu Product의 총 수량을 곱한 값으로 계산할 수 있다.")
-    @Test
-    void priceMultiplyByQuantity() {
-        Product product = product("후라이드", 16000L);
-        productRepository.save(product);
-        MenuProductMaterial menuProductMaterial = menuProductMaterial(product.getId(), 2L);
-        Menu menu = menu(30000L, true, productRepository, menuProductMaterial);
-        assertThat(menu.priceMultiplyByQuantity(2L)).isEqualTo(BigDecimal.valueOf(60000L));
     }
 }

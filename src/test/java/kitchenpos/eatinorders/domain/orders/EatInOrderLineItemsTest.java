@@ -60,7 +60,7 @@ class EatInOrderLineItemsTest {
         )).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("EatInOrderLineItems 생성 시 메뉴가 존재하지 않으면 예외를 던진다.")
+    @DisplayName("EatInOrderLineItems 생성 시 Menu가 존재하지 않으면 예외를 던진다.")
     @Test
     void createWithNotExistsMenu() {
         assertThatThrownBy(() -> EatInOrderLineItems.from(

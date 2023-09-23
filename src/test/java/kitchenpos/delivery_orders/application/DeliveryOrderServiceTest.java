@@ -45,7 +45,7 @@ class DeliveryOrderServiceTest {
         orderService = new DeliveryOrderService(orderRepository, menuRepository, kitchenridersClient);
     }
 
-    @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
+    @DisplayName("1개 이상의 OrderLineItem으로 Delivery Order을 등록할 수 있다.")
     @Test
     void createDeliveryOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
@@ -63,7 +63,7 @@ class DeliveryOrderServiceTest {
         );
     }
 
-    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @DisplayName("Menu가 없으면 Delivery Order를 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
     void create(final List<DeliveryOrderLineItem> orderLineItems) {
@@ -80,7 +80,7 @@ class DeliveryOrderServiceTest {
         );
     }
 
-    @DisplayName("배달 주소가 올바르지 않으면 배달 주문을 등록할 수 없다.")
+    @DisplayName("Delivery Address가 올바르지 않으면 Delivery Order를 등록할 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String deliveryAddress) {
@@ -92,7 +92,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    @DisplayName("Hide된 Menu를 포함한 OrderLineItem이 있을 때는 Delivery Order를 등록할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, productRepository)).getId();
@@ -103,7 +103,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
+    @DisplayName("OrderLineItem의 Price는 실제 Menu Price와 일치해야 한다.")
     @Test
     void createNotMatchedMenuPriceOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
@@ -114,7 +114,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("주문을 접수한다.")
+    @DisplayName("Delivery Order를 Accept한다.")
     @Test
     void accept() {
         final UUID orderId = orderRepository.save(order(OrderStatus.WAITING, "서울시 송파구 위례성대로 2", productRepository)).getId();
@@ -122,7 +122,7 @@ class DeliveryOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
-    @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
+    @DisplayName("Waiting 중인 Delivery Order만 Accept할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void accept(final OrderStatus status) {
@@ -131,7 +131,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("배달 주문을 접수되면 배달 대행사를 호출한다.")
+    @DisplayName("Delivery Order를 Accept하면 Kitchen Rider를 호출한다.")
     @Test
     void acceptDeliveryOrder() {
         final UUID orderId = orderRepository.save(order(OrderStatus.WAITING, "서울시 송파구 위례성대로 2", productRepository)).getId();
@@ -143,7 +143,7 @@ class DeliveryOrderServiceTest {
         );
     }
 
-    @DisplayName("주문을 서빙한다.")
+    @DisplayName("Delivery Order을 Serve한다.")
     @Test
     void serve() {
         final UUID orderId = orderRepository.save(order(OrderStatus.ACCEPTED, "서울시 송파구 위례성대로 2", productRepository)).getId();
@@ -151,7 +151,7 @@ class DeliveryOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    @DisplayName("접수된 주문만 서빙할 수 있다.")
+    @DisplayName("Accept한 Delivery Order만 Serve할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "ACCEPTED", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void serve(final OrderStatus status) {
@@ -160,7 +160,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 배달한다.")
+    @DisplayName("Delivery Order을 Delivering한다.")
     @Test
     void startDelivery() {
         final UUID orderId = orderRepository.save(order(OrderStatus.SERVED, "서울시 송파구 위례성대로 2", productRepository)).getId();
@@ -168,7 +168,7 @@ class DeliveryOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.DELIVERING);
     }
 
-    @DisplayName("서빙된 주문만 배달할 수 있다.")
+    @DisplayName("Serve된 Delivery Order만 Delivering할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void startDelivery(final OrderStatus status) {
@@ -177,7 +177,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 배달 완료한다.")
+    @DisplayName("Delivery Order을 Delivered한다.")
     @Test
     void completeDelivery() {
         final UUID orderId = orderRepository.save(order(OrderStatus.DELIVERING, "서울시 송파구 위례성대로 2", productRepository)).getId();
@@ -185,7 +185,7 @@ class DeliveryOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.DELIVERED);
     }
 
-    @DisplayName("배달 중인 주문만 배달 완료할 수 있다.")
+    @DisplayName("Delivering인 Delivery Order만 Delivered할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "DELIVERING", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void completeDelivery(final OrderStatus status) {
@@ -194,7 +194,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 완료한다.")
+    @DisplayName("Delivery Order을 Comleted한다.")
     @Test
     void complete() {
         final DeliveryOrder expected = orderRepository.save(order(OrderStatus.DELIVERED, "서울시 송파구 위례성대로 2", productRepository));
@@ -202,7 +202,7 @@ class DeliveryOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
-    @DisplayName("배달 주문의 경우 배달 완료된 주문만 완료할 수 있다.")
+    @DisplayName("Delivered인 Delivery Order만 Completed할 수 있다.")
     @EnumSource(value = OrderStatus.class, names = "DELIVERED", mode = EnumSource.Mode.EXCLUDE)
     @ParameterizedTest
     void completeDeliveryOrder(final OrderStatus status) {
@@ -211,7 +211,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문의 목록을 조회할 수 있다.")
+    @DisplayName("Delivery Order의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         orderRepository.save(order(OrderStatus.SERVED, "서울시 송파구 위례성대로 21", productRepository));

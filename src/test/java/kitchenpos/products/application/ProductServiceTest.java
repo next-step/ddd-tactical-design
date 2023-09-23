@@ -40,7 +40,7 @@ class ProductServiceTest {
         productService = new ProductService(productRepository, productNamePolicy, eventPublisher);
     }
 
-    @DisplayName("상품을 등록할 수 있다.")
+    @DisplayName("Product를 등록할 수 있다.")
     @Test
     void create() {
         final ProductCreateRequest expected = createProductRequest("후라이드", 16_000L);
@@ -53,7 +53,7 @@ class ProductServiceTest {
         );
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("Product의 Price가 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -63,7 +63,7 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("Product의 Name이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
@@ -73,7 +73,7 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @DisplayName("Product의 Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
@@ -82,7 +82,7 @@ class ProductServiceTest {
         assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
+    @DisplayName("Product의 Price가 올바르지 않으면 변경할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -93,7 +93,7 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
+    @DisplayName("Product의 Price가 변경될 때 연관된 Menu의 Price가 MenuProduct의 Total Amount보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
@@ -102,7 +102,7 @@ class ProductServiceTest {
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
-    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @DisplayName("Product의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));

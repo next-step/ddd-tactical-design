@@ -44,7 +44,7 @@ class EatInOrderTest {
         eatInOrderPolicy = new EatInOrderPolicy(orderTableRepository);
     }
 
-    @DisplayName("승인 대기 중인 주문을 생성할 수 있다.")
+    @DisplayName("Waiting인 EatInOrder을 생성할 수 있다.")
     @Test
     void createWaitingOrder() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -64,7 +64,7 @@ class EatInOrderTest {
         );
     }
 
-    @DisplayName("매장 테이블이 존재하지 않으면 승인 대기 중인 주문을 생성할 수 없다.")
+    @DisplayName("OrderTable이 존재하지 않으면 Waiting 중인 EatInOrder를 생성할 수 없다.")
     @Test
     void waitingOrderWithNonExistOrderTable() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -77,7 +77,7 @@ class EatInOrderTest {
         )).isInstanceOf(NoSuchElementException.class);
     }
 
-    @DisplayName("매장 테이블이 비어있으면 승인 대기 중인 주문을 생성할 수 없다.")
+    @DisplayName("Clear된 OrderTable에 EatInOrder을 생성할 수 없다.")
     @Test
     void waitingOrderWithEmptyOrderTable() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -91,7 +91,7 @@ class EatInOrderTest {
         )).isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("승인 대기 중인 주문을 승인할 수 있다.")
+    @DisplayName("Waiting인 EatInOrder을 Accept할 수 있다.")
     @Test
     void accept() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -107,7 +107,7 @@ class EatInOrderTest {
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
-    @DisplayName("승인 대기 중이 아닌 주문을 승인할 수 없다.")
+    @DisplayName("Waiting이 아닌 EatInOrder을 Accept할 수 없다.")
     @Test
     void acceptWithNotWaitingOrder() {
         ordersOtherThanWaitingOrder().forEach(eatInOrder ->
@@ -125,7 +125,7 @@ class EatInOrderTest {
         );
     }
 
-    @DisplayName("승인된 주문을 서빙 완료 상태로 변경할 수 있다.")
+    @DisplayName("Accepted인 EatInOrder를 Serve할 수 있다")
     @Test
     void served() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -142,7 +142,7 @@ class EatInOrderTest {
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    @DisplayName("승인된 주문이 아닌 주문을 서빙 완료 상태로 변경할 수 없다.")
+    @DisplayName("Accepted가 아닌 EatInOrder는 Serve 할 수 없다.")
     @Test
     void servedWithNotAcceptedOrder() {
         ordersOtherThanAcceptedOrder().forEach(eatInOrder ->
@@ -160,7 +160,7 @@ class EatInOrderTest {
         );
     }
 
-    @DisplayName("서빙 완료된 주문을 완료 상태로 변경할 수 있다.")
+    @DisplayName("Served된 EatInOrder을 Complete할 수 있다.")
     @Test
     void complete() {
         Menu menu = menuRepository.save(menu(productRepository));
@@ -176,5 +176,43 @@ class EatInOrderTest {
         eatInOrder.served();
         eatInOrder.complete(eatInOrderPolicy);
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+    }
+
+    @DisplayName("Served가 아닌 EatInOrder는 Completed 할 수 없다.")
+    @Test
+    void servedWithNotServedOrder() {
+        ordersOtherThanServedOrder().forEach(eatInOrder ->
+                assertThatThrownBy(() -> eatInOrder.complete(eatInOrderPolicy)).isInstanceOf(IllegalStateException.class)
+        );
+    }
+
+    private List<EatInOrder> ordersOtherThanServedOrder() {
+        final Menu menu = menuRepository.save(menu(productRepository));
+        OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
+        return Arrays.asList(
+                waitingOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                acceptedOrder(orderTable, menu, menuClient, eatInOrderPolicy),
+                completedOrder(orderTable, menu, menuClient, eatInOrderPolicy)
+        );
+    }
+
+    @DisplayName("EatInOrder가 Competed될 때 OrderTable을 비울 수 있다.")
+    @Test
+    void eatInOrderCompleteAndThenClearOrderTable() {
+        Menu menu = menuRepository.save(menu(productRepository));
+        final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
+        final EatInOrder eatInOrder = EatInOrder.waitingOrder(
+                UUID.randomUUID(),
+                LocalDateTime.of(2020, 1, 1, 12, 0, 0),
+                EatInOrderLineItems.from(List.of(eatInOrderLineItemMaterial(menu.getId())), menuClient),
+                orderTable.getId(),
+                eatInOrderPolicy
+        );
+        eatInOrder.accept();
+        eatInOrder.served();
+        eatInOrder.complete(eatInOrderPolicy);
+        OrderTable actual = orderTableRepository.findById(orderTable.getId())
+                .orElseThrow(() -> new NoSuchElementException("OrderTable이 존재하지 않습니다."));
+        assertThat(actual.isClear()).isTrue();
     }
 }

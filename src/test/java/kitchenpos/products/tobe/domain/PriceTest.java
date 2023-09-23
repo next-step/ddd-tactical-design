@@ -25,7 +25,7 @@ class PriceTest {
         );
     }
 
-    @DisplayName("상품 가격은 null이 될 수 없다.")
+    @DisplayName("Product의 Price는 null이 될 수 없다.")
     @ParameterizedTest
     @NullSource
     void createWithNullPrice(BigDecimal price) {
@@ -33,14 +33,14 @@ class PriceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품 가격은 음수가 될 수 없다.")
+    @DisplayName("Product의 Price는 음수가 될 수 없다.")
     @Test
     void createWithNegativePrice() {
         assertThatThrownBy(() -> Price.from(BigDecimal.valueOf(-1L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품 가격끼리 더할 수 있다.")
+    @DisplayName("Product의 Price끼리 더할 수 있다.")
     @Test
     void add() {
         final Price price = Price.from(BigDecimal.valueOf(1000L));
@@ -49,7 +49,7 @@ class PriceTest {
         assertThat(actual).isEqualTo(Price.from(BigDecimal.valueOf(3000L)));
     }
 
-    @DisplayName("상품 가격에 수량을 곱할 수 있다.")
+    @DisplayName("Product의 Price에 수량을 곱할 수 있다.")
     @Test
     void multiplyQuantity() {
         final Price price = Price.from(BigDecimal.valueOf(1000L));

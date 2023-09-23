@@ -34,11 +34,11 @@ public class MenuService {
 
     @Transactional
     public Menu create(final MenuCreateRequest request) {
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-                .orElseThrow(NoSuchElementException::new);
-        if (request.getMenuProducts() == null) {
+        if (request.getMenuProducts() == null || request.getMenuProducts().isEmpty()) {
             throw new IllegalArgumentException();
         }
+        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+                .orElseThrow(NoSuchElementException::new);
         List<MenuProductMaterial> menuProductMaterials = request.getMenuProducts().stream()
                 .map(it -> new MenuProductMaterial(it.getProductId(), it.getQuantity()))
                 .collect(Collectors.toList());

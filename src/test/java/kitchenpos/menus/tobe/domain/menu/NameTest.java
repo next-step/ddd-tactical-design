@@ -24,7 +24,7 @@ class NameTest {
         menuNamePolicy = new MenuNamePolicy(menuNameProfanities);
     }
 
-    @DisplayName("메뉴 이름 생성")
+    @DisplayName("Menu의 Name 생성할 수 있다.")
     @Test
     void create() {
         final String name = "후라이드";
@@ -35,7 +35,7 @@ class NameTest {
         );
     }
 
-    @DisplayName("메뉴 이름이 null이면 생성할 수 없다.")
+    @DisplayName("Menu의 Name은 null일때 생성할 수 없다.")
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
@@ -43,7 +43,7 @@ class NameTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴 이름에 비속어를 포함하면 생성할 수 없다.")
+    @DisplayName("Menu의 Name에 Profanity를 포함되면 생성할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {

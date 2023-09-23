@@ -99,10 +99,6 @@ public class Menu {
         this.displayed = false;
     }
 
-    public BigDecimal priceMultiplyByQuantity(long quantity) {
-        return this.price.multiplyByQuantity(quantity).getValue();
-    }
-
     public boolean isHide() {
         return !this.displayed;
     }

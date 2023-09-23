@@ -51,7 +51,7 @@ class EatInOrderServiceTest {
         eatInOrderService = new EatInOrderService(eatInOrderRepository, menuClient, eatInOrderPolicy);
     }
 
-    @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
+    @DisplayName("1개 이상의 EatInOrderLineItem으로 EatInOrder를 등록할 수 있다.")
     @Test
     void createEatInOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
@@ -68,7 +68,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @DisplayName("EatInOrderLineItem가 없으면 EatInOrder는 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
     void create(final List<EatInOrderLineItemMaterial> orderLineItems) {
@@ -86,21 +86,21 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
+    @DisplayName("EatInOrder는 EatInOrderLineItem의 수량은 0 미만일 수 있다.")
     @ValueSource(longs = -1L)
     @ParameterizedTest
     void createEatInOrder(final long quantity) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final EatInOrderCreateRequest expected = createOrderRequest(
-                orderTableId, eatInOrderLineItemMaterial(menuId)
+                orderTableId, eatInOrderLineItemMaterial(menuId, quantity)
         );
         assertDoesNotThrow(() -> eatInOrderService.create(expected));
     }
 
-    @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
+    @DisplayName("Clear된 OrderTable에는 EatInOrder를 등록할 수 없다.")
     @Test
-    void createEmptyTableEatInOrder() {
+    void createClearTableEatInOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository)).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
         final EatInOrderCreateRequest expected = createOrderRequest(
@@ -110,7 +110,7 @@ class EatInOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    @DisplayName("Not Displayed인 Menu를 포함한 EatInOrder는 등록할 수 없다.")
     @Test
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, productRepository)).getId();
@@ -120,7 +120,7 @@ class EatInOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문을 승인한다.")
+    @DisplayName("EatInOrder을 Accept한다.")
     @Test
     void accept() {
         final Menu menu = menuRepository.save(menu(true, productRepository));
@@ -130,7 +130,7 @@ class EatInOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
     }
 
-    @DisplayName("승인 대기 중인 주문만 승인할 수 있다.")
+    @DisplayName("Waiting인 EatInOrder만 Accept할 수 있다.")
     @Test
     void acceptFromOnlyWaitingOrder() {
         ordersOtherThanWaitingOrder().forEach(order -> {
@@ -150,7 +150,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("주문을 서빙한다.")
+    @DisplayName("EatInOrder을 Serve한다.")
     @Test
     void serve() {
         final Menu menu = menuRepository.save(menu(productRepository));
@@ -160,7 +160,7 @@ class EatInOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
 
-    @DisplayName("승인된 주문만 서빙할 수 있다.")
+    @DisplayName("Accepted인 EatInOrder만 Serve할 수 있다.")
     @Test
     void serveFromOnlyAcceptOrder() {
         ordersOtherThanAcceptedOrder().forEach(order -> {
@@ -180,7 +180,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("주문을 완료한다.")
+    @DisplayName("EatInOrder을 Complete한다.")
     @Test
     void complete() {
         final Menu menu = menuRepository.save(menu(productRepository));
@@ -190,7 +190,7 @@ class EatInOrderServiceTest {
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 
-    @DisplayName("매장 주문의 경우 서빙된 주문만 완료할 수 있다.")
+    @DisplayName("Served인 EatInOrder만 Complete할 수 있다.")
     @Test
     void completeTakeoutAndEatInOrder() {
         ordersOtherThanServedOrder().forEach(order -> {
@@ -210,7 +210,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
+    @DisplayName("EatInOrder가 Completed되면 OrderTable을 Clear한다.")
     @Test
     void completeEatInOrder() {
         final Menu menu = menuRepository.save(menu(productRepository));
@@ -224,7 +224,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.")
+    @DisplayName("Complete가 아닌 EatInOrder가 있는 OrderTable은 Clear하지 않는다.")
     @Test
     void completeNotTable() {
         final Menu menu = menuRepository.save(menu(productRepository));
@@ -238,7 +238,7 @@ class EatInOrderServiceTest {
         );
     }
 
-    @DisplayName("주문의 목록을 조회할 수 있다.")
+    @DisplayName("EatInOrder의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         final Menu menu = menuRepository.save(menu(productRepository));

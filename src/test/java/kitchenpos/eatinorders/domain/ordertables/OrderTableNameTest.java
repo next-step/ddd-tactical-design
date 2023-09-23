@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTableNameTest {
 
-    @DisplayName("주문 테이블 이름을 생성할 수 있다.")
+    @DisplayName("OrderTable name을 생성할 수 있다.")
     @Test
     void create() {
         final String name = "1번";
@@ -21,7 +21,7 @@ class OrderTableNameTest {
         );
     }
 
-    @DisplayName("주문 테이블 이름 값이 올바르지 않으면 생성할 수 없다.")
+    @DisplayName("Order Table Name 값이 비어있으면 생성할 수 없다.")
     @ParameterizedTest
     @NullAndEmptySource
     void createWithInvalidName(String name) {

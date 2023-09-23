@@ -21,7 +21,7 @@ class NameTest {
         productNameProfanities = new FakeProductNameProfanities();
     }
 
-    @DisplayName("상품 이름 생성")
+    @DisplayName("Product의 Name 생성할 수 있다")
     @Test
     void create() {
         final String name = "후라이드";
@@ -32,7 +32,7 @@ class NameTest {
         );
     }
 
-    @DisplayName("상품 이름이 null이면 생성할 수 없다.")
+    @DisplayName("Product의 Name이 null이면 생성할 수 없다.")
     @ParameterizedTest
     @NullSource
     void createWithNullName(String name) {
@@ -40,7 +40,7 @@ class NameTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품 이름에 비속어를 포함하면 생성할 수 없다.")
+    @DisplayName("Product의 Name에 Profanity를 포함하면 생성할 수 없다.")
     @ParameterizedTest
     @ValueSource(strings = {"비속어포함이름", "중간에욕설포함"})
     void createWithProfanityName(String name) {

@@ -31,7 +31,7 @@ class MenuProductTest {
         productClient = new ProductClientImpl(productRepository);
     }
 
-    @DisplayName("MenuProducts를 생성할 수 있다.")
+    @DisplayName("MenuProduct를 생성할 수 있다.")
     @Test
     void create() {
         final MenuProduct menuProduct = MenuProduct.from(product.getId(), 1L, productClient);
@@ -43,14 +43,14 @@ class MenuProductTest {
         );
     }
 
-    @DisplayName("MenuProduct 생성 시 수량이 0보다 작으면 예외가 발생한다.")
+    @DisplayName("MenuProduct 생성 시 Quantity가 0보다 작으면 예외가 발생한다.")
     @Test
     void createWithNegativeQuantity() {
         assertThatThrownBy(() -> MenuProduct.from(product.getId(), -1L, productClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("MenuProduct 가격을 변경할 수 있다.")
+    @DisplayName("MenuProduct Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         final MenuProduct menuProduct = MenuProduct.from(product.getId(), 1L, productClient);
@@ -58,14 +58,14 @@ class MenuProductTest {
         assertEquals(menuProduct.getPrice(), BigDecimal.valueOf(20000));
     }
 
-    @DisplayName("MenuProduct의 가격과 수량을 곱합 결과인 amount를 계산할 수 있다.")
+    @DisplayName("MenuProduct의 Price와 Quantity을 곱한 amount를 반환할 수 있다.")
     @Test
     void calculateAmount() {
         final MenuProduct menuProduct = MenuProduct.from(product.getId(), 2L, productClient);
         assertEquals(menuProduct.calculateAmount(), BigDecimal.valueOf(32000L));
     }
 
-    @DisplayName("MenuProducts의 productId와 동일한지 여부를 확인할 수 있다.")
+    @DisplayName("특정 productId가 MenuProduct의 productId와 동일한지 여부를 확인할 수 있다.")
     @Test
     void isSameProductId() {
         final UUID productId = product.getId();

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NumberOfGuestsTest {
 
-    @DisplayName("손님 수를 생성할 수 있다.")
+    @DisplayName("NumberOfGuests를 생성할 수 있다.")
     @Test
     void create() {
         final NumberOfGuests numberOfGuests = new NumberOfGuests(1);
@@ -17,7 +17,7 @@ class NumberOfGuestsTest {
         );
     }
 
-    @DisplayName("손님 수가 0보다 작으면 생성할 수 없다.")
+    @DisplayName("NumberOfGuests는 수가 0보다 작으면 생성할 수 없다.")
     @Test
     void createWithNegativeValue() {
         assertThrows(IllegalArgumentException.class, () -> new NumberOfGuests(-1));

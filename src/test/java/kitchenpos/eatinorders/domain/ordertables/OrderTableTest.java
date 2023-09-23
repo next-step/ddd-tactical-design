@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTableTest {
 
-    @DisplayName("새로운 미샤용 OrderTable을 생성할 수 있다.")
+    @DisplayName("새로운 Clear상태의 OrderTable을 생성할 수 있다.")
     @Test
     void createNew() {
         final OrderTable orderTable = OrderTable.createNew(new OrderTableName("테이블1"));
@@ -22,7 +22,7 @@ class OrderTableTest {
         );
     }
 
-    @DisplayName("미사용 상태의 OrderTable을 사용 상태로 변경할 수 있다.")
+    @DisplayName("Clear 상태의 OrderTable을 Sit 으로 변경할 수 있다.")
     @Test
     void sit() {
         final OrderTable orderTable = OrderTable.createNew(new OrderTableName("테이블1"));
@@ -30,7 +30,7 @@ class OrderTableTest {
         assertThat(orderTable.isOccupied()).isTrue();
     }
 
-    @DisplayName("사용 상태의 OrderTable을 미사용 상태로 변경할 수 있다.")
+    @DisplayName("Sit 상태의 OrderTable을 Clear 할 수 있다.")
     @Test
     void clear() {
         final OrderTable orderTable = OrderTable.createNew(new OrderTableName("테이블1"));
@@ -42,7 +42,7 @@ class OrderTableTest {
         );
     }
 
-    @DisplayName("OrderTable의 손님 수를 변경할 수 있다.")
+    @DisplayName("OrderTable의 NumberOfGuests를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
         final OrderTable orderTable = OrderTable.createNew(new OrderTableName("테이블1"));
@@ -51,7 +51,7 @@ class OrderTableTest {
         assertThat(orderTable.getNumberOfGuests()).isEqualTo(new NumberOfGuests(4));
     }
 
-    @DisplayName("미사용 상태의 OrderTable의 손님 수를 변경할 수 없다.")
+    @DisplayName("Clear인 OrderTable은 NumberOfGuests를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsWhenClearTable() {
         final OrderTable orderTable = OrderTable.createNew(new OrderTableName("테이블1"));

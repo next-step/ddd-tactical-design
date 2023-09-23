@@ -27,7 +27,7 @@ class MenuGroupServiceTest {
         menuGroupService = new MenuGroupService(menuGroupRepository);
     }
 
-    @DisplayName("메뉴 그룹을 등록할 수 있다.")
+    @DisplayName("MenuGroup을 등록할 수 있다.")
     @Test
     void create() {
         final MenuGroupCreateRequest expected = createMenuGroupRequest("두마리메뉴");
@@ -39,7 +39,7 @@ class MenuGroupServiceTest {
         );
     }
 
-    @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("MenuGroup의 Name이 비어있으면 등록할 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
@@ -48,7 +48,7 @@ class MenuGroupServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
+    @DisplayName("MenuGroup의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         menuGroupRepository.save(menuGroup("두마리메뉴"));

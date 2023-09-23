@@ -28,7 +28,7 @@ class OrderTableServiceTest {
         orderTableService = new OrderTableService(orderTableRepository);
     }
 
-    @DisplayName("주문 테이블을 등록할 수 있다.")
+    @DisplayName("OrderTable을 등록할 수 있다.")
     @Test
     void create() {
         final OrderTableName expected = new OrderTableName("1번");
@@ -42,7 +42,7 @@ class OrderTableServiceTest {
         );
     }
 
-    @DisplayName("빈 테이블을 해지할 수 있다.")
+    @DisplayName("Clear OrderTable을 Sit상태로 변경할 수 있다.")
     @Test
     void sit() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
@@ -50,7 +50,7 @@ class OrderTableServiceTest {
         assertThat(actual.isOccupied()).isTrue();
     }
 
-    @DisplayName("방문한 손님 수를 변경할 수 있다.")
+    @DisplayName("OrderTable의 NumberOfGuests를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
@@ -59,7 +59,7 @@ class OrderTableServiceTest {
         assertThat(actual.getNumberOfGuests()).isEqualTo(new NumberOfGuests(4));
     }
 
-    @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
+    @DisplayName("Clear인 OrderTable은 NumberOfGuests를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsInEmptyTable() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
@@ -68,7 +68,7 @@ class OrderTableServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("주문 테이블의 목록을 조회할 수 있다.")
+    @DisplayName("OrderTable의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         orderTableRepository.save(orderTable());
