@@ -1,16 +1,14 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.tobe.application.EatInOrderService;
-import kitchenpos.eatinorders.tobe.application.OrderValidator;
-import kitchenpos.eatinorders.tobe.application.dto.request.OrderCreateRequest;
-import kitchenpos.eatinorders.tobe.application.dto.request.OrderLineItemCreateRequest;
-import kitchenpos.eatinorders.tobe.application.dto.response.OrderResponse;
-import kitchenpos.eatinorders.tobe.domain.Order;
-import kitchenpos.eatinorders.tobe.domain.OrderRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderType;
+import kitchenpos.eatinorders.application.dto.request.OrderCreateRequest;
+import kitchenpos.eatinorders.application.dto.request.OrderLineItemCreateRequest;
+import kitchenpos.eatinorders.application.dto.response.OrderResponse;
+import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.domain.OrderRepository;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
