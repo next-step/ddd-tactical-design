@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "orders")
@@ -54,12 +55,19 @@ public class Order {
     }
 
     public Order(OrderType type, OrderStatus status, LocalDateTime orderDateTime, List<OrderLineItem> orderLineItems, OrderTable orderTable) {
+        validateOrderType(type);
         this.id = UUID.randomUUID();
         this.type = type;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems.addAll(orderLineItems);
         this.orderTable = orderTable;
+    }
+
+    private static void validateOrderType(OrderType type) {
+        if (Objects.isNull(type)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public UUID getId() {
@@ -103,15 +111,11 @@ public class Order {
         return orderLineItems.get();
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress.getValue();
-    }
-
     public OrderTable getOrderTable() {
         return orderTable;
     }
 
     public UUID getOrderTableId() {
-        return orderTableId;
+        return orderTable.getId();
     }
 }

@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.tobe.application.EatInOrderService;
+import kitchenpos.eatinorders.tobe.application.OrderValidator;
 import kitchenpos.eatinorders.tobe.application.dto.request.OrderCreateRequest;
 import kitchenpos.eatinorders.tobe.application.dto.request.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.tobe.application.dto.response.OrderResponse;
@@ -43,13 +44,15 @@ class EatInOrderServiceTest {
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService eatInOrderService;
+    private OrderValidator orderValidator;
 
     @BeforeEach
     void setUp() {
         orderRepository = new InMemoryOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        eatInOrderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository);
+        orderValidator = new OrderValidator(menuRepository);
+        eatInOrderService = new EatInOrderService(orderRepository, orderValidator, orderTableRepository);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -74,8 +77,9 @@ class EatInOrderServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final OrderType type) {
+        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final OrderCreateRequest expected = createOrderRequest(type, createOrderLineItemRequest(menuId, 19_000L, 3L));
+        final OrderCreateRequest expected = createOrderRequest(type, orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
         assertThatThrownBy(() -> eatInOrderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -84,7 +88,7 @@ class EatInOrderServiceTest {
     @MethodSource("orderLineItems")
     @ParameterizedTest
     void create(final List<OrderLineItemCreateRequest> orderLineItems) {
-        final OrderCreateRequest expected = createOrderRequest(OrderType.TAKEOUT, orderLineItems);
+        final OrderCreateRequest expected = createOrderRequest(OrderType.EAT_IN, orderLineItems);
         assertThatThrownBy(() -> eatInOrderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -125,7 +129,7 @@ class EatInOrderServiceTest {
     @Test
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
-        final OrderCreateRequest expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 19_000L, 3L));
+        final OrderCreateRequest expected = createOrderRequest(OrderType.EAT_IN, createOrderLineItemRequest(menuId, 19_000L, 3L));
         assertThatThrownBy(() -> eatInOrderService.create(expected))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -134,7 +138,7 @@ class EatInOrderServiceTest {
     @Test
     void createNotMatchedMenuPriceOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final OrderCreateRequest expected = createOrderRequest(OrderType.TAKEOUT, createOrderLineItemRequest(menuId, 16_000L, 3L));
+        final OrderCreateRequest expected = createOrderRequest(OrderType.EAT_IN, createOrderLineItemRequest(menuId, 16_000L, 3L));
         assertThatThrownBy(() -> eatInOrderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
