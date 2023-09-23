@@ -186,7 +186,7 @@ docker compose -p kitchenpos up -d
 - `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
 - 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
 - `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
+- `OrderLineItem`는 가격과 수량, `OrderedMenu`를 가진다.
 - `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
 
 ### 배달 주문
