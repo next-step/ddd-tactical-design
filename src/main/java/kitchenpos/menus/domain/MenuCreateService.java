@@ -3,9 +3,8 @@ package kitchenpos.menus.domain;
 import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsSizeException;
-import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.vo.Products;
+import kitchenpos.products.domain.Products;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 

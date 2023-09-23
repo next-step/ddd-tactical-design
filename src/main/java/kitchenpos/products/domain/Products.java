@@ -1,11 +1,8 @@
-package kitchenpos.products.domain.vo;
-
-import kitchenpos.products.domain.Product;
-import kitchenpos.support.ValueObject;
+package kitchenpos.products.domain;
 
 import java.util.List;
 
-public class Products extends ValueObject {
+public class Products {
 
     private final List<Product> products;
 

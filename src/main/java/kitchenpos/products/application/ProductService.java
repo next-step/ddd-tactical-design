@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.vo.Products;
+import kitchenpos.products.domain.Products;
 import kitchenpos.products.event.ProductPriceChangeEvent;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.context.ApplicationEventPublisher;

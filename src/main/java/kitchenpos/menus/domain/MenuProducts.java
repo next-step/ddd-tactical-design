@@ -1,8 +1,6 @@
-package kitchenpos.menus.domain.vo;
+package kitchenpos.menus.domain;
 
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsException;
-import kitchenpos.support.ValueObject;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,7 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Embeddable
-public class MenuProducts extends ValueObject {
+public class MenuProducts  {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
             name = "menu_id",

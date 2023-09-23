@@ -4,7 +4,6 @@ import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.vo.MenuName;
 import kitchenpos.menus.domain.vo.MenuPrice;
-import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
