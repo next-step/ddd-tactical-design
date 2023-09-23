@@ -1,9 +1,9 @@
 package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.dto.MenuChangePriceRequest;
-import kitchenpos.menus.dto.MenuCreateRequest;
-import kitchenpos.menus.dto.MenuResponse;
+import kitchenpos.menus.application.dto.MenuChangePriceRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

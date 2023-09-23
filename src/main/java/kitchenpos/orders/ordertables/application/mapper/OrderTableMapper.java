@@ -1,7 +1,7 @@
 package kitchenpos.orders.ordertables.application.mapper;
 
+import kitchenpos.orders.ordertables.application.dto.OrderTableResponse;
 import kitchenpos.orders.ordertables.domain.OrderTable;
-import kitchenpos.orders.ordertables.dto.OrderTableResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

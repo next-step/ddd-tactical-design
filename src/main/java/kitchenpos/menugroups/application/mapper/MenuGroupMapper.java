@@ -1,12 +1,17 @@
 package kitchenpos.menugroups.application.mapper;
 
+import kitchenpos.menugroups.application.dto.MenuGroupCreateRequest;
+import kitchenpos.menugroups.application.dto.MenuGroupResponse;
 import kitchenpos.menugroups.domain.MenuGroup;
-import kitchenpos.menugroups.dto.MenuGroupResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MenuGroupMapper {
+
+    public static MenuGroup toEntity(MenuGroupCreateRequest request) {
+        return new MenuGroup(request.getName());
+    }
 
     public static MenuGroupResponse toDto(MenuGroup menuGroup) {
         return new MenuGroupResponse(menuGroup.getId(), menuGroup.getNameValue());

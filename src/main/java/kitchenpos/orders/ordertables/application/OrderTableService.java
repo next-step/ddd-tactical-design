@@ -1,12 +1,13 @@
 package kitchenpos.orders.ordertables.application;
 
+import kitchenpos.orders.ordertables.application.dto.OrderTableRequest;
+import kitchenpos.orders.ordertables.application.dto.OrderTableResponse;
+import kitchenpos.orders.ordertables.application.loader.EatInOrderStatusLoader;
 import kitchenpos.orders.ordertables.application.mapper.OrderTableMapper;
 import kitchenpos.orders.ordertables.domain.NumberOfGuest;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;
-import kitchenpos.orders.ordertables.dto.OrderTableRequest;
-import kitchenpos.orders.ordertables.dto.OrderTableResponse;
 import kitchenpos.orders.ordertables.exception.OrderTableErrorCode;
 import kitchenpos.orders.ordertables.exception.OrderTableException;
 import org.springframework.stereotype.Service;

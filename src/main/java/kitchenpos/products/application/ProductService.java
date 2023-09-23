@@ -2,9 +2,9 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.products.application.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.application.mapper.ProductMapper;
-import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductRepository;

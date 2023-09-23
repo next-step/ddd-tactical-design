@@ -1,11 +1,11 @@
 package kitchenpos.orders.eatinorders.application.mapper;
 
 import kitchenpos.common.domain.Price;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderLineItemRequest;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderLineItemResponse;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderRequest;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderResponse;
 import kitchenpos.orders.eatinorders.domain.*;
-import kitchenpos.orders.eatinorders.dto.EatInOrderLineItemRequest;
-import kitchenpos.orders.eatinorders.dto.EatInOrderLineItemResponse;
-import kitchenpos.orders.eatinorders.dto.EatInOrderRequest;
-import kitchenpos.orders.eatinorders.dto.EatInOrderResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

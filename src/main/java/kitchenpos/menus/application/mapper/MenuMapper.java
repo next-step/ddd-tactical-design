@@ -1,7 +1,7 @@
 package kitchenpos.menus.application.mapper;
 
-import kitchenpos.menus.dto.MenuProductResponse;
-import kitchenpos.menus.dto.MenuResponse;
+import kitchenpos.menus.application.dto.MenuProductResponse;
+import kitchenpos.menus.application.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;

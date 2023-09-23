@@ -1,12 +1,12 @@
 package kitchenpos.orders.eatinorders.application;
 
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderLineItemRequest;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderRequest;
+import kitchenpos.orders.eatinorders.application.dto.EatInOrderResponse;
 import kitchenpos.orders.eatinorders.application.loader.MenuLoader;
 import kitchenpos.orders.eatinorders.application.loader.OrderTableStatusLoader;
 import kitchenpos.orders.eatinorders.application.mapper.EatInOrderMapper;
 import kitchenpos.orders.eatinorders.domain.*;
-import kitchenpos.orders.eatinorders.dto.EatInOrderLineItemRequest;
-import kitchenpos.orders.eatinorders.dto.EatInOrderRequest;
-import kitchenpos.orders.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.orders.eatinorders.exception.EatInOrderException;
 import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;

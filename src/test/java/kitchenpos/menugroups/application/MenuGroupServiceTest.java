@@ -1,8 +1,9 @@
 package kitchenpos.menugroups.application;
 
+import kitchenpos.menugroups.application.dto.MenuGroupCreateRequest;
+import kitchenpos.menugroups.application.dto.MenuGroupResponse;
 import kitchenpos.menugroups.domain.MenuGroup;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
-import kitchenpos.menugroups.dto.MenuGroupResponse;
 import kitchenpos.menus.exception.MenuDisplayedNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,12 +32,12 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create1() {
-        final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
+        final MenuGroupCreateRequest expected = createMenuGroupRequest("두마리메뉴");
         final MenuGroupResponse actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(expected.getNameValue())
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName())
         );
     }
 
@@ -56,7 +57,7 @@ class MenuGroupServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuGroup createMenuGroupRequest(final String name) {
-        return new MenuGroup(name);
+    private MenuGroupCreateRequest createMenuGroupRequest(final String name) {
+        return new MenuGroupCreateRequest(name);
     }
 }
