@@ -2,14 +2,15 @@
 
 ## 모델링
 #### 속성
-- `OrderTable`은 식별자, 이름, `손님 수`를 갖는다.
+- `OrderTable`은 식별자, 이름, `Number Of Guests`를 갖는다.
+- `Number Of Guests`는 손님 수를 갖는다.
+  - 손님 수는 0명 이상이어야 한다.
 #### 기능
 - `OrderTable`을 등록할 수 있다.
   - `OrderTable` 등록 시, 테이블 상태는 `Not In Use`이다.
-- `OrderTable`의 `손님 수`를 변경 할 수 있다.
-  - `OrderTable`의 `손님 수` 변경 시, `손님 수`는 0명 이상이여야 한다.
+- `OrderTable`의 `Number Of Guests`를 변경 할 수 있다.
 - `OrderTable`은 `Clean Table` 할 수 있다.
-  - 테이블 상태를 `Not In Use`로 변경과 `손님 수`를 0으로 만든다.
+  - 테이블 상태를 `Not In Use`로 변경과 `Number Of Guests`를 0으로 만든다.
 - `OrderTable`은 `Seat on Table` 할 수 있다.
   - 테이블 상태를 `In Use`로 변경한다.
   
