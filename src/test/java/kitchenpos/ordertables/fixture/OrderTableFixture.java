@@ -1,8 +1,8 @@
 package kitchenpos.ordertables.fixture;
 
-import kitchenpos.ordertables.domain.NumberOfGuest;
-import kitchenpos.ordertables.domain.OrderTable;
-import kitchenpos.ordertables.domain.OrderTableName;
+import kitchenpos.orders.ordertables.domain.NumberOfGuest;
+import kitchenpos.orders.ordertables.domain.OrderTable;
+import kitchenpos.orders.ordertables.domain.OrderTableName;
 
 public class OrderTableFixture {
 

@@ -1,13 +1,13 @@
 package kitchenpos.ordertables.subsriber;
 
-import kitchenpos.eatinorders.application.EatInOrderService;
-import kitchenpos.eatinorders.domain.EatInOrder;
-import kitchenpos.eatinorders.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.EatInOrderStatus;
-import kitchenpos.eatinorders.publisher.EatInOrderCompletedEvent;
-import kitchenpos.ordertables.application.OrderTableService;
-import kitchenpos.ordertables.domain.OrderTable;
-import kitchenpos.ordertables.domain.OrderTableRepository;
+import kitchenpos.orders.eatinorders.application.EatInOrderService;
+import kitchenpos.orders.eatinorders.domain.EatInOrder;
+import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.orders.eatinorders.publisher.EatInOrderCompletedEvent;
+import kitchenpos.orders.ordertables.application.OrderTableService;
+import kitchenpos.orders.ordertables.domain.OrderTable;
+import kitchenpos.orders.ordertables.domain.OrderTableRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
-import static kitchenpos.eatinorders.fixture.EatInOrderFixture.order;
+import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
 import static kitchenpos.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 

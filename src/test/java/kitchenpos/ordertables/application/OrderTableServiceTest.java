@@ -1,16 +1,18 @@
 package kitchenpos.ordertables.application;
 
-import kitchenpos.eatinorders.application.InMemoryEatInOrderRepository;
-import kitchenpos.eatinorders.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.EatInOrderStatus;
-import kitchenpos.ordertables.application.service.DefaultEatInOrderStatusLoader;
-import kitchenpos.ordertables.domain.OrderTable;
-import kitchenpos.ordertables.domain.OrderTableId;
-import kitchenpos.ordertables.dto.OrderTableRequest;
-import kitchenpos.ordertables.dto.OrderTableResponse;
-import kitchenpos.ordertables.exception.NumberOfGuestException;
-import kitchenpos.ordertables.exception.OrderTableException;
-import kitchenpos.ordertables.exception.OrderTableNameException;
+import kitchenpos.orders.eatinorders.application.InMemoryEatInOrderRepository;
+import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.orders.ordertables.application.OrderTableService;
+import kitchenpos.orders.ordertables.application.service.DefaultEatInOrderStatusLoader;
+import kitchenpos.orders.ordertables.domain.OrderTable;
+import kitchenpos.orders.ordertables.domain.OrderTableId;
+import kitchenpos.orders.ordertables.domain.OrderTableRepository;
+import kitchenpos.orders.ordertables.dto.OrderTableRequest;
+import kitchenpos.orders.ordertables.dto.OrderTableResponse;
+import kitchenpos.orders.ordertables.exception.NumberOfGuestException;
+import kitchenpos.orders.ordertables.exception.OrderTableException;
+import kitchenpos.orders.ordertables.exception.OrderTableNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,7 +23,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
-import static kitchenpos.eatinorders.fixture.EatInOrderFixture.order;
+import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
 import static kitchenpos.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("주문 테이블")
 class OrderTableServiceTest {
-    private kitchenpos.ordertables.domain.OrderTableRepository orderTableRepository;
+    private OrderTableRepository orderTableRepository;
     private EatInOrderRepository eatInOrderRepository;
     private OrderTableService orderTableService;
 
