@@ -45,13 +45,13 @@ public class Menu {
                 boolean displayed,
                 List<MenuProduct> menuProducts
     ) {
-        validatePrice(price);
         this.id = UUID.randomUUID();
         this.name = new MenuDisplayedName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts.addAll(menuProducts);
+        validatePrice(price);
     }
 
     public UUID getId() {
@@ -88,8 +88,8 @@ public class Menu {
     }
 
     public void changePrice(BigDecimal price) {
-        validatePrice(price);
         this.price = new MenuPrice(price);
+        validatePrice(price);
     }
 
     private void validatePrice(BigDecimal price) {
