@@ -5,28 +5,20 @@ import java.util.UUID;
 
 public class EatInOrderRequest {
 
-    private UUID orderTableId;
-    private List<EatInOrderLineItemRequest> orderLineItems;
+    final private UUID orderTableId;
+    final private List<EatInOrderLineItemRequest> orderLineItems;
 
     public EatInOrderRequest(UUID orderTableId, List<EatInOrderLineItemRequest> orderLineItems) {
         this.orderTableId = orderTableId;
         this.orderLineItems = orderLineItems;
     }
 
-
     public UUID getOrderTableId() {
         return orderTableId;
-    }
-
-    public void setOrderTableId(UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 
     public List<EatInOrderLineItemRequest> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(List<EatInOrderLineItemRequest> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
 }

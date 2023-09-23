@@ -1,20 +1,18 @@
-package kitchenpos.orders.eatinorders.application.dto;
-
-import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
+package kitchenpos.orders.eatinorders.ui.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public class EatInOrderResponse {
+public class EatInOrderRestResponse {
 
     final private UUID id;
-    final private EatInOrderStatus eatInOrderStatus;
+    final private String eatInOrderStatus;
     final private LocalDateTime orderDateTime;
     final private UUID orderTableId;
-    final private List<EatInOrderLineItemResponse> orderLineItems;
+    final private List<EatInOrderLineItemRestResponse> orderLineItems;
 
-    public EatInOrderResponse(UUID eatInOrderId, EatInOrderStatus eatInOrderStatus, LocalDateTime orderDateTime, UUID orderTableId, List<EatInOrderLineItemResponse> orderLineItems) {
+    public EatInOrderRestResponse(UUID eatInOrderId, String eatInOrderStatus, LocalDateTime orderDateTime, UUID orderTableId, List<EatInOrderLineItemRestResponse> orderLineItems) {
         this.id = eatInOrderId;
         this.eatInOrderStatus = eatInOrderStatus;
         this.orderDateTime = orderDateTime;
@@ -26,7 +24,7 @@ public class EatInOrderResponse {
         return id;
     }
 
-    public EatInOrderStatus getEatInOrderStatus() {
+    public String getEatInOrderStatus() {
         return eatInOrderStatus;
     }
 
@@ -38,7 +36,7 @@ public class EatInOrderResponse {
         return orderTableId;
     }
 
-    public List<EatInOrderLineItemResponse> getOrderLineItems() {
+    public List<EatInOrderLineItemRestResponse> getOrderLineItems() {
         return orderLineItems;
     }
 

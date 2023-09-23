@@ -1,15 +1,15 @@
-package kitchenpos.orders.eatinorders.application.dto;
+package kitchenpos.orders.eatinorders.ui.dto.response;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class EatInOrderLineItemResponse {
+public class EatInOrderLineItemRestResponse {
     final private long seq;
     final private UUID menuId;
     final private long quantity;
     final private BigDecimal price;
 
-    public EatInOrderLineItemResponse(long seq, UUID menuId, long quantity, BigDecimal price) {
+    public EatInOrderLineItemRestResponse(long seq, UUID menuId, long quantity, BigDecimal price) {
         this.seq = seq;
         this.menuId = menuId;
         this.quantity = quantity;
