@@ -1,7 +1,4 @@
-package kitchenpos.products.dto;
-
-import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.tobe.domain.Product;
+package kitchenpos.products.ui.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -33,7 +30,4 @@ public class ProductRequest {
         return price;
     }
 
-    public Product toEntity(ProfanityPolicy profanityPolicy) {
-        return Product.of(this.name, this.price, profanityPolicy);
-    }
 }

@@ -2,8 +2,9 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.dto.ProductResponse;
+import kitchenpos.products.application.mapper.ProductMapper;
+import kitchenpos.products.ui.dto.ProductRequest;
+import kitchenpos.products.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,8 @@ public class ProductService {
 
     @Transactional
     public ProductResponse create(final ProductRequest request) {
-        Product product = productRepository.save(request.toEntity(profanityPolicy));
-        return ProductResponse.fromEntity(product);
+        Product product = productRepository.save(ProductMapper.toEntity(request, profanityPolicy));
+        return ProductMapper.toDto(product);
     }
 
     @Transactional
@@ -39,13 +40,13 @@ public class ProductService {
         product.changePrice(productPrice);
         productRepository.save(product);
 
-        return ProductResponse.fromEntity(product);
+        return ProductMapper.toDto(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         List<Product> products = productRepository.findAll();
-        return ProductResponse.fromEntities(products);
+        return ProductMapper.toDtos(products);
     }
 
 
@@ -58,6 +59,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse findProductById(ProductId productId) {
         Product product = findById(productId);
-        return ProductResponse.fromEntity(product);
+        return ProductMapper.toDto(product);
     }
 }

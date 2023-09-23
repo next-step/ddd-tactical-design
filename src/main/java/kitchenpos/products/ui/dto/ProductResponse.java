@@ -1,4 +1,4 @@
-package kitchenpos.products.dto;
+package kitchenpos.products.ui.dto;
 
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -19,19 +19,6 @@ public class ProductResponse {
         this.id = id.getValue();
         this.name = name;
         this.price = price;
-    }
-
-    public static ProductResponse fromEntity(Product product) {
-        return new ProductResponse(
-                product.getId(),
-                product.getNameValue(),
-                product.getPriceValue());
-    }
-
-    public static List<ProductResponse> fromEntities(List<Product> products) {
-        return products.stream()
-                .map(ProductResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
     }
 
     public String getName() {

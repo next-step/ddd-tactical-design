@@ -1,4 +1,4 @@
-package kitchenpos.products.dto;
+package kitchenpos.products.ui.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
