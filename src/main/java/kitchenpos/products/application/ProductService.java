@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -34,7 +35,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse changePrice(final ProductId productId, BigDecimal price) {
+    public ProductResponse changePrice(final UUID productId, BigDecimal price) {
         Product product = findById(productId);
         Price productPrice = new Price(price);
 
@@ -56,9 +57,13 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    private Product findById(UUID productId) {
+        return findById(new ProductId(productId));
+    }
+
 
     @Transactional(readOnly = true)
-    public ProductResponse findProductById(ProductId productId) {
+    public ProductResponse findProductById(UUID productId) {
         Product product = findById(productId);
         return ProductMapper.toDto(product);
     }

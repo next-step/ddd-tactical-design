@@ -20,7 +20,7 @@ public class DefaultProductPriceLoader implements ProductPriceLoader {
 
     @Override
     public Price findPriceById(UUID productId) {
-        ProductResponse product = productService.findProductById(new ProductId(productId));
+        ProductResponse product = productService.findProductById(productId);
         return new Price(product.getPrice());
     }
 }
