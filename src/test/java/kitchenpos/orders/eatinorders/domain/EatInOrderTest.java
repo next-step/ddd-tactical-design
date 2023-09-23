@@ -3,7 +3,7 @@ package kitchenpos.orders.eatinorders.domain;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.orders.eatinorders.exception.EatInOrderException;
 import kitchenpos.orders.ordertables.domain.OrderTable;
-import kitchenpos.ordertables.fixture.OrderTableFixture;
+import kitchenpos.orders.ordertables.fixture.OrderTableFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

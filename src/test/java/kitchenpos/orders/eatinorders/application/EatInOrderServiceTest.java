@@ -13,7 +13,7 @@ import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.ordertables.application.InMemoryOrderTableRepository;
+import kitchenpos.orders.ordertables.application.InMemoryOrderTableRepository;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ import java.util.UUID;
 
 import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
 import static kitchenpos.menus.application.fixtures.MenuFixture.*;
-import static kitchenpos.ordertables.fixture.OrderTableFixture.orderTable;
+import static kitchenpos.orders.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

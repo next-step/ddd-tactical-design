@@ -1,6 +1,5 @@
 package kitchenpos.orders.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.*;
 import kitchenpos.orders.eatinorders.domain.*;
 
 import java.util.*;

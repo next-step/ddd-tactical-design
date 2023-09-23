@@ -1,9 +1,8 @@
-package kitchenpos.ordertables.application;
+package kitchenpos.orders.ordertables.application;
 
 import kitchenpos.orders.eatinorders.application.InMemoryEatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
-import kitchenpos.orders.ordertables.application.OrderTableService;
 import kitchenpos.orders.ordertables.application.service.DefaultEatInOrderStatusLoader;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
@@ -24,7 +23,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 
 import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
-import static kitchenpos.ordertables.fixture.OrderTableFixture.orderTable;
+import static kitchenpos.orders.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

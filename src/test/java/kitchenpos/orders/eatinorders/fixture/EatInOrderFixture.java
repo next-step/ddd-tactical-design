@@ -1,9 +1,8 @@
 package kitchenpos.orders.eatinorders.fixture;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.orders.eatinorders.application.MenuLoader;
-import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.orders.eatinorders.application.MenuLoader;
 import kitchenpos.orders.eatinorders.domain.*;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 

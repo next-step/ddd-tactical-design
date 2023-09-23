@@ -1,9 +1,10 @@
-package kitchenpos.ordertables.subsriber;
+package kitchenpos.orders.ordertables.subsriber;
 
 import kitchenpos.orders.eatinorders.application.EatInOrderService;
 import kitchenpos.orders.eatinorders.domain.EatInOrder;
 import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
+import kitchenpos.orders.ordertables.fixture.OrderTableFixture;
 import kitchenpos.orders.eatinorders.publisher.EatInOrderCompletedEvent;
 import kitchenpos.orders.ordertables.application.OrderTableService;
 import kitchenpos.orders.ordertables.domain.OrderTable;
@@ -16,7 +17,7 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
-import static kitchenpos.ordertables.fixture.OrderTableFixture.orderTable;
+import static kitchenpos.orders.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -43,7 +44,7 @@ class EatInOrderCompletedEventListenerTest {
     @Test
     void completeEatInOrder() {
         assertThat(events.stream(EatInOrderCompletedEvent.class)).hasSize(0);
-        final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
+        final OrderTable orderTable = orderTableRepository.save(OrderTableFixture.orderTable(true, 4));
         final EatInOrder expected = eatInOrderRepository.save(order(EatInOrderStatus.SERVED, orderTable));
         expected.complete();
         eatInOrderRepository.save(expected);

@@ -1,4 +1,4 @@
-package kitchenpos.ordertables.fixture;
+package kitchenpos.orders.ordertables.fixture;
 
 import kitchenpos.orders.ordertables.domain.NumberOfGuest;
 import kitchenpos.orders.ordertables.domain.OrderTable;

@@ -1,4 +1,4 @@
-package kitchenpos.ordertables.application;
+package kitchenpos.orders.ordertables.application;
 
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.orders.ordertables.domain.OrderTable;
