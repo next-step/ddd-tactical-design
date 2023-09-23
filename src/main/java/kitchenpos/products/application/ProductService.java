@@ -37,8 +37,9 @@ public class ProductService {
         return productRepository.save(
                 new Product(
                         UUID.randomUUID(),
-                        new DisplayedName(request.getName(), purgomalumClient),
-                        request.getPrice()
+                        request.getName(),
+                        request.getPrice(),
+                        purgomalumClient
                 )
         );
     }

@@ -22,8 +22,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, DisplayedName name, Long price) {
-        this(id, name, new Price(price));
+    public Product(UUID id, String name, Long price, PurgomalumClient purgomalumClient) {
+        this(id, new DisplayedName(name, purgomalumClient), new Price(price));
     }
 
     public Product(UUID id, DisplayedName name, Price price) {
