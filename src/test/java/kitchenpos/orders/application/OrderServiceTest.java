@@ -65,7 +65,7 @@ class OrderServiceTest {
         DeliveryOrderCreateService deliveryOrderCreateService = new DeliveryOrderCreateService(orderLineItemsService);
         orderCreateFactory = new OrderCreateFactory(eatInOrderCreateService, takeOutOrderCreateService, deliveryOrderCreateService);
 
-        orderService = new OrderService(orderRepository, publisher, kitchenridersClient, orderLineItemsService, orderTableRepository, orderTableClearService, orderCreateFactory);
+        orderService = new OrderService(orderRepository, kitchenridersClient, orderTableClearService, orderCreateFactory);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")

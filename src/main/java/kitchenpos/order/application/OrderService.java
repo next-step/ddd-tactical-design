@@ -2,12 +2,9 @@ package kitchenpos.order.application;
 
 import kitchenpos.order.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.order.domain.Order;
-import kitchenpos.order.domain.OrderLineItemsService;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-import kitchenpos.order.eatinorders.domain.OrderTableRepository;
 import kitchenpos.order.supports.factory.OrderCreateFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,26 +15,17 @@ import java.util.UUID;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final ApplicationEventPublisher publisher;
     private final KitchenridersClient kitchenridersClient;
-    private final OrderLineItemsService orderLineItemsService;
-    private final OrderTableRepository orderTableRepository;
     private final OrderTableClearService orderTableClearService;
     private final OrderCreateFactory orderCreateFactory;
 
     public OrderService(
             final OrderRepository orderRepository,
-            final ApplicationEventPublisher publisher,
             final KitchenridersClient kitchenridersClient,
-            final OrderLineItemsService orderLineItemsService,
-            final OrderTableRepository orderTableRepository,
             final OrderTableClearService orderTableClearService,
             final OrderCreateFactory orderCreateFactory) {
         this.orderRepository = orderRepository;
-        this.publisher = publisher;
         this.kitchenridersClient = kitchenridersClient;
-        this.orderLineItemsService = orderLineItemsService;
-        this.orderTableRepository = orderTableRepository;
         this.orderTableClearService = orderTableClearService;
         this.orderCreateFactory = orderCreateFactory;
     }
@@ -51,31 +39,31 @@ public class OrderService {
     @Transactional
     public Order accept(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.accept(publisher, kitchenridersClient));
+        return orderRepository.save(order.accept(kitchenridersClient));
     }
 
     @Transactional
     public Order serve(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.serve(publisher));
+        return orderRepository.save(order.serve());
     }
 
     @Transactional
     public Order complete(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.complete(publisher, orderTableClearService));
+        return orderRepository.save(order.complete(orderTableClearService));
     }
 
     @Transactional
     public Order startDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderRepository.save(order.startDelivery(publisher));
+        return this.orderRepository.save(order.startDelivery());
     }
 
     @Transactional
     public Order completeDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderRepository.save(order.completeDelivery(publisher));
+        return this.orderRepository.save(order.completeDelivery());
     }
 
     @Transactional(readOnly = true)

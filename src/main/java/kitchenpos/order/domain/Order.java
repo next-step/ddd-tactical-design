@@ -2,8 +2,6 @@ package kitchenpos.order.domain;
 
 import kitchenpos.order.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-import kitchenpos.order.event.OrderStatusChangeEvent;
-import org.springframework.context.ApplicationEventPublisher;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -76,7 +74,7 @@ public class Order {
         }
     }
 
-    public Order accept(ApplicationEventPublisher publisher, KitchenridersClient kitchenridersClient) {
+    public Order accept(KitchenridersClient kitchenridersClient) {
         if (getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
         }
@@ -84,19 +82,19 @@ public class Order {
         if (getType() == OrderType.DELIVERY) {
             kitchenridersClient.requestDelivery(getId(), sum, getDeliveryAddress());
         }
-        publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.ACCEPTED));
+        chageStatus(OrderStatus.ACCEPTED);
         return this;
     }
 
-    public Order serve(ApplicationEventPublisher publisher) {
+    public Order serve() {
         if (getStatus() != OrderStatus.ACCEPTED) {
             throw new IllegalStateException();
         }
-        publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.SERVED));
+        chageStatus(OrderStatus.SERVED);
         return this;
     }
 
-    public Order complete(ApplicationEventPublisher publisher, OrderTableClearService orderTableClearService) {
+    public Order complete(OrderTableClearService orderTableClearService) {
         if (getType() == OrderType.DELIVERY) {
             if (getStatus() != OrderStatus.DELIVERED) {
                 throw new IllegalStateException();
@@ -107,32 +105,32 @@ public class Order {
                 throw new IllegalStateException();
             }
         }
-        publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.COMPLETED));
+        chageStatus(OrderStatus.COMPLETED);
         if (getType() == OrderType.EAT_IN) {
             orderTableClearService.clear(this);
         }
         return this;
     }
 
-    public Order startDelivery(ApplicationEventPublisher publisher) {
+    public Order startDelivery() {
         if (getType() != OrderType.DELIVERY) {
             throw new IllegalStateException();
         }
         if (getStatus() != OrderStatus.SERVED) {
             throw new IllegalStateException();
         }
-        publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.DELIVERING));
+        chageStatus(OrderStatus.DELIVERING);
         return this;
     }
 
-    public Order completeDelivery(ApplicationEventPublisher publisher) {
+    public Order completeDelivery() {
         if (getType() != OrderType.DELIVERY) {
             throw new IllegalStateException();
         }
         if (getStatus() != OrderStatus.DELIVERING) {
             throw new IllegalStateException();
         }
-        publisher.publishEvent(new OrderStatusChangeEvent(getId(), OrderStatus.DELIVERED));
+        chageStatus(OrderStatus.DELIVERED);
         return this;
     }
 
