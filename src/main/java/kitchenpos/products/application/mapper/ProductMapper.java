@@ -2,8 +2,8 @@ package kitchenpos.products.application.mapper;
 
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.ui.dto.ProductRequest;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.dto.ProductResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

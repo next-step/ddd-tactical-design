@@ -1,9 +1,9 @@
 package kitchenpos.products.ui;
 
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.ui.dto.ProductChangePriceRequest;
-import kitchenpos.products.ui.dto.ProductRequest;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.dto.ProductChangePriceRequest;
+import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

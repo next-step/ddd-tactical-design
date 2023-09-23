@@ -3,7 +3,7 @@ package kitchenpos.menus.infra;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.ProductPriceLoader;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.ui.dto.ProductResponse;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Component;
 
