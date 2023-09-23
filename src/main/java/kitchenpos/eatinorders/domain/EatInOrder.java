@@ -1,11 +1,10 @@
 package kitchenpos.eatinorders.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,7 +12,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "eat_in_orders")
@@ -30,14 +28,8 @@ public class EatInOrder {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "order_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
     @ManyToOne
     @JoinColumn(

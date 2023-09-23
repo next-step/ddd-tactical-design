@@ -23,6 +23,7 @@
 - Quantity는 수량을 갖는다.
   - 수량은 0개 이상이어야 한다.
 - `OrderLineItems`는 `OrderLineItem`을 갖는다.
+  - `OrderLineItem`은 1개 이상이어야 한다.
 - `OrderLineItem`은 `Menu`의 식별자, `Price`, Quantity를 갖는다.
   - `OrderLineItem`의 `Price`와 `Menu`의 `Price`는 같아야한다.
 #### 기능
