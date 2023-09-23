@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain.menu;
+package kitchenpos.common.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -6,25 +6,25 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class MenuPrice {
+public class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected MenuPrice() {
+    protected Price() {
     }
 
-    private MenuPrice(final BigDecimal price) {
+    private Price(final BigDecimal price) {
         this.price = price;
     }
 
-    public static MenuPrice of(final BigDecimal price) {
+    public static Price of(final BigDecimal price) {
         validatePrice(price);
-        return new MenuPrice(price);
+        return new Price(price);
     }
 
     private static void validatePrice(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("메뉴 가격이 비어 있거나 0원 미만입니다.");
+            throw new IllegalArgumentException("가격이 비어 있거나 0원 미만입니다.");
         }
     }
 
@@ -36,7 +36,7 @@ public class MenuPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuPrice that = (MenuPrice) o;
+        Price that = (Price) o;
         return Objects.equals(price, that.price);
     }
 

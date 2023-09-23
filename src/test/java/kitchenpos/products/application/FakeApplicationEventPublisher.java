@@ -15,7 +15,7 @@ public class FakeApplicationEventPublisher implements ApplicationEventPublisher 
     @Override
     public void publishEvent(final Object event) {
         if (event instanceof ProductChangePriceEvent) {
-            menuService.hideIfMenuPriceGraterThanProduct(((ProductChangePriceEvent) event).getProductId());
+            menuService.hideIfMenuPriceGraterThanProducts(((ProductChangePriceEvent) event).getProductId());
         }
     }
 }

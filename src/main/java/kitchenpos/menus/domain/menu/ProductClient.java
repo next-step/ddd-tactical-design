@@ -1,13 +1,11 @@
 package kitchenpos.menus.domain.menu;
 
+import kitchenpos.common.domain.Price;
+
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductClient {
-
-    ProductPrice getProductPrice(final UUID productId);
-
-    void validateMenuProducts(final List<MenuProduct> menuProducts, final MenuPrice menuPrice);
-
-    void validateMenuPrice(final List<MenuProduct> menuProducts, final MenuPrice menuPrice);
+    Price getProductPrice(final UUID productId);
+    boolean isInvalidMenuProductsCount(final List<MenuProduct> menuProducts);
 }

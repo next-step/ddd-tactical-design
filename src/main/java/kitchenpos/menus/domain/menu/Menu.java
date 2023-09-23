@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain.menu;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.domain.menugroup.MenuGroup;
 
 import javax.persistence.*;
@@ -15,10 +17,10 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName name;
+    private Name name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -46,14 +48,17 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(final MenuGroup menuGroup, final MenuName name, final MenuPrice price, final boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(final MenuGroup menuGroup, final Name name, final Price price, final boolean displayed, final MenuProducts menuProducts) {
+        if (isMenuPriceGraterThanProducts(price, menuProducts.getMenuProducts())) {
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 큽니다.");
+        }
         this.id = UUID.randomUUID();
         this.menuGroup = menuGroup;
         this.menuGroupId = menuGroup.getId();
         this.name = name;
         this.price = price;
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = menuProducts.getMenuProducts();
     }
 
     public UUID getId() {
@@ -64,15 +69,14 @@ public class Menu {
         return name.getName();
     }
 
-    public MenuPrice getMenuPrice() {
-        return price;
-    }
-
     public BigDecimal getPrice() {
         return price.getPrice();
     }
 
-    public void changePrice(final MenuPrice menuPrice) {
+    public void changePrice(final Price menuPrice) {
+        if (isMenuPriceGraterThanProducts(menuPrice, menuProducts)) {
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 큽니다.");
+        }
         this.price = menuPrice;
     }
 
@@ -85,11 +89,20 @@ public class Menu {
     }
 
     public void display() {
+        if (isMenuPriceGraterThanProducts()) {
+            throw new IllegalStateException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 클 경우 메뉴를 노출할 수 없습니다.");
+        }
         this.displayed = true;
     }
 
     public void hide() {
         this.displayed = false;
+    }
+
+    public void hideIfMenuPriceGraterThanProducts() {
+        if (isMenuPriceGraterThanProducts()) {
+            this.displayed = false;
+        }
     }
 
     public List<MenuProduct> getMenuProducts() {
@@ -98,6 +111,17 @@ public class Menu {
 
     public UUID getMenuGroupId() {
         return menuGroupId;
+    }
+
+    public boolean isMenuPriceGraterThanProducts(final Price menuPrice, final List<MenuProduct> menuProducts) {
+        return menuProducts.stream()
+                .map(menuProduct -> menuProduct.getProductPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .compareTo(menuPrice.getPrice()) < 0;
+    }
+
+    public boolean isMenuPriceGraterThanProducts() {
+        return isMenuPriceGraterThanProducts(price, menuProducts);
     }
 
 }

@@ -1,11 +1,11 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.domain.ProductPurgomalumClient;
+import kitchenpos.common.domain.PurgomalumClient;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FakeProductPurgomalumClient implements ProductPurgomalumClient {
+public class FakeProductPurgomalumClient implements PurgomalumClient {
     private static final List<String> profanities;
 
     static {

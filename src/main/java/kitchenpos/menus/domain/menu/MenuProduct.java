@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain.menu;
 
+import kitchenpos.common.domain.Price;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -19,12 +21,12 @@ public class MenuProduct {
     private long quantity;
 
     @Transient
-    private ProductPrice productPrice;
+    private Price productPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(final Long seq, final UUID productId, final long quantity, final ProductPrice price) {
+    public MenuProduct(final Long seq, final UUID productId, final long quantity, final Price price) {
         this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;
@@ -47,9 +49,9 @@ public class MenuProduct {
         return productPrice.getPrice();
     }
 
-    public void changeProductPrice(final ProductPrice productPrice) {
+    public void changeProductPrice(final Price productPrice) {
         if (productPrice == null) {
-            throw new IllegalArgumentException("상품 가격이 없습니다.");
+            throw new IllegalArgumentException("상품 가격이 비어 있습니다.");
         }
 
         if (!this.productPrice.equals(productPrice)) {

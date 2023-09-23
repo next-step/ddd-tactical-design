@@ -1,7 +1,9 @@
 package kitchenpos.menus.application.menu.dto;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MenuRequest {
@@ -13,14 +15,14 @@ public class MenuRequest {
 
     private final boolean displayed;
 
-    private final List<MenuProductRequest> menuProductsRequests;
+    private final List<MenuProductRequest> menuProductsRequests; // 일급 컬렉션
 
-    public MenuRequest(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final List<MenuProductRequest> menuProductsRequests) {
+    public MenuRequest(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final List<MenuProductRequest> menuProductRequests) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
-        this.menuProductsRequests = menuProductsRequests;
+        this.menuProductsRequests = menuProductRequests;
     }
 
     public String getName() {
@@ -40,6 +42,7 @@ public class MenuRequest {
     }
 
     public List<MenuProductRequest> getMenuProductsRequests() {
-        return menuProductsRequests;
+        return Optional.ofNullable(menuProductsRequests)
+                .orElse(Collections.emptyList());
     }
 }

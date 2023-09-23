@@ -19,6 +19,6 @@ public class ProductEventListener {
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void changeDisplayed(final ProductChangePriceEvent event) {
-        menuService.hideIfMenuPriceGraterThanProduct(event.getProductId());
+        menuService.hideIfMenuPriceGraterThanProducts(event.getProductId());
     }
 }

@@ -1,27 +1,27 @@
-package kitchenpos.menus.domain.menu;
+package kitchenpos.common.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class MenuName {
+public class Name {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected MenuName() {
+    protected Name() {
     }
 
-    private MenuName(final String name) {
+    private Name(final String name) {
         this.name = name;
     }
 
-    public static MenuName of(final String name, MenuPurgomalumClient menuPurgomalumClient) {
+    public static Name of(final String name, PurgomalumClient menuPurgomalumClient) {
         validateName(name, menuPurgomalumClient);
-        return new MenuName(name);
+        return new Name(name);
     }
 
-    private static void validateName(final String name, MenuPurgomalumClient menuPurgomalumClient) {
+    private static void validateName(final String name, PurgomalumClient menuPurgomalumClient) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("메뉴명이 없습니다.");
         }
@@ -38,7 +38,7 @@ public class MenuName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuName that = (MenuName) o;
+        Name that = (Name) o;
         return Objects.equals(name, that.name);
     }
 

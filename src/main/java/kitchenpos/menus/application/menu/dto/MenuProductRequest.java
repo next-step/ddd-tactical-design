@@ -1,7 +1,7 @@
 package kitchenpos.menus.application.menu.dto;
 
+import kitchenpos.common.domain.Price;
 import kitchenpos.menus.domain.menu.MenuProduct;
-import kitchenpos.menus.domain.menu.ProductPrice;
 
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ public class MenuProductRequest {
         return quantity;
     }
 
-    public MenuProduct toMenuProduct(final ProductPrice productPrice) {
+    public MenuProduct toMenuProduct(final Price productPrice) {
         return new MenuProduct(null, this.productId, this.quantity, productPrice);
     }
 }

@@ -1,5 +1,8 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.menu.Menu;
 import kitchenpos.menus.domain.menu.MenuRepository;
@@ -7,7 +10,8 @@ import kitchenpos.menus.domain.menu.ProductClient;
 import kitchenpos.menus.infra.DefaultProductClient;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
-import kitchenpos.products.domain.*;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +34,7 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
     private ProductService productService;
     private ProductClient productClient;
-    private ProductPurgomalumClient purgomalumClient;
+    private PurgomalumClient purgomalumClient;
     private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
@@ -114,37 +118,37 @@ class ProductServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    @DisplayName("ProductPrice VO를 정상 생성한다.")
+    @DisplayName("Price VO를 정상 생성한다.")
     @ValueSource(strings = "16000")
     @ParameterizedTest
-    void createProductPriceVo(final BigDecimal price) {
-        final ProductPrice actual = ProductPrice.of(price);
+    void createPriceVo(final BigDecimal price) {
+        final Price actual = Price.of(price);
         assertThat(actual.getPrice()).isEqualTo(price);
     }
 
-    @DisplayName("ProductPrice VO 생성시 가격이 비어 있거나 0원 미만이면 예외가 발생한다.")
+    @DisplayName("Price VO 생성시 가격이 비어 있거나 0원 미만이면 예외가 발생한다.")
     @ValueSource(strings = "-10000")
     @NullSource
     @ParameterizedTest
-    void throwExceptionOfProductPrice(final BigDecimal price) {
-        assertThatThrownBy(() -> ProductPrice.of(price))
+    void throwExceptionOfPrice(final BigDecimal price) {
+        assertThatThrownBy(() -> Price.of(price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("ProductName VO를 정상 생성한다.")
+    @DisplayName("Name VO를 정상 생성한다.")
     @ValueSource(strings = "간장치킨")
     @ParameterizedTest
-    void createProductNameVo(final String name) {
-        final ProductName actual = ProductName.of(name, purgomalumClient);
+    void createNameVo(final String name) {
+        final Name actual = Name.of(name, purgomalumClient);
         assertThat(actual.getName()).isEqualTo(name);
     }
 
-    @DisplayName("ProductName VO 생성시 이름이 비어 있거나 비속어가 포함되어 있으면 예외가 발생한다.")
+    @DisplayName("Name VO 생성시 이름이 비어 있거나 비속어가 포함되어 있으면 예외가 발생한다.")
     @ValueSource(strings = "비속어")
     @NullSource
     @ParameterizedTest
-    void throwExceptionOfProductNameVo(final String name) {
-        assertThatThrownBy(() -> ProductName.of(name, purgomalumClient))
+    void throwExceptionOfNameVo(final String name) {
+        assertThatThrownBy(() -> Name.of(name, purgomalumClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

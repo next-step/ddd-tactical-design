@@ -1,9 +1,14 @@
 package kitchenpos.menus.application.menu;
 
-import kitchenpos.menus.application.menu.dto.MenuProductRequest;
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.menus.application.menu.dto.MenuRequest;
 import kitchenpos.menus.application.menu.dto.MenuResponse;
-import kitchenpos.menus.domain.menu.*;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menu.MenuProducts;
+import kitchenpos.menus.domain.menu.MenuRepository;
+import kitchenpos.menus.domain.menu.ProductClient;
 import kitchenpos.menus.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Service;
@@ -18,13 +23,13 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final MenuPurgomalumClient purgomalumClient;
+    private final PurgomalumClient purgomalumClient;
     private final ProductClient productClient;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final MenuPurgomalumClient purgomalumClient,
+            final PurgomalumClient purgomalumClient,
             final ProductClient productClient
     ) {
         this.menuRepository = menuRepository;
@@ -37,17 +42,15 @@ public class MenuService {
     public MenuResponse create(final MenuRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 메뉴그룹입니다."));
-        final MenuName menuName = MenuName.of(request.getName(), purgomalumClient);
-        final MenuPrice menuPrice = MenuPrice.of(request.getPrice());
-        final List<MenuProductRequest> menuProductRequests = request.getMenuProductsRequests();
-        if (menuProductRequests == null || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException("메뉴의 상품정보가 비어 있습니다.");
-        }
-        final List<MenuProduct> menuProducts = menuProductRequests.stream()
+        final Name menuName = Name.of(request.getName(), purgomalumClient);
+        final Price menuPrice = Price.of(request.getPrice());
+        final MenuProducts menuProducts = MenuProducts.of(request.getMenuProductsRequests().stream()
                 .map(p -> p.toMenuProduct(productClient.getProductPrice(p.getProductId())))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
 
-        productClient.validateMenuProducts(menuProducts, MenuPrice.of(request.getPrice()));
+        if (productClient.isInvalidMenuProductsCount(menuProducts.getMenuProducts())) {
+            throw new IllegalArgumentException("메뉴에 등록되지 않은 상품이 있습니다.");
+        }
 
         final Menu menu = new Menu(menuGroup, menuName, menuPrice, request.isDisplayed(), menuProducts);
         return new MenuResponse(menuRepository.save(menu));
@@ -56,10 +59,7 @@ public class MenuService {
     @Transactional
     public MenuResponse changePrice(final UUID menuId, final MenuRequest request) {
         final Menu menu = getMenu(menuId);
-
-        MenuPrice menuPrice = MenuPrice.of(request.getPrice());
-        productClient.validateMenuPrice(menu.getMenuProducts(), menuPrice);
-
+        final Price menuPrice = Price.of(request.getPrice());
         menu.changePrice(menuPrice);
         return new MenuResponse(menu);
     }
@@ -67,11 +67,6 @@ public class MenuService {
     @Transactional
     public MenuResponse display(final UUID menuId) {
         final Menu menu = getMenu(menuId);
-        try {
-            productClient.validateMenuPrice(menu.getMenuProducts(), menu.getMenuPrice());
-        } catch (final IllegalArgumentException e) {
-            throw new IllegalStateException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다.");
-        }
         menu.display();
         return new MenuResponse(menu);
     }
@@ -84,7 +79,7 @@ public class MenuService {
     }
 
     @Transactional
-    public void hideIfMenuPriceGraterThanProduct(final UUID productId) {
+    public void hideIfMenuPriceGraterThanProducts(final UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             // refresh product price
@@ -92,11 +87,7 @@ public class MenuService {
                     menuProduct.changeProductPrice(productClient.getProductPrice(menuProduct.getProductId()))
             );
 
-            try {
-                productClient.validateMenuPrice(menu.getMenuProducts(), menu.getMenuPrice());
-            } catch (final IllegalArgumentException e) {
-                menu.hide();
-            }
+            menu.hideIfMenuPriceGraterThanProducts();
         }
     }
 
@@ -111,4 +102,5 @@ public class MenuService {
         return menuRepository.findById(menuId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 메뉴입니다."));
     }
+
 }

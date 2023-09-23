@@ -19,9 +19,4 @@ public class GlobalRestControllerExceptionHandler {
     public HttpEntity<String> handleException(final IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public HttpEntity<String> handleException(final IllegalStateException e) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
-    }
 }

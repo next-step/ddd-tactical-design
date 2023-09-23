@@ -1,21 +1,21 @@
 package kitchenpos;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.application.FakeMenuPurgomalumClient;
 import kitchenpos.menus.domain.menu.Menu;
-import kitchenpos.menus.domain.menu.MenuName;
-import kitchenpos.menus.domain.menu.MenuPrice;
 import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.menu.MenuProducts;
 import kitchenpos.menus.domain.menugroup.MenuGroup;
 import kitchenpos.menus.domain.menugroup.MenuGroupName;
 import kitchenpos.products.application.FakeProductPurgomalumClient;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductName;
-import kitchenpos.products.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -33,11 +33,11 @@ public class Fixtures {
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         return new Menu(
                 menuGroup(),
-                MenuName.of("후라이드+후라이드",
+                Name.of("후라이드+후라이드",
                 new FakeMenuPurgomalumClient()),
-                MenuPrice.of(BigDecimal.valueOf(price)),
+                Price.of(BigDecimal.valueOf(price)),
                 displayed,
-                Arrays.asList(menuProducts)
+                MenuProducts.of(Arrays.asList(menuProducts))
         );
     }
 
@@ -54,7 +54,7 @@ public class Fixtures {
                 new Random().nextLong(),
                 product().getId(),
                 2L,
-                kitchenpos.menus.domain.menu.ProductPrice.of(product().getPrice())
+                Price.of(product().getPrice())
         );
     }
 
@@ -63,7 +63,7 @@ public class Fixtures {
                 new Random().nextLong(),
                 product.getId(),
                 quantity,
-                kitchenpos.menus.domain.menu.ProductPrice.of(product.getPrice())
+                Price.of(product.getPrice())
         );
     }
 
@@ -73,7 +73,7 @@ public class Fixtures {
         order.setType(OrderType.DELIVERY);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         order.setDeliveryAddress(deliveryAddress);
         return order;
     }
@@ -84,7 +84,7 @@ public class Fixtures {
         order.setType(OrderType.TAKEOUT);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         return order;
     }
 
@@ -94,7 +94,7 @@ public class Fixtures {
         order.setType(OrderType.EAT_IN);
         order.setStatus(status);
         order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderLineItems(List.of(orderLineItem()));
         order.setOrderTable(orderTable);
         return order;
     }
@@ -125,8 +125,8 @@ public class Fixtures {
 
     public static Product product(final String name, final long price) {
         return new Product(
-                ProductName.of(name, new FakeProductPurgomalumClient()),
-                ProductPrice.of(BigDecimal.valueOf(price))
+                Name.of(name, new FakeProductPurgomalumClient()),
+                Price.of(BigDecimal.valueOf(price))
         );
     }
 }
