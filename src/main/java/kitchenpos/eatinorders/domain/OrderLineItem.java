@@ -1,10 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
-
-import kitchenpos.menus.domain.Menu;
 
 @Table(name = "order_line_item")
 @Entity
@@ -14,63 +11,27 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
+    @Column(name = "menu_id")
+    private UUID menuId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID menuId;
+    @Column(name = "price", nullable = false)
+    private Price price;
 
-    @Transient
-    private BigDecimal price;
-
-    public OrderLineItem() {
+    protected OrderLineItem() {
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
-    public UUID getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
+    public OrderLineItem(UUID menuId, long quantity, Long price) {
+        if (menuId == null) {
+            throw new IllegalArgumentException("메뉴의 id는 null일 수 없습니다.");
+        }
+        if (quantity < 0) {
+            throw new IllegalArgumentException(String.format("수량은 0개 이상이어야 합니다. 현재 값: %s", quantity));
+        }
         this.menuId = menuId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+        this.quantity = quantity;
+        this.price = new Price(price);
     }
 }
