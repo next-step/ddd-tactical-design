@@ -1,4 +1,4 @@
-package kitchenpos.orders.eatinorders.application;
+package kitchenpos.orders.eatinorders.application.loader;
 
 import java.util.UUID;
 

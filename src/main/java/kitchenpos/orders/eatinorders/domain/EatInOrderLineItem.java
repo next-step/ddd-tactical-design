@@ -1,9 +1,6 @@
 package kitchenpos.orders.eatinorders.domain;
 
 import kitchenpos.common.domain.Price;
-import kitchenpos.orders.eatinorders.application.MenuLoader;
-import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
-import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -30,24 +27,16 @@ public class EatInOrderLineItem {
     protected EatInOrderLineItem() {
     }
 
-    public EatInOrderLineItem(UUID menuId, EatInOrderLineItemQuantity quantity, Price price, MenuLoader menuLoader) {
-
-        OrderedMenu orderedMenu = menuLoader.findMenuById(menuId);
-
-        if (!orderedMenu.getMenuPrice().equals(price)) {
-            throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_PRICE_EQUAL_MENU_PRICE);
-        }
-
+    public EatInOrderLineItem(EatInOrderLineItemQuantity quantity, Price price, OrderedMenu orderedMenu) {
         this.menu = orderedMenu;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public EatInOrderLineItem(UUID menuId, long quantity, Price price, MenuLoader policy) {
-        this(menuId,
-                new EatInOrderLineItemQuantity(quantity),
+    public EatInOrderLineItem(long quantity, Price price, OrderedMenu orderedMenu) {
+        this(new EatInOrderLineItemQuantity(quantity),
                 price,
-                policy);
+                orderedMenu);
     }
 
     public long getSeqValue() {

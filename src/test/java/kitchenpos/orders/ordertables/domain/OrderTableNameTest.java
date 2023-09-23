@@ -1,6 +1,5 @@
 package kitchenpos.orders.ordertables.domain;
 
-import kitchenpos.orders.ordertables.domain.OrderTableName;
 import kitchenpos.orders.ordertables.exception.OrderTableErrorCode;
 import kitchenpos.orders.ordertables.exception.OrderTableNameException;
 import org.junit.jupiter.api.DisplayName;

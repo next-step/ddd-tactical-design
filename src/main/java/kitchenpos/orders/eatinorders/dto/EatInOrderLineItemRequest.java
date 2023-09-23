@@ -1,10 +1,5 @@
 package kitchenpos.orders.eatinorders.dto;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.orders.eatinorders.application.MenuLoader;
-import kitchenpos.orders.eatinorders.domain.EatInOrderLineItem;
-import kitchenpos.orders.eatinorders.domain.EatInOrderLineItemQuantity;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -27,15 +22,6 @@ public class EatInOrderLineItemRequest {
     }
 
     public EatInOrderLineItemRequest() {
-    }
-
-    public EatInOrderLineItem toEntity(MenuLoader policy) {
-        return new EatInOrderLineItem(
-                menuId,
-                new EatInOrderLineItemQuantity(quantity),
-                new Price(orderPrice),
-                policy
-        );
     }
 
     public UUID getMenuId() {

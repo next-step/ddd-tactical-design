@@ -1,6 +1,5 @@
 package kitchenpos.orders.ordertables.domain;
 
-import kitchenpos.orders.ordertables.domain.NumberOfGuest;
 import kitchenpos.orders.ordertables.exception.NumberOfGuestException;
 import kitchenpos.orders.ordertables.exception.OrderTableErrorCode;
 import org.junit.jupiter.api.DisplayName;

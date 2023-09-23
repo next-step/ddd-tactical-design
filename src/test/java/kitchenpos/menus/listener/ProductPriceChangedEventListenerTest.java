@@ -1,8 +1,8 @@
 package kitchenpos.menus.listener;
 
+import kitchenpos.common.events.ProductPriceChangedEvent;
 import kitchenpos.menus.application.listener.ProductPriceChangedEventListener;
 import kitchenpos.products.application.ProductService;
-import kitchenpos.common.events.ProductPriceChangedEvent;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.DisplayName;

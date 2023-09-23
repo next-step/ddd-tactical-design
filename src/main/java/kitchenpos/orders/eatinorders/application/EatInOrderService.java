@@ -1,8 +1,10 @@
 package kitchenpos.orders.eatinorders.application;
 
-import kitchenpos.orders.eatinorders.domain.EatInOrder;
-import kitchenpos.orders.eatinorders.domain.EatInOrderId;
-import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.orders.eatinorders.application.loader.MenuLoader;
+import kitchenpos.orders.eatinorders.application.loader.OrderTableStatusLoader;
+import kitchenpos.orders.eatinorders.application.mapper.EatInOrderMapper;
+import kitchenpos.orders.eatinorders.domain.*;
+import kitchenpos.orders.eatinorders.dto.EatInOrderLineItemRequest;
 import kitchenpos.orders.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.orders.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class EatInOrderService {
@@ -37,23 +41,40 @@ public class EatInOrderService {
             throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_LINE_ITEMS_IS_EMPTY);
         }
 
+        List<EatInOrderLineItem> orderLineItems = request.getOrderLineItems()
+                .stream()
+                .map(makeOrderLineItem())
+                .collect(Collectors.toUnmodifiableList());
 
-        EatInOrder eatInOrder = eatInOrderRepository.save(request.toEntity(menuLoader));
-        return EatInOrderResponse.fromEntity(eatInOrder);
+        EatInOrder eatInOrder = eatInOrderRepository.save(EatInOrderMapper.toEntity(request, orderLineItems));
+        return EatInOrderMapper.toDto(eatInOrder);
+    }
+
+    // menu 가격 검증
+    private Function<EatInOrderLineItemRequest, EatInOrderLineItem> makeOrderLineItem() {
+        return item -> {
+            OrderedMenu orderedMenu = menuLoader.findMenuById(item.getMenuId());
+
+            if (!orderedMenu.getMenuPrice().equal(item.getOrderPrice())) {
+                throw new EatInOrderLineItemException(EatInOrderErrorCode.ORDER_PRICE_EQUAL_MENU_PRICE);
+            }
+
+            return EatInOrderMapper.toItemEntity(item, orderedMenu);
+        };
     }
 
     @Transactional
     public EatInOrderResponse accept(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.accept();
-        return EatInOrderResponse.fromEntity(order);
+        return EatInOrderMapper.toDto(order);
     }
 
     @Transactional
     public EatInOrderResponse serve(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.serve();
-        return EatInOrderResponse.fromEntity(order);
+        return EatInOrderMapper.toDto(order);
     }
 
 
@@ -61,13 +82,13 @@ public class EatInOrderService {
     public EatInOrderResponse complete(final EatInOrderId orderId) {
         final EatInOrder order = findById(orderId);
         order.complete();
-        return EatInOrderResponse.fromEntity(order);
+        return EatInOrderMapper.toDto(order);
     }
 
     @Transactional(readOnly = true)
     public List<EatInOrderResponse> findAll() {
         List<EatInOrder> eatInOrders = eatInOrderRepository.findAll();
-        return EatInOrderResponse.fromEntities(eatInOrders);
+        return EatInOrderMapper.toDtos(eatInOrders);
     }
 
     private EatInOrder findById(EatInOrderId eatInOrderId) {

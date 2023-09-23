@@ -1,9 +1,9 @@
-package kitchenpos.orders.eatinorders.application.loader;
+package kitchenpos.orders.eatinorders.infa;
 
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuId;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.orders.eatinorders.application.MenuLoader;
+import kitchenpos.orders.eatinorders.application.loader.MenuLoader;
 import kitchenpos.orders.eatinorders.domain.OrderedMenu;
 import kitchenpos.orders.eatinorders.exception.EatInOrderErrorCode;
 import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;

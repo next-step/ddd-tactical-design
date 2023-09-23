@@ -2,7 +2,6 @@ package kitchenpos.orders.eatinorders.fixture;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.orders.eatinorders.application.MenuLoader;
 import kitchenpos.orders.eatinorders.domain.*;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 
@@ -44,28 +43,15 @@ public class EatInOrderFixture {
         return orderLineItem(
                 menu,
                 1L,
-                menu.getPriceValue().longValue(),
-                (menuId) -> new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice())
-        );
-    }
-
-    public static EatInOrderLineItem orderLineItem(Menu menu, long quantity, long price, MenuLoader menuLoader) {
-        return new EatInOrderLineItem(
-                menu.getIdValue(),
-                quantity,
-                new Price(price),
-                menuLoader
+                menu.getPriceValue().longValue()
         );
     }
 
     public static EatInOrderLineItem orderLineItem(Menu menu, long quantity, long price) {
-        return orderLineItem(
-                menu,
+        return new EatInOrderLineItem(
                 quantity,
-                price,
-                (menuId) -> {
-                    return new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice());
-                }
+                new Price(price),
+                new OrderedMenu(menu.getIdValue(), menu.getNameValue(), menu.getPrice())
         );
     }
 

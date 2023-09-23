@@ -1,11 +1,7 @@
 package kitchenpos.orders.eatinorders.dto;
 
-import kitchenpos.orders.eatinorders.domain.EatInOrderLineItem;
-
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class EatInOrderLineItemResponse {
     private long seq;
@@ -23,20 +19,6 @@ public class EatInOrderLineItemResponse {
         this.price = price;
     }
 
-    public static EatInOrderLineItemResponse fromEntity(EatInOrderLineItem orderLineItem) {
-        return new EatInOrderLineItemResponse(
-                orderLineItem.getSeqValue(),
-                orderLineItem.getMenuIdValue(),
-                orderLineItem.getQuantityValue(),
-                orderLineItem.getPriceValue()
-        );
-    }
-
-    public static List<EatInOrderLineItemResponse> fromEntities(List<EatInOrderLineItem> orderLineItems) {
-        return orderLineItems.stream()
-                .map(EatInOrderLineItemResponse::fromEntity)
-                .collect(Collectors.toUnmodifiableList());
-    }
 
     public long getSeq() {
         return seq;

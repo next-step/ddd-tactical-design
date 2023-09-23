@@ -1,6 +1,6 @@
-package kitchenpos.orders.eatinorders.application.loader;
+package kitchenpos.orders.eatinorders.infa;
 
-import kitchenpos.orders.eatinorders.application.OrderTableStatusLoader;
+import kitchenpos.orders.eatinorders.application.loader.OrderTableStatusLoader;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;

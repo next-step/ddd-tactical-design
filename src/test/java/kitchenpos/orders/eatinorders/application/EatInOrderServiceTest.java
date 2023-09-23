@@ -1,7 +1,8 @@
 package kitchenpos.orders.eatinorders.application;
 
-import kitchenpos.orders.eatinorders.application.loader.DefaultMenuLoader;
-import kitchenpos.orders.eatinorders.application.loader.DefaultOrderTableStatusLoader;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrder;
 import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
@@ -10,9 +11,8 @@ import kitchenpos.orders.eatinorders.dto.EatInOrderRequest;
 import kitchenpos.orders.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.orders.eatinorders.exception.EatInOrderException;
 import kitchenpos.orders.eatinorders.exception.EatInOrderLineItemException;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.orders.eatinorders.infa.DefaultMenuLoader;
+import kitchenpos.orders.eatinorders.infa.DefaultOrderTableStatusLoader;
 import kitchenpos.orders.ordertables.application.InMemoryOrderTableRepository;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
 import static kitchenpos.menus.application.fixtures.MenuFixture.*;
+import static kitchenpos.orders.eatinorders.fixture.EatInOrderFixture.order;
 import static kitchenpos.orders.ordertables.fixture.OrderTableFixture.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -86,7 +86,7 @@ class EatInOrderServiceTest {
         @DisplayName("메뉴가 없으면 등록할 수 없다.")
         @NullAndEmptySource
         @ParameterizedTest
-        void create(final List<EatInOrderLineItemRequest> eatInOrderLineItems) {
+        void create1(final List<EatInOrderLineItemRequest> eatInOrderLineItems) {
             final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
 
             final EatInOrderRequest request = createOrderRequest(
@@ -99,7 +99,7 @@ class EatInOrderServiceTest {
 
         @DisplayName("메뉴가 없으면 등록할 수 없다.")
         @Test
-        void create() {
+        void create2() {
             final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
 
             final EatInOrderRequest request = createOrderRequest(
@@ -175,7 +175,7 @@ class EatInOrderServiceTest {
 
         @DisplayName("주문을 접수한다.")
         @Test
-        void accept() {
+        void accept1() {
             EatInOrder order = eatInOrderRepository.save(order(EatInOrderStatus.WAITING, orderTable(true, 4)));
             final EatInOrderResponse actual = orderService.accept(order.getId());
 
@@ -185,7 +185,7 @@ class EatInOrderServiceTest {
         @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
         @EnumSource(value = EatInOrderStatus.class, names = "WAITING", mode = EnumSource.Mode.EXCLUDE)
         @ParameterizedTest
-        void accept(final EatInOrderStatus status) {
+        void accept2(final EatInOrderStatus status) {
             EatInOrder order = eatInOrderRepository.save(order(status, orderTable(true, 4)));
 
             assertThatThrownBy(() -> orderService.accept(order.getId()))
