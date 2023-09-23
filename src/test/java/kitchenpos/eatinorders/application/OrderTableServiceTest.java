@@ -1,11 +1,11 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.application.dto.request.OrderTableChangeRequest;
 import kitchenpos.eatinorders.tobe.application.dto.request.OrderTableCreateRequest;
 import kitchenpos.eatinorders.tobe.application.dto.response.OrderTableResponse;
+import kitchenpos.eatinorders.tobe.domain.OrderRepository;
+import kitchenpos.eatinorders.tobe.domain.OrderStatus;
 import kitchenpos.eatinorders.tobe.domain.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;

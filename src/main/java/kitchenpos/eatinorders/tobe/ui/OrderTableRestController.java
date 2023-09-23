@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui;
+package kitchenpos.eatinorders.tobe.ui;
 
 import kitchenpos.eatinorders.tobe.application.OrderTableService;
 import kitchenpos.eatinorders.tobe.application.dto.request.OrderTableChangeRequest;

@@ -1,6 +1,4 @@
-package kitchenpos.eatinorders.domain;
-
-import kitchenpos.eatinorders.tobe.domain.OrderTable;
+package kitchenpos.eatinorders.tobe.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
