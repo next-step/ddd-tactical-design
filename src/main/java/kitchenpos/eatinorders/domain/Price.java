@@ -31,4 +31,21 @@ public class Price {
     public kitchenpos.products.domain.Price multiply(BigDecimal price) {
         return new kitchenpos.products.domain.Price(this.getValue().multiply(price));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Price price = (Price) o;
+        return Objects.equals(value, price.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
