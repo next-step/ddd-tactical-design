@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.products.application.mapper.ProductMapper;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.ui.dto.ProductRequest;
 import kitchenpos.products.ui.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
@@ -16,11 +17,11 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
-    private final kitchenpos.products.tobe.domain.ProductRepository productRepository;
+    private final ProductRepository productRepository;
     private final ProfanityPolicy profanityPolicy;
 
     public ProductService(
-            final kitchenpos.products.tobe.domain.ProductRepository productRepository,
+            final ProductRepository productRepository,
             final ProfanityPolicy profanityPolicy) {
         this.productRepository = productRepository;
         this.profanityPolicy = profanityPolicy;
