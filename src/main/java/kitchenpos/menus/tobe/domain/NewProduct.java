@@ -4,6 +4,7 @@ import kitchenpos.common.domain.Price;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -25,19 +26,28 @@ public class NewProduct {
         this.price = price;
     }
 
-    public static NewProduct create(UUID id, BigDecimal price) {
-        return new NewProduct(id, Price.of(price));
+    public static NewProduct create(UUID id, Price price) {
+        return new NewProduct(id, price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public BigDecimal getPriceValue() {
-        return price.getPrice();
-    }
-
     public Price getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewProduct that = (NewProduct) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

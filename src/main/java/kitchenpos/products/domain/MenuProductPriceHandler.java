@@ -17,7 +17,7 @@ public class MenuProductPriceHandler {
     public void hideMenuDisplayMenuPriceGreaterThanSum(Map<UUID, Product> productMap, List<NewMenu> newMenus) {
         for (final NewMenu newMenu : newMenus) {
             BigDecimal sum = sumMenuProductPrice(productMap, newMenu.getMenuProductList());
-            hideMenuDisplayMenuPriceGreaterThanSum(newMenu.getPrice(), sum, newMenu);
+            hideMenuDisplayMenuPriceGreaterThanSum(newMenu.getPriceValue(), sum, newMenu);
         }
     }
 

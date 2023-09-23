@@ -48,7 +48,7 @@ public class MenuService {
                         newMenuGroup.getId(),
                         DisplayedName.of(request.getName(), displayNameChecker),
                         Price.of(request.getPrice()),
-                        MenuProducts.create(createMenuProductList(products, request.getMenuProducts())),
+                        MenuProducts.create(createMenuProducts(products, request.getMenuProducts())),
                         request.isDisplayed()
                 ));
         return createResponse(savedMenu);
@@ -58,7 +58,7 @@ public class MenuService {
     public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
         final NewMenu newMenu = findMenuById(menuId);
         newMenu.changePrice(Price.of(request.getPrice()));
-        return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPrice());
+        return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPriceValue());
     }
 
     @Transactional
@@ -112,7 +112,7 @@ public class MenuService {
         return new MenuInfoResponse(
                 savedMenu.getId(),
                 savedMenu.getName(),
-                savedMenu.getPrice(),
+                savedMenu.getPriceValue(),
                 savedMenu.getMenuGroupId(),
                 savedMenu.isDisplayed(),
                 savedMenu.getMenuProductList()
@@ -122,7 +122,7 @@ public class MenuService {
         );
     }
 
-    private List<NewMenuProduct> createMenuProductList(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
+    private List<NewMenuProduct> createMenuProducts(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
         return requests.stream()
                 .map(k -> NewMenuProduct.create(findByProductId(products, k.getProductId()), k.getQuantity()))
                 .collect(Collectors.toList());

@@ -47,7 +47,7 @@ public class NewFixtures {
     public static NewMenuProduct menuProduct(final Product product, final long quantity) {
         return NewMenuProduct.create(
                 new Random().nextLong(),
-                NewProduct.create(product.getId(), product.getPrice()),
+                NewProduct.create(product.getId(), Price.of(product.getPrice())),
                 quantity);
     }
 
@@ -56,6 +56,6 @@ public class NewFixtures {
     }
 
     public static NewProduct newProduct(final long price) {
-        return NewProduct.create(UUID.randomUUID(), BigDecimal.valueOf(price));
+        return NewProduct.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(price)));
     }
 }

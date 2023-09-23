@@ -7,6 +7,7 @@ import kitchenpos.common.domain.Price;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -59,11 +60,6 @@ public class NewMenu {
         this.displayed = false;
     }
 
-
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
     public void changePrice(Price price) {
         menuProducts.validateMenuPrice(price);
         this.price = price;
@@ -74,8 +70,12 @@ public class NewMenu {
         return menuProducts.getMenuProductIds();
     }
 
-    public BigDecimal getPrice() {
+    public BigDecimal getPriceValue() {
         return price.getPrice();
+    }
+
+    public Price getPrice() {
+        return price;
     }
 
     public List<NewMenuProduct> getMenuProductList() {
@@ -94,4 +94,20 @@ public class NewMenu {
         return menuGroupId;
     }
 
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewMenu newMenu = (NewMenu) o;
+        return Objects.equals(id, newMenu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

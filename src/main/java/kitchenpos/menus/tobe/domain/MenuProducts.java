@@ -27,20 +27,20 @@ public class MenuProducts {
     public MenuProducts() {
     }
 
-    public MenuProducts(List<NewMenuProduct> newMenuProductList) {
-        if (newMenuProductList == null || newMenuProductList.isEmpty()) {
+    public MenuProducts(List<NewMenuProduct> newMenuProducts) {
+        if (newMenuProducts == null || newMenuProducts.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_MENU_PRODUCT);
         }
-        this.newMenuProducts = newMenuProductList;
+        this.newMenuProducts = newMenuProducts;
     }
 
 
-    public static MenuProducts of(List<NewMenuProduct> newMenuProductList) {
-        return new MenuProducts(newMenuProductList);
+    public static MenuProducts of(List<NewMenuProduct> newMenuProducts) {
+        return new MenuProducts(newMenuProducts);
     }
 
-    public static MenuProducts create(List<NewMenuProduct> menuProductList) {
-        return new MenuProducts(menuProductList);
+    public static MenuProducts create(List<NewMenuProduct> menuProducts) {
+        return new MenuProducts(menuProducts);
     }
 
     public void validateMenuPrice(Price targetMenuPrice) {
