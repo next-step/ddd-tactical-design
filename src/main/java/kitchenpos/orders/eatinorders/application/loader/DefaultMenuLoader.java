@@ -1,4 +1,4 @@
-package kitchenpos.orders.eatinorders.application.service;
+package kitchenpos.orders.eatinorders.application.loader;
 
 import kitchenpos.orders.eatinorders.application.MenuLoader;
 import kitchenpos.orders.eatinorders.domain.OrderedMenu;

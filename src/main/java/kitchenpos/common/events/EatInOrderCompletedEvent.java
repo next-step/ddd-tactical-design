@@ -1,4 +1,4 @@
-package kitchenpos.orders.eatinorders.publisher;
+package kitchenpos.common.events;
 
 import org.springframework.context.ApplicationEvent;
 

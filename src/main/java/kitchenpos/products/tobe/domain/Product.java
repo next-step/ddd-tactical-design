@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.publisher.ProductPriceChangedEvent;
+import kitchenpos.common.events.ProductPriceChangedEvent;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;

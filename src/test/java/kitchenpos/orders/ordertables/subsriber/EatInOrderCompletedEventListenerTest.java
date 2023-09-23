@@ -5,7 +5,7 @@ import kitchenpos.orders.eatinorders.domain.EatInOrder;
 import kitchenpos.orders.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.orders.ordertables.fixture.OrderTableFixture;
-import kitchenpos.orders.eatinorders.publisher.EatInOrderCompletedEvent;
+import kitchenpos.common.events.EatInOrderCompletedEvent;
 import kitchenpos.orders.ordertables.application.OrderTableService;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;

@@ -3,7 +3,7 @@ package kitchenpos.orders.ordertables.subsriber;
 import kitchenpos.orders.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.orders.ordertables.domain.OrderTable;
 import kitchenpos.orders.ordertables.domain.OrderTableRepository;
-import kitchenpos.orders.eatinorders.publisher.EatInOrderCompletedEvent;
+import kitchenpos.common.events.EatInOrderCompletedEvent;
 import kitchenpos.orders.ordertables.domain.OrderTableId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
