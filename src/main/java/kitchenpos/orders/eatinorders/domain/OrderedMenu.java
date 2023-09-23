@@ -18,10 +18,10 @@ public class OrderedMenu extends ValueObject {
     private UUID id;
 
     @Column(name = "menu_name", nullable = false)
-    String displayName;
+    private String displayName;
 
     @Column(name = "menu_prcie", nullable = false)
-    BigDecimal menuPrice;
+    private BigDecimal menuPrice;
 
     protected OrderedMenu() {
 
