@@ -23,7 +23,6 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.Price;
 import kitchenpos.menus.domain.PurgomalumClient;
 import kitchenpos.menus.domain.Quantity;
-import kitchenpos.menus.infra.DefaultProductApiService;
 
 @Service
 public class MenuService {
@@ -31,14 +30,14 @@ public class MenuService {
     private final MenuGroupRepository menuGroupRepository;
     private final PurgomalumClient purgomalumClient;
     private final MenuPricePolicy menuPricePolicy;
-    private final DefaultProductApiService productApiService;
+    private final ProductApiService productApiService;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final PurgomalumClient purgomalumClient,
             final MenuPricePolicy menuPricePolicy,
-            final DefaultProductApiService productApiService) {
+            final ProductApiService productApiService) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.purgomalumClient = purgomalumClient;
