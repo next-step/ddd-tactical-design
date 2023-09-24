@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Table(name = "orders")
 @Entity
@@ -24,28 +25,20 @@ public class TobeOrder {
 
     private UUID orderTableId;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<TobeOrderLineItem> orderLineItems;
-
+    private TobeOrderLineItems tobeOrderLineItems;
     protected TobeOrder() {
     }
 
     public TobeOrder(final UUID id, final OrderStatus status, final LocalDateTime orderDateTime, final UUID orderTableId, final List<TobeOrderLineItem> orderLineItems) {
+        this(id, status, orderDateTime, orderTableId, new TobeOrderLineItems(orderLineItems));
+    }
+
+    public TobeOrder(final UUID id, final OrderStatus status, final LocalDateTime orderDateTime, final UUID orderTableId, final TobeOrderLineItems orderLineItems) {
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderTableId = orderTableId;
-        this.orderLineItems = orderLineItems;
-    }
-
-    public void setOrderTable(final TobeOrderTable orderTable) {
-        this.orderTableId = orderTable.getId();
+        this.tobeOrderLineItems = orderLineItems;
     }
 
     public UUID getId() {
@@ -64,8 +57,12 @@ public class TobeOrder {
         return orderTableId;
     }
 
-    public List<TobeOrderLineItem> getOrderLineItems() {
-        return orderLineItems;
+    public TobeOrderLineItems getOrderLineItems() {
+        return tobeOrderLineItems;
+    }
+
+    public Stream<TobeOrderLineItem> getOrderLineItemsStream() {
+        return tobeOrderLineItems.getOrderLineItems().stream();
     }
 
     public void accept() {

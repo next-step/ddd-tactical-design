@@ -57,10 +57,9 @@ public class TobeOrderResponse {
 
     public static TobeOrderResponse from(TobeOrder tobeOrder) {
         return new TobeOrderResponse(tobeOrder.getId(), tobeOrder.getStatus(), tobeOrder.getOrderDateTime(),
-                                     tobeOrder.getOrderLineItems()
-                                                    .stream()
-                                                    .map(TobeOrderLineItemResponse::from)
-                                                    .collect(Collectors.toList()), tobeOrder.getOrderTableId());
+                                     tobeOrder.getOrderLineItemsStream()
+                                              .map(TobeOrderLineItemResponse::from)
+                                              .collect(Collectors.toList()), tobeOrder.getOrderTableId());
 
     }
 

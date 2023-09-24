@@ -18,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.UUID;
 
@@ -72,8 +74,8 @@ class TobeOrderServiceTest {
         );
     }
 
-    @DisplayName("메뉴가 없으면 등록할 수 없다.")
-    @MethodSource("orderLineItems")
+    @DisplayName("메뉴가 비어 있으면 등록할 수 없다.")
+    @NullAndEmptySource
     @ParameterizedTest
     void create(final List<TobeOrderLineItemRequest> orderLineItems) {
         TobeOrderCreateRequest expected = createOrderRequest(orderLineItems);
@@ -81,12 +83,12 @@ class TobeOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    private static List<Arguments> orderLineItems() {
-        return Arrays.asList(
-                null,
-                Arguments.of(Collections.emptyList()),
-                Arguments.of(List.of(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
-        );
+    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    @Test
+    void create01() {
+        TobeOrderCreateRequest expected = createOrderRequest(List.of(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)));
+        assertThatThrownBy(() -> orderService.create(expected))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @DisplayName("매장 주문은 주문 항목의 수량이 0 미만일 수 있다.")
@@ -161,15 +163,6 @@ class TobeOrderServiceTest {
     void serve(final OrderStatus status) {
         final UUID orderId = orderRepository.save(order(status)).getId();
         assertThatThrownBy(() -> orderService.serve(orderId))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
-    @DisplayName("서빙된 주문만 배달할 수 있다.")
-    @EnumSource(value = OrderStatus.class, names = "SERVED", mode = EnumSource.Mode.EXCLUDE)
-    @ParameterizedTest
-    void startDelivery(final OrderStatus status) {
-        final UUID orderId = orderRepository.save(order(status)).getId();
-        assertThatThrownBy(() -> orderService.startDelivery(orderId))
                 .isInstanceOf(IllegalStateException.class);
     }
 

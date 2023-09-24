@@ -32,6 +32,12 @@ public class TobeOrderTable {
         this.occupied = occupied;
     }
 
+    public void validateCreateOrder() {
+        if (!this.occupied) {
+            throw new IllegalStateException();
+        }
+    }
+
     public UUID getId() {
         return id;
     }
