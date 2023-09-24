@@ -2,14 +2,16 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.menus.dto.MenuChangePriceRequest;
-import kitchenpos.menus.dto.MenuCreateRequest;
-import kitchenpos.menus.dto.MenuProductRequest;
+import kitchenpos.menus.application.dto.MenuChangePriceRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuProductRequest;
+import kitchenpos.menus.application.dto.MenuResponse;
+import kitchenpos.menus.application.loader.MenuGroupLoader;
+import kitchenpos.menus.application.loader.ProductPriceLoader;
+import kitchenpos.menus.application.mapper.MenuMapper;
 import kitchenpos.menus.exception.MenuErrorCode;
 import kitchenpos.menus.exception.MenuProductException;
 import kitchenpos.menus.tobe.domain.menu.*;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,27 +23,30 @@ import java.util.stream.Collectors;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupService menuGroupService;
-    private final MenuProductMappingService mappingService;
+    private final MenuGroupLoader menuGroupLoader;
+    private final ProductPriceLoader productPriceLoader;
     private final ProfanityPolicy profanityPolicy;
 
     public MenuService(
             final MenuRepository menuRepository,
-            final MenuGroupService menuGroupService,
-            final MenuProductMappingService mappingService,
+            final MenuGroupLoader menuGroupLoader,
+            final ProductPriceLoader productPriceLoader,
             final ProfanityPolicy profanityPolicy
     ) {
         this.menuRepository = menuRepository;
-        this.menuGroupService = menuGroupService;
-        this.mappingService = mappingService;
+        this.menuGroupLoader = menuGroupLoader;
+        this.productPriceLoader = productPriceLoader;
         this.profanityPolicy = profanityPolicy;
     }
 
     @Transactional
-    public Menu create(final MenuCreateRequest request) {
+    public MenuResponse create(final MenuCreateRequest request) {
         final MenuDisplayedName menuDisplayedName = new MenuDisplayedName(request.getName(), profanityPolicy);
         final Price price = new Price(request.getPrice());
-        final MenuGroup menuGroup = menuGroupService.findById(request.getMenuGroupId());
+
+        if (!menuGroupLoader.exists(request.getMenuGroupId())) {
+            throw new NoSuchElementException();
+        }
 
         // 메뉴 상품 조립
         validateMenuProducts(request);
@@ -53,17 +58,19 @@ public class MenuService {
         final Menu menu = new Menu(
                 menuDisplayedName,
                 price,
-                menuGroup,
+                new MenuGroupId(request.getMenuGroupId()),
                 request.isDisplayed(),
                 new MenuProducts(menuProductValues)
         );
 
-        return menuRepository.save(menu);
+        menuRepository.save(menu);
+
+        return MenuMapper.toDto(menu);
     }
 
     private MenuProduct fetchMenuProduct(MenuProductRequest menuProductRequest) {
-        Product product = mappingService.findById(menuProductRequest.getProductId());
-        return new MenuProduct(product.getId(), product.getPrice(), menuProductRequest.getQuantity());
+        Price productPrice = productPriceLoader.findPriceById(menuProductRequest.getProductId());
+        return new MenuProduct(menuProductRequest.getProductId(), productPrice, menuProductRequest.getQuantity());
     }
 
     private void validateMenuProducts(MenuCreateRequest request) {
@@ -76,51 +83,46 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, MenuChangePriceRequest request) {
-
-        final Menu menu = findById(menuId);
+    public MenuResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.changePrice(new Price(request.getPrice()));
-
-        return menu;
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
-        final Menu menu = findById(menuId);
+    public MenuResponse display(final UUID menuId) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.display();
-        return menu;
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
-        final Menu menu = findById(menuId);
+    public MenuResponse hide(final UUID menuId) {
+        final Menu menu = findById(new MenuId(menuId));
         menu.hide();
-        return menu;
+        return MenuMapper.toDto(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        List<Menu> menus = menuRepository.findAll();
+        return MenuMapper.toDtos(menus);
     }
 
     @Transactional
-    public void checkHideAndPrice(UUID productId) {
+    public void checkHideAndPrice(ProductId productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(menu -> fetchMenuProduct(productId, menu));
-        menus.forEach(Menu::checkPriceAndHide);
-    }
-
-    private void fetchMenuProduct(UUID productId, Menu menu) {
-        Product product = mappingService.findById(productId);
-        menu.getMenuProducts()
-                .getValues()
-                .stream()
-                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.fetchPrice(product.getPrice()));
+        Price productPrice = productPriceLoader.findPriceById(productId.getValue());
+        menus.forEach(menu -> menu.fetchProductPrice(productId, productPrice));
     }
 
     @Transactional(readOnly = true)
-    public Menu findById(UUID menuId) {
+    public MenuResponse findMenuById(MenuId menuId) {
+        Menu menu = findById(menuId);
+        return MenuMapper.toDto(menu);
+    }
+
+    private Menu findById(MenuId menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
     }

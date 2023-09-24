@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class Price extends ValueObject {
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private BigDecimal value;
 
     protected Price() {
 
@@ -24,7 +24,7 @@ public class Price {
         if (isLessThanZero(price)) {
             throw new PriceException(PriceErrorCode.PRICE_IS_GREATER_THAN_EQUAL_ZERO);
         }
-        this.price = price;
+        this.value = price;
     }
 
     public Price(long price) {
@@ -36,21 +36,25 @@ public class Price {
     }
 
     public Price add(Price inputPrice) {
-        BigDecimal add = price.add(inputPrice.price);
+        BigDecimal add = value.add(inputPrice.value);
         return new Price(add);
     }
 
     public Price multiply(long input) {
-        BigDecimal multiply = price.multiply(BigDecimal.valueOf(input));
+        BigDecimal multiply = value.multiply(BigDecimal.valueOf(input));
         return new Price(multiply);
     }
 
     public boolean isGreaterThan(BigDecimal input) {
-        return price.compareTo(input) > 0;
+        return value.compareTo(input) > 0;
+    }
+
+    public boolean equal(BigDecimal price) {
+        return value.compareTo(price) == 0;
     }
 
     public BigDecimal getValue() {
-        return price;
+        return value;
     }
 
     @Override
@@ -58,12 +62,14 @@ public class Price {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Price that = (Price) o;
-        return Objects.equals(price, that.price);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price);
+        return Objects.hash(value);
     }
+
+
 }
 

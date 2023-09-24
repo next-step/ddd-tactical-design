@@ -2,13 +2,12 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
-import kitchenpos.products.dto.ProductRequest;
-import kitchenpos.products.exception.ProductErrorCode;
-import kitchenpos.products.exception.ProductPriceException;
-import kitchenpos.products.publisher.ProductPriceChangedEvent;
+import kitchenpos.products.application.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductResponse;
+import kitchenpos.products.application.mapper.ProductMapper;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,51 +21,50 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProfanityPolicy profanityPolicy;
 
-    private final ApplicationEventPublisher publisher;
-
     public ProductService(
             final ProductRepository productRepository,
-            final ProfanityPolicy profanityPolicy,
-            final ApplicationEventPublisher publisher) {
+            final ProfanityPolicy profanityPolicy) {
         this.productRepository = productRepository;
         this.profanityPolicy = profanityPolicy;
-        this.publisher = publisher;
     }
 
     @Transactional
-    public Product create(final ProductRequest request) {
-        Product product = request.toEntity(profanityPolicy);
-        return productRepository.save(product);
+    public ProductResponse create(final ProductRequest request) {
+        Product product = productRepository.save(ProductMapper.toEntity(request, profanityPolicy));
+        return ProductMapper.toDto(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, BigDecimal price) {
+    public ProductResponse changePrice(final UUID productId, BigDecimal price) {
         Product product = findById(productId);
         Price productPrice = new Price(price);
+
         product.changePrice(productPrice);
+        productRepository.save(product);
 
-        try {
-            publisher.publishEvent(new ProductPriceChangedEvent(this, productId));
-        } catch (RuntimeException ex) {
-            throw new ProductPriceException(ProductErrorCode.FAIL_REFLACT_MENU_PRICE);
-        }
-
-        return product;
+        return ProductMapper.toDto(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        List<Product> products = productRepository.findAll();
+        return ProductMapper.toDtos(products);
     }
 
-    @Transactional(readOnly = true)
-    public Product findById(UUID productId) {
+
+    private Product findById(ProductId productId) {
         return productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    private Product findById(UUID productId) {
+        return findById(new ProductId(productId));
+    }
+
+
     @Transactional(readOnly = true)
-    public List<Product> findAllInById(List<UUID> productIds) {
-        return productRepository.findAllByIdIn(productIds);
+    public ProductResponse findProductById(UUID productId) {
+        Product product = findById(productId);
+        return ProductMapper.toDto(product);
     }
 }

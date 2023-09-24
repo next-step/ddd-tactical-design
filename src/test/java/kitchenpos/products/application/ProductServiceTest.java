@@ -3,10 +3,9 @@ package kitchenpos.products.application;
 import kitchenpos.common.FakeProfanityPolicy;
 import kitchenpos.common.domain.ProfanityPolicy;
 import kitchenpos.common.exception.PriceException;
-import kitchenpos.products.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.exception.ProductDisplayedNameException;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,33 +24,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@DisplayName("상품")
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
-    private ProductRepository productRepository;
+    private kitchenpos.products.tobe.domain.ProductRepository productRepository;
 
     private ProductService productService;
-
-    @Spy
-    private ApplicationEventPublisher publisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         ProfanityPolicy profanityPolicy = new FakeProfanityPolicy();
-        productService = new ProductService(productRepository, profanityPolicy, publisher);
+        productService = new ProductService(productRepository, profanityPolicy);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
         final ProductRequest expected = new ProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final ProductResponse actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName()),
-                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -80,12 +75,12 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getIdValue();
         final BigDecimal changePrice = BigDecimal.valueOf(15_000L);
 
-        final Product actual = productService.changePrice(productId, changePrice);
+        final ProductResponse actual = productService.changePrice(productId, changePrice);
 
-        assertThat(actual.getPriceValue()).isEqualTo(changePrice);
+        assertThat(actual.getPrice()).isEqualTo(changePrice);
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -93,7 +88,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
+        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getIdValue();
         assertThatThrownBy(() -> productService.changePrice(productId, price))
                 .isInstanceOf(PriceException.class);
     }
@@ -103,7 +98,7 @@ class ProductServiceTest {
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));
         productRepository.save(product("양념치킨", 16_000L));
-        final List<Product> actual = productService.findAll();
+        final List<ProductResponse> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 

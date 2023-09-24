@@ -2,6 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.common.events.ProductPriceChangedEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,10 +12,10 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+public class Product extends AbstractAggregateRoot<Product> {
+
+    @EmbeddedId
+    private ProductId id;
 
     @Column(name = "name", nullable = false)
     @Embedded
@@ -27,7 +29,7 @@ public class Product {
 
     }
 
-    public Product(UUID id, ProductDisplayedName name, Price price) {
+    public Product(ProductId id, ProductDisplayedName name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,7 +37,7 @@ public class Product {
 
     public static Product of(String name, BigDecimal price, ProfanityPolicy profanityPolicy) {
         return new Product(
-                UUID.randomUUID(),
+                new ProductId(),
                 new ProductDisplayedName(name, profanityPolicy),
                 new Price(price)
         );
@@ -43,10 +45,20 @@ public class Product {
 
     public void changePrice(Price price) {
         this.price = price;
+        changedPrice();
     }
 
-    public UUID getId() {
+    @PostUpdate
+    private void changedPrice() {
+        registerEvent(new ProductPriceChangedEvent(this, id.getValue()));
+    }
+
+    public ProductId getId() {
         return id;
+    }
+
+    public UUID getIdValue() {
+        return this.id.getValue();
     }
 
     public String getNameValue() {

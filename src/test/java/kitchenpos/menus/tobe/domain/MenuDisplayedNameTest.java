@@ -43,7 +43,7 @@ class MenuDisplayedNameTest {
     @DisplayName("[실패] 이름은 null이거나 공백일 수 없다.")
     @ParameterizedTest
     @NullAndEmptySource
-    void create_test_3(String name) {
+    void create3(String name) {
         assertThatThrownBy(
                 () -> new MenuDisplayedName(name, profanityPolicy))
                 .isInstanceOf(MenuDisplayedNameException.class)

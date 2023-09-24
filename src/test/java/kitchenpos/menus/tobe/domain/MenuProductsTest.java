@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static kitchenpos.menus.application.fixtures.MenuFixture.menuProduct;
 import static kitchenpos.products.fixture.ProductFixture.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,8 +22,8 @@ class MenuProductsTest {
     @Test
     void calculate1() {
         //given
-        MenuProduct menuProduct_1000 = new MenuProduct(product(1000), 3);
-        MenuProduct menuProduct_2000 = new MenuProduct(product(2000), 3);
+        MenuProduct menuProduct_1000 = menuProduct(product(1000), 3);
+        MenuProduct menuProduct_2000 = menuProduct(product(2000), 3);
         //when
         MenuProducts menuProducts = new MenuProducts(Arrays.asList(menuProduct_1000, menuProduct_2000));
         //then

@@ -1,14 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.common.domain.ProfanityPolicy;
+import kitchenpos.common.domain.ValueObject;
 import kitchenpos.products.exception.ProductDisplayedNameException;
 import kitchenpos.products.exception.ProductErrorCode;
 
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
-public class ProductDisplayedName {
+public class ProductDisplayedName extends ValueObject {
     private String name;
 
     protected ProductDisplayedName() {
@@ -38,16 +38,4 @@ public class ProductDisplayedName {
         return name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductDisplayedName that = (ProductDisplayedName) o;
-        return Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
 }
