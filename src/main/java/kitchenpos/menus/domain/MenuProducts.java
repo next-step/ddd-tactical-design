@@ -1,6 +1,8 @@
 package kitchenpos.menus.domain;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -8,14 +10,14 @@ import java.util.UUID;
 @Embeddable
 public class MenuProducts {
 
-    @ElementCollection
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
             name = "menu_id",
             nullable = false,
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<MenuProduct> menuProducts;
+    private List<MenuProduct> menuProducts = new ArrayList<>();
 
     protected MenuProducts() {
     }
@@ -30,7 +32,7 @@ public class MenuProducts {
     public Price totalPrice() {
         return menuProducts.stream()
                 .map(MenuProduct::getPrice)
-                .reduce(new Price(0), Price::sum);
+                .reduce(new Price(0L), Price::sum);
     }
 
     public void changeProductPrice(UUID productId, Price price) {

@@ -1,25 +1,25 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.domain.DisplayedName;
-import kitchenpos.products.domain.Price;
-import kitchenpos.products.domain.Product;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.Test;
+
+import kitchenpos.products.domain.Price;
+import kitchenpos.products.domain.Product;
 
 class ProductTest {
 
     @Test
     void 상품을_등록할_수_있다() {
-        assertDoesNotThrow(() -> new Product(UUID.randomUUID(), new DisplayedName("치킨", new FakePurgomalumClient()), new Price(10000L)));
+        assertDoesNotThrow(() -> new Product(UUID.randomUUID(), "치킨", 10000L, new FakePurgomalumClient()));
     }
 
     @Test
     void 가격을_변경할_수_있다() {
-        Product product = new Product(UUID.randomUUID(), new DisplayedName("꿀", new FakePurgomalumClient()), new Price(10000L));
+        Product product = new Product(UUID.randomUUID(), "꿀", 10000L, new FakePurgomalumClient());
 
         product.changePrice(new Price(15000L));
 

@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
+import kitchenpos.menus.application.dto.CreateMenuRequest;
+import kitchenpos.menus.application.dto.MenuProductDto;
+import kitchenpos.menus.application.dto.ProductDto;
 import kitchenpos.menus.domain.DisplayedName;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
@@ -18,7 +22,7 @@ import kitchenpos.menus.domain.MenuProducts;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.Price;
 import kitchenpos.menus.domain.PurgomalumClient;
-import kitchenpos.menus.infra.DefaultProductApiService;
+import kitchenpos.menus.domain.Quantity;
 
 @Service
 public class MenuService {
@@ -26,14 +30,14 @@ public class MenuService {
     private final MenuGroupRepository menuGroupRepository;
     private final PurgomalumClient purgomalumClient;
     private final MenuPricePolicy menuPricePolicy;
-    private final DefaultProductApiService productApiService;
+    private final ProductApiService productApiService;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final PurgomalumClient purgomalumClient,
             final MenuPricePolicy menuPricePolicy,
-            final DefaultProductApiService productApiService) {
+            final ProductApiService productApiService) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.purgomalumClient = purgomalumClient;
@@ -50,7 +54,7 @@ public class MenuService {
 
         final Menu menu = new Menu(
                 UUID.randomUUID(),
-                new DisplayedName(request.getName(), purgomalumClient),
+                request.getName(), purgomalumClient,
                 request.getPrice(),
                 menuGroup,
                 menuProducts,
@@ -63,35 +67,41 @@ public class MenuService {
      * menuProductsRequest로 MenuProducts를 만든다.
      * - menuProductsRequest의 productId가 모두 존재하는지 확인한다. (getPrice)
      */
-    private MenuProducts createMenuProducts(List<MenuProduct> menuProductsRequest) {
+    private MenuProducts createMenuProducts(List<MenuProductDto> menuProductsRequest) {
+        if (menuProductsRequest == null) {
+            throw new IllegalArgumentException();
+        }
         List<ProductDto> products = productApiService.findAllByIdIn(menuProductsRequest.stream()
-                .map(MenuProduct::getProductId)
+                .map(MenuProductDto::getProductId)
                 .collect(Collectors.toList()));
 
         return new MenuProducts(menuProductsRequest.stream()
-                .map(menuProduct ->
-                        new MenuProduct(
-                                menuProduct.getProductId(),
-                                menuProduct.getQuantity(),
-                                getPrice(products, menuProduct)
-                        )
-                )
+                .map(menuProduct -> createMenuProduct(products, menuProduct))
                 .collect(Collectors.toList())
         );
     }
 
-    private Price getPrice(List<ProductDto> products, MenuProduct menuProduct) {
+    private MenuProduct createMenuProduct(List<ProductDto> products, MenuProductDto menuProduct) {
+        UUID productId = menuProduct.getProductId();
+        ProductDto productDto = findProductDto(products, productId);
+        return new MenuProduct(
+                productId,
+                new Quantity(menuProduct.getQuantity()),
+                new Price(productDto.getPrice())
+        );
+    }
+
+    private ProductDto findProductDto(List<ProductDto> products, UUID productId) {
         return products.stream()
-                .filter(productDto -> productDto.getProductId().equals(menuProduct.getProductId()))
+                .filter(productDto -> productDto.getProductId().equals(productId))
                 .findAny()
-                .orElseThrow(IllegalArgumentException::new)
-                .getPrice();
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = findById(menuId);
-        menu.changePrice(request.getPrice(), menuPricePolicy);
+        menu.changePrice(new Price(request.getPrice()), menuPricePolicy);
         return menu;
     }
 
