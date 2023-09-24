@@ -18,7 +18,6 @@ public class ProductName {
     }
 
     protected ProductName() {
-
     }
 
     public String getProductName() {
@@ -30,8 +29,20 @@ public class ProductName {
             throw new IllegalArgumentException("상품 이름 값이 존재하지 않습니다.");
         }
         if (purgomalumClient.containsProfanity(productName)) {
-            throw new IllegalArgumentException("상품 이름에 비속어가 존재합니다. product Name : " + productName);
+            throw new IllegalArgumentException("상품 이름에 비속어가 존재합니다.");
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductName that = (ProductName) o;
+        return Objects.equals(productName, that.productName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productName);
+    }
 }

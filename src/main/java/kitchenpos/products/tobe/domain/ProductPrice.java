@@ -17,7 +17,6 @@ public class ProductPrice {
     }
 
     protected ProductPrice() {
-
     }
 
     private void validateProductPrice(BigDecimal productPrice) {
@@ -33,4 +32,16 @@ public class ProductPrice {
         return productPrice;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductPrice price = (ProductPrice) o;
+        return Objects.equals(productPrice, price.productPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productPrice);
+    }
 }

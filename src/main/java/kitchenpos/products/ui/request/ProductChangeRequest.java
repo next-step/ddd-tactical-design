@@ -8,6 +8,11 @@ public class ProductChangeRequest {
 
     private ProductChangeRequest() {}
 
+    public ProductChangeRequest(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
+
     public String getName() {
         return name;
     }
