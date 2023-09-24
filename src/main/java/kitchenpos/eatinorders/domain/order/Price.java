@@ -34,10 +34,6 @@ public class Price {
         return new Price(price.longValue() + other.price.longValue());
     }
 
-    public String stringValue() {
-        return price.toString();
-    }
-
     public long longValue() {
         return price.longValue();
     }
