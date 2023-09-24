@@ -89,6 +89,10 @@ public class EatInOrder {
         return orderDateTime;
     }
 
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
+    }
+
     public OrderTable getOrderTable() {
         return orderTable;
     }

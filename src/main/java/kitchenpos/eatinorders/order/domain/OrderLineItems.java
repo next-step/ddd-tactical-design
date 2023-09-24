@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.order.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,7 +19,7 @@ public class OrderLineItems {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<OrderLineItem> orderLineItems = new ArrayList<>();
 
     protected OrderLineItems() {
     }
@@ -30,5 +32,9 @@ public class OrderLineItems {
             );
         }
         this.orderLineItems = orderLineItems;
+    }
+
+    public List<OrderLineItem> listValue() {
+        return Collections.unmodifiableList(orderLineItems);
     }
 }
