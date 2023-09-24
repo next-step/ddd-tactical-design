@@ -1,9 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.tobe.application.TobeOrderTable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,9 +31,60 @@ public class TobeOrder {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<TobeOrderLineItem> orderLineItems;
 
     protected TobeOrder() {
     }
 
+    public TobeOrder(final UUID id, final OrderStatus status, final LocalDateTime orderDateTime, final UUID orderTableId, final List<TobeOrderLineItem> orderLineItems) {
+        this.id = id;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderTableId = orderTableId;
+        this.orderLineItems = orderLineItems;
+    }
+
+    public void setOrderTable(final TobeOrderTable orderTable) {
+        this.orderTableId = orderTable.getId();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public UUID getOrderTableId() {
+        return orderTableId;
+    }
+
+    public List<TobeOrderLineItem> getOrderLineItems() {
+        return orderLineItems;
+    }
+
+    public void accept() {
+        this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void served() {
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void delivering() {
+        this.status = OrderStatus.DELIVERING;
+    }
+
+    public void delivered() {
+        this.status = OrderStatus.DELIVERED;
+    }
+
+    public void completed() {
+        this.status = OrderStatus.COMPLETED;
+    }
 }

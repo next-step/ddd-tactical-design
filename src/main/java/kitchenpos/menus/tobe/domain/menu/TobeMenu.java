@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -86,6 +87,10 @@ public class TobeMenu {
 
     public MenuPrice getPrice() {
         return price;
+    }
+
+    public BigDecimal getPriceValue() {
+        return price.getPrice();
     }
 
     public boolean isDisplayed() {

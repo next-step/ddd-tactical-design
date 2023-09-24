@@ -22,7 +22,14 @@ public class TobeOrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public TobeOrderTable() {
+    protected TobeOrderTable() {
+    }
+
+    public TobeOrderTable(final UUID id, final String name, final int numberOfGuests, final boolean occupied) {
+        this.id = id;
+        this.name = name;
+        this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
     }
 
     public UUID getId() {
