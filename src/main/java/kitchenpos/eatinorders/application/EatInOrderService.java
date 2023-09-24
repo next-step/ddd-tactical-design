@@ -22,13 +22,13 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.Price;
 
 @Service
-public class OrderService {
+public class EatInOrderService {
     private final EatInOrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final EatInOrderCompletePolicy eatInOrderCompletePolicy;
 
-    public OrderService(
+    public EatInOrderService(
             final EatInOrderRepository orderRepository,
             final MenuRepository menuRepository,
             final OrderTableRepository orderTableRepository,
