@@ -5,6 +5,7 @@ import kitchenpos.eatinorders.tobe.application.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.sharedkernel.OrderStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

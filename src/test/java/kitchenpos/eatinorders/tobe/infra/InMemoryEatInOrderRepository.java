@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.tobe.infra;
 
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderStatus;
+import kitchenpos.sharedkernel.OrderStatus;
 
 import java.util.*;
 

@@ -1,10 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.sharedkernel.OrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static kitchenpos.eatinorders.tobe.EatInOrderFixtures.*;

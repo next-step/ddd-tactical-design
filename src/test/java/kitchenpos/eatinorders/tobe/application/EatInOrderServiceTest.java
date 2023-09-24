@@ -8,6 +8,7 @@ import kitchenpos.eatinorders.tobe.infra.InMemoryOrderTableRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.sharedkernel.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,6 @@ import java.util.UUID;
 
 import static kitchenpos.Fixtures.menu;
 import static kitchenpos.Fixtures.*;
-import static kitchenpos.eatinorders.tobe.EatInOrderFixtures.orderTable;
 import static kitchenpos.eatinorders.tobe.EatInOrderFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

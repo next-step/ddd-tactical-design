@@ -1,30 +1,21 @@
 package kitchenpos.deliveryorders.tobe.domain;
 
 import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.sharedkernel.Order;
+import kitchenpos.sharedkernel.OrderStatus;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Table(name = "delivery_order")
 @Entity
-public class DeliveryOrder {
-
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
-    @Column(name = "order_date_time", nullable = false)
-    private LocalDateTime orderDateTime;
-
+public class DeliveryOrder extends Order {
     @Embedded
     private DeliveryOrderLineItems deliveryOrderLineItems;
 
@@ -47,18 +38,6 @@ public class DeliveryOrder {
         this.orderDateTime = orderDateTime;
         this.deliveryOrderLineItems = deliveryOrderLineItems;
         this.deliveryAddress = deliveryAddress;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
     }
 
     public DeliveryOrderLineItems getOrderLineItems() {
@@ -91,40 +70,8 @@ public class DeliveryOrder {
         );
     }
 
-    private static Map<UUID, Menu> createMenuMap(final List<Menu> menus) {
-        return menus.stream()
-            .map(menu -> {
-                validateDisplayedMenu(menu);
-                return menu;
-            })
-            .collect(Collectors.toMap(
-                Menu::getId,
-                menu -> menu
-            ));
-    }
-
-    private static void validateDisplayedMenu(final Menu menu) {
-        if (!menu.isDisplayed()) {
-            throw new IllegalStateException();
-        }
-    }
-
     public BigDecimal getSumOfOrderLineItemPrice(List<Menu> menus) {
         return deliveryOrderLineItems.getSumOfOrderLineItemPrice(menus);
-    }
-
-    public void accept() {
-        if (status != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        status = OrderStatus.ACCEPTED;
-    }
-
-    public void serve() {
-        if (status != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        status = OrderStatus.SERVED;
     }
 
     public void startDelivery() {
@@ -141,6 +88,7 @@ public class DeliveryOrder {
         status = OrderStatus.DELIVERED;
     }
 
+    @Override
     public void complete() {
         if (status != OrderStatus.DELIVERED) {
             throw new IllegalStateException();

@@ -1,5 +1,6 @@
 package kitchenpos.takeoutorders.tobe.domain;
 
+import kitchenpos.sharedkernel.OrderStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
