@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
-import kitchenpos.eatinorders.domain.OrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
@@ -17,9 +17,9 @@ import kitchenpos.eatinorders.domain.OrderTableRepository;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final EatInOrderRepository orderRepository;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderRepository orderRepository) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
     }
