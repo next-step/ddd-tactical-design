@@ -36,5 +36,5 @@ public class TakeoutOrder {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<TakeoutOrderLineItem> orderLineItems;
 }

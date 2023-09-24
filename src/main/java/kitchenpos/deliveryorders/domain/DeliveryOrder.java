@@ -36,7 +36,7 @@ public class DeliveryOrder {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<DeliveryOrderLineItem> orderLineItems;
 
     @Column(name = "delivery_address")
     private String deliveryAddress;
