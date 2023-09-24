@@ -72,9 +72,7 @@ public class OrderService {
 //            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
 //                throw new IllegalArgumentException();
 //            }
-            final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
+            final OrderLineItem orderLineItem = new OrderLineItem(menu.getId(), quantity, menu.getPrice().longValue());
             orderLineItems.add(orderLineItem);
         }
         Order order = new Order();

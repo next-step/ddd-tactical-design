@@ -34,4 +34,16 @@ public class OrderLineItem {
         this.quantity = quantity;
         this.price = new Price(price);
     }
+
+    public UUID getMenuId() {
+        return menuId;
+    }
+
+    public long getQuantity() {
+        return quantity;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
 }
