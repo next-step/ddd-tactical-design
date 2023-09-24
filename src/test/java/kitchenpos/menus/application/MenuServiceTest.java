@@ -7,17 +7,15 @@ import kitchenpos.menus.shared.dto.request.MenuPriceChangeRequest;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
-import kitchenpos.menus.tobe.domain.menu.MenuProductCreateService;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
-import kitchenpos.menus.tobe.domain.menu.ProductPriceService;
+import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.InMemoryProductClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.MenuProductCreateServiceImpl;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPriceServiceImpl;
+import kitchenpos.menus.infra.ProductClientImpl;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,9 +39,7 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private ProductPriceService productPriceService;
-
-    private MenuProductCreateService menuProductCreateService;
+    private ProductClient productClient;
     private PurgomalumClient purgomalumClient;
     private MenuService menuService;
     private UUID menuGroupId;
@@ -55,9 +51,8 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productPriceService = new ProductPriceServiceImpl(productRepository);
-        menuProductCreateService = new MenuProductCreateServiceImpl(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productPriceService, menuProductCreateService, purgomalumClient);
+        productClient = new InMemoryProductClient(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -192,7 +187,7 @@ class MenuServiceTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
     void displayExpensiveMenu() {
-        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.save(new Menu(UUID.randomUUID(), new MenuName("후라이드+후라이드", purgomalumClient), new MenuPrice(BigDecimal.valueOf(33_000L)), menuGroup(), false, new MenuProducts(Arrays.asList(menuProduct(product, 2L))))).getId();
         assertThatThrownBy(() -> menuService.display(menuId))
             .isInstanceOf(IllegalArgumentException.class);
     }

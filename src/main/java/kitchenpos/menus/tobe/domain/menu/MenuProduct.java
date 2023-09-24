@@ -1,8 +1,16 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.products.tobe.domain.Product;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -22,16 +30,20 @@ public class MenuProduct {
     @Embedded
     private MenuProductQuantity quantity;
 
-    public MenuProduct(UUID productId, MenuProductQuantity quantity) {
+    @Transient
+    private BigDecimal menuProductPrice;
+
+    public MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal menuProductPrice) {
         this.productId = productId;
         this.quantity = quantity;
+        this.menuProductPrice = menuProductPrice;
     }
 
     protected MenuProduct() {
     }
 
-    public static MenuProduct of(UUID productId, MenuProductQuantity quantity) {
-        return new MenuProduct(productId, quantity);
+    public static MenuProduct of(UUID productId, MenuProductQuantity quantity, ProductClient productClient) {
+        return new MenuProduct(productId, quantity, productClient.getProductPrice(productId));
     }
 
     public Long getSeq() {
@@ -44,5 +56,9 @@ public class MenuProduct {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public BigDecimal getMenuProductPrice() {
+        return menuProductPrice;
     }
 }

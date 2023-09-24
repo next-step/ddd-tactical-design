@@ -7,10 +7,13 @@ import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.products.application.InMemoryProductClient;
+import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -34,7 +37,7 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = Menu.of(new MenuName("후라이드+후라이드", purgomalumClient), new MenuPrice(BigDecimal.valueOf(price)), menuGroup(), displayed, MenuProducts.from(Arrays.asList(menuProducts)));
+        final Menu menu = Menu.of(new MenuName("후라이드+후라이드", purgomalumClient), new MenuPrice(BigDecimal.valueOf(price)), menuGroup(), displayed, new MenuProducts(Arrays.asList(menuProducts)));
         return menu;
     }
 
@@ -48,12 +51,13 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = MenuProduct.of(product().getId(), new MenuProductQuantity(2L));
+        final InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        final MenuProduct menuProduct = MenuProduct.of(product().getId(), new MenuProductQuantity(2L), new InMemoryProductClient(productRepository));
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = MenuProduct.of(product.getId(), new MenuProductQuantity(quantity));
+        final MenuProduct menuProduct = new MenuProduct(product.getId(), new MenuProductQuantity(quantity), product.getPrice());
         return menuProduct;
     }
 

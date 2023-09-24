@@ -8,21 +8,17 @@ import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.MenuProductCreateService;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.menus.tobe.domain.menu.ProductPriceService;
+import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.shared.util.ConvertUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,22 +26,18 @@ import java.util.stream.Collectors;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductPriceService productPriceService;
-
-    private final MenuProductCreateService menuProductCreateService;
+    private final ProductClient productClient;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductPriceService productPriceService,
-        final MenuProductCreateService menuProductCreateService,
+        final ProductClient productClient,
         final PurgomalumClient purgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productPriceService = productPriceService;
-        this.menuProductCreateService = menuProductCreateService;
+        this.productClient = productClient;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -53,21 +45,26 @@ public class MenuService {
     public MenuDto create(final MenuCreateRequest request) {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProductDto> menuProductRequests = request.getMenuProducts();
 
-        productPriceService.validateMenuProductDtoRequest(menuProductRequests);
+        if (Objects.isNull(request.getMenuProducts()) || request.getMenuProducts().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
 
-        final List<MenuProduct> menuProducts = menuProductCreateService.getMenuProducts(menuProductRequests);
+        List<MenuProduct> menuProducts = request.getMenuProducts().stream()
+                .map(menuProductDto -> MenuProduct.of(
+                        menuProductDto.getProductId(),
+                        new MenuProductQuantity(menuProductDto.getQuantity())
+                        , productClient)
+                ).collect(Collectors.toList());
 
         final Menu menu = Menu.of(
                 new MenuName(request.getName(), purgomalumClient),
                 new MenuPrice(request.getPrice()),
                 menuGroup,
                 request.isDisplayed(),
-                MenuProducts.from(menuProducts)
+                MenuProducts.from(menuProducts, productClient)
         );
 
-        menuProductCreateService.valid(menu);
         return ConvertUtil.convert(menuRepository.save(menu), MenuDto.class);
     }
 
@@ -77,8 +74,6 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
         menu.changeMenuPrice(new MenuPrice(request.getPrice()));
 
-        menuProductCreateService.valid(menu);
-
         return ConvertUtil.convert(menu, MenuDto.class);
     }
 
@@ -86,8 +81,6 @@ public class MenuService {
     public MenuDto display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-
-        menuProductCreateService.valid(menu);
 
         menu.display();
         return ConvertUtil.convert(menu, MenuDto.class);

@@ -3,6 +3,7 @@ package kitchenpos.menus.shared.dto;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.products.shared.dto.response.ProductDto;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuProductDto {
@@ -13,6 +14,15 @@ public class MenuProductDto {
     private ProductDto product;
     private long quantity;
 
+    private BigDecimal menuProductPrice;
+
+    public MenuProductDto(UUID productId, long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
+    protected MenuProductDto() {
+    }
     public Long getSeq() {
         return seq;
     }
@@ -25,15 +35,13 @@ public class MenuProductDto {
         return quantity;
     }
 
+    public BigDecimal getMenuProductPrice() {
+        return menuProductPrice;
+    }
+
     public ProductDto getProduct() {
         return product;
     }
 
-    public MenuProductDto(UUID productId, long quantity) {
-        this.productId = productId;
-        this.quantity = quantity;
-    }
 
-    public MenuProductDto() {
-    }
 }

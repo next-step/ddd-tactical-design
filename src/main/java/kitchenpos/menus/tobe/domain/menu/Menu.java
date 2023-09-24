@@ -44,7 +44,14 @@ public class Menu {
     }
 
     public static Menu of(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        validateMenu(price, menuProducts);
         return new Menu(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts);
+    }
+
+    private static void validateMenu(MenuPrice price, MenuProducts menuProducts) {
+        if (price.isGreaterThan(menuProducts.getTotalMenuProductsPrice())){
+            throw new IllegalArgumentException("메뉴가격은 메뉴 상품의 가격의 합보다 같거나 작아야합니다");
+        }
     }
 
     protected Menu() {
@@ -73,10 +80,12 @@ public class Menu {
     }
 
     public void changeMenuPrice(MenuPrice menuPrice) {
+        validateMenu(menuPrice, menuProducts);
         this.price = menuPrice;
     }
 
     public void display() {
+        validateMenu(price, menuProducts);
         this.displayed = true;
     }
 

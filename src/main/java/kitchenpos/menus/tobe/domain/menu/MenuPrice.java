@@ -31,6 +31,10 @@ public class MenuPrice {
         }
     }
 
+    public boolean isGreaterThan(BigDecimal menuPrice) {
+        return this.menuPrice.compareTo(menuPrice) > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
