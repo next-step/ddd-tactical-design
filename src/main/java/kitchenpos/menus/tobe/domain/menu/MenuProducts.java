@@ -42,7 +42,7 @@ public class MenuProducts {
     }
 
     public static MenuProducts from(List<MenuProduct> menuProducts, ProductClient productClient) {
-        validateMenuProductDto(menuProducts, productClient);
+        validateMenuProducts(menuProducts, productClient);
         return new MenuProducts(menuProducts);
     }
 
@@ -51,7 +51,7 @@ public class MenuProducts {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private static void validateMenuProductDto(List<MenuProduct> menuProducts, ProductClient productClient) {
+    private static void validateMenuProducts(List<MenuProduct> menuProducts, ProductClient productClient) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
