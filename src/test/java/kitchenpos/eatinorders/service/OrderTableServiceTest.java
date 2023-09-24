@@ -15,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
-import kitchenpos.eatinorders.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)

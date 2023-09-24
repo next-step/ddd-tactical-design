@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kitchenpos.eatinorders.application.EatInOrderService;
 import kitchenpos.eatinorders.application.dto.CreateOrderRequest;
-import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.order.EatInOrder;
 
 @RequestMapping("/api/orders")
 @RestController

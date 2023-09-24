@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.domain.order;
 
 import javax.persistence.*;
 import java.util.UUID;

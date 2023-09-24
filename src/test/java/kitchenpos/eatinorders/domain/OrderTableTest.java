@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+
 class OrderTableTest {
     private OrderTable orderTable;
 

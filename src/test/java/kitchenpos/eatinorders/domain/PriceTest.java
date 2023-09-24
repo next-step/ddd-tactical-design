@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import kitchenpos.eatinorders.domain.order.Price;
+import kitchenpos.eatinorders.domain.order.Quantity;
+
 class PriceTest {
     @ParameterizedTest
     @ValueSource(longs = {0, 1})

@@ -1,6 +1,8 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.domain.order;
 
 import org.springframework.stereotype.Component;
+
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 @Component
 public class EatInOrderCompletePolicy {

@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.service;
 
 import java.util.UUID;
 
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 public class OrderTableFixture {
     private final OrderTable orderTable;

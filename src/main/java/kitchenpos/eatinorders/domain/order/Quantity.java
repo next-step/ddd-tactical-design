@@ -1,9 +1,7 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.domain.order;
 
 import java.util.Objects;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 
 @Embeddable

@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import kitchenpos.eatinorders.domain.order.OrderLineItem;
+import kitchenpos.eatinorders.domain.order.OrderLineItems;
+
 class OrderLineItemsTest {
     @Test
     void OrderLineItem은_1개_이상이어야_한다() {

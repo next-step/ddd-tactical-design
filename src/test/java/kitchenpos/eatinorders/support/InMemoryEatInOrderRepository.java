@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import kitchenpos.eatinorders.domain.EatInOrder;
-import kitchenpos.eatinorders.domain.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.order.EatInOrder;
+import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.order.OrderStatus;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 public class InMemoryEatInOrderRepository implements EatInOrderRepository {
     private final Map<UUID, EatInOrder> orders = new HashMap<>();

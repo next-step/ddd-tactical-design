@@ -8,6 +8,12 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import kitchenpos.eatinorders.domain.order.EatInOrder;
+import kitchenpos.eatinorders.domain.order.EatInOrderCompletePolicy;
+import kitchenpos.eatinorders.domain.order.OrderLineItem;
+import kitchenpos.eatinorders.domain.order.OrderLineItems;
+import kitchenpos.eatinorders.domain.order.OrderStatus;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.support.InMemoryEatInOrderRepository;
 
 class EatInOrderTest {
