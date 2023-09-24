@@ -5,7 +5,6 @@ import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,7 +38,7 @@ public class OrderLineItemsValidService {
 
     private void validMenu(OrderLineItem orderLineItem) {
         final Menu menu = menuRepository.findById(orderLineItem.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(IllegalArgumentException::new);
         if (!menu.isDisplayed()) {
             throw new IllegalStateException();
         }

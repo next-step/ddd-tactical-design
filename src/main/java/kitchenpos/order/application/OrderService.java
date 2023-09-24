@@ -1,10 +1,8 @@
 package kitchenpos.order.application;
 
-import kitchenpos.order.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderRepository;
-import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-import kitchenpos.order.supports.factory.OrderCreateFactory;
+import kitchenpos.order.supports.strategy.OrderProcessStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,55 +13,50 @@ import java.util.UUID;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final KitchenridersClient kitchenridersClient;
-    private final OrderTableClearService orderTableClearService;
-    private final OrderCreateFactory orderCreateFactory;
+
+    private final OrderProcessStrategy orderProcessStrategy;
 
     public OrderService(
             final OrderRepository orderRepository,
-            final KitchenridersClient kitchenridersClient,
-            final OrderTableClearService orderTableClearService,
-            final OrderCreateFactory orderCreateFactory) {
+            final OrderProcessStrategy orderProcessStrategy) {
         this.orderRepository = orderRepository;
-        this.kitchenridersClient = kitchenridersClient;
-        this.orderTableClearService = orderTableClearService;
-        this.orderCreateFactory = orderCreateFactory;
+        this.orderProcessStrategy = orderProcessStrategy;
     }
 
     @Transactional
     public Order create(final Order request) {
-        Order order = orderCreateFactory.createOrder(request);
+        Order order = this.orderProcessStrategy.get(request).create(request);
         return orderRepository.save(order);
     }
 
     @Transactional
     public Order accept(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.accept(kitchenridersClient));
+        return orderRepository.save(this.orderProcessStrategy.get(order).accept(order));
     }
 
     @Transactional
     public Order serve(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.serve());
+        return orderRepository.save(this.orderProcessStrategy.get(order).serve(order));
     }
 
     @Transactional
     public Order complete(final UUID orderId) {
         Order order = getOrder(orderId);
-        return orderRepository.save(order.complete(orderTableClearService));
+        return orderRepository.save(this.orderProcessStrategy.get(order).complete(order));
     }
 
     @Transactional
     public Order startDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderRepository.save(order.startDelivery());
+        return orderRepository.save(this.orderProcessStrategy.get(order).startDelivery(order));
     }
 
     @Transactional
     public Order completeDelivery(final UUID orderId) {
         Order order = getOrder(orderId);
-        return this.orderRepository.save(order.completeDelivery());
+        return orderRepository.save(this.orderProcessStrategy.get(order).completeDelivery(order));
     }
 
     @Transactional(readOnly = true)
@@ -76,5 +69,4 @@ public class OrderService {
         return orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
     }
-
 }

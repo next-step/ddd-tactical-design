@@ -38,9 +38,9 @@ class OrderTableServiceTest {
         orderRepository = new InMemoryOrderRepository();
         orderTableCreateService = new OrderTableCreateService(orderTableRepository);
         orderTableChangeGuestService = new OrderTableChangeGuestService(orderTableRepository);
-        orderTableClearService = new OrderTableClearService(orderTableRepository);
+        orderTableClearService = new OrderTableClearService(orderTableRepository, orderRepository);
         orderTableSitService = new OrderTableSitService(orderTableRepository);
-        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderTableChangeGuestService, orderTableSitService, orderTableClearService, orderRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableCreateService, orderTableChangeGuestService, orderTableSitService, orderTableClearService);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

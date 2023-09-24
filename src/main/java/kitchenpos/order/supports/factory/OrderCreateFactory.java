@@ -1,6 +1,12 @@
 package kitchenpos.order.supports.factory;
 
-import kitchenpos.order.domain.*;
+import kitchenpos.order.deliveryorders.domain.DeliveryOrderCreateService;
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderStatus;
+import kitchenpos.order.domain.OrderTable;
+import kitchenpos.order.domain.OrderType;
+import kitchenpos.order.eatinorders.domain.EatInOrderCreateService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderCreateService;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

@@ -1,10 +1,6 @@
 package kitchenpos.order.domain;
 
-import kitchenpos.order.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -73,67 +69,6 @@ public class Order {
                     });
         }
     }
-
-    public Order accept(KitchenridersClient kitchenridersClient) {
-        if (getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        BigDecimal sum = getOrderLineItems().sum();
-        if (getType() == OrderType.DELIVERY) {
-            kitchenridersClient.requestDelivery(getId(), sum, getDeliveryAddress());
-        }
-        chageStatus(OrderStatus.ACCEPTED);
-        return this;
-    }
-
-    public Order serve() {
-        if (getStatus() != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        chageStatus(OrderStatus.SERVED);
-        return this;
-    }
-
-    public Order complete(OrderTableClearService orderTableClearService) {
-        if (getType() == OrderType.DELIVERY) {
-            if (getStatus() != OrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
-        }
-        if (getType() == OrderType.EAT_IN || getType() == OrderType.TAKEOUT) {
-            if (getStatus() != OrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
-        }
-        chageStatus(OrderStatus.COMPLETED);
-        if (getType() == OrderType.EAT_IN) {
-            orderTableClearService.clear(this);
-        }
-        return this;
-    }
-
-    public Order startDelivery() {
-        if (getType() != OrderType.DELIVERY) {
-            throw new IllegalStateException();
-        }
-        if (getStatus() != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        chageStatus(OrderStatus.DELIVERING);
-        return this;
-    }
-
-    public Order completeDelivery() {
-        if (getType() != OrderType.DELIVERY) {
-            throw new IllegalStateException();
-        }
-        if (getStatus() != OrderStatus.DELIVERING) {
-            throw new IllegalStateException();
-        }
-        chageStatus(OrderStatus.DELIVERED);
-        return this;
-    }
-
 
     public boolean isCompleted() {
         return this.status == OrderStatus.COMPLETED;

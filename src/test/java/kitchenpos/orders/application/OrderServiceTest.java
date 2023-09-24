@@ -3,16 +3,23 @@ package kitchenpos.orders.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.application.OrderService;
+import kitchenpos.order.deliveryorders.application.DeliveryOrderService;
+import kitchenpos.order.deliveryorders.domain.*;
 import kitchenpos.order.domain.*;
-import kitchenpos.order.eatinorders.domain.OrderTableClearService;
-import kitchenpos.order.eatinorders.domain.OrderTableRepository;
+import kitchenpos.order.eatinorders.application.EatInOrderService;
+import kitchenpos.order.eatinorders.domain.*;
 import kitchenpos.order.supports.factory.OrderCreateFactory;
+import kitchenpos.order.supports.strategy.OrderProcessStrategy;
+import kitchenpos.order.takeoutorders.application.TakeOutOrderService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderAcceptService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderCompleteService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderCreateService;
+import kitchenpos.order.takeoutorders.domain.TakeOutOrderServeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,8 +42,34 @@ class OrderServiceTest {
     private OrderService orderService;
     private OrderLineItemsValidService orderLineItemsValidService;
     private OrderTableClearService orderTableClearService;
-    private ApplicationEventPublisher publisher;
     private OrderCreateFactory orderCreateFactory;
+
+    // EAT_IN order service
+    private EatInOrderService eatInOrderService;
+    private EatInOrderCreateService eatInOrderCreateService;
+    private EatInOrderAcceptService eatInOrderAcceptService;
+    private EatInOrderServeService eatInOrderServeService;
+    private EatInOrderCompleteService eatInOrderCompleteService;
+
+
+    // TAKE_OUT order service
+    private TakeOutOrderService takeOutOrderService;
+    private TakeOutOrderCreateService takeOutOrderCreateService;
+    private TakeOutOrderAcceptService takeOutOrderAcceptService;
+    private TakeOutOrderServeService takeOutOrderServeService;
+    private TakeOutOrderCompleteService takeOutOrderCompleteService;
+
+
+    // DELIVERY order service
+    private DeliveryOrderService deliveryOrderService;
+    private DeliveryOrderCreateService deliveryOrderCreateService;
+    private DeliveryOrderAcceptService deliveryOrderAcceptService;
+    private DeliveryOrderServeService deliveryOrderServeService;
+    private DeliveryOrderCompleteService deliveryOrderCompleteService;
+    private DeliveryOrderStartDeliveryService deliveryOrderStartDeliveryService;
+    private DeliveryOrderCompleteDeliveryService deliveryOrderCompleteDeliveryService;
+
+    private OrderProcessStrategy orderProcessStrategy;
 
     private static List<Arguments> orderLineItems() {
         return Arrays.asList(
@@ -57,15 +90,34 @@ class OrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         kitchenridersClient = new FakeKitchenridersClient();
         orderLineItemsValidService = new OrderLineItemsValidService(menuRepository);
-        orderTableClearService = new OrderTableClearService(orderTableRepository);
-        publisher = new FakeOrderApplicationEventPublisher(orderRepository);
+        orderTableClearService = new OrderTableClearService(orderTableRepository, orderRepository);
 
-        EatInOrderCreateService eatInOrderCreateService = new EatInOrderCreateService(orderLineItemsValidService, orderTableRepository);
-        TakeOutOrderCreateService takeOutOrderCreateService = new TakeOutOrderCreateService(orderLineItemsValidService);
-        DeliveryOrderCreateService deliveryOrderCreateService = new DeliveryOrderCreateService(orderLineItemsValidService);
-        orderCreateFactory = new OrderCreateFactory(eatInOrderCreateService, takeOutOrderCreateService, deliveryOrderCreateService);
 
-        orderService = new OrderService(orderRepository, kitchenridersClient, orderTableClearService, orderCreateFactory);
+        eatInOrderCreateService = new EatInOrderCreateService(orderTableRepository, orderLineItemsValidService);
+        eatInOrderAcceptService = new EatInOrderAcceptService(orderRepository);
+        eatInOrderServeService = new EatInOrderServeService(orderRepository);
+        eatInOrderCompleteService = new EatInOrderCompleteService(orderRepository, new OrderTableClearService(orderTableRepository, orderRepository));
+        eatInOrderService = new EatInOrderService(eatInOrderCreateService, eatInOrderAcceptService, eatInOrderServeService, eatInOrderCompleteService);
+
+
+        takeOutOrderCreateService = new TakeOutOrderCreateService(orderRepository, orderLineItemsValidService);
+        takeOutOrderAcceptService = new TakeOutOrderAcceptService(orderRepository);
+        takeOutOrderServeService = new TakeOutOrderServeService(orderRepository);
+        takeOutOrderCompleteService = new TakeOutOrderCompleteService(orderRepository);
+        takeOutOrderService = new TakeOutOrderService(takeOutOrderCreateService, takeOutOrderAcceptService, takeOutOrderServeService, takeOutOrderCompleteService);
+
+
+        deliveryOrderCreateService = new DeliveryOrderCreateService(orderRepository, orderLineItemsValidService);
+        deliveryOrderAcceptService = new DeliveryOrderAcceptService(orderRepository, kitchenridersClient);
+        deliveryOrderServeService = new DeliveryOrderServeService(orderRepository);
+        deliveryOrderCompleteService = new DeliveryOrderCompleteService(orderRepository);
+        deliveryOrderStartDeliveryService = new DeliveryOrderStartDeliveryService(orderRepository);
+        deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository);
+        deliveryOrderService = new DeliveryOrderService(deliveryOrderCreateService, deliveryOrderAcceptService, deliveryOrderServeService, deliveryOrderStartDeliveryService, deliveryOrderCompleteDeliveryService, deliveryOrderCompleteService);
+
+        orderProcessStrategy = new OrderProcessStrategy(Arrays.asList(eatInOrderService, takeOutOrderService, deliveryOrderService));
+        orderService = new OrderService(orderRepository, orderProcessStrategy);
+
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
