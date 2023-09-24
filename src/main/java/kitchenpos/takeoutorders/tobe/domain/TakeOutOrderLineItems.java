@@ -1,6 +1,7 @@
 package kitchenpos.takeoutorders.tobe.domain;
 
 import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.sharedkernel.OrderLineItems;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Embeddable
-public class OrderLineItems {
+public class TakeOutOrderLineItems extends OrderLineItems {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -19,7 +20,7 @@ public class OrderLineItems {
     )
     private List<TakeOutOrderLineItem> takeOutOrderLineItemList;
 
-    public OrderLineItems(final List<TakeOutOrderLineItem> takeOutOrderLineItemList, final Map<UUID, Menu> menuMap) {
+    public TakeOutOrderLineItems(final List<TakeOutOrderLineItem> takeOutOrderLineItemList, final Map<UUID, Menu> menuMap) {
         takeOutOrderLineItemList.forEach(orderLineItem -> {
             Menu menu = menuMap.get(orderLineItem.getMenuId());
             validateMenu(menu);
@@ -28,19 +29,7 @@ public class OrderLineItems {
         this.takeOutOrderLineItemList = takeOutOrderLineItemList;
     }
 
-    protected OrderLineItems() {
+    protected TakeOutOrderLineItems() {
 
-    }
-
-    private void validateMenu(final Menu menu) {
-        if (menu == null) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateMenuPrice(final TakeOutOrderLineItem takeOutOrderLineItem, final Menu menu) {
-        if (menu.getBigDecimalPrice().compareTo(takeOutOrderLineItem.getPrice()) != 0) {
-            throw new IllegalArgumentException();
-        }
     }
 }

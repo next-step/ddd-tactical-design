@@ -1,26 +1,20 @@
 package kitchenpos.takeoutorders.tobe.domain;
 
-import javax.persistence.*;
+import kitchenpos.sharedkernel.OrderLineItem;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
 
 @Table(name = "take_out_order_line_item")
 @Entity
-public class TakeOutOrderLineItem {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
+public class TakeOutOrderLineItem extends OrderLineItem {
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
-    private UUID menuId;
-
-    @Transient
-    private BigDecimal price;
+    protected long quantity;
 
     protected TakeOutOrderLineItem() {
     }
@@ -32,6 +26,10 @@ public class TakeOutOrderLineItem {
         this.price = price;
     }
 
+    public long getQuantity() {
+        return quantity;
+    }
+
     public static TakeOutOrderLineItem create(final long quantity, final UUID menuId, final long price) {
         return new TakeOutOrderLineItem(
             new Random().nextLong(),
@@ -39,13 +37,5 @@ public class TakeOutOrderLineItem {
             menuId,
             BigDecimal.valueOf(price)
         );
-    }
-
-    public UUID getMenuId() {
-        return menuId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 }

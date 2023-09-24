@@ -16,7 +16,7 @@ import java.util.UUID;
 public class TakeOutOrder extends Order {
 
     @Embedded
-    private OrderLineItems orderLineItems;
+    private TakeOutOrderLineItems takeOutOrderLineItems;
 
     protected TakeOutOrder() {
 
@@ -26,12 +26,12 @@ public class TakeOutOrder extends Order {
         final UUID id,
         final OrderStatus status,
         final LocalDateTime orderDateTime,
-        final OrderLineItems orderLineItems
+        final TakeOutOrderLineItems takeOutOrderLineItems
     ) {
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
+        this.takeOutOrderLineItems = takeOutOrderLineItems;
     }
 
     public static TakeOutOrder create(
@@ -42,7 +42,7 @@ public class TakeOutOrder extends Order {
             UUID.randomUUID(),
             OrderStatus.WAITING,
             LocalDateTime.now(),
-            new OrderLineItems(takeOutOrderLineItemList, createMenuMap(menus))
+            new TakeOutOrderLineItems(takeOutOrderLineItemList, createMenuMap(menus))
         );
     }
 }

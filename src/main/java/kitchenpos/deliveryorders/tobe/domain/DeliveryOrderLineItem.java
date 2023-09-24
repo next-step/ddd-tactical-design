@@ -1,27 +1,22 @@
 package kitchenpos.deliveryorders.tobe.domain;
 
-import javax.persistence.*;
+import kitchenpos.sharedkernel.OrderLineItem;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
 
 @Table(name = "delvery_order_line_item")
 @Entity
-public class DeliveryOrderLineItem {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
+public class DeliveryOrderLineItem extends OrderLineItem {
 
     @Embedded
     @Column(name = "quantity", nullable = false)
     private DeliveryOrderLineItemQuantity quantity;
-
-    @Transient
-    private UUID menuId;
-
-    @Transient
-    private BigDecimal price;
 
     protected DeliveryOrderLineItem() {
     }
@@ -49,14 +44,6 @@ public class DeliveryOrderLineItem {
             menuId,
             BigDecimal.valueOf(price)
         );
-    }
-
-    public UUID getMenuId() {
-        return menuId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
     }
 
     public long getLongQuantity() {

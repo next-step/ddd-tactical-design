@@ -1,6 +1,7 @@
 package kitchenpos.deliveryorders.tobe.domain;
 
 import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.sharedkernel.OrderLineItems;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Embeddable
-public class DeliveryOrderLineItems {
+public class DeliveryOrderLineItems extends OrderLineItems {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -31,18 +32,6 @@ public class DeliveryOrderLineItems {
 
     protected DeliveryOrderLineItems() {
 
-    }
-
-    private void validateMenu(final Menu menu) {
-        if (menu == null) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateMenuPrice(final DeliveryOrderLineItem deliveryOrderLineItem, final Menu menu) {
-        if (menu.getBigDecimalPrice().compareTo(deliveryOrderLineItem.getPrice()) != 0) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public List<DeliveryOrderLineItem> getOrderLineItemList() {
