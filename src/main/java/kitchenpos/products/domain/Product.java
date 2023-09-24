@@ -31,15 +31,19 @@ public class Product {
         this.price = price;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public void changePrice(Price price) {
         this.price = price;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public Price getPrice() {
         return price;
+    }
+
+    public DisplayedName getName() {
+        return name;
     }
 }

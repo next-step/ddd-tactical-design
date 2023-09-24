@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.products.application.dto.ChangePriceRequest;
 import kitchenpos.products.application.dto.CreateProductRequest;
+import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.domain.ChangedProductPriceEvent;
 import kitchenpos.products.domain.Price;
 import kitchenpos.products.domain.Product;
@@ -32,8 +34,8 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final CreateProductRequest request) {
-        return productRepository.save(
+    public ProductResponse create(final CreateProductRequest request) {
+        final Product product = productRepository.save(
                 new Product(
                         UUID.randomUUID(),
                         request.getName(),
@@ -41,19 +43,24 @@ public class ProductService {
                         purgomalumClient
                 )
         );
+
+        return new ProductResponse(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ChangePriceRequest request) {
+    public ProductResponse changePrice(final UUID productId, final ChangePriceRequest request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(new Price(request.getPrice()));
         publisher.publishEvent(new ChangedProductPriceEvent(product.getId(), product.getPrice()));
-        return product;
+        return new ProductResponse(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductResponse::new)
+                .collect(Collectors.toUnmodifiableList());
     }
 }
