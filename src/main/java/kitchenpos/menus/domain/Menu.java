@@ -97,4 +97,10 @@ public class Menu {
             throw new IllegalArgumentException();
         }
     }
+
+    public void validateSamePrice(BigDecimal price) {
+        if (!this.price.hasSamePrice(price)) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.application.dto.request.OrderLineItemCreateRequest;
 import kitchenpos.menus.domain.Menu;
@@ -24,9 +24,7 @@ public class OrderValidator {
         if (!menu.isDisplayed()) {
             throw new IllegalStateException();
         }
-        if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-            throw new IllegalArgumentException();
-        }
+        menu.validateSamePrice(orderLineItemRequest.getPrice());
     }
 
     public static void validateOrderLineItemRequests(List<OrderLineItemCreateRequest> orderLineItemRequests) {

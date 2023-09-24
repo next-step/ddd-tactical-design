@@ -28,8 +28,8 @@ public class MenuPrice {
         return value;
     }
 
-    public int compareTo(BigDecimal price) {
-        return value.compareTo(price);
+    public boolean hasSamePrice(BigDecimal price) {
+        return value.compareTo(price) == 0;
     }
 
     public BigDecimal multiply(long value) {
@@ -38,8 +38,12 @@ public class MenuPrice {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         MenuPrice menuPrice = (MenuPrice) o;
         return Objects.equals(value, menuPrice.value);
     }
