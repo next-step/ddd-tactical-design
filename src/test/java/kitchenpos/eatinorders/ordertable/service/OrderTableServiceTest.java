@@ -16,6 +16,7 @@ import kitchenpos.eatinorders.ordertable.application.OrderTableService;
 import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
 import kitchenpos.eatinorders.order.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.ordertable.application.dto.OrderTableResponse;
 import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.ordertable.domain.OrderTableRepository;
 
@@ -59,7 +60,7 @@ public class OrderTableServiceTest {
 
     @Test
     void 주문테이블_정리_실패__해당_주문테이블에_완료되지_않은_주문이_존재() {
-        OrderTable orderTable = orderTableService.create(OrderTableRequestFixture.builder().buildCreateRequest());
+        OrderTableResponse orderTable = orderTableService.create(OrderTableRequestFixture.builder().buildCreateRequest());
         when(orderRepository.existsByOrderTableAndStatusNot(any(), any())).thenReturn(true);
 
         assertThatThrownBy(() -> orderTableService.clear(orderTable.getId()))
@@ -68,7 +69,8 @@ public class OrderTableServiceTest {
 
     @Test
     void 주문테이블_손님수_변경_실패__손님수가_음수() {
-        OrderTable orderTable = orderTableService.create(OrderTableRequestFixture.builder().buildCreateRequest());
+        OrderTableResponse orderTableResponse = orderTableService.create(OrderTableRequestFixture.builder().buildCreateRequest());
+        OrderTable orderTable = orderTableRepository.findById(orderTableResponse.getId()).orElseThrow();
         orderTable.use();
         orderTableRepository.save(orderTable);
         ChangeNumberOfGuestsRequest request = OrderTableRequestFixture.builder()
@@ -82,7 +84,7 @@ public class OrderTableServiceTest {
     @Test
     void 주문테이블_손님수_변경_실패__주문테이블이_착석상태가_아님() {
         CreateOrderTableRequest createRequest = OrderTableRequestFixture.builder().buildCreateRequest();
-        OrderTable orderTable = orderTableService.create(createRequest);
+        OrderTableResponse orderTable = orderTableService.create(createRequest);
         ChangeNumberOfGuestsRequest request = OrderTableRequestFixture.builder().buildChangeRequest();
 
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), request))

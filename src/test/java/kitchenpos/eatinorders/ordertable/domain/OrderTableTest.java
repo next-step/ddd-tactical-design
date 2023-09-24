@@ -34,7 +34,7 @@ class OrderTableTest {
             orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블");
         });
 
-        assertThat(orderTable.getNumberOfGuests()).isEqualTo(0);
+        assertThat(orderTable.getNumberOfGuests().intValue()).isEqualTo(0);
         assertThat(orderTable.isInUse()).isFalse();
         assertThat(orderTable.isNotInUse()).isTrue();
     }
@@ -52,7 +52,7 @@ class OrderTableTest {
 
         orderTable.changeNumberOfGuests(1);
 
-        assertThat(orderTable.getNumberOfGuests()).isEqualTo(1);
+        assertThat(orderTable.getNumberOfGuests().intValue()).isEqualTo(1);
     }
 
     @Test
@@ -70,6 +70,6 @@ class OrderTableTest {
         orderTable.clean();
 
         assertThat(orderTable.isNotInUse()).isTrue();
-        assertThat(orderTable.getNumberOfGuests()).isEqualTo(0);
+        assertThat(orderTable.getNumberOfGuests().intValue()).isEqualTo(0);
     }
 }
