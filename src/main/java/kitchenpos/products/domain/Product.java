@@ -1,5 +1,8 @@
 package kitchenpos.products.domain;
 
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,38 +15,22 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductName name;
+    private Name name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product() {
     }
 
-    public Product(final UUID id, final ProductName name, final ProductPrice price) {
-        this.id = id;
+    public Product(final Name name, final Price price) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
     }
 
-    public Product(final UUID id, final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
-        this.id = id;
-        this.name = ProductName.of(name, purgomalumClient);
-        this.price = ProductPrice.of(price);
-    }
-
-    public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
-        this.id = UUID.randomUUID();
-        this.name = ProductName.of(name, purgomalumClient);
-        this.price = ProductPrice.of(price);
-    }
-
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,8 +41,7 @@ public class Product {
         return price.getPrice();
     }
 
-    public void changePrice(final BigDecimal price) {
-        this.price = ProductPrice.of(price);
+    public void changePrice(final Price price) {
+        this.price = price;
     }
-
 }
