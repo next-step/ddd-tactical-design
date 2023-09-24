@@ -17,12 +17,12 @@ public class MenuGroup {
     @Embedded
     private MenuGroupName name;
 
+    protected MenuGroup() {
+    }
+
     public MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;
         this.name = name;
-    }
-
-    protected MenuGroup() {
     }
 
     public static MenuGroup from(MenuGroupName name) {

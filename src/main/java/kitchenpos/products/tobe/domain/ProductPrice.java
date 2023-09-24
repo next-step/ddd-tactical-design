@@ -10,13 +10,13 @@ public class ProductPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal productPrice;
 
+    protected ProductPrice() {
+
+    }
+
     public ProductPrice(BigDecimal productPrice) {
         validateProductPrice(productPrice);
         this.productPrice = productPrice;
-    }
-
-    protected ProductPrice() {
-
     }
 
     private void validateProductPrice(BigDecimal productPrice) {

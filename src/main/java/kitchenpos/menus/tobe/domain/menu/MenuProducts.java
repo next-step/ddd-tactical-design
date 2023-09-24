@@ -23,8 +23,7 @@ public class MenuProducts {
     )
     private List<MenuProduct> menuProducts;
 
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+    protected MenuProducts() {
     }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
@@ -38,7 +37,8 @@ public class MenuProducts {
         }
     }
 
-    protected MenuProducts() {
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     public static MenuProducts from(List<MenuProduct> menuProducts, ProductClient productClient) {

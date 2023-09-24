@@ -11,8 +11,7 @@ public class MenuName {
     @Column(name = "name", nullable = false)
     private String menuName;
 
-    public String getMenuName() {
-        return menuName;
+    protected MenuName() {
     }
 
     public MenuName(String menuName, PurgomalumClient purgomalumClient) {
@@ -26,7 +25,8 @@ public class MenuName {
         }
     }
 
-    protected MenuName() {
+    public String getMenuName() {
+        return menuName;
     }
 
     @Override

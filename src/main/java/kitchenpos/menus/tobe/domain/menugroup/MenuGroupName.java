@@ -9,8 +9,7 @@ public class MenuGroupName {
     @Column(name = "name", nullable = false)
     private String menuGroupName;
 
-    public String getMenuGroupName() {
-        return menuGroupName;
+    protected MenuGroupName() {
     }
 
     public MenuGroupName(String menuGroupName) {
@@ -18,13 +17,14 @@ public class MenuGroupName {
         this.menuGroupName = menuGroupName;
     }
 
-    protected MenuGroupName() {
-    }
-
     private void validateMenuGroupName(String menuGroupName) {
         if (Objects.isNull(menuGroupName) || menuGroupName.isEmpty()) {
             throw new IllegalArgumentException("메뉴 그룹명이 존재하지 않습니다.");
         }
+    }
+
+    public String getMenuGroupName() {
+        return menuGroupName;
     }
 
     @Override

@@ -10,16 +10,12 @@ public class MenuPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal menuPrice;
 
-    public BigDecimal getMenuPrice() {
-        return menuPrice;
+    protected MenuPrice() {
     }
 
     public MenuPrice(BigDecimal menuPrice) {
         validateMenuPrice(menuPrice);
         this.menuPrice = menuPrice;
-    }
-
-    protected MenuPrice() {
     }
 
     private void validateMenuPrice(BigDecimal menuPrice) {
@@ -29,6 +25,10 @@ public class MenuPrice {
         if (menuPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("메뉴 가격이 0원 미만일 수 없습니다");
         }
+    }
+
+    public BigDecimal getMenuPrice() {
+        return menuPrice;
     }
 
     public boolean isGreaterThan(BigDecimal menuPrice) {

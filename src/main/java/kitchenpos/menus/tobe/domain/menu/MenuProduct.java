@@ -33,13 +33,13 @@ public class MenuProduct {
     @Transient
     private BigDecimal menuProductPrice;
 
+    protected MenuProduct() {
+    }
+
     public MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal menuProductPrice) {
         this.productId = productId;
         this.quantity = quantity;
         this.menuProductPrice = menuProductPrice;
-    }
-
-    protected MenuProduct() {
     }
 
     public static MenuProduct of(UUID productId, MenuProductQuantity quantity, ProductClient productClient) {

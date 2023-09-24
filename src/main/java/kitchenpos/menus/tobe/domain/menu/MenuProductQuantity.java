@@ -8,6 +8,9 @@ public class MenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private Long menuProductQuantity;
 
+    protected MenuProductQuantity() {
+    }
+
     public MenuProductQuantity(Long menuProductQuantity) {
         validateMenuProductQuantity(menuProductQuantity);
         this.menuProductQuantity = menuProductQuantity;
@@ -19,8 +22,6 @@ public class MenuProductQuantity {
         }
     }
 
-    protected MenuProductQuantity() {
-    }
 
     public Long getMenuProductQuantity() {
         return menuProductQuantity;
