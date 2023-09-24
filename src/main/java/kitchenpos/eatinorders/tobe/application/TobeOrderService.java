@@ -74,9 +74,6 @@ public class TobeOrderService {
     public TobeOrderResponse accept(final UUID orderId) {
         final TobeOrder order = orderRepository.findById(orderId)
                                                .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
         order.accept();
 
         return TobeOrderResponse.from(order);
@@ -86,9 +83,7 @@ public class TobeOrderService {
     public TobeOrderResponse serve(final UUID orderId) {
         final TobeOrder order = orderRepository.findById(orderId)
                                                .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
+
         order.served();
 
         return TobeOrderResponse.from(order);
@@ -98,14 +93,9 @@ public class TobeOrderService {
     public TobeOrderResponse complete(final UUID orderId) {
         final TobeOrder order = orderRepository.findById(orderId)
                                                .orElseThrow(NoSuchElementException::new);
-        final OrderStatus status = order.getStatus();
-
-        if (status != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
         order.completed();
-        TobeOrderTable orderTable = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
 
+        TobeOrderTable orderTable = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
         if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             orderTable.setNumberOfGuests(0);
             orderTable.setOccupied(false);

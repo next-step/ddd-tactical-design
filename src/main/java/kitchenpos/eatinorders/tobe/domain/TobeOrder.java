@@ -66,22 +66,23 @@ public class TobeOrder {
     }
 
     public void accept() {
+        if (status != OrderStatus.WAITING) {
+            throw new IllegalStateException();
+        }
         this.status = OrderStatus.ACCEPTED;
     }
 
     public void served() {
+        if (status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException();
+        }
         this.status = OrderStatus.SERVED;
     }
 
-    public void delivering() {
-        this.status = OrderStatus.DELIVERING;
-    }
-
-    public void delivered() {
-        this.status = OrderStatus.DELIVERED;
-    }
-
     public void completed() {
+        if (status != OrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
         this.status = OrderStatus.COMPLETED;
     }
 }
