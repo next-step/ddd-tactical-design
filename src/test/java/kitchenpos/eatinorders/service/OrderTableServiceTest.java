@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import kitchenpos.eatinorders.application.OrderTableService;
 import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
-import kitchenpos.eatinorders.domain.OrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
 
@@ -27,7 +27,7 @@ public class OrderTableServiceTest {
     private OrderTableService orderTableService;
 
     @Mock
-    private OrderRepository orderRepository;
+    private EatInOrderRepository orderRepository;
 
     @Autowired
     private OrderTableRepository orderTableRepository;
