@@ -1,15 +1,22 @@
 package kitchenpos.menus.ui;
 
-import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
-import kitchenpos.menus.application.dto.CreateMenuRequest;
-import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.Menu;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.vo.MenuVo;
 
 @RequestMapping("/api/menus")
 @RestController
@@ -21,10 +28,10 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Menu> create(@RequestBody final CreateMenuRequest request) {
+    public ResponseEntity<Menu> create(@RequestBody final MenuVo request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{menuId}/price")

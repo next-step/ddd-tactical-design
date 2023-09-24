@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
-import kitchenpos.menus.application.dto.CreateMenuRequest;
-import kitchenpos.menus.application.dto.MenuProductDto;
 import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.vo.MenuProductVo;
+import kitchenpos.menus.domain.vo.MenuVo;
 import kitchenpos.products.domain.Product;
 
 public class MenuRequestFixture {
@@ -14,7 +14,7 @@ public class MenuRequestFixture {
     private Long price;
     private UUID menuGroupId;
     private boolean displayed;
-    private List<MenuProductDto> menuProducts;
+    private List<MenuProductVo> menuProducts;
 
     public MenuRequestFixture() {
         name = "치킨";
@@ -60,13 +60,13 @@ public class MenuRequestFixture {
         return this;
     }
 
-    public MenuRequestFixture menuProducts(List<MenuProductDto> menuProducts) {
+    public MenuRequestFixture menuProducts(List<MenuProductVo> menuProducts) {
         this.menuProducts = menuProducts;
         return this;
     }
 
-    public CreateMenuRequest buildCreateRequest() {
-        return new CreateMenuRequest(name, price, menuGroupId, displayed, menuProducts);
+    public MenuVo buildCreateRequest() {
+        return new MenuVo(name, price, menuGroupId, displayed, menuProducts);
     }
 
     public ChangeMenuPriceRequest buildChangePriceRequest() {

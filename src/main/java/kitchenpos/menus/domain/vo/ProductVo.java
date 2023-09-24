@@ -1,12 +1,12 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.domain.vo;
 
 import java.util.UUID;
 
-public class ProductDto {
+public class ProductVo {
     private final UUID productId;
     private final Long price;
 
-    public ProductDto(UUID productId, Long price) {
+    public ProductVo(UUID productId, Long price) {
         this.productId = productId;
         this.price = price;
     }

@@ -6,24 +6,24 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import kitchenpos.menus.application.ProductApiService;
-import kitchenpos.menus.application.dto.ProductDto;
+import kitchenpos.menus.domain.ProductApiRepository;
+import kitchenpos.menus.domain.vo.ProductVo;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 
 @Service
-public class DefaultProductApiService implements ProductApiService {
+public class DefaultProductApiRepository implements ProductApiRepository {
     private final ProductRepository productRepository;
 
-    public DefaultProductApiService(ProductRepository productRepository) {
+    public DefaultProductApiRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     @Override
-    public List<ProductDto> findAllByIdIn(List<UUID> productIds) {
+    public List<ProductVo> findAllByIdIn(List<UUID> productIds) {
         List<Product> products = productRepository.findAllByIdIn(productIds);
         return products.stream()
-                .map(product -> new ProductDto(
+                .map(product -> new ProductVo(
                                 product.getId(),
                                 product.getPrice().longValue()
                         )

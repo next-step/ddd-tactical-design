@@ -20,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.application.dto.ChangeMenuPriceRequest;
-import kitchenpos.menus.application.dto.CreateMenuRequest;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuPricePolicy;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.PurgomalumClient;
+import kitchenpos.menus.domain.vo.MenuVo;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -84,7 +84,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__가격이_null() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .price(null)
                 .buildCreateRequest();
 
@@ -94,7 +94,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__가격이_음수() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .price(-1L)
                 .buildCreateRequest();
 
@@ -104,7 +104,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__메뉴그룹이_존재하지_않음() {
-        CreateMenuRequest request = MenuRequestFixture.builder()
+        MenuVo request = MenuRequestFixture.builder()
                 .menuGroupId(MenuGroupFixture.builder()
                         .name("존재하지 않는 메뉴그룹")
                         .build().getId())
@@ -116,7 +116,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__메뉴상품이_null() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .menuProducts(null)
                 .buildCreateRequest();
 
@@ -126,7 +126,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__메뉴상품이_0개() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .menuProducts(List.of())
                 .buildCreateRequest();
 
@@ -136,7 +136,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__메뉴_생성_요청의_메뉴상품이_존재하지_않음() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .menuProducts(
                         List.of(MenuProductDtoFixture.builder().build())
                 )
@@ -148,7 +148,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__메뉴상품의_갯수가_음수() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .menuProducts(
                         List.of(
                                 MenuProductDtoFixture.builder(강정치킨)
@@ -164,7 +164,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__구성메뉴상품의_가격_총합이_메뉴_가격_보다_초과일_수_없다() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴)
                 .price(52001L)
                 .menuProducts(
                         List.of(
@@ -183,7 +183,7 @@ public class MenuServiceTest {
 
     @Test
     void 메뉴_생성_실패__이름이_null() {
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴, 강정치킨)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴, 강정치킨)
                 .name(null)
                 .buildCreateRequest();
 
@@ -194,7 +194,7 @@ public class MenuServiceTest {
     @Test
     void 메뉴_생성_실패__이름에_욕설_포함() {
         when(purgomalumClient.containsProfanity("abuse name")).thenReturn(true);
-        CreateMenuRequest request = MenuRequestFixture.builder(추천메뉴, 강정치킨)
+        MenuVo request = MenuRequestFixture.builder(추천메뉴, 강정치킨)
                 .name("abuse name")
                 .buildCreateRequest();
 

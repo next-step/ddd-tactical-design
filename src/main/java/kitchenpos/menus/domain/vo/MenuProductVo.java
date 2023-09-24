@@ -1,15 +1,15 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.domain.vo;
 
 import java.util.UUID;
 
-public class MenuProductDto {
+public class MenuProductVo {
     private UUID productId;
     private int quantity;
 
-    public MenuProductDto() {
+    public MenuProductVo() {
     }
 
-    public MenuProductDto(UUID productId, int quantity) {
+    public MenuProductVo(UUID productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }

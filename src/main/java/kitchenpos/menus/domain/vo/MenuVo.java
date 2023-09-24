@@ -1,19 +1,19 @@
-package kitchenpos.menus.application.dto;
+package kitchenpos.menus.domain.vo;
 
 import java.util.List;
 import java.util.UUID;
 
-public class CreateMenuRequest {
+public class MenuVo {
     private String name;
     private Long price;
     private UUID menuGroupId;
     private boolean displayed;
-    private List<MenuProductDto> menuProducts;
+    private List<MenuProductVo> menuProducts;
 
-    public CreateMenuRequest() {
+    public MenuVo() {
     }
 
-    public CreateMenuRequest(String name, Long price, UUID menuGroupId, boolean displayed, List<MenuProductDto> menuProducts) {
+    public MenuVo(String name, Long price, UUID menuGroupId, boolean displayed, List<MenuProductVo> menuProducts) {
         this.name = name;
         this.price = price;
         this.menuGroupId = menuGroupId;
@@ -37,7 +37,7 @@ public class CreateMenuRequest {
         return displayed;
     }
 
-    public List<MenuProductDto> getMenuProducts() {
+    public List<MenuProductVo> getMenuProducts() {
         return menuProducts;
     }
 }
