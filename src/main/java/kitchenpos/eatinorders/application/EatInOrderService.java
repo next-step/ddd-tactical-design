@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.application.dto.request.OrderCreateRequest;
 import kitchenpos.eatinorders.application.dto.request.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.application.dto.response.OrderResponse;
+import kitchenpos.eatinorders.domain.EatInOrderPolicy;
 import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderRepository;
@@ -26,15 +27,18 @@ public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
     private final OrderTableRepository orderTableRepository;
+    private final EatInOrderPolicy eatInOrderPolicy;
 
     public EatInOrderService(
         final OrderRepository orderRepository,
         final OrderValidator orderValidator,
-        final OrderTableRepository orderTableRepository
+        final OrderTableRepository orderTableRepository,
+        final EatInOrderPolicy eatInOrderPolicy
     ) {
         this.orderRepository = orderRepository;
         this.orderValidator = orderValidator;
         this.orderTableRepository = orderTableRepository;
+        this.eatInOrderPolicy = eatInOrderPolicy;
     }
 
     @Transactional
@@ -83,11 +87,7 @@ public class EatInOrderService {
     @Transactional
     public OrderResponse complete(final UUID orderId) {
         final Order order = findOrder(orderId);
-        order.completed();
-        final OrderTable orderTable = order.getOrderTable();
-        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            orderTable.clear();
-        }
+        order.completed(eatInOrderPolicy);
         return OrderResponse.of(order);
     }
 

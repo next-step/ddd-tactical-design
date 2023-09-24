@@ -96,11 +96,12 @@ public class Order {
         this.status = OrderStatus.SERVED;
     }
 
-    public void completed() {
+    public void completed(EatInOrderPolicy eatInOrderPolicy) {
         if (this.status != OrderStatus.SERVED) {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.COMPLETED;
+        eatInOrderPolicy.follow(this.orderTable);
     }
 
     public LocalDateTime getOrderDateTime() {
