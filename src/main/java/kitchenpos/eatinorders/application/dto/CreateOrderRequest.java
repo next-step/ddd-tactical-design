@@ -3,14 +3,16 @@ package kitchenpos.eatinorders.application.dto;
 import java.util.List;
 import java.util.UUID;
 
+import kitchenpos.eatinorders.domain.order.vo.OrderLineItemVo;
+
 public class CreateOrderRequest {
     private UUID orderTableId;
-    private List<OrderLineItemDto> orderLineItems;
+    private List<OrderLineItemVo> orderLineItems;
 
     public CreateOrderRequest() {
     }
 
-    public CreateOrderRequest(UUID orderTableId, List<OrderLineItemDto> orderLineItems) {
+    public CreateOrderRequest(UUID orderTableId, List<OrderLineItemVo> orderLineItems) {
         this.orderTableId = orderTableId;
         this.orderLineItems = orderLineItems;
     }
@@ -19,7 +21,7 @@ public class CreateOrderRequest {
         return orderTableId;
     }
 
-    public List<OrderLineItemDto> getOrderLineItems() {
+    public List<OrderLineItemVo> getOrderLineItems() {
         return orderLineItems;
     }
 }
