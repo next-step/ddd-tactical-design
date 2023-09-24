@@ -1,12 +1,14 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+
+import kitchenpos.menus.application.NewInMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.NewMenu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.common.domain.DisplayNameChecker;
+import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.NewFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,7 +35,7 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
+        menuRepository = new NewInMemoryMenuRepository();
         displayNameChecker = new FakeDisplayNameChecker();
         menuProductPriceHandler = new MenuProductPriceHandler();
         productService = new ProductService(productRepository, menuRepository, displayNameChecker, menuProductPriceHandler);
@@ -94,9 +96,9 @@ class ProductServiceTest {
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final NewMenu newMenu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), 8_000L);
-        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
+        assertThat(menuRepository.findById(newMenu.getId()).get().isDisplayed()).isFalse();
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")

@@ -1,11 +1,12 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.NewMenu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.common.domain.DisplayNameChecker;
+import kitchenpos.products.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,9 +47,9 @@ public class ProductService {
     public Product changePrice(final UUID id, final Long price) {
         Product product = findProductById(id);
         product.changePrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(id);
-        Map<UUID, Product> productMap = findProductInMenus(menus);
-        menuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
+        final List<NewMenu> newMenus = menuRepository.findAllByProductId(id);
+        Map<UUID, Product> productMap = findProductInMenus(newMenus);
+        menuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, newMenus);
         return product;
     }
 
@@ -57,9 +58,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    private Map<UUID, Product> findProductInMenus(List<Menu> menus) {
+    private Map<UUID, Product> findProductInMenus(List<NewMenu> newMenus) {
         return productRepository.findAllByIdIn(
-                        menus.stream()
+                        newMenus.stream()
                                 .flatMap(menu -> menu.getMenuProductIds().stream())
                                 .collect(Collectors.toList()))
                 .stream()

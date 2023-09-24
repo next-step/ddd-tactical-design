@@ -1,5 +1,6 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.domain;
 
+import kitchenpos.common.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,4 +31,11 @@ class PriceTest {
                 .hasMessage(PRODUCT_PRICE_MORE_ZERO);
     }
 
+    @DisplayName("두 가격을 비교")
+    @Test
+    void compare() {
+        Price left = Price.of(BigDecimal.valueOf(200L));
+        Price right = Price.of(BigDecimal.valueOf(100L));
+        assertThat(left.isGreaterThan(right)).isTrue();
+    }
 }

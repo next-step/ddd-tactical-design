@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayNameChecker;
 
 import java.util.Arrays;
 import java.util.List;

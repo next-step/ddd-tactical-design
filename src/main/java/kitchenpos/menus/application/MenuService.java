@@ -1,133 +1,138 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.*;
-import kitchenpos.products.domain.MenuProductPriceHandler;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.DisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+
+import kitchenpos.common.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+import kitchenpos.menus.application.dto.*;
+import kitchenpos.menus.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static kitchenpos.menus.exception.MenuProductExceptionMessage.NOT_EQUAL_MENU_PRODUCT_SIZE;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final DisplayNameChecker displayNameChecker;
-    private final MenuProductPriceHandler menuProductPriceHandler;
+    private final ProductRepostiory productRepostiory;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final ProductRepository productRepository,
             final DisplayNameChecker displayNameChecker,
-            final MenuProductPriceHandler menuProductPriceHandler
+            final ProductRepostiory productRepostiory
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.displayNameChecker = displayNameChecker;
-        this.menuProductPriceHandler = menuProductPriceHandler;
+        this.productRepostiory = productRepostiory;
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-                .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Product> products = productRepository.findAllByIdIn(
-                menuProductRequests.stream()
-                        .map(MenuProduct::getProductId)
-                        .collect(Collectors.toList())
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                    .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                    product.getPrice()
-                            .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = MenuProduct.of(product.getId(), quantity);
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || displayNameChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+    public MenuInfoResponse create(final MenuCreateRequest request) {
+        final NewMenuGroup newMenuGroup = findById(request.getMenuGroupId());
+        List<UUID> productIds = getProductIds(request.getMenuProducts());
+        List<NewProduct> products = productRepostiory.findAllByIdIn(productIds);
+        validateExistsProduct(productIds, products);
+
+        NewMenu savedMenu = menuRepository.save(
+                NewMenu.create(
+                        UUID.randomUUID(),
+                        newMenuGroup.getId(),
+                        DisplayedName.of(request.getName(), displayNameChecker),
+                        Price.of(request.getPrice()),
+                        MenuProducts.create(createMenuProducts(products, request.getMenuProducts())),
+                        request.isDisplayed()
+                ));
+        return createResponse(savedMenu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(NoSuchElementException::new);
-        Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
-                .stream()
-                .collect(Collectors.toMap(Product::getId, p -> p));
-        BigDecimal sum = menuProductPriceHandler.sumMenuProductPrice(productMap, menu);
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        menu.setPrice(price);
-        return menu;
+    public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
+        final NewMenu newMenu = findMenuById(menuId);
+        newMenu.changePrice(Price.of(request.getPrice()));
+        return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPriceValue());
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(NoSuchElementException::new);
-        Map<UUID, Product> productMap = productRepository.findAllByIdIn(menu.getMenuProductIds())
-                .stream()
-                .collect(Collectors.toMap(Product::getId, p -> p));
-        menuProductPriceHandler.checkPrice(productMap, menu);
-        menu.setDisplayed(true);
-        return menu;
+    public MenuDisplayResponse display(final UUID menuId) {
+        final NewMenu newMenu = findMenuById(menuId);
+        newMenu.displayed();
+        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
-        return menu;
+    public MenuDisplayResponse hide(final UUID menuId) {
+        final NewMenu newMenu = findMenuById(menuId);
+        newMenu.notDisplayed();
+        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuInfoResponse> findAll() {
+        List<NewMenu> savedMenusList = menuRepository.findAll();
+        return savedMenusList.stream()
+                .map(this::createResponse)
+                .collect(Collectors.toList());
     }
+
+    private NewMenuGroup findById(UUID id) {
+        return menuGroupRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    private NewMenu findMenuById(UUID menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    private void validateExistsProduct(List<UUID> productIds, List<NewProduct> productList) {
+        if (productIds.size() != productList.size()) {
+            throw new IllegalArgumentException(NOT_EQUAL_MENU_PRODUCT_SIZE);
+        }
+    }
+
+    private List<UUID> getProductIds(List<MenuProductCreateRequest> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException(NOT_EQUAL_MENU_PRODUCT_SIZE);
+        }
+        return menuProducts.stream()
+                .map(MenuProductCreateRequest::getProductId)
+                .collect(Collectors.toList());
+    }
+
+    private MenuInfoResponse createResponse(NewMenu savedMenu) {
+        return new MenuInfoResponse(
+                savedMenu.getId(),
+                savedMenu.getName(),
+                savedMenu.getPriceValue(),
+                savedMenu.getMenuGroupId(),
+                savedMenu.isDisplayed(),
+                savedMenu.getMenuProductList()
+                        .stream()
+                        .map(m -> new MenuProductInfoResponse(m.getProductId(), m.getQuantity()))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private List<NewMenuProduct> createMenuProducts(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
+        return requests.stream()
+                .map(k -> NewMenuProduct.create(findByProductId(products, k.getProductId()), k.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
+    private NewProduct findByProductId(List<NewProduct> products, UUID productId) {
+        return products.stream()
+                .filter(p -> productId.equals(p.getId()))
+                .findAny()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
 }

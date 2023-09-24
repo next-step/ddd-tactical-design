@@ -4,8 +4,9 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.NewMenuGroup;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -46,12 +47,12 @@ public class Fixtures {
         return menuGroup;
     }
 
-    public static MenuProduct menuProduct() {
-        return MenuProduct.of(new Random().nextLong(), product().getId(), 2L);
+    public static NewMenuGroup tobeMenuGroup(final String name) {
+        return NewMenuGroup.create(UUID.randomUUID(), name);
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return MenuProduct.of(new Random().nextLong(), product.getId(), quantity);
+    public static MenuProduct menuProduct() {
+        return MenuProduct.of(new Random().nextLong(), product().getId(), 2L);
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {

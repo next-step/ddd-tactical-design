@@ -1,49 +1,73 @@
 package kitchenpos.products.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import kitchenpos.common.domain.DisplayNameChecker;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
-//@Table(name = "product")
-//@Entity
+import static kitchenpos.products.exception.ProductExceptionMessage.PRODUCT_PRICE_MORE_ZERO;
+
+@Entity
+@Table(name = "product")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
+    @Embedded
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Price price;
 
-    public Product() {
+    @Embedded
+    @Column(name = "name", nullable = false)
+    private DisplayedName name;
+
+    protected Product() {
+    }
+
+    private Product(UUID id, Price price, DisplayedName name) {
+        this.id = id;
+        this.price = price;
+        this.name = name;
+    }
+
+    public static Product create(UUID id, BigDecimal price, String name, DisplayNameChecker displayNameChecker) {
+        return new Product(id, Price.of(price), DisplayedName.of(name, displayNameChecker));
+    }
+
+    public void changePrice(Long price) {
+        if (price == null || price < 0) {
+            throw new IllegalArgumentException(PRODUCT_PRICE_MORE_ZERO);
+        }
+        this.price = Price.of(BigDecimal.valueOf(price));
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
