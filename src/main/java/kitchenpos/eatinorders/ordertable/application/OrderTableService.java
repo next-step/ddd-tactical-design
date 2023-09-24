@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
 import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
-import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.order.OrderStatus;
+import kitchenpos.eatinorders.order.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.order.domain.OrderStatus;
 import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.ordertable.domain.OrderTableRepository;
 
