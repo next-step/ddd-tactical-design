@@ -1,14 +1,10 @@
-package kitchenpos.menus.infra;
+package kitchenpos.menus.domain;
 
 import java.util.List;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuDisplayPolicy;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.Price;
 import kitchenpos.products.domain.ChangedProductPriceEvent;
 
 @Component
