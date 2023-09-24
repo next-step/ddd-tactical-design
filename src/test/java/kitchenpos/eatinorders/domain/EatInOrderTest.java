@@ -13,7 +13,7 @@ import kitchenpos.eatinorders.domain.order.EatInOrderCompletePolicy;
 import kitchenpos.eatinorders.domain.order.OrderLineItem;
 import kitchenpos.eatinorders.domain.order.OrderLineItems;
 import kitchenpos.eatinorders.domain.order.OrderStatus;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 import kitchenpos.eatinorders.support.InMemoryEatInOrderRepository;
 
 class EatInOrderTest {

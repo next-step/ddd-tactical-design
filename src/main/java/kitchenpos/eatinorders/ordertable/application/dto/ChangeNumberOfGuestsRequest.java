@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application.dto;
+package kitchenpos.eatinorders.ordertable.application.dto;
 
 public class ChangeNumberOfGuestsRequest {
     private int numberOfGuests;

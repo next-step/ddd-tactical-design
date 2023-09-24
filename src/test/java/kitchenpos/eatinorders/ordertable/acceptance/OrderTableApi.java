@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.acceptance;
+package kitchenpos.eatinorders.ordertable.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

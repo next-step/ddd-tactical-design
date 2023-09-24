@@ -1,7 +1,7 @@
-package kitchenpos.eatinorders.service;
+package kitchenpos.eatinorders.ordertable.service;
 
-import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
 
 public class OrderTableRequestFixture {
     private String name;

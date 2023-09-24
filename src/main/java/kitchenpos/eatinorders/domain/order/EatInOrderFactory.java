@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import kitchenpos.eatinorders.domain.order.vo.MenuVo;
 import kitchenpos.eatinorders.domain.order.vo.OrderLineItemVo;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
+import kitchenpos.eatinorders.ordertable.domain.OrderTableRepository;
 import kitchenpos.menus.domain.Price;
 
 @Component

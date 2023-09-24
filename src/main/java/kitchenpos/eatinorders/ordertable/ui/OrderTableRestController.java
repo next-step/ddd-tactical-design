@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui;
+package kitchenpos.eatinorders.ordertable.ui;
 
 import java.net.URI;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kitchenpos.eatinorders.application.OrderTableService;
-import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.ordertable.application.OrderTableService;
+import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 
 @RequestMapping("/api/order-tables")
 @RestController

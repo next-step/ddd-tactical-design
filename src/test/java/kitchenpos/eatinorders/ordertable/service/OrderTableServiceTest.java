@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.service;
+package kitchenpos.eatinorders.ordertable.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,12 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import kitchenpos.eatinorders.application.OrderTableService;
-import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
+import kitchenpos.eatinorders.ordertable.application.OrderTableService;
+import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
 import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
+import kitchenpos.eatinorders.ordertable.domain.OrderTableRepository;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)

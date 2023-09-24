@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
 
 public interface EatInOrderRepository {
     EatInOrder save(EatInOrder eatInOrder);

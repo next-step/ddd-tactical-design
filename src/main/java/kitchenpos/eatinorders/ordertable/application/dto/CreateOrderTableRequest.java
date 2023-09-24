@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application.dto;
+package kitchenpos.eatinorders.ordertable.application.dto;
 
 public class CreateOrderTableRequest {
     private String name;

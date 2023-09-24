@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.ordertable.domain;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.eatinorders.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.ordertable.domain.NumberOfGuests;
 
 class NumberOfGuestsTest {
 

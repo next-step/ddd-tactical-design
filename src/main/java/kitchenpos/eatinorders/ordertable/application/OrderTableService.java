@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.ordertable.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -7,12 +7,12 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kitchenpos.eatinorders.application.dto.ChangeNumberOfGuestsRequest;
-import kitchenpos.eatinorders.application.dto.CreateOrderTableRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.ChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.ordertable.application.dto.CreateOrderTableRequest;
 import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.order.OrderStatus;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.ordertable.domain.OrderTable;
+import kitchenpos.eatinorders.ordertable.domain.OrderTableRepository;
 
 @Service
 public class OrderTableService {

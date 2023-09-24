@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.acceptance;
 
 import static kitchenpos.eatinorders.acceptance.OrderApi.*;
-import static kitchenpos.eatinorders.acceptance.OrderTableApi.*;
+import static kitchenpos.eatinorders.ordertable.acceptance.OrderTableApi.*;
 import static kitchenpos.menus.acceptance.MenuApi.메뉴_생성;
 import static kitchenpos.menus.acceptance.MenuData.강정치킨_2마리;
 import static kitchenpos.menus.acceptance.MenuGroupApi.메뉴그룹_생성;

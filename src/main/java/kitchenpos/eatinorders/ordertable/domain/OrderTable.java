@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain.ordertable;
+package kitchenpos.eatinorders.ordertable.domain;
 
 import java.util.UUID;
 

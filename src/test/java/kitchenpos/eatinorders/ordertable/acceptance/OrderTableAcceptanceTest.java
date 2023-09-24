@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.acceptance;
+package kitchenpos.eatinorders.ordertable.acceptance;
 
-import static kitchenpos.eatinorders.acceptance.OrderTableApi.*;
+import static kitchenpos.eatinorders.ordertable.acceptance.OrderTableApi.*;
 
 import java.util.Map;
 
