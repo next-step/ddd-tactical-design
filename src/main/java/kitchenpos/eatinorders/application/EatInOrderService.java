@@ -3,72 +3,35 @@ package kitchenpos.eatinorders.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kitchenpos.eatinorders.application.dto.CreateOrderRequest;
-import kitchenpos.eatinorders.application.dto.OrderLineItemDto;
 import kitchenpos.eatinorders.domain.order.EatInOrder;
 import kitchenpos.eatinorders.domain.order.EatInOrderCompletePolicy;
+import kitchenpos.eatinorders.domain.order.EatInOrderFactory;
 import kitchenpos.eatinorders.domain.order.EatInOrderRepository;
-import kitchenpos.eatinorders.domain.order.OrderLineItem;
-import kitchenpos.eatinorders.domain.order.OrderLineItems;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.Price;
 
 @Service
 public class EatInOrderService {
     private final EatInOrderRepository orderRepository;
-    private final MenuRepository menuRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final EatInOrderFactory eatInOrderFactory;
     private final EatInOrderCompletePolicy eatInOrderCompletePolicy;
 
     public EatInOrderService(
             final EatInOrderRepository orderRepository,
-            final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository,
+            final EatInOrderFactory eatInOrderFactory,
             final EatInOrderCompletePolicy eatInOrderCompletePolicy) {
         this.orderRepository = orderRepository;
-        this.menuRepository = menuRepository;
-        this.orderTableRepository = orderTableRepository;
+        this.eatInOrderFactory = eatInOrderFactory;
         this.eatInOrderCompletePolicy = eatInOrderCompletePolicy;
     }
 
     @Transactional
     public EatInOrder create(final CreateOrderRequest request) {
-        final List<OrderLineItemDto> orderLineItemRequests = request.getOrderLineItems();
-        List<OrderLineItem> orderLineItems = orderLineItemRequests.stream()
-                .map(it -> createOrderLineItem(it))
-                .collect(Collectors.toList());
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-                orderLineItems.stream()
-                        .map(OrderLineItem::getMenuId)
-                        .collect(Collectors.toList())
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), new OrderLineItems(orderLineItems), orderTable);
+        final EatInOrder eatInOrder = eatInOrderFactory.create(request.getOrderTableId(), request.getOrderLineItems());
         return orderRepository.save(eatInOrder);
-    }
-
-    private OrderLineItem createOrderLineItem(OrderLineItemDto it) {
-        final Menu menu = menuRepository.findById(it.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
-        if (!menu.isDisplayed()) {
-            throw new IllegalStateException();
-        }
-        if (menu.getPrice().isNotSame(new Price(it.getPrice()))) {
-            throw new IllegalArgumentException();
-        }
-        return new OrderLineItem(it.getMenuId(), it.getQuantity(), it.getPrice());
     }
 
     @Transactional
