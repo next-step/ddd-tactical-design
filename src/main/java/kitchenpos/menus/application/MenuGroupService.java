@@ -2,7 +2,7 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.application.dto.MenuGroupCreateRequest;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupDisplayedName;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +20,8 @@ public class MenuGroupService {
 
     @Transactional
     public MenuGroup create(final MenuGroupCreateRequest request) {
-        final MenuGroupDisplayedName displayedName = new MenuGroupDisplayedName(request.getName());
-        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), displayedName);
+        final MenuGroupName name = new MenuGroupName(request.getName());
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), name);
         return menuGroupRepository.save(menuGroup);
     }
 

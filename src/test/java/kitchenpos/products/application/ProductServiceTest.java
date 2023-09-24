@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
-    private ProductDisplayedNamePolicy productDisplayedNamePolicy;
+    private ProductNameProfanities productNameProfanities;
+    private ProductNamePolicy productNamePolicy;
     private ProductService productService;
     private ProductEventPublisher eventPublisher;
 
@@ -34,13 +34,13 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productDisplayedNameProfanities = new FakeProductDisplayedNameProfanities();
-        productDisplayedNamePolicy = new ProductDisplayedNamePolicy(productDisplayedNameProfanities);
+        productNameProfanities = new FakeProductNameProfanities();
+        productNamePolicy = new ProductNamePolicy(productNameProfanities);
         eventPublisher = new FakeProductEventPublisher(productRepository, menuRepository);
-        productService = new ProductService(productRepository, productDisplayedNamePolicy, eventPublisher);
+        productService = new ProductService(productRepository, productNamePolicy, eventPublisher);
     }
 
-    @DisplayName("상품을 등록할 수 있다.")
+    @DisplayName("Product를 등록할 수 있다.")
     @Test
     void create() {
         final ProductCreateRequest expected = createProductRequest("후라이드", 16_000L);
@@ -48,12 +48,12 @@ class ProductServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getDisplayedName()).isEqualTo(ProductDisplayedName.from(expected.getName(), productDisplayedNamePolicy)),
-                () -> assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()))
+                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName(), productNamePolicy),
+                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice())
         );
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("Product의 Price가 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -63,26 +63,26 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("Product의 Name이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
-    void createWithInvalidDisplayedName(final String name) {
+    void createWithInvalidName(final String name) {
         final ProductCreateRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @DisplayName("Product의 Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(expected.getPrice()));
+        assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
+    @DisplayName("Product의 Price가 올바르지 않으면 변경할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest
@@ -93,7 +93,7 @@ class ProductServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
+    @DisplayName("Product의 Price가 변경될 때 연관된 Menu의 Price가 MenuProduct의 Total Amount보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
@@ -102,7 +102,7 @@ class ProductServiceTest {
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
-    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @DisplayName("Product의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));

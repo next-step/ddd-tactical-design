@@ -29,7 +29,7 @@ public class ProductEventListener {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
         for (final Menu menu : menus) {
-            menu.changeMenuProductPrice(product.getId(), product.getPrice().getValue());
+            menu.changeMenuProductPrice(product.getId(), product.getPriceValue());
         }
         menuRepository.saveAll(menus);
     }

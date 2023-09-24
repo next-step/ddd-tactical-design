@@ -13,29 +13,28 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductDisplayedNamePolicy productDisplayedNamePolicy;
+    private final ProductNamePolicy productNamePolicy;
     private final ProductEventPublisher productEventPublisher;
 
-    public ProductService(ProductRepository productRepository, ProductDisplayedNamePolicy productDisplayedNamePolicy, ProductEventPublisher productEventPublisher) {
+    public ProductService(ProductRepository productRepository, ProductNamePolicy productNamePolicy, ProductEventPublisher productEventPublisher) {
 
         this.productRepository = productRepository;
-        this.productDisplayedNamePolicy = productDisplayedNamePolicy;
+        this.productNamePolicy = productNamePolicy;
         this.productEventPublisher = productEventPublisher;
     }
 
     @Transactional
     public Product create(final ProductCreateRequest request) {
-        Product product = request.toProduct(productDisplayedNamePolicy);
+        Product product = request.toProduct(productNamePolicy);
         Product productWithId = product.giveId();
         return productRepository.save(productWithId);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
-        final ProductPrice changePrice = ProductPrice.from(request.getPrice());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(changePrice);
+        product.changePrice(request.getPrice());
         productEventPublisher.changePrice(new ProductPriceChangeEvent(product.getId()));
         return product;
     }

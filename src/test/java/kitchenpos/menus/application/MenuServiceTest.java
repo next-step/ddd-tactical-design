@@ -11,8 +11,8 @@ import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.application.dto.ProductChangePriceRequest;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductDisplayedNamePolicy;
-import kitchenpos.products.tobe.domain.ProductDisplayedNameProfanities;
+import kitchenpos.products.tobe.domain.ProductNamePolicy;
+import kitchenpos.products.tobe.domain.ProductNameProfanities;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +35,9 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
-    private MenuDisplayedNameProfanities menuDisplayedNameProfanities;
-    private ProductDisplayedNameProfanities productDisplayedNameProfanities;
-    private MenuDisplayedNamePolicy menuDisplayedNamePolicy;
+    private MenuNameProfanities menuNameProfanities;
+    private ProductNameProfanities productNameProfanities;
+    private MenuNamePolicy menuNamePolicy;
     private MenuService menuService;
     private ProductClient productClient;
     private ProductService productService;
@@ -49,16 +49,16 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        menuDisplayedNameProfanities = new FakeMenuDisplayedNameProfanities();
+        menuNameProfanities = new FakeMenuNameProfanities();
         productClient = new ProductClientImpl(productRepository);
-        menuDisplayedNamePolicy = new MenuDisplayedNamePolicy(menuDisplayedNameProfanities);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, menuDisplayedNamePolicy);
-        productService = new ProductService(productRepository, new ProductDisplayedNamePolicy(productDisplayedNameProfanities), new FakeProductEventPublisher(productRepository, menuRepository));
+        menuNamePolicy = new MenuNamePolicy(menuNameProfanities);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, menuNamePolicy);
+        productService = new ProductService(productRepository, new ProductNamePolicy(productNameProfanities), new FakeProductEventPublisher(productRepository, menuRepository));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
 
-    @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
+    @DisplayName("1개 이상의 등록된 Product로 Menu를 등록할 수 있다.")
     @Test
     void create() {
         final MenuCreateRequest expected = createMenuRequest(
@@ -68,15 +68,15 @@ class MenuServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getDisplayedName()).isEqualTo(MenuDisplayedName.from(expected.getName(), menuDisplayedNamePolicy)),
-                () -> assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice())),
+                () -> assertThat(actual.getNameValue()).isEqualTo(expected.getName(), menuNamePolicy),
+                () -> assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice()),
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                 () -> assertThat(actual.getMenuProducts().getMenuProducts()).hasSize(1)
         );
     }
 
-    @DisplayName("상품이 없으면 등록할 수 없다.")
+    @DisplayName("MenuProduct가 비어있거나 Product가 존재하지 않으면 Menu를등록할 수 없다.")
     @MethodSource("menuProducts")
     @ParameterizedTest
     void create(final List<MenuProductCreateRequest> menuProducts) {
@@ -93,18 +93,18 @@ class MenuServiceTest {
         );
     }
 
-    @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
+    @DisplayName("Menu에 MenuProduct의 Quantity는 1개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
         final MenuCreateRequest expected = createMenuRequest(
-                "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)
+                "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 0)
         );
         assertThatThrownBy(() -> menuService.create(expected))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = "-1000")
+    @DisplayName("Menu의 Price가 음수라면 등록할 수 없다.")
+    @ValueSource(strings = "-1")
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
@@ -115,7 +115,7 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @DisplayName("MenuProduct의 Total Amount는 Menu의 Price보다 크거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
         final MenuCreateRequest expected = createMenuRequest(
@@ -125,7 +125,7 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
+    @DisplayName("Menu는 특정 MenuGroup에 속해야 한다.")
     @NullSource
     @ParameterizedTest
     void create(final UUID menuGroupId) {
@@ -136,7 +136,7 @@ class MenuServiceTest {
                 .isInstanceOf(NoSuchElementException.class);
     }
 
-    @DisplayName("메뉴의 이름이 올바르지 않으면 등록할 수 없다.")
+    @DisplayName("Menu의 Name에 Profanity가 포함되면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @NullSource
     @ParameterizedTest
@@ -148,17 +148,17 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격을 변경할 수 있다.")
+    @DisplayName("Menu의 Price를 변경할 수 있다.")
     @Test
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
         final MenuPriceChangeRequest expected = changePriceRequest(16_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.getPrice()).isEqualTo(MenuPrice.from(expected.getPrice()));
+        assertThat(actual.getPriceValue()).isEqualTo(expected.getPrice());
     }
 
-    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(strings = "-1000")
+    @DisplayName("Menu의 Price는 0미만의 음수로 변경할 수 없다.")
+    @ValueSource(strings = "-1")
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
@@ -168,7 +168,7 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @DisplayName("Menu의 Price 변경 시 MenuProduct의 Total Amount는 Menu의 Price보다 크거나 같아야 한다.")
     @Test
     void changePriceToExpensive() {
         final UUID menuId = menuRepository.save(menu(19_000L, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
@@ -177,7 +177,7 @@ class MenuServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴를 노출할 수 있다.")
+    @DisplayName("Menu를 Display할 수 있다.")
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
@@ -185,16 +185,16 @@ class MenuServiceTest {
         assertThat(actual.isDisplayed()).isTrue();
     }
 
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @DisplayName("Menu의 Price가 MenuProduct의 Total Amount보다 비싼 경우 Display할 수 없다.")
     @Test
     void displayExpensiveMenu() {
         final UUID menuId = menuRepository.save(menu(32_000L, false, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
-        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getDisplayedName().getValue(), BigDecimal.valueOf(15_000L)));
+        productService.changePrice(product.getId(), new ProductChangePriceRequest(product.getId(), product.getNameValue(), BigDecimal.valueOf(15_000L)));
         assertThatThrownBy(() -> menuService.display(menuId))
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("메뉴를 숨길 수 있다.")
+    @DisplayName("Menu를 Hide할 수 있다.")
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, productRepository, menuProductMaterial(product.getId(), 2L))).getId();
@@ -202,7 +202,7 @@ class MenuServiceTest {
         assertThat(actual.isDisplayed()).isFalse();
     }
 
-    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    @DisplayName("Menu의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, productRepository, menuProductMaterial(product.getId(), 2L)));
