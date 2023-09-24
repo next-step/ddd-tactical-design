@@ -20,6 +20,10 @@ public class Quantity {
         this.quantity = quantity;
     }
 
+    public long longValue() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,9 +35,5 @@ public class Quantity {
     @Override
     public int hashCode() {
         return Objects.hash(quantity);
-    }
-
-    public long longValue() {
-        return quantity;
     }
 }

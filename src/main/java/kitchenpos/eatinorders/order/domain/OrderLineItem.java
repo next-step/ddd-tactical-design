@@ -15,7 +15,7 @@ public class OrderLineItem {
     private UUID menuId;
 
     @Column(name = "quantity", nullable = false)
-    private long quantity;
+    private Quantity quantity;
 
     @Column(name = "price", nullable = false)
     private Price price;
@@ -31,7 +31,7 @@ public class OrderLineItem {
             throw new IllegalArgumentException(String.format("수량은 0개 이상이어야 합니다. 현재 값: %s", quantity));
         }
         this.menuId = menuId;
-        this.quantity = quantity;
+        this.quantity = new Quantity(quantity);
         this.price = new Price(price);
     }
 
@@ -39,7 +39,7 @@ public class OrderLineItem {
         return menuId;
     }
 
-    public long getQuantity() {
+    public Quantity getQuantity() {
         return quantity;
     }
 

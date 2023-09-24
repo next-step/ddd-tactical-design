@@ -27,7 +27,7 @@ public class Price {
     }
 
     public Price multiplyQuantity(Quantity quantity) {
-        return new Price(price.longValue() * quantity.intValue());
+        return new Price(price.longValue() * quantity.longValue());
     }
 
     public Price sum(Price other) {
