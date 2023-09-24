@@ -20,6 +20,6 @@ class OrderLineItemsTest {
                 .hasMessage("주문 항목은 1개 이상이어야 합니다. 현재 값: null");
         assertThatThrownBy(() -> new OrderLineItems(List.of()))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("주문 항목은 1개 이상이어야 합니다. 현재 값: null");
+                .hasMessage("주문 항목은 1개 이상이어야 합니다. 현재 값: 0");
     }
 }
