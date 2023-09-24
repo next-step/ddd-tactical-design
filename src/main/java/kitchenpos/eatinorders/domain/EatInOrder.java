@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "eat_in_orders")
+@Table(name = "orders")
 @Entity
 public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
