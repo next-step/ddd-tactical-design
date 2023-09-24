@@ -1,7 +1,6 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.menus.shared.dto.MenuDto;
-import kitchenpos.menus.shared.dto.MenuProductDto;
 import kitchenpos.menus.shared.dto.request.MenuCreateRequest;
 import kitchenpos.menus.shared.dto.request.MenuPriceChangeRequest;
 import kitchenpos.menus.tobe.domain.menu.Menu;
@@ -90,7 +89,7 @@ public class MenuService {
     public MenuDto hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.notDisplay();
+        menu.hide();
         return ConvertUtil.convert(menu, MenuDto.class);
     }
 

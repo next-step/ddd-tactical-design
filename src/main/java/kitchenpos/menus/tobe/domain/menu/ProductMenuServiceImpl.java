@@ -35,7 +35,7 @@ public class ProductMenuServiceImpl implements ProductMenuService {
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.notDisplay();
+                menu.hide();
             }
         }
     }

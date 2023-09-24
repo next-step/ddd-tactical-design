@@ -89,7 +89,7 @@ public class Menu {
         this.displayed = true;
     }
 
-    public void notDisplay() {
+    public void hide() {
         this.displayed = false;
     }
 }
