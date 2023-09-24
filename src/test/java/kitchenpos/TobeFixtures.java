@@ -1,20 +1,26 @@
 package kitchenpos;
 
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.application.TobeOrderTable;
+import kitchenpos.eatinorders.tobe.domain.TobeOrder;
+import kitchenpos.eatinorders.tobe.domain.TobeOrderLineItem;
 import kitchenpos.menus.tobe.application.FakeMenuPurgomalumChecker;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
+import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct;
+import kitchenpos.menus.tobe.domain.menu.TobeMenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroupName;
-import kitchenpos.menus.tobe.domain.menu.TobeMenuProductQuantity;
-import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct;
 import kitchenpos.products.application.FakePurgomalumChecker;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.TobeProduct;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -61,5 +67,39 @@ public class TobeFixtures {
 
     public static TobeProduct product(final String name, final long price) {
         return new TobeProduct(UUID.randomUUID(), new ProductName(name, new FakePurgomalumChecker()), new ProductPrice(BigDecimal.valueOf(price)));
+    }
+
+//    public static TobeOrder order(final OrderStatus status) {
+//        final TobeOrder order = new TobeOrder(UUID.randomUUID(), status, LocalDateTime.of(2020, 1, 1, 12, 0),
+//
+//                                              );
+//        order.setId(UUID.randomUUID());
+//        order.setType(OrderType.DELIVERY);
+//        order.setStatus(status);
+//        order.setOrderDateTime();
+//        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+//        return order;
+//    }
+
+    public static TobeOrder order(final OrderStatus status) {
+        return new TobeOrder(UUID.randomUUID(), status, LocalDateTime.of(2020, 1, 1, 12, 0), UUID.randomUUID(),
+                             List.of(orderLineItem()));
+    }
+
+    public static TobeOrder order(final OrderStatus status, final TobeOrderTable orderTable) {
+        return new TobeOrder(UUID.randomUUID(), status, LocalDateTime.of(2020, 1, 1, 12, 0), orderTable.getId(),
+                             List.of(orderLineItem()));
+    }
+
+    public static TobeOrderLineItem orderLineItem() {
+        return new TobeOrderLineItem(new Random().nextLong(), menu().getId(), BigDecimal.valueOf(16_000));
+    }
+
+//    public static TobeOrderLineItem orderTable() {
+//        return orderTable(false, 0);
+//    }
+
+    public static TobeOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+        return new TobeOrderTable(UUID.randomUUID(), "1번", numberOfGuests, occupied);
     }
 }
