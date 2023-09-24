@@ -66,31 +66,11 @@ public class OrderTable {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public int getNumberOfGuests() {
-        return numberOfGuests.intValue();
-    }
-
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
-    }
-
-    public boolean isOccupied() {
-        return occupied;
-    }
-
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
+    public NumberOfGuests getNumberOfGuests() {
+        return numberOfGuests;
     }
 }
