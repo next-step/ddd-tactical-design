@@ -11,13 +11,13 @@ public class ProductName {
     @Column(name = "name", nullable = false)
     private String productName;
 
+    protected ProductName() {
+
+    }
+
     public ProductName(String productName, PurgomalumClient purgomalumClient) {
         validateProductName(productName, purgomalumClient);
         this.productName = productName;
-    }
-
-    protected ProductName() {
-
     }
 
     public String getProductName() {

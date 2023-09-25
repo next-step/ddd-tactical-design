@@ -1,9 +1,9 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.ProductMenuServiceImpl;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.ProductMenuServiceImpl;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.shared.dto.request.ProductChangePriceRequest;
 import kitchenpos.products.shared.dto.request.ProductCreateRequest;
 import kitchenpos.products.shared.dto.response.ProductDto;
@@ -40,8 +40,8 @@ class ProductServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productMenuService = new ProductMenuServiceImpl(menuRepository);
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient, productMenuService);
+        productMenuService = new ProductMenuServiceImpl(menuRepository, productRepository);
+        productService = new ProductService(productRepository, purgomalumClient, productMenuService);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

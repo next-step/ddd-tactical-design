@@ -24,13 +24,13 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
+    protected Product() {
+    }
+
     public Product(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    protected Product() {
     }
 
     public static Product of(ProductName productName, ProductPrice productPrice) {
