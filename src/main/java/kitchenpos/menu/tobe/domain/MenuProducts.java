@@ -27,7 +27,7 @@ public class MenuProducts {
 
     public MenuProducts(List<MenuProduct> value) {
         if (Objects.isNull(value) || value.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("유효하지 않은 값으로 메뉴항목 컬렉션을 생성할 수 없습니다.");
         }
 
         this.value = new ArrayList<>(value);
