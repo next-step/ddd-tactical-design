@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kitchenpos.common.domain.Price;
@@ -22,30 +22,30 @@ public class MenuProducts {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
-    private List<NewMenuProduct> newMenuProducts = new ArrayList<>();
+    private List<MenuProduct> menuProducts = new ArrayList<>();
 
     public MenuProducts() {
     }
 
-    public MenuProducts(List<NewMenuProduct> newMenuProducts) {
-        if (newMenuProducts == null || newMenuProducts.isEmpty()) {
+    public MenuProducts(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_MENU_PRODUCT);
         }
-        this.newMenuProducts = newMenuProducts;
+        this.menuProducts = menuProducts;
     }
 
 
-    public static MenuProducts of(List<NewMenuProduct> newMenuProducts) {
-        return new MenuProducts(newMenuProducts);
+    public static MenuProducts of(List<MenuProduct> menuProducts) {
+        return new MenuProducts(menuProducts);
     }
 
-    public static MenuProducts create(List<NewMenuProduct> menuProducts) {
+    public static MenuProducts create(List<MenuProduct> menuProducts) {
         return new MenuProducts(menuProducts);
     }
 
     public void validateMenuPrice(Price targetMenuPrice) {
-        Price sumOfmenuProductPrice = newMenuProducts.stream()
-                .map(NewMenuProduct::calculateTotalPrice)
+        Price sumOfmenuProductPrice = menuProducts.stream()
+                .map(MenuProduct::calculateTotalPrice)
                 .reduce(Price.ZERO, Price::plus);
 
         if (targetMenuPrice.isGreaterThan(sumOfmenuProductPrice)) {
@@ -54,14 +54,14 @@ public class MenuProducts {
     }
 
     @JsonIgnore
-    public List<NewMenuProduct> getMenuProducts() {
-        return newMenuProducts;
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts;
     }
 
     @JsonIgnore
     public List<UUID> getMenuProductIds() {
-        return newMenuProducts.stream()
-                .map(NewMenuProduct::getProductId)
+        return menuProducts.stream()
+                .map(MenuProduct::getProductId)
                 .collect(Collectors.toList());
     }
 
@@ -70,12 +70,12 @@ public class MenuProducts {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MenuProducts that = (MenuProducts) o;
-        return Objects.equals(newMenuProducts, that.newMenuProducts);
+        return Objects.equals(menuProducts, that.menuProducts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(newMenuProducts);
+        return Objects.hash(menuProducts);
     }
 
 }

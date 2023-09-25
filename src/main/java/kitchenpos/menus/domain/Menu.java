@@ -1,10 +1,14 @@
 package kitchenpos.menus.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kitchenpos.common.domain.DisplayedName;
+import kitchenpos.common.domain.Price;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Table(name = "menu")
 @Entity
@@ -13,98 +17,97 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private DisplayedName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    @Column(name = "menu_group_id", nullable = false, columnDefinition = "binary(16)")
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
 
     public Menu() {
     }
 
+    private Menu(UUID id, DisplayedName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        menuProducts.validateMenuPrice(price);
+
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroupId = menuGroupId;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public static Menu create(UUID menuId, UUID menuGroupId, DisplayedName name, Price price, MenuProducts menuProducts, boolean displayed) {
+        return new Menu(menuId, name, price, menuGroupId, displayed, menuProducts);
+    }
+
+    public void displayed() {
+        menuProducts.validateMenuPrice(price);
+        this.displayed = true;
+    }
+
+    public void notDisplayed() {
+        this.displayed = false;
+    }
+
+    public void changePrice(Price price) {
+        menuProducts.validateMenuPrice(price);
+        this.price = price;
+    }
+
+    @JsonIgnore
     public List<UUID> getMenuProductIds() {
-        return menuProducts.stream()
-                .map(MenuProduct::getProductId)
-                .collect(Collectors.toList());
+        return menuProducts.getMenuProductIds();
+    }
+
+    public BigDecimal getPriceValue() {
+        return price.getPrice();
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public List<MenuProduct> getMenuProductList() {
+        return menuProducts.getMenuProducts();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+        return name.getName();
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    public boolean isDisplayed() {
+        return displayed;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

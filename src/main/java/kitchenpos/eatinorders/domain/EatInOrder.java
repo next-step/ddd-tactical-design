@@ -1,7 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain;
-
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
+package kitchenpos.eatinorders.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

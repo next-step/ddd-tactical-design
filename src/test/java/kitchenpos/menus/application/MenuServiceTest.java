@@ -2,12 +2,11 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.menus.application.dto.*;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
-import kitchenpos.menus.tobe.domain.NewProduct;
+import kitchenpos.menus.domain.NewProduct;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

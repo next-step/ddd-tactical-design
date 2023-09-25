@@ -5,7 +5,7 @@ import kitchenpos.common.domain.DisplayNameChecker;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
 import kitchenpos.menus.application.dto.*;
-import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,15 +37,15 @@ public class MenuService {
 
     @Transactional
     public MenuInfoResponse create(final MenuCreateRequest request) {
-        final NewMenuGroup newMenuGroup = findById(request.getMenuGroupId());
+        final MenuGroup menuGroup = findById(request.getMenuGroupId());
         List<UUID> productIds = getProductIds(request.getMenuProducts());
         List<NewProduct> products = productRepostiory.findAllByIdIn(productIds);
         validateExistsProduct(productIds, products);
 
-        NewMenu savedMenu = menuRepository.save(
-                NewMenu.create(
+        Menu savedMenu = menuRepository.save(
+                Menu.create(
                         UUID.randomUUID(),
-                        newMenuGroup.getId(),
+                        menuGroup.getId(),
                         DisplayedName.of(request.getName(), displayNameChecker),
                         Price.of(request.getPrice()),
                         MenuProducts.create(createMenuProducts(products, request.getMenuProducts())),
@@ -56,39 +56,39 @@ public class MenuService {
 
     @Transactional
     public MenuChangePriceResponse changePrice(final UUID menuId, MenuChangePriceRequest request) {
-        final NewMenu newMenu = findMenuById(menuId);
-        newMenu.changePrice(Price.of(request.getPrice()));
-        return new MenuChangePriceResponse(newMenu.getId(), newMenu.getPriceValue());
+        final Menu menu = findMenuById(menuId);
+        menu.changePrice(Price.of(request.getPrice()));
+        return new MenuChangePriceResponse(menu.getId(), menu.getPriceValue());
     }
 
     @Transactional
     public MenuDisplayResponse display(final UUID menuId) {
-        final NewMenu newMenu = findMenuById(menuId);
-        newMenu.displayed();
-        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
+        final Menu menu = findMenuById(menuId);
+        menu.displayed();
+        return new MenuDisplayResponse(menu.getId(), menu.isDisplayed());
     }
 
     @Transactional
     public MenuDisplayResponse hide(final UUID menuId) {
-        final NewMenu newMenu = findMenuById(menuId);
-        newMenu.notDisplayed();
-        return new MenuDisplayResponse(newMenu.getId(), newMenu.isDisplayed());
+        final Menu menu = findMenuById(menuId);
+        menu.notDisplayed();
+        return new MenuDisplayResponse(menu.getId(), menu.isDisplayed());
     }
 
     @Transactional(readOnly = true)
     public List<MenuInfoResponse> findAll() {
-        List<NewMenu> savedMenusList = menuRepository.findAll();
+        List<Menu> savedMenusList = menuRepository.findAll();
         return savedMenusList.stream()
                 .map(this::createResponse)
                 .collect(Collectors.toList());
     }
 
-    private NewMenuGroup findById(UUID id) {
+    private MenuGroup findById(UUID id) {
         return menuGroupRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private NewMenu findMenuById(UUID menuId) {
+    private Menu findMenuById(UUID menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
     }
@@ -108,7 +108,7 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
-    private MenuInfoResponse createResponse(NewMenu savedMenu) {
+    private MenuInfoResponse createResponse(Menu savedMenu) {
         return new MenuInfoResponse(
                 savedMenu.getId(),
                 savedMenu.getName(),
@@ -122,9 +122,9 @@ public class MenuService {
         );
     }
 
-    private List<NewMenuProduct> createMenuProducts(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
+    private List<MenuProduct> createMenuProducts(List<NewProduct> products, List<MenuProductCreateRequest> requests) {
         return requests.stream()
-                .map(k -> NewMenuProduct.create(findByProductId(products, k.getProductId()), k.getQuantity()))
+                .map(k -> MenuProduct.create(findByProductId(products, k.getProductId()), k.getQuantity()))
                 .collect(Collectors.toList());
     }
 

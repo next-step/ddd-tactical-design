@@ -4,7 +4,6 @@ import kitchenpos.eatinorders.application.OrderService;
 import kitchenpos.eatinorders.application.dto.EatInOrderRequest;
 import kitchenpos.eatinorders.application.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.application.dto.OrderStatusResponse;
-import kitchenpos.eatinorders.domain.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import kitchenpos.NewFixtures;
+import kitchenpos.eatinorders.domain.EatInOrderLineItem;
+import kitchenpos.eatinorders.domain.EatInOrderLineItems;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

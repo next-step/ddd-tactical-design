@@ -1,7 +1,7 @@
 package kitchenpos.menus.infra;
 
-import kitchenpos.menus.tobe.domain.NewProduct;
-import kitchenpos.menus.tobe.domain.ProductRepostiory;
+import kitchenpos.menus.domain.NewProduct;
+import kitchenpos.menus.domain.ProductRepostiory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

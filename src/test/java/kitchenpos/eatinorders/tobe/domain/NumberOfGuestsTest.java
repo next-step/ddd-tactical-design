@@ -1,15 +1,14 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.domain.NumberOfGuests;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static kitchenpos.eatinorders.exception.OrderTableExceptionMessage.NUMBER_GUESTS_NEGATIVE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("고객수 테스트")

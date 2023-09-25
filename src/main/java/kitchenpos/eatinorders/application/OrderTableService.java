@@ -1,8 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.application.dto.*;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.*;
+import kitchenpos.eatinorders.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

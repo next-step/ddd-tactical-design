@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.domain;
 
 import javax.persistence.*;
 import java.util.Objects;

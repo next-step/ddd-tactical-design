@@ -1,6 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 
+import kitchenpos.eatinorders.domain.EatInOrder;
+import kitchenpos.eatinorders.domain.EatInOrderRepository;
+import kitchenpos.eatinorders.domain.EatInOrderTable;
 import kitchenpos.eatinorders.domain.OrderStatus;
 
 import java.util.*;

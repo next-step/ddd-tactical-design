@@ -1,7 +1,7 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.tobe.domain.NewMenu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
@@ -47,9 +47,9 @@ public class ProductService {
     public Product changePrice(final UUID id, final Long price) {
         Product product = findProductById(id);
         product.changePrice(price);
-        final List<NewMenu> newMenus = menuRepository.findAllByProductId(id);
-        Map<UUID, Product> productMap = findProductInMenus(newMenus);
-        menuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, newMenus);
+        final List<Menu> menus = menuRepository.findAllByProductId(id);
+        Map<UUID, Product> productMap = findProductInMenus(menus);
+        menuProductPriceHandler.hideMenuDisplayMenuPriceGreaterThanSum(productMap, menus);
         return product;
     }
 
@@ -58,9 +58,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    private Map<UUID, Product> findProductInMenus(List<NewMenu> newMenus) {
+    private Map<UUID, Product> findProductInMenus(List<Menu> menus) {
         return productRepository.findAllByIdIn(
-                        newMenus.stream()
+                        menus.stream()
                                 .flatMap(menu -> menu.getMenuProductIds().stream())
                                 .collect(Collectors.toList()))
                 .stream()

@@ -3,8 +3,11 @@ package kitchenpos.menus.tobe.domain;
 import kitchenpos.NewFixtures;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
+import kitchenpos.menus.domain.MenuProducts;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.FakeDisplayNameChecker;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,18 +20,18 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayName("메뉴테스트")
-public class NewMenuTest {
+public class MenuTest {
 
-    private final NewMenuGroup menuGroup = NewFixtures.menuGroup("두마리치킨메뉴그룹");
-    private final NewMenuProduct menuProduct1 = NewFixtures.menuProduct(NewFixtures.newProduct(14_000L), 1L);
-    private final NewMenuProduct menuProduct2 = NewFixtures.menuProduct(NewFixtures.newProduct(16_000L), 1L);
+    private final MenuGroup menuGroup = NewFixtures.menuGroup("두마리치킨메뉴그룹");
+    private final MenuProduct menuProduct1 = NewFixtures.menuProduct(NewFixtures.newProduct(14_000L), 1L);
+    private final MenuProduct menuProduct2 = NewFixtures.menuProduct(NewFixtures.newProduct(16_000L), 1L);
     private final FakeDisplayNameChecker displayNameChecker = new FakeDisplayNameChecker();
 
     @DisplayName("메뉴 생성 성공")
     @Test
     void create() {
         UUID id = UUID.randomUUID();
-        NewMenu menu = createMenu(id, 30_000L, false);
+        Menu menu = createMenu(id, 30_000L, false);
 
         assertThat(menu).isEqualTo(createMenu(id, 30_000L, false));
     }
@@ -45,7 +48,7 @@ public class NewMenuTest {
     @DisplayName("메뉴를 노출한다.")
     @Test
     void display() {
-        NewMenu menu = createMenu(UUID.randomUUID(), 30_000L, false);
+        Menu menu = createMenu(UUID.randomUUID(), 30_000L, false);
 
         menu.displayed();
 
@@ -55,7 +58,7 @@ public class NewMenuTest {
     @DisplayName("메뉴를 비노출한다.")
     @Test
     void hide() {
-        NewMenu menu = createMenu(UUID.randomUUID(), 30_000L, true);
+        Menu menu = createMenu(UUID.randomUUID(), 30_000L, true);
 
         menu.notDisplayed();
 
@@ -65,7 +68,7 @@ public class NewMenuTest {
     @DisplayName("메뉴 가격을 변경한다.")
     @Test
     void changePrice() {
-        NewMenu menu = createMenu(UUID.randomUUID(), 30_000L, true);
+        Menu menu = createMenu(UUID.randomUUID(), 30_000L, true);
 
         Price changePrice = Price.of(BigDecimal.valueOf(20_000L));
         menu.changePrice(changePrice);
@@ -76,7 +79,7 @@ public class NewMenuTest {
     @DisplayName("메뉴 가격이 메뉴 상품 가격들의 합보다 크면 예외를 반환한다.")
     @Test
     void changePrice_failed() {
-        NewMenu menu = createMenu(UUID.randomUUID(), 30_000L, true);
+        Menu menu = createMenu(UUID.randomUUID(), 30_000L, true);
 
         Price changePrice = Price.of(BigDecimal.valueOf(50_000L));
 
@@ -85,8 +88,8 @@ public class NewMenuTest {
                 .hasMessage(MENU_PRICE_MORE_PRODUCTS_SUM);
     }
 
-    private NewMenu createMenu(UUID id, Long price, boolean isDisplayed) {
-        return NewMenu.create(
+    private Menu createMenu(UUID id, Long price, boolean isDisplayed) {
+        return Menu.create(
                 id,
                 menuGroup.getId(),
                 DisplayedName.of("두마리치킨메뉴", displayNameChecker),

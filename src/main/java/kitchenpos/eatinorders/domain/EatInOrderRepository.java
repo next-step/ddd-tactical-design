@@ -1,7 +1,5 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.domain;
 
-
-import kitchenpos.eatinorders.domain.OrderStatus;
 
 import java.util.List;
 import java.util.Optional;

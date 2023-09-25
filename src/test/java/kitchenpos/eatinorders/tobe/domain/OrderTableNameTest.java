@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.domain.OrderTableName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

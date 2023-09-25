@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.domain.EatInOrderTable;
+import kitchenpos.eatinorders.domain.NumberOfGuests;
+import kitchenpos.eatinorders.domain.OrderTableName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

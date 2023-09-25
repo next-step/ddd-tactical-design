@@ -1,5 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
+import kitchenpos.eatinorders.domain.EatInMenu;
+import kitchenpos.eatinorders.domain.EatInMenuRepository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
