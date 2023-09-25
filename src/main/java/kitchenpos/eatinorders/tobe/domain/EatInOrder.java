@@ -91,7 +91,9 @@ public class EatInOrder {
         this.orderLineItems = orderLineItems;
     }
 
-
+    public EatInOrderTable getOrderTable() {
+        return orderTable;
+    }
 
     public void setOrderTable(final EatInOrderTable orderTable) {
         this.orderTable = orderTable;

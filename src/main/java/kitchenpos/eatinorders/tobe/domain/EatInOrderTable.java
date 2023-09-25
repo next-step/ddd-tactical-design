@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.UUID;
 
 import static kitchenpos.eatinorders.exception.OrderTableExceptionMessage.NOT_OCCUPIED_GUESTS;
@@ -78,5 +79,18 @@ public class EatInOrderTable { // 기존 OrderTable 삭제 후 OrderTable 로 �
 
     public boolean isOccupied() {
         return occupied;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrderTable that = (EatInOrderTable) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
