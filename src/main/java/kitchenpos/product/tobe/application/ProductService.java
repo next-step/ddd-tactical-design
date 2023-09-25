@@ -3,8 +3,7 @@ package kitchenpos.product.tobe.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuRepository;
+import kitchenpos.menu.event.ChangeProductPriceEvent;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceRequest;
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceResponse;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
@@ -13,6 +12,7 @@ import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductName;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import kitchenpos.product.tobe.domain.service.ProductNamePolicy;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final ProductNamePolicy productNamePolicy;
 
-    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, ProductNamePolicy productNamePolicy) {
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public ProductService(ProductRepository productRepository, ProductNamePolicy productNamePolicy, ApplicationEventPublisher applicationEventPublisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.productNamePolicy = productNamePolicy;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
@@ -41,8 +42,7 @@ public class ProductService {
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());
 
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(Menu::checkPrice);
+        applicationEventPublisher.publishEvent(new ChangeProductPriceEvent(productId, request.getPrice()));
 
         return ChangeProductPriceResponse.of(product);
     }

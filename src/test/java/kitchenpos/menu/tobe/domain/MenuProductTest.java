@@ -23,6 +23,6 @@ class MenuProductTest {
         var actual = menuProduct.calculatePrice();
 
         // then
-        assertThat(actual).isEqualTo(BigDecimal.valueOf(32_000L));
+        assertThat(actual.getValue()).isEqualTo(BigDecimal.valueOf(32_000L));
     }
 }
