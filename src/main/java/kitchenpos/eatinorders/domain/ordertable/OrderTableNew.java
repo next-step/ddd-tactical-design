@@ -26,12 +26,7 @@ public class OrderTableNew {
 
     protected OrderTableNew() {
     }
-
-    public static OrderTableNew create(final Name name) {
-
-        return new OrderTableNew(UUID.randomUUID(), name, 0, Status.EMPTY);
-    }
-
+    
     private OrderTableNew(final UUID id, final Name name, final int numberOfGuests,
         final Status status) {
 
@@ -41,18 +36,32 @@ public class OrderTableNew {
         this.status = status;
     }
 
+    public static OrderTableNew create(final Name name) {
+
+        return new OrderTableNew(UUID.randomUUID(), name, 0, Status.EMPTY);
+    }
+
+    /**
+     * @throws IllegalArgumentException numberOfGuests가 음수일 때
+     * @throws IllegalStateException    orderTable이 점유된 상태가 아닐 때
+     */
     public void sit(final int numberOfGuests) {
         status = Status.NOT_EMPTY;
         changeNumberOfGuests(numberOfGuests);
     }
 
+    /**
+     * @throws IllegalArgumentException numberOfGuests가 음수일 때
+     * @throws IllegalStateException    orderTable이 점유된 상태가 아닐 때
+     */
     public void changeNumberOfGuests(final int numberOfGuests) {
-        if (status != Status.NOT_EMPTY) {
-            throw new IllegalStateException("");
+        if (numberOfGuests < 0) {
+            throw new IllegalArgumentException("number Of Guests can not be less than zero");
         }
 
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException("");
+        if (status != Status.NOT_EMPTY) {
+            throw new IllegalStateException(
+                "orderTable is not empty. can not change numberOfGuests.");
         }
 
         this.numberOfGuests = numberOfGuests;

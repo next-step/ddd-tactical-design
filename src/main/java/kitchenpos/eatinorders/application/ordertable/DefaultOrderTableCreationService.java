@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.application.ordertable;
 import static kitchenpos.support.ParameterValidateUtils.checkNotNull;
 
 import java.util.UUID;
+import kitchenpos.eatinorders.application.exception.NotExistOrderTableException;
 import kitchenpos.eatinorders.application.ordertable.port.in.OrderTableCreationUseCase;
 import kitchenpos.eatinorders.application.ordertable.port.out.OrderTableNewRepository;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableNew;
@@ -23,5 +24,15 @@ public class DefaultOrderTableCreationService implements OrderTableCreationUseCa
         final OrderTableNew orderTable = repository.save(OrderTableNew.create(name));
 
         return orderTable.getId();
+    }
+
+    @Override
+    public void clear(final UUID id) {
+        checkNotNull(id, "id");
+
+        final OrderTableNew orderTable = repository.findById(id)
+            .orElseThrow(() -> new NotExistOrderTableException(id));
+
+        orderTable.clear();
     }
 }
