@@ -1,4 +1,4 @@
-package kitchenpos.order.ui;
+package kitchenpos.order.eatinorders.ui;
 
 import kitchenpos.order.application.OrderService;
 import kitchenpos.order.domain.Order;
@@ -9,12 +9,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/api/orders")
+@RequestMapping("/api/eatin-orders")
 @RestController
-public class OrderRestController {
+public class EatInOrderRestController {
     private final OrderService orderService;
 
-    public OrderRestController(final OrderService orderService) {
+    public EatInOrderRestController(final OrderService orderService) {
         this.orderService = orderService;
     }
 
