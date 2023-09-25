@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import kitchenpos.eatinorders.application.eatinorder.port.in.EatinOrderInitCommand;
 import kitchenpos.eatinorders.application.eatinorder.port.out.ValidMenuPort;
 import kitchenpos.eatinorders.application.exception.InvalidAcceptStatusException;
 import kitchenpos.eatinorders.application.exception.InvalidCompleteStatusException;
@@ -23,6 +22,7 @@ import kitchenpos.eatinorders.application.exception.InvalidServeStatusException;
 import kitchenpos.eatinorders.application.exception.NotExistOrderTableException;
 import kitchenpos.eatinorders.application.ordertable.port.out.OrderTableNewRepository;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableNew;
+import org.apache.commons.lang3.tuple.Pair;
 
 @Table(name = "eatin_order")
 @Entity
@@ -73,19 +73,21 @@ public class EatinOrder {
      * @throws NotExistOrderTableException orderTableId에 해당하는 table이 없을 때
      * @throws IllegalStateException       orderLineItem에 있는 menu가 없는 menu일 때
      */
-    public static EatinOrder create(final EatinOrderInitCommand command,
+    public static EatinOrder create(final UUID orderTableId,
+        final List<UUID> orderLindItemMenuIds,
+        final List<Pair<UUID, Integer>> orderLineItemMenuAndQuantities,
         final OrderTableNewRepository orderTableRepository,
         final ValidMenuPort validMenuPort) {
 
-        final OrderTableNew orderTable = orderTableRepository.findById(command.getOrderTableId())
-            .orElseThrow(() -> new NotExistOrderTableException(command.getOrderTableId()));
+        final OrderTableNew orderTable = orderTableRepository.findById(orderTableId)
+            .orElseThrow(() -> new NotExistOrderTableException(orderTableId));
 
-        validMenuPort.checkValidMenu(command.getOrderLineItemMenuIds());
+        validMenuPort.checkValidMenu(orderLindItemMenuIds);
 
-        final List<OrderLineItemNew> orderLineItems = command.getOrderLineItemCommands()
-            .stream()
-            .map(item -> OrderLineItemNew.create(item.getMenuId(), item.getQuantity()))
-            .collect(Collectors.toUnmodifiableList());
+        final List<OrderLineItemNew> orderLineItems =
+            orderLineItemMenuAndQuantities.stream()
+                .map(item -> OrderLineItemNew.create(item.getLeft(), item.getRight()))
+                .collect(Collectors.toUnmodifiableList());
 
         return new EatinOrder(UUID.randomUUID(),
             Status.WAITING, LocalDateTime.now(), orderLineItems, orderTable);

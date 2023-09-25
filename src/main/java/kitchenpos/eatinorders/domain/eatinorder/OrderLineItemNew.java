@@ -27,7 +27,7 @@ public class OrderLineItemNew {
         this.quantity = quantity;
     }
 
-    public static OrderLineItemNew create(final UUID menuId, final int quantity) {
+    static OrderLineItemNew create(final UUID menuId, final int quantity) {
         return new OrderLineItemNew(UUID.randomUUID(), menuId, quantity);
     }
 
