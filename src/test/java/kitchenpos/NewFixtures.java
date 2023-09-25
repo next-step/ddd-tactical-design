@@ -2,11 +2,15 @@ package kitchenpos;
 
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeDisplayNameChecker;
 import kitchenpos.products.domain.Product;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -57,5 +61,34 @@ public class NewFixtures {
 
     public static NewProduct newProduct(final long price) {
         return NewProduct.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(price)));
+    }
+
+    public static EatInOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+        return EatInOrderTable.create(
+                UUID.randomUUID(),
+                OrderTableName.create("1번"),
+                NumberOfGuests.create(numberOfGuests),
+                occupied
+        );
+    }
+
+    public static EatInOrder order(final OrderStatus status, final EatInOrderTable orderTable) {
+        final EatInOrder order = new EatInOrder();
+        order.setId(UUID.randomUUID());
+        order.setType(OrderType.EAT_IN);
+        order.setStatus(status);
+        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        order.setOrderTable(orderTable);
+        return order;
+    }
+
+    public static EatInOrderLineItem orderLineItem() {
+        return EatInOrderLineItem.create(
+                new Random().nextLong(), eatInMenu(), 1L, Price.of(BigDecimal.valueOf(10_000L)));
+    }
+
+    private static EatInMenu eatInMenu() {
+        return EatInMenu.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(10_000L)), true);
     }
 }

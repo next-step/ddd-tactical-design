@@ -35,10 +35,11 @@ public class EatInOrder {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<EatInOrderLineItem> orderLineItems;
 
+    @Embedded
     @Column(name = "delivery_address")
-    private String deliveryAddress;
+    private DeliveryAddress deliveryAddress;
 
     @ManyToOne
     @JoinColumn(
@@ -46,7 +47,7 @@ public class EatInOrder {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
-    private OrderTable orderTable;
+    private EatInOrderTable orderTable;
 
     @Transient
     private UUID orderTableId;
@@ -86,27 +87,13 @@ public class EatInOrder {
         this.orderDateTime = orderDateTime;
     }
 
-    public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
-    }
-
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
+    public void setOrderLineItems(final List<EatInOrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
 
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
+    public void setOrderTable(final EatInOrderTable orderTable) {
         this.orderTable = orderTable;
     }
 
