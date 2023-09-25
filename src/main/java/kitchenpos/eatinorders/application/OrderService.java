@@ -1,184 +1,149 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.common.domain.Price;
+import kitchenpos.eatinorders.application.dto.*;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static kitchenpos.eatinorders.exception.OrderExceptionMessage.*;
 
 @Service
 public class OrderService {
-    private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
-    private final OrderTableRepository orderTableRepository;
-    private final KitchenridersClient kitchenridersClient;
+    private final EatInOrderRepository orderRepository;
+    private final EatInMenuRepository menuRepository;
+    private final EatInOrderTableRepository orderTableRepository;
 
     public OrderService(
-        final OrderRepository orderRepository,
-        final MenuRepository menuRepository,
-        final OrderTableRepository orderTableRepository,
-        final KitchenridersClient kitchenridersClient
+            final EatInOrderRepository orderRepository,
+            final EatInMenuRepository menuRepository,
+            final EatInOrderTableRepository orderTableRepository
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
-        this.kitchenridersClient = kitchenridersClient;
     }
 
     @Transactional
-    public Order create(final Order request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
-        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(OrderLineItem::getMenuId)
-                .collect(Collectors.toList())
+    public EatInOrderResponse create(final EatInOrderRequest request) {
+        List<EatInOrderLineItemRequest> orderLineItemsRequest = request.getOrderLineItems();
+        validateExistOrderLineRequest(orderLineItemsRequest);
+
+        List<EatInMenu> eatInMenus = getEatInMenuAllByMenuIdIn(orderLineItemsRequest);
+        validateExistMenu(eatInMenus, orderLineItemsRequest);
+
+        EatInOrder eatInOrder = EatInOrder.create(
+                UUID.randomUUID(),
+                OrderStatus.WAITING,
+                LocalDateTime.now(),
+                EatInOrderLineItems.create(createEatInOrderLineItems(orderLineItemsRequest, eatInMenus)),
+                findOrderTableById(request.getOrderTableId())
         );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-            }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
-            orderLineItems.add(orderLineItem);
-        }
-        Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(type);
-        order.setStatus(OrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
-        order.setOrderLineItems(orderLineItems);
-        if (type == OrderType.DELIVERY) {
-            final String deliveryAddress = request.getDeliveryAddress();
-            if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-            order.setDeliveryAddress(deliveryAddress);
-        }
-        if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
-            }
-            order.setOrderTable(orderTable);
-        }
-        return orderRepository.save(order);
+        EatInOrder savedOrder = orderRepository.save(eatInOrder);
+        return createEatInOrderResponse(savedOrder);
     }
 
     @Transactional
-    public Order accept(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        if (order.getType() == OrderType.DELIVERY) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
-                sum = orderLineItem.getMenu()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
-            }
-            kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
-        }
-        order.setStatus(OrderStatus.ACCEPTED);
-        return order;
+    public OrderStatusResponse accept(final UUID orderId) {
+        final EatInOrder order = getOrder(orderId);
+        order.accept();
+        return OrderStatusResponse.create(order.getId(), order.getStatus());
     }
 
     @Transactional
-    public Order serve(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(OrderStatus.SERVED);
-        return order;
+    public OrderStatusResponse serve(final UUID orderId) {
+        final EatInOrder order = getOrder(orderId);
+        order.serve();
+        return OrderStatusResponse.create(order.getId(), order.getStatus());
     }
 
     @Transactional
-    public Order startDelivery(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getType() != OrderType.DELIVERY) {
-            throw new IllegalStateException();
+    public OrderStatusResponse complete(final UUID orderId) {
+        final EatInOrder order = getOrder(orderId);
+        order.complete();
+        EatInOrderTable orderTable = order.getOrderTable();
+        // TODO: 질문
+        // order.complete() 에서 변경한 상태가 commit 되지 않아서 아래 existsByOrderTableAndStatusNot 은 무조건 false 이지 않나요?
+        // 아래 기능이 이 위치에 있는게 괜찮을까요?
+        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+            orderTable.clear();
         }
-        if (order.getStatus() != OrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(OrderStatus.DELIVERING);
-        return order;
-    }
-
-    @Transactional
-    public Order completeDelivery(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != OrderStatus.DELIVERING) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(OrderStatus.DELIVERED);
-        return order;
-    }
-
-    @Transactional
-    public Order complete(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        final OrderType type = order.getType();
-        final OrderStatus status = order.getStatus();
-        if (type == OrderType.DELIVERY) {
-            if (status != OrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
-        }
-        if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-            if (status != OrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
-        }
-        order.setStatus(OrderStatus.COMPLETED);
-        if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = order.getOrderTable();
-            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
-            }
-        }
-        return order;
+        return OrderStatusResponse.create(order.getId(), order.getStatus());
     }
 
     @Transactional(readOnly = true)
-    public List<Order> findAll() {
-        return orderRepository.findAll();
+    public List<EatInOrderResponse> findAll() {
+        List<EatInOrder> eatInOrders = orderRepository.findAll();
+        return eatInOrders.stream()
+                .map(this::createEatInOrderResponse)
+                .collect(Collectors.toList());
+    }
+
+    private void validateExistMenu(List<EatInMenu> eatInMenus, List<EatInOrderLineItemRequest> orderLineItemsRequest) {
+        if (eatInMenus.size() != orderLineItemsRequest.size()) {
+            throw new IllegalArgumentException(NOT_FOUND_MENU);
+        }
+    }
+
+    private EatInOrder getOrder(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    }
+
+    private EatInOrderTable findOrderTableById(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_ORDER_TABLE));
+    }
+
+    private List<EatInOrderLineItem> createEatInOrderLineItems(List<EatInOrderLineItemRequest> orderLineItemRequests, List<EatInMenu> eatInMenus) {
+        return orderLineItemRequests.stream()
+                .map(request -> EatInOrderLineItem.create(findById(eatInMenus, request.getMenuId()), request.getQuantity(), Price.of(request.getPrice())))
+                .collect(Collectors.toList());
+    }
+
+    private EatInMenu findById(List<EatInMenu> eatInMenus, UUID menuId) {
+        return eatInMenus.stream()
+                .filter(p -> menuId.equals(p.getId()))
+                .findAny()
+                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_MENU));
+
+    }
+
+    private EatInOrderResponse createEatInOrderResponse(EatInOrder savedOrder) {
+        return EatInOrderResponse.create(
+                savedOrder.getId(),
+                savedOrder.getType(),
+                savedOrder.getStatus(),
+                savedOrder.getOrderDateTime(),
+                savedOrder.getOrderTableId(),
+                createEatInOrderLineItemResponse(savedOrder.getOrderLineItems())
+        );
+    }
+
+    private List<EatInOrderLineItemResponse> createEatInOrderLineItemResponse(EatInOrderLineItems orderLineItems) {
+        return orderLineItems.getOrderLineItems()
+                .stream()
+                .map(m -> EatInOrderLineItemResponse.create(m.getSeq(), m.getMenuId(), m.getQuantityValue()))
+                .collect(Collectors.toList());
+    }
+
+    private List<EatInMenu> getEatInMenuAllByMenuIdIn(List<EatInOrderLineItemRequest> orderLineItemsRequest) {
+        List<UUID> menuIds = orderLineItemsRequest.stream()
+                .map(EatInOrderLineItemRequest::getMenuId)
+                .collect(Collectors.toList());
+        return menuRepository.findAllByIdIn(menuIds);
+    }
+
+    private void validateExistOrderLineRequest(List<EatInOrderLineItemRequest> orderLineItemsRequest) {
+        if (ObjectUtils.isEmpty(orderLineItemsRequest)) {
+            throw new IllegalArgumentException(ORDER_LINE_ITEM_EMPTY);
+        }
     }
 }

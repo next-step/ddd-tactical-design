@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static kitchenpos.eatinorders.exception.OrderTableExceptionMessage.NOT_OCCUPIED_GUESTS;
-import static kitchenpos.eatinorders.exception.OrderTableExceptionMessage.NUMBER_GUESTS_NEGATIVE;
 
 @Table(name = "order_table")
 @Entity
@@ -79,6 +78,10 @@ public class EatInOrderTable { // 기존 OrderTable 삭제 후 OrderTable 로 �
 
     public boolean isOccupied() {
         return occupied;
+    }
+
+    public boolean isEmpty() {
+        return !occupied;
     }
 
     @Override

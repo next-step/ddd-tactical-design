@@ -1,6 +1,8 @@
-package kitchenpos.eatinorders.tobe.domain;
+package kitchenpos.eatinorders.infra;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.EatInOrderRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

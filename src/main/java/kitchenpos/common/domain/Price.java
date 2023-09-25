@@ -40,6 +40,10 @@ public class Price {
         return result > 0;
     }
 
+    public boolean isNotEqualTo(Price price) {
+        return this.price.compareTo(price.price) != 0;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }

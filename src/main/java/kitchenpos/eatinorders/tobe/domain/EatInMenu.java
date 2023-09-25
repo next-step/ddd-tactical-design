@@ -1,14 +1,8 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.NewMenuProduct;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -38,6 +32,17 @@ public class EatInMenu {
         return new EatInMenu(id, price, displayed);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
 
     @Override
     public boolean equals(Object o) {

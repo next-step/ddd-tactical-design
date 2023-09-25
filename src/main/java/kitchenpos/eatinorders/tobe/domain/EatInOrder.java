@@ -1,14 +1,14 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import static kitchenpos.eatinorders.exception.OrderExceptionMessage.*;
 
 @Table(name = "orders")
 @Entity
@@ -28,31 +28,56 @@ public class EatInOrder {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<EatInOrderLineItem> orderLineItems;
-
     @Embedded
-    @Column(name = "delivery_address")
-    private DeliveryAddress deliveryAddress;
+    private EatInOrderLineItems orderLineItems;
 
     @ManyToOne
     @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+            name = "order_table_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
     private EatInOrderTable orderTable;
 
-    @Transient
-    private UUID orderTableId;
-
     public EatInOrder() {
+    }
+
+    public EatInOrder(UUID id, OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, EatInOrderTable orderTable) {
+        if (orderTable.isEmpty()) {
+            throw new IllegalStateException(NOT_OCCUPIED_ORDER_TABLE);
+        }
+
+        this.id = id;
+        this.type = orderType;
+        this.status = orderStatus;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = eatInOrderLineItems;
+        this.orderTable = orderTable;
+    }
+
+    public static EatInOrder create(UUID id, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, EatInOrderTable orderTable) {
+        return new EatInOrder(id, OrderType.EAT_IN, orderStatus, orderDateTime, eatInOrderLineItems, orderTable);
+    }
+
+    public void accept() {
+        if (this.status != OrderStatus.WAITING) {
+            throw new IllegalStateException(ORDER_STATUS_NOT_WAITING);
+        }
+        this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (this.status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException(ORDER_STATUS_NOT_ACCEPTED);
+        }
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void complete() {
+        if (this.status != OrderStatus.SERVED) {
+            throw new IllegalStateException(ORDER_STATUS_NOT_SERVED);
+        }
+        this.status = OrderStatus.COMPLETED;
     }
 
     public UUID getId() {
@@ -67,43 +92,40 @@ public class EatInOrder {
         return type;
     }
 
-    public void setType(final OrderType type) {
-        this.type = type;
-    }
 
     public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
-        this.status = status;
-    }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
-    public void setOrderLineItems(final List<EatInOrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
 
     public EatInOrderTable getOrderTable() {
         return orderTable;
     }
 
-    public void setOrderTable(final EatInOrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
-
     public UUID getOrderTableId() {
-        return orderTableId;
+        return orderTable.getId();
     }
 
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+    public EatInOrderLineItems getOrderLineItems() {
+        return orderLineItems;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrder that = (EatInOrder) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

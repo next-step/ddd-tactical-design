@@ -9,7 +9,7 @@ public class OrderExceptionMessage {
     public static final String NOT_EQUALS_PRICE = "메뉴 가격과 주문아이템의 가격이 다르면 안됩니다.";
     public static final String DELIVERY_ADDRESS_EMPTY = "배송지 주소가 존재하지 않습니다.";
     public static final String NOT_FOUND_ORDER_TABLE = "주문테이블이 존재하지 않습니다.";
-    public static final String NOT_OCCUPIED_ORDER_TABLE = "주문테이블이 비어있지 않습니다.";
+    public static final String NOT_OCCUPIED_ORDER_TABLE = "빈테이블에는 주문을 등록할 수 없습니다.";
     public static final String NOT_FOUND_ORDER = "주문이 존재하지 않습니다.";
     public static final String ORDER_STATUS_NOT_WAITING = "주문상태가 대기중이 아닙니다.";
     public static final String ORDER_STATUS_NOT_ACCEPTED = "주문상태가 수락됨이 아닙니다.";

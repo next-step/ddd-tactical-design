@@ -3,7 +3,6 @@ package kitchenpos;
 import kitchenpos.common.domain.DisplayedName;
 import kitchenpos.common.domain.Price;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.application.FakeDisplayNameChecker;
@@ -12,6 +11,7 @@ import kitchenpos.products.domain.Product;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -73,22 +73,43 @@ public class NewFixtures {
     }
 
     public static EatInOrder order(final OrderStatus status, final EatInOrderTable orderTable) {
-        final EatInOrder order = new EatInOrder();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setOrderTable(orderTable);
-        return order;
+        return EatInOrder.create(
+                UUID.randomUUID(),
+                status,
+                LocalDateTime.now(),
+                eatInOrderLineItems(Arrays.asList(eatInOrderLineItem())),
+                orderTable
+        );
     }
 
-    public static EatInOrderLineItem orderLineItem() {
+    public static EatInOrder order(final OrderStatus status) {
+        return EatInOrder.create(
+                UUID.randomUUID(),
+                status,
+                LocalDateTime.now(),
+                eatInOrderLineItems(Arrays.asList(eatInOrderLineItem())),
+                orderTable(true, 5)
+        );
+    }
+
+    private static EatInOrderLineItems eatInOrderLineItems(List<EatInOrderLineItem> eatInOrderLineItems) {
+        return EatInOrderLineItems.create(eatInOrderLineItems);
+    }
+
+    public static EatInOrderLineItem eatInOrderLineItem() {
         return EatInOrderLineItem.create(
                 new Random().nextLong(), eatInMenu(), 1L, Price.of(BigDecimal.valueOf(10_000L)));
     }
 
-    private static EatInMenu eatInMenu() {
+    public static EatInMenu eatInMenu() {
         return EatInMenu.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(10_000L)), true);
+    }
+
+    public static EatInMenu eatInMenu(Long price, boolean displayed) {
+        return EatInMenu.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(price)), displayed);
+    }
+
+    public static EatInMenu eatInMenu(boolean displayed) {
+        return EatInMenu.create(UUID.randomUUID(), Price.of(BigDecimal.valueOf(10_000L)), displayed);
     }
 }
