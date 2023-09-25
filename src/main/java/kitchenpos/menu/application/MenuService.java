@@ -7,9 +7,13 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceRequest;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceResponse;
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuResponse;
+import kitchenpos.menu.tobe.application.dto.DisplayMenuResponse;
+import kitchenpos.menu.tobe.application.dto.HideMenuResponse;
+import kitchenpos.menu.tobe.application.dto.QueryMenuResponse;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuName;
 import kitchenpos.menu.tobe.domain.MenuPrice;
@@ -84,33 +88,36 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
+    public ChangeMenuPriceResponse changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.changePrice(MenuPrice.of(request.getPrice()));
-        return menu;
+        return ChangeMenuPriceResponse.of(menu);
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public DisplayMenuResponse display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.display();
 
-        return menu;
+        return DisplayMenuResponse.of(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public HideMenuResponse hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.hide();
 
-        return menu;
+        return HideMenuResponse.of(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<QueryMenuResponse> findAll() {
+        return menuRepository.findAll()
+            .stream()
+            .map(QueryMenuResponse::of)
+            .collect(Collectors.toList());
     }
 }

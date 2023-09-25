@@ -151,7 +151,7 @@ class MenuServiceTest {
     void changePrice() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final var expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
+        final var actual = menuService.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(16_000L));
     }
 
@@ -179,7 +179,7 @@ class MenuServiceTest {
     @Test
     void display() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.display(menuId);
+        final var actual = menuService.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
 
@@ -201,7 +201,7 @@ class MenuServiceTest {
     @Test
     void hide() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.hide(menuId);
+        final var actual = menuService.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }
 
@@ -209,7 +209,7 @@ class MenuServiceTest {
     @Test
     void findAll() {
         menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<Menu> actual = menuService.findAll();
+        final var actual = menuService.findAll();
         assertThat(actual).hasSize(1);
     }
 
