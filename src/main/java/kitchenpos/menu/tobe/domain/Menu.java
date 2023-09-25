@@ -61,15 +61,11 @@ public class Menu {
     }
 
     public void changePrice(MenuPrice price) {
-        validateDisplayByPrice(price);
-        this.price = price;
-    }
-
-    private void validateDisplayByPrice(MenuPrice price) {
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalArgumentException();
         }
+        this.price = price;
     }
 
     public void display() {
@@ -78,6 +74,10 @@ public class Menu {
             throw new IllegalStateException();
         }
         this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 
     public UUID getId() {
@@ -102,10 +102,6 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
     }
 
     public MenuProducts getMenuProducts() {

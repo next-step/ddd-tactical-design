@@ -1,6 +1,5 @@
 package kitchenpos.menu.application;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -105,7 +104,8 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.hide();
+
         return menu;
     }
 
