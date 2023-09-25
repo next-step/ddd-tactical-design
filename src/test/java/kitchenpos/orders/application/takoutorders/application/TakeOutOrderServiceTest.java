@@ -1,4 +1,4 @@
-package kitchenpos.orders.application;
+package kitchenpos.orders.application.takoutorders.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
@@ -9,6 +9,8 @@ import kitchenpos.order.takeoutorders.domain.TakeOutOrderAcceptService;
 import kitchenpos.order.takeoutorders.domain.TakeOutOrderCompleteService;
 import kitchenpos.order.takeoutorders.domain.TakeOutOrderCreateService;
 import kitchenpos.order.takeoutorders.domain.TakeOutOrderServeService;
+import kitchenpos.orders.application.InMemoryOrderRepository;
+import kitchenpos.orders.application.InMemoryOrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

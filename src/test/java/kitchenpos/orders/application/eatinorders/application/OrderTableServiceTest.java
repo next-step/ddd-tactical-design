@@ -1,4 +1,4 @@
-package kitchenpos.orders.application;
+package kitchenpos.orders.application.eatinorders.application;
 
 import kitchenpos.order.domain.Order;
 import kitchenpos.order.domain.OrderRepository;
@@ -7,6 +7,8 @@ import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.eatinorders.application.OrderTableService;
 import kitchenpos.order.eatinorders.domain.*;
 import kitchenpos.order.eatinorders.domain.exception.InvalidOrderTableNameException;
+import kitchenpos.orders.application.InMemoryOrderRepository;
+import kitchenpos.orders.application.InMemoryOrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

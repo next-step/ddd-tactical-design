@@ -1,7 +1,7 @@
 package kitchenpos.order.eatinorders.ui;
 
-import kitchenpos.order.application.OrderService;
 import kitchenpos.order.domain.Order;
+import kitchenpos.order.eatinorders.application.EatInOrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,46 +12,37 @@ import java.util.UUID;
 @RequestMapping("/api/eatin-orders")
 @RestController
 public class EatInOrderRestController {
-    private final OrderService orderService;
+    private final EatInOrderService eatInOrderService;
 
-    public EatInOrderRestController(final OrderService orderService) {
-        this.orderService = orderService;
+    public EatInOrderRestController(EatInOrderService eatInOrderService) {
+        this.eatInOrderService = eatInOrderService;
     }
+
 
     @PostMapping
     public ResponseEntity<Order> create(@RequestBody final Order request) {
-        final Order response = orderService.create(request);
+        final Order response = eatInOrderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
                 .body(response);
     }
 
     @PutMapping("/{orderId}/accept")
     public ResponseEntity<Order> accept(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(orderService.accept(orderId));
+        return ResponseEntity.ok(eatInOrderService.accept(orderId));
     }
 
     @PutMapping("/{orderId}/serve")
     public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(orderService.serve(orderId));
+        return ResponseEntity.ok(eatInOrderService.serve(orderId));
     }
-
-//    @PutMapping("/{orderId}/start-delivery")
-//    public ResponseEntity<Order> startDelivery(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(eatInOrderService.startDelivery(orderId));
-//    }
-
-//    @PutMapping("/{orderId}/complete-delivery")
-//    public ResponseEntity<Order> completeDelivery(@PathVariable final UUID orderId) {
-//        return ResponseEntity.ok(eatInOrderService.completeDelivery(orderId));
-//    }
 
     @PutMapping("/{orderId}/complete")
     public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(orderService.complete(orderId));
+        return ResponseEntity.ok(eatInOrderService.complete(orderId));
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> findAll() {
-        return ResponseEntity.ok(orderService.findAll());
+        return ResponseEntity.ok(eatInOrderService.findAll());
     }
 }

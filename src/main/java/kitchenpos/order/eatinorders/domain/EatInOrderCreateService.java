@@ -19,9 +19,8 @@ public class EatInOrderCreateService {
     }
 
     public Order create(Order order) {
-        OrderTable orderTable = getOrderTable(order);
         orderLineItemsValidService.valid(order.getOrderLineItems());
-        return OrderCreateFactory.eatInOrder(order, orderTable);
+        return OrderCreateFactory.eatInOrder(order, getOrderTable(order));
     }
 
 

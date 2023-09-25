@@ -1,61 +1,66 @@
 package kitchenpos.order.eatinorders.application;
 
 import kitchenpos.order.domain.Order;
-import kitchenpos.order.domain.OrderType;
+import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.eatinorders.domain.EatInOrderAcceptService;
 import kitchenpos.order.eatinorders.domain.EatInOrderCompleteService;
 import kitchenpos.order.eatinorders.domain.EatInOrderCreateService;
 import kitchenpos.order.eatinorders.domain.EatInOrderServeService;
-import kitchenpos.order.supports.strategy.OrderProcess;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Component
-public class EatInOrderService implements OrderProcess {
+public class EatInOrderService {
 
+    private final OrderRepository orderRepository;
     private final EatInOrderCreateService eatInOrderCreateService;
     private final EatInOrderAcceptService eatInOrderAcceptService;
     private final EatInOrderServeService eatInOrderServeService;
     private final EatInOrderCompleteService eatInOrderCompleteService;
 
-    public EatInOrderService(EatInOrderCreateService eatInOrderCreateService, EatInOrderAcceptService eatInOrderAcceptService, EatInOrderServeService eatInOrderServeService, EatInOrderCompleteService eatInOrderCompleteService) {
+    public EatInOrderService(OrderRepository orderRepository, EatInOrderCreateService eatInOrderCreateService, EatInOrderAcceptService eatInOrderAcceptService, EatInOrderServeService eatInOrderServeService, EatInOrderCompleteService eatInOrderCompleteService) {
+        this.orderRepository = orderRepository;
         this.eatInOrderCreateService = eatInOrderCreateService;
         this.eatInOrderAcceptService = eatInOrderAcceptService;
         this.eatInOrderServeService = eatInOrderServeService;
         this.eatInOrderCompleteService = eatInOrderCompleteService;
     }
 
-    @Override
-    public Order create(Order order) {
-        return this.eatInOrderCreateService.create(order);
+    @Transactional(readOnly = false)
+    public Order create(Order request) {
+        return this.eatInOrderCreateService.create(request);
     }
 
-    @Override
-    public Order accept(Order order) {
+    @Transactional(readOnly = false)
+    public Order accept(final UUID orderId) {
+        Order order = getOrder(orderId);
         return this.eatInOrderAcceptService.accept(order);
     }
 
-    @Override
-    public Order serve(Order order) {
+    @Transactional(readOnly = false)
+    public Order serve(final UUID orderId) {
+        Order order = getOrder(orderId);
         return this.eatInOrderServeService.serve(order);
     }
 
-    @Override
-    public Order complete(Order order) {
+    @Transactional(readOnly = false)
+    public Order complete(final UUID orderId) {
+        Order order = getOrder(orderId);
         return eatInOrderCompleteService.complete(order);
     }
 
-    @Override
-    public Order startDelivery(Order order) {
-        throw new IllegalStateException("배달 주문이 아닙니다.");
+    @Transactional(readOnly = true)
+    public Order getOrder(final UUID orderId) {
+        return this.orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
-    @Override
-    public Order completeDelivery(Order order) {
-        throw new IllegalStateException("배달 주문이 아닙니다.");
-    }
-
-    @Override
-    public boolean support(OrderType orderType) {
-        return orderType.equals(OrderType.EAT_IN);
+    @Transactional(readOnly = true)
+    public List<Order> findAll() {
+        return orderRepository.findAll();
     }
 }

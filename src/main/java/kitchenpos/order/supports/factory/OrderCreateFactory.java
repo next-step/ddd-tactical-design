@@ -40,6 +40,7 @@ public class OrderCreateFactory {
         return new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), null, orderTable, orderTable.getId());
     }
 
+
     private static void validOrderType(Order order) {
         if (order == null) throw new IllegalArgumentException("주문이 존재하지 않습니다.");
         if (order.getType() == null) throw new IllegalArgumentException("주문 타입이 존재하지 않습니다.");
