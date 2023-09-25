@@ -1,7 +1,8 @@
 package kitchenpos.eatinorders.application.dto;
 
-import kitchenpos.common.domain.OrderLineItems;
+import kitchenpos.eatinorders.domain.order.OrderLineItems;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public class OrderRequest {
     }
 
     public OrderLineItems getOrderLineItems() {
+        if (orderLineItems == null) {
+            return OrderLineItems.of(Collections.emptyList());
+        }
+
         return OrderLineItems.of(orderLineItems.stream()
                 .map(OrderLineItemRequest::toOrderLineItem)
                 .collect(Collectors.toList()));

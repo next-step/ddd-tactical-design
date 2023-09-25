@@ -1,6 +1,6 @@
 package kitchenpos;
 
-import kitchenpos.common.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.order.OrderLineItem;
 import kitchenpos.common.domain.code.OrderType;
 import kitchenpos.common.domain.vo.Name;
 import kitchenpos.common.domain.vo.Price;

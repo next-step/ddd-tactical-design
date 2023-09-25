@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.application.dto;
 
-import kitchenpos.common.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.order.OrderLineItem;
 
 import java.math.BigDecimal;
 import java.util.UUID;

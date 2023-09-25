@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.eatinorders.domain.order;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -41,24 +41,12 @@ public class OrderLineItem {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getMenuId() {
         return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
     }
 
     public BigDecimal getPrice() {

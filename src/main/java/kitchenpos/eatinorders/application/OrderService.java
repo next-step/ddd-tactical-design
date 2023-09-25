@@ -1,11 +1,8 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.common.domain.OrderLineItems;
 import kitchenpos.eatinorders.application.dto.OrderRequest;
 import kitchenpos.eatinorders.application.dto.OrderResponse;
-import kitchenpos.eatinorders.domain.order.MenuClient;
-import kitchenpos.eatinorders.domain.order.Order;
-import kitchenpos.eatinorders.domain.order.OrderRepository;
+import kitchenpos.eatinorders.domain.order.*;
 import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
@@ -59,6 +56,9 @@ public class OrderService {
     public OrderResponse complete(final UUID orderId) {
         final Order order = getOrder(orderId);
         order.complete();
+        if (isOrderStatusCompleted(order.getOrderTable())) {
+            order.getOrderTable().clear();
+        }
         return new OrderResponse(order);
     }
 
@@ -81,5 +81,9 @@ public class OrderService {
             throw new IllegalStateException("빈 테이블에는 매장 주문을 등록할 수 없습니다.");
         }
         return orderTable;
+    }
+
+    private boolean isOrderStatusCompleted(OrderTable orderTable) {
+        return !orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED);
     }
 }

@@ -1,7 +1,5 @@
 package kitchenpos.eatinorders.domain.order;
 
-import kitchenpos.common.domain.OrderLineItem;
-import kitchenpos.common.domain.OrderLineItems;
 import kitchenpos.common.domain.code.OrderType;
 import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
@@ -30,23 +28,20 @@ public class Order {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+            name = "order_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
     private List<OrderLineItem> orderLineItems;
 
     @ManyToOne
     @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+            name = "order_table_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
     private OrderTable orderTable;
-
-    @Transient
-    private UUID orderTableId;
 
     protected Order() {
     }
@@ -60,7 +55,7 @@ public class Order {
         this.orderTable = orderTable;
     }
 
-    public Order(final OrderType orderType, OrderStatus orderStatus, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+    public Order(final OrderType orderType, final OrderStatus orderStatus, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
         this.id = UUID.randomUUID();
         this.type = orderType;
         this.status = orderStatus;
@@ -73,48 +68,24 @@ public class Order {
         return id;
     }
 
-    public OrderType getType() {
-        return type;
-    }
-
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final OrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public List<OrderLineItem> getOrderLineItems() {
         return orderLineItems;
-    }
-
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
     }
 
     public OrderTable getOrderTable() {
         return orderTable;
     }
 
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
-
     public UUID getOrderTableId() {
-        return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+        return orderTable.getId();
     }
 
     public void served() {
@@ -130,12 +101,11 @@ public class Order {
     public void complete() {
         validateOrderStatus(OrderStatus.SERVED);
         this.status = OrderStatus.COMPLETED;
-        this.getOrderTable().clear();
     }
 
     private void validateOrderStatus(final OrderStatus status) {
         if (this.status != status) {
-            throw new IllegalStateException("주문 상태가 " + status + "가 아닙니다.");
+            throw new IllegalStateException("주문 상태가 " + status.name() + "가 아닙니다.");
         }
     }
 }

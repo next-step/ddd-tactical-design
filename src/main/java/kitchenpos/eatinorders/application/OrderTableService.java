@@ -28,15 +28,14 @@ public class OrderTableService {
 
     @Transactional
     public OrderTableResponse create(final OrderTableRequest request) {
-        final Name tableName = Name.of(request.getName());
-        final OrderTable orderTable = new OrderTable(tableName);
+        final OrderTable orderTable = new OrderTable(Name.of(request.getName()));
         return new OrderTableResponse(orderTableRepository.save(orderTable));
     }
 
     @Transactional
     public OrderTableResponse sit(final UUID orderTableId) {
         final OrderTable orderTable = getOrderTable(orderTableId);
-        orderTable.setOccupied(true);
+        orderTable.occupy();
         return new OrderTableResponse(orderTable);
     }
 
@@ -48,31 +47,14 @@ public class OrderTableService {
         return new OrderTableResponse(orderTable);
     }
 
-    private void validateCompletedOrder(OrderTable orderTable) {
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException("완료되지 않은 주문이 있는 테이블입니다.");
-        }
-    }
-
-    private OrderTable getOrderTable(UUID orderTableId) {
-        return orderTableRepository.findById(orderTableId)
-                .orElseThrow(() -> new NoSuchElementException("입력한 주문테이블이 존재하지 않습니다."));
-    }
-
     @Transactional
     public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
         final GuestNumber numberOfGuests = GuestNumber.of(request.getNumberOfGuests());
         final OrderTable orderTable = getOrderTable(orderTableId);
 
-        checkIfOccupiedTable(orderTable);
+        validateEmptyTable(orderTable);
         orderTable.changeNumberOfGuests(numberOfGuests);
         return new OrderTableResponse(orderTable);
-    }
-
-    private static void checkIfOccupiedTable(OrderTable orderTable) {
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Transactional(readOnly = true)
@@ -80,5 +62,22 @@ public class OrderTableService {
         return orderTableRepository.findAll().stream()
                 .map(OrderTableResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    private void validateCompletedOrder(final OrderTable orderTable) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+            throw new IllegalStateException("완료되지 않은 주문이 있는 테이블입니다.");
+        }
+    }
+
+    private OrderTable getOrderTable(final UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(() -> new NoSuchElementException("입력한 주문테이블이 존재하지 않습니다."));
+    }
+
+    private static void validateEmptyTable(final OrderTable orderTable) {
+        if (!orderTable.isOccupied()) {
+            throw new IllegalStateException("주문 테이블이 비어 있습니다.");
+        }
     }
 }

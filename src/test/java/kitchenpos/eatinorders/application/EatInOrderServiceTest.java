@@ -1,13 +1,9 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.common.domain.code.OrderType;
 import kitchenpos.eatinorders.application.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.application.dto.OrderRequest;
 import kitchenpos.eatinorders.application.dto.OrderResponse;
-import kitchenpos.eatinorders.domain.order.MenuClient;
-import kitchenpos.eatinorders.domain.order.Order;
-import kitchenpos.eatinorders.domain.order.OrderRepository;
-import kitchenpos.eatinorders.domain.order.OrderStatus;
+import kitchenpos.eatinorders.domain.order.*;
 import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 import kitchenpos.eatinorders.infra.DefaultMenuClient;
@@ -44,7 +40,7 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         menuRepository = new InMemoryMenuRepository();
         menuClient = new DefaultMenuClient(menuRepository);
-        orderService = new OrderService(orderRepository,  orderTableRepository, menuClient);
+        orderService = new OrderService(orderRepository, orderTableRepository, menuClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -56,22 +52,12 @@ class EatInOrderServiceTest {
         final OrderResponse actual = orderService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getOrderId()).isNotNull(),
-            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
-            () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-            () -> assertThat(actual.getOrderLineItemResponses()).hasSize(1),
-            () -> assertThat(actual.getOrderTableId()).isEqualTo(expected.getOrderTableId())
+                () -> assertThat(actual.getOrderId()).isNotNull(),
+                () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
+                () -> assertThat(actual.getOrderDateTime()).isNotNull(),
+                () -> assertThat(actual.getOrderLineItemResponses()).hasSize(1),
+                () -> assertThat(actual.getOrderTableId()).isEqualTo(expected.getOrderTableId())
         );
-    }
-
-    @DisplayName("주문 유형이 올바르지 않으면 등록할 수 없다.")
-    @NullSource
-    @ParameterizedTest
-    void create(final OrderType type) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final OrderRequest expected = createOrderRequest(createOrderLineItemRequest(menuId, 19_000L, 3L));
-        assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
@@ -80,14 +66,14 @@ class EatInOrderServiceTest {
     void create(final List<OrderLineItemRequest> orderLineItems) {
         final OrderRequest expected = createOrderRequest(orderLineItems);
         assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     private static List<Arguments> orderLineItems() {
         return Arrays.asList(
-            null,
-            Arguments.of(Collections.emptyList()),
-            Arguments.of(List.of(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
+                null,
+                Arguments.of(Collections.emptyList()),
+                Arguments.of(List.of(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
         );
     }
 
@@ -98,21 +84,9 @@ class EatInOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final OrderRequest expected = createOrderRequest(
-           orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity)
+                orderTableId, createOrderLineItemRequest(menuId, 19_000L, quantity)
         );
         assertDoesNotThrow(() -> orderService.create(expected));
-    }
-
-    @DisplayName("매장 주문을 제외한 주문의 경우 주문 항목의 수량은 0 이상이어야 한다.")
-    @ValueSource(longs = -1L)
-    @ParameterizedTest
-    void createWithoutEatInOrder(final long quantity) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final OrderRequest expected = createOrderRequest(
-            createOrderLineItemRequest(menuId, 19_000L, quantity)
-        );
-        assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
@@ -121,10 +95,10 @@ class EatInOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
         final OrderRequest expected = createOrderRequest(
-            orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
+                orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
         assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
@@ -133,7 +107,7 @@ class EatInOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
         final OrderRequest expected = createOrderRequest(createOrderLineItemRequest(menuId, 19_000L, 3L));
         assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
@@ -142,7 +116,7 @@ class EatInOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final OrderRequest expected = createOrderRequest(createOrderLineItemRequest(menuId, 16_000L, 3L));
         assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("주문을 접수한다.")
@@ -159,13 +133,13 @@ class EatInOrderServiceTest {
     void accept(final OrderStatus status) {
         final UUID orderId = orderRepository.save(order(status, orderTable(true, 4))).getId();
         assertThatThrownBy(() -> orderService.accept(orderId))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("주문을 서빙한다.")
     @Test
     void serve() {
-        final UUID orderId = orderRepository.save(order(OrderStatus.ACCEPTED)).getId();
+        final UUID orderId = orderRepository.save(order(OrderStatus.ACCEPTED, orderTable(true, 4))).getId();
         final OrderResponse actual = orderService.serve(orderId);
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.SERVED);
     }
@@ -176,14 +150,14 @@ class EatInOrderServiceTest {
     void serve(final OrderStatus status) {
         final UUID orderId = orderRepository.save(order(status)).getId();
         assertThatThrownBy(() -> orderService.serve(orderId))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
 
     @DisplayName("주문을 완료한다.")
     @Test
     void complete() {
-        final Order expected = orderRepository.save(order(OrderStatus.SERVED));
+        final Order expected = orderRepository.save(order(OrderStatus.SERVED, orderTable(true, 4)));
         final OrderResponse actual = orderService.complete(expected.getId());
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
@@ -194,7 +168,7 @@ class EatInOrderServiceTest {
     void completeTakeoutAndEatInOrder(final OrderStatus status) {
         final UUID orderId = orderRepository.save(order(status)).getId();
         assertThatThrownBy(() -> orderService.complete(orderId))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.")
@@ -204,9 +178,9 @@ class EatInOrderServiceTest {
         final Order expected = orderRepository.save(order(OrderStatus.SERVED, orderTable));
         final OrderResponse actual = orderService.complete(expected.getId());
         assertAll(
-            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+                () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
         );
     }
 
@@ -218,23 +192,40 @@ class EatInOrderServiceTest {
         final Order expected = orderRepository.save(order(OrderStatus.SERVED, orderTable));
         final OrderResponse actual = orderService.complete(expected.getId());
         assertAll(
-            () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isTrue(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
+                () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isTrue(),
+                () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(4)
         );
     }
 
     @DisplayName("주문의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        final OrderTable 테이블1번 = orderTableRepository.save(orderTable(true, 4));
-        final OrderTable 테이블2번 = orderTableRepository.save(orderTable(false, 0));
-        orderRepository.save(order(OrderStatus.SERVED, 테이블1번));
-        orderRepository.save(order(OrderStatus.COMPLETED, 테이블2번));
+        final OrderTable firstTable = orderTableRepository.save(orderTable(true, 4));
+        final OrderTable secondTable = orderTableRepository.save(orderTable(false, 0));
+        orderRepository.save(order(OrderStatus.SERVED, firstTable));
+        orderRepository.save(order(OrderStatus.COMPLETED, secondTable));
         final List<OrderResponse> actual = orderService.findAll();
         assertThat(actual).hasSize(2);
     }
 
+    @DisplayName("OrderLineItems 일급 컬렉션을 정상 생성한다.")
+    @Test
+    void createOrderLineItems() {
+        final List<OrderLineItem> expected = List.of(orderLineItem());
+        final OrderLineItems actual = OrderLineItems.of(expected);
+        assertThat(actual.getOrderLineItems()).isEqualTo(expected);
+    }
+
+    @DisplayName("OrderLineItems 일급 컬렉션 생성시 OrderLineItems List가 비어 있으면 예외가 발생한다.")
+    @MethodSource("orderLineItems")
+    @NullSource
+    @ParameterizedTest
+    void throwExceptionOfEmptyOrderLineItems(final List<OrderLineItems> orderLineItems) {
+        final List<OrderLineItem> expected = Collections.emptyList();
+        assertThatThrownBy(() -> OrderLineItems.of(expected))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 
     private OrderRequest createOrderRequest(final OrderLineItemRequest... orderLineItems) {
         return createOrderRequest(Arrays.asList(orderLineItems));
@@ -245,8 +236,8 @@ class EatInOrderServiceTest {
     }
 
     private OrderRequest createOrderRequest(
-        final UUID orderTableId,
-        final OrderLineItemRequest... orderLineItems
+            final UUID orderTableId,
+            final OrderLineItemRequest... orderLineItems
     ) {
         return new OrderRequest(orderTableId, Arrays.asList(orderLineItems));
     }

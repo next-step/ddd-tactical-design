@@ -27,8 +27,7 @@ public class OrderTable {
     public OrderTable(final Name name) {
         this.id = UUID.randomUUID();
         this.name = name;
-        this.numberOfGuests = GuestNumber.of(0);
-        this.occupied = false;
+        clear();
     }
 
     public OrderTable(final Name name, final GuestNumber numberOfGuests, final boolean occupied) {
@@ -40,10 +39,6 @@ public class OrderTable {
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -58,8 +53,8 @@ public class OrderTable {
         return occupied;
     }
 
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
+    public void occupy() {
+        this.occupied = true;
     }
 
     public void clear() {

@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.eatinorders.domain.order;
 
 import java.util.List;
 
@@ -7,8 +7,11 @@ public class OrderLineItems {
 
     private OrderLineItems(List<OrderLineItem> orderLineItems) {
         validateNullOrEmpty(orderLineItems);
-        validateQuantity(orderLineItems);
         this.orderLineItems = orderLineItems;
+    }
+
+    public List<OrderLineItem> getOrderLineItems() {
+        return orderLineItems;
     }
 
     public int getSize() {
@@ -21,22 +24,8 @@ public class OrderLineItems {
         }
     }
 
-    private static void validateQuantity(final List<OrderLineItem> orderLineItems) {
-        // 주문 품목들중에 수량이 0보다 작은게 있는지 확인
-        orderLineItems.stream()
-                .map(OrderLineItem::getQuantity)
-                .filter(quantity -> quantity < 0)
-                .findAny()
-                .ifPresent(quantity -> {
-                    throw new IllegalArgumentException("주문 품목의 수량은 0보다 작을 수 없습니다.");
-                });
-    }
-
     public static OrderLineItems of(List<OrderLineItem> orderLineItems) {
         return new OrderLineItems(orderLineItems);
     }
 
-    public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
-    }
 }

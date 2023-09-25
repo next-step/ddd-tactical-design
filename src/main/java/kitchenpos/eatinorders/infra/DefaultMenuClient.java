@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.infra;
 
-import kitchenpos.common.domain.OrderLineItem;
-import kitchenpos.common.domain.OrderLineItems;
+import kitchenpos.eatinorders.domain.order.OrderLineItem;
+import kitchenpos.eatinorders.domain.order.OrderLineItems;
 import kitchenpos.eatinorders.domain.order.MenuClient;
 import kitchenpos.menus.domain.menu.Menu;
 import kitchenpos.menus.domain.menu.MenuRepository;
