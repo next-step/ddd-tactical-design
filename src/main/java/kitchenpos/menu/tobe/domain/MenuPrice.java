@@ -9,6 +9,7 @@ import javax.persistence.Embeddable;
 public class MenuPrice {
 
     public static final MenuPrice ZERO = new MenuPrice(BigDecimal.ZERO);
+    public static final int MIN_PRICE_VALUE = 0;
 
     @Column(name = "price", nullable = false)
     private BigDecimal value;
@@ -17,8 +18,8 @@ public class MenuPrice {
     }
 
     public MenuPrice(BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < MIN_PRICE_VALUE) {
+            throw new IllegalArgumentException("null 또는 0 미만의 값으로는 메뉴 가격을 지정할 수 없습니다.");
         }
 
         this.value = value;
