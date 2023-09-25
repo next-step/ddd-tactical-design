@@ -30,20 +30,20 @@ public class MenuProduct {
     @Embedded
     private MenuProductQuantity quantity;
 
-    @Transient
-    private BigDecimal menuProductPrice;
+    @Embedded
+    private MenuProductPrice menuProductPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, MenuProductQuantity quantity, BigDecimal menuProductPrice) {
+    public MenuProduct(UUID productId, MenuProductQuantity quantity, MenuProductPrice menuProductPrice) {
         this.productId = productId;
         this.quantity = quantity;
         this.menuProductPrice = menuProductPrice;
     }
 
     public static MenuProduct of(UUID productId, MenuProductQuantity quantity, ProductClient productClient) {
-        return new MenuProduct(productId, quantity, productClient.getProductPrice(productId));
+        return new MenuProduct(productId, quantity, new MenuProductPrice(productClient.getProductPrice(productId)));
     }
 
     public Long getSeq() {
@@ -59,6 +59,6 @@ public class MenuProduct {
     }
 
     public BigDecimal getMenuProductPrice() {
-        return menuProductPrice;
+        return menuProductPrice.getMenuProductPrice();
     }
 }

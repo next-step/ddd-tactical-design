@@ -5,6 +5,7 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
+import kitchenpos.menus.tobe.domain.menu.MenuProductPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.ProductClient;
@@ -57,7 +58,7 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct(product.getId(), new MenuProductQuantity(quantity), product.getPrice());
+        final MenuProduct menuProduct = new MenuProduct(product.getId(), new MenuProductQuantity(quantity), new MenuProductPrice(product.getPrice()));
         return menuProduct;
     }
 
