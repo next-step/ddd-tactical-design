@@ -104,7 +104,7 @@ class OrderServiceTest {
         takeOutOrderAcceptService = new TakeOutOrderAcceptService(orderRepository);
         takeOutOrderServeService = new TakeOutOrderServeService(orderRepository);
         takeOutOrderCompleteService = new TakeOutOrderCompleteService(orderRepository);
-        takeOutOrderService = new TakeOutOrderService(takeOutOrderCreateService, takeOutOrderAcceptService, takeOutOrderServeService, takeOutOrderCompleteService);
+        takeOutOrderService = new TakeOutOrderService(orderRepository, takeOutOrderCreateService, takeOutOrderAcceptService, takeOutOrderServeService, takeOutOrderCompleteService);
 
 
         deliveryOrderCreateService = new DeliveryOrderCreateService(orderRepository, orderLineItemsValidService);
@@ -115,7 +115,7 @@ class OrderServiceTest {
         deliveryOrderCompleteDeliveryService = new DeliveryOrderCompleteDeliveryService(orderRepository);
         deliveryOrderService = new DeliveryOrderService(orderRepository, deliveryOrderCreateService, deliveryOrderAcceptService, deliveryOrderServeService, deliveryOrderStartDeliveryService, deliveryOrderCompleteDeliveryService, deliveryOrderCompleteService);
 
-        orderProcessStrategy = new OrderProcessStrategy(Arrays.asList(eatInOrderService, takeOutOrderService));
+        orderProcessStrategy = new OrderProcessStrategy(Arrays.asList(eatInOrderService));
         orderService = new OrderService(orderRepository, orderProcessStrategy);
 
     }

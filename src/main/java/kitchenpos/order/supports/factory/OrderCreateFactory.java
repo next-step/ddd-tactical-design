@@ -26,26 +26,22 @@ public class OrderCreateFactory {
     }
 
     public static Order deliveryOrder(Order order, String deliveryAddress) {
+        validOrderType(order);
         return new Order(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), deliveryAddress, null, null);
     }
 
     public static Order takeOutOrder(Order order) {
+        validOrderType(order);
         return new Order(UUID.randomUUID(), OrderType.TAKEOUT, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), null, null, null);
     }
 
     public static Order eatInOrder(Order order, OrderTable orderTable) {
+        validOrderType(order);
         return new Order(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), order.getOrderLineItems(), null, orderTable, orderTable.getId());
     }
 
-    public Order createOrder(Order order) {
-
-        if (order.getType() == OrderType.EAT_IN) {
-            return this.eatInOrderCreateService.create(order);
-        } else if (order.getType() == OrderType.TAKEOUT) {
-            return this.takeOutOrderCreateService.create(order);
-        } else if (order.getType() == OrderType.DELIVERY) {
-            return this.deliveryOrderCreateService.create(order);
-        }
-        throw new IllegalArgumentException("주문 타입이 올바르지 않습니다.");
+    private static void validOrderType(Order order) {
+        if (order == null) throw new IllegalArgumentException("주문이 존재하지 않습니다.");
+        if (order.getType() == null) throw new IllegalArgumentException("주문 타입이 존재하지 않습니다.");
     }
 }
