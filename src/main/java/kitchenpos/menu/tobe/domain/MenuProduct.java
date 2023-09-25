@@ -15,6 +15,8 @@ import kitchenpos.product.tobe.domain.ProductPrice;
 @Entity
 public class MenuProduct {
 
+    public static final int MIN_QUANTITY = 0;
+
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -32,7 +34,7 @@ public class MenuProduct {
     }
 
     public MenuProduct(UUID productId, ProductPrice price, long quantity) {
-        if (quantity < 0) {
+        if (quantity < MIN_QUANTITY) {
             throw new IllegalArgumentException();
         }
 
@@ -46,16 +48,11 @@ public class MenuProduct {
     }
 
     public MenuPrice calculatePrice() {
-        return price.multiply(quantity)
-            .toMenuPrice();
+        return price.multiply(quantity).toMenuPrice();
     }
 
     public Long getSeq() {
         return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
     }
 
     public ProductPrice getPrice() {
@@ -66,15 +63,7 @@ public class MenuProduct {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

@@ -32,10 +32,6 @@ public class MenuPrice {
         return new MenuPrice(this.value.add(other.value));
     }
 
-//    public boolean isBiggerThan(MenuPrice other) { // TODO(경록) : 제거 예정
-//        return this.value.compareTo(other.value) > 0;
-//    }
-
     public boolean isLowerThan(MenuPrice other) {
         return this.value.compareTo(other.value) < 0;
     }
