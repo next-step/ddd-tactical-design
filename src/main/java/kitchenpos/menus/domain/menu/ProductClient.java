@@ -1,6 +1,6 @@
 package kitchenpos.menus.domain.menu;
 
-import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.vo.Price;
 
 import java.util.List;
 import java.util.UUID;

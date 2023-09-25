@@ -1,4 +1,9 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.domain.order;
+
+import kitchenpos.common.domain.OrderLineItem;
+import kitchenpos.common.domain.OrderLineItems;
+import kitchenpos.common.domain.code.OrderType;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,9 +37,6 @@ public class Order {
     )
     private List<OrderLineItem> orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
         name = "order_table_id",
@@ -46,23 +48,33 @@ public class Order {
     @Transient
     private UUID orderTableId;
 
-    public Order() {
+    protected Order() {
+    }
+
+    public Order(final OrderLineItems orderLineItems, final OrderTable orderTable) {
+        this.id = UUID.randomUUID();
+        this.type = OrderType.EAT_IN;
+        this.status = OrderStatus.WAITING;
+        this.orderDateTime = LocalDateTime.now();
+        this.orderLineItems = orderLineItems.getOrderLineItems();
+        this.orderTable = orderTable;
+    }
+
+    public Order(final OrderType orderType, OrderStatus orderStatus, final LocalDateTime orderDateTime, final List<OrderLineItem> orderLineItems, final OrderTable orderTable) {
+        this.id = UUID.randomUUID();
+        this.type = orderType;
+        this.status = orderStatus;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTable = orderTable;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public OrderType getType() {
         return type;
-    }
-
-    public void setType(final OrderType type) {
-        this.type = type;
     }
 
     public OrderStatus getStatus() {
@@ -89,14 +101,6 @@ public class Order {
         this.orderLineItems = orderLineItems;
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
     public OrderTable getOrderTable() {
         return orderTable;
     }
@@ -111,5 +115,27 @@ public class Order {
 
     public void setOrderTableId(final UUID orderTableId) {
         this.orderTableId = orderTableId;
+    }
+
+    public void served() {
+        validateOrderStatus(OrderStatus.ACCEPTED);
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void accept() {
+        validateOrderStatus(OrderStatus.WAITING);
+        this.status = OrderStatus.ACCEPTED;
+    }
+
+    public void complete() {
+        validateOrderStatus(OrderStatus.SERVED);
+        this.status = OrderStatus.COMPLETED;
+        this.getOrderTable().clear();
+    }
+
+    private void validateOrderStatus(final OrderStatus status) {
+        if (this.status != status) {
+            throw new IllegalStateException("주문 상태가 " + status + "가 아닙니다.");
+        }
     }
 }

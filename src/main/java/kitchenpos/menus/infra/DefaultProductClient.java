@@ -1,6 +1,6 @@
 package kitchenpos.menus.infra;
 
-import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.vo.Price;
 import kitchenpos.menus.domain.menu.MenuProduct;
 import kitchenpos.menus.domain.menu.ProductClient;
 import kitchenpos.products.domain.Product;
