@@ -41,7 +41,7 @@ public class Menu {
 
     public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
         MenuPrice totalMenuProductPrice = menuProducts.sumOfMenuProductPrice();
-        if (price.isBiggerThan(totalMenuProductPrice)) {
+        if (totalMenuProductPrice.isLowerThan(price)) {
             throw new IllegalArgumentException();
         }
 
@@ -55,25 +55,33 @@ public class Menu {
 
     public void checkPrice() {
         var sum = menuProducts.sumOfMenuProductPrice();
-        if (this.price.isBiggerThan(sum)) {
+        if (sum.isLowerThan(this.price)) {
             displayed = false;
         }
     }
 
     public void changePrice(MenuPrice price) {
+        validateDisplayByPrice(price);
+        this.price = price;
+    }
+
+    private void validateDisplayByPrice(MenuPrice price) {
         var sum = menuProducts.sumOfMenuProductPrice();
-        if (price.isBiggerThan(sum)) {
+        if (sum.isLowerThan(price)) {
             throw new IllegalArgumentException();
         }
-        this.price = sum;
+    }
+
+    public void display() {
+        var sum = menuProducts.sumOfMenuProductPrice();
+        if (sum.isLowerThan(price)) {
+            throw new IllegalStateException();
+        }
+        this.displayed = true;
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public MenuName getName() {
@@ -82,10 +90,6 @@ public class Menu {
 
     public String getNameValue() {
         return name.getValue();
-    }
-
-    public void setName(final MenuName name) {
-        this.name = name;
     }
 
     public BigDecimal getPrice() {
@@ -108,16 +112,7 @@ public class Menu {
         return menuProducts;
     }
 
-    public void setMenuProducts(final MenuProducts menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
-
 }

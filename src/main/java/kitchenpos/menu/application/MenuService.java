@@ -96,18 +96,8 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts().getValue()) { // TODO(경록) : 임시로 getter로 꺼내서 통과
-            sum = sum.add(
-                menuProduct.getPrice()
-                    .multiply(menuProduct.getQuantity())
-                    .getValue()
-            );
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.setDisplayed(true);
+        menu.display();
+
         return menu;
     }
 

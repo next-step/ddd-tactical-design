@@ -152,7 +152,7 @@ class MenuServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final var expected = changePriceRequest(16_000L);
         final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(32_000L));
+        assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(16_000L));
     }
 
     @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
