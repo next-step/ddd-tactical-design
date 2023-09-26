@@ -1,10 +1,9 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.ProductMenuServiceImpl;
+import kitchenpos.menus.application.MenuEventListener;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.application.ProductMenuService;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.application.dto.ProductInfo;
 import kitchenpos.products.tobe.domain.Product;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,18 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProductMenuService productMenuService;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productMenuService = new ProductMenuServiceImpl(menuRepository);
         purgomalumClient = new FakePurgomalumClient();
+        applicationEventPublisher = new FakeApplicationEventPublisher(productRepository, menuRepository);
 
-        productService = new ProductService(productRepository, productMenuService, purgomalumClient);
+        productService = new ProductService(productRepository, purgomalumClient, applicationEventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

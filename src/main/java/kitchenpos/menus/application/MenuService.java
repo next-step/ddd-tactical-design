@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
@@ -30,7 +31,6 @@ public class MenuService {
         this.purgomalumClient = purgomalumClient;
     }
 
-    @Transactional
     public Menu create(final Menu request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
@@ -86,7 +86,6 @@ public class MenuService {
         return menuRepository.save(menu);
     }
 
-    @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
@@ -110,7 +109,6 @@ public class MenuService {
         return menu;
     }
 
-    @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
@@ -130,12 +128,24 @@ public class MenuService {
         return menu;
     }
 
-    @Transactional
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
         return menu;
+    }
+
+    public void changeMenuDisplayStatus(final UUID productId) {
+        menuRepository.findAllByProductId(productId)
+                .forEach(menu -> {
+                    BigDecimal sum = menu.getMenuProducts().stream()
+                            .map(menuProduct -> menuProduct.getProduct().getPrice().getProductPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                    if (menu.getPrice().compareTo(sum) > 0) {
+                        menu.setDisplayed(false);
+                    }
+                });
     }
 
     @Transactional(readOnly = true)
