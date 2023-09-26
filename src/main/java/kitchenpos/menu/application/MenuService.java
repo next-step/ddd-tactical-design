@@ -81,7 +81,10 @@ public class MenuService {
         }
 
         var menuProducts = menuProductRequests.stream()
-            .map(it -> MenuProduct.of(productByIds.get(it.getProductId()), it.getQuantity()))
+            .map(it -> {
+                Product product = productByIds.get(it.getProductId());
+                return MenuProduct.of(product.getId(), product.getPrice(), it.getQuantity());
+            })
             .collect(Collectors.toList());
 
         return new MenuProducts(menuProducts);

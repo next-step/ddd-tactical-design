@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductPrice;
 
 @Table(name = "menu_product")
@@ -43,8 +42,8 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static MenuProduct of(Product product, long quantity) {
-        return new MenuProduct(product.getId(), product.getPrice(), quantity);
+    public static MenuProduct of(UUID productId, ProductPrice price, long quantity) {
+        return new MenuProduct(productId, price, quantity);
     }
 
     public MenuPrice calculatePrice() {
