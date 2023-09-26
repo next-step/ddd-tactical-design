@@ -6,7 +6,6 @@ import kitchenpos.menus.domain.exception.InvalidMenuProductQuantityException;
 import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.application.ProductPriceChangeService;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
@@ -19,6 +18,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
+    ApplicationEventPublisher publisher;
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
@@ -39,7 +40,18 @@ class MenuServiceTest {
     private MenuGroupService menuGroupService;
     private MenuCreateService menuCreateService;
     private MenuChangePriceService menuChangePriceService;
-    private ProductPriceChangeService productPriceChangeService;
+
+    private static List<Arguments> menuProducts() {
+        return Arrays.asList(
+                null,
+                Arguments.of(Collections.emptyList()),
+                Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
+        );
+    }
+
+    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
+        return new MenuProduct(productId, BigDecimal.valueOf(16_000L), quantity);
+    }
 
     @BeforeEach
     void setUp() {
@@ -48,10 +60,10 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
-        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
-        productPriceChangeService = new ProductPriceChangeService(menuService);
+
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, purgomalumClient, publisher));
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -69,6 +81,7 @@ class MenuServiceTest {
                 () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
                 () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
                 () -> assertThat(actual.getMenuProducts().getMenuProducts()).hasSize(1)
+
         );
     }
 
@@ -80,14 +93,7 @@ class MenuServiceTest {
             final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
             menuService.create(expected);
         }).isInstanceOf(IllegalArgumentException.class);
-    }
 
-    private static List<Arguments> menuProducts() {
-        return Arrays.asList(
-                null,
-                Arguments.of(Collections.emptyList()),
-                Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
-        );
     }
 
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
@@ -131,8 +137,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        assertThatThrownBy(() -> createMenuRequest(name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createMenuRequest(name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)));
     }
 
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
@@ -239,10 +244,6 @@ class MenuServiceTest {
             final List<MenuProduct> menuProducts
     ) {
         return new Menu(UUID.randomUUID(), name, price, menuGroup(menuGroupId), displayed, menuProducts, menuGroupId, purgomalumClient);
-    }
-
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        return new MenuProduct(productId, BigDecimal.valueOf(16_000L), quantity);
     }
 
     private Menu changePriceRequest(final long price) {

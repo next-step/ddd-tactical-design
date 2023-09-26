@@ -1,9 +1,10 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.application.InMemoryMenuGroupRepository;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuGroupService;
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.domain.*;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.exception.InvalidProductDisplayedNameException;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,17 +28,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
+    private ApplicationEventPublisher publisher;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
-    private MenuService menuService;
     private MenuGroupService menuGroupService;
     private ProductService productService;
     private MenuCreateService menuCreateService;
     private PurgomalumClient purgomalumClient;
     private MenuChangePriceService menuChangePriceService;
-
-    private ProductPriceChangeService productPriceChangeService;
+    private MenuService menuService;
 
     @BeforeEach
     void setUp() {
@@ -44,12 +45,12 @@ class ProductServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, purgomalumClient, publisher));
+        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService);
         menuGroupService = new MenuGroupService(menuGroupRepository);
-        menuChangePriceService = new MenuChangePriceService(new ProductService(productRepository, productPriceChangeService, purgomalumClient));
-        menuCreateService = new MenuCreateService(new ProductService(productRepository, productPriceChangeService, purgomalumClient), menuGroupService);
-        menuService = new MenuService(menuRepository, menuCreateService, menuChangePriceService, purgomalumClient);
-        productPriceChangeService = new ProductPriceChangeService(menuService);
-        productService = new ProductService(productRepository, productPriceChangeService, purgomalumClient);
+        menuCreateService = new MenuCreateService(new ProductService(productRepository, purgomalumClient, publisher), menuGroupService, purgomalumClient);
+        publisher = new FakeProductApplicationEventPublisher(menuService);
+        productService = new ProductService(productRepository, purgomalumClient, publisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -132,7 +133,6 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        Product product = new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
-        return product.changePrice(price);
+        return new Product(UUID.randomUUID(), "후라이드 치킨", price, purgomalumClient);
     }
 }

@@ -15,3 +15,4 @@ public interface ProductRepository {
 
     List<Product> findAllByIdIn(List<UUID> ids);
 }
+

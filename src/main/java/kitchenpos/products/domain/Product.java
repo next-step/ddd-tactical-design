@@ -4,12 +4,12 @@ import kitchenpos.products.domain.vo.ProductDisplayedName;
 import kitchenpos.products.domain.vo.ProductPrice;
 import kitchenpos.products.infra.PurgomalumClient;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Table(name = "product")
+@Entity
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

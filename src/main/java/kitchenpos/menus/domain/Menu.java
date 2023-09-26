@@ -1,9 +1,9 @@
 package kitchenpos.menus.domain;
 
 import kitchenpos.menus.domain.exception.InvalidMenuPriceException;
+import kitchenpos.menus.domain.exception.InvalidMenuProductsPriceException;
 import kitchenpos.menus.domain.vo.MenuName;
 import kitchenpos.menus.domain.vo.MenuPrice;
-import kitchenpos.menus.domain.vo.MenuProducts;
 import kitchenpos.products.infra.PurgomalumClient;
 
 import javax.persistence.*;
@@ -37,6 +37,7 @@ public class Menu {
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
+
 
     @Embedded
     private MenuProducts menuProducts;
@@ -103,12 +104,14 @@ public class Menu {
         return menuProducts;
     }
 
-
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
     public Menu displayed() {
+        if (price.getPrice().compareTo(menuProducts.totalAmount()) > 0) {
+            throw new InvalidMenuProductsPriceException();
+        }
         this.displayed = true;
         return this;
     }
