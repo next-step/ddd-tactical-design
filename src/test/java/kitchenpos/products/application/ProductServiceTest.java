@@ -1,17 +1,25 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuEventListener;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.dto.ProductInfo;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.ui.request.ProductChangeRequest;
+import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,20 +35,23 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
     private PurgomalumClient purgomalumClient;
     private ProductService productService;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        applicationEventPublisher = new FakeApplicationEventPublisher(productRepository, menuRepository);
+
+        productService = new ProductService(productRepository, purgomalumClient, applicationEventPublisher);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final ProductCreateRequest expected = new ProductCreateRequest("후라이드", new BigDecimal(16000));
+        final ProductInfo actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -54,7 +65,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Product expected = createProductRequest("후라이드", price);
+        final ProductCreateRequest expected = new ProductCreateRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -64,7 +75,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
+        final ProductCreateRequest expected = new ProductCreateRequest(name, new BigDecimal(16000));
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -72,9 +83,10 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
+        final Product product = productRepository.save(product("후라이드", 16_000L));
+        final ProductChangeRequest expected = new ProductChangeRequest("", new BigDecimal(15000));
+
+        final ProductInfo actual = productService.changePrice(product.getId(), expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -83,9 +95,9 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
+        final Product product = productRepository.save(product("후라이드", 16_000L));
+        final ProductChangeRequest expected = new ProductChangeRequest("", price);
+        assertThatThrownBy(() -> productService.changePrice(product.getId(), expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -94,7 +106,8 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        final ProductChangeRequest request = new ProductChangeRequest("", new BigDecimal(8000));
+        productService.changePrice(product.getId(), request);
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -112,10 +125,11 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+        return new Product(
+                UUID.randomUUID(),
+                new ProductName(name),
+                new ProductPrice(price)
+        );
     }
 
     private Product changePriceRequest(final long price) {
@@ -123,8 +137,10 @@ class ProductServiceTest {
     }
 
     private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
+        return new Product(
+                UUID.randomUUID(),
+                new ProductName(""),
+                new ProductPrice(price)
+        );
     }
 }
