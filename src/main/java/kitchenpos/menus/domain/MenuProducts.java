@@ -40,6 +40,10 @@ public class MenuProducts {
                 .forEach(menuProduct -> menuProduct.changeProductPrice(price));
     }
 
+    public List<MenuProduct> listValue() {
+        return menuProducts;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

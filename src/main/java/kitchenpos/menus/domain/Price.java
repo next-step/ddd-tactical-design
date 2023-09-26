@@ -25,16 +25,16 @@ public class Price {
         return price.compareTo(other.price) <= 0;
     }
 
+    public boolean isNotSame(Price other) {
+        return this.price.compareTo(other.price) != 0;
+    }
+
     public Price multiplyQuantity(Quantity quantity) {
-        return new Price(price.longValue() * quantity.intValue());
+        return new Price(price.longValue() * quantity.longValue());
     }
 
     public Price sum(Price other) {
         return new Price(price.longValue() + other.price.longValue());
-    }
-
-    public String stringValue() {
-        return price.toString();
     }
 
     public long longValue() {

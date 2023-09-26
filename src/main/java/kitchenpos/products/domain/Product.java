@@ -1,7 +1,6 @@
 package kitchenpos.products.domain;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -32,15 +31,19 @@ public class Product {
         this.price = price;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public void changePrice(Price price) {
         this.price = price;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public Price getPrice() {
         return price;
+    }
+
+    public DisplayedName getName() {
+        return name;
     }
 }

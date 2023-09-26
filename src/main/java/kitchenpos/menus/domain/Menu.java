@@ -1,5 +1,7 @@
 package kitchenpos.menus.domain;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -84,12 +86,23 @@ public class Menu {
         return id;
     }
 
+    public DisplayedName getName() {
+        return name;
+    }
+
     public Price getPrice() {
         return price;
+    }
+
+    public MenuGroup getMenuGroup() {
+        return menuGroup;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
+    public List<MenuProduct> getMenuProducts() {
+        return Collections.unmodifiableList(menuProducts.listValue());
+    }
 }

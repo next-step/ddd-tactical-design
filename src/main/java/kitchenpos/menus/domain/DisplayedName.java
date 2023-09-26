@@ -21,6 +21,10 @@ public class DisplayedName {
         this.name = name;
     }
 
+    public String stringValue() {
+        return name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

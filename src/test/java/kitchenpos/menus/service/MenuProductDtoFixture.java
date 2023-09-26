@@ -2,7 +2,7 @@ package kitchenpos.menus.service;
 
 import java.util.UUID;
 
-import kitchenpos.menus.application.dto.MenuProductDto;
+import kitchenpos.menus.domain.vo.MenuProductVo;
 import kitchenpos.products.domain.Product;
 
 public class MenuProductDtoFixture {
@@ -37,7 +37,7 @@ public class MenuProductDtoFixture {
         return this;
     }
 
-    public MenuProductDto build() {
-        return new MenuProductDto(productId, quantity);
+    public MenuProductVo build() {
+        return new MenuProductVo(productId, quantity);
     }
 }
