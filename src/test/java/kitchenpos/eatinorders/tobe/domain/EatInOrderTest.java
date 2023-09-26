@@ -34,25 +34,15 @@ class EatInOrderTest {
     void create() {
         UUID id = UUID.randomUUID();
 
-        EatInOrder eatInOrder = EatInOrder.create(id, OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(id, OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
-        assertThat(eatInOrder).isEqualTo(EatInOrder.create(id, OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable));
-    }
-
-    @DisplayName("테이블이 비어있으면 매장주문을 생성할 수 없다.")
-    @Test
-    void create_failed() {
-        EatInOrderTable emptyTable = NewFixtures.orderTable(false, 0);
-
-        assertThatThrownBy( () -> EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, emptyTable))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage(NOT_OCCUPIED_ORDER_TABLE);
+        assertThat(eatInOrder).isEqualTo(EatInOrder.create(id, OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId()));
     }
 
     @DisplayName("주문상태가 접수 대기가 아니면 주문을 수락할 수 없다.")
     @Test
     void accept_failed() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.COMPLETED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.COMPLETED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         assertThatThrownBy( () -> eatInOrder.accept())
                 .isInstanceOf(IllegalStateException.class)
@@ -62,7 +52,7 @@ class EatInOrderTest {
     @DisplayName("주문상태가 접수대기면 주문을 접수할 수 있다.")
     @Test
     void accept() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         eatInOrder.accept();
 
@@ -72,7 +62,7 @@ class EatInOrderTest {
     @DisplayName("주문상태가 접수가 아니면 주문을 서빙할 수 없다.")
     @Test
     void serve_failed() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         assertThatThrownBy( () -> eatInOrder.serve())
                 .isInstanceOf(IllegalStateException.class)
@@ -82,7 +72,7 @@ class EatInOrderTest {
     @DisplayName("주문상태가 접수면 주문을 서빙할 수 있다.")
     @Test
     void serve() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.ACCEPTED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.ACCEPTED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         eatInOrder.serve();
 
@@ -92,7 +82,7 @@ class EatInOrderTest {
     @DisplayName("주문상태가 서빙이 아니면 주문을 완료할 수 없다.")
     @Test
     void complete_failed() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         assertThatThrownBy( () -> eatInOrder.complete())
                 .isInstanceOf(IllegalStateException.class)
@@ -102,7 +92,7 @@ class EatInOrderTest {
     @DisplayName("주문상태가 서빙이면 주문을 완료할 수 있다.")
     @Test
     void complete() {
-        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.SERVED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable);
+        EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.SERVED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
         eatInOrder.complete();
 

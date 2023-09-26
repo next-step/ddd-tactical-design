@@ -35,7 +35,8 @@ class OrderServiceTest {
         orderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryEatInMenuRepository();
         orderTableRepository = new InMemoryEatInOrderTableRepository();
-        orderService = new OrderService(orderRepository, menuRepository, orderTableRepository);
+        MockOrderEventService orderEventService = new MockOrderEventService(orderTableRepository);
+        orderService = new OrderService(orderRepository, menuRepository, orderTableRepository, orderEventService);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

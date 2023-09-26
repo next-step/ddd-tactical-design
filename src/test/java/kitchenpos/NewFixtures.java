@@ -77,7 +77,7 @@ public class NewFixtures {
                 status,
                 LocalDateTime.now(),
                 eatInOrderLineItems(Arrays.asList(eatInOrderLineItem())),
-                orderTable
+                orderTable.getId()
         );
     }
 
@@ -87,7 +87,7 @@ public class NewFixtures {
                 status,
                 LocalDateTime.now(),
                 eatInOrderLineItems(Arrays.asList(eatInOrderLineItem())),
-                orderTable(true, 5)
+                orderTable(true, 5).getId()
         );
     }
 

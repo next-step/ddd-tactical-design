@@ -28,31 +28,22 @@ public class EatInOrder {
     @Embedded
     private EatInOrderLineItems orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private EatInOrderTable orderTable;
+    @Column(name = "order_table_id", columnDefinition = "binary(16)")
+    private UUID orderTableId;
 
     public EatInOrder() {
     }
 
-    public EatInOrder(UUID id, OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, EatInOrderTable orderTable) {
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException(NOT_OCCUPIED_ORDER_TABLE);
-        }
-
+    public EatInOrder(UUID id, OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, UUID orderTableId) {
         this.id = id;
         this.type = orderType;
         this.status = orderStatus;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = eatInOrderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
-    public static EatInOrder create(UUID id, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, EatInOrderTable orderTable) {
+    public static EatInOrder create(UUID id, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, UUID orderTable) {
         return new EatInOrder(id, OrderType.EAT_IN, orderStatus, orderDateTime, eatInOrderLineItems, orderTable);
     }
 
@@ -96,12 +87,8 @@ public class EatInOrder {
     }
 
 
-    public EatInOrderTable getOrderTable() {
-        return orderTable;
-    }
-
     public UUID getOrderTableId() {
-        return orderTable.getId();
+        return orderTableId;
     }
 
     public EatInOrderLineItems getOrderLineItems() {

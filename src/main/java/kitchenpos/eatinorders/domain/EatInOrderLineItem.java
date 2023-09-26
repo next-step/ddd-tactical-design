@@ -51,7 +51,7 @@ public class EatInOrderLineItem {
         if (!eatInMenu.isDisplayed()) {
             throw new IllegalStateException(ORDER_LINE_ITEM_MENU_NOT_DISPLAY);
         }
-        if (eatInMenu.getPrice().isNotEqualTo(orderLineItemPrice)) {
+        if (eatInMenu.isNotEqualTo(orderLineItemPrice)) {
             throw new IllegalArgumentException(NOT_EQUALS_PRICE);
         }
         this.menu = eatInMenu;

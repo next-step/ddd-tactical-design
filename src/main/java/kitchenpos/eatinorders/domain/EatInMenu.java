@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "menu")
+@Table(name = "eat_in_menu")
 @Entity
 public class EatInMenu {
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -55,5 +55,9 @@ public class EatInMenu {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isNotEqualTo(Price orderLineItemPrice) {
+        return price.isNotEqualTo(orderLineItemPrice);
     }
 }

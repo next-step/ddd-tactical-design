@@ -50,7 +50,7 @@ public class OrderTableService {
     public OrderTableClearResponse clear(final UUID orderTableId) {
         final EatInOrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (isNotExistCompletedOrder(orderTable)) {
+        if (isNotExistCompletedOrder(orderTable.getId())) {
             throw new IllegalStateException(NOT_EXIST_COMPLETE_ORDER);
         }
         orderTable.clear();
@@ -74,7 +74,7 @@ public class OrderTableService {
                 .collect(Collectors.toList());
     }
 
-    private boolean isNotExistCompletedOrder(EatInOrderTable orderTable) {
-        return orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED);
+    private boolean isNotExistCompletedOrder(UUID orderTableId) {
+        return orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED);
     }
 }
