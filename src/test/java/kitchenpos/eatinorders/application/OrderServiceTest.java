@@ -197,7 +197,7 @@ class OrderServiceTest {
     @Test
     void findAll() {
         orderRepository.save(order(OrderStatus.SERVED));
-        orderRepository.save(order(OrderStatus.DELIVERED));
+        orderRepository.save(order(OrderStatus.COMPLETED));
         final List<EatInOrderResponse> actual = orderService.findAll();
         assertThat(actual).hasSize(2);
     }
