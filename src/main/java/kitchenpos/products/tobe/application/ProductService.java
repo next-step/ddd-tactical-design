@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMenuService productMenuService;
@@ -33,7 +34,6 @@ public class ProductService {
         this.purgomalumClient = purgomalumClient;
     }
 
-    @Transactional
     public ProductInfo create(final ProductCreateRequest request) {
         final Product product = productRepository.save(new Product(
                 UUID.randomUUID(),
@@ -48,7 +48,6 @@ public class ProductService {
         );
     }
 
-    @Transactional
     public ProductInfo changePrice(final UUID productId, final ProductChangeRequest request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
