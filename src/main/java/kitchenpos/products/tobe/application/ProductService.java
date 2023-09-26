@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.global.exception.custom.NotFoundProductException;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.dto.ProductEvent;
 import kitchenpos.products.tobe.application.dto.ProductInfo;
@@ -53,7 +54,7 @@ public class ProductService {
 
     public ProductInfo changePrice(final UUID productId, final ProductChangeRequest request) {
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(NotFoundProductException::new);
         product.changePrice(new ProductPrice(request.getPrice()));
 
         applicationEventPublisher.publishEvent(new ProductEvent(productId));
