@@ -1,6 +1,5 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.products.domain.DisplayedName;
 import kitchenpos.products.domain.PurgomalumClient;
 
 import javax.persistence.Column;
@@ -20,7 +19,7 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private DisplayedName name;
+    private MenuDisplayedName name;
 
     @Column(name = "price", nullable = false)
     private MenuPrice price;
@@ -47,12 +46,12 @@ public class Menu {
                 List<MenuProduct> menuProducts
     ) {
         this.id = UUID.randomUUID();
-        this.name = new DisplayedName(name, purgomalumClient);
+        this.name = new MenuDisplayedName(name, purgomalumClient);
         this.price = new MenuPrice(price);
         this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts.addAll(menuProducts);
-        validatePrice();
+        validatePrice(price);
     }
 
     public UUID getId() {
@@ -84,17 +83,23 @@ public class Menu {
     }
 
     public void show() {
-        validatePrice();
+        validatePrice(this.price.getValue());
         this.displayed = true;
     }
 
     public void changePrice(BigDecimal price) {
         this.price = new MenuPrice(price);
-        validatePrice();
+        validatePrice(price);
     }
 
-    private void validatePrice() {
-        if (this.price.compareTo(menuProducts.sumOfPrice()) > 0) {
+    private void validatePrice(BigDecimal price) {
+        if (menuProducts.hasTotalPriceLowerThan(price)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void validateSamePrice(BigDecimal price) {
+        if (!this.price.hasSamePrice(price)) {
             throw new IllegalArgumentException();
         }
     }

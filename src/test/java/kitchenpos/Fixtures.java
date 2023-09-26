@@ -14,7 +14,6 @@ import kitchenpos.products.domain.Product;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.UUID;
 
 public class Fixtures {
@@ -51,41 +50,22 @@ public class Fixtures {
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setDeliveryAddress(deliveryAddress);
+        final Order order = new Order(OrderType.DELIVERY, status, LocalDateTime.of(2020, 1, 1, 12, 0), Arrays.asList(orderLineItem()), null);
         return order;
     }
 
     public static Order order(final OrderStatus status) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
+        final Order order = new Order(OrderType.TAKEOUT, status, LocalDateTime.of(2020, 1, 1, 12, 0), Arrays.asList(orderLineItem()), null);
         return order;
     }
 
     public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(Arrays.asList(orderLineItem()));
-        order.setOrderTable(orderTable);
+        final Order order = new Order(OrderType.EAT_IN, status, LocalDateTime.of(2020, 1, 1, 12, 0), Arrays.asList(orderLineItem()), orderTable);
         return order;
     }
 
     public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
+        final OrderLineItem orderLineItem = new OrderLineItem(menu().getId(), menu().getPrice(), 1L);
         return orderLineItem;
     }
 
@@ -94,12 +74,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return new OrderTable("1번", numberOfGuests, occupied);
     }
 
     public static Product product() {

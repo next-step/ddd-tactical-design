@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class DisplayedNameTest {
+class ProductDisplayedNameTest {
     private PurgomalumClient purgomalumClient;
 
     @BeforeEach
@@ -22,7 +22,7 @@ class DisplayedNameTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        assertThatThrownBy(() -> new DisplayedName(name, purgomalumClient))
+        assertThatThrownBy(() -> new ProductDisplayedName(name, purgomalumClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

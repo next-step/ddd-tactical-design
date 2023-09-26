@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,47 +14,51 @@ public class OrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private OrderTableName name;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private NumberOfGuests numberOfGuests;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    protected OrderTable() {
+    }
+
+    public OrderTable(String name, int numberOfGuests, boolean occupied) {
+        this.id = UUID.randomUUID();
+        this.name = new OrderTableName(name);
+        this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+        this.occupied = occupied;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.getValue();
     }
 
     public int getNumberOfGuests() {
-        return numberOfGuests;
+        return numberOfGuests.getValue();
     }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
+    public void changeNumberOfGuests(final int numberOfGuests) {
+        this.numberOfGuests.changeNumberOfGuests(numberOfGuests);
     }
 
     public boolean isOccupied() {
         return occupied;
     }
 
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
+    public void occupied() {
+        this.occupied = true;
+    }
+
+    public void clear() {
+        this.occupied = false;
+        this.numberOfGuests = new NumberOfGuests(0);
     }
 }

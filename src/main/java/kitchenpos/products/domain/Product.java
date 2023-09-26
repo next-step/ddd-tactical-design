@@ -16,7 +16,7 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private ProductDisplayedName name;
 
     @Embedded
     private Price price;
@@ -26,7 +26,7 @@ public class Product {
 
     public Product(final String name, PurgomalumClient purgomalumClient, final BigDecimal price) {
         this.id = UUID.randomUUID();
-        this.name = new DisplayedName(name, purgomalumClient);
+        this.name = new ProductDisplayedName(name, purgomalumClient);
         this.price = new Price(price);
     }
 
@@ -34,7 +34,7 @@ public class Product {
         return id;
     }
 
-    public DisplayedName getName() {
+    public ProductDisplayedName getName() {
         return name;
     }
 
