@@ -4,11 +4,8 @@ import kitchenpos.global.exception.custom.NotFoundProductException;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.dto.ProductEvent;
 import kitchenpos.products.tobe.application.dto.ProductInfo;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.ui.request.ProductChangeRequest;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.springframework.context.ApplicationEventPublisher;
@@ -39,10 +36,12 @@ public class ProductService {
     }
 
     public ProductInfo create(final ProductCreateRequest request) {
+        ProductValidator productValidator = new ProductValidator(request.getName(), request.getPrice(), purgomalumClient);
+
         final Product product = productRepository.save(new Product(
                 UUID.randomUUID(),
-                new ProductName(request.getName(), purgomalumClient),
-                new ProductPrice(request.getPrice())
+                new ProductName(productValidator.getNameValidator().getName()),
+                new ProductPrice(productValidator.getPriceValidator().getPrice())
         ));
 
         return new ProductInfo(
@@ -55,7 +54,8 @@ public class ProductService {
     public ProductInfo changePrice(final UUID productId, final ProductChangeRequest request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NotFoundProductException::new);
-        product.changePrice(new ProductPrice(request.getPrice()));
+        PriceValidator priceValidator = new PriceValidator(request.getPrice());
+        product.changePrice(new ProductPrice(priceValidator.getPrice()));
 
         applicationEventPublisher.publishEvent(new ProductEvent(productId));
 
