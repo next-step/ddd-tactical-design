@@ -17,7 +17,7 @@ public class ProductMenuServiceImpl implements ProductMenuService {
     }
 
     @Override
-    public void validMenuDisplay(final UUID productId) {
+    public void changeMenuDisplayStatus(final UUID productId) {
         menuRepository.findAllByProductId(productId)
                 .forEach(menu -> {
                     BigDecimal sum = menu.getMenuProducts().stream()

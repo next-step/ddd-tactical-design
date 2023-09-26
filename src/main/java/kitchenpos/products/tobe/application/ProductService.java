@@ -53,7 +53,7 @@ public class ProductService {
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(new ProductPrice(request.getPrice()));
 
-        productMenuService.validMenuDisplay(productId);
+        productMenuService.changeMenuDisplayStatus(productId);
 
         return new ProductInfo(
                 product.getId(),
