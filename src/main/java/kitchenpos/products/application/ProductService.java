@@ -1,8 +1,8 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.Price;
-import kitchenpos.common.domain.PurgomalumClient;
+import kitchenpos.common.domain.vo.Name;
+import kitchenpos.common.domain.vo.Price;
+import kitchenpos.common.domain.client.PurgomalumClient;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.application.dto.ProductResponse;
 import kitchenpos.products.domain.Product;

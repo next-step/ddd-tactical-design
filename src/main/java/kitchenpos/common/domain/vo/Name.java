@@ -1,4 +1,6 @@
-package kitchenpos.common.domain;
+package kitchenpos.common.domain.vo;
+
+import kitchenpos.common.domain.client.PurgomalumClient;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -17,14 +19,23 @@ public class Name {
     }
 
     public static Name of(final String name, PurgomalumClient menuPurgomalumClient) {
-        validateName(name, menuPurgomalumClient);
+        validateNullOrEmpty(name);
+        validateProfanity(name, menuPurgomalumClient);
         return new Name(name);
     }
 
-    private static void validateName(final String name, PurgomalumClient menuPurgomalumClient) {
+    public static Name of(final String name) {
+        validateNullOrEmpty(name);
+        return new Name(name);
+    }
+
+    private static void validateNullOrEmpty(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("메뉴명이 없습니다.");
         }
+    }
+
+    private static void validateProfanity(String name, PurgomalumClient menuPurgomalumClient) {
         if (menuPurgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException("메뉴명에 비속어가 포함되었습니다.");
         }

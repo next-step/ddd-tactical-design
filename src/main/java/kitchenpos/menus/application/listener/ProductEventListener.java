@@ -2,10 +2,8 @@ package kitchenpos.menus.application.listener;
 
 import kitchenpos.menus.application.menu.MenuService;
 import kitchenpos.products.application.ProductChangePriceEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class ProductEventListener {
@@ -16,8 +14,7 @@ public class ProductEventListener {
         this.menuService = menuService;
     }
 
-    @TransactionalEventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @EventListener
     public void changeDisplayed(final ProductChangePriceEvent event) {
         menuService.hideIfMenuPriceGraterThanProducts(event.getProductId());
     }
