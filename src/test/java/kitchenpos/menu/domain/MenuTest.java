@@ -1,16 +1,46 @@
 package kitchenpos.menu.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.menu.tobe.domain.Menu;
+import kitchenpos.menu.tobe.domain.MenuPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class MenuTest {
+
+    @DisplayName("메뉴 객체를 생성한다")
+    @ParameterizedTest
+    @ValueSource(longs = {10_000L, 11_000L, 12_000L, 13_000L, 14_000L, 15_000L})
+    void testInitMenu(long price) {
+        // given
+        var menuProducts = List.of(Fixtures.menuProduct(10_000L, 1), Fixtures.menuProduct(5_000L, 1));
+
+        // when // then
+        assertDoesNotThrow(() -> new Menu(UUID.randomUUID(), "test menu name", MenuPrice.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts));
+    }
+
+    @DisplayName("메뉴 객체를 생성한다")
+    @ParameterizedTest
+    @ValueSource(longs = {15_001L, 16_000L, 17_000L, 18_000L, 19_000L})
+    void testInitMenuIfPriceIsMoreThanSumOfMenuProductPrices(long price) {
+        // given
+        var menuProducts = List.of(Fixtures.menuProduct(10_000L, 1), Fixtures.menuProduct(5_000L, 1));
+
+        // when // then
+        assertThatThrownBy(() -> new Menu(UUID.randomUUID(), "test menu name", MenuPrice.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
 
     @DisplayName("메뉴의 가격이 메뉴에 속한 Product Price들의 가격 합보다 크면 메뉴가 숨김 처리된다.")
     @Test
