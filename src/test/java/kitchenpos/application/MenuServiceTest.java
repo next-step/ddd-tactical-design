@@ -19,7 +19,6 @@ import kitchenpos.menu.application.MenuService;
 import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
-import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import kitchenpos.menu.tobe.domain.service.MenuNameNormalPolicy;
 import kitchenpos.menu.tobe.domain.service.MenuNamePolicy;
@@ -173,28 +172,6 @@ class MenuServiceTest {
         final var expected = changePriceRequest(38_001L);
         assertThatThrownBy(() -> menuService.changePrice(menuId, expected)) // TODO(경록) : 예외가 발생하는게 맞음! (이거 수정중!)
             .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("메뉴를 노출할 수 있다.")
-    @Test
-    void display() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final var actual = menuService.display(menuId);
-        assertThat(actual.isDisplayed()).isTrue();
-    }
-
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-    @Test
-    void displayExpensiveMenu() {
-        // given
-        Menu menu = menu(32_000L, false, menuProduct(product, 2L));
-        final UUID menuId = menuRepository.save(menu).getId();
-
-        menu.setPrice(BigDecimal.valueOf(33_000L));
-
-        // when // then
-        assertThatThrownBy(() -> menuService.display(menuId))
-            .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("메뉴를 숨길 수 있다.")

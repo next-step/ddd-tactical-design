@@ -41,6 +41,14 @@ public class Fixtures {
             displayed, Arrays.asList(menuProducts));
     }
 
+    public static Menu hideMenu(final long price, final MenuProduct... menuProducts) {
+        Menu menu = menu(price, false, menuProducts);
+        BigDecimal expensivePrice = BigDecimal.valueOf(price).subtract(BigDecimal.ONE);
+        menu.changeMenuProductPrice(menuProducts[0].getProductId(), MenuPrice.of(expensivePrice));
+
+        return menu;
+    }
+
     public static MenuGroup menuGroup() {
         return menuGroup("두마리메뉴");
     }

@@ -69,7 +69,7 @@ public class Menu {
         this.price = price;
     }
 
-    public void display() { // TODO(경록) : 테스트 코드 추가 예정
+    public void display() {
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalStateException();
@@ -77,7 +77,7 @@ public class Menu {
         this.displayed = true;
     }
 
-    public void hide() { // TODO(경록) : 테스트 코드 추가 예정
+    public void hide() {
         this.displayed = false;
     }
 
@@ -95,10 +95,6 @@ public class Menu {
 
     public BigDecimal getPrice() {
         return price.getValue();
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = new MenuPrice(price);
     }
 
     public boolean isDisplayed() {

@@ -48,7 +48,6 @@ class MenuTest {
         // given
         MenuProduct menuProduct = Fixtures.menuProduct(100_000, 1);
         Menu menu = Fixtures.menu(100_000, true, menuProduct);
-        menu.setPrice(BigDecimal.valueOf(100_001L)); // menu 혹은 menu가 가지는 MenuProduct의 가격 변경이 어려워 setter로 가격 변경 (테스트를 위한 메서드 같아서 꺼려짐)
 
         // when
         menu.changeMenuProductPrice(menuProduct.getProductId(), MenuPrice.of(BigDecimal.valueOf(99_999L)));
@@ -57,7 +56,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    @DisplayName("메뉴의 메뉴 상품 가격을 변경할 때, 메뉴 상품들의 가격 합보다 메뉴의 가격이 작거나 같으면 메뉴의 숨김 여부가 변경되지 않는다.")
+    @DisplayName("메뉴의 메뉴 상품 가격을 변경할 때, 메뉴 상품들의경 가격 합보다 메뉴의 가격이 작거나 같으면 메뉴의 숨김 여부가 변경되지 않는다.")
     @CsvSource(value = {"true;true", "false;false"}, delimiter = ';')
     @ParameterizedTest
     void testChangeMenuProductPriceIfMenuPriceIsLessThanSumOfMenuProductPrices(boolean displayed, boolean expected) {
@@ -72,5 +71,40 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isEqualTo(expected);
     }
 
+    @DisplayName("메뉴를 노출한다")
+    @Test
+    void testDisplay() {
+        // given
+        var menu = Fixtures.menu(9_999L, false, Fixtures.menuProduct(10_000L, 1));
 
+        // when
+        menu.display();
+
+        // then
+        assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("만약 메뉴 가격이 메뉴 상품의 가격 합보다 크면 메뉴를 노출할 수 없다")
+    @Test
+    void testDisplayIfMenuPriceIsMoreThanSumOfMenuProductPrices() {
+        // given
+        var menu = Fixtures.hideMenu(9_999L, Fixtures.menuProduct(10_000L, 1));
+
+        // when // then
+        assertThatThrownBy(() -> menu.display())
+            .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("메뉴를 숨긴다")
+    @Test
+    void testHide() {
+        // given
+        var menu = Fixtures.menu();
+
+        // when
+        menu.hide();
+
+        // then
+        assertThat(menu.isDisplayed()).isFalse();
+    }
 }
