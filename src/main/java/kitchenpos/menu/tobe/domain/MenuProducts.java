@@ -3,7 +3,9 @@ package kitchenpos.menu.tobe.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
@@ -37,6 +39,15 @@ public class MenuProducts {
         return value.stream()
             .map(MenuProduct::calculatePrice)
             .reduce(MenuPrice.ZERO, MenuPrice::add);
+    }
+
+    public void changeMenuProductPrice(UUID productId, MenuPrice price) { // TODO(경록) : test code 작성 예정
+        MenuProduct menuProduct = value.stream()
+            .filter(it -> it.equalsToProductId(productId))
+            .findAny()
+            .orElseThrow(NoSuchElementException::new);
+
+        menuProduct.changePrice(price);
     }
 
     public List<MenuProduct> getValue() {

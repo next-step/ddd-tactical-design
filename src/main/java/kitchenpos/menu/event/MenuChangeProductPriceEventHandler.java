@@ -2,7 +2,7 @@ package kitchenpos.menu.event;
 
 import java.util.List;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuProductRepository;
+import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -13,11 +13,9 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class MenuChangeProductPriceEventHandler {
 
     private final MenuRepository menuRepository;
-    private final MenuProductRepository menuProductRepository;
 
-    public MenuChangeProductPriceEventHandler(MenuRepository menuRepository, MenuProductRepository menuProductRepository) {
+    public MenuChangeProductPriceEventHandler(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
-        this.menuProductRepository = menuProductRepository;
     }
 
     @Async
@@ -26,9 +24,7 @@ public class MenuChangeProductPriceEventHandler {
         fallbackExecution = true
     )
     public void handleChangeProductPriceEvent(ChangeProductPriceEvent event) {
-        menuProductRepository.bulkUpdateMenuProductPrice(event.getProductId(), event.getPrice());
-
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
-        menus.forEach(Menu::checkPrice);
+        menus.forEach(menu -> menu.changeMenuProductPrice(event.getProductId(), MenuPrice.of(event.getPrice())));
     }
 }

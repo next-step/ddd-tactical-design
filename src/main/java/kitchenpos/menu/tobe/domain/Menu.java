@@ -53,14 +53,15 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public void checkPrice() {
+    public void changeMenuProductPrice(UUID productId, MenuPrice price) {
+        this.menuProducts.changeMenuProductPrice(productId, price);
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(this.price)) {
             displayed = false;
         }
     }
 
-    public void changePrice(MenuPrice price) {
+    public void changePrice(MenuPrice price) { // TODO(경록) : 테스트 코드 추가 예정
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalArgumentException();
@@ -68,7 +69,7 @@ public class Menu {
         this.price = price;
     }
 
-    public void display() {
+    public void display() { // TODO(경록) : 테스트 코드 추가 예정
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalStateException();
@@ -76,7 +77,7 @@ public class Menu {
         this.displayed = true;
     }
 
-    public void hide() {
+    public void hide() { // TODO(경록) : 테스트 코드 추가 예정
         this.displayed = false;
     }
 

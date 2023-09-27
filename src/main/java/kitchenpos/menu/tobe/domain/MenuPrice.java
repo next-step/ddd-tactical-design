@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.product.tobe.domain.ProductPrice;
 
 @Embeddable
 public class MenuPrice {
@@ -39,6 +40,10 @@ public class MenuPrice {
 
     public BigDecimal getValue() {
         return value;
+    }
+
+    public ProductPrice toProductPrice() {
+        return new ProductPrice(this.value);
     }
 
     @Override

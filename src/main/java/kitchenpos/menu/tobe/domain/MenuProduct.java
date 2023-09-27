@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.domain;
 
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -50,6 +51,14 @@ public class MenuProduct {
         return price.multiply(quantity).toMenuPrice();
     }
 
+    public void changePrice(MenuPrice price) {
+        this.price = price.toProductPrice();
+    }
+
+    public boolean equalsToProductId(UUID productId) {
+        return this.productId.equals(productId);
+    }
+
     public Long getSeq() {
         return seq;
     }
@@ -64,5 +73,22 @@ public class MenuProduct {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MenuProduct)) {
+            return false;
+        }
+        MenuProduct that = (MenuProduct) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq);
     }
 }

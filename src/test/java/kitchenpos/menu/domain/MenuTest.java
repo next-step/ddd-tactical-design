@@ -10,6 +10,7 @@ import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuPrice;
+import kitchenpos.menu.tobe.domain.MenuProduct;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,16 +42,16 @@ class MenuTest {
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
-
     @DisplayName("메뉴의 가격이 메뉴에 속한 Product Price들의 가격 합보다 크면 메뉴가 숨김 처리된다.")
     @Test
-    void testCheckPriceIfMenuPriceIsMoreThanSumOfMenuProductPrices() {
+    void testChangeMenuProductPriceIfMenuPriceIsMoreThanSumOfMenuProductPrices() {
         // given
-        Menu menu = Fixtures.menu(100_000, true, Fixtures.menuProduct(Fixtures.product(100_000), 1));
+        MenuProduct menuProduct = Fixtures.menuProduct(100_000, 1);
+        Menu menu = Fixtures.menu(100_000, true, menuProduct);
         menu.setPrice(BigDecimal.valueOf(100_001L)); // menu 혹은 menu가 가지는 MenuProduct의 가격 변경이 어려워 setter로 가격 변경 (테스트를 위한 메서드 같아서 꺼려짐)
 
         // when
-        menu.checkPrice();
+        menu.changeMenuProductPrice(menuProduct.getProductId(), MenuPrice.of(BigDecimal.valueOf(99_999L)));
 
         // then
         assertThat(menu.isDisplayed()).isFalse();
@@ -59,14 +60,17 @@ class MenuTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 Product Price들의 가격 합이 작거나 같으면 메뉴는 처음 노출 상태를 유지한다.")
     @CsvSource(value = {"true;true", "false;false"}, delimiter = ';')
     @ParameterizedTest
-    void testCheckPriceIfMenuPriceIsLessThanSumOfMenuProductPrices(boolean displayed, boolean expected) {
+    void testChangeMenuProductPriceIfMenuPriceIsLessThanSumOfMenuProductPrices(boolean displayed, boolean expected) {
         // given
-        Menu menu = Fixtures.menu(10_000, displayed, Fixtures.menuProduct());
+        MenuProduct menuProduct = Fixtures.menuProduct(100_000L, 1);
+        Menu menu = Fixtures.menu(100_000, displayed, menuProduct);
 
         // when
-        menu.checkPrice();
+        menu.changeMenuProductPrice(menuProduct.getProductId(), MenuPrice.of(BigDecimal.valueOf(100_001L)));
 
         // then
         assertThat(menu.isDisplayed()).isEqualTo(expected);
     }
+
+
 }
