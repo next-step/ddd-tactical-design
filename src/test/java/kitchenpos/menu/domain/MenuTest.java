@@ -42,7 +42,7 @@ class MenuTest {
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격이 메뉴에 속한 Product Price들의 가격 합보다 크면 메뉴가 숨김 처리된다.")
+    @DisplayName("메뉴의 메뉴 상품 가격을 변경할 때, 메뉴 상품들의 가격 합보다 메뉴의 가격이 크면 메뉴가 숨김 처리된다.")
     @Test
     void testChangeMenuProductPriceIfMenuPriceIsMoreThanSumOfMenuProductPrices() {
         // given
@@ -57,7 +57,7 @@ class MenuTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    @DisplayName("메뉴의 가격이 메뉴에 속한 Product Price들의 가격 합이 작거나 같으면 메뉴는 처음 노출 상태를 유지한다.")
+    @DisplayName("메뉴의 메뉴 상품 가격을 변경할 때, 메뉴 상품들의 가격 합보다 메뉴의 가격이 작거나 같으면 메뉴의 숨김 여부가 변경되지 않는다.")
     @CsvSource(value = {"true;true", "false;false"}, delimiter = ';')
     @ParameterizedTest
     void testChangeMenuProductPriceIfMenuPriceIsLessThanSumOfMenuProductPrices(boolean displayed, boolean expected) {
