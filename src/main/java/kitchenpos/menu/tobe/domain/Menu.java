@@ -61,7 +61,7 @@ public class Menu {
         }
     }
 
-    public void changePrice(MenuPrice price) { // TODO(경록) : 테스트 코드 추가 예정
+    public void changePrice(MenuPrice price) {
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalArgumentException();

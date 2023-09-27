@@ -107,4 +107,18 @@ class MenuTest {
         // then
         assertThat(menu.isDisplayed()).isFalse();
     }
+
+    @DisplayName("메뉴의 가격을 수정한다")
+    @Test
+    void testChangePrice() {
+        // given
+        var menu = Fixtures.menu();
+        BigDecimal expected = BigDecimal.valueOf(5_000L);
+
+        // when
+        menu.changePrice(MenuPrice.of(expected));
+
+        // then
+        assertThat(menu.getPrice()).isEqualTo(expected);
+    }
 }
