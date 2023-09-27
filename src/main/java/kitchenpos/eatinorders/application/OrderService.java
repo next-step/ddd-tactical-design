@@ -121,7 +121,6 @@ public class OrderService {
     private EatInOrderResponse createEatInOrderResponse(EatInOrder savedOrder) {
         return EatInOrderResponse.create(
                 savedOrder.getId(),
-                savedOrder.getType(),
                 savedOrder.getStatus(),
                 savedOrder.getOrderDateTime(),
                 savedOrder.getOrderTableId(),

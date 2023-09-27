@@ -49,7 +49,6 @@ class OrderServiceTest {
         assertThat(actual).isNotNull();
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getType()).isEqualTo(OrderType.EAT_IN),
                 () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING),
                 () -> assertThat(actual.getOrderDateTime()).isNotNull(),
                 () -> assertThat(actual.getEatInOrderLineItems()).hasSize(1),

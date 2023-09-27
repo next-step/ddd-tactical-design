@@ -14,10 +14,6 @@ public class EatInOrder {
     @Id
     private UUID id;
 
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
-
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -34,9 +30,8 @@ public class EatInOrder {
     public EatInOrder() {
     }
 
-    public EatInOrder(UUID id, OrderType orderType, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, UUID orderTableId) {
+    public EatInOrder(UUID id, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, UUID orderTableId) {
         this.id = id;
-        this.type = orderType;
         this.status = orderStatus;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = eatInOrderLineItems;
@@ -44,7 +39,7 @@ public class EatInOrder {
     }
 
     public static EatInOrder create(UUID id, OrderStatus orderStatus, LocalDateTime orderDateTime, EatInOrderLineItems eatInOrderLineItems, UUID orderTable) {
-        return new EatInOrder(id, OrderType.EAT_IN, orderStatus, orderDateTime, eatInOrderLineItems, orderTable);
+        return new EatInOrder(id, orderStatus, orderDateTime, eatInOrderLineItems, orderTable);
     }
 
     public void accept() {
@@ -71,11 +66,6 @@ public class EatInOrder {
     public UUID getId() {
         return id;
     }
-
-    public OrderType getType() {
-        return type;
-    }
-
 
     public OrderStatus getStatus() {
         return status;
