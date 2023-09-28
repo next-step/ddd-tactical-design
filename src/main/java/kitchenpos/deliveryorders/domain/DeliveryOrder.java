@@ -1,0 +1,137 @@
+package kitchenpos.deliveryorders.domain;
+
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Table(name = "delivery_orders")
+@Entity
+public class DeliveryOrder {
+    @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
+    private UUID id;
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @Column(name = "order_date_time", nullable = false)
+    private LocalDateTime orderDateTime;
+
+    @Embedded
+    private DeliveryOrderLineItems orderLineItems;
+
+    @Embedded
+    private DeliveryOrderAddress deliveryAddress;
+
+    protected DeliveryOrder() {
+    }
+
+    public DeliveryOrder(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, DeliveryOrderLineItems orderLineItems, DeliveryOrderAddress deliveryAddress) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public static DeliveryOrder of(DeliveryOrderLineItems orderLineItems, DeliveryOrderAddress orderAddress, MenuClient menuClient) {
+        validateDeliveryOrder(orderLineItems, menuClient);
+        return new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderAddress);
+    }
+
+    private static void validateDeliveryOrder(DeliveryOrderLineItems orderLineItems, MenuClient menuClient) {
+        List<Menu> menus = menuClient.findAllByIdIn(
+                orderLineItems.getOrderLineItems().stream()
+                        .map(DeliveryOrderLineItem::getMenuId)
+                        .collect(Collectors.toList())
+        );
+        if (menus.size() != orderLineItems.getOrderLineItems().size()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public OrderType getType() {
+        return type;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public List<DeliveryOrderLineItem> getOrderLineItems() {
+        return orderLineItems.getOrderLineItems();
+    }
+
+    public String  getDeliveryAddress() {
+        return deliveryAddress.getDeliveryOrderAddress();
+    }
+
+    public void accept(KitchenridersClient kitchenridersClient) {
+        if (status != OrderStatus.WAITING) {
+            throw new IllegalStateException();
+        }
+
+        kitchenridersClient.requestDelivery(id, orderLineItems.getTotalDeliveryOrderLineItemsPrice(), getDeliveryAddress());
+        status = OrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (status != OrderStatus.ACCEPTED) {
+            throw new IllegalStateException();
+        }
+        this.status = OrderStatus.SERVED;
+    }
+
+    public void startDelivery() {
+        if (type != OrderType.DELIVERY) {
+            throw new IllegalStateException();
+        }
+        if (status != OrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
+        status = OrderStatus.DELIVERING;
+    }
+
+    public void completeDelivery() {
+        if (status != OrderStatus.DELIVERING) {
+            throw new IllegalStateException();
+        }
+        status = OrderStatus.DELIVERED;
+    }
+
+    public void complete() {
+        if (type != OrderType.DELIVERY) {
+            throw new IllegalStateException();
+        }
+        if (status != OrderStatus.DELIVERED) {
+            throw new IllegalStateException();
+        }
+        status = OrderStatus.COMPLETED;
+    }
+}

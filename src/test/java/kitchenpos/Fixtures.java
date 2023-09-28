@@ -1,7 +1,13 @@
 package kitchenpos;
 
 import kitchenpos.common.domain.PurgomalumClient;
+import kitchenpos.deliveryorders.domain.DeliveryOrderLineItem;
+import kitchenpos.deliveryorders.domain.DeliveryOrderLineItemPrice;
+import kitchenpos.deliveryorders.domain.DeliveryOrderLineItemQuantity;
+import kitchenpos.deliveryorders.domain.MenuClient;
+import kitchenpos.deliveryorders.infra.MenuClientImpl;
 import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
@@ -35,6 +41,9 @@ public class Fixtures {
 
     public static Menu menu(final long price, final MenuProduct... menuProducts) {
         return menu(price, false, menuProducts);
+    }
+    public static Menu displayedMenu(final long price, final MenuProduct... menuProducts) {
+        return menu(price, true, menuProducts);
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
@@ -99,6 +108,10 @@ public class Fixtures {
         orderLineItem.setSeq(new Random().nextLong());
         orderLineItem.setMenu(menu());
         return orderLineItem;
+    }
+
+    public static DeliveryOrderLineItem deliveryOrderLineItem(Menu menu, MenuClient menuClient) {
+        return DeliveryOrderLineItem.of(menu.getId(), new DeliveryOrderLineItemQuantity(2L), new DeliveryOrderLineItemPrice(menu.getPrice()), menuClient);
     }
 
     public static OrderTable orderTable() {
