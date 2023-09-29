@@ -2,8 +2,13 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.shared.dto.request.EatInOrderTableChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.shared.dto.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableName;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,24 +20,20 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final EatInOrderRepository eatInOrderRepository;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(OrderTableRepository orderTableRepository, EatInOrderRepository eatInOrderRepository) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.eatInOrderRepository = eatInOrderRepository;
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+    public OrderTable create(final OrderTableCreateRequest request) {
+        final OrderTable orderTable = OrderTable.of(
+                new OrderTableName(request.getName()),
+                new NumberOfGuests(0),
+                false
+        );
         return orderTableRepository.save(orderTable);
     }
 
@@ -40,7 +41,7 @@ public class OrderTableService {
     public OrderTable sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
+        orderTable.sit();
         return orderTable;
     }
 
@@ -48,26 +49,18 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+        orderTable.clear();
         return orderTable;
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
+    public OrderTable changeNumberOfGuests(final UUID orderTableId, final EatInOrderTableChangeNumberOfGuestsRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
+        orderTable.changeNumberOfGuests(request.getNumberOfGuests());
         return orderTable;
     }
 

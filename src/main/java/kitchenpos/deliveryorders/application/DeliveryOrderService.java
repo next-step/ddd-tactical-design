@@ -65,7 +65,6 @@ public class DeliveryOrderService {
         DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         deliveryOrder.accept(kitchenridersClient);
-
         return ConvertUtil.convert(deliveryOrder, DeliveryOrderDto.class);
     }
 
@@ -73,7 +72,6 @@ public class DeliveryOrderService {
     public DeliveryOrderDto serve(final UUID orderId) {
         DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-
         deliveryOrder.serve();
         return ConvertUtil.convert(deliveryOrder, DeliveryOrderDto.class);
     }
@@ -82,7 +80,6 @@ public class DeliveryOrderService {
     public DeliveryOrderDto startDelivery(final UUID orderId) {
         DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-
         deliveryOrder.startDelivery();
         return ConvertUtil.convert(deliveryOrder, DeliveryOrderDto.class);
     }
@@ -91,7 +88,6 @@ public class DeliveryOrderService {
     public DeliveryOrderDto completeDelivery(final UUID orderId) {
         DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-
         deliveryOrder.completeDelivery();
         return ConvertUtil.convert(deliveryOrder, DeliveryOrderDto.class);
     }
@@ -100,7 +96,6 @@ public class DeliveryOrderService {
     public DeliveryOrderDto complete(final UUID orderId) {
         DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-
         deliveryOrder.complete();
         return ConvertUtil.convert(deliveryOrder, DeliveryOrderDto.class);
     }

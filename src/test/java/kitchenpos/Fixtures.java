@@ -5,16 +5,22 @@ import kitchenpos.deliveryorders.domain.DeliveryOrderLineItem;
 import kitchenpos.deliveryorders.domain.DeliveryOrderLineItemPrice;
 import kitchenpos.deliveryorders.domain.DeliveryOrderLineItemQuantity;
 import kitchenpos.deliveryorders.domain.MenuClient;
-import kitchenpos.deliveryorders.infra.MenuClientImpl;
 import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.eatinorders.tobe.domain.order.EatInMenuClient;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemPrice;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItemQuantity;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableName;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
 import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProductPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProductQuantity;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
-import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
@@ -103,6 +109,10 @@ public class Fixtures {
         return order;
     }
 
+    public static EatInOrder eatInOrder(final OrderStatus status, final OrderTable orderTable, final Menu menu) {
+        return new EatInOrder(UUID.randomUUID(), OrderType.EAT_IN, status, LocalDateTime.now(), new EatInOrderLineItems(Arrays.asList(new EatInOrderLineItem(menu.getId(), new EatInOrderLineItemQuantity(1L), new EatInOrderLineItemPrice(BigDecimal.TEN)))), orderTable);
+    }
+
     public static OrderLineItem orderLineItem() {
         final OrderLineItem orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(new Random().nextLong());
@@ -114,17 +124,20 @@ public class Fixtures {
         return DeliveryOrderLineItem.of(menu.getId(), new DeliveryOrderLineItemQuantity(2L), new DeliveryOrderLineItemPrice(menu.getPrice()), menuClient);
     }
 
+    public static EatInOrderLineItem eatInOrderLineItem(Menu menu, EatInMenuClient menuClient) {
+        return EatInOrderLineItem.of(menu.getId(), new EatInOrderLineItemQuantity(2L), new EatInOrderLineItemPrice(menu.getPrice()), menuClient);
+    }
+
     public static OrderTable orderTable() {
         return orderTable(false, 0);
     }
 
+    public static OrderTable occupiedOrderTable() {
+        return orderTable(true, 0);
+    }
+
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return new OrderTable(UUID.randomUUID(), new OrderTableName("1번"), new NumberOfGuests(numberOfGuests), occupied);
     }
 
     public static Product product() {

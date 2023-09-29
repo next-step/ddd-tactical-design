@@ -5,8 +5,8 @@ import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -181,8 +181,7 @@ public class TakeOutOrderService {
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.setNumberOfGuests(0);
-                orderTable.setOccupied(false);
+                orderTable.clear();
             }
         }
         return order;

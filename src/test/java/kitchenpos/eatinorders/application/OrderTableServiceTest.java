@@ -1,9 +1,25 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.deliveryorders.application.InMemoryMenuClient;
+import kitchenpos.deliveryorders.domain.MenuClient;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.shared.dto.request.EatInOrderTableChangeNumberOfGuestsRequest;
+import kitchenpos.eatinorders.shared.dto.request.OrderTableCreateRequest;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableName;
+import kitchenpos.eatinorders.tobe.domain.ordertable.OrderTableRepository;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,31 +27,49 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.Fixtures.displayedMenu;
+import static kitchenpos.Fixtures.eatInOrder;
+import static kitchenpos.Fixtures.menuProduct;
 import static kitchenpos.Fixtures.order;
+import static kitchenpos.Fixtures.orderLineItem;
 import static kitchenpos.Fixtures.orderTable;
+import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableServiceTest {
     private OrderTableRepository orderTableRepository;
-    private OrderRepository orderRepository;
+
+    private EatInOrderRepository eatInOrderRepository;
     private OrderTableService orderTableService;
+    private MenuRepository menuRepository;
+    private MenuClient menuClient;
+    private ProductRepository productRepository;
+    Product product;
+    Menu displayedMenu;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderRepository = new InMemoryOrderRepository();
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        eatInOrderRepository = new InMemoryEatInOrderRepository();
+
+        productRepository = new InMemoryProductRepository();
+        orderTableService = new OrderTableService(orderTableRepository, eatInOrderRepository);
+        product = productRepository.save(product());
+        menuRepository = new InMemoryMenuRepository();
+        menuClient = new InMemoryMenuClient(menuRepository);
+        displayedMenu = menuRepository.save(displayedMenu(1L, menuProduct(product, 1L)));
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
-        final OrderTable expected = createOrderTableRequest("1번");
+        final OrderTableCreateRequest expected = createOrderTableRequest("1번");
         final OrderTable actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -50,7 +84,7 @@ class OrderTableServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
+        final OrderTableCreateRequest expected = createOrderTableRequest(name);
         assertThatThrownBy(() -> orderTableService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -79,7 +113,7 @@ class OrderTableServiceTest {
     void clearWithUncompletedOrders() {
         final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
         final UUID orderTableId = orderTable.getId();
-        orderRepository.save(order(OrderStatus.ACCEPTED, orderTable));
+        eatInOrderRepository.save(eatInOrder(OrderStatus.ACCEPTED, orderTable, displayedMenu));
         assertThatThrownBy(() -> orderTableService.clear(orderTableId))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -88,7 +122,7 @@ class OrderTableServiceTest {
     @Test
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
+        final EatInOrderTableChangeNumberOfGuestsRequest expected = changeNumberOfGuestsRequest(4);
         final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
@@ -98,7 +132,7 @@ class OrderTableServiceTest {
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(numberOfGuests);
+        final EatInOrderTableChangeNumberOfGuestsRequest expected = changeNumberOfGuestsRequest(numberOfGuests);
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -107,7 +141,7 @@ class OrderTableServiceTest {
     @Test
     void changeNumberOfGuestsInEmptyTable() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
+        final EatInOrderTableChangeNumberOfGuestsRequest expected = changeNumberOfGuestsRequest(4);
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -120,15 +154,11 @@ class OrderTableServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+    private OrderTableCreateRequest createOrderTableRequest(final String name) {
+        return new OrderTableCreateRequest(name);
     }
 
-    private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+    private EatInOrderTableChangeNumberOfGuestsRequest changeNumberOfGuestsRequest(final int numberOfGuests) {
+        return new EatInOrderTableChangeNumberOfGuestsRequest(numberOfGuests);
     }
 }

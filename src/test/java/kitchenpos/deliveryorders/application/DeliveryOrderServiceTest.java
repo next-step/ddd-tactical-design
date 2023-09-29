@@ -104,7 +104,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("배달 주문은 주소가 필수값이다.")
+    @DisplayName("배달 주문 메뉴 가격은 주문항목 가격과 같아야 한다.")
     @Test
     void menu_price_of_delivery_order_and_order_line_item_price_should_be_same() {
         //given
@@ -159,7 +159,7 @@ class DeliveryOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-    @DisplayName("배달한 주문만 배달 완료할 수 있다.")
+    @DisplayName("배달한 주문만 완료할 수 있다.")
     @Test
     void only_delivery_completed_order_can_be_complete() {
 
