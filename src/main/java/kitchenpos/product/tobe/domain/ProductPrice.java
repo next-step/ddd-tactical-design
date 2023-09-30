@@ -4,12 +4,16 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import kitchenpos.menu.tobe.domain.MenuPrice;
 
 @Embeddable
 public class ProductPrice {
 
     @Column(name = "price", nullable = false)
-    private final BigDecimal value;
+    private BigDecimal value;
+
+    protected ProductPrice() {
+    }
 
     public ProductPrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
@@ -19,8 +23,16 @@ public class ProductPrice {
         this.value = value;
     }
 
+    public ProductPrice multiply(long quantity) {
+        return new ProductPrice(this.value.multiply(BigDecimal.valueOf(quantity)));
+    }
+
     public BigDecimal getValue() {
         return value;
+    }
+
+    public MenuPrice toMenuPrice() {
+        return new MenuPrice(value);
     }
 
     @Override
@@ -38,9 +50,5 @@ public class ProductPrice {
     @Override
     public int hashCode() {
         return Objects.hash(value);
-    }
-
-    public ProductPrice multiply(long quantity) {
-        return new ProductPrice(this.value.multiply(BigDecimal.valueOf(quantity)));
     }
 }

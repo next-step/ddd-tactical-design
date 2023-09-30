@@ -3,8 +3,15 @@ package kitchenpos.menu.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import kitchenpos.menu.application.MenuService;
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceRequest;
+import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceResponse;
+import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
+import kitchenpos.menu.tobe.application.dto.CreateMenuResponse;
+import kitchenpos.menu.tobe.application.dto.DisplayMenuResponse;
+import kitchenpos.menu.tobe.application.dto.HideMenuResponse;
+import kitchenpos.menu.tobe.application.dto.QueryMenuResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +32,29 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Menu> create(@RequestBody final Menu request) {
-        final Menu response = menuService.create(request);
+    public ResponseEntity<CreateMenuResponse> create(@Valid @RequestBody final CreateMenuRequest request) {
+        final var response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<ChangeMenuPriceResponse> changePrice(@PathVariable final UUID menuId, @RequestBody final ChangeMenuPriceRequest request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 
     @PutMapping("/{menuId}/display")
-    public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
+    public ResponseEntity<DisplayMenuResponse> display(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
-    public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
+    public ResponseEntity<HideMenuResponse> hide(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.hide(menuId));
     }
 
     @GetMapping
-    public ResponseEntity<List<Menu>> findAll() {
+    public ResponseEntity<List<QueryMenuResponse>> findAll() {
         return ResponseEntity.ok(menuService.findAll());
     }
 }

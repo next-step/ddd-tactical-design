@@ -16,7 +16,7 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private ProductName name;
 
     @Embedded
@@ -25,10 +25,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
-        this.id = id;
-        this.name = new ProductName(name);
-        this.price = new ProductPrice(price);
+    public Product(UUID id, ProductName name, BigDecimal price) {
+        this(id, name, new ProductPrice(price));
     }
 
     public Product(UUID id, ProductName name, ProductPrice price) {

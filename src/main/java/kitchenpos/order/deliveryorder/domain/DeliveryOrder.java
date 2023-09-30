@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 public class DeliveryOrder {
 
-    @Column(name = "id", columnDefinition = "binary(16)")
+    @Column(name = "delivery_order_id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
@@ -31,10 +31,9 @@ public class DeliveryOrder {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "order_id",
+        name = "delivery_order_id",
         nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_delivery_order_line_item_to_orders")
+        columnDefinition = "binary(16)"
     )
     private List<DeliveryOrderLineItem> orderLineItems;
 
