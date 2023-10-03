@@ -13,25 +13,23 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static kitchenpos.eatinorders.exception.OrderExceptionMessage.*;
+import static kitchenpos.eatinorders.exception.OrderExceptionMessage.NOT_FOUND_MENU;
+import static kitchenpos.eatinorders.exception.OrderExceptionMessage.ORDER_LINE_ITEM_EMPTY;
 
 @Service
 public class OrderService {
     private final EatInOrderRepository orderRepository;
     private final EatInMenuRepository menuRepository;
-    private final EatInOrderTableRepository orderTableRepository;
-    private final OrderEventService orderEventService;
+    private final EatInOrderTableChecker eatInOrderTableChecker;
 
     public OrderService(
             final EatInOrderRepository orderRepository,
             final EatInMenuRepository menuRepository,
-            final EatInOrderTableRepository orderTableRepository,
-            final OrderEventService orderEventService
+            final EatInOrderTableChecker eatInOrderTableChecker
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
-        this.orderTableRepository = orderTableRepository;
-        this.orderEventService = orderEventService;
+        this.eatInOrderTableChecker = eatInOrderTableChecker;
     }
 
     @Transactional
@@ -47,10 +45,11 @@ public class OrderService {
                 OrderStatus.WAITING,
                 LocalDateTime.now(),
                 EatInOrderLineItems.create(createEatInOrderLineItems(orderLineItemsRequest, eatInMenus)),
-                findOrderTableById(request.getOrderTableId())
+                //EatInOrderTable.emptyCheck(request.getOrderTableId(), eatInOrderTableChecker)
+                eatInOrderTableChecker.validate(request.getOrderTableId())
         );
-        EatInOrder savedOrder = orderRepository.save(eatInOrder);
-        return createEatInOrderResponse(savedOrder);
+        orderRepository.save(eatInOrder);
+        return createEatInOrderResponse(eatInOrder);
     }
 
     @Transactional
@@ -70,10 +69,7 @@ public class OrderService {
     @Transactional
     public OrderStatusResponse complete(final UUID orderId) {
         final EatInOrder order = getOrder(orderId);
-        order.complete();
-        if (!orderRepository.existsByOrderTableIdAndStatusNot(order.getOrderTableId(), OrderStatus.COMPLETED)) {
-            orderEventService.notifyOrderComplete(OrderCompleteEvent.create(order.getOrderTableId()));
-        }
+        order.complete(orderRepository);
         return OrderStatusResponse.create(order.getId(), order.getStatus());
     }
 
@@ -93,15 +89,6 @@ public class OrderService {
 
     private EatInOrder getOrder(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
-    }
-
-    private UUID findOrderTableById(UUID orderTableId) {
-        EatInOrderTable eatInOrderTable = orderTableRepository.findById(orderTableId)
-                .orElseThrow(() -> new NoSuchElementException(NOT_FOUND_ORDER_TABLE));
-        if (eatInOrderTable.isEmpty()) {
-            throw new IllegalStateException(NOT_OCCUPIED_ORDER_TABLE);
-        }
-        return eatInOrderTable.getId();
     }
 
     private List<EatInOrderLineItem> createEatInOrderLineItems(List<EatInOrderLineItemRequest> orderLineItemRequests, List<EatInMenu> eatInMenus) {

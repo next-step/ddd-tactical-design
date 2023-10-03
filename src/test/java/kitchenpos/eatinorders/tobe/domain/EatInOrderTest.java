@@ -22,11 +22,13 @@ class EatInOrderTest {
 
     private EatInOrderTable eatInOrderTable;
     private EatInOrderLineItems eatInOrderLineItems;
+    private InMemoryEatInOrderRepository eatInOrderRepository;
 
     @BeforeEach
     void setUp() {
         eatInOrderLineItems = EatInOrderLineItems.create(List.of(NewFixtures.eatInOrderLineItem()));
         eatInOrderTable = NewFixtures.orderTable(true, 4);
+        eatInOrderRepository = new InMemoryEatInOrderRepository();
     }
 
     @DisplayName("매장주문 생성 성공")
@@ -84,7 +86,7 @@ class EatInOrderTest {
     void complete_failed() {
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
-        assertThatThrownBy( () -> eatInOrder.complete())
+        assertThatThrownBy( () -> eatInOrder.complete(eatInOrderRepository))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(ORDER_STATUS_NOT_SERVED);
     }
@@ -94,7 +96,7 @@ class EatInOrderTest {
     void complete() {
         EatInOrder eatInOrder = EatInOrder.create(UUID.randomUUID(), OrderStatus.SERVED, LocalDateTime.now(), eatInOrderLineItems, eatInOrderTable.getId());
 
-        eatInOrder.complete();
+        eatInOrder.complete(eatInOrderRepository);
 
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }

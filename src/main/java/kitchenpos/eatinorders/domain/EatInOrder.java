@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
+import org.springframework.data.domain.AbstractAggregateRoot;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -9,7 +11,7 @@ import static kitchenpos.eatinorders.exception.OrderExceptionMessage.*;
 
 @Table(name = "orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -56,11 +58,20 @@ public class EatInOrder {
         this.status = OrderStatus.SERVED;
     }
 
-    public void complete() {
+    public void complete(EatInOrderRepository orderRepository) {
         if (this.status != OrderStatus.SERVED) {
             throw new IllegalStateException(ORDER_STATUS_NOT_SERVED);
         }
         this.status = OrderStatus.COMPLETED;
+
+        if (!orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED)) {
+            registerEvent(OrderCompleteEvent.create(orderTableId));
+            orderRepository.save(this);
+        }
+    }
+
+    public void notifyOrderComplete() {
+
     }
 
     public UUID getId() {
@@ -98,4 +109,5 @@ public class EatInOrder {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
