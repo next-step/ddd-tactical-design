@@ -76,7 +76,6 @@ class DeliveryOrderServiceTest {
 
         //then
         assertThat(result.getStatus()).isEqualTo(OrderStatus.WAITING);
-        assertThat(result.getType()).isEqualTo(OrderType.DELIVERY);
         assertThat(result.getOrderDateTime()).isNotNull();
         assertThat(result.getDeliveryAddress()).isEqualTo(request.getDeliveryAddress());
     }
@@ -119,7 +118,7 @@ class DeliveryOrderServiceTest {
     @Test
     void only_waiting_order_can_be_accept() {
 
-        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
+        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
         deliveryOrderRepository.save(deliveryOrder);
 
         assertThatThrownBy(() -> deliveryOrderService.accept(deliveryOrder.getId()))
@@ -130,7 +129,7 @@ class DeliveryOrderServiceTest {
     @Test
     void only_accepted_order_can_be_serve() {
 
-        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
+        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
         deliveryOrderRepository.save(deliveryOrder);
 
         assertThatThrownBy(() -> deliveryOrderService.serve(deliveryOrder.getId()))
@@ -141,7 +140,7 @@ class DeliveryOrderServiceTest {
     @Test
     void only_served_order_can_be_delivery_start() {
 
-        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
+        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderStatus.DELIVERING, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
         deliveryOrderRepository.save(deliveryOrder);
 
         assertThatThrownBy(() -> deliveryOrderService.startDelivery(deliveryOrder.getId()))
@@ -152,7 +151,7 @@ class DeliveryOrderServiceTest {
     @Test
     void only_delivery_started_order_can_be_complete_delivery() {
 
-        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.SERVED, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
+        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderStatus.SERVED, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
         deliveryOrderRepository.save(deliveryOrder);
 
         assertThatThrownBy(() -> deliveryOrderService.completeDelivery(deliveryOrder.getId()))
@@ -163,7 +162,7 @@ class DeliveryOrderServiceTest {
     @Test
     void only_delivery_completed_order_can_be_complete() {
 
-        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.SERVED, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
+        DeliveryOrder deliveryOrder = new DeliveryOrder(UUID.randomUUID(), OrderStatus.SERVED, LocalDateTime.now(), new DeliveryOrderLineItems(List.of(deliveryOrderLineItem(displayedMenu, menuClient))), new DeliveryOrderAddress("서울"));
         deliveryOrderRepository.save(deliveryOrder);
 
         assertThatThrownBy(() -> deliveryOrderService.complete(deliveryOrder.getId()))

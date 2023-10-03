@@ -23,10 +23,6 @@ public class DeliveryOrder {
     @Id
     private UUID id;
 
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
-
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -43,9 +39,8 @@ public class DeliveryOrder {
     protected DeliveryOrder() {
     }
 
-    public DeliveryOrder(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, DeliveryOrderLineItems orderLineItems, DeliveryOrderAddress deliveryAddress) {
+    public DeliveryOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, DeliveryOrderLineItems orderLineItems, DeliveryOrderAddress deliveryAddress) {
         this.id = id;
-        this.type = type;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
@@ -54,7 +49,7 @@ public class DeliveryOrder {
 
     public static DeliveryOrder of(DeliveryOrderLineItems orderLineItems, DeliveryOrderAddress orderAddress, MenuClient menuClient) {
         validateDeliveryOrder(orderLineItems, menuClient);
-        return new DeliveryOrder(UUID.randomUUID(), OrderType.DELIVERY, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderAddress);
+        return new DeliveryOrder(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderAddress);
     }
 
     private static void validateDeliveryOrder(DeliveryOrderLineItems orderLineItems, MenuClient menuClient) {
@@ -70,10 +65,6 @@ public class DeliveryOrder {
 
     public UUID getId() {
         return id;
-    }
-
-    public OrderType getType() {
-        return type;
     }
 
     public OrderStatus getStatus() {
@@ -109,9 +100,6 @@ public class DeliveryOrder {
     }
 
     public void startDelivery() {
-        if (type != OrderType.DELIVERY) {
-            throw new IllegalStateException();
-        }
         if (status != OrderStatus.SERVED) {
             throw new IllegalStateException();
         }
@@ -126,9 +114,6 @@ public class DeliveryOrder {
     }
 
     public void complete() {
-        if (type != OrderType.DELIVERY) {
-            throw new IllegalStateException();
-        }
         if (status != OrderStatus.DELIVERED) {
             throw new IllegalStateException();
         }
