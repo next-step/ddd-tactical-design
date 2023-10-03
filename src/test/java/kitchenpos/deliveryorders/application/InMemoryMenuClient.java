@@ -22,7 +22,7 @@ public class InMemoryMenuClient implements MenuClient {
     }
 
     @Override
-    public List<Menu> findAllByIdIn(List<UUID> ids) {
-        return menuRepository.findAllByIdIn(ids);
+    public int countAllByIdIn(List<UUID> ids) {
+        return menuRepository.findAllByIdIn(ids).size();
     }
 }

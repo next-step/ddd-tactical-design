@@ -1,8 +1,6 @@
 package kitchenpos.deliveryorders.domain;
 
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.tobe.domain.menu.Menu;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -53,12 +51,12 @@ public class DeliveryOrder {
     }
 
     private static void validateDeliveryOrder(DeliveryOrderLineItems orderLineItems, MenuClient menuClient) {
-        List<Menu> menus = menuClient.findAllByIdIn(
+        int menusSize = menuClient.countAllByIdIn(
                 orderLineItems.getOrderLineItems().stream()
                         .map(DeliveryOrderLineItem::getMenuId)
                         .collect(Collectors.toList())
         );
-        if (menus.size() != orderLineItems.getOrderLineItems().size()) {
+        if (menusSize != orderLineItems.getOrderLineItems().size()) {
             throw new IllegalArgumentException();
         }
     }

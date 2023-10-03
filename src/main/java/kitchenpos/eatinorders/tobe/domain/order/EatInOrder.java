@@ -99,7 +99,7 @@ public class EatInOrder {
     }
 
     public void complete() {
-        if (status != OrderStatus.ACCEPTED) {
+        if (status != OrderStatus.SERVED) {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.COMPLETED;

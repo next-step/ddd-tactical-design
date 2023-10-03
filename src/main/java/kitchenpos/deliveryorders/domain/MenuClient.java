@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface MenuClient {
 
     Optional<Menu> findById(UUID id);
-    List<Menu> findAllByIdIn(List<UUID> ids);
+    int countAllByIdIn(List<UUID> ids);
 }
