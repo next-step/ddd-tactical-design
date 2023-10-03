@@ -1,6 +1,8 @@
 package kitchenpos.menus.shared.dto.request;
 
 import kitchenpos.menus.shared.dto.MenuProductDto;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuName;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,4 +43,9 @@ public class MenuCreateRequest {
         this.menuProducts = menuProducts;
         this.displayed = displayed;
     }
+
+    public static Menu toEntity(MenuCreateRequest request) {
+        return Menu.of(null, null, null, false, null );
+    }
+
 }

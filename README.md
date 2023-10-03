@@ -121,6 +121,7 @@ docker compose -p kitchenpos up -d
 
 | 한글명 | 영문명 | 설명 |
 | --- | --- | --- |
+| 매장 주문 | eat in order | 매장에서 안에서의 주문  |
 | 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
 | 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
 | 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
@@ -134,18 +135,19 @@ docker compose -p kitchenpos up -d
 
 ### 배달 주문
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명    | 영문명            | 설명                                             |
+|--------|----------------|------------------------------------------------|
+| 배달 주문  | delivery order | 배달을 위한 주문                                      |
+| 배달     | delivering     | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계      |
+| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스                       |
+| 배달 완료  | delivered      | 배달원이 주문한 음식을 고객에게 배달 완료한 단계                    |
+| 서빙     | served         | 조리가 완료되어 음식이 나갈 수 있는 단계                        |
+| 완료     | completed      | 배달이 완료된 후 주문을 마무리 하는 단계                        |
+| 접수     | accepted       | 주문을 받고 음식을 조리하는 단계                             |
+| 접수 대기  | waiting        | 주문이 생성되어 매장으로 전달된 단계                           |
+| 주문     | order          | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다.                 |
+| 주문 상태  | order status   | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
+| 주문 항목  | order line item | 주문에 속하는 수량이 있는 메뉴                              |
 
 ### 포장 주문
 
@@ -181,27 +183,42 @@ docker compose -p kitchenpos up -d
 ### 매장 주문
 
 - `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
+- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `EatInOrder`가 완료되면 `EmptyTable`이 된다.
 - `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
+- `EatInOrder`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
+- `Menu`가 `Display Menu`되고 있으며 판매되는 메뉴 가격과 일치하면 `EatInOrder`가 생성된다.
+- `EatInOrder`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
+- `EatInOrder`가 생성되면 `OrderStatus`는 `Waiting` 상태이다.
+- `Accepted` 가 되려면 전 주문은 `Waiting` 상태여야 한다.
+- `Served` 가 되려면 전 주문은 `Accepted` 상태여야 한다.
+- `Completed` 가 되려면 전 주문은 `Served` 상태여야 한다.
 - `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- `OrderLineItem`의 수량은 기존 `EatInOrder`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- ``
 
 ### 배달 주문
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
+- `Delivery Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
+- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Delivery Order`가 생성된다.
+- `Delivery Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
+- `Delivery Order`가 생성되면 `OrderStatus`는 `Waiting` 상태이다.
+- `Delivery Order`가 접수되면 `DeliveryAgency`가 호출된다.
+- `Accepted` 가 되려면 전 주문은 `Waiting` 상태여야 한다.
+- `Served` 가 되려면 전 주문은 `Accepted` 상태여야 한다.
+- `Delivering` 가 되려면 전 주문은 `Served` 상태여야 한다.
+- `Delivered` 가 되려면 전 주문은 `Delivering` 상태여야 한다.
+- `Completed` 가 되려면 전 주문은 `Delivered` 상태여야 한다.
 - `OrderLineItem`는 가격과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.
 
 ### 포장 주문
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
+- `Take Out Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
+- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Take Out Order`가 생성된다.
+- `Take Out Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
+- `Take Out Order`가 생성되면 `OrderStatus`는 `Waiting` 상태이다. 
+- `Accepted` 가 되려면 전 주문은 `Waiting` 상태여야 한다.
+- `Served` 가 되려면 전 주문은 `Accepted` 상태여야 한다.
+- `Completed` 가 되려면 전 주문은 `Served` 상태여야 한다.
 - `OrderLineItem`는 가격과 수량을 가진다.
 - `OrderLineItem`의 수량은 1보다 커야 한다.

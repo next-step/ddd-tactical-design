@@ -12,9 +12,10 @@ import java.util.Objects;
 
 @Component
 public class ConvertUtil<T, R> {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper;
 
-    public ConvertUtil() {
+    static  {
+        objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
         objectMapper.registerModule(new JavaTimeModule());
