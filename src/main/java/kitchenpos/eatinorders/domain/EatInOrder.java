@@ -70,10 +70,6 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
         }
     }
 
-    public void notifyOrderComplete() {
-
-    }
-
     public UUID getId() {
         return id;
     }
