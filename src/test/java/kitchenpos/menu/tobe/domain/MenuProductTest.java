@@ -54,4 +54,17 @@ class MenuProductTest {
         // then
         assertThat(actual.getValue()).isEqualTo(BigDecimal.valueOf(32_000L));
     }
+
+    @DisplayName("메뉴 상품의 가격을 수정한다")
+    @Test
+    void testChangeMenuProductPrice() {
+        // given
+        var menuProduct = Fixtures.menuProduct();
+
+        // when
+        menuProduct.changePrice(MenuPrice.of(BigDecimal.ONE));
+
+        // then
+        assertThat(menuProduct.getPrice()).isEqualTo(new ProductPrice(BigDecimal.ONE));
+    }
 }

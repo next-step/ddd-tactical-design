@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.List;
 import kitchenpos.Fixtures;
-import kitchenpos.product.tobe.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,18 +46,5 @@ class MenuProductsTest {
 
         // then
         assertThat(actual).isEqualTo(new MenuPrice(BigDecimal.valueOf(25_000L)));
-    }
-
-    @DisplayName("메뉴 상품의 가격을 수정한다")
-    @Test
-    void testChangeMenuProductPrice() {
-        // given
-        var menuProduct = Fixtures.menuProduct();
-
-        // when
-        menuProduct.changePrice(MenuPrice.of(BigDecimal.ONE));
-
-        // then
-        assertThat(menuProduct.getPrice()).isEqualTo(new ProductPrice(BigDecimal.ONE));
     }
 }
