@@ -121,4 +121,16 @@ class MenuTest {
         // then
         assertThat(menu.getPrice()).isEqualTo(expected);
     }
+
+    @DisplayName("메뉴항목들의 가격 합보다 작은 가격으로는 메뉴 가격을 수정할 수 없다")
+    @Test
+    void testChangePriceIfSumOfMenuProductPricesIsLowerThanChangedPrice() {
+        // given
+        var menu = Fixtures.menu(10_000L, Fixtures.menuProduct(11_000L, 1));
+        MenuPrice changedPrice = MenuPrice.of(BigDecimal.valueOf(15_000L));
+
+        // when // then
+        assertThatThrownBy(() -> menu.changePrice(changedPrice))
+            .isExactlyInstanceOf(IllegalArgumentException.class);
+    }
 }
