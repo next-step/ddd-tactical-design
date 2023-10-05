@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.List;
 import kitchenpos.Fixtures;
+import kitchenpos.common.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,6 +46,6 @@ class MenuProductsTest {
         var actual = sut.sumOfMenuProductPrice();
 
         // then
-        assertThat(actual).isEqualTo(new MenuPrice(BigDecimal.valueOf(25_000L)));
+        assertThat(actual).isEqualTo(new Price(BigDecimal.valueOf(25_000L)));
     }
 }

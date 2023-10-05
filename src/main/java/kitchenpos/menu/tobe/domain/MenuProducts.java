@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import kitchenpos.common.Price;
 
 @Embeddable
 public class MenuProducts {
@@ -35,13 +36,13 @@ public class MenuProducts {
         this.value = new ArrayList<>(value);
     }
 
-    public MenuPrice sumOfMenuProductPrice() {
+    public Price sumOfMenuProductPrice() {
         return value.stream()
             .map(MenuProduct::calculatePrice)
-            .reduce(MenuPrice.ZERO, MenuPrice::add);
+            .reduce(Price.ZERO, Price::add);
     }
 
-    public void changeMenuProductPrice(UUID productId, MenuPrice price) { // TODO(경록) : test code 작성 예정
+    public void changeMenuProductPrice(UUID productId, Price price) { // TODO(경록) : test code 작성 예정
         MenuProduct menuProduct = value.stream()
             .filter(it -> it.equalsToProductId(productId))
             .findAny()

@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.Fixtures;
+import kitchenpos.common.Price;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.menu.tobe.domain.MenuProduct;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class MenuTest {
         var menuProducts = List.of(Fixtures.menuProduct(10_000L, 1), Fixtures.menuProduct(5_000L, 1));
 
         // when // then
-        assertDoesNotThrow(() -> new Menu(UUID.randomUUID(), "test menu name", MenuPrice.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts));
+        assertDoesNotThrow(() -> new Menu(UUID.randomUUID(), "test menu name", Price.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts));
     }
 
     @DisplayName("메뉴 객체를 생성한다")
@@ -38,7 +38,7 @@ class MenuTest {
         var menuProducts = List.of(Fixtures.menuProduct(10_000L, 1), Fixtures.menuProduct(5_000L, 1));
 
         // when // then
-        assertThatThrownBy(() -> new Menu(UUID.randomUUID(), "test menu name", MenuPrice.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts))
+        assertThatThrownBy(() -> new Menu(UUID.randomUUID(), "test menu name", Price.of(BigDecimal.valueOf(price)), UUID.randomUUID(), true, menuProducts))
             .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
@@ -50,7 +50,7 @@ class MenuTest {
         Menu menu = Fixtures.menu(100_000, true, menuProduct);
 
         // when
-        menu.changeMenuProductPrice(menuProduct.getProductId(), MenuPrice.of(BigDecimal.valueOf(99_999L)));
+        menu.changeMenuProductPrice(menuProduct.getProductId(), Price.of(BigDecimal.valueOf(99_999L)));
 
         // then
         assertThat(menu.isDisplayed()).isFalse();
@@ -65,7 +65,7 @@ class MenuTest {
         Menu menu = Fixtures.menu(100_000, displayed, menuProduct);
 
         // when
-        menu.changeMenuProductPrice(menuProduct.getProductId(), MenuPrice.of(BigDecimal.valueOf(100_001L)));
+        menu.changeMenuProductPrice(menuProduct.getProductId(), Price.of(BigDecimal.valueOf(100_001L)));
 
         // then
         assertThat(menu.isDisplayed()).isEqualTo(expected);
@@ -116,7 +116,7 @@ class MenuTest {
         BigDecimal expected = BigDecimal.valueOf(5_000L);
 
         // when
-        menu.changePrice(MenuPrice.of(expected));
+        menu.changePrice(Price.of(expected));
 
         // then
         assertThat(menu.getPrice()).isEqualTo(expected);
@@ -127,7 +127,7 @@ class MenuTest {
     void testChangePriceIfSumOfMenuProductPricesIsLowerThanChangedPrice() {
         // given
         var menu = Fixtures.menu(10_000L, Fixtures.menuProduct(11_000L, 1));
-        MenuPrice changedPrice = MenuPrice.of(BigDecimal.valueOf(15_000L));
+        var changedPrice = Price.of(BigDecimal.valueOf(15_000L));
 
         // when // then
         assertThatThrownBy(() -> menu.changePrice(changedPrice))

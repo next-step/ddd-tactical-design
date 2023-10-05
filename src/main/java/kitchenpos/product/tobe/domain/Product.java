@@ -7,6 +7,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.common.Price;
 
 @Table(name = "product")
 @Entity
@@ -20,26 +21,26 @@ public class Product {
     private ProductName name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product() {
     }
 
     public Product(UUID id, ProductName name, BigDecimal price) {
-        this(id, name, new ProductPrice(price));
+        this(id, name, new Price(price));
     }
 
-    public Product(UUID id, ProductName name, ProductPrice price) {
+    public Product(UUID id, ProductName name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
+        this.price = new Price(price);
     }
 
-    public ProductPrice multiplyPrice(long quantity) {
+    public Price multiplyPrice(long quantity) {
         return price.multiply(quantity);
     }
 
@@ -51,7 +52,7 @@ public class Product {
         return name;
     }
 
-    public ProductPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 }

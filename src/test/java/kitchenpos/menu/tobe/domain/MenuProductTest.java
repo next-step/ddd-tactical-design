@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.Fixtures;
+import kitchenpos.common.Price;
 import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +20,7 @@ class MenuProductTest {
     @Test
     void testInitMenuProduct() {
         // given
-        ProductPrice price = new ProductPrice(BigDecimal.valueOf(10_000L));
+        Price price = new Price(BigDecimal.valueOf(10_000L));
         int quantity = 1;
 
         // when // then
@@ -32,7 +32,7 @@ class MenuProductTest {
     @ValueSource(ints = {-1, -2, -3})
     void testInitMenuProductIfQuantityIsNegative(int quantity) {
         // given
-        ProductPrice price = new ProductPrice(BigDecimal.valueOf(10_000L));
+        Price price = new Price(BigDecimal.valueOf(10_000L));
 
         // when // then
         assertThatThrownBy(() -> new MenuProduct(UUID.randomUUID(), price, quantity))
@@ -57,14 +57,14 @@ class MenuProductTest {
 
     @DisplayName("메뉴 상품의 가격을 수정한다")
     @Test
-    void testChangeMenuProductPrice() {
+    void testChangeMenuPrice() {
         // given
         var menuProduct = Fixtures.menuProduct();
 
         // when
-        menuProduct.changePrice(MenuPrice.of(BigDecimal.ONE));
+        menuProduct.changePrice(Price.of(BigDecimal.ONE));
 
         // then
-        assertThat(menuProduct.getPrice()).isEqualTo(new ProductPrice(BigDecimal.ONE));
+        assertThat(menuProduct.getPrice()).isEqualTo(new Price(BigDecimal.ONE));
     }
 }

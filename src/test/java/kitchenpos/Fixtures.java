@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.common.Price;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.tobe.domain.MenuProducts;
 import kitchenpos.menugroup.domain.MenuGroup;
@@ -22,7 +22,6 @@ import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
 import kitchenpos.order.takeoutorder.domain.TakeOutOrderStatus;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductName;
-import kitchenpos.product.tobe.domain.ProductPrice;
 
 public class Fixtures {
 
@@ -37,14 +36,14 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        return new Menu(UUID.randomUUID(), "후라이드+후라이드", new MenuPrice(BigDecimal.valueOf(price)), menuGroup().getId(),
+        return new Menu(UUID.randomUUID(), "후라이드+후라이드", new Price(BigDecimal.valueOf(price)), menuGroup().getId(),
             displayed, Arrays.asList(menuProducts));
     }
 
     public static Menu hideMenu(final long price, final MenuProduct... menuProducts) {
         Menu menu = menu(price, false, menuProducts);
         BigDecimal expensivePrice = BigDecimal.valueOf(price).subtract(BigDecimal.ONE);
-        menu.changeMenuProductPrice(menuProducts[0].getProductId(), MenuPrice.of(expensivePrice));
+        menu.changeMenuProductPrice(menuProducts[0].getProductId(), Price.of(expensivePrice));
 
         return menu;
     }
@@ -66,7 +65,7 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct(final long price, final long quantity) {
-        return new MenuProduct(UUID.randomUUID(), new ProductPrice(BigDecimal.valueOf(price)), quantity);
+        return new MenuProduct(UUID.randomUUID(), new Price(BigDecimal.valueOf(price)), quantity);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
