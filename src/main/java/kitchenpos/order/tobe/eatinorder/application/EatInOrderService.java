@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorder.application;
+package kitchenpos.order.tobe.eatinorder.application;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,15 +7,14 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.deliveryagency.DeliveryAgencyClient;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
-import kitchenpos.order.eatinorder.domain.EatInOrder;
-import kitchenpos.order.eatinorder.domain.EatInOrderLineItem;
-import kitchenpos.order.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.eatinorder.domain.EatInOrderStatus;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +28,7 @@ public class EatInOrderService {
     public EatInOrderService(
         final EatInOrderRepository orderRepository,
         final MenuRepository menuRepository,
-        final OrderTableRepository orderTableRepository,
-        final DeliveryAgencyClient deliveryAgencyClient
+        final OrderTableRepository orderTableRepository
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;

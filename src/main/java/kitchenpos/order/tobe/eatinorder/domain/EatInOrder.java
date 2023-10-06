@@ -1,4 +1,4 @@
-package kitchenpos.order.eatinorder.domain;
+package kitchenpos.order.tobe.eatinorder.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
 
 @Table(name = "eat_in_orders")
 @Entity

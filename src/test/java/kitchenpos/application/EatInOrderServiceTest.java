@@ -18,13 +18,13 @@ import java.util.Random;
 import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.menu.tobe.domain.MenuRepository;
-import kitchenpos.order.eatinorder.application.EatInOrderService;
-import kitchenpos.order.eatinorder.domain.EatInOrder;
-import kitchenpos.order.eatinorder.domain.EatInOrderLineItem;
-import kitchenpos.order.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.eatinorder.domain.EatInOrderStatus;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.application.EatInOrderService;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,6 @@ class EatInOrderServiceTest {
 
     private EatInOrderRepository orderRepository;
     private MenuRepository menuRepository;
-    private FakeDeliveryAgencyClient kitchenridersClient;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService eatInOrderService;
 
@@ -47,8 +46,7 @@ class EatInOrderServiceTest {
         orderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        kitchenridersClient = new FakeDeliveryAgencyClient();
-        eatInOrderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient);
+        eatInOrderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

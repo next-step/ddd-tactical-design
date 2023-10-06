@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.order.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.eatinorder.ordertable.application.OrderTableService;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
+import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

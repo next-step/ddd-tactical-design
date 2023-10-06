@@ -1,9 +1,8 @@
-package kitchenpos.order.eatinorder.domain;
+package kitchenpos.order.tobe.eatinorder.domain;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.order.eatinorder.ordertable.domain.OrderTable;
 
 public interface EatInOrderRepository {
 
