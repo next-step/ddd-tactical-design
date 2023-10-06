@@ -39,7 +39,15 @@ public class EatInOrder {
     @Column(name = "order_table_id", columnDefinition = "binary(16)", nullable = false)
     private UUID orderTableId;
 
-    public EatInOrder() {
+    protected EatInOrder() {
+    }
+
+    public EatInOrder(EatInOrderStatus status, LocalDateTime orderDateTime, List<EatInOrderLineItem> orderLineItems, UUID orderTableId) {
+        this.id = UUID.randomUUID();
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
     }
 
     public UUID getId() {

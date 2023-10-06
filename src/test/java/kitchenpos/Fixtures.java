@@ -3,6 +3,7 @@ package kitchenpos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.common.Price;
@@ -82,23 +83,11 @@ public class Fixtures {
     }
 
     public static EatInOrder eatInOrder(final EatInOrderStatus status) {
-        final EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(status);
-        eatInOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        eatInOrder.setOrderLineItems(Arrays.asList(eatInOrderLineItem()));
-        return eatInOrder;
+        return new EatInOrder(status, LocalDateTime.of(2020, 1, 1, 12, 0), List.of(eatInOrderLineItem()), UUID.randomUUID());
     }
 
     public static EatInOrder eatInOrder(final EatInOrderStatus status, final OrderTable orderTable) {
-        final EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(status);
-        eatInOrder.setOrderTable(orderTable);
-        eatInOrder.setOrderTableId(orderTable.getId());
-        eatInOrder.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        eatInOrder.setOrderLineItems(Arrays.asList(eatInOrderLineItem()));
-        return eatInOrder;
+        return new EatInOrder(status, LocalDateTime.of(2020, 1, 1, 12, 0), List.of(eatInOrderLineItem()), orderTable.getId());
     }
 
     public static DeliveryOrder deliveryOrder(final DeliveryOrderStatus status, final String deliveryAddress) {

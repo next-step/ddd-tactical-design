@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
+import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderRequest;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
@@ -36,7 +37,7 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrder request) {
+    public EatInOrder create(final CreateEatInOrderRequest request) {
         final var orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -65,17 +66,15 @@ public class EatInOrderService {
             orderLineItem.setQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
-        EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(EatInOrderStatus.WAITING);
-        eatInOrder.setOrderDateTime(LocalDateTime.now());
-        eatInOrder.setOrderLineItems(orderLineItems);
+
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
             .orElseThrow(NoSuchElementException::new);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
-        eatInOrder.setOrderTable(orderTable);
+
+        EatInOrder eatInOrder = new EatInOrder(EatInOrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable.getId());
+
         return orderRepository.save(eatInOrder);
     }
 
@@ -110,8 +109,8 @@ public class EatInOrderService {
             throw new IllegalStateException();
         }
         eatInOrder.setStatus(EatInOrderStatus.COMPLETED);
-        final OrderTable orderTable = eatInOrder.getOrderTable();
-        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
+        final OrderTable orderTable = eatInOrder.getOrderTableId(); // TODO(경록) : orderTableId
+        if (!orderRepository.existsByOrderTableIdAndStatusNot(eatInOrder.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
             orderTable.setNumberOfGuests(0);
             orderTable.setOccupied(false);
         }
