@@ -8,13 +8,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Table(name = "eat_in_orders")
 @Entity
@@ -39,15 +36,7 @@ public class EatInOrder {
     )
     private List<EatInOrderLineItem> orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
-
-    @Transient
+    @Column(name = "order_table_id", columnDefinition = "binary(16)", nullable = false)
     private UUID orderTableId;
 
     public EatInOrder() {
@@ -83,14 +72,6 @@ public class EatInOrder {
 
     public void setOrderLineItems(final List<EatInOrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
     }
 
     public UUID getOrderTableId() {

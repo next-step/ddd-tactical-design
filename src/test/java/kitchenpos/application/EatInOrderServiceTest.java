@@ -62,7 +62,7 @@ class EatInOrderServiceTest {
             () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
             () -> assertThat(actual.getOrderDateTime()).isNotNull(),
             () -> assertThat(actual.getOrderLineItems()).hasSize(1),
-            () -> assertThat(actual.getOrderTable().getId()).isEqualTo(expected.getOrderTableId())
+            () -> assertThat(actual.getOrderTableId()).isEqualTo(expected.getOrderTableId())
         );
     }
 
@@ -185,7 +185,7 @@ class EatInOrderServiceTest {
         assertAll(
             () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
             () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isZero()
         );
     }
 
