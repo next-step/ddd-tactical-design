@@ -48,4 +48,20 @@ class MenuProductsTest {
         // then
         assertThat(actual).isEqualTo(new Price(BigDecimal.valueOf(25_000L)));
     }
+
+    @DisplayName("메뉴항목들 중, 특정 메뉴항목 가격을 변경한다")
+    @Test
+    void testChangeMenuProductPrice() {
+        // given
+        MenuProduct menuProduct = Fixtures.menuProduct(10_000L, 2);
+        var sut = Fixtures.menuProducts(menuProduct, Fixtures.menuProduct(5_000L, 1));
+        Price expectedPrice = Price.of(12_000L);
+
+        // when
+        sut.changeMenuProductPrice(menuProduct.getProductId(), expectedPrice);
+
+        // then
+        MenuProduct targetMenuProduct = sut.getValue().get(0);
+        assertThat(targetMenuProduct.getPrice()).isEqualTo(expectedPrice);
+    }
 }

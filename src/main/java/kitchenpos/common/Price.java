@@ -28,6 +28,10 @@ public class Price {
         return new Price(price);
     }
 
+    public static Price of(Long price) {
+        return of(BigDecimal.valueOf(price));
+    }
+
     public Price add(Price other) {
         return new Price(this.value.add(other.value));
     }

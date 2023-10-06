@@ -42,7 +42,7 @@ public class MenuProducts {
             .reduce(Price.ZERO, Price::add);
     }
 
-    public void changeMenuProductPrice(UUID productId, Price price) { // TODO(경록) : test code 작성 예정
+    public void changeMenuProductPrice(UUID productId, Price price) {
         MenuProduct menuProduct = value.stream()
             .filter(it -> it.equalsToProductId(productId))
             .findAny()
