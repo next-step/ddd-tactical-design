@@ -82,39 +82,19 @@ public class EatInOrder {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public EatInOrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final EatInOrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public List<EatInOrderLineItem> getOrderLineItems() {
         return orderLineItems;
     }
 
-    public void setOrderLineItems(final List<EatInOrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
-    }
-
     public UUID getOrderTableId() {
         return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }
