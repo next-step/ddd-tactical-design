@@ -50,6 +50,34 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
+    public static EatInOrder init(LocalDateTime orderDateTime, List<EatInOrderLineItem> orderLineItems, UUID orderTableId) {
+        return new EatInOrder(EatInOrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
+    }
+
+    public void accept() {
+        if (status != EatInOrderStatus.WAITING) {
+            throw new IllegalStateException();
+        }
+
+        this.status = EatInOrderStatus.ACCEPTED;
+    }
+
+    public void serve() {
+        if (status != EatInOrderStatus.ACCEPTED) {
+            throw new IllegalStateException();
+        }
+
+        this.status = EatInOrderStatus.SERVED;
+    }
+
+    public void complete() {
+        if (status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
+
+        this.status = EatInOrderStatus.COMPLETED;
+    }
+
     public UUID getId() {
         return id;
     }

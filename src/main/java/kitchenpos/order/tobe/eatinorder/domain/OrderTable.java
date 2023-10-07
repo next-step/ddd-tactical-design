@@ -26,6 +26,11 @@ public class OrderTable {
     public OrderTable() {
     }
 
+    public void clear() {
+        this.numberOfGuests = 0;
+        this.occupied = false;
+    }
+
     public UUID getId() {
         return id;
     }

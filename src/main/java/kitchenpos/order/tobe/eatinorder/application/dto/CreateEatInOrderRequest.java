@@ -1,16 +1,20 @@
 package kitchenpos.order.tobe.eatinorder.application.dto;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class CreateEatInOrderRequest {
 
+    @NotNull
     private UUID orderTableId;
-    private List<EatInOrderLineItem> orderLineItems;
 
-    public CreateEatInOrderRequest(UUID orderTableId, List<EatInOrderLineItem> orderLineItems) {
+    @NotEmpty
+    @NotNull
+    private List<EatInOrderLintItemDto> orderLineItems;
+
+    public CreateEatInOrderRequest(UUID orderTableId, List<EatInOrderLintItemDto> orderLineItems) {
         this.orderTableId = orderTableId;
         this.orderLineItems = orderLineItems;
     }
@@ -19,7 +23,7 @@ public class CreateEatInOrderRequest {
         return orderTableId;
     }
 
-    public List<EatInOrderLineItem> getOrderLineItems() {
-        return Collections.unmodifiableList(orderLineItems);
+    public List<EatInOrderLintItemDto> getOrderLineItems() {
+        return orderLineItems;
     }
 }

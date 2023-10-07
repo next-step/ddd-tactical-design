@@ -124,10 +124,7 @@ public class Fixtures {
     }
 
     public static EatInOrderLineItem eatInOrderLineItem() {
-        final EatInOrderLineItem orderLineItem = new EatInOrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+        return new EatInOrderLineItem(menu(), 1);
     }
 
     public static OrderTable orderTable() {

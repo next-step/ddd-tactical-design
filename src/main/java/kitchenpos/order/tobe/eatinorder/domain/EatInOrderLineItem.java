@@ -36,9 +36,14 @@ public class EatInOrderLineItem {
     private UUID menuId;
 
     @Transient
-    private BigDecimal price;
+    private BigDecimal price; // TODO(경록) : price 컬럼을 별도로 가지는 것이 좋다고 생각됌. --> 스냅샷 개념 (메뉴는 추후 가격이 변동될 수 있으나 그렇다고 기존의 주문 가격이 바뀌지는 않는다!)
 
-    public EatInOrderLineItem() {
+    protected EatInOrderLineItem() {
+    }
+
+    public EatInOrderLineItem(Menu menu, long quantity) {
+        this.menu = menu;
+        this.quantity = quantity;
     }
 
     public Long getSeq() {

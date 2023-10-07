@@ -1,21 +1,24 @@
 package kitchenpos.order.tobe.eatinorder.application;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderRequest;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.application.dto.DetailEatInOrderResponse;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
+import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.event.EatInOrderCompleteEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,46 +29,53 @@ public class EatInOrderService {
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     public EatInOrderService(
         final EatInOrderRepository orderRepository,
         final MenuRepository menuRepository,
-        final OrderTableRepository orderTableRepository
-    ) {
+        final OrderTableRepository orderTableRepository,
+        ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
     public EatInOrder create(final CreateEatInOrderRequest request) {
+        if (Objects.isNull(request.getOrderLineItems()) || request.getOrderLineItems().isEmpty()) { // TODO(경록) : 이 로직을 DTO로 넘길 순 없나? (이걸 써 말어?)
+            throw new IllegalArgumentException();
+        }
+
         final var orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
+        List<UUID> menuIds = orderLineItemRequests.stream()
+            .map(EatInOrderLintItemDto::getMenuId)
+            .collect(Collectors.toList());
+
+        final var menus = menuRepository.findAllByIdIn(menuIds)
+            .stream()
+            .collect(Collectors.toMap(Menu::getId, Function.identity()));
+
+        if (menus.size() != menuIds.size()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(EatInOrderLineItem::getMenuId)
-                .collect(Collectors.toList())
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<EatInOrderLineItem> orderLineItems = new ArrayList<>();
-        for (final var orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final EatInOrderLineItem orderLineItem = new EatInOrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
-            orderLineItems.add(orderLineItem);
-        }
+
+        // TODO(경록) :  도메인 서비스가 필요한 시점??     고민해보기!
+        final var orderLineItems = orderLineItemRequests.stream()
+            .map(orderLineItemRequest -> {
+                // TODO(경록) : 이 validation 로직을 어떻게 추상화할 수 있을까? 
+                final Menu menu = menus.get(orderLineItemRequest.getMenuId());
+                if (!menu.isDisplayed()) {
+                    throw new IllegalStateException();
+                }
+                if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+                    throw new IllegalArgumentException();
+                }
+
+                return new EatInOrderLineItem(menu, orderLineItemRequest.getQuantity());
+            })
+            .collect(Collectors.toList());
 
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
             .orElseThrow(NoSuchElementException::new);
@@ -73,48 +83,38 @@ public class EatInOrderService {
             throw new IllegalStateException();
         }
 
-        EatInOrder eatInOrder = new EatInOrder(EatInOrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable.getId());
+        EatInOrder eatInOrder = EatInOrder.init(LocalDateTime.now(), orderLineItems, orderTable.getId());
 
         return orderRepository.save(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder accept(final UUID orderId) {
+    public DetailEatInOrderResponse accept(final UUID orderId) {
         final EatInOrder eatInOrder = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.ACCEPTED);
-        return eatInOrder;
+        eatInOrder.accept();
+
+        return DetailEatInOrderResponse.of(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder serve(final UUID orderId) {
+    public DetailEatInOrderResponse serve(final UUID orderId) {
         final EatInOrder eatInOrder = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.SERVED);
-        return eatInOrder;
+        eatInOrder.serve();
+
+        return DetailEatInOrderResponse.of(eatInOrder);
     }
 
     @Transactional
-    public EatInOrder complete(final UUID orderId) {
+    public DetailEatInOrderResponse complete(final UUID orderId) {
         final EatInOrder eatInOrder = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
-        final EatInOrderStatus status = eatInOrder.getStatus();
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.COMPLETED);
-        final OrderTable orderTable = eatInOrder.getOrderTableId(); // TODO(경록) : orderTableId
-        if (!orderRepository.existsByOrderTableIdAndStatusNot(eatInOrder.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
-            orderTable.setNumberOfGuests(0);
-            orderTable.setOccupied(false);
-        }
-        return eatInOrder;
+        eatInOrder.complete();
+
+        applicationEventPublisher.publishEvent(new EatInOrderCompleteEvent(eatInOrder.getOrderTableId()));
+
+        return DetailEatInOrderResponse.of(eatInOrder);
     }
 
     @Transactional(readOnly = true)
