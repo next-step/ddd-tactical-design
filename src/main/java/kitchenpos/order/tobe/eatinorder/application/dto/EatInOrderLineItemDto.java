@@ -8,7 +8,7 @@ public class EatInOrderLineItemDto {
 
     private final UUID menuId;
     private final BigDecimal price;
-    private long quantity;
+    private final long quantity;
 
     public EatInOrderLineItemDto(UUID menuId, BigDecimal price, long quantity) {
         this.menuId = menuId;
