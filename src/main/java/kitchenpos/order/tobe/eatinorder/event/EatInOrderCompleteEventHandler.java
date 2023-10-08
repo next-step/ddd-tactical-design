@@ -28,8 +28,6 @@ public class EatInOrderCompleteEventHandler {
     public void handleEatInOrderCompleteEvent(EatInOrderCompleteEvent event) {
         final var orderTable = orderTableRepository.findById(event.getOrderTableId())
             .orElseThrow(NoSuchElementException::new);
-        if (!orderRepository.existsByOrderTableIdAndStatusNot(event.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
-            orderTable.clear();
-        }
+        orderTable.clear();
     }
 }

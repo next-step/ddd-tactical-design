@@ -14,13 +14,13 @@ import kitchenpos.menugroup.domain.MenuGroup;
 import kitchenpos.order.deliveryorder.domain.DeliveryOrder;
 import kitchenpos.order.deliveryorder.domain.DeliveryOrderLineItem;
 import kitchenpos.order.deliveryorder.domain.DeliveryOrderStatus;
+import kitchenpos.order.takeoutorder.domain.TakeOutOrder;
+import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
+import kitchenpos.order.takeoutorder.domain.TakeOutOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
-import kitchenpos.order.takeoutorder.domain.TakeOutOrder;
-import kitchenpos.order.takeoutorder.domain.TakeOutOrderLineItem;
-import kitchenpos.order.takeoutorder.domain.TakeOutOrderStatus;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductName;
 
@@ -124,7 +124,8 @@ public class Fixtures {
     }
 
     public static EatInOrderLineItem eatInOrderLineItem() {
-        return new EatInOrderLineItem(menu(), 1);
+        Menu menu = menu();
+        return new EatInOrderLineItem(1, menu.getId(), Price.of(menu.getPrice()));
     }
 
     public static OrderTable orderTable() {
@@ -132,12 +133,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return new OrderTable(UUID.randomUUID(), "1번", numberOfGuests, occupied);
     }
 
     public static Product product() {

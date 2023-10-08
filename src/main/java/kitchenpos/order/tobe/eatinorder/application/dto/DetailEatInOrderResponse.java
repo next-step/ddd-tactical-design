@@ -25,7 +25,8 @@ public class DetailEatInOrderResponse {
     }
 
     public static DetailEatInOrderResponse of(EatInOrder entity) {
-        var orderLineItems = entity.getOrderLineItems().stream()
+        var orderLineItems = entity.getOrderLineItems().getValue()
+            .stream()
             .map(EatInOrderLintItemDto::of)
             .collect(Collectors.toList());
 

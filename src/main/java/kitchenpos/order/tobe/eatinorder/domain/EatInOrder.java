@@ -3,14 +3,12 @@ package kitchenpos.order.tobe.eatinorder.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "eat_in_orders")
@@ -28,13 +26,8 @@ public class EatInOrder {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "eat_in_order_id",
-        nullable = false,
-        columnDefinition = "binary(16)"
-    )
-    private List<EatInOrderLineItem> orderLineItems;
+    @Embedded
+    private EatInOrderLineItems orderLineItems;
 
     @Column(name = "order_table_id", columnDefinition = "binary(16)", nullable = false)
     private UUID orderTableId;
@@ -43,6 +36,10 @@ public class EatInOrder {
     }
 
     public EatInOrder(EatInOrderStatus status, LocalDateTime orderDateTime, List<EatInOrderLineItem> orderLineItems, UUID orderTableId) {
+        this(status, orderDateTime, new EatInOrderLineItems(orderLineItems), orderTableId);
+    }
+
+    public EatInOrder(EatInOrderStatus status, LocalDateTime orderDateTime, EatInOrderLineItems orderLineItems, UUID orderTableId) {
         this.id = UUID.randomUUID();
         this.status = status;
         this.orderDateTime = orderDateTime;
@@ -50,7 +47,7 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public static EatInOrder init(LocalDateTime orderDateTime, List<EatInOrderLineItem> orderLineItems, UUID orderTableId) {
+    public static EatInOrder create(LocalDateTime orderDateTime, EatInOrderLineItems orderLineItems, UUID orderTableId) {
         return new EatInOrder(EatInOrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
     }
 
@@ -90,7 +87,7 @@ public class EatInOrder {
         return orderDateTime;
     }
 
-    public List<EatInOrderLineItem> getOrderLineItems() {
+    public EatInOrderLineItems getOrderLineItems() {
         return orderLineItems;
     }
 

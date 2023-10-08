@@ -102,6 +102,10 @@ public class Menu {
         return displayed;
     }
 
+    public boolean isHide() {
+        return !isDisplayed();
+    }
+
     public MenuProducts getMenuProducts() {
         return menuProducts;
     }

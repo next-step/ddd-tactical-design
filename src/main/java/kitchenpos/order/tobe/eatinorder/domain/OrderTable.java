@@ -23,7 +23,18 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    protected OrderTable() {
+    }
+
+    public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+        this.id = id;
+        this.name = name;
+        this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
+    }
+
+    public static OrderTable empty(UUID id, String name) {
+        return new OrderTable(id, name, 0, false);
     }
 
     public void clear() {
@@ -31,35 +42,35 @@ public class OrderTable {
         this.occupied = false;
     }
 
-    public UUID getId() {
-        return id;
+    public void changeInUseTable() {
+        this.occupied = true;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public void changeNumberOfGuests(int numberOfGuests) {
+        if (numberOfGuests < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!occupied) {
+            throw new IllegalStateException();
+        }
+
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
-        this.numberOfGuests = numberOfGuests;
-    }
-
     public boolean isOccupied() {
         return occupied;
-    }
-
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
     }
 }

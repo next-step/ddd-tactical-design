@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
+import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
+import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +36,7 @@ class DeliveryOrderTableServiceTest {
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
-        final OrderTable expected = createOrderTableRequest("1번");
+        final var expected = createOrderTableRequest("1번");
         final OrderTable actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -49,7 +51,7 @@ class DeliveryOrderTableServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
+        final var expected = createOrderTableRequest(name);
         assertThatThrownBy(() -> orderTableService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -77,7 +79,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
+        final var expected = changeNumberOfGuestsRequest(4);
         final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
@@ -87,7 +89,7 @@ class DeliveryOrderTableServiceTest {
     @ParameterizedTest
     void changeNumberOfGuests(final int numberOfGuests) {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(numberOfGuests);
+        final var expected = changeNumberOfGuestsRequest(numberOfGuests);
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -96,7 +98,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void changeNumberOfGuestsInEmptyTable() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
+        final var expected = changeNumberOfGuestsRequest(4);
         assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -109,15 +111,11 @@ class DeliveryOrderTableServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+    private CreateOrderTableRequest createOrderTableRequest(final String name) {
+        return new CreateOrderTableRequest(name);
     }
 
-    private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+    private ChangeNumberOfGuestRequest changeNumberOfGuestsRequest(final int numberOfGuests) {
+        return new ChangeNumberOfGuestRequest(numberOfGuests);
     }
 }
