@@ -7,7 +7,6 @@ import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.DetailOrderTableResponse;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +52,7 @@ public class OrderTableRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderTable>> findAll() {
+    public ResponseEntity<List<DetailOrderTableResponse>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());
     }
 }

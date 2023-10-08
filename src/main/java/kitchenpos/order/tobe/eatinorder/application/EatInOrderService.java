@@ -38,14 +38,14 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final CreateEatInOrderRequest request) {
+    public DetailEatInOrderResponse create(final CreateEatInOrderRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId()).orElseThrow(NoSuchElementException::new);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
 
         EatInOrder eatInOrder = EatInOrder.create(LocalDateTime.now(), EatInOrderLineItems.from(request.getOrderLineItems(), menuClient), orderTable.getId());
-        return orderRepository.save(eatInOrder);
+        return DetailEatInOrderResponse.of(orderRepository.save(eatInOrder));
     }
 
     @Transactional

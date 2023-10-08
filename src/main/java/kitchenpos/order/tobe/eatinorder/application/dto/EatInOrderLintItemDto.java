@@ -2,7 +2,6 @@ package kitchenpos.order.tobe.eatinorder.application.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
 
 public class EatInOrderLintItemDto {

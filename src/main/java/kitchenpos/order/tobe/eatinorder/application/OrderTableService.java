@@ -3,6 +3,7 @@ package kitchenpos.order.tobe.eatinorder.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.DetailOrderTableResponse;
@@ -58,7 +59,10 @@ public class OrderTableService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<DetailOrderTableResponse> findAll() {
+        return orderTableRepository.findAll()
+            .stream()
+            .map(DetailOrderTableResponse::of)
+            .collect(Collectors.toList());
     }
 }

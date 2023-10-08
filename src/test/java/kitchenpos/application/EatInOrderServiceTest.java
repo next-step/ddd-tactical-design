@@ -73,13 +73,13 @@ class EatInOrderServiceTest {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         final var expected = createEatInOrderRequest(orderTableId, createOrderLineItemRequest(menuId, 19_000L, 3L));
-        final EatInOrder actual = eatInOrderService.create(expected);
+        final var actual = eatInOrderService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
             () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
             () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-            () -> assertThat(actual.getOrderLineItems().getValue()).hasSize(1),
+            () -> assertThat(actual.getOrderLineItems()).hasSize(1),
             () -> assertThat(actual.getOrderTableId()).isEqualTo(expected.getOrderTableId())
         );
     }
