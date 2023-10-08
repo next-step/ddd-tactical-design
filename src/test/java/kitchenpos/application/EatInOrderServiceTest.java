@@ -184,7 +184,7 @@ class EatInOrderServiceTest {
     @DisplayName("주문을 완료한다.")
     @Test
     void complete() {
-        OrderTable orderTable = orderTable();
+        OrderTable orderTable = Fixtures.emptyOrderTable();
         orderTableRepository.save(orderTable);
 
         final EatInOrder expected = orderRepository.save(Fixtures.eatInOrder(EatInOrderStatus.SERVED, orderTable));

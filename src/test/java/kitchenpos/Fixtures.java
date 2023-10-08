@@ -128,7 +128,7 @@ public class Fixtures {
         return new EatInOrderLineItem(1, menu.getId(), Price.of(menu.getPrice()));
     }
 
-    public static OrderTable orderTable() {
+    public static OrderTable emptyOrderTable() {
         return orderTable(false, 0);
     }
 

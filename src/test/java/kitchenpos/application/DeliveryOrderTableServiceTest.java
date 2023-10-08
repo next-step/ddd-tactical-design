@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.Fixtures;
 import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
@@ -106,7 +107,7 @@ class DeliveryOrderTableServiceTest {
     @DisplayName("주문 테이블의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        orderTableRepository.save(orderTable());
+        orderTableRepository.save(Fixtures.emptyOrderTable());
         final List<OrderTable> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
