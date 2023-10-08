@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
 
 @Embeddable
 public class EatInOrderLineItems {
@@ -34,7 +34,7 @@ public class EatInOrderLineItems {
         this.value = value;
     }
 
-    public static EatInOrderLineItems from(List<EatInOrderLintItemDto> orderLineItems, MenuClient menuClient) { // TODO(경록) : 이거는 테스트를 어떻게 해야할까?
+    public static EatInOrderLineItems from(List<EatInOrderLineItemDto> orderLineItems, MenuClient menuClient) {
         if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
         }
