@@ -57,6 +57,10 @@ public class OrderTable {
         this.numberOfGuests = NumberOfGuests.of(numberOfGuests);
     }
 
+    public boolean isEmpty() {
+        return !occupied;
+    }
+
     public UUID getId() {
         return id;
     }

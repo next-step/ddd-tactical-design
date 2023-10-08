@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import kitchenpos.Fixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class OrderTableTest {
 
@@ -62,5 +64,19 @@ class OrderTableTest {
         // when // then
         assertThatThrownBy(() -> orderTable.changeNumberOfGuests(expectedNumberOfGuests))
             .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("주문 테이블이 비어있는지 확인한다")
+    @ParameterizedTest
+    @CsvSource(value = {"false;false", "true;true"}, delimiter = ';')
+    void testIsEmpty(boolean occupied, boolean expected) {
+        // given
+        var orderTable = Fixtures.orderTable(occupied, 0);
+
+        // when
+        boolean actual = orderTable.isEmpty();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }

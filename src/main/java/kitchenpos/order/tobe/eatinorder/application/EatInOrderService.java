@@ -40,8 +40,8 @@ public class EatInOrderService {
     @Transactional
     public DetailEatInOrderResponse create(final CreateEatInOrderRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId()).orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
+        if (orderTable.isEmpty()) {
+            throw new IllegalStateException("빈 테이블은 주문을 할 수 없습니다.");
         }
 
         EatInOrder eatInOrder = EatInOrder.create(LocalDateTime.now(), EatInOrderLineItems.from(request.getOrderLineItems(), menuClient), orderTable.getId());
