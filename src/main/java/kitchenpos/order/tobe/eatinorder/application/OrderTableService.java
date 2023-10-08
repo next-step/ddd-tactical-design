@@ -2,7 +2,6 @@ package kitchenpos.order.tobe.eatinorder.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
@@ -27,12 +26,7 @@ public class OrderTableService {
 
     @Transactional
     public DetailOrderTableResponse create(final CreateOrderTableRequest request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) { // TODO(경록) : OrderTableName VO로 감싸보기!
-            throw new IllegalArgumentException();
-        }
-
-        OrderTable orderTable = orderTableRepository.save(OrderTable.empty(UUID.randomUUID(), name));
+        OrderTable orderTable = orderTableRepository.save(OrderTable.empty(UUID.randomUUID(), request.getName()));
         return DetailOrderTableResponse.of(orderTable);
     }
 

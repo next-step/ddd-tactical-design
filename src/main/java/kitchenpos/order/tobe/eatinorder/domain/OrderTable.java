@@ -10,12 +10,15 @@ import javax.persistence.Table;
 @Entity
 public class OrderTable {
 
+    public static final int INIT_NUMBER_OF_GUESTS = 0;
+    public static final int MIN_NUMBER_OF_GUESTS = 0;
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private OrderTableName name;
 
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
@@ -28,17 +31,17 @@ public class OrderTable {
 
     public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
         this.id = id;
-        this.name = name;
+        this.name = new OrderTableName(name);
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
     }
 
     public static OrderTable empty(UUID id, String name) {
-        return new OrderTable(id, name, 0, false);
+        return new OrderTable(id, name, INIT_NUMBER_OF_GUESTS, false);
     }
 
     public void clear() {
-        this.numberOfGuests = 0;
+        this.numberOfGuests = INIT_NUMBER_OF_GUESTS;
         this.occupied = false;
     }
 
@@ -47,12 +50,12 @@ public class OrderTable {
     }
 
     public void changeNumberOfGuests(int numberOfGuests) {
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
+        if (numberOfGuests < MIN_NUMBER_OF_GUESTS) {
+            throw new IllegalArgumentException(MIN_NUMBER_OF_GUESTS + "이상의 손님 수로만 변경할 수 있습니다. input numberOfGuests = " + numberOfGuests);
         }
 
         if (!occupied) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("사용중인 테이블의 손님 수만 수정할 수 있습니다.");
         }
 
         this.numberOfGuests = numberOfGuests;
@@ -63,7 +66,7 @@ public class OrderTable {
     }
 
     public String getName() {
-        return name;
+        return name.getValue();
     }
 
     public int getNumberOfGuests() {
