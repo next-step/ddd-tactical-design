@@ -6,6 +6,7 @@ import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductName;
 
 public class ChangeProductPriceResponse {
+
     private final UUID id;
     private final ProductName name;
     private final Price price;

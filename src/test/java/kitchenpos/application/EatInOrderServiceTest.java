@@ -87,7 +87,7 @@ class EatInOrderServiceTest {
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
-    void create(final List<EatInOrderLineItemDto> orderLineItems) { // TODO(경록) : 이 부분 어떻게 녹이면 좋을까...?
+    void create(final List<EatInOrderLineItemDto> orderLineItems) {
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 2));
 
         final var expected = createEatInOrderRequest(orderTable.getId(), orderLineItems);

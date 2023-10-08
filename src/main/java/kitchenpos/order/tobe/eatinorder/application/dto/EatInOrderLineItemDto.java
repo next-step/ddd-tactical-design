@@ -5,6 +5,7 @@ import java.util.UUID;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
 
 public class EatInOrderLineItemDto {
+
     private final UUID menuId;
     private final BigDecimal price;
     private long quantity;

@@ -4,6 +4,7 @@ import java.util.UUID;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 
 public class DetailOrderTableResponse {
+
     private final UUID id;
     private final String name;
     private final int numberOfGuests;

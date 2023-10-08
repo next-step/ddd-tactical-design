@@ -5,14 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.util.List;
 import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
