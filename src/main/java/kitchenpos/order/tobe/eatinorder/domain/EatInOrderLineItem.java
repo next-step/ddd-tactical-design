@@ -41,7 +41,7 @@ public class EatInOrderLineItem {
         this.price = price;
     }
 
-    public static EatInOrderLineItem from(EatInOrderLintItemDto dto, Map<UUID, Menu> menus) {  // TODO(경록) : 이거는 테스트를 어떻게 해야할까?
+    public static EatInOrderLineItem from(EatInOrderLintItemDto dto, Map<UUID, Menu> menus) {
         if (!menus.containsKey(dto.getMenuId())) {
             throw new IllegalArgumentException("존재하지 않는 메뉴 id입니다. menuId = ." + dto.getMenuId());
         }
