@@ -108,7 +108,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void findAll() {
         orderTableRepository.save(Fixtures.emptyOrderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
+        final var actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
 
