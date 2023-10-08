@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.order.tobe.eatinorder.application.OrderTableService;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
+import kitchenpos.order.tobe.eatinorder.application.dto.DetailOrderTableResponse;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,24 +28,24 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final CreateOrderTableRequest request) {
-        final OrderTable response = orderTableService.create(request);
+    public ResponseEntity<DetailOrderTableResponse> create(@RequestBody final CreateOrderTableRequest request) {
+        final var response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
             .body(response);
     }
 
     @PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<OrderTable> sit(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<DetailOrderTableResponse> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<DetailOrderTableResponse> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<OrderTable> changeNumberOfGuests(
+    public ResponseEntity<DetailOrderTableResponse> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
         @RequestBody final ChangeNumberOfGuestRequest request
     ) {

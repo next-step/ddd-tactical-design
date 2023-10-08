@@ -37,7 +37,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void create() {
         final var expected = createOrderTableRequest("1번");
-        final OrderTable actual = orderTableService.create(expected);
+        final var actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -60,7 +60,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void sit() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
+        final var actual = orderTableService.sit(orderTableId);
         assertThat(actual.isOccupied()).isTrue();
     }
 
@@ -68,7 +68,7 @@ class DeliveryOrderTableServiceTest {
     @Test
     void clear() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
+        final var actual = orderTableService.clear(orderTableId);
         assertAll(
             () -> assertThat(actual.getNumberOfGuests()).isZero(),
             () -> assertThat(actual.isOccupied()).isFalse()
@@ -80,7 +80,7 @@ class DeliveryOrderTableServiceTest {
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
         final var expected = changeNumberOfGuestsRequest(4);
-        final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
+        final var actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
 

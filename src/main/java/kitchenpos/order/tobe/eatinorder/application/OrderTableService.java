@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.order.tobe.eatinorder.application.dto.ChangeNumberOfGuestRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateOrderTableRequest;
+import kitchenpos.order.tobe.eatinorder.application.dto.DetailOrderTableResponse;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
@@ -25,40 +26,41 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final CreateOrderTableRequest request) { // TODO(경록) : Response DTO 만들기
+    public DetailOrderTableResponse create(final CreateOrderTableRequest request) {
         final String name = request.getName();
         if (Objects.isNull(name) || name.isEmpty()) { // TODO(경록) : OrderTableName VO로 감싸보기!
             throw new IllegalArgumentException();
         }
 
-        return orderTableRepository.save(OrderTable.empty(UUID.randomUUID(), name));
+        OrderTable orderTable = orderTableRepository.save(OrderTable.empty(UUID.randomUUID(), name));
+        return DetailOrderTableResponse.of(orderTable);
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) { // TODO(경록) : Response DTO 만들기
+    public DetailOrderTableResponse sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         orderTable.changeInUseTable();
-        return orderTable;
+        return DetailOrderTableResponse.of(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) { // TODO(경록) : Response DTO 만들기
+    public DetailOrderTableResponse clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRepository.existsByOrderTableIdAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();
-        return orderTable;
+        return DetailOrderTableResponse.of(orderTable);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestRequest request) { // TODO(경록) : Response DTO 만들기
+    public DetailOrderTableResponse changeNumberOfGuests(final UUID orderTableId, final ChangeNumberOfGuestRequest request) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.changeNumberOfGuests(request.getNumberOfGuests()); // TODO(경록) : 도메인 객체에게 책임을 위임
-        return orderTable;
+        orderTable.changeNumberOfGuests(request.getNumberOfGuests());
+        return DetailOrderTableResponse.of(orderTable);
     }
 
     @Transactional(readOnly = true)
