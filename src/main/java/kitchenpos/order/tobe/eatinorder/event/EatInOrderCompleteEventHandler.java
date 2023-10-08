@@ -2,7 +2,6 @@ package kitchenpos.order.tobe.eatinorder.event;
 
 import java.util.NoSuchElementException;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -28,6 +27,6 @@ public class EatInOrderCompleteEventHandler {
     public void handleEatInOrderCompleteEvent(EatInOrderCompleteEvent event) {
         final var orderTable = orderTableRepository.findById(event.getOrderTableId())
             .orElseThrow(NoSuchElementException::new);
-        orderTable.clear();
+        orderTable.changeEmptyTable();
     }
 }

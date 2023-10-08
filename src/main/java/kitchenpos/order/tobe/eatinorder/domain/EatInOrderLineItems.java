@@ -34,7 +34,7 @@ public class EatInOrderLineItems {
         this.value = value;
     }
 
-    public static EatInOrderLineItems from(List<EatInOrderLintItemDto> orderLineItems, MenuClient menuClient) {
+    public static EatInOrderLineItems from(List<EatInOrderLintItemDto> orderLineItems, MenuClient menuClient) { // TODO(경록) : 이거는 테스트를 어떻게 해야할까?
         if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException();
         }

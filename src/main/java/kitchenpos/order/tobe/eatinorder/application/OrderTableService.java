@@ -45,7 +45,7 @@ public class OrderTableService {
         if (orderRepository.existsByOrderTableIdAndStatusNot(orderTable.getId(), EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.clear();
+        orderTable.changeEmptyTable();
         return DetailOrderTableResponse.of(orderTable);
     }
 
