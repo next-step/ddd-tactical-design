@@ -24,4 +24,21 @@ public class OrderTableName {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderTableName)) {
+            return false;
+        }
+        OrderTableName that = (OrderTableName) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
