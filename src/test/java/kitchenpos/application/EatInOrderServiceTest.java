@@ -24,7 +24,7 @@ import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import kitchenpos.order.tobe.eatinorder.application.EatInOrderService;
 import kitchenpos.order.tobe.eatinorder.application.dto.CreateEatInOrderRequest;
-import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
@@ -87,7 +87,7 @@ class EatInOrderServiceTest {
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
-    void create(final List<EatInOrderLintItemDto> orderLineItems) { // TODO(경록) : 이 부분 어떻게 녹이면 좋을까...?
+    void create(final List<EatInOrderLineItemDto> orderLineItems) { // TODO(경록) : 이 부분 어떻게 녹이면 좋을까...?
         OrderTable orderTable = orderTableRepository.save(orderTable(true, 2));
 
         final var expected = createEatInOrderRequest(orderTable.getId(), orderLineItems);
@@ -237,19 +237,19 @@ class EatInOrderServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    private CreateEatInOrderRequest createEatInOrderRequest(final UUID orderTableId, final List<EatInOrderLintItemDto> orderLineItems) {
+    private CreateEatInOrderRequest createEatInOrderRequest(final UUID orderTableId, final List<EatInOrderLineItemDto> orderLineItems) {
         return new CreateEatInOrderRequest(orderTableId, orderLineItems);
     }
 
     private CreateEatInOrderRequest createEatInOrderRequest(
         final UUID orderTableId,
-        final EatInOrderLintItemDto... orderLineItems
+        final EatInOrderLineItemDto... orderLineItems
     ) {
         return new CreateEatInOrderRequest(orderTableId, Arrays.asList(orderLineItems));
     }
 
-    private static EatInOrderLintItemDto createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
-        final var orderLineItem = new EatInOrderLintItemDto(menuId, BigDecimal.valueOf(price), quantity);
+    private static EatInOrderLineItemDto createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
+        final var orderLineItem = new EatInOrderLineItemDto(menuId, BigDecimal.valueOf(price), quantity);
         return orderLineItem;
     }
 }

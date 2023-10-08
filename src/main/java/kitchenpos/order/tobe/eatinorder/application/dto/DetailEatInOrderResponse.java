@@ -12,10 +12,10 @@ public class DetailEatInOrderResponse {
     private UUID id;
     private EatInOrderStatus status;
     private LocalDateTime orderDateTime;
-    private List<EatInOrderLintItemDto> orderLineItems;
+    private List<EatInOrderLineItemDto> orderLineItems;
     private UUID orderTableId;
 
-    public DetailEatInOrderResponse(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime, List<EatInOrderLintItemDto> orderLineItems,
+    public DetailEatInOrderResponse(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime, List<EatInOrderLineItemDto> orderLineItems,
         UUID orderTableId) {
         this.id = id;
         this.status = status;
@@ -27,7 +27,7 @@ public class DetailEatInOrderResponse {
     public static DetailEatInOrderResponse of(EatInOrder entity) {
         var orderLineItems = entity.getOrderLineItems().getValue()
             .stream()
-            .map(EatInOrderLintItemDto::of)
+            .map(EatInOrderLineItemDto::of)
             .collect(Collectors.toList());
 
         return new DetailEatInOrderResponse(
@@ -51,7 +51,7 @@ public class DetailEatInOrderResponse {
         return orderDateTime;
     }
 
-    public List<EatInOrderLintItemDto> getOrderLineItems() {
+    public List<EatInOrderLineItemDto> getOrderLineItems() {
         return orderLineItems;
     }
 

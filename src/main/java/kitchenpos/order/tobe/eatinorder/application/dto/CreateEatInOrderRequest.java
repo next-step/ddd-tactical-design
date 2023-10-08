@@ -12,9 +12,9 @@ public class CreateEatInOrderRequest {
 
     @NotEmpty
     @NotNull
-    private List<EatInOrderLintItemDto> orderLineItems;
+    private List<EatInOrderLineItemDto> orderLineItems;
 
-    public CreateEatInOrderRequest(UUID orderTableId, List<EatInOrderLintItemDto> orderLineItems) {
+    public CreateEatInOrderRequest(UUID orderTableId, List<EatInOrderLineItemDto> orderLineItems) {
         this.orderTableId = orderTableId;
         this.orderLineItems = orderLineItems;
     }
@@ -23,7 +23,7 @@ public class CreateEatInOrderRequest {
         return orderTableId;
     }
 
-    public List<EatInOrderLintItemDto> getOrderLineItems() {
+    public List<EatInOrderLineItemDto> getOrderLineItems() {
         return orderLineItems;
     }
 }

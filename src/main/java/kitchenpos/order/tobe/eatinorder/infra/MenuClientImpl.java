@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
-import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
 import kitchenpos.order.tobe.eatinorder.domain.MenuClient;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +19,9 @@ public class MenuClientImpl implements MenuClient {
     }
 
     @Override
-    public List<Menu> getMenusByMenuIds(List<EatInOrderLintItemDto> orderLineItems) {
+    public List<Menu> getMenusByMenuIds(List<EatInOrderLineItemDto> orderLineItems) {
         List<UUID> menuIds = orderLineItems.stream()
-            .map(EatInOrderLintItemDto::getMenuId)
+            .map(EatInOrderLineItemDto::getMenuId)
             .collect(Collectors.toList());
 
         return menuRepository.findAllByIdIn(menuIds);

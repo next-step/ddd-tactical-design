@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.math.BigDecimal;
 import java.util.Map;
 import kitchenpos.Fixtures;
-import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class EatInOrderLineItemTest {
         // given
         var menu = Fixtures.menu();
         var menus = Map.of(menu.getId(), menu);
-        var dto = new EatInOrderLintItemDto(menu.getId(), menu.getPrice(), 1);
+        var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
 
         // when // then
         assertDoesNotThrow(() -> EatInOrderLineItem.from(dto, menus));
@@ -29,7 +29,7 @@ class EatInOrderLineItemTest {
     void testInitIfNotExistMenu() {
         // given
         var menu = Fixtures.menu();
-        var dto = new EatInOrderLintItemDto(menu.getId(), menu.getPrice(), 1);
+        var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
 
         var otherMenu = Fixtures.menu();
         var menus = Map.of(otherMenu.getId(), otherMenu);
@@ -45,7 +45,7 @@ class EatInOrderLineItemTest {
         // given
         var menu = Fixtures.menu(10_000L, false, Fixtures.menuProduct(10_000L, 1));
         var menus = Map.of(menu.getId(), menu);
-        var dto = new EatInOrderLintItemDto(menu.getId(), menu.getPrice(), 1);
+        var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
 
         // when // then
         assertThatThrownBy(() -> EatInOrderLineItem.from(dto, menus))
@@ -58,7 +58,7 @@ class EatInOrderLineItemTest {
         // given
         var menu = Fixtures.menu();
         var menus = Map.of(menu.getId(), menu);
-        var dto = new EatInOrderLintItemDto(menu.getId(), menu.getPrice().add(BigDecimal.ONE), 1);
+        var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice().add(BigDecimal.ONE), 1);
 
         // when // then
         assertThatThrownBy(() -> EatInOrderLineItem.from(dto, menus))

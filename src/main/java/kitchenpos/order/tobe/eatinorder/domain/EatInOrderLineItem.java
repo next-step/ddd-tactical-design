@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import kitchenpos.common.Price;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLintItemDto;
+import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
 
 @Table(name = "eat_in_order_line_item")
 @Entity
@@ -41,7 +41,7 @@ public class EatInOrderLineItem {
         this.price = price;
     }
 
-    public static EatInOrderLineItem from(EatInOrderLintItemDto dto, Map<UUID, Menu> menus) {
+    public static EatInOrderLineItem from(EatInOrderLineItemDto dto, Map<UUID, Menu> menus) {
         if (!menus.containsKey(dto.getMenuId())) {
             throw new IllegalArgumentException("존재하지 않는 메뉴 id입니다. menuId = ." + dto.getMenuId());
         }
@@ -59,7 +59,7 @@ public class EatInOrderLineItem {
         return EatInOrderLineItem.from(dto);
     }
 
-    private static EatInOrderLineItem from(EatInOrderLintItemDto dto) {
+    private static EatInOrderLineItem from(EatInOrderLineItemDto dto) {
         return new EatInOrderLineItem(dto.getQuantity(), dto.getMenuId(), Price.of(dto.getPrice()));
     }
 
