@@ -53,7 +53,6 @@ class EatInOrderServiceTest {
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService eatInOrderService;
-    private MenuClient menuClient;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -63,7 +62,7 @@ class EatInOrderServiceTest {
         orderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        menuClient = new MenuClientImpl(menuRepository);
+        MenuClient menuClient = new MenuClientImpl(menuRepository);
         eatInOrderService = new EatInOrderService(orderRepository, orderTableRepository, menuClient, applicationEventPublisher);
     }
 
