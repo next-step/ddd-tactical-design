@@ -33,6 +33,14 @@ create table order_line_item
     primary key (seq)
 ) engine = InnoDB;
 
+create table eat_in_menu
+(
+    id            binary(16)     not null,
+    displayed     bit            not null,
+    price         decimal(19, 2) not null,
+    primary key (id)
+) engine = InnoDB;
+
 create table order_table
 (
     id               binary(16)   not null,

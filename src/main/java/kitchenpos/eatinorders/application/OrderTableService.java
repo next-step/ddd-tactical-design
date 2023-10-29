@@ -1,78 +1,80 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.eatinorders.application.dto.*;
+import kitchenpos.eatinorders.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static kitchenpos.eatinorders.exception.OrderTableExceptionMessage.NOT_EXIST_COMPLETE_ORDER;
 
 @Service
 public class OrderTableService {
-    private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final EatInOrderTableRepository orderTableRepository;
+    private final EatInOrderRepository orderRepository;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final EatInOrderTableRepository orderTableRepository, final EatInOrderRepository orderRepository) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTableRepository.save(orderTable);
+    public OrderTableResponse create(final OrderTableRequest request) {
+        EatInOrderTable eatInOrderTable = EatInOrderTable.create(
+                UUID.randomUUID(),
+                OrderTableName.create(request.getName()),
+                NumberOfGuests.ZERO,
+                false);
+        EatInOrderTable savedEatInOrderTable = orderTableRepository.save(eatInOrderTable);
+        return OrderTableResponse.create(
+                savedEatInOrderTable.getId(),
+                savedEatInOrderTable.getNameValue(),
+                savedEatInOrderTable.getNumberOfGuestsValue(),
+                savedEatInOrderTable.isOccupied()
+        );
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+    public boolean sit(final UUID orderTableId) {
+        final EatInOrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
-        return orderTable;
+        orderTable.sit();
+        return orderTable.isOccupied();
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+    public OrderTableClearResponse clear(final UUID orderTableId) {
+        final EatInOrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+        if (isNotExistCompletedOrder(orderTable.getId())) {
+            throw new IllegalStateException(NOT_EXIST_COMPLETE_ORDER);
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
+        orderTable.clear();
+        return OrderTableClearResponse.create(orderTable.getNumberOfGuestsValue(), orderTable.isOccupied());
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+    public OrderTableChangeNumberOfGuestsResponse changeNumberOfGuests(final UUID orderTableId, final OrderTableChangeNumberOfGuestsRequest request) {
+        final EatInOrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        orderTable.changeNumberOfGuests(NumberOfGuests.create(request.getNumberOfGuests()));
+        return OrderTableChangeNumberOfGuestsResponse.create(
+                orderTable.getId(), orderTable.getNameValue(), orderTable.getNumberOfGuestsValue());
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableResponse> findAll() {
+        List<EatInOrderTable> orderTables = orderTableRepository.findAll();
+        return orderTables.stream()
+                .map(m -> OrderTableResponse.create(m.getId(), m.getNameValue(), m.getNumberOfGuestsValue(), m.isOccupied()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isNotExistCompletedOrder(UUID orderTableId) {
+        return orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, OrderStatus.COMPLETED);
     }
 }

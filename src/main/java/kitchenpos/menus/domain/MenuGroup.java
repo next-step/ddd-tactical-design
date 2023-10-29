@@ -1,10 +1,15 @@
 package kitchenpos.menus.domain;
 
+import org.springframework.util.StringUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
+
+import static kitchenpos.menus.exception.MenuGroupExceptionMessage.NULL_EMPTY_NAME;
 
 @Table(name = "menu_group")
 @Entity
@@ -19,19 +24,36 @@ public class MenuGroup {
     public MenuGroup() {
     }
 
-    public UUID getId() {
-        return id;
+    private MenuGroup(UUID id, String name) {
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException(NULL_EMPTY_NAME);
+        }
+        this.id = id;
+        this.name = name;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public static MenuGroup create(UUID id, String name) {
+        return new MenuGroup(id, name);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuGroup menuGroup = (MenuGroup) o;
+        return Objects.equals(id, menuGroup.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

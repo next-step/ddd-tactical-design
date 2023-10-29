@@ -2,8 +2,8 @@ package kitchenpos.products.application;
 
 
 import kitchenpos.menus.application.NewInMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.NewMenu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.CreateProductRequest;
 import kitchenpos.products.domain.MenuProductPriceHandler;
 import kitchenpos.products.domain.ProductRepository;
@@ -96,9 +96,9 @@ class ProductServiceTest {
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final NewMenu newMenu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), 8_000L);
-        assertThat(menuRepository.findById(newMenu.getId()).get().isDisplayed()).isFalse();
+        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")

@@ -1,9 +1,8 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.domain.NewProduct;
-import kitchenpos.menus.tobe.domain.ProductRepostiory;
+import kitchenpos.menus.domain.NewProduct;
+import kitchenpos.menus.domain.ProductRepostiory;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
