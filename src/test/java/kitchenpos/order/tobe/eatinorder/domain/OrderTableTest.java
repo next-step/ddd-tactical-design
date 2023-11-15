@@ -68,7 +68,7 @@ class OrderTableTest {
 
     @DisplayName("주문 테이블이 비어있는지 확인한다")
     @ParameterizedTest
-    @CsvSource(value = {"false;false", "true;true"}, delimiter = ';')
+    @CsvSource(value = {"false;true", "true;false"}, delimiter = ';')
     void testIsEmpty(boolean occupied, boolean expected) {
         // given
         var orderTable = Fixtures.orderTable(occupied, 0);
