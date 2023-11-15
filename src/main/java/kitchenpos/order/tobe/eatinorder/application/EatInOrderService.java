@@ -12,8 +12,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.MenuClient;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
-import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.service.EatInOrderCreatePolicy;
 import kitchenpos.order.tobe.eatinorder.event.EatInOrderCompleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -23,28 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class EatInOrderService {
 
     private final EatInOrderRepository orderRepository;
-    private final OrderTableRepository orderTableRepository;
-
     private final MenuClient menuClient;
-
+    private final EatInOrderCreatePolicy eatInOrderCreatePolicy;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public EatInOrderService(final EatInOrderRepository orderRepository, final OrderTableRepository orderTableRepository,
-        final MenuClient menuClient, ApplicationEventPublisher applicationEventPublisher) {
+    public EatInOrderService(final EatInOrderRepository orderRepository, final MenuClient menuClient, EatInOrderCreatePolicy eatInOrderCreatePolicy,
+        ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
-        this.orderTableRepository = orderTableRepository;
         this.menuClient = menuClient;
+        this.eatInOrderCreatePolicy = eatInOrderCreatePolicy;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
     public DetailEatInOrderResponse create(final CreateEatInOrderRequest request) {
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId()).orElseThrow(NoSuchElementException::new);
-        if (orderTable.isEmpty()) {
-            throw new IllegalStateException("빈 테이블은 주문을 할 수 없습니다.");
-        }
-
-        EatInOrder eatInOrder = EatInOrder.create(LocalDateTime.now(), EatInOrderLineItems.from(request.getOrderLineItems(), menuClient), orderTable.getId());
+        EatInOrder eatInOrder = EatInOrder.create(LocalDateTime.now(), EatInOrderLineItems.from(request.getOrderLineItems(), menuClient),
+            request.getOrderTableId(), eatInOrderCreatePolicy);
         return DetailEatInOrderResponse.of(orderRepository.save(eatInOrder));
     }
 

@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.order.tobe.eatinorder.domain.service.EatInOrderCreatePolicy;
 
 @Table(name = "eat_in_orders")
 @Entity
@@ -47,7 +48,9 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public static EatInOrder create(LocalDateTime orderDateTime, EatInOrderLineItems orderLineItems, UUID orderTableId) {
+    public static EatInOrder create(LocalDateTime orderDateTime, EatInOrderLineItems orderLineItems, UUID orderTableId,
+        EatInOrderCreatePolicy eatInOrderCreatePolicy) {
+        eatInOrderCreatePolicy.validOrderTableId(orderTableId);
         return new EatInOrder(EatInOrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
     }
 

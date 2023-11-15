@@ -31,6 +31,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.MenuClient;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.OrderTableRepository;
+import kitchenpos.order.tobe.eatinorder.domain.service.EatInOrderCreatePolicy;
 import kitchenpos.order.tobe.eatinorder.event.EatInOrderCompleteEvent;
 import kitchenpos.order.tobe.eatinorder.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +54,7 @@ class EatInOrderServiceTest {
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
     private EatInOrderService eatInOrderService;
+    private EatInOrderCreatePolicy eatInOrderCreatePolicy;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -63,7 +65,8 @@ class EatInOrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         MenuClient menuClient = new MenuClientImpl(menuRepository);
-        eatInOrderService = new EatInOrderService(orderRepository, orderTableRepository, menuClient, applicationEventPublisher);
+        this.eatInOrderCreatePolicy = new EatInOrderCreatePolicy(orderTableRepository);
+        eatInOrderService = new EatInOrderService(orderRepository, menuClient, eatInOrderCreatePolicy, applicationEventPublisher);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
