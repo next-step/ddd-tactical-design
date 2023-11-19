@@ -21,7 +21,7 @@ public class MenuClientImpl implements MenuClient {
     @Override
     public List<Menu> getMenusByMenuIds(List<EatInOrderLineItemDto> orderLineItems) {
         List<UUID> menuIds = orderLineItems.stream()
-            .map(EatInOrderLineItemDto::getMenuId)
+            .map(EatInOrderLineItemDto::getEatInOrderMenuId)
             .collect(Collectors.toList());
 
         return menuRepository.findAllByIdIn(menuIds);

@@ -26,27 +26,27 @@ public class EatInOrderLineItem {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Column(name = "menu_id", columnDefinition = "binary(16)", nullable = false)
-    private UUID menuId;
-
     @Embedded
-    private Price price;
+    private EatItOrderMenu eatInOrderMenu;
 
     protected EatInOrderLineItem() {
     }
 
-    public EatInOrderLineItem(long quantity, UUID menuId, Price price) {
+    public EatInOrderLineItem(long quantity, UUID id, Price price) {
+        this(quantity, EatItOrderMenu.from(id, price));
+    }
+
+    public EatInOrderLineItem(long quantity, EatItOrderMenu eatInOrderMenu) {
         this.quantity = quantity;
-        this.menuId = menuId;
-        this.price = price;
+        this.eatInOrderMenu = eatInOrderMenu;
     }
 
     public static EatInOrderLineItem from(EatInOrderLineItemDto dto, Map<UUID, Menu> menus) {
-        if (!menus.containsKey(dto.getMenuId())) {
-            throw new IllegalArgumentException("존재하지 않는 메뉴 id입니다. menuId = ." + dto.getMenuId());
+        if (!menus.containsKey(dto.getEatInOrderMenuId())) {
+            throw new IllegalArgumentException("존재하지 않는 메뉴 id입니다. menuId = ." + dto.getEatInOrderMenuId());
         }
 
-        var menu = menus.get(dto.getMenuId());
+        var menu = menus.get(dto.getEatInOrderMenuId());
         if (menu.isHide()) {
             throw new IllegalStateException("숨김 메뉴는 주문할 수 없습니다.");
         }
@@ -60,7 +60,7 @@ public class EatInOrderLineItem {
     }
 
     private static EatInOrderLineItem from(EatInOrderLineItemDto dto) {
-        return new EatInOrderLineItem(dto.getQuantity(), dto.getMenuId(), Price.of(dto.getPrice()));
+        return new EatInOrderLineItem(dto.getQuantity(), EatItOrderMenu.from(dto.getEatInOrderMenuId(), Price.of(dto.getPrice())));
     }
 
     public Long getSeq() {
@@ -71,11 +71,11 @@ public class EatInOrderLineItem {
         return quantity;
     }
 
-    public UUID getMenuId() {
-        return this.menuId;
+    public UUID getEatInOrderMenuId() {
+        return this.eatInOrderMenu.getEatInOrderMenuId();
     }
 
     public BigDecimal getPrice() {
-        return this.price.getValue();
+        return this.eatInOrderMenu.getPrice().getValue();
     }
 }
