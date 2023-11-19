@@ -8,6 +8,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import kitchenpos.common.Price;
 
 @Table(name = "menu")
 @Entity
@@ -21,9 +22,9 @@ public class Menu {
     private MenuName name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
-    @Column(name = "mene_group_id", nullable = false)
+    @Column(name = "menu_group_id", nullable = false)
     private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
@@ -35,12 +36,12 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(UUID id, String name, MenuPrice menuPrice, UUID menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
-        this(id, new MenuName(name), menuPrice, menuGroupId, displayed, new MenuProducts(menuProducts));
+    public Menu(UUID id, String name, Price price, UUID menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
+        this(id, new MenuName(name), price, menuGroupId, displayed, new MenuProducts(menuProducts));
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
-        MenuPrice totalMenuProductPrice = menuProducts.sumOfMenuProductPrice();
+    public Menu(UUID id, MenuName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+        Price totalMenuProductPrice = menuProducts.sumOfMenuProductPrice();
         if (totalMenuProductPrice.isLowerThan(price)) {
             throw new IllegalArgumentException();
         }
@@ -53,7 +54,7 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public void changeMenuProductPrice(UUID productId, MenuPrice price) {
+    public void changeMenuProductPrice(UUID productId, Price price) {
         this.menuProducts.changeMenuProductPrice(productId, price);
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(this.price)) {
@@ -61,7 +62,7 @@ public class Menu {
         }
     }
 
-    public void changePrice(MenuPrice price) {
+    public void changePrice(Price price) {
         var sum = menuProducts.sumOfMenuProductPrice();
         if (sum.isLowerThan(price)) {
             throw new IllegalArgumentException();
@@ -99,6 +100,10 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public boolean isHide() {
+        return !isDisplayed();
     }
 
     public MenuProducts getMenuProducts() {

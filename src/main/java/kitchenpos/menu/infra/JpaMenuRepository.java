@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface JpaMenuRepository extends MenuRepository, JpaRepository<Menu, UUID> {
 
-    @Query("select m from Menu m join m.menuProducts mp where mp.productId = :productId")
+    @Query("select m from Menu m join m.menuProducts.value mp where mp = :productId")
     @Override
     List<Menu> findAllByProductId(@Param("productId") UUID productId);
 }

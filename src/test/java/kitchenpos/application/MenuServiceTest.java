@@ -170,7 +170,7 @@ class MenuServiceTest {
     void changePriceToExpensive() {
         final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
         final var expected = changePriceRequest(38_001L);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected)) // TODO(경록) : 예외가 발생하는게 맞음! (이거 수정중!)
+        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
 

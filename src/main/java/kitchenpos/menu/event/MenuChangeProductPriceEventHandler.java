@@ -1,8 +1,8 @@
 package kitchenpos.menu.event;
 
 import java.util.List;
+import kitchenpos.common.Price;
 import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -25,6 +25,6 @@ public class MenuChangeProductPriceEventHandler {
     )
     public void handleChangeProductPriceEvent(ChangeProductPriceEvent event) {
         final List<Menu> menus = menuRepository.findAllByProductId(event.getProductId());
-        menus.forEach(menu -> menu.changeMenuProductPrice(event.getProductId(), MenuPrice.of(event.getPrice())));
+        menus.forEach(menu -> menu.changeMenuProductPrice(event.getProductId(), Price.of(event.getPrice())));
     }
 }

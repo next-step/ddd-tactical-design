@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import kitchenpos.product.tobe.domain.ProductPrice;
+import kitchenpos.common.Price;
 
 @Table(name = "menu_product")
 @Entity
@@ -23,7 +23,8 @@ public class MenuProduct {
     private Long seq;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
+
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
@@ -33,7 +34,7 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, ProductPrice price, long quantity) {
+    public MenuProduct(UUID productId, Price price, long quantity) {
         if (quantity < MIN_QUANTITY) {
             throw new IllegalArgumentException();
         }
@@ -43,16 +44,17 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static MenuProduct of(UUID productId, ProductPrice price, long quantity) {
+    public static MenuProduct of(UUID productId, Price price, long quantity) {
         return new MenuProduct(productId, price, quantity);
     }
 
-    public MenuPrice calculatePrice() {
-        return price.multiply(quantity).toMenuPrice();
+    public Price calculatePrice() {
+        return price.multiply(quantity);
     }
 
-    public void changePrice(MenuPrice price) {
-        this.price = price.toProductPrice();
+
+    public void changePrice(Price price) {
+        this.price = price;
     }
 
     public boolean equalsToProductId(UUID productId) {
@@ -63,7 +65,7 @@ public class MenuProduct {
         return seq;
     }
 
-    public ProductPrice getPrice() {
+    public Price getPrice() {
         return price;
     }
 

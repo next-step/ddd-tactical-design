@@ -3,7 +3,6 @@ package kitchenpos.menu.tobe.domain;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menu.tobe.domain.Menu;
 
 public interface MenuRepository {
 

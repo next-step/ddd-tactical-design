@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductNameNormalPolicy implements ProductNamePolicy {
+
     private final ProfanityClient profanityClient;
 
     public ProductNameNormalPolicy(ProfanityClient profanityClient) {
