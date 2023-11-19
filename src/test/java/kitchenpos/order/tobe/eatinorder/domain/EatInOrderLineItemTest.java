@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import kitchenpos.Fixtures;
 import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
+import kitchenpos.order.tobe.eatinorder.domain.service.MenuDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +17,9 @@ class EatInOrderLineItemTest {
     @Test
     void testInit() {
         // given
-        var menu = Fixtures.menu();
-        var menus = Map.of(menu.getId(), menu);
-        var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
+        var menuDto = MenuDto.from(Fixtures.menu());
+        var menus = Map.of(menuDto.getId(), menuDto);
+        var dto = new EatInOrderLineItemDto(menuDto.getId(), menuDto.getPrice(), 1);
 
         // when // then
         assertDoesNotThrow(() -> EatInOrderLineItem.from(dto, menus));
@@ -28,10 +29,10 @@ class EatInOrderLineItemTest {
     @Test
     void testInitIfNotExistMenu() {
         // given
-        var menu = Fixtures.menu();
+        var menu = MenuDto.from(Fixtures.menu());
         var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
 
-        var otherMenu = Fixtures.menu();
+        var otherMenu = MenuDto.from(Fixtures.menu());
         var menus = Map.of(otherMenu.getId(), otherMenu);
 
         // when // then
@@ -43,7 +44,7 @@ class EatInOrderLineItemTest {
     @Test
     void testInitIfMenuIsHide() {
         // given
-        var menu = Fixtures.menu(10_000L, false, Fixtures.menuProduct(10_000L, 1));
+        var menu = MenuDto.from(Fixtures.menu(10_000L, false, Fixtures.menuProduct(10_000L, 1)));
         var menus = Map.of(menu.getId(), menu);
         var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice(), 1);
 
@@ -56,7 +57,7 @@ class EatInOrderLineItemTest {
     @Test
     void testInitIfNotEqualToMenuPrice() {
         // given
-        var menu = Fixtures.menu();
+        var menu = MenuDto.from(Fixtures.menu());
         var menus = Map.of(menu.getId(), menu);
         var dto = new EatInOrderLineItemDto(menu.getId(), menu.getPrice().add(BigDecimal.ONE), 1);
 

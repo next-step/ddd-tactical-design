@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
+import kitchenpos.order.tobe.eatinorder.domain.service.MenuClient;
+import kitchenpos.order.tobe.eatinorder.domain.service.MenuDto;
 
 @Embeddable
 public class EatInOrderLineItems {
@@ -41,7 +43,7 @@ public class EatInOrderLineItems {
 
         var menus = menuClient.getMenusByMenuIds(orderLineItems)
             .stream()
-            .collect(Collectors.toMap(Menu::getId, Function.identity()));
+            .collect(Collectors.toMap(MenuDto::getId, Function.identity()));
 
         return orderLineItems.stream()
             .map(it -> EatInOrderLineItem.from(it, menus))

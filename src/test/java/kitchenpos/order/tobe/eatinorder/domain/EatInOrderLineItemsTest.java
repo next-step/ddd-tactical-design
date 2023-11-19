@@ -12,6 +12,7 @@ import kitchenpos.application.InMemoryMenuRepository;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 import kitchenpos.order.tobe.eatinorder.application.dto.EatInOrderLineItemDto;
+import kitchenpos.order.tobe.eatinorder.domain.service.MenuClient;
 import kitchenpos.order.tobe.eatinorder.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

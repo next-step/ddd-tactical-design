@@ -11,7 +11,7 @@ import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItems;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
-import kitchenpos.order.tobe.eatinorder.domain.MenuClient;
+import kitchenpos.order.tobe.eatinorder.domain.service.MenuClient;
 import kitchenpos.order.tobe.eatinorder.domain.service.EatInOrderCreatePolicy;
 import kitchenpos.order.tobe.eatinorder.event.EatInOrderCompleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
