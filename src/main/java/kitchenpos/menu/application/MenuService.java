@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import kitchenpos.common.Price;
 import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceRequest;
 import kitchenpos.menu.tobe.application.dto.ChangeMenuPriceResponse;
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
@@ -16,7 +17,6 @@ import kitchenpos.menu.tobe.application.dto.HideMenuResponse;
 import kitchenpos.menu.tobe.application.dto.QueryMenuResponse;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuName;
-import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.menu.tobe.domain.MenuProduct;
 import kitchenpos.menu.tobe.domain.MenuProducts;
 import kitchenpos.menu.tobe.domain.MenuRepository;
@@ -55,7 +55,7 @@ public class MenuService {
         final Menu menu = new Menu(
             UUID.randomUUID(),
             MenuName.of(request.getName(), menuNamePolicy),
-            new MenuPrice(request.getPrice()),
+            new Price(request.getPrice()),
             menuGroup.getId(),
             request.isDisplayed(),
             createMenuProducts(request.getMenuProducts())
@@ -94,7 +94,7 @@ public class MenuService {
     public ChangeMenuPriceResponse changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(MenuPrice.of(request.getPrice()));
+        menu.changePrice(Price.of(request.getPrice()));
         return ChangeMenuPriceResponse.of(menu);
     }
 

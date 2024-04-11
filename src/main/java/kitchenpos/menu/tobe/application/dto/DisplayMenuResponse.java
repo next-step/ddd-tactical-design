@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.menu.tobe.domain.Menu;
 
 public class DisplayMenuResponse {
+
     private final UUID id;
     private final String name;
     private final BigDecimal price;
