@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.Fixtures.menu;
+import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
