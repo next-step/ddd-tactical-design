@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductTest {
 
     private static final String 상품이름 = "상품이름";
-    private static final BigDecimal 상품가격 = BigDecimal.valueOf(10_000);
+    private static final ProductPrice 상품가격 = ProductPrice.from(10_000);
 
     @DisplayName("상품을 생성한다.")
     @Test
@@ -25,7 +25,7 @@ class ProductTest {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(상품이름),
-                () -> assertThat(actual.getPrice()).isEqualTo(상품가격)
+                () -> assertThat(actual.getPrice()).isEqualTo(상품가격.price())
         );
     }
 
@@ -37,7 +37,7 @@ class ProductTest {
         BigDecimal newPrice = BigDecimal.valueOf(15_000);
 
         // when
-        상품.changePrice(newPrice);
+        상품.changePrice(ProductPrice.from(newPrice));
 
         // then
         assertThat(상품.getPrice()).isEqualTo(newPrice);

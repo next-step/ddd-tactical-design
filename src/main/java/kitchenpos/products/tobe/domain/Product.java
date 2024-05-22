@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,27 +19,23 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
+    protected Product(UUID id, String name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public static Product from(BigDecimal price) {
-        return new Product(UUID.randomUUID(), null, price);
-    }
-
-    public static Product from(String name, BigDecimal price) {
+    public static Product from(String name, ProductPrice price) {
         return new Product(UUID.randomUUID(), name, price);
     }
 
-    public void changePrice(BigDecimal price) {
+    public void changePrice(ProductPrice price) {
         this.price = price;
     }
 
@@ -51,6 +48,6 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.price();
     }
 }
