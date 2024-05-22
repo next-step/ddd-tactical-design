@@ -9,6 +9,8 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProfanityChecker;
 import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
@@ -124,6 +126,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.from(name, ProductPrice.from(price));
+        return Product.from(ProductName.from(name), ProductPrice.from(price));
+    }
+
+    public static Product product(final String name, final long price, ProfanityChecker profanityChecker) {
+        return Product.from(ProductName.from(name, profanityChecker), ProductPrice.from(price));
     }
 }

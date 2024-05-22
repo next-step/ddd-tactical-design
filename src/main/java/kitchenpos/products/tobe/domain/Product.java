@@ -16,8 +16,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private ProductPrice price;
@@ -25,13 +25,13 @@ public class Product {
     protected Product() {
     }
 
-    protected Product(UUID id, String name, ProductPrice price) {
+    protected Product(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public static Product from(String name, ProductPrice price) {
+    public static Product from(ProductName name, ProductPrice price) {
         return new Product(UUID.randomUUID(), name, price);
     }
 
@@ -44,7 +44,7 @@ public class Product {
     }
 
     public String getName() {
-        return name;
+        return name.name();
     }
 
     public BigDecimal getPrice() {

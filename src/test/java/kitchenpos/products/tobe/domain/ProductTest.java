@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("상품")
 class ProductTest {
 
-    private static final String 상품이름 = "상품이름";
+    private static final ProductName 상품이름 = ProductName.from("상품이름");
     private static final ProductPrice 상품가격 = ProductPrice.from(10_000);
 
     @DisplayName("상품을 생성한다.")
@@ -24,7 +24,7 @@ class ProductTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(상품이름),
+                () -> assertThat(actual.getName()).isEqualTo(상품이름.name()),
                 () -> assertThat(actual.getPrice()).isEqualTo(상품가격.price())
         );
     }
