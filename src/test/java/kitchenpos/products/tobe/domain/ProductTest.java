@@ -21,8 +21,8 @@ class ProductTest {
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(상품이름.name()),
-                () -> assertThat(actual.getPrice()).isEqualTo(상품가격.price())
+                () -> assertThat(actual.getName()).isEqualTo(상품이름.nameValue()),
+                () -> assertThat(actual.getPrice()).isEqualTo(상품가격.priceValue())
         );
     }
 

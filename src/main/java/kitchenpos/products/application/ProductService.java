@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
@@ -35,14 +36,14 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final ProductCreateRequest request) {
+    public ProductResponse create(final ProductCreateRequest request) {
         final ProductPrice price = ProductPrice.from(request.price());
         final ProductName name = ProductName.from(request.name(), profanityChecker);
-        return productRepository.save(Product.from(name, price));
+        return ProductResponse.of(productRepository.save(Product.from(name, price)));
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ProductChangePriceRequest request) {
+    public ProductResponse changePrice(final UUID productId, final ProductChangePriceRequest request) {
         final ProductPrice price = ProductPrice.from(request.price());
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
@@ -61,11 +62,13 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ProductResponse.of(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll().stream()
+                .map(ProductResponse::of)
+                .toList();
     }
 }

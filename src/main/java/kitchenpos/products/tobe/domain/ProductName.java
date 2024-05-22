@@ -33,7 +33,7 @@ public class ProductName {
         return new ProductName(name, profanityChecker);
     }
 
-    public String name() {
+    public String nameValue() {
         return name;
     }
 

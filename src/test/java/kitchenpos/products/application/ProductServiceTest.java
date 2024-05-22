@@ -5,6 +5,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
+import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
@@ -47,12 +48,12 @@ class ProductServiceTest {
     @Test
     void create() {
         final ProductCreateRequest expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final ProductResponse actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.name()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.price())
+            () -> assertThat(actual.id()).isNotNull(),
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.price()).isEqualTo(expected.price())
         );
     }
 
@@ -81,8 +82,8 @@ class ProductServiceTest {
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
         final ProductChangePriceRequest expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(expected.price());
+        final ProductResponse actual = productService.changePrice(productId, expected);
+        assertThat(actual.price()).isEqualTo(expected.price());
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
@@ -110,7 +111,7 @@ class ProductServiceTest {
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));
         productRepository.save(product("양념치킨", 16_000L));
-        final List<Product> actual = productService.findAll();
+        final List<ProductResponse> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 

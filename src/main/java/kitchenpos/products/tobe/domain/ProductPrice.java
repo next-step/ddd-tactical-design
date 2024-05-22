@@ -42,7 +42,7 @@ public class ProductPrice {
         return Objects.hash(price);
     }
 
-    public BigDecimal price() {
+    public BigDecimal priceValue() {
         return price;
     }
 

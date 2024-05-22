@@ -44,10 +44,10 @@ public class Product {
     }
 
     public String getName() {
-        return name.name();
+        return name.nameValue();
     }
 
     public BigDecimal getPrice() {
-        return price.price();
+        return price.priceValue();
     }
 }
