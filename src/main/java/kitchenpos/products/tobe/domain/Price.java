@@ -9,7 +9,9 @@ import java.util.Objects;
 @Embeddable
 public class Price {
     @Column(name = "price", nullable = false)
-    private final BigDecimal price;
+    private BigDecimal price;
+
+    public Price() {}
 
     public Price(BigDecimal price) {
         checkValidPrice(price);

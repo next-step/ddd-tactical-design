@@ -8,7 +8,9 @@ import java.util.Objects;
 @Embeddable
 public class DisplayedName {
     @Column(name = "name", nullable = false)
-    private final String name;
+    private String name;
+
+    public DisplayedName() {}
 
     public DisplayedName(String name, ProductNameValidationService service) {
         if (Objects.isNull(name) || service.hasProfanity(name)) {

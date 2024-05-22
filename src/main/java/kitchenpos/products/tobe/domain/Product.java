@@ -18,6 +18,8 @@ public class Product {
     @Embedded
     private Price price;
 
+    public Product() {}
+
     public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
         this.id = id;
         this.name = new DisplayedName(name, productNameValidationService);
