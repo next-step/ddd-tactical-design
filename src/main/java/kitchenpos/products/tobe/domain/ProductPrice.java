@@ -29,6 +29,15 @@ public class ProductPrice {
         return new ProductPrice(price);
     }
 
+    protected ProductPrice multiply(BigDecimal number) {
+        return ProductPrice.from(price.multiply(number));
+    }
+
+
+    public BigDecimal priceValue() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,10 +49,6 @@ public class ProductPrice {
     @Override
     public int hashCode() {
         return Objects.hash(price);
-    }
-
-    public BigDecimal priceValue() {
-        return price;
     }
 
     private void validatePrice(BigDecimal price) {

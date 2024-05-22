@@ -39,6 +39,10 @@ public class Product {
         this.price = price;
     }
 
+    public BigDecimal priceMultiple(BigDecimal number) {
+        return price.multiply(number).priceValue();
+    }
+
     public UUID getId() {
         return id;
     }

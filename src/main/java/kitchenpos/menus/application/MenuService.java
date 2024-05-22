@@ -100,14 +100,7 @@ public class MenuService {
         }
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
+        BigDecimal sum = sumMenuProducts(menu);
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
@@ -119,14 +112,7 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
+        BigDecimal sum = sumMenuProducts(menu);
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
@@ -145,5 +131,22 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Transactional
+    public void checkHideMenuBasedOnProductPrice(UUID productId) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        for (final Menu menu : menus) {
+            BigDecimal sum = sumMenuProducts(menu);
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
+        }
+    }
+
+    private BigDecimal sumMenuProducts(Menu menu) {
+        return menu.getMenuProducts().stream()
+                .map(MenuProduct::multiplyPriceAndQuantity)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

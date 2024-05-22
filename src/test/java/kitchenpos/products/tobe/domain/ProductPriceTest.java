@@ -30,4 +30,24 @@ class ProductPriceTest {
         assertThatThrownBy(() -> ProductPrice.from(price))
                 .isInstanceOf(InvalidProductPriceException.class);
     }
+
+    @DisplayName("[성공] 상품의 가격에 숫자를 곱한다.")
+    @Test
+    void success1() {
+        ProductPrice price = ProductPrice.from(10_000);
+
+        ProductPrice actual = price.multiply(BigDecimal.TEN);
+
+        assertThat(actual).isEqualTo(ProductPrice.from(100_000));
+    }
+
+    @DisplayName("[실패] 상품의 가격에 숫자를 곱한 결과는 0원 이상이어야 한다.")
+    @ValueSource(strings = {"-1", "-2", "-10"})
+    @ParameterizedTest
+    void fail2(BigDecimal input) {
+        ProductPrice price = ProductPrice.from(10_000);
+
+        assertThatThrownBy(() -> price.multiply(input))
+                .isInstanceOf(InvalidProductPriceException.class);
+    }
 }

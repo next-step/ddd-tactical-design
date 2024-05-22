@@ -1,7 +1,10 @@
 package kitchenpos.products.application;
 
+import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
@@ -31,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
+    private MenuGroupRepository menuGroupRepository;
+    private MenuService menuService;
     private PurgomalumClient purgomalumClient;
     private ProfanityChecker profanityChecker;
     private ProductService productService;
@@ -39,9 +44,11 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
+        menuGroupRepository = new InMemoryMenuGroupRepository();
         purgomalumClient = new FakePurgomalumClient();
         profanityChecker = new ProfanityChecker(purgomalumClient);
-        productService = new ProductService(productRepository, menuRepository, profanityChecker);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuService, profanityChecker);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
