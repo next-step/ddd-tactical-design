@@ -20,10 +20,24 @@ public class Product {
 
     public Product() {}
 
+    public Product(UUID id, String name, Price price, ProductNameValidationService productNameValidationService) {
+        this.id = id;
+        this.name = new DisplayedName(name, productNameValidationService);
+        this.price = price;
+    }
+
     public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
         this.id = id;
         this.name = new DisplayedName(name, productNameValidationService);
         this.price = new Price(price);
+    }
+
+    public void changePrice(BigDecimal changedPrice) {
+        price = new Price(changedPrice);
+    }
+
+    public boolean isSamePrice(BigDecimal price) {
+        return this.price.equals(new Price(price));
     }
 
     public UUID getId() {
