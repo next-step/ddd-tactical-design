@@ -10,7 +10,7 @@ import java.util.*
 @Table(name = "product")
 @Entity
 class Product(
-    @Column(name = "name", nullable = false)
+    @Column(name = "displayedName", nullable = false)
     val displayedName: String,
     price: BigDecimal
 ) {

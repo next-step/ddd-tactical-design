@@ -1,0 +1,1 @@
+ALTER TABLE product ADD COLUMN displayedName VARCHAR(255) NOT NULL;
