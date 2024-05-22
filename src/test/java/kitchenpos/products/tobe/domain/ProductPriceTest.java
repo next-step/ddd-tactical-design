@@ -17,10 +17,8 @@ class ProductPriceTest {
     @DisplayName("[성공] 상품가격을 생성한다.")
     @Test
     void create() {
-        // given
         ProductPrice price = ProductPrice.from(10_000);
 
-        // then
         assertThat(price).isEqualTo(new ProductPrice(BigDecimal.valueOf(10_000)));
     }
 
