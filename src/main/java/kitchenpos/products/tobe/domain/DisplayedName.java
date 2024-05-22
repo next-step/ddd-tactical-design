@@ -10,7 +10,7 @@ public class DisplayedName {
     @Column(name = "name", nullable = false)
     private final String name;
 
-    public DisplayedName(String name, ProductDomainService service) {
+    public DisplayedName(String name, ProductNameValidationService service) {
         if (Objects.isNull(name) || service.hasProfanity(name)) {
             throw new IllegalArgumentException();
         }

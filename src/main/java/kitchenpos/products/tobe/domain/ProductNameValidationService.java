@@ -2,10 +2,10 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.infra.PurgomalumClient;
 
-public class ProductDomainService {
+public class ProductNameValidationService {
     private PurgomalumClient purgomalumClient;
 
-    public ProductDomainService(PurgomalumClient purgomalumClient) {
+    public ProductNameValidationService(PurgomalumClient purgomalumClient) {
         this.purgomalumClient = purgomalumClient;
     }
 

@@ -18,9 +18,9 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product(UUID id, String name, BigDecimal price, ProductDomainService productDomainService) {
+    public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
         this.id = id;
-        this.name = new DisplayedName(name, productDomainService);
+        this.name = new DisplayedName(name, productNameValidationService);
         this.price = new Price(price);
     }
 

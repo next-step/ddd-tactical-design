@@ -1,7 +1,7 @@
 package kitchenpos.products.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.ProductDomainService;
+import kitchenpos.products.tobe.domain.ProductNameValidationService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,12 +17,12 @@ import java.util.UUID;
 
 @DisplayName("상품 도메인 테스트")
 public class ProductTest {
-    private ProductDomainService productDomainService;
+    private ProductNameValidationService productNameValidationService;
 
     @BeforeEach
     void setUp() {
         FakePurgomalumClient fakePurgomalumClient = new FakePurgomalumClient();
-        productDomainService = new ProductDomainService(fakePurgomalumClient);
+        productNameValidationService = new ProductNameValidationService(fakePurgomalumClient);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class ProductTest {
         Product product = new Product(
                 UUID.randomUUID(),
                 "후라이드", BigDecimal.valueOf(20000),
-                productDomainService
+                productNameValidationService
         );
 
         Assertions.assertThat(product.getId()).isNotNull();
@@ -41,7 +41,7 @@ public class ProductTest {
     @DisplayName("상품에는 비속어가 포함될 수 없다.")
     void create_exception_profanity() {
         Assertions.assertThatThrownBy(
-                () -> new Product(UUID.randomUUID(), "비속어", BigDecimal.valueOf(20000), productDomainService)
+                () -> new Product(UUID.randomUUID(), "비속어", BigDecimal.valueOf(20000), productNameValidationService)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -51,7 +51,7 @@ public class ProductTest {
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
     void create_exception_price(BigDecimal price) {
         Assertions.assertThatThrownBy(
-                () -> new Product(UUID.randomUUID(), "후라이드", price, productDomainService)
+                () -> new Product(UUID.randomUUID(), "후라이드", price, productNameValidationService)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 }
