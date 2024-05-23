@@ -30,7 +30,8 @@ class DefaultProductService(
         request: Product,
     ): Product {
         val product = changeProductPriceService.changeProductPrice(
-            productId = productId, price = request.price
+            productId = productId,
+            price = request.price,
         )
 
         priceChangeDrivenMenuUpdater.menuDisplayUpdateByProductId(productId)
