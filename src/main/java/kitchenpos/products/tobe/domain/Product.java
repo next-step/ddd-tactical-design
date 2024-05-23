@@ -1,9 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
@@ -18,9 +15,22 @@ public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
+
+    protected Product() {
+
+    }
+
+    public Product(String name, BigDecimal price) {
+        this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
+    }
+
+    public void changePrice(BigDecimal price){
+        this.price = new ProductPrice(price);
+    }
 }
