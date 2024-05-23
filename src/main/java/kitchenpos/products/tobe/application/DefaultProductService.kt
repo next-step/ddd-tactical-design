@@ -38,4 +38,7 @@ class DefaultProductService(
 
         return product
     }
+
+    @Transactional(readOnly = true)
+    fun findAll(): List<Product> = productRepository.findAll()
 }
