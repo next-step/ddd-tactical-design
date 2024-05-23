@@ -1,7 +1,6 @@
 package kitchenpos.products.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.CleanName;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.ProductNameValidationService;
 import org.assertj.core.api.Assertions;
@@ -29,7 +28,7 @@ public class ProductTest {
     }
 
     @Nested
-    @DisplayName("상품 생성 테스트")
+    @DisplayName("엔티티 생성 테스트")
     class CreateTest {
         @Test
         @DisplayName("후라이드 상품을 생성한다.")
@@ -61,7 +60,7 @@ public class ProductTest {
     }
 
     @Nested
-    @DisplayName("상품 가격 변경 테스트")
+    @DisplayName("가격 변경 테스트")
     class ChangePriceTest {
         @Test
         @DisplayName("상품의 가격을 변경한다.")
@@ -88,51 +87,6 @@ public class ProductTest {
 
             Assertions.assertThatThrownBy(
                     () -> product.changePrice(변경_금액)
-            ).isInstanceOf(IllegalArgumentException.class);
-        }
-    }
-
-    @Nested
-    @DisplayName("상품 이름 테스트")
-    class CleanNameTest {
-        @Test
-        @DisplayName("이름을 생성한다.")
-        void create() {
-            String name = "후라이드";
-            CleanName cleanName = new CleanName(name, productNameValidationService);
-
-            Assertions.assertThat(cleanName.getName().equals(name)).isEqualTo(true);
-        }
-
-        @Test
-        @DisplayName("상품의 이름에는 비속어가 존재할 수 없다.")
-        void create_exception_profanity() {
-            String name = "비속어";
-
-            Assertions.assertThatThrownBy(
-                    () -> new CleanName(name, productNameValidationService)
-            ).isInstanceOf(IllegalArgumentException.class);
-        }
-    }
-
-    @Nested
-    @DisplayName("상품 가격 테스트")
-    class PriceTest {
-        @Test
-        @DisplayName("가격을 생성한다.")
-        void create() {
-            BigDecimal price = BigDecimal.valueOf(20_000);
-            Price 가격 = new Price(price);
-
-            Assertions.assertThat(가격.getPrice().compareTo(price)).isZero();
-        }
-
-        @Test
-        @DisplayName("가격은 0 이상이어야 한다.")
-        void create_exception() {
-            BigDecimal price = BigDecimal.valueOf(-1);
-            Assertions.assertThatThrownBy(
-                    () -> new Price(price)
             ).isInstanceOf(IllegalArgumentException.class);
         }
     }
