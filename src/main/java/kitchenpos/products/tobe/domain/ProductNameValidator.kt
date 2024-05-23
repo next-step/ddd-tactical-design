@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.application
+package kitchenpos.products.tobe.domain
 
 import kitchenpos.products.infra.PurgomalumClient
 import org.springframework.stereotype.Component

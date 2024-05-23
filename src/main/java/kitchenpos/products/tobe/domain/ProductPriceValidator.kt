@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.application
+package kitchenpos.products.tobe.domain
 
 import org.springframework.stereotype.Component
 import java.math.BigDecimal

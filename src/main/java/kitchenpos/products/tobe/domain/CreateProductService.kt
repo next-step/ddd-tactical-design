@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.application
+package kitchenpos.products.tobe.domain
 
 import kitchenpos.products.domain.Product
 import org.springframework.stereotype.Component
