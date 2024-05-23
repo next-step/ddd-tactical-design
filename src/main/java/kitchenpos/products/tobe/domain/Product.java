@@ -20,16 +20,14 @@ public class Product {
 
     public Product() {}
 
+    public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
+        this(id, name, new Price(price),productNameValidationService);
+    }
+
     public Product(UUID id, String name, Price price, ProductNameValidationService productNameValidationService) {
         this.id = id;
         this.name = new DisplayedName(name, productNameValidationService);
         this.price = price;
-    }
-
-    public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
-        this.id = id;
-        this.name = new DisplayedName(name, productNameValidationService);
-        this.price = new Price(price);
     }
 
     public void changePrice(BigDecimal changedPrice) {
