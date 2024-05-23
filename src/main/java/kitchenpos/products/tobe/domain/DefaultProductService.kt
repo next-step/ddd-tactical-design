@@ -14,7 +14,6 @@ import java.math.BigDecimal
 class DefaultProductService(
     private val productRepository: ProductRepository,
     private val menuRepository: MenuRepository,
-    private val purgomalumClient: PurgomalumClient,
     private val createProductService: CreateProductService,
 ) {
     fun create(request: Product): Product {
