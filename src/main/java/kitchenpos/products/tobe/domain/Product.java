@@ -34,8 +34,8 @@ public class Product {
         price = new Price(changedPrice);
     }
 
-    public boolean isSamePrice(BigDecimal price) {
-        return this.price.equals(new Price(price));
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     public UUID getId() {

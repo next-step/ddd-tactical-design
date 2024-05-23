@@ -28,7 +28,7 @@ public class ProductTest {
     }
 
     @Nested
-    @DisplayName("생성 테스트")
+    @DisplayName("엔티티 생성 테스트")
     class CreateTest {
         @Test
         @DisplayName("후라이드 상품을 생성한다.")
@@ -73,7 +73,7 @@ public class ProductTest {
 
             product.changePrice(변경_금액);
 
-            Assertions.assertThat(product.isSamePrice(변경_금액)).isEqualTo(true);
+            Assertions.assertThat(product.getPrice().equals(변경_금액)).isEqualTo(true);
         }
 
         @Test
