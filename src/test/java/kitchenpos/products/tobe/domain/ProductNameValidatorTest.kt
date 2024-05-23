@@ -1,15 +1,14 @@
 package kitchenpos.products.tobe.domain
 
- import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
-import kitchenpos.products.application.FakePurgomalumClient
-import kitchenpos.products.tobe.adpater.DefaultSlangChecker
+import kitchenpos.products.tobe.adapter.FakeSlangChecker
 
 class ProductNameValidatorTest : BehaviorSpec({
-    val productNameValidator = ProductNameValidator(DefaultSlangChecker(FakePurgomalumClient()))
+    val productNameValidator = ProductNameValidator(FakeSlangChecker())
 
     Given("상품 이름 검증 시") {
         When("욕설이 포함되어 있다면") {
@@ -17,7 +16,7 @@ class ProductNameValidatorTest : BehaviorSpec({
                 forAll(
                     row("비속어"),
                     row("욕설")
-                ){ name ->
+                ) { name ->
                     shouldThrowExactly<IllegalArgumentException> {
                         productNameValidator.requireNormalName(name)
                     }
