@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.BehaviorSpec
 import java.math.BigDecimal
@@ -26,8 +27,12 @@ class ProductPriceValidatorTest : BehaviorSpec({
         When("가격이 null이 아니고, 0 이상이라면") {
             Then("예외를 던지지 않는다.") {
                 assertSoftly {
-                    productPriceValidator.requireNormalPrice(BigDecimal.ZERO)
-                    productPriceValidator.requireNormalPrice(BigDecimal.TWO)
+                    shouldNotThrowAny {
+                        productPriceValidator.requireNormalPrice(BigDecimal.ZERO)
+                    }
+                    shouldNotThrowAny {
+                        productPriceValidator.requireNormalPrice(BigDecimal.TWO)
+                    }
                 }
             }
         }
