@@ -54,7 +54,7 @@ public class ProductService {
 		final List<Menu> menus = menuRepository.findAllByProductId(productId);
 
 		if (!CollectionUtils.isEmpty(menus)) {
-			menus.forEach(Menu::displayBasedOnProductsPrice);
+			menus.forEach(Menu::hideBasedOnProductsPrice);
 		}
 
 		return product;
