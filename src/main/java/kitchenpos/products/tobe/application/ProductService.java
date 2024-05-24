@@ -1,4 +1,4 @@
-package kitchenpos.product.application;
+package kitchenpos.products.tobe.application;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import kitchenpos.common.domain.PurgomalumClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.application.dto.ProductCreationRequest;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.common.domain.PurgomalumClient;
+import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 
 @Service
 public class ProductService {
