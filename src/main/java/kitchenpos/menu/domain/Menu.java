@@ -108,7 +108,7 @@ public class Menu {
 		return menuGroupId;
 	}
 
-	public void hideBasedOnProductsPrice() {
+	public void displayBasedOnProductsPrice() {
 		if (price.getValue().compareTo(menuProducts.getPrice()) > 0) {
 			display(false);
 		}
