@@ -12,18 +12,16 @@ import java.util.*
 @Transactional
 @Service
 class ChangeProductPriceService(
-    private val productPriceValidator: ProductPriceValidator,
     private val productReader: ProductReader,
-    private val updateProductPriceService: UpdateProductPriceService,
 ) {
     fun changeProductPrice(
         productId: UUID,
         price: BigDecimal?,
     ): Product {
-        productPriceValidator.requireNormalPrice(price)
+        ProductPriceValidator.requireNormalPrice(price)
 
         return productReader.findProductById(productId).apply {
-            updateProductPriceService.updatePrice(this, price!!)
+            UpdateProductPriceService.updatePrice(this, price!!)
         }
     }
 }

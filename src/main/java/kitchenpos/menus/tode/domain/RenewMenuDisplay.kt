@@ -1,16 +1,12 @@
 package kitchenpos.menus.tode.domain
 
 import kitchenpos.menus.domain.Menu
-import org.springframework.stereotype.Component
 
-@Component
-class RenewMenuDisplay(
-    private val menuPriceValidator: MenuPriceValidator,
-) {
+object RenewMenuDisplay {
     fun renewMenusDisplay(
         menu: Menu,
     ) {
-        if (menuPriceValidator.isMenuDisplayable(menu)) {
+        if (MenuPriceValidator.isMenuDisplayable(menu)) {
             menu.isDisplayed = false
         }
     }

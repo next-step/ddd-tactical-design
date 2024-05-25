@@ -7,14 +7,13 @@ import java.util.*
 
 @Component
 class CreateProductService(
-    private val productPriceValidator: ProductPriceValidator,
     private val productNameValidator: ProductNameValidator,
 ) {
     fun createProduct(
         price: BigDecimal?,
         name: String?,
     ): Product {
-        productPriceValidator.requireNormalPrice(price)
+        ProductPriceValidator.requireNormalPrice(price)
         productNameValidator.requireNormalName(name)
 
         return Product().apply {

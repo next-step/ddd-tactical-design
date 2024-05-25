@@ -8,12 +8,11 @@ import java.util.*
 @Service
 class PriceChangeDrivenMenuUpdater(
     private val menuReader: MenuReader,
-    private val renewMenuDisplay: RenewMenuDisplay,
 ) {
     fun menuDisplayUpdateByProductId(
         productId: UUID,
     ) = menuReader.findAllByProductId(productId)
         .forEach { menu ->
-            renewMenuDisplay.renewMenusDisplay(menu)
+            RenewMenuDisplay.renewMenusDisplay(menu)
         }
 }

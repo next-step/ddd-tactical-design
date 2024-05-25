@@ -12,9 +12,7 @@ import java.util.*
 class ChangeProductPriceServiceTest : BehaviorSpec({
     val fakeProductReader = FakeProductReader()
     val changeProductPriceService = ChangeProductPriceService(
-        productPriceValidator = ProductPriceValidator(),
         productReader = fakeProductReader,
-        updateProductPriceService = UpdateProductPriceService()
     )
 
     Given("상품 가격 변경 시") {

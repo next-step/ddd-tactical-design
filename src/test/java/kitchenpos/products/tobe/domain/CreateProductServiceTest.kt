@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 class CreateProductServiceTest : BehaviorSpec({
     val createProductService = CreateProductService(
-        productPriceValidator = ProductPriceValidator(), productNameValidator = ProductNameValidator(FakeSlangChecker())
+        productNameValidator = ProductNameValidator(FakeSlangChecker())
     )
 
     Given("상품 생성 시") {
