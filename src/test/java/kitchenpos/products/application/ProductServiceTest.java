@@ -1,24 +1,25 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProfanityChecker;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,24 +32,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
-    private MenuService menuService;
     private PurgomalumClient purgomalumClient;
     private ProfanityChecker profanityChecker;
     private ProductService productService;
+    private FakeMenuServiceClient menuServiceClient;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
         purgomalumClient = new FakePurgomalumClient();
         profanityChecker = new ProfanityChecker(purgomalumClient);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
-        productService = new ProductService(productRepository, menuService, profanityChecker);
+        menuServiceClient = new FakeMenuServiceClient(menuRepository);
+        productService = new ProductService(productRepository, profanityChecker, applicationEventPublisher, menuServiceClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

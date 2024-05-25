@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.acl.menu.MenuServiceClient;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
@@ -9,6 +9,7 @@ import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +21,19 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProfanityChecker profanityChecker;
-    private final MenuService menuService;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final MenuServiceClient menuServiceClient;
 
     public ProductService(
         final ProductRepository productRepository,
-        final MenuService menuService,
-        final ProfanityChecker profanityChecker
+        final ProfanityChecker profanityChecker,
+        final ApplicationEventPublisher applicationEventPublisher,
+        final MenuServiceClient menuServiceClient
     ) {
         this.productRepository = productRepository;
-        this.menuService = menuService;
         this.profanityChecker = profanityChecker;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.menuServiceClient = menuServiceClient;
     }
 
     @Transactional
@@ -46,7 +50,8 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        menuService.checkHideMenuBasedOnProductPrice(productId);
+        applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId));
+        menuServiceClient.hideMenuBasedOnProductPrice(productId);
         return ProductResponse.of(product);
     }
 
