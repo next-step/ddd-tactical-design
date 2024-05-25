@@ -26,18 +26,14 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
-        this(UUID.randomUUID(), name, price, purgomalumClient);
+    public Product(String name, BigDecimal price) {
+        this(UUID.randomUUID(), name, price);
     }
 
-    public Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
-        this.name = new ProductName(name, purgomalumClient);
+        this.name = new ProductName(name);
         this.price = new ProductPrice(price);
-    }
-
-    public void changePrice(long newPrice) {
-        this.price = new ProductPrice(newPrice);
     }
 
     public void changePrice(BigDecimal newPrice) {

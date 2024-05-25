@@ -19,13 +19,9 @@ public class ProductName {
 	protected ProductName() {
 	}
 
-	public ProductName(String value, PurgomalumClient purgomalumClient) {
+	public ProductName(String value) {
 		if (Strings.isEmpty(value)) {
 			throw new IllegalArgumentException(NULL_OR_EMPTY_NAME_ERROR);
-		}
-
-		if (purgomalumClient.containsProfanity(value)) {
-			throw new IllegalArgumentException(NAME_WITH_PROFANITY_ERROR);
 		}
 
 		this.value = value;
