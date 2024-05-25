@@ -95,107 +95,186 @@ docker compose -p kitchenpos up -d
 - 주문 목록을 조회할 수 있다.
 
 ## 용어 사전
-
 ### 상품
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명   | 영문명           | 설명                    |
+|-------|---------------|-----------------------|
+| 상품    | Product       | 판매될 수 있는 물리적 제품       |
+| 상품 가격 | Product Price | 상품을 구매하기 위해 지불해야하는 금액 |
+| 상품 이름 | Product Name  | 상품을 식별하기 위한 명칭        |
+| 비속어   | Black Word    | 부적절한 내용               |
 
 ### 메뉴
+| 한글명      | 영문명                | 설명                      |
+|----------|--------------------|-------------------------|
+| 메뉴 그룹    | Menu Group         | 여러 메뉴들을 특정 기준으로 묶은 모음   |
+| 메뉴 그룹 이름 | Menu Group Name    | e.g. 세트A, 나홀로 메뉴, 셋트 메뉴 |
+| 메뉴       | Menu               | 손님이 구매할 수 있는 최소 단위      |
+| 메뉴 이름    | Menu Name          | 메뉴 상품들을 대표하는 명칭         |
+| 메뉴 가격    | Menu Price         | 손님이 지불해야될 금액            |
+| 메뉴 상품    | Menu Product       | 손님에게 제공하는 제품            |
+| 메뉴 상품 가격 | Menu Product Price | 손님에게 제공하는 제품 가격         |
+| 메뉴 상품 개수 | Menu Product Count | 손님에게 제공되는 제품 수량         |
+| 노출 메뉴    | Displayed Menu     | 손님에게 메뉴가 노출된 상태         |
+| 숨김 메뉴    | Hide Menu          | 손님에게 메뉴가 숨겨진 상태         |
+| 비속어      | Black Word         | 부적절한 내용                 |
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+### 주문
 
-### 매장 주문
+#### 배달 주문
+| 한글명       | 영문명                       | 설명                           |
+|-----------|---------------------------|------------------------------|
+| 배달 주문     | Delivery Order            | 손님이 구매한 메뉴를 지정된 목적지로 전달하여 제공 |
+| 주문 항목     | Order Line Item           | 손님이 구매 요청한 메뉴 모음             |
+| 배달 주문 대기  | Delivery Order Waiting    | 배달 주문이 요청된 상태                |
+| 배달 주문 접수  | Delivery Order Accepted   | 배달 주문이 접수된 상태                |
+| 배달 주문 제공  | Delivery Order Served     | 배달 주문 메뉴가 전달될 준비가된 상태        |
+| 배달 주문 배달중 | Delivery Order Delivering | 배달 주문 메뉴가 전달중인 상태            |
+| 배달 주문 배달완료 | Delivery Order Delivered  | 배달 주문 메뉴가 전달이 완료된 상태         |
+| 주문 완료     | Delivery Order Completed  | 배달 주문이 완료된 상태                |
+| 배달 주소     | Delivery Address          | 손님이 구매한 메뉴를 전달할 목적지          |
+| 배달업체      | Delivery Agency           | 손님이 구매한 메뉴를 전달하는 업체          |
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+#### 매장 주문
+| 한글명         | 영문명                    | 설명                              |
+|-------------|------------------------|---------------------------------|
+| 매장 주문       | Eat-In Order           | 손님이 구매한 메뉴를 지정된 주문 테이블로 전달하여 제공 |
+| 주문 항목       | Order Line Item        | 손님이 구매 요청한 메뉴 모음                |
+| 매장 주문 대기    | Eat-In Order Waiting   | 매장 주문이 요청된 상태                   |
+| 매장 주문 접수    | Eat-In Order Accepted  | 매장 주문이 접수된 상태                   |
+| 매장 주문 제공    | Eat-In Order Served    | 매장 주문 메뉴가 제공된 상태                |
+| 매장 주문 완료    | Eat-In Order Completed | 매장 주문이 완료된 상태                   |
+| 주문 테이블      | Order Table            | 매장 주문 손님이 사용하는 테이블              |
+| 주문 테이블 이름   | Order Table Name       | e.g. 1번 테이블, 2번 테이블, 3번 테이블     |
+| 사용중인 주문 테이블 | Occupied Order Table   | 손님이 사용중인 테이블                    |
+| 빈 주문 테이블    | Cleared Order Table    | 손님이 사용중이지 않은 테이블                |
+| 손님          | Guest                  | 매장 주문을 이용하는 손님                  |
 
-### 배달 주문
+#### 포장 주문
+| 한글명      | 영문명                     | 설명                  |
+|----------|-------------------------|---------------------|
+| 포장 주문    | Takeout Order           | 손님이 구매한 메뉴를 포장하여 제공 |
+| 주문 항목    | Order Line Item         | 손님이 구매 요청한 메뉴 모음    |
+| 포장 주문 대기 | Takeout Order Waiting   | 포장 주문이 요청된 상태       |
+| 포장 주문 접수 | Takeout Order Accepted  | 포장 주문이 접수된 상태       |
+| 포장 주문 제공 | Takeout Order Served    | 포장 주문 메뉴가 제공된 상태    |
+| 포장 주문 완료 | Takeout Order Completed | 포장 주문이 완료된 상태       |
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
-
-### 포장 주문
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
 
 ## 모델링
-
 ### 상품
+#### 속성
+- `Product`는 `Product Name`, `Product Price`를 가진다.
+  - `Product Price`은 0원 이상이어야 한다.
+  - `Product Name`은 `Black Word`가 포함되면 안된다.
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### 행위
+- `Product`를 등록할 수 있다.
+  - `Product`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Product`의 `Product Price`를 변경할 수 있다.
+  - `Product Price` 속성의 비즈니스 규칙을 만족하지 못하면 변경할 수 없다.
+  - `Product`가 `Menu`에 포함된 경우, `Menu Product`의 `Product Price`도 변경된다.
+- 등록된 `Product` 목록을 조회할 수 있다.
+
+### 메뉴 그룹
+#### 속성
+- `Menu Group`는 `Menu Group Name`를 가진다.
+  - `Menu Group Name`은 널이거나 빈 값이면 등록할 수 없다.
+
+#### 행위
+- `Menu Group`을 등록할 수 있다.
+  - `Menu Group`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Menu Group` 목록을 조회할 수 있다.
 
 ### 메뉴
+#### 속성
+- `Menu`는 `Menu Group`, `Menu Name`, `Menu Price`, `Menu Product`를 가진다.
+  - `Menu Price`는 0원 이상이어야 한다.
+  - `Menu Name`은 `Black Word`가 포함되면 안된다.
+  - `Menu Product`의 수량은 0 이상이어야 한다.
+    - `Menu Product`로 등록하려면, `Product`로 등록돼야한다.
+  - `Menu Price`는 `Menu Product Price`의 합 보다 크면 안된다.
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+#### 행위
+- `Menu`를 등록할 수 있다.
+  - `Menu`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Menu`의 `Menu Price`를 변경할 수 있다.
+  - `Menu Price`, `Menu Product Price` 속성의 비즈니스 규칙을 만족하지 못하면 변경할 수 없다.
+- 등록된 `Menu`를 `Displayed Menu`로 변경할 수 있다.
+  - `Menu Price`, `Menu Product Price` 속성의 비즈니스 규칙을 만족하지 못하면 변경할 수 없다.
+- 등록된 `Menu`를 `Hide Menu`로 변경할 수 있다.
+- `Menu`의 `Menu Price`가 `Menu Product`의 `Product Price`의 합보다 크면 `Hide Menu`가 된다.
+- 등록된 `Menu` 목록을 조회할 수 있다.
 
-### 매장 주문
+### 배달 주문(Delivery Order)
+![delivery_order_flow](images/delivery_order_flow.png)
 
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+#### 속성
+- `Delivery Order`는, `Order Line Item`, `Delivery Address`를 가진다.
+  - `Order Line Item`의 개수는 0개 이상이어야 한다.
+  - `Order Line Item`는 `Menu`가 존재해야 한다.
+  - `Order Line Item`는 `Hide Menu`이면 안된다.
+  - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
+  - `Delivery Address`는 빈 값이면 안된다.
 
-### 배달 주문
+#### 행위
+- `Delivery Order`을 등록할 수 있다.
+  - `Delivery Order`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Delivery Order`가 `Delivery Order Waiting`이면, `Delivery Order Accepted`로 변경할 수 있다.
+- `Delivery Order Accepted`이면, `Delivery Agency`를 호출한다.
+- 등록된 `Delivery Order`가 `Delivery Order Accepted`이면, `Delivery Order Served`로 변경할 수 있다.
+- 등록된 `Delivery Order`가 `Delivery Order Served`이면, `Delivery Order Delivering`로 변경할 수 있다.
+- 등록된 `Delivery Order`가 `Delivery Order Delivering`이면, `Delivery Order Delivered`로 변경할 수 있다.
+- 등록된 `Delivery Order`가 `Delivery Order Delivered`이면, `Delivery Order Completed`로 변경할 수 있다.
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+### 매장 주문(Eat-In Order) 및 주문 테이블(Order Table)
+![eat-in_order_flow](images/eat-in_order_flow.png)
 
-### 포장 주문
+#### 속성
+- `Order Table`는 `Order Table Name`, `Guest`를 가진다.
+  - `Order Table Name`은 널이거나 빈 값이면 등록할 수 없다.
+  - `Guest` 수는 0 이상이어야 한다.(기본 값은 0이다)
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+
+- `Eat-In Order`는 `Order Line Item`, `Order Table`를 가진다.
+  - `Order Line Item`의 개수는 정수만 가능하다.
+  - `Order Line Item`는 `Menu`가 존재해야 한다.
+  - `Order Line Item`는 `Hide Menu`이면 안된다.
+  - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
+  - `Order Table`이 존재하지 않으면 안된다.
+  - `Order Table`이 `Cleared Order Table`이면 안된다.
+
+#### 행위
+- `Order Table`을 등록할 수 있다.
+  - `Order Table`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Order Table`을 `Occupied Order Table`로 변경할 수 있다.
+- 등록된 `Order Table`을 `Cleared Order Table`로 변경할 수 있다.
+  - `Order Table`의 `Order`가 `Eat-In Order Complete`가 아니면 변경할 수 없다.
+- `Order Table`의 `Guest` 수를 변경할 수 있다.
+  - `Guest` 속성의 비즈니스 규칙을 만족하지 못하면 변경할 수 없다.
+  - `Cleared Order Table`인 경우 변경할 수 없다.
+- 등록된 `Order Table` 목록을 조회할 수 있다.
+
+
+- `Eat-In Order`을 등록할 수 있다.
+  - `Eat-In Order`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Waiting`이면, `Delivery Order Accepted`로 변경할 수 있다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Accepted`이면, `Delivery Order Served`로 변경할 수 있다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Served`이면, `Delivery Order Completed`로 변경할 수 있다.
+- `Eat-In Order Completed`이면, `Order Table`을 `Cleared Order Table`로 변경할 수 있다.
+
+### 포장 주문(Takeout Order)
+![takeout_order_flow](images/takeout_order_flow.png)
+
+#### 속성
+- `Takeout Order`는 `Order Line Item`를 가진다.
+  - `Order Line Item`의 개수는 0개 이상이어야 한다.
+  - `Order Line Item`는 `Menu`가 존재해야 한다.
+  - `Order Line Item`는 `Hide Menu`이면 안된다.
+  - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
+
+#### 행위
+- `Takeout Order`을 등록할 수 있다.
+  - `Takeout Order`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
+- 등록된 `Takeout Order`가 `Takeout Order Waiting`이면, `Takeout Order Accepted`로 변경할 수 있다.
+- 등록된 `Takeout Order`가 `Takeout Order Accepted`이면, `Takeout Order Served`로 변경할 수 있다.
+- 등록된 `Takeout Order`가 `Takeout Order Served`이면, `Takeout Order Completed`로 변경할 수 있다.
