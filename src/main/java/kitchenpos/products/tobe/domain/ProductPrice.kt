@@ -1,12 +1,9 @@
 package kitchenpos.products.tobe.domain
 
-import jakarta.persistence.Column
-import jakarta.persistence.Embeddable
 import java.math.BigDecimal
 
-@Embeddable
-data class ProductPrice(
-    @Column(name = "price", nullable = false)
+@JvmInline
+value class ProductPrice(
     val value: BigDecimal
 ) {
     init {
