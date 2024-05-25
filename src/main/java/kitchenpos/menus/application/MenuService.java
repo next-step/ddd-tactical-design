@@ -100,7 +100,7 @@ public class MenuService {
         }
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = sumMenuProducts(menu);
+        BigDecimal sum = menu.sumMenuProducts();
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
@@ -112,8 +112,7 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = sumMenuProducts(menu);
-        if (menu.getPrice().compareTo(sum) > 0) {
+        if (menu.isPriceGreaterThanMenuProductsSum()) {
             throw new IllegalStateException();
         }
         menu.setDisplayed(true);
@@ -124,7 +123,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.hide();
         return menu;
     }
 
@@ -134,19 +133,10 @@ public class MenuService {
     }
 
     @Transactional
-    public void checkHideMenuBasedOnProductPrice(UUID productId) {
+    public void hideMenuBasedOnProductPrice(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = sumMenuProducts(menu);
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-    }
-
-    private BigDecimal sumMenuProducts(Menu menu) {
-        return menu.getMenuProducts().stream()
-                .map(MenuProduct::multiplyPriceAndQuantity)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        menus.stream()
+                .filter(Menu::isPriceGreaterThanMenuProductsSum)
+                .forEach(Menu::hide);
     }
 }
