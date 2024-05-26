@@ -8,6 +8,9 @@ public class Product {
     final Price price;
 
     public Product(Name name, Price price) {
+        if (price.getValue() <= 0) {
+            throw new IllegalArgumentException("Price should be over zero, not negative");
+        }
         this.name = name;
         this.price = price;
     }

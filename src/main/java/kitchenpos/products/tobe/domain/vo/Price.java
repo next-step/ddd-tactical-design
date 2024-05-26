@@ -6,4 +6,8 @@ public class Price {
     public Price(int value) {
         this.value = value;
     }
+
+    public int getValue(){
+        return this.value;
+    }
 }
