@@ -14,6 +14,7 @@ import java.util.UUID
 class Product(
     name: ProductName,
     price: ProductPrice,
+    nameValidator: ProductNameValidator,
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -32,6 +33,10 @@ class Product(
     )
     var price: ProductPrice = price
         private set
+
+    init {
+        require(nameValidator.validate(name.value)) { "상품 이름에 비속어가 포함되어 있습니다." }
+    }
 
     fun changePrice(price: ProductPrice) {
         this.price = price
