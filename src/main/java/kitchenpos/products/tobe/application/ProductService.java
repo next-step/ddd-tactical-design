@@ -12,7 +12,7 @@ import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.common.domain.PurgomalumClient;
+import kitchenpos.common.tobe.domain.PurgomalumClient;
 import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 
 @Service
