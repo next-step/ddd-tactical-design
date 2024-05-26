@@ -78,7 +78,17 @@ class DefaultMenuService(
     }
 
     override fun display(menuId: UUID): Menu {
-        TODO("Not yet implemented")
+        val menu = menuRepository.findById(menuId).orElseThrow {
+            throw NoSuchElementException()
+        }
+
+        if (MenuDisplayableChecker.isMenuDisplayable(menu)) {
+            throw IllegalArgumentException()
+        }
+
+        RenewMenuDisplay.renewMenusDisplay(menu)
+
+        return menu
     }
 
     override fun hide(menuId: UUID): Menu {
