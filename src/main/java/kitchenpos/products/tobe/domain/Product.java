@@ -2,9 +2,9 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.products.infra.PurgomalumClient;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -51,5 +51,19 @@ public class Product {
 
     public ProductPrice getPrice() {
         return price;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
