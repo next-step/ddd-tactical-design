@@ -2,6 +2,8 @@ package kitchenpos.menus.ui;
 
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +22,7 @@ import java.util.UUID;
 public class MenuRestController {
     private final MenuService menuService;
 
-    public MenuRestController(final MenuService menuService) {
+    public MenuRestController(@Qualifier("MenuService") final MenuService menuService) {
         this.menuService = menuService;
     }
 
