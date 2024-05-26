@@ -1,5 +1,6 @@
 package kitchenpos.product.application;
 
+import kitchenpos.exception.IllegalNameException;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuProduct;
@@ -36,7 +37,7 @@ public class ProductService {
         final BigDecimal price = request.getProductPrice();
         final String name = request.getProductName();
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalNameException(name);
         }
 
         final Product product = new Product(name, price);

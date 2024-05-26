@@ -4,7 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.exception.IllegalNameException;
+import kitchenpos.exception.IllegalPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -29,18 +30,18 @@ public class Product {
     }
 
     public Product(String productName, BigDecimal productPrice) {
-        validate(productName, productPrice);
+        validateNameAndPrice(productName, productPrice);
         this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
     }
 
-    private static void validate(String productName, BigDecimal productPrice) {
+    private void validateNameAndPrice(String productName, BigDecimal productPrice) {
         if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalPriceException(this.getClass().getName());
         }
         if (Objects.isNull(productName)) {
-            throw new IllegalArgumentException();
+            throw new IllegalNameException(this.getClass().getName());
         }
     }
 
