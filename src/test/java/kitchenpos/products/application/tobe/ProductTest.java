@@ -5,6 +5,7 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.vo.Name;
 import kitchenpos.products.tobe.domain.vo.Price;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ProductTest {
 
+    @DisplayName("상품의 이름은 비속어이면 안된다")
+    @Disabled("not implemented")
+    @Test
+    void ProductNameTest() {
+        Price price = new Price(10);
+        Name name = new Name("아이씨");
+        assertThatThrownBy(()->new Product(name, price)).isInstanceOf(IllegalArgumentException.class);
+    }
+    
     @DisplayName("상품의 가격은 0원 이상이어야 한다.")
     @Test
     void ProductPriceTest() {
