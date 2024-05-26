@@ -14,6 +14,9 @@ public class FakePurgomalumClient implements PurgomalumClient {
 
     @Override
     public boolean containsProfanity(final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
         return profanities.stream()
             .anyMatch(profanity -> text.contains(profanity));
     }

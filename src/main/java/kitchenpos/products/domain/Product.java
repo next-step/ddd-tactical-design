@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -22,6 +23,17 @@ public class Product {
     private BigDecimal price;
 
     public Product() {
+    }
+    public Product(Product product) {
+        if (Objects.isNull(product.getPrice()) || product.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (Objects.isNull(product.getName())) {
+            throw new IllegalArgumentException();
+        }
+        this.id = UUID.randomUUID();
+        this.name = product.getName();
+        this.price = product.getPrice();
     }
 
     public UUID getId() {
