@@ -86,13 +86,24 @@ class DefaultMenuService(
             throw IllegalArgumentException()
         }
 
-        RenewMenuDisplay.renewMenusDisplay(menu)
+        RenewMenuDisplay.renewMenusDisplay(
+            menu = menu,
+        )
 
         return menu
     }
 
     override fun hide(menuId: UUID): Menu {
-        TODO("Not yet implemented")
+        val menu = menuRepository.findById(menuId).orElseThrow {
+            throw NoSuchElementException()
+        }
+
+        RenewMenuDisplay.updateDisplay(
+            menu = menu,
+            displayed = false,
+        )
+
+        return menu
     }
 
     override fun findAll(): MutableList<Menu> {

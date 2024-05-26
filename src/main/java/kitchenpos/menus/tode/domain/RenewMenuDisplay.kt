@@ -10,4 +10,11 @@ object RenewMenuDisplay {
             menu.isDisplayed = false
         }
     }
+
+    fun updateDisplay(
+        menu: Menu,
+        displayed: Boolean,
+    ) {
+        menu.isDisplayed = displayed
+    }
 }
