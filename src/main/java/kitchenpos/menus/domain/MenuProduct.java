@@ -10,8 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -37,6 +38,10 @@ public class MenuProduct {
     private UUID productId;
 
     public MenuProduct() {
+    }
+
+    public BigDecimal multiplyPriceAndQuantity() {
+        return this.product.priceMultiple(BigDecimal.valueOf(this.quantity));
     }
 
     public Long getSeq() {

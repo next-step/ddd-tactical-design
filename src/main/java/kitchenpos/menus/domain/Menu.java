@@ -54,6 +54,20 @@ public class Menu {
     public Menu() {
     }
 
+    public boolean isPriceGreaterThanMenuProductsSum() {
+        return this.price.compareTo(sumMenuProducts()) > 0;
+    }
+
+    public BigDecimal sumMenuProducts() {
+        return this.menuProducts.stream()
+                .map(MenuProduct::multiplyPriceAndQuantity)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
     public UUID getId() {
         return id;
     }
