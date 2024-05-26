@@ -9,9 +9,9 @@ class MenuNameValidator(
 ) {
     fun requireNormalName(
         name: String?,
-    ) = require(name != null && isNotContainProfanity(name))
+    ) = require(!(name == null || isContainProfanity(name)))
 
-    private fun isNotContainProfanity(
+    private fun isContainProfanity(
         name: String,
-    ) = !(slangChecker.containSlang(name))
+    ) = slangChecker.containSlang(name)
 }
