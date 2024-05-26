@@ -17,7 +17,7 @@ class MenuProductService(
         menuProductRequests: List<MenuProduct>,
     ): List<MenuProduct> {
         val menuProducts = mutableListOf<MenuProduct>()
-        val sum = BigDecimal.ZERO
+        var sum = BigDecimal.ZERO
 
         menuProductRequests.forEach { menuProductRequest ->
             val quantity = menuProductRequest.quantity
@@ -26,7 +26,7 @@ class MenuProductService(
             val product = loadProductPort.findById(menuProductRequest.productId)
                 ?: throw NoSuchElementException()
 
-            sum.add(product.price.multiply(BigDecimal.valueOf(quantity)))
+            sum = sum.add(product.price.multiply(BigDecimal.valueOf(quantity)))
 
             menuProducts.add(
                 MenuProduct().apply {

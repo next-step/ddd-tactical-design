@@ -10,7 +10,9 @@ object MenuPriceValidator {
     fun requireMenuPriceUnderSum(
         menuPrice: BigDecimal,
         sum: BigDecimal,
-    ) = require(menuPrice <= sum)
+    ) = require(menuPrice <= sum){
+        "$menuPrice , sum = ${sum}"
+    }
 
     private fun isNegativePrice(
         price: BigDecimal,
