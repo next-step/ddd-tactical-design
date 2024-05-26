@@ -1,77 +1,41 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.application.dto.ProductPriceChangeCommand;
+import kitchenpos.products.application.dto.ProductRegisterCommand;
+import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.ProductProfanityValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProductProfanityValidator productProfanityValidator;
 
     public ProductService(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final ProductProfanityValidator productProfanityValidator
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.productProfanityValidator = productProfanityValidator;
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+    public Product create(final ProductRegisterCommand command) {
+        final Product product = new Product(productProfanityValidator, command.getName(), command.getPrice());
         return productRepository.save(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = productRepository.findById(productId)
+    public Product changePrice(final ProductPriceChangeCommand command) {
+        final Product product = productRepository.findById(command.getId())
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-        return product;
+        product.changePrice(command.getPrice());
+        return productRepository.save(product);
     }
 
     @Transactional(readOnly = true)
