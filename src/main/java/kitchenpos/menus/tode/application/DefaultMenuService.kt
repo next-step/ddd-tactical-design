@@ -106,7 +106,5 @@ class DefaultMenuService(
         return menu
     }
 
-    override fun findAll(): MutableList<Menu> {
-        TODO("Not yet implemented")
-    }
+    override fun findAll(): List<Menu> = menuRepository.findAll()
 }
