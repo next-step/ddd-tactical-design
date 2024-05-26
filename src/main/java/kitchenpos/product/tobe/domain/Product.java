@@ -6,11 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "product")
 public class Product {
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -24,8 +26,14 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String productName, BigDecimal productPrice) {
-        this.id = id;
+    public Product(String productName, BigDecimal productPrice) {
+        if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (Objects.isNull(productName) || purgomalumClient.containsProfanity(productName)) {
+            throw new IllegalArgumentException();
+        }
+        this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
     }
