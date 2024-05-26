@@ -18,7 +18,7 @@ class Product(
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private val id: UUID = UUID.randomUUID()
+    val id: UUID = UUID.randomUUID()
 
     @Embedded
     @AttributeOverrides(

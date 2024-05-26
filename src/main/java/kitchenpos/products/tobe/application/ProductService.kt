@@ -5,9 +5,11 @@ import kitchenpos.products.tobe.domain.ProductName
 import kitchenpos.products.tobe.domain.ProductNameValidator
 import kitchenpos.products.tobe.domain.ProductPrice
 import kitchenpos.products.tobe.domain.ProductRepository
+import kitchenpos.products.tobe.ui.dto.ProductResponse
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 import java.util.UUID
 
 @Service
@@ -18,29 +20,39 @@ class ProductService(
 ) {
     @Transactional
     fun create(
-        name: ProductName,
-        price: ProductPrice,
-    ): Product {
-        val product = Product(name, price, productNameValidator)
-        return save(product)
+        name: String,
+        price: BigDecimal,
+    ): ProductResponse {
+        val productName = ProductName(name)
+        val productPrice = ProductPrice(price)
+        val newProduct = Product(productName, productPrice, productNameValidator)
+
+        save(newProduct)
+
+        return ProductResponse.of(newProduct)
     }
 
     @Transactional
     fun changePrice(
         productId: UUID,
-        newPrice: ProductPrice,
-    ): Product {
+        newPrice: BigDecimal,
+    ): ProductResponse {
+        val productNewPrice = ProductPrice(newPrice)
         val product =
-            productRepository.findById(productId).orElseThrow {
-                IllegalArgumentException("Product not found")
-            }
-        product.changePrice(newPrice)
-        return save(product)
+            productRepository.findById(productId)
+                .orElseThrow { IllegalArgumentException("Product not found") }
+
+        product.changePrice(productNewPrice)
+
+        save(product)
+
+        return ProductResponse.of(product)
     }
 
     @Transactional(readOnly = true)
-    fun findAll(): List<Product> {
+    fun findAll(): List<ProductResponse> {
         return productRepository.findAll()
+            .map(ProductResponse::of)
     }
 
     private fun save(product: Product): Product {
