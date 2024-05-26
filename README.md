@@ -98,104 +98,132 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명   | 영문명           | 설명                                  |
+|-------|---------------|-------------------------------------|
+| 상품    | product       | 키친 포스에서 주문할 수 있는 상품을 말한다.           |
+| 상품 가격 | product price | 상품의 가격을 나타낸다.                       |
+| 상품 이름 | product name  | 상품의 이름을 나타낸다. 상품 이름에는 비속어가들어갈 수 없다. |
+| 비속어   | slang         | 비속어를 지칭한다.                          |
 
 ### 메뉴
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명           | 영문명                   | 설명                                                |
+|---------------|-----------------------|---------------------------------------------------|
+| 메뉴            | menu                  | 키친 포스에서 주문할 수 있는 메뉴를 나타낸다. 1개 이상의 상품들로 이루어져 있다.   |
+| 메뉴 그룹         | menu group            | 메뉴의 그룹을 나타낸다.                                                 |
+| 메뉴 전시 상태      | display status        | 메뉴 전시 상태를 나타낸다. 전시 상태는 변경이 가능하다.                  |
+| 메뉴 전시         | displayed             | 메뉴가 전시된 상태를 나타낸다.                                 |
+| 메뉴 비전시        | undisplayed           | 메뉴가 비전시된 상태를 나타낸다.                                |
+| 메뉴 가격         | menu price            | 메뉴의 가격을 나타낸다. 메뉴의 가격은 속해있는 상품들의 총 가격의 합과 다를 수 있다. |
+| 메뉴에 속한 상품     | menu product          | 메뉴에 속한 상품을 나타낸다. 메뉴에는 1개 이상의 menu product가 존재한다.  |
+| 메뉴에 속한 상품의 수량 | menu product quantity | 메뉴에 속한 상품의 개수를 나타낸다.                              |
+| 비속어           | slang                 | 비속어를 지칭한다.                                        |
 
-### 매장 주문
+### 주문
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명   | 영문명             | 설명                                                                                   |
+|-------|-----------------|--------------------------------------------------------------------------------------|
+| 주문    | order           | 키친 포스에서 주문한 주문을 나타낸다.                                                                |
+| 주문 유형 | order type      | 주문의 유형을 나타낸다. 주문의 유형은 DELIVERY, TAKEOUT, EAT_IN 가 존재한다.                              |
+| 배달 주문 | delivery order  | 주문 유형 중 배달 유형을 의미한다.                                                                 |
+| 포장 주문 | takeout order   | 주문 유형 중 포장 유형을 의미한다.                                                                 |
+| 매장 주문 | eat in order    | 주문 유형 중 매장 내 식사 유형을 의미한다.                                                            |
+| 주문 상태 | order status    | 주문의 현재 상태를 의미한다. WAITING, ACCEPTED, SERVED, DELIVERING, DELIVERED, COMPLETED 가 존재한다. |
+| 주문 상품 | order line item | 주문에 포함되어 있는 메뉴 정보이다. 메뉴에는 상품이 1개 이상 속해있다. 주문 상품은 주문에 반드시 1개 이상 존재한다.                 |
+| 주문 시간 | order date time | 주문이 생성된 시간이다.                                                                        |
+| 주문 가격 | order price     | 해당 주문의 가격이다.                                                                         |
 
 ### 배달 주문
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명    | 영문명             | 설명                                 |
+|--------|-----------------|------------------------------------|
+| 배달 대행사 | delivery agency | 배달 주문을 배달할 대행사를 나타낸다.              |
+| 배달 주소  | address         | 배달 될 주소를 나타낸다.                     |
+| 배달 가격  | order price     | 배달 될 주문의 가격을 나타낸다.                 |
+| 주문 대기  | waiting         | 신규 주문이 들어오고 아직 수락되지 않은 상태이다.       |
+| 주문 수락  | accepted        | 신규 주문을 수락하고, 배달 대행사에 배달 요청을 한 상태이다. |
+| 서빙     | served          | 배달 기사에게 음식이 전달된 상태이다.              |
+| 배달 중   | delivering      | 배달 기사가 음식을 배달 중인 상태이다.             |
+| 배달 완료  | delivered       | 배달 기사가 음식을 손님에게 전달 완료한 상태이다.       |
+| 주문 완료  | completed       | 주문이 완료된 상태이다.                      |
+
+### 매장 주문
+
+| 한글명   | 영문명       | 설명                             |
+|-------|-----------|--------------------------------|
+| 주문 대기 | waiting   | 손님이 테이블을 점유하고, 주문한 상태이다.       |
+| 주문 수락 | accepted  | 신규 주문을 수락한 상태이다.               |
+| 서빙    | served    | 음식이 손님에게 전달된 상태이다.             |
+| 주문 완료 | completed | 손님이 식사를 마치고 나간 상태이다.           |
+| 테이블   | order table     | 매장 내 테이블이다. 매장 내 식사만 이용할 수 있다. |
 
 ### 포장 주문
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명   | 영문명         | 설명                       |
+|-------|-------------|--------------------------|
+| 주문 대기 | waiting         | 신규 주문이 들어오고 아직 수락되지 않은 상태이다. |
+| 주문 수락 | accepted        | 신규 주문을 수락한 상태이다.         |
+| 서빙    | served          | 음식이 손님에게 전달된 상태이다.       |
+| 주문 완료 | completed       | 주문이 완료된 상태이다.            |
+
+### 테이블
+
+| 한글명     | 영문명              | 설명                       |
+|---------|------------------|--------------------------|
+| 테이블     | order table      | 매장 내 테이블을 나타낸다.          |
+| 테이블 상태  | table status     | 매장 내 테이블의 점유 상태를 나타낸다.   |
+| 테이블 비점유 | unoccupied table | 테이블을 점유하지 않은 상태이다.       |
+| 테이블 점유 | occupied table   | 테이블의 점유한 상태이다.           |
+| 테이블 손님 수 | num of guest     | 테이블에 있는 손님의 수를 의미한다.     |
+| 테이블 앉기  | sit              | 테이블에 앉는 행동을 의미한다.        |
+| 테이블 치우기 | clear            | 테이블 이용을 마치고 치우는 것을 의미한다. |
 
 ## 모델링
 
 ### 상품
-
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+- `product`는 `product name`과 `product price`를 반드시 가져야 한다.
+  - `product name`에는 `slang`이 포함될 수 없다.
+  - `price`는 0원 이상이여야 한다.
+- `product price`는 변경할 수 있다.
+  - `product price`를 변경하면 해당 `product`가 속한 `menu`들의 `display status`를 다시 설정한다.
 
 ### 메뉴
+- `menu`를 생성할 수 있다.
+  - `menu`는 1 개 이상의 `product`로 이루어져 있다.
+  - `menu`에 속한 상품의 수량은 0개 이상이어야 한다.
+  - `menu`는 `display status`를 갖는다.
+  - `name`은 반드시 있어야 하고, `slang`이 포함될 수 없다.
+  - `menu price`는 속해있는 상품들의 총 가격의 합보다 작거나 같아야 한다.
+- `menu price`를 수정할 수 있다.
+  - `menu price`는 0원 이상이어야 한다.
+- `display status`를 수정할 수 있다.
+  - `displayed` 상태로 변경 시, 메뉴에 속해있는 상품들의 총 가격의 합보다 작거나 같아야 변경된다.
+  - `undisplayed` 상태로 변경 시, 추가 검증을 하지 않고, 변경한다.
+- `menu`의 전체 목록을 조회할 수 있다.
+- `menu group`은 반드시 존재해야한다.
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+### 주문
+- `order`을 생성할 수 있다.
+- `order type`은 반드시 존재해야 한다.
+- `order`는 `order status`를 갖는다.
+- `order line item`은 주문에 1개 이상 존재한다.
+- `order`의 전체 목록을 조회할 수 있다.
 
-### 매장 주문
-
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
-
-### 배달 주문
-
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+### 베달 주문
+- `delivery order`을 `accepted`하면, `delivery agency`를 호출한다.
+- `delivery order`은 `address`가 존재해야 한다.
+- `delivery order`은 `order line item`의 `quantity`가 0개 이상 존재해야 한다.
+- `order status`는 `waiting` -> `accepted` -> `served` -> `delivering` -> `deliveryed` -> `complete` 순서로 변경된다.
 
 ### 포장 주문
+- `포장 주문`은 `order line item`의 `quantity`가 0개 이상 존재해야 한다.
+- `order status`는 `waiting` -> `accepted` -> `served` -> `complete` 순서로 변경된다.
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+### 매장 주문
+- `eat in order`은 `order table`을 점유하고 있는 상태여야 주문이 가능하다.
+- `order status`는 `waiting` -> `accepted` -> `served` -> `complete` 순서로 변경된다.
+  - `eat in order`이 `complete` 상태가 되며, `order table`이 `clear` 된다.
+- `order table`은 `name`과 `num of guest`, `table status`를 갖는다.
+- `order table`에 `sit`, `clear` 할 수 있다.
+- `order table`에 있는 `num of guest` 변경이 가능하다.
+- `table status`는 변경 가능하다.
