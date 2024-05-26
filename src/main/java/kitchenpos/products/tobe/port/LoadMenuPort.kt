@@ -1,9 +1,9 @@
-package kitchenpos.menus.tode.port
+package kitchenpos.products.tobe.port
 
 import kitchenpos.menus.domain.Menu
 import java.util.UUID
 
-interface MenuReader {
+interface LoadMenuPort {
     fun findAllByProductId(
         productId: UUID
     ): List<Menu>

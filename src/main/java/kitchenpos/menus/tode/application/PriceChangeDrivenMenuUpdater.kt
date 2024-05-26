@@ -1,17 +1,17 @@
 package kitchenpos.menus.tode.application
 
 import kitchenpos.menus.tode.domain.RenewMenuDisplay
-import kitchenpos.menus.tode.port.MenuReader
+import kitchenpos.products.tobe.port.LoadMenuPort
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class PriceChangeDrivenMenuUpdater(
-    private val menuReader: MenuReader,
+    private val loadMenuPort: LoadMenuPort,
 ) {
     fun menuDisplayUpdateByProductId(
         productId: UUID,
-    ) = menuReader.findAllByProductId(productId)
+    ) = loadMenuPort.findAllByProductId(productId)
         .forEach { menu ->
             RenewMenuDisplay.renewMenusDisplay(menu)
         }

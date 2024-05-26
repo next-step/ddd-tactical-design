@@ -1,14 +1,14 @@
-package kitchenpos.menus.tode.adapter
+package kitchenpos.products.tobe.adpater
 
 import kitchenpos.menus.domain.Menu
 import kitchenpos.menus.domain.MenuRepository
-import kitchenpos.menus.tode.port.MenuReader
+import kitchenpos.products.tobe.port.LoadMenuPort
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class DefaultMenuReader(
+class LoadMenuAdapter(
     private val menuRepository: MenuRepository,
-) : MenuReader {
+) : LoadMenuPort {
     override fun findAllByProductId(productId: UUID): List<Menu> = menuRepository.findAllByProductId(productId)
 }
