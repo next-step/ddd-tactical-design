@@ -33,14 +33,18 @@ class ProductTest {
     @DisplayName("욕설이 있으면 생성 불가")
     void canNotCreateHaveProfanity() {
 
-       assertThatThrownBy(() -> new Product("욕설치킨", BigDecimal.valueOf(18000L), purgomalumClient))
-               .isExactlyInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new Product("욕설치킨", BigDecimal.valueOf(18000L), purgomalumClient))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new Product("욕설비속어", BigDecimal.valueOf(18000L), purgomalumClient))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new Product("비속어치킨욕설", BigDecimal.valueOf(18000L), purgomalumClient))
+                .isExactlyInstanceOf(IllegalArgumentException.class);
 
     }
 
     @Test
     @DisplayName("ID, 이름, 가격을 이용한 생성자 생성시 값 일치 확인하기")
-    void get(){
+    void get() {
         //given
         UUID id = UUID.randomUUID();
         Product product = new Product(id, "후라이드치킨", BigDecimal.valueOf(18000L));
@@ -56,7 +60,7 @@ class ProductTest {
         private Product product;
 
         @BeforeEach
-        void  setUp(){
+        void setUp() {
             //given
             UUID id = UUID.randomUUID();
             product = new Product(id, "후라이드치킨", BigDecimal.valueOf(18000L));
@@ -64,7 +68,7 @@ class ProductTest {
 
         @Test
         @DisplayName("가격 변경 성공")
-        void success(){
+        void success() {
             //when
             product.changePrice(BigDecimal.valueOf(20000L));
 
@@ -74,9 +78,11 @@ class ProductTest {
 
         @Test
         @DisplayName("가격을 null 또는 음수를 입력할 수 없다.")
-        void canNotPriceNullOrMinus(){
+        void canNotPriceNullOrMinus() {
             //when then
             assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-1000L)))
+                    .isExactlyInstanceOf(IllegalArgumentException.class);
+            assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-1L)))
                     .isExactlyInstanceOf(IllegalArgumentException.class);
             assertThatThrownBy(() -> product.changePrice(null))
                     .isExactlyInstanceOf(IllegalArgumentException.class);
