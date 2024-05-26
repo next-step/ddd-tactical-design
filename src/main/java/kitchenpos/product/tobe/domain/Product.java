@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -24,18 +25,23 @@ public class Product {
     private BigDecimal productPrice;
 
     protected Product() {
+        // 외부에서 기본생성자 사용하지 못하도록 접근제어자 변경
     }
 
     public Product(String productName, BigDecimal productPrice) {
-        if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        if (Objects.isNull(productName) || purgomalumClient.containsProfanity(productName)) {
-            throw new IllegalArgumentException();
-        }
+        validate(productName, productPrice);
         this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
+    }
+
+    private static void validate(String productName, BigDecimal productPrice) {
+        if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (Objects.isNull(productName)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public UUID getId() {
