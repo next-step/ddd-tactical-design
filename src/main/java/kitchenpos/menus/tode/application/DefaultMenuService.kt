@@ -5,10 +5,7 @@ import kitchenpos.menus.domain.Menu
 import kitchenpos.menus.domain.MenuGroupRepository
 import kitchenpos.menus.domain.MenuProduct
 import kitchenpos.menus.domain.MenuRepository
-import kitchenpos.menus.tode.domain.MenuCreateFactory
-import kitchenpos.menus.tode.domain.MenuNameValidator
-import kitchenpos.menus.tode.domain.MenuPriceValidator
-import kitchenpos.menus.tode.domain.MenuProductValidator
+import kitchenpos.menus.tode.domain.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -61,7 +58,23 @@ class DefaultMenuService(
         menuId: UUID,
         request: Menu,
     ): Menu {
-        TODO("Not yet implemented")
+        val price = request.price
+        MenuPriceValidator.requireNormalPrice(price)
+
+        val menu = menuRepository.findById(menuId).orElseThrow {
+            throw NoSuchElementException()
+        }
+
+        if (MenuDisplayableChecker.isMenuDisplayable(menu)) {
+            throw IllegalArgumentException()
+        }
+
+        MenuPriceUpdater.updateMenuPrice(
+            price = price,
+            menu = menu,
+        )
+
+        return menu
     }
 
     override fun display(menuId: UUID): Menu {
