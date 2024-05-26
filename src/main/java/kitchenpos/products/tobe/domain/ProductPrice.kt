@@ -1,12 +1,14 @@
 package kitchenpos.products.tobe.domain
 
-import java.math.BigDecimal
+import kitchenpos.common.Price
+import kitchenpos.common.ZERO
 
 @JvmInline
 value class ProductPrice(
-    val value: BigDecimal
+    val value: Price
 ) {
     init {
-        require(value >= BigDecimal.ZERO) { "상품의 가격은 0보다 작을 수 없습니다" }
+        require(value >= ZERO) { "상품의 가격은 0보다 작을 수 없습니다" }
     }
 }
+fun Price.productPrice() = ProductPrice(this)
