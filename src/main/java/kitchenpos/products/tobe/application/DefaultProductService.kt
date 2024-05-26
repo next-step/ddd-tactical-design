@@ -5,7 +5,6 @@ import kitchenpos.products.application.ProductService
 import kitchenpos.products.domain.Product
 import kitchenpos.products.domain.ProductRepository
 import kitchenpos.products.tobe.domain.CreateProductService
-import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
