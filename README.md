@@ -95,107 +95,55 @@ docker compose -p kitchenpos up -d
 - 주문 목록을 조회할 수 있다.
 
 ## 용어 사전
+- 메뉴 그룹                     | MenuGroup     | 메뉴를 묶는 그룹
+---
+- 상품                         | Product      | 판매자가 팔고자 하는 물건 or 서비스
+---
+- 메뉴                         | Menu                                | 상품을 그룹화해서 전시하여 고객이 주문을 할 수 있는 단위
+  - 메뉴 가격                     | MenuPrice                           | 고객이 각 메뉴의 주문 요청시 지불할 금액
+  - 메뉴 전시 노출/미노출            | DisplayStatus('ACTIVE', 'INACTIVE') | 주문이 가능한 메뉴의 상태
+---
+- 메뉴 상품                     | MenuProduct         | 메뉴에 속하는 상품
+---
+- 주문                         | Order              | 고객이 상품을 소비하기 위한 일련의 과정
+- 주문 항목                     | OrderLineItem      | 고객이 구매하려는 메뉴
+- 주문 항목 가격                 | OrderLineItemPrice | 고객의 주문 요청 당시의 메뉴 가격
+---
+- 주문 유형                   | OrderType    |
+  - 배달 주문                 | DELIVERY     | 배달원이 직접 상품을 전달해주는 주문
+    - 접수 대기               | WAITING     | 사용자가 주문의 접수를 대기하는 상태
+    - 접수                   | ACCEPTED    | 판매자가 접수 대기의 주문을 받고 준비하는 상태
+    - 전달                   | SERVED      | 판매자가 상품을 배달원에게 전달한 상태
+    - 배달 중                | DELIVERING   | 배달원이 상품을 가지고 배달을 시작한 상태
+    - 배달 완료               | DELIVERED   | 배달원이 고객에게 상품을 전달한 상태
+    - 주문 종료               | COMPLETED   | 판매자가 주문을 종료시킨 상태
 
-### 상품
+  - 매장 주문                 | EAT IN      | 고객이 매장에서 직접 상품을 소비하는 주문
+    - 접수 대기               | WAITING     | 사용자가 주문의 접수를 대기하는 상태
+    - 접수                   | ACCEPTED    | 판매자가 접수 대기의 주문을 받고 준비하는 상태
+    - 전달                   | SERVED      | 판매자가 상품을 매장의 손님에게 전달한 상태
+    - 주문 종료               | COMPLETED   | 판매자가 주문을 종료시킨 상태
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
-
-### 메뉴
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
-
-### 매장 주문
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
-
-### 배달 주문
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
-
-### 포장 주문
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+  - 포장 주문                 | TAKEOUT     | 고객이 매장에 방문하여 포장해가는 주문
+    - 접수 대기               | WAITING     | 사용자가 주문의 접수를 대기하는 상태
+    - 접수                   | ACCEPTED    | 판매자가 접수 대기의 주문을 받고 준비하는 상태
+    - 전달                   | SERVED      | 판매자가 상품을 매장의 손님에게 전달한 상태
+    - 주문 종료               | COMPLETED   | 판매자가 주문을 종료시킨 상태
+---
+- 주문 테이블                    | OrderTable           | 매장 주문 요청 고객이 상품을 소비하는 좌석
+- 비어있는 주문 테이블              | AvailableOrderTable | 주문완료가 되지 않은 주문이 존재하지 않아 사용이 가능한 좌석
+---
+- 판매자                         | Seller   | 가게 운영하는 사용자
+- 고객                          | Customer | 손님
+- 배달원                         | Rider    | 배달원
+---
+- 비속어/욕설                  | profanity
 
 ## 모델링
+- MenuGroup의 name을 지정하여 생성한다
+- Product의 name과 price를 지정하여 생성한다
+- Menu의 price와 name과 displayStatus, 속하게될 MenuGroup, 포함하는 MenuProduct의 price와 quantity 목록을 지정하여 메뉴를 생성한다
+  - MenuProduct의 quantity는 0보다 크거나 같아야한다
+  - Menu의 price는 MenuProduct 목록의 Price의 합보다 작거나 같아야한다
 
-### 상품
-
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
-
-### 메뉴
-
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
-
-### 매장 주문
-
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
-
-### 배달 주문
-
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
-
-### 포장 주문
-
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+<img width="1503" alt="Screenshot 2024-05-22 at 9 11 40 PM" src="https://github.com/next-step/ddd-strategic-design/assets/124428341/1bb3da02-bdab-4101-a33d-e7bcc4278a26">
