@@ -34,12 +34,23 @@ class Product(
     var price: ProductPrice = price
         private set
 
+    @Transient
+    private val domainEvents: MutableList<DomainEvent> = mutableListOf()
+
     init {
         require(nameValidator.validate(name.value)) { "상품 이름에 비속어가 포함되어 있습니다." }
     }
 
-    fun changePrice(price: ProductPrice) {
-        this.price = price
+    fun changePrice(newPrice: ProductPrice) {
+        val oldPrice = this.price
+        this.price = newPrice
+        domainEvents.add(ProductPriceChangedEvent(id, oldPrice.value, newPrice.value))
+    }
+
+    fun getAndClearDomainEvents(): List<DomainEvent> {
+        val events = domainEvents.toList()
+        domainEvents.clear()
+        return events
     }
 
     override fun equals(other: Any?): Boolean {
