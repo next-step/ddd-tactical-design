@@ -5,9 +5,14 @@ import java.math.BigDecimal
 object MenuPriceValidator {
     fun requireNormalPrice(
         price: BigDecimal?,
-    ) = require(price != null && isNotNegativePrice(price))
+    ) = require(!(price == null || isNegativePrice(price)))
 
-    private fun isNotNegativePrice(
+    fun requireMenuPriceUnderSum(
+        menuPrice: BigDecimal,
+        sum: BigDecimal,
+    ) = require(menuPrice <= sum)
+
+    private fun isNegativePrice(
         price: BigDecimal,
-    ) = price >= BigDecimal.ZERO
+    ) = price < BigDecimal.ZERO
 }
