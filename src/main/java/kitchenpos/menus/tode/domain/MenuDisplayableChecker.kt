@@ -2,7 +2,7 @@ package kitchenpos.menus.tode.domain
 
 import kitchenpos.menus.domain.Menu
 
-object MenuPriceValidator {
+object MenuDisplayableChecker {
     fun isMenuDisplayable(
         menu: Menu,
     ): Boolean {
