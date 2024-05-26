@@ -59,4 +59,11 @@ public class Product {
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
+
+    public void changePrice(final BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.price = price;
+    }
 }
