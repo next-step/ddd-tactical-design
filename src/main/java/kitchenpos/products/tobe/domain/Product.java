@@ -57,6 +57,10 @@ public class Product {
         }
     }
 
+    public void changePrice(BigDecimal price) {
+        this.productPrice = ProductPrice.of(price);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,4 +75,5 @@ public class Product {
     public int hashCode() {
         return Objects.hash(id, name, productPrice);
     }
+
 }
