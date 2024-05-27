@@ -2,7 +2,7 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.acl.menu.MenuServiceClient;
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 
 import java.util.UUID;
 
