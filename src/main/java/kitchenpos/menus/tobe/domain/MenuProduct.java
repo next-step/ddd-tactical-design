@@ -40,7 +40,7 @@ public class MenuProduct {
 	@Transient
 	private UUID productId;
 
-	public MenuProduct() {
+	protected MenuProduct() {
 	}
 
 	public MenuProduct(Long seq, Product product, long quantity) {

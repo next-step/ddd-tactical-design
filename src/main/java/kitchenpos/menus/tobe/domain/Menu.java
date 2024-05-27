@@ -45,7 +45,7 @@ public class Menu {
 	@Transient
 	private UUID menuGroupId;
 
-	public Menu() {
+	protected Menu() {
 	}
 
 	public Menu(
