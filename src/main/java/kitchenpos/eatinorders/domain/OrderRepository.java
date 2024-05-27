@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
+import kitchenpos.eatinorders.domain.constant.OrderStatus;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,4 +15,3 @@ public interface OrderRepository {
 
     boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
 }
-
