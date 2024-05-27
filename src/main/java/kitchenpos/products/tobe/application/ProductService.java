@@ -31,7 +31,9 @@ public class ProductService {
 
     @Transactional
     public Product create(final String name, final BigDecimal price) {
-        purgomalumClient.containsProfanity(name);
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
 
         return productRepository.save(Product.create(name, price));
     }
