@@ -32,6 +32,7 @@ public class ProductService {
     @Transactional
     public Product create(final String name, final BigDecimal price) {
         purgomalumClient.containsProfanity(name);
+
         return productRepository.save(Product.create(name, price));
     }
 
