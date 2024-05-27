@@ -1,9 +1,6 @@
 package kitchenpos.product.tobe.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import kitchenpos.exception.IllegalNameException;
 import kitchenpos.exception.IllegalPriceException;
 
@@ -19,8 +16,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String productName;
+    @Embedded
+    private ProductName productName;
 
     @Column(name = "price", nullable = false)
     private BigDecimal productPrice;
@@ -29,7 +26,7 @@ public class Product {
         // 외부에서 기본생성자 사용하지 못하도록 접근제어자 변경
     }
 
-    public Product(String productName, BigDecimal productPrice) {
+    public Product(ProductName productName, BigDecimal productPrice) {
         this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
@@ -40,16 +37,13 @@ public class Product {
         if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalPriceException(productPrice);
         }
-        if (Objects.isNull(productName)) {
-            throw new IllegalNameException(null);
-        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getProductName() {
+    public ProductName getProductName() {
         return productName;
     }
 

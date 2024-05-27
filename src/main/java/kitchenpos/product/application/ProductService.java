@@ -1,12 +1,12 @@
 package kitchenpos.product.application;
 
-import kitchenpos.exception.IllegalNameException;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.ProductName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,23 +34,20 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
+        final String name = request.getProductName().getName();
         final BigDecimal price = request.getProductPrice();
-        final String name = request.getProductName();
-        checkContainsProfanity(name);
 
-        final Product product = new Product(name, price);
+        final Product product = new Product(new ProductName(name, checkContainsProfanity(name)), price);
         return productRepository.save(product);
     }
 
-    void checkContainsProfanity(String name) {
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalNameException(name);
-        }
+    boolean checkContainsProfanity(String name) {
+        return purgomalumClient.containsProfanity(name);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
+        final BigDecimal price = request.getProductPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
