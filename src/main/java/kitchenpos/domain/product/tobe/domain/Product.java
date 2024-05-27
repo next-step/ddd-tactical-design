@@ -8,8 +8,9 @@ import java.util.UUID;
 @Table(name = "product")
 @Entity
 public class Product {
-    @EmbeddedId
-    private ProductId id;
+    @Id
+    @Column(name = "id", columnDefinition = "binary(16)")
+    private UUID id;
 
     @Embedded
     private ProductName name;
@@ -25,7 +26,7 @@ public class Product {
     }
 
     public Product(UUID id, String name, BigDecimal price) {
-        this.id = new ProductId(id);
+        this.id = id;
         this.name = new ProductName(name);
         this.price = new ProductPrice(price);
     }
