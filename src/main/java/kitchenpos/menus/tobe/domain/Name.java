@@ -12,6 +12,13 @@ public class Name {
 
     protected Name() {}
 
+    public Name(String name, MenuNameValidationService menuNameValidationService) {
+        this(name);
+        if (menuNameValidationService.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public Name(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException();
