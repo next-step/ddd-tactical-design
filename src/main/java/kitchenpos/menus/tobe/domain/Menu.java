@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.common.tobe.domain.PurgomalumClient;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
 
 @Table(name = "menu")
 @Entity

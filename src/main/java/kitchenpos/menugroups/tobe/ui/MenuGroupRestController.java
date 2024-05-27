@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.ui;
+package kitchenpos.menugroups.tobe.ui;
 
 import java.net.URI;
 import java.util.List;
@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import kitchenpos.menus.tobe.application.MenuGroupService;
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menugroups.tobe.application.MenuGroupService;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
 
 @RequestMapping("/api/menu-groups")
 public class MenuGroupRestController {

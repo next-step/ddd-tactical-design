@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 import kitchenpos.products.tobe.domain.Product;

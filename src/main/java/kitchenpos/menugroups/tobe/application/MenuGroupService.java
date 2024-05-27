@@ -1,8 +1,8 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menugroups.tobe.application;
 
 import java.util.List;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
 
 
 public interface MenuGroupService {

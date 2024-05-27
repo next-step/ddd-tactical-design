@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menugroups.tobe.application;
 
 import static kitchenpos.TobeFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
+import kitchenpos.menugroups.tobe.domain.MenuGroupRepository;
+import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
 
 class DefaultMenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();

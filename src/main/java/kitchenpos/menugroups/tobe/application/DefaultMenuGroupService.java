@@ -1,12 +1,12 @@
-package kitchenpos.menus.tobe.application;
+package kitchenpos.menugroups.tobe.application;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupRepository;
+import kitchenpos.menugroups.tobe.domain.MenuGroup;
+import kitchenpos.menugroups.tobe.domain.MenuGroupRepository;
 
 @Service
 public class DefaultMenuGroupService implements MenuGroupService {

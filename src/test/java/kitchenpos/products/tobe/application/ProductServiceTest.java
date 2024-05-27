@@ -21,7 +21,7 @@ import kitchenpos.menus.tobe.application.DefaultMenuService;
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
-import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
+import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
 import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 import kitchenpos.products.tobe.domain.Product;
