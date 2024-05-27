@@ -33,7 +33,7 @@ class ProductServiceTest {
 	private MenuRepository menuRepository;
 	private MenuService menuService;
 	private PurgomalumClient purgomalumClient;
-	private ProductService productService;
+	private DefaultProductService productService;
 
 	@BeforeEach
 	void setUp() {
@@ -41,7 +41,7 @@ class ProductServiceTest {
 		menuRepository = new InMemoryMenuRepository();
 		menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), productService, purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
-		productService = new ProductService(productRepository, menuService, purgomalumClient);
+		productService = new DefaultProductService(productRepository, menuService, purgomalumClient);
 	}
 
 	@DisplayName("상품을 등록할 수 있다.")

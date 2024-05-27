@@ -34,6 +34,7 @@ public class DefaultMenuService implements MenuService {
     public static final String NAME_WITH_PROFANITY_ERROR = "메뉴 이름에 비속어가 포함될 수 없습니다.";
 
     private final MenuRepository menuRepository;
+
     private final MenuGroupRepository menuGroupRepository;
 
     private final ProductService productService;
@@ -124,6 +125,12 @@ public class DefaultMenuService implements MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Menu> findAllByProductId(UUID productId) {
+        return menuRepository.findAllByProductId(productId);
     }
 
     @Override
