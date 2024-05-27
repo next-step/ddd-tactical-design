@@ -191,6 +191,7 @@ docker compose -p kitchenpos up -d
 - `Menu`는 `Menu Group`, `Menu Name`, `Menu Price`, `Menu Product`를 가진다.
   - `Menu Price`는 0원 이상이어야 한다.
   - `Menu Name`은 `Black Word`가 포함되면 안된다.
+  - `Menu Name`은 Null 이면 안된다.
   - `Menu Product`의 수량은 0 이상이어야 한다.
     - `Menu Product`로 등록하려면, `Product`로 등록돼야한다.
   - `Menu Price`는 `Menu Product Price`의 합 보다 크면 안된다.
