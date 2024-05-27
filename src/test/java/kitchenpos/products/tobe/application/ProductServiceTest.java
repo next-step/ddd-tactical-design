@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import static kitchenpos.Fixtures.*;
+import static kitchenpos.TobeFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,20 +15,23 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.common.domain.PurgomalumClient;
-import kitchenpos.common.infra.FakePurgomalumClient;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.menu.infra.InMemoryMenuRepository;
-import kitchenpos.product.application.ProductService;
-import kitchenpos.product.application.dto.ProductCreationRequest;
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
-import kitchenpos.product.infra.InMemoryProductRepository;
+import kitchenpos.common.tobe.domain.PurgomalumClient;
+import kitchenpos.common.tobe.infra.FakePurgomalumClient;
+import kitchenpos.menus.tobe.application.DefaultMenuService;
+import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.infra.InMemoryMenuGroupRepository;
+import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
+import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 
 class ProductServiceTest {
 	private ProductRepository productRepository;
 	private MenuRepository menuRepository;
+	private MenuService menuService;
 	private PurgomalumClient purgomalumClient;
 	private ProductService productService;
 
@@ -36,8 +39,9 @@ class ProductServiceTest {
 	void setUp() {
 		productRepository = new InMemoryProductRepository();
 		menuRepository = new InMemoryMenuRepository();
+		menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), productService, purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
-		productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+		productService = new ProductService(productRepository, menuService, purgomalumClient);
 	}
 
 	@DisplayName("상품을 등록할 수 있다.")

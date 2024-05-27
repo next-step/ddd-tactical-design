@@ -2,11 +2,10 @@ package kitchenpos.products.tobe.domain;
 
 import java.util.Objects;
 
-import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.StringUtils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.common.domain.PurgomalumClient;
 
 @Embeddable
 public class ProductName {
@@ -20,7 +19,7 @@ public class ProductName {
 	}
 
 	public ProductName(String value) {
-		if (Strings.isEmpty(value)) {
+		if (!StringUtils.hasText(value)) {
 			throw new IllegalArgumentException(NULL_OR_EMPTY_NAME_ERROR);
 		}
 

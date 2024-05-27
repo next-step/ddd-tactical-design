@@ -11,15 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.common.domain.PurgomalumClient;
-import kitchenpos.common.domain.Quantity;
-import kitchenpos.common.infra.FakePurgomalumClient;
-import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.product.domain.Product;
+import kitchenpos.common.tobe.domain.Quantity;
+import kitchenpos.products.tobe.domain.Product;
 
 class MenuProductTest {
-
-	private final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
 	@Test
 	@DisplayName("유효한 값으로 메뉴 상품 객체를 생성하면 정상적으로 생성된다.")
@@ -30,7 +25,7 @@ class MenuProductTest {
 		long quantityValue = 10;
 
 		// When
-		kitchenpos.menu.domain.MenuProduct menuProduct = new kitchenpos.menu.domain.MenuProduct(seqValue, product, quantityValue);
+		MenuProduct menuProduct = new MenuProduct(seqValue, product, quantityValue);
 
 		// Then
 		assertEquals(seqValue, menuProduct.getSeq());
@@ -53,6 +48,6 @@ class MenuProductTest {
 	}
 
 	private Product createProduct(String name, long price) {
-		return new Product(UUID.randomUUID(), name, new BigDecimal(price), purgomalumClient);
+		return new Product(UUID.randomUUID(), name, new BigDecimal(price));
 	}
 }

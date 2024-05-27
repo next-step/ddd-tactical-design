@@ -11,8 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.menu.domain.MenuPrice;
-
 class MenuPriceTest {
 
 	@ParameterizedTest
@@ -25,8 +23,8 @@ class MenuPriceTest {
 
 		// When & Then
 		assertThatExceptionOfType(IllegalArgumentException.class)
-			.isThrownBy(() -> kitchenpos.menu.domain.MenuPrice.of(price))
-			.withMessage(kitchenpos.menu.domain.MenuPrice.INVALID_PRICE_ERROR);
+			.isThrownBy(() -> MenuPrice.of(price))
+			.withMessage(MenuPrice.INVALID_PRICE_ERROR);
 	}
 
 	@Test
@@ -36,7 +34,7 @@ class MenuPriceTest {
 		BigDecimal validPrice = new BigDecimal("1000");
 
 		// When
-		kitchenpos.menu.domain.MenuPrice menuPrice = MenuPrice.of(validPrice);
+		MenuPrice menuPrice = MenuPrice.of(validPrice);
 
 		// Then
 		assertEquals(validPrice, menuPrice.getValue());

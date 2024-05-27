@@ -10,13 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import kitchenpos.common.domain.NonEmptyName;
-import kitchenpos.common.domain.PurgomalumClient;
-import kitchenpos.common.infra.FakePurgomalumClient;
-import kitchenpos.menu.domain.MenuGroup;
+import kitchenpos.common.tobe.domain.NonEmptyName;
 
 class MenuGroupTest {
-	private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
 	@ParameterizedTest
 	@NullAndEmptySource
@@ -27,7 +23,7 @@ class MenuGroupTest {
 
 		// When & Then
 		assertThatExceptionOfType(IllegalArgumentException.class)
-			.isThrownBy(() -> new kitchenpos.menu.domain.MenuGroup(id, invalidName))
+			.isThrownBy(() -> new MenuGroup(id, invalidName))
 			.withMessage(NonEmptyName.NULL_OR_EMPTY_NAME_ERROR);
 	}
 
@@ -39,7 +35,7 @@ class MenuGroupTest {
 		String name = "유효한 메뉴 그룹 이름";
 
 		// When
-		kitchenpos.menu.domain.MenuGroup menuGroup = new MenuGroup(id, name);
+		MenuGroup menuGroup = new MenuGroup(id, name);
 
 		// Then
 		assertEquals(id, menuGroup.getId());

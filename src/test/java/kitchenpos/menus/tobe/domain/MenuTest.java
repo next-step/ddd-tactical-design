@@ -16,25 +16,17 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import kitchenpos.common.domain.PurgomalumClient;
-import kitchenpos.common.infra.FakePurgomalumClient;
-import kitchenpos.menu.application.dto.MenuCreationRequest;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuPrice;
-import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.product.domain.Product;
+import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
+import kitchenpos.products.tobe.domain.Product;
 
 class MenuTest {
-
-	private kitchenpos.menu.domain.MenuGroup menuGroup;
+	private MenuGroup menuGroup;
 	private Product product;
-	private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
 
 	@BeforeEach
 	void setUp() {
 		menuGroup = new MenuGroup("메뉴 그룹");
-		product = new Product("후라이드", BigDecimal.valueOf(16000), purgomalumClient);
+		product = new Product("후라이드", BigDecimal.valueOf(16000));
 	}
 
 	@Nested
@@ -58,13 +50,12 @@ class MenuTest {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> {
 					// when
-					new kitchenpos.menu.domain.Menu(
+					new Menu(
 						request.name(),
 						request.price(),
 						menuGroup,
-						List.of(new kitchenpos.menu.domain.MenuProduct(product, 2L)),
-						request.displayed(),
-						purgomalumClient
+						List.of(new MenuProduct(product, 2L)),
+						request.displayed()
 					);
 				});
 		}
@@ -72,21 +63,20 @@ class MenuTest {
 		@ParameterizedTest
 		@NullAndEmptySource
 		@DisplayName("메뉴 생성 시 메뉴 상품 목록이 null이거나 비어있으면 메뉴를 생성할 수 없다")
-		void createMenuWithNoMenuProducts(List<kitchenpos.menu.domain.MenuProduct> menuProducts) {
+		void createMenuWithNoMenuProducts(List<MenuProduct> menuProducts) {
 			// given
-			kitchenpos.menu.domain.MenuPrice menuPrice = MenuPrice.of(BigDecimal.valueOf(19000));
+			MenuPrice menuPrice = MenuPrice.of(BigDecimal.valueOf(19000));
 
 			// then
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> {
 					// when
-					new kitchenpos.menu.domain.Menu(
+					new Menu(
 						"후라이드+후라이드",
 						menuPrice.getValue(),
 						menuGroup,
 						menuProducts,
-						true,
-						purgomalumClient
+						true
 					);
 				});
 		}
@@ -98,36 +88,33 @@ class MenuTest {
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> {
 					// given & when
-					new kitchenpos.menu.domain.Menu(
+					new Menu(
 						"후라이드+후라이드",
 						BigDecimal.valueOf(19000),
 						menuGroup,
-						List.of(new kitchenpos.menu.domain.MenuProduct(product, -1L)),
-						true,
-						purgomalumClient
+						List.of(new MenuProduct(product, -1L)),
+						true
 					);
 				});
 		}
 
 		@ParameterizedTest
 		@NullSource
-		@ValueSource(strings = {"비속어"})
-		@DisplayName("메뉴 생성 시 메뉴 이름이 null이거나 비속어가 포함되어 있으면 메뉴를 생성할 수 없다")
+		@DisplayName("메뉴 생성 시 메뉴 이름이 null이면 메뉴를 생성할 수 없다")
 		void createMenuWithInvalidProductNames(String name) {
 			// given
-			kitchenpos.menu.domain.MenuProduct validProduct = new kitchenpos.menu.domain.MenuProduct(product, 2L);
+			MenuProduct validProduct = new MenuProduct(product, 2L);
 
 			// then
 			assertThatExceptionOfType(IllegalArgumentException.class)
 				.isThrownBy(() -> {
 					// when
-					new kitchenpos.menu.domain.Menu(
+					new Menu(
 						name,
 						BigDecimal.valueOf(19000),
 						menuGroup,
 						List.of(validProduct),
-						true,
-						purgomalumClient
+						true
 					);
 				});
 		}
@@ -137,16 +124,15 @@ class MenuTest {
 		@DisplayName("메뉴를 정상적으로 생성할 수 있다")
 		void createMenuWithValidProductPricesAndNames(BigDecimal price) {
 			// given
-			kitchenpos.menu.domain.MenuProduct validProduct = new kitchenpos.menu.domain.MenuProduct(product, 2L);
+			MenuProduct validProduct = new MenuProduct(product, 2L);
 
 			// when
-			kitchenpos.menu.domain.Menu menu = new kitchenpos.menu.domain.Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				price,
 				menuGroup,
 				List.of(validProduct),
-				true,
-				purgomalumClient
+				true
 			);
 
 			// then
@@ -163,13 +149,12 @@ class MenuTest {
 		@DisplayName("메뉴 가격 변경 시 가격이 null이거나 0미만인 경우 메뉴 가격을 변경할 수 없다")
 		void changePriceWithInvalidPrice(BigDecimal price) {
 			// given
-			kitchenpos.menu.domain.Menu menu = new kitchenpos.menu.domain.Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				BigDecimal.valueOf(19000),
 				menuGroup,
-				List.of(new kitchenpos.menu.domain.MenuProduct(product, 2L)),
-				true,
-				purgomalumClient
+				List.of(new MenuProduct(product, 2L)),
+				true
 			);
 
 			// then
@@ -185,13 +170,12 @@ class MenuTest {
 		@DisplayName("메뉴 가격 변경 시 변경 가격이 상품 가격 총합보다 클 때 메뉴 가격을 변경할 수 없다")
 		void changePriceWithExcessivePrice(BigDecimal price) {
 			// given
-			kitchenpos.menu.domain.Menu menu = new kitchenpos.menu.domain.Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				BigDecimal.valueOf(32000),
 				menuGroup,
-				List.of(new kitchenpos.menu.domain.MenuProduct(product, 2L)),
-				true,
-				purgomalumClient
+				List.of(new MenuProduct(product, 2L)),
+				true
 			);
 
 			// then
@@ -207,13 +191,12 @@ class MenuTest {
 		@DisplayName("메뉴 가격 변경 시 변경 가격이 상품 가격 총합보다 작거나 같을 때 메뉴 가격을 변경할 수 있다")
 		void changePriceWithValidPrice(BigDecimal price) {
 			// given
-			kitchenpos.menu.domain.Menu menu = new kitchenpos.menu.domain.Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				BigDecimal.valueOf(19000),
 				menuGroup,
-				List.of(new kitchenpos.menu.domain.MenuProduct(product, 2L)),
-				true,
-				purgomalumClient
+				List.of(new MenuProduct(product, 2L)),
+				true
 			);
 
 			// when
@@ -232,13 +215,12 @@ class MenuTest {
 		@DisplayName("메뉴 노출 시 메뉴 가격이 상품 가격 총합과 같거나 작으면 메뉴를 노출할 수 있다")
 		void displayMenuSuccessfully(BigDecimal price) {
 			// given
-			kitchenpos.menu.domain.Menu menu = new kitchenpos.menu.domain.Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				price,
 				menuGroup,
-				List.of(new kitchenpos.menu.domain.MenuProduct(product, 2L)),
-				false,
-				purgomalumClient
+				List.of(new MenuProduct(product, 2L)),
+				false
 			);
 
 			// when
@@ -256,13 +238,12 @@ class MenuTest {
 		@DisplayName("메뉴 숨김 처리를 할 수 있다")
 		void hideMenuSuccessfully() {
 			// given
-			kitchenpos.menu.domain.Menu menu = new Menu(
+			Menu menu = new Menu(
 				"후라이드+후라이드",
 				BigDecimal.valueOf(19000),
 				menuGroup,
 				List.of(new MenuProduct(product, 2L)),
-				true,
-				purgomalumClient
+				true
 			);
 
 			// when

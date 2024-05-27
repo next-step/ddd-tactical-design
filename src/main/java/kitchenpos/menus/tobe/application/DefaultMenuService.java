@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.application;
 
-import static kitchenpos.product.domain.ProductName.*;
+import static kitchenpos.menus.tobe.domain.MenuName.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,32 +22,33 @@ import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuName;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 
 @Service
 public class DefaultMenuService implements MenuService {
     private static final String PRODUCT_NOT_FOUND = "상품을 찾을 수 없습니다";
     private static final String MENU_GROUP_NOT_FOUND_ERROR = "메뉴 그룹을 찾을 수 없습니다.";
-    private static final String NAME_WITH_PROFANITY_ERROR = "메뉴 이름에 비속어가 포함될 수 없습니다.";
+    public static final String NAME_WITH_PROFANITY_ERROR = "메뉴 이름에 비속어가 포함될 수 없습니다.";
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
+
+    private final ProductService productService;
+
     private final PurgomalumClient purgomalumClient;
 
     public DefaultMenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
+        final ProductService productService,
         final PurgomalumClient purgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -59,7 +60,7 @@ public class DefaultMenuService implements MenuService {
             .orElseThrow(() -> new NoSuchElementException(MENU_GROUP_NOT_FOUND_ERROR));
 
         final Map<UUID, Product> products =
-            productRepository.findAllByIdIn(new ArrayList<>(request.menuProductQuantities().keySet()))
+            productService.findAllByIdIn(new ArrayList<>(request.menuProductQuantities().keySet()))
                 .stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
 
@@ -76,7 +77,7 @@ public class DefaultMenuService implements MenuService {
 
     private void validateMenuName(String name) {
         if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException(MenuName.NULL_OR_EMPTY_NAME_ERROR);
+            throw new IllegalArgumentException(NULL_OR_EMPTY_NAME_ERROR);
         }
 
         if (purgomalumClient.containsProfanity(name)) {

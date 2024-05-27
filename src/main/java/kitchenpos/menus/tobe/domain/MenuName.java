@@ -6,7 +6,6 @@ import org.springframework.util.StringUtils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.common.tobe.domain.PurgomalumClient;
 
 @Embeddable
 public class MenuName {

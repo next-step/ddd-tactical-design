@@ -8,6 +8,7 @@ import java.util.UUID;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 import kitchenpos.products.tobe.domain.Product;
 
 public class TobeFixtures {
@@ -67,6 +68,10 @@ public class TobeFixtures {
 
 	public static Product product(final String name, final long price) {
 		return new Product(name, BigDecimal.valueOf(price));
+	}
+
+	public static ProductCreationRequest productCreationRequest(final String name, final long price) {
+		return new ProductCreationRequest(name, BigDecimal.valueOf(price));
 	}
 }
 
