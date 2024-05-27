@@ -3,7 +3,8 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.exception.ProductNameNullPointerException;
 import kitchenpos.products.exception.ProductNameProfanityException;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.infra.PurgomalumClient;
+import kitchenpos.products.infra.ProductProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ class ProductNameTest {
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
-        profanityChecker = new ProfanityChecker(purgomalumClient);
+        profanityChecker = new ProductProfanityChecker(purgomalumClient);
     }
 
     @DisplayName("[성공] 상품 이름을 생성한다.")
