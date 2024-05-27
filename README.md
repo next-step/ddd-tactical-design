@@ -190,6 +190,7 @@ docker compose -p kitchenpos up -d
 #### 속성
 - `Menu`는 `Menu Group`, `Menu Name`, `Menu Price`, `Menu Product`를 가진다.
   - `Menu Price`는 0원 이상이어야 한다.
+  - `Menu Price`는 Null 이면 안된다.
   - `Menu Name`은 `Black Word`가 포함되면 안된다.
   - `Menu Name`은 Null 이면 안된다.
   - `Menu Product`의 수량은 0 이상이어야 한다.
