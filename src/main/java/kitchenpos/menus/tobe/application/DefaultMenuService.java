@@ -128,12 +128,6 @@ public class DefaultMenuService implements MenuService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Menu> findAllByProductId(UUID productId) {
-        return menuRepository.findAllByProductId(productId);
-    }
-
-    @Override
     @Transactional
     public void hideMenusBasedOnProductPrice(UUID productId) {
         List<Menu> menus = menuRepository.findAllByProductId(productId);

@@ -18,7 +18,5 @@ public interface MenuService {
 
 	List<Menu> findAll();
 
-	List<Menu> findAllByProductId(UUID productId);
-
 	void hideMenusBasedOnProductPrice(UUID productId);
 }
