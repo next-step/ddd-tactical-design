@@ -16,7 +16,7 @@ public class ProductTest {
     @DisplayName("상품의 이름은 비속어이면 안된다")
     @Disabled("not implemented")
     @Test
-    void ProductNameTest() {
+    void ProductGetNameTest() {
         Price price = new Price(10);
         Name name = new Name("아이씨");
         assertThatThrownBy(()->new Product(name, price)).isInstanceOf(IllegalArgumentException.class);
