@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    Product() {
+    protected Product() {
     }
 
     Product(UUID id, String name, BigDecimal price) {
@@ -31,15 +31,24 @@ public class Product {
         this.price = price;
     }
 
-    public static Product create(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public static Product create(String name, BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
 
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || name.length() <= 0) {
             throw new IllegalArgumentException();
         }
         return new Product(UUID.randomUUID(), name, price);
     }
+
+    public void setChangePrice(final BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.price = price;
+    }
+
 
 }
