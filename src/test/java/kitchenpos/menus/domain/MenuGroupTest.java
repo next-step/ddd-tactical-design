@@ -2,7 +2,7 @@ package kitchenpos.menus.domain;
 
 
 import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuGroupName;
+import kitchenpos.menus.tobe.domain.Name;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,12 +34,12 @@ public class MenuGroupTest {
 
     @Nested
     @DisplayName("메뉴 그룹 이름 테스트")
-    class MenuGroupNameTest {
+    class NameTest {
         @Test
         @DisplayName("메뉴 그룹의 이름을 생성한다.")
         void create() {
             String 이름 = "후라이드";
-            MenuGroupName 메뉴_그룹_이름 = new MenuGroupName(이름);
+            Name 메뉴_그룹_이름 = new Name(이름);
 
             Assertions.assertThat(메뉴_그룹_이름.getName()).isEqualTo(이름);
         }
@@ -49,7 +49,7 @@ public class MenuGroupTest {
         @DisplayName("메뉴 그룹 이름은 공백일 수 없다.")
         void create_exception_empty(String 이름) {
             Assertions.assertThatThrownBy(
-                    () -> new MenuGroupName(이름)
+                    () -> new Name(이름)
             ).isInstanceOf(IllegalArgumentException.class);
         }
     }
