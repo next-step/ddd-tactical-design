@@ -8,10 +8,13 @@ public class Product {
     final Price price;
 
     public Product(Name name, Price price) {
-        this.checkValidPrice(price);
-
         this.name = name;
         this.price = price;
+    }
+
+    public void validateProperty(){
+        this.checkValidPrice(this.price);
+        this.checkValidName(this.name);
     }
 
     private void checkValidName(Name name){

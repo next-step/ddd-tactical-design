@@ -13,6 +13,7 @@ import java.util.UUID;
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new HashMap<>();
 
+
     @Override
     public Product save(final Product product) {
         products.put(product.getId(), product);
