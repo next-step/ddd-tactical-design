@@ -1,7 +1,9 @@
 package kitchenpos.exception;
 
+import java.math.BigDecimal;
+
 public class IllegalPriceException extends IllegalArgumentException {
-    public IllegalPriceException(String classType) {
-        super(classType + " : 잘못된 가격입니다.");
+    public IllegalPriceException(BigDecimal price) {
+        super("잘못된 가격입니다. : " + price);
     }
 }

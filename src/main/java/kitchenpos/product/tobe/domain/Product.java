@@ -30,18 +30,18 @@ public class Product {
     }
 
     public Product(String productName, BigDecimal productPrice) {
-        validateNameAndPrice(productName, productPrice);
         this.id = UUID.randomUUID();
         this.productName = productName;
         this.productPrice = productPrice;
+        validateNameAndPrice();
     }
 
-    private void validateNameAndPrice(String productName, BigDecimal productPrice) {
+    private void validateNameAndPrice() {
         if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalPriceException(this.getClass().getName());
+            throw new IllegalPriceException(productPrice);
         }
         if (Objects.isNull(productName)) {
-            throw new IllegalNameException(this.getClass().getName());
+            throw new IllegalNameException(null);
         }
     }
 

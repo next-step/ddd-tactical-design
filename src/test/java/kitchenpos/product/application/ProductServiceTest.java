@@ -25,6 +25,7 @@ import java.util.Optional;
 import static kitchenpos.MoneyConstants.*;
 import static kitchenpos.fixture.MenuFixture.createMenu;
 import static kitchenpos.fixture.ProductFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -126,6 +127,7 @@ public class ProductServiceTest {
 
             Product response = productService.changePrice(product.getId(), product);
 
+            assertThat(response.getId()).isEqualTo(product.getId());
             assertAll(
                     "변경된 상품 정보 그룹 Assertions",
                     () -> assertEquals(response.getId(), product.getId()),

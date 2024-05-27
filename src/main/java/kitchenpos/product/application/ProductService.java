@@ -36,12 +36,16 @@ public class ProductService {
     public Product create(final Product request) {
         final BigDecimal price = request.getProductPrice();
         final String name = request.getProductName();
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalNameException(name);
-        }
+        checkContainsProfanity(name);
 
         final Product product = new Product(name, price);
         return productRepository.save(product);
+    }
+
+    void checkContainsProfanity(String name) {
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalNameException(name);
+        }
     }
 
     @Transactional
