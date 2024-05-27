@@ -310,6 +310,7 @@ docker compose -p kitchenpos up -d
 | 주문    | order           | - 손님이 메뉴를 시키는 것으로, 배달 주문, 포장 주문, 매장 주문이 가능하다.                                                                       |
 | 주문항목  | order line item | - 주문을 구성하는 메뉴로, 하나의 메뉴와 개수, 가격으로 구성된다.                                                                              |
 | 주문 상태 | order status    | - 주문의 상태를 말하며, 주문 접수(WAITING), 주문 수락(ACCEPTED), 서빙 완료(SERVED), 배달 중(DELIVERING), 배달 완료(DELIVERED), 주문 완료(COMPLETED) |
+| 주문 종류 | order type      | - 손님이 주문할 수 있는 주문의 종류로 배달 주문, 포장 주문, 매장 주문이 있다.                                                                     |
 
 #### 배달주문
 
@@ -349,95 +350,98 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product` 는 식별자, `ProductName`, `ProductPrice` 을 항상 가진다.
-- `ProductPrice` 는 0원보다 적을 수 없다.
-- `Product` 에서 `ProductPrice` 를 변경한다.
+- `Product(상품)` 는 식별자, `ProductName(상품 이름)`, `ProductPrice(상품 가격)` 을 항상 가진다.
+- `ProductPrice(상품 가격)` 는 0원보다 적을 수 없다.
+- `Product(상품)` 에서 `ProductPrice(상품 가격)` 를 변경한다.
+- `ProductName(상품 이름)` 는 `Slang(비속어)`을 포함할 수 없다.
 
 ### 메뉴 그룹
 
-- `MenuGroup` 은 식별자, `MenuGroupName` 를 항상 가진다.
+- `MenuGroup(메뉴 그룹)` 은 식별자, `MenuGroupName(메뉴 그룹 이름)` 를 항상 가진다.
 
 ### 메뉴
 
-- `Menu` 는 식별자, `MenuName`, `MenuPrice`, `MenuGroup`, `MenuDisplayStatus`, `MenuProducts` 를 가진다.
-- `Menu`에서 `MenuProducts`를 생성한다.
-- `Menu` 에서 `MenuProduct` 의 총 `Price`을 계산한다.
-- `Menu` 에서 `MenuDisplayStatus` 를 `DisplayedMenu` 로 변경 할 수 있다.
-- `MenuPrice` 가 `MenuProduct` 의 총 `Price` 를 초과하는 경우 `DisplayedMenu` 로 변경할 수 없다.
-- `Menu` 에서 `MenuDisplayStatus` 를 `UndisplayedMenu` 로 변경 할 수 있다.
-- `Menu` 에서 `MenuPrice` 를 변경한다.
-- `MenuPrice` 륿 변경할 때 `MenuProduct` 의 총 `Price` 를 초과하는 경우 변경할 수 없다.
-- `MenuProduct` 는 `Product`, `Quantity` 을 가진다.
-- `MenuProduct` 에서 `Product` 의 총 `Price` 을 계산한다.
+- `Menu(메뉴)` 는 식별자, `MenuName(메뉴 이름)`, `MenuPrice(메뉴 가격)`, `MenuGroup(메뉴 그룹)`, `MenuDisplayStatus(메뉴 노출 상태)`, 여러
+  개의 `MenuProduct(메뉴 상품)` 를 가진다.
+- `MenuName(메뉴 이름)` 은 `Slang(비속어)`을 포함할 수 없다.
+- `Menu(메뉴)` 에서 여러 개의 `MenuProduct(메뉴 상품)`를 생성한다.
+- `Menu(메뉴)` 에서 `MenuProduct(메뉴 상품)` 의 총 `Price(가격)`을 계산한다.
+- `Menu(메뉴)` 에서 `MenuDisplayStatus(메뉴 노출 상태)` 를 `DisplayedMenu(노출된 메뉴)` 로 변경 할 수 있다.
+- `MenuPrice(메뉴 가격)` 가 `MenuProduct(메뉴 상품)` 의 총 `Price(가격)` 를 초과하는 경우 `DisplayedMenu(노출된 메뉴)` 로 변경할 수 없다.
+- `Menu(메뉴)` 에서 `MenuDisplayStatus(메뉴 노출 상태)` 를 `UndisplayedMenu(숨겨진 메뉴)` 로 변경 할 수 있다.
+- `Menu(메뉴)` 에서 `MenuPrice(메뉴 가격)` 를 변경한다.
+- `MenuPrice(메뉴 가격)` 륿 변경할 때 `MenuProduct(메뉴 상품)` 의 총 `Price(가격)` 를 초과하는 경우 변경할 수 없다.
+- `MenuProduct(메뉴 상품)` 는 `Product(상품)`, `Quantity(수량)` 을 가진다.
+- `MenuProduct(메뉴 상품)` 에서 `Product(상품)` 의 총 `Price(가격)` 을 계산한다.
 
 ### 주문 테이블
 
-- `OrderTable` 은 식별자, `OrderTableName`, `NumberOfGuests`, `Occupied` 를 항상가진다.
-- `OrderTable` 에서 `Occupied`를 `OccupyingTable` 또는 `ClearedTable` 로 변경한다.
-- `ClearedTable` 로 변경할 때 `Order` 의 상태가 `COMPLETED` 여야 한다.
-- `ClearedTable` 은 `NumberOfGuests` 가 0이고, `Occupied` 가 아닌 상태이다.
-- `OrderTable` 에서 `NumberOfGuests` 를 변경한다.
-- `NumberOfGuests` 는 0명 이상이다.
-- `NumberOfGuests` 는 `OccupyingTable` 일 때만 가능하다.
+- `OrderTable(주문 테이블)` 은 식별자, `OrderTableName(주문 테이블 이름)`, `NumberOfGuests(손님 수)`, `Occupied(착석여부)` 를 항상가진다.
+- `OrderTable(주문 테이블)` 에서 `Occupied(착석여부)`를 `OccupyingTable(착석 테이블)` 또는 `ClearedTable(빈 테이블)` 로 변경한다.
+- `ClearedTable(빈 테이블)` 로 변경할 때 `Order(주문)` 의 상태가 `COMPLETED` 여야 한다.
+- `ClearedTable(빈 테이블)` 은 `NumberOfGuests(손님 수)` 가 0이고, `Occupied(착석여부)` 가 아닌 상태이다.
+- `OrderTable(주문 테이블)` 에서 `NumberOfGuests(손님 수)` 를 변경한다.
+- `NumberOfGuests(손님 수)` 는 0명 이상이다.
+- `NumberOfGuests(손님 수)` 는 `OccupyingTable(착석 테이블)` 일 때만 가능하다.
 
 ### 배달 주문
 
-- `Order` 는 `OrderType` 중 `DELIVERY_ORDER` 를 가진다.
-- `Order` 는 식별자, `OrderStatus`, 주문 일시, `DeliveryAddress`, `OrderLineItems` 을 가진다.
-- `Order` 에서 `OrderLineItems` 를 생성한다.
-- `OrderLineItem` 은 `DisplayedMenu` , `Quantity`, 총 `Price` 을 가진다.
-- `Order` 에서 `OrderStatus` 를 변경한다.
-- `OrderStatus` 는 `Waiting` → `Accepted` → `Served` → `Delivering` → `Delivered` → `Completed` 를 가진다.
-- 주문 등록 정책 : `Menu`가 `DisplayedMenu` 면서 0개 이상 주문을 해야하고, `DeliveryAddress`가 있어야 가능하다.
+- `Order(주문)` 는 `OrderType(주문 종류)` 중 `DELIVERY_ORDER(배달 주문)` 를 가진다.
+- `Order(주문)` 는 식별자, `OrderStatus(주문 상턔)`, 주문 일시, `DeliveryAddress(배달 주소)`, 여러 개의 `OrderLineItem(주문 항목)` 을 가진다.
+- `Order(주문)` 에서 여러 개의 `OrderLineItem(주문 항목)` 를 생성한다.
+- `OrderLineItem` 은 `DisplayedMenu(노출된 메뉴)` , `Quantity(수량)`, 총 `Price(가격)` 을 가진다.
+- `Order(주문)` 에서 `OrderStatus(주문 상턔)` 를 변경한다.
+- `OrderStatus(주문 상턔)` 는 `Waiting` → `Accepted` → `Served` → `Delivering` → `Delivered` → `Completed` 를 가진다.
+- 주문 등록 정책 : `Menu(메뉴)`가 `DisplayedMenu(노출된 메뉴)` 면서 0개 이상 주문을 해야하고, `DeliveryAddress(배달 주소)`가 있어야 가능하다.
 
   ```mermaid
   ---
   title: Delivery OrderStatus
   ---
   flowchart LR
-    A[Waiting] --> D(Accepted)
-    D --> E(Served)
-    E --> F(Delivering)
-    F --> G(Delivered)
-    G --> H[Completed]
+    A[Waiting\n접수] --> D(Accepted\n수락)
+    D --> E(Served\n서빙 완료)
+    E --> F(Delivering\n배달 중)
+    F --> G(Delivered\n배달 완료)
+    G --> H[Completed\n주문 완료]
   ```
 
 ### 포장 주문
 
-- `Order` 는 `OrderType` 중 `TAKEOUT` 를 가진다.
-- `Order` 는 식별자, `OrderStatus`, 주문 일시, `OrderLineItems` 을 가진다.
-- `Order` 에서 `OrderLineItems` 를 생성한다.
-- `OrderLineItem` 은 `DisplayedMenu` , `Quantity`, 총 `Price` 을 가진다.
-- `Order` 에서 `OrderStatus` 를 변경한다.
-- `OrderStatus` 는 `Waiting` → `Accepted` → `Served` → `Completed` 를 가진다.
-- 주문 등록 정책 : `Menu`가 `DisplayedMenu` 면서 0개 이상이어야 등록이 가능하다.
+- `Order(주문)` 는 `OrderType(주문 종류)` 중 `TAKEOUT(포장 주문)` 를 가진다.
+- `Order(주문)` 는 식별자, `OrderStatus(주문 상턔)`, 주문 일시, 여러 개의 `OrderLineItem(주문 항목)` 을 가진다.
+- `Order(주문)` 에서 여러 개의 `OrderLineItem(주문 항목)` 를 생성한다.
+- `OrderLineItem` 은 `DisplayedMenu(노출된 메뉴)` , `Quantity(수량)`, 총 `Price(가격)` 을 가진다.
+- `Order(주문)` 에서 `OrderStatus(주문 상턔)` 를 변경한다.
+- `OrderStatus(주문 상턔)` 는 `Waiting` → `Accepted` → `Served` → `Completed` 를 가진다.
+- 주문 등록 정책 : `Menu(메뉴)`가 `DisplayedMenu(노출된 메뉴)` 면서 0개 이상이어야 등록이 가능하다.
 
   ```mermaid
   ---
   title: Takeout OrderStatus
   ---
   flowchart LR
-    A[Waiting] --> D(Accepted)
-    D --> E(Served)
-    E --> H[Completed]
+    A[Waiting\n접수] --> D(Accepted\n수락)
+    D --> E(Served\n서빙 완료)
+    E --> F[Completed\n주문 완료]
   ```
 
 ### 매장 주문
 
-- `Order` 는 `OrderType` 중 `EAT_IN` 를 가진다.
-- `Order` 는 식별자, `OrderStatus`, 주문 일시, `OrderLineItems`, `OrderTable`을 가진다.
-- `Order` 에서 `OrderLineItems` 를 생성한다.
-- `OrderLineItem` 은 `DisplayedMenu` , `Quantity`, 총 `Price` 을 가진다.
-- `Order` 에서 `OrderStatus` 를 변경한다.
-- `OrderStatus` 는 `Waiting` → `Accepted` → `Served` →  `Completed` 를 가진다.
-- 주문 등록 정책 : `Menu`가 `DisplayedMenu`이고. `OrderTable`이 있어야 등록이 가능하다.
+- `Order(주문)` 는 `OrderType(주문 종류)` 중 `EAT_IN(매장 주문)` 를 가진다.
+- `Order(주문)` 는 식별자, `OrderStatus(주문 상턔)`, 주문 일시, 여러 개의 `OrderLineItem(주문 항목)`, `OrderTable(주문 테이블)`을 가진다.
+- `Order(주문)` 에서 여러 개의 `OrderLineItem(주문 항목)` 를 생성한다.
+- `OrderLineItem` 은 `DisplayedMenu(노출된 메뉴)` , `Quantity(수량)`, 총 `Price(가격)` 을 가진다.
+- `Order(주문)` 에서 `OrderStatus(주문 상턔)` 를 변경한다.
+- `OrderStatus(주문 상턔)` 는 `Waiting` → `Accepted` → `Served` →  `Completed` 를 가진다.
+- 주문 등록 정책 : `Menu(메뉴)`가 `DisplayedMenu(노출된 메뉴)`이고. `OrderTable(주문 테이블)`이 있어야 등록이 가능하다.
 
   ```mermaid
   ---
   title: EatIn OrderStatus
   ---
   flowchart LR
-    A[Waiting] --> D(Accepted)
-    D --> E(Served)
-    E --> H[Completed]
+    A[Waiting\n접수] --> D(Accepted\n수락)
+    D --> E(Served\n서빙 완료)
+    E --> F[Completed\n주문 완료]
   ```
