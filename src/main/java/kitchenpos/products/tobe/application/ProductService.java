@@ -1,8 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -20,17 +17,17 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ProductEventHandler productEventHandler;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient,
+            final ProductEventHandler productEventHandler
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.productEventHandler = productEventHandler;
     }
 
     /**
@@ -72,22 +69,7 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않습니다."));
 
         product.changePrice(price);
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        productEventHandler.productPriceChangeEvent(productId);
 
         return ProductResponse.of(
                 product.getId(),
