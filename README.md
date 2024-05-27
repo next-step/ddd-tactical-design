@@ -166,6 +166,7 @@ docker compose -p kitchenpos up -d
 - `Product`는 `Product Name`, `Product Price`를 가진다.
   - `Product Price`은 0원 이상이어야 한다.
   - `Product Name`은 `Black Word`가 포함되면 안된다.
+  - `Product Name`은 Null 이면 안된다.
 
 #### 행위
 - `Product`를 등록할 수 있다.
