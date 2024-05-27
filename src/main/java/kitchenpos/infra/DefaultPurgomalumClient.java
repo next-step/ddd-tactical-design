@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.infra;
 
 import java.net.URI;
 import java.util.Objects;
