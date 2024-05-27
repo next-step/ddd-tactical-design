@@ -1,4 +1,4 @@
-package kitchenpos.acl.menu;
+package kitchenpos.common.acl.menu;
 
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.acl.menu.MenuServiceClient;
+import kitchenpos.common.acl.menu.MenuServiceClient;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.MenuRepository;
 
