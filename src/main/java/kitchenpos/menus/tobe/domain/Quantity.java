@@ -14,6 +14,7 @@ public class Quantity {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
+        this.quantity = quantity;
     }
 
     public long getQuantity() {

@@ -38,4 +38,12 @@ public class MenuProduct {
     public Long getSeq() {
         return seq;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public long getQuantity() {
+        return quantity.getQuantity();
+    }
 }

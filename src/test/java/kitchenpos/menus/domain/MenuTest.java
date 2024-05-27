@@ -2,10 +2,10 @@ package kitchenpos.menus.domain;
 
 import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.application.FakeMenuPurgomalumClient;
-import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.entity.MenuGroup;
-import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
-import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +36,7 @@ public class MenuTest {
     @Nested
     @DisplayName("메뉴 생성 테스트")
     class CreateTest {
+
         @Test
         @DisplayName("메뉴를 생성한다.")
         public void create() {
@@ -45,9 +46,10 @@ public class MenuTest {
                     UUID.randomUUID(),
                     "튀김",
                     BigDecimal.valueOf(400_000),
+                    치킨,
+                    치킨.getId(),
                     true,
-                    치킨_상품_목록,
-                    치킨.getId()
+                    치킨_상품_목록
             );
 
             Assertions.assertThat(메뉴.getId()).isNotNull();
@@ -140,16 +142,17 @@ public class MenuTest {
     }
 
     private Menu createMenu(String name, BigDecimal price, boolean displayed) {
+        MenuGroup menuGroup = toBeFixtures.치킨;
         List<MenuProduct> menuProducts = createMenuProducts();
         Menu menu = ToBeFixtures.menuCreateOf(
-                name, menuNameValidationService, price, displayed, menuProducts
+                name, menuNameValidationService, price, menuGroup, menuGroup.getId(), displayed, menuProducts
         );
         return menu;
     }
 
     private List<MenuProduct> createMenuProducts() {
-        MenuProduct 치킨_후라이드_10개 = ToBeFixtures.menuProductOf(10, toBeFixtures.후라이드_20000.getPrice());
-        MenuProduct 치킨_양념치킨_10개 = ToBeFixtures.menuProductOf(10, toBeFixtures.양념치킨_20000.getPrice());
+        MenuProduct 치킨_후라이드_10개 = ToBeFixtures.menuProductOf(toBeFixtures.후라이드_20000, 10);
+        MenuProduct 치킨_양념치킨_10개 = ToBeFixtures.menuProductOf(toBeFixtures.양념치킨_20000, 10);
         List<MenuProduct> 치킨_상품_목록 = List.of(치킨_후라이드_10개, 치킨_양념치킨_10개);
         return 치킨_상품_목록;
     }
