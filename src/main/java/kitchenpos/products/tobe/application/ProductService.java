@@ -8,7 +8,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.repository.ProductRepository;
 import kitchenpos.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ public class ProductService {
     public Product changePrice(final UUID productId, final BigDecimal price) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setChangePrice(price);
+        product.setPrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
