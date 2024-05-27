@@ -14,7 +14,6 @@ import java.util.UUID
 class Product(
     name: ProductName,
     price: ProductPrice,
-    nameValidator: ProductNameValidator,
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -36,10 +35,6 @@ class Product(
 
     @Transient
     private val domainEvents: MutableList<DomainEvent> = mutableListOf()
-
-    init {
-        require(nameValidator.validate(name.value)) { "상품 이름에 비속어가 포함되어 있습니다." }
-    }
 
     fun changePrice(newPrice: ProductPrice) {
         val oldPrice = this.price

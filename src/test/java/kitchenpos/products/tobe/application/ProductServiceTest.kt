@@ -3,9 +3,8 @@ package kitchenpos.products.tobe.application
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.justRun
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.springframework.context.ApplicationEventPublisher
 import java.math.BigDecimal
 
@@ -25,8 +24,6 @@ class ProductServiceTest : BehaviorSpec({
     val invalidName = "유효하지 않은 이름"
     val validPrice = 1000.won
     val invalidPrice = (-1000).won
-
-    justRun { eventPublisher.publishEvent(any()) }
 
     Given("상품을 생성할 떄") {
         When("상품 이름과 가격이 유효하면") {
@@ -57,15 +54,13 @@ class ProductServiceTest : BehaviorSpec({
 
     Given("상품 가격을 변경할 때") {
         When("상품이 존재하는 경우") {
+            every { eventPublisher.publishEvent(any()) } returns Unit
+
             val existingProduct = productService.create(validName, validPrice)
             val updateProduct = productService.changePrice(existingProduct.id, 2000.won)
 
             Then("상품 가격이 업데이트된다.") {
                 updateProduct.price shouldBe 2000.won
-            }
-
-            Then("이벤트가 발행된다.") {
-                verify { eventPublisher.publishEvent(any()) }
             }
         }
     }

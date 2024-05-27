@@ -23,9 +23,9 @@ class ProductService(
         name: String,
         price: BigDecimal,
     ): ProductResponse {
-        val productName = ProductName(name)
+        val productName = ProductName(name, productNameValidator)
         val productPrice = ProductPrice(price)
-        val newProduct = Product(productName, productPrice, productNameValidator)
+        val newProduct = Product(productName, productPrice)
 
         save(newProduct)
 
