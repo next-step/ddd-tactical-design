@@ -12,13 +12,13 @@ public class MenuGroup {
     private UUID id;
 
     @Embedded
-    private MenuGroupName menuGroupName;
+    private Name name;
 
     public MenuGroup() {}
 
     public MenuGroup(UUID id, String name) {
         this.id = id;
-        this.menuGroupName = new MenuGroupName(name);
+        this.name = new Name(name);
     }
 
     public UUID getId() {
