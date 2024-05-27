@@ -14,10 +14,10 @@ public class ProductPrice {
     protected ProductPrice() {}
 
     protected ProductPrice(BigDecimal price) {
-        this.price = price;
+        this.setPrice(price);
     }
 
-    public void setPrice(final BigDecimal price) {
+    private void setPrice(final BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }

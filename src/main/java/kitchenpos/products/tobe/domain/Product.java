@@ -38,7 +38,7 @@ public class Product {
     }
 
     public void setChangePrice(final BigDecimal price) {
-        this.price.setPrice(price);
+        this.price = new ProductPrice(price);
     }
 
 
