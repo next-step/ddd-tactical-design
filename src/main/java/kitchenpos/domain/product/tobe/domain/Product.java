@@ -31,6 +31,12 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
+    public Product(UUID id, String name, BigDecimal price, BlackWordClient blackWordClient) {
+        this.id = id;
+        this.name = new ProductName(name, blackWordClient);
+        this.price = new ProductPrice(price);
+    }
+
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }

@@ -18,7 +18,13 @@ class ProductNameTest {
 
     @DisplayName("ProductName 이름이 Null이면 생성을 실패한다")
     @Test
-    void constructor_fail() {
+    void constructor_null_fail() {
         assertThatIllegalArgumentException().isThrownBy(() -> new ProductName(null));
+    }
+
+    @DisplayName("ProductName 이름에 비속어가 포함됐으면 생성을 실패한다")
+    @Test
+    void constructor_blackWord_fail() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new ProductName("비속어가포함된", (text) -> true));
     }
 }

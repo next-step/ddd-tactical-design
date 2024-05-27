@@ -14,7 +14,15 @@ class ProductName {
     }
 
     public ProductName(String name) {
+        this(name, (text) -> false);
+    }
+
+    public ProductName(String name, BlackWordClient blackWordClient) {
         validateName(name);
+        boolean containsProfanity = blackWordClient.containsProfanity(name);
+        if (containsProfanity) {
+            throw new IllegalArgumentException("name에 비속어가 포함될 수 없습니다.");
+        }
         this.name = name;
     }
 

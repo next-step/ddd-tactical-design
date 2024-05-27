@@ -30,6 +30,12 @@ class ProductTest {
         assertThatIllegalArgumentException().isThrownBy(() -> new Product(null, BigDecimal.ZERO));
     }
 
+    @DisplayName("상품 이름에 비속어가 포함됐으면 상품 생성을 실패한다")
+    @Test
+    void constructor_blackWord_fail() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new Product(UUID.randomUUID(), "비속어상품", BigDecimal.ZERO, (text) -> true));
+    }
+
     @DisplayName("상품 가격이 음수이면 상품 생성을 실패한다")
     @Test
     void constructor_price_fail() {
