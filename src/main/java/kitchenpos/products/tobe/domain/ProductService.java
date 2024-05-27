@@ -28,7 +28,8 @@ public class ProductService {
     }
 
     public void changeName(UUID productId, String name) throws Exception {
-//        this.nameValidator.execute(name);
+        // pseudocode
+        // this.nameValidator.execute(name);
 
         Optional<Product> optionalProduct = this.productRepository.findById(productId);
         if (optionalProduct.isEmpty()) {
@@ -41,11 +42,11 @@ public class ProductService {
         this.productRepository.update(changedProduct);
     }
 
-    public List<Product> getList(){
+    public List<Product> getList() {
         return this.productRepository.findAll();
     }
 
-    public Optional<Product> findById(UUID id){
+    public Optional<Product> findById(UUID id) {
         return this.productRepository.findById(id);
     }
 }
