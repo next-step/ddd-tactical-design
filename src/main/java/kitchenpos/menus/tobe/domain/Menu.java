@@ -15,10 +15,13 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private CleanName name;
 
     @Embedded
     private Price price;
+
+    @Column(name = "displayed", nullable = false)
+    private boolean displayed;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,8 +44,9 @@ public class Menu {
                    List<MenuProduct> menuProducts) {
         this(
                 id,
-                new DisplayedName(displayed, name, menuNameValidationService),
+                new CleanName(name, menuNameValidationService),
                 new Price(price),
+                displayed,
                 menuGroup,
                 menuGroupId,
                 new MenuProducts(menuProducts)
@@ -53,19 +57,21 @@ public class Menu {
                 boolean displayed, List<MenuProduct> menuProducts) {
         this (
                 id,
-                new DisplayedName(displayed, new CleanName(name)),
+                new CleanName(name),
                 new Price(price),
+                displayed,
                 menuGroup,
                 menuGroupId,
                 new MenuProducts(menuProducts)
         );
     }
 
-    public Menu(UUID id, DisplayedName name, Price price, MenuGroup menuGroup,
+    public Menu(UUID id, CleanName name, Price price, boolean displayed, MenuGroup menuGroup,
                 UUID menuGroupId, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.displayed = displayed;
         this.menuGroup = menuGroup;
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
@@ -84,11 +90,15 @@ public class Menu {
             return ;
         }
 
-        name.display();
+        displayed = true;
     }
 
     public void hide() {
-        name.hide();
+        displayed = false;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
     }
 
     public UUID getId() {
@@ -97,9 +107,5 @@ public class Menu {
 
     public BigDecimal getPrice() {
         return price.getPrice();
-    }
-
-    public boolean isDisplayed() {
-        return name.isDisplayed();
     }
 }
