@@ -56,7 +56,16 @@ public class ProductService {
         }
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+
+        final var productPrice = new ProductPrice(price);
+        product.setProductPrice(productPrice);
+
+        changeMenuDisplayStatus(productId);
+
+        return product;
+    }
+
+    private void changeMenuDisplayStatus(UUID productId) {
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -71,7 +80,6 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
     }
 
     @Transactional(readOnly = true)
