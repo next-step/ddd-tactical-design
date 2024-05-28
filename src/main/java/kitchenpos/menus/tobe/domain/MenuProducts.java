@@ -23,17 +23,19 @@ public class MenuProducts {
     }
 
     public void checkNotLessThenMenuPrice(BigDecimal menuPrice) {
-        BigDecimal sumResult  = calculateTotalPrice();
-
-        if (menuPrice.compareTo(sumResult) > 0) {
+        if (isLessThenMenuPrice(menuPrice)) {
             throw new IllegalArgumentException();
         }
     }
 
+    public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
+        BigDecimal sumResult  = calculateTotalPrice();
+        return menuPrice.compareTo(sumResult) > 0;
+    }
+
     public BigDecimal calculateTotalPrice() {
         return menuProducts.stream()
-                .map(menuProduct -> menuProduct.getProduct()
-                        .getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                .map(menuProduct -> menuProduct.totalPrice())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

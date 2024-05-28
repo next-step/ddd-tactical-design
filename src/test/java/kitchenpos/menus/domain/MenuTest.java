@@ -47,7 +47,6 @@ public class MenuTest {
                     "튀김",
                     BigDecimal.valueOf(400_000),
                     치킨,
-                    치킨.getId(),
                     true,
                     치킨_상품_목록
             );
@@ -145,7 +144,7 @@ public class MenuTest {
         MenuGroup menuGroup = toBeFixtures.치킨;
         List<MenuProduct> menuProducts = createMenuProducts();
         Menu menu = ToBeFixtures.menuCreateOf(
-                name, menuNameValidationService, price, menuGroup, menuGroup.getId(), displayed, menuProducts
+                name, menuNameValidationService, price, menuGroup, displayed, menuProducts
         );
         return menu;
     }
