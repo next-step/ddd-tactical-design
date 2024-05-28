@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import kitchenpos.products.domain.Product;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -24,9 +25,9 @@ public class MenuProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
+            name = "product_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
     private Product product;
 
@@ -69,5 +70,14 @@ public class MenuProduct {
 
     public void setProductId(final UUID productId) {
         this.productId = productId;
+    }
+
+    /**
+     * 상품의 구성품의 총 가격을 계산합니다.
+     *
+     * @return the 계산된 가격 (수량*상품 가격)
+     */
+    public BigDecimal getCalculatePrice() {
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }

@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.menus.tobe.application.ProductEventHandler;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
