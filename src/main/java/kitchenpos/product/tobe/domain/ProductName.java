@@ -21,8 +21,11 @@ public class ProductName {
     }
 
     private void validate(boolean isProfanity) {
-        if (Objects.isNull(name) || isProfanity) {
-            throw new IllegalNameException(name);
+        if (Objects.isNull(name)) {
+            throw new IllegalNameException(null);
+        }
+        if (isProfanity) {
+            throw new IllegalNameException("(비속어 포함 이름) " + name);
         }
     }
 
