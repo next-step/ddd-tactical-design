@@ -3,6 +3,7 @@ package kitchenpos.menus.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.products.tobe.domain.Product;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -33,6 +34,11 @@ public class MenuProduct {
         this.seq = seq;
         this.product = product;
         this.quantity = new Quantity(quantity);
+    }
+
+    public BigDecimal totalPrice() {
+        BigDecimal quantity = BigDecimal.valueOf(getQuantity());
+        return product.getPrice().multiply(quantity);
     }
 
     public Long getSeq() {

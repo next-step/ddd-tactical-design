@@ -23,7 +23,7 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(
             name = "menu_group_id",
             columnDefinition = "binary(16)",
@@ -31,16 +31,13 @@ public class Menu {
     )
     private MenuGroup menuGroup;
 
-    @Transient
-    private UUID menuGroupId;
-
     @Embedded
     private MenuProducts menuProducts;
 
     protected Menu() {}
 
     public Menu(UUID id, String name, MenuNameValidationService menuNameValidationService,
-                   BigDecimal price, MenuGroup menuGroup, UUID menuGroupId, boolean displayed,
+                   BigDecimal price, MenuGroup menuGroup, boolean displayed,
                    List<MenuProduct> menuProducts) {
         this(
                 id,
@@ -48,12 +45,11 @@ public class Menu {
                 new Price(price),
                 displayed,
                 menuGroup,
-                menuGroupId,
                 new MenuProducts(menuProducts)
         );
     }
 
-    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, UUID menuGroupId,
+    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup,
                 boolean displayed, List<MenuProduct> menuProducts) {
         this (
                 id,
@@ -61,19 +57,17 @@ public class Menu {
                 new Price(price),
                 displayed,
                 menuGroup,
-                menuGroupId,
                 new MenuProducts(menuProducts)
         );
     }
 
-    public Menu(UUID id, CleanName name, Price price, boolean displayed, MenuGroup menuGroup,
-                UUID menuGroupId, MenuProducts menuProducts) {
+    public Menu(UUID id, CleanName name, Price price, boolean displayed,
+                MenuGroup menuGroup, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.displayed = displayed;
         this.menuGroup = menuGroup;
-        this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.menuProducts.checkNotLessThenMenuPrice(price.getPrice());
     }
@@ -84,10 +78,9 @@ public class Menu {
     }
 
     public void display() {
-        int result = price.getPrice().compareTo(menuProducts.calculateTotalPrice());
-        if (result == 1) {
+        if (menuProducts.isLessThenMenuPrice(price.getPrice())) {
             hide();
-            return ;
+            return;
         }
 
         displayed = true;
