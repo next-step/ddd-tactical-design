@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 public class DisplayedName {
@@ -20,5 +21,22 @@ public class DisplayedName {
             throw new DisplayedNameProfanityIncludedException("이름에 적절하지 않은 단어가 포함되어있습니다.");
         }
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        DisplayedName that = (DisplayedName) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

@@ -36,7 +36,7 @@ public class Product {
         final ProfanityCheckProvider profanityCheckProvider) {
         return new Product(
             new DisplayedName(name, profanityCheckProvider),
-            new Price(price)
+            Price.create(price)
         );
     }
 
@@ -53,7 +53,7 @@ public class Product {
     }
 
     public void changePrice(final BigDecimal price) {
-        this.price = new Price(price);
+        this.price = Price.create(price);
     }
 
     @Override
