@@ -54,7 +54,7 @@ public class Product {
     }
 
     public Product changePrice(final Price price){
-        this.price.changePrice(price);
+        this.price = this.price.changePrice(price);
 
         return this;
     }

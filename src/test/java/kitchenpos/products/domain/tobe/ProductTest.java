@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +42,28 @@ class ProductTest {
     @ParameterizedTest
     void create(final String name) {
         assertThatThrownBy(() -> Product.createProduct(name, new BigDecimal(16000), new FakeProfanities()))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @Test
+    void changePrice() {
+        final Product product = createProductRequest("후라이드", new BigDecimal(16000));
+
+        final BigDecimal changePrice = BigDecimal.valueOf(15000);
+        final Product actual = product.changePrice(Price.createPrice(changePrice));
+
+        assertThat(actual.getPrice().getPriceValue()).isEqualTo(changePrice);
+    }
+
+    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
+    @ValueSource(strings = "-1000")
+    @NullSource
+    @ParameterizedTest
+    void changePrice(final BigDecimal price) {
+        final Product product = createProductRequest("후라이드", new BigDecimal(16000));
+
+        assertThatThrownBy(() -> product.changePrice(Price.createPrice(price)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
