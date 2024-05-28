@@ -15,12 +15,12 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class ProductService {
+public class TobeProductService {
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
     private final ProductEventHandler productEventHandler;
 
-    public ProductService(
+    public TobeProductService(
             final ProductRepository productRepository,
             final PurgomalumClient purgomalumClient,
             final ProductEventHandler productEventHandler

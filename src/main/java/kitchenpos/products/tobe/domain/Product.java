@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "TobeProduct")
 @Table(name = "product")
 public class Product {
 

@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.ui;
 
-import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.TobeProductService;
 import kitchenpos.products.tobe.dto.request.ProductCreateRequest;
 import kitchenpos.products.tobe.dto.response.ProductResponse;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +17,18 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/api/products")
+@RequestMapping("/api/products/tobe")
 @RestController
-public class ProductRestController {
-    private final ProductService productService;
+public class TobeProductRestController {
+    private final TobeProductService tobeProductService;
 
-    public ProductRestController(final ProductService productService) {
-        this.productService = productService;
+    public TobeProductRestController(final TobeProductService tobeProductService) {
+        this.tobeProductService = tobeProductService;
     }
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(@RequestBody final ProductCreateRequest request) {
-        ProductResponse response = productService.create(request);
+        ProductResponse response = tobeProductService.create(request);
         return ResponseEntity.created(pathAfterProductCreation(response.id())).body(response);
     }
 
@@ -41,11 +41,11 @@ public class ProductRestController {
             @PathVariable final UUID productId,
             @RequestBody final BigDecimal price
     ) {
-        return ResponseEntity.ok(productService.changePrice(productId, price));
+        return ResponseEntity.ok(tobeProductService.changePrice(productId, price));
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+        return ResponseEntity.ok(tobeProductService.findAll());
     }
 }

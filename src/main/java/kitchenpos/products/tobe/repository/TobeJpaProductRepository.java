@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface JpaProductRepository extends ProductRepository, JpaRepository<Product, UUID> {
+public interface TobeJpaProductRepository extends ProductRepository, JpaRepository<Product, UUID> {
 
-    @Query("select new kitchenpos.products.tobe.dto.response.ProductResponse(p.id, p.name, p.productPrice.price) from Product p")
+    @Query("select new kitchenpos.products.tobe.dto.response.ProductResponse(p.id, p.name, p.price) from Product p")
     List<ProductResponse> findAllProductResponse();
 }
