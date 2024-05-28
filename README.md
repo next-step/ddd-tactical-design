@@ -104,19 +104,19 @@ docker compose -p kitchenpos up -d
 | 비속어   | Black Word    | 부적절한 내용               |
 
 ### 메뉴
-| 한글명      | 영문명                | 설명                      |
-|----------|--------------------|-------------------------|
-| 메뉴 그룹    | Menu Group         | 여러 메뉴들을 특정 기준으로 묶은 모음   |
-| 메뉴 그룹 이름 | Menu Group Name    | e.g. 세트A, 나홀로 메뉴, 셋트 메뉴 |
-| 메뉴       | Menu               | 손님이 구매할 수 있는 최소 단위      |
-| 메뉴 이름    | Menu Name          | 메뉴 상품들을 대표하는 명칭         |
-| 메뉴 가격    | Menu Price         | 손님이 지불해야될 금액            |
-| 메뉴 상품    | Menu Product       | 손님에게 제공하는 제품            |
-| 메뉴 상품 가격 | Menu Product Price | 손님에게 제공하는 제품 가격         |
-| 메뉴 상품 개수 | Menu Product Count | 손님에게 제공되는 제품 수량         |
-| 노출 메뉴    | Displayed Menu     | 손님에게 메뉴가 노출된 상태         |
-| 숨김 메뉴    | Hide Menu          | 손님에게 메뉴가 숨겨진 상태         |
-| 비속어      | Black Word         | 부적절한 내용                 |
+| 한글명      | 영문명                   | 설명                      |
+|----------|-----------------------|-------------------------|
+| 메뉴 그룹    | Menu Group            | 여러 메뉴들을 특정 기준으로 묶은 모음   |
+| 메뉴 그룹 이름 | Menu Group Name       | e.g. 세트A, 나홀로 메뉴, 셋트 메뉴 |
+| 메뉴       | Menu                  | 손님이 구매할 수 있는 최소 단위      |
+| 메뉴 이름    | Menu Name             | 메뉴 상품들을 대표하는 명칭         |
+| 메뉴 가격    | Menu Price            | 손님이 지불해야될 금액            |
+| 메뉴 상품    | Menu Product          | 손님에게 제공하는 제품            |
+| 메뉴 상품 가격 | Menu Product Price    | 손님에게 제공하는 제품 가격         |
+| 메뉴 상품 개수 | Menu Product Quantity | 손님에게 제공되는 제품 수량         |
+| 노출 메뉴    | Displayed Menu        | 손님에게 메뉴가 노출된 상태         |
+| 숨김 메뉴    | Hide Menu             | 손님에게 메뉴가 숨겨진 상태         |
+| 비속어      | Black Word            | 부적절한 내용                 |
 
 ### 주문
 
@@ -190,7 +190,9 @@ docker compose -p kitchenpos up -d
 #### 속성
 - `Menu`는 `Menu Group`, `Menu Name`, `Menu Price`, `Menu Product`를 가진다.
   - `Menu Price`는 0원 이상이어야 한다.
+  - `Menu Price`는 Null 이면 안된다.
   - `Menu Name`은 `Black Word`가 포함되면 안된다.
+  - `Menu Name`은 Null 이면 안된다.
   - `Menu Product`의 수량은 0 이상이어야 한다.
     - `Menu Product`로 등록하려면, `Product`로 등록돼야한다.
   - `Menu Price`는 `Menu Product Price`의 합 보다 크면 안된다.
