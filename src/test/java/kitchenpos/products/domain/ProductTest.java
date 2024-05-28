@@ -1,7 +1,7 @@
 package kitchenpos.products.domain;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.DisplayedName;
+import kitchenpos.products.tobe.domain.CleanName;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.products.tobe.domain.ProductNameValidationService;
 import org.assertj.core.api.Assertions;
@@ -94,14 +94,14 @@ public class ProductTest {
 
     @Nested
     @DisplayName("상품 이름 테스트")
-    class DisplayedNameTest {
+    class CleanNameTest {
         @Test
         @DisplayName("이름을 생성한다.")
         void create() {
             String name = "후라이드";
-            DisplayedName displayedName = new DisplayedName(name, productNameValidationService);
+            CleanName cleanName = new CleanName(name, productNameValidationService);
 
-            Assertions.assertThat(displayedName.getName().equals(name)).isEqualTo(true);
+            Assertions.assertThat(cleanName.getName().equals(name)).isEqualTo(true);
         }
 
         @Test
@@ -110,7 +110,7 @@ public class ProductTest {
             String name = "비속어";
 
             Assertions.assertThatThrownBy(
-                    () -> new DisplayedName(name, productNameValidationService)
+                    () -> new CleanName(name, productNameValidationService)
             ).isInstanceOf(IllegalArgumentException.class);
         }
     }
