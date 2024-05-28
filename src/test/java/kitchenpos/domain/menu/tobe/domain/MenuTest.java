@@ -19,7 +19,7 @@ class MenuTest {
         Menu menu = new Menu("메뉴A", BigDecimal.ONE, null, false, List.of(menuProduct));
         assertThat(menu.name()).isEqualTo("메뉴A");
         assertThat(menu.price()).isEqualTo(BigDecimal.ONE);
-        assertThat(menu.displayed()).isFalse();
+        assertThat(menu.isDisplayed()).isFalse();
     }
 
     @DisplayName("메뉴 가격을 변경한다")
@@ -49,7 +49,7 @@ class MenuTest {
         Menu menu = new Menu("메뉴A", BigDecimal.ONE, null, false, List.of(menuProduct));
 
         menu.hide();
-        assertThat(menu.displayed()).isFalse();
+        assertThat(menu.isDisplayed()).isFalse();
     }
 
     @DisplayName("메뉴를 Displayed Menu로 변경한다")
@@ -59,7 +59,7 @@ class MenuTest {
         Menu menu = new Menu("메뉴A", BigDecimal.ONE, null, false, List.of(menuProduct));
 
         menu.display();
-        assertThat(menu.displayed()).isTrue();
+        assertThat(menu.isDisplayed()).isTrue();
     }
 
     @DisplayName("메뉴 가격이 메뉴 상품 가격의 합을 초과하면, Displayed Menu로 변경할 수 없다")

@@ -1,4 +1,4 @@
-package kitchenpos.domain.product.tobe.domain;
+package kitchenpos.domain.support;
 
 public interface BlackWordClient {
     boolean containsBlackWord(String text);

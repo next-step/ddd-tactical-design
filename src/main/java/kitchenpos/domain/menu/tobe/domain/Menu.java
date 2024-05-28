@@ -1,6 +1,8 @@
 package kitchenpos.domain.menu.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.domain.support.Name;
+import kitchenpos.domain.support.Price;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,10 +16,10 @@ public class Menu {
     private UUID id;
 
     @Embedded
-    private MenuName name;
+    private Name name;
 
     @Embedded
-    private MenuPrice price;
+    private Price price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -41,12 +43,12 @@ public class Menu {
     }
 
     public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
-        MenuPrice newMenuPrice = new MenuPrice(price);
+        Price newMenuPrice = new Price(price);
         MenuProducts newMenuProducts = new MenuProducts(menuProducts);
         validateOverMenuPrice(newMenuPrice, newMenuProducts);
 
         this.id = id;
-        this.name = new MenuName(name);
+        this.name = new Name(name);
         this.price = newMenuPrice;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
@@ -55,14 +57,13 @@ public class Menu {
 
     public void changePrice(BigDecimal price) {
         // validate price and menuProducts price sum
-        MenuPrice changeMenuPrice = new MenuPrice(price);
+        Price changeMenuPrice = new Price(price);
         validateOverMenuPrice(changeMenuPrice, menuProducts);
         this.price = changeMenuPrice;
     }
 
-    private void validateOverMenuPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
-        BigDecimal price = menuPrice.getPrice();
-        if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+    private void validateOverMenuPrice(Price menuPrice, MenuProducts menuProducts) {
+        if (menuPrice.isOver(menuProducts.getTotalPrice())) {
             throw new IllegalStateException("메뉴 가격은 메뉴 상품 가격의 합보다 초과할 수 없습니다.");
         }
     }
@@ -76,7 +77,7 @@ public class Menu {
         this.displayed = true;
     }
 
-    public boolean displayed() {
+    public boolean isDisplayed() {
         return displayed;
     }
 
