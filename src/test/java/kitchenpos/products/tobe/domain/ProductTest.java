@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.application.FakePurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class ProductTest {
     Assertions.assertThatIllegalArgumentException()
         .isThrownBy(
             () -> {
-              Product.create(name, BigDecimal.valueOf(10_000L));
+              Product.create(name, BigDecimal.valueOf(10_000L), new FakePurgomalumClient());
             });
   }
 
@@ -29,7 +30,7 @@ class ProductTest {
     Assertions.assertThatIllegalArgumentException()
         .isThrownBy(
             () -> {
-              Product.create("상품", BigDecimal.valueOf(-10_000L));
+              Product.create("상품", BigDecimal.valueOf(-10_000L), new FakePurgomalumClient());
             });
   }
 }

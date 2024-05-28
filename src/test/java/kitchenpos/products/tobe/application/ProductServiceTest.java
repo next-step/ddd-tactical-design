@@ -1,35 +1,28 @@
 package kitchenpos.products.tobe.application;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
+import kitchenpos.products.tobe.infra.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
-  @Mock private MenuRepository menuRepository;
-  @Mock private ProductRepository productRepository;
-  @Mock private PurgomalumClient purgomalumClient;
+  private final ProductService productService;
 
-  @InjectMocks private ProductService productService;
+  public ProductServiceTest(@Mock ProductRepository productRepository, @Mock MenuRepository menuRepository) {
+    this.productService = new ProductService(productRepository, menuRepository, new FakePurgomalumClient());
+  }
 
   @Test
   @DisplayName("상품 이름에 비속어가 들어갈 경우")
   void name() {
-    BDDMockito.given(purgomalumClient.containsProfanity(any())).willReturn(true);
-
     Assertions.assertThatIllegalArgumentException()
         .isThrownBy(
             () -> {
