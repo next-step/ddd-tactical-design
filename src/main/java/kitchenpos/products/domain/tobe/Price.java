@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 @Getter
 @Embeddable
@@ -28,18 +29,8 @@ public class Price {
     }
 
     private void validate(BigDecimal price) {
-        if (price.compareTo(BigDecimal.ZERO) > 1) {
+        if (Optional.ofNullable(price).isEmpty() || price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("price is not zero");
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return this.priceValue.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(priceValue);
     }
 }

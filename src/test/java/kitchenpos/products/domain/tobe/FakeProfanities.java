@@ -13,6 +13,7 @@ public class FakeProfanities implements Profanities {
 
     @Override
     public boolean contains(String text) {
-        return profanities.contains(text);
+        return profanities.stream()
+                .anyMatch(profanity -> text.contains(profanity));
     }
 }
