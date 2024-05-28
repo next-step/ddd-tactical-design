@@ -1,8 +1,6 @@
-package kitchenpos.infra;
+package kitchenpos.products.tobe.infra;
 
 import java.net.URI;
-import java.util.Objects;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,10 +16,6 @@ public class DefaultPurgomalumClient implements PurgomalumClient {
 
     @Override
     public boolean containsProfanity(final String text) {
-        if (Objects.isNull(text) || text.length() <= 0) {
-            throw new IllegalArgumentException();
-        }
-
         final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
             .queryParam("text", text)
             .build()
