@@ -8,8 +8,8 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.repository.ProductRepository;
-import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.products.tobe.infra.ProductRepository;
+import kitchenpos.products.tobe.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +31,7 @@ public class ProductService {
 
     @Transactional
     public ProductCreationResponseDto create(final String name, final BigDecimal price) {
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("비속어가 담긴 이름은 사용할 수 없습니다.");
-        }
-
-        final Product product = productRepository.save(Product.create(name, price));
+        final Product product = productRepository.save(Product.create(name, price, purgomalumClient));
         return ProductCreationResponseDto.of(product);
     }
 
@@ -43,7 +39,7 @@ public class ProductService {
     public Product changePrice(final UUID productId, final BigDecimal price) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

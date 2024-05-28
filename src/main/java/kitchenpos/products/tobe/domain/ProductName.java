@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.products.tobe.infra.PurgomalumClient;
 
 import java.util.Objects;
 
@@ -12,13 +13,17 @@ public class ProductName {
 
     protected ProductName() {}
 
-    protected ProductName(String name) {
-        this.setName(name);
+    protected ProductName(String name, PurgomalumClient purgomalumClient) {
+        this.setName(name, purgomalumClient);
     }
 
-    private void setName(String name) {
+    private void setName(String name, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException("이름을 입력하지 않았거나, 공백을 입력할 수 없습니다.");
+        }
+
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException("비속어가 담긴 이름은 사용할 수 없습니다.");
         }
 
         this.name = name;

@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.products.tobe.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -21,17 +22,17 @@ public class Product {
     protected Product() {
     }
 
-    protected Product(UUID id, String name, BigDecimal price) {
+    protected Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
         this.id = id;
-        this.name = new ProductName(name);
+        this.name = new ProductName(name, purgomalumClient);
         this.price = new ProductPrice(price);
     }
 
-    public static Product create(String name, BigDecimal price) {
-        return new Product(UUID.randomUUID(), name, price);
+    public static Product create(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+        return new Product(UUID.randomUUID(), name, price, purgomalumClient);
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void changePrice(final BigDecimal price) {
         this.price = new ProductPrice(price);
     }
 
