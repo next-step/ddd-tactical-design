@@ -6,6 +6,7 @@ import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductPrice;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,8 +24,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static kitchenpos.MoneyConstants.*;
-import static kitchenpos.fixture.MenuFixture.createMenu;
-import static kitchenpos.fixture.ProductFixture.*;
+import static kitchenpos.fixture.tobe.MenuFixture.*;
+import static kitchenpos.fixture.tobe.ProductFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,46 +68,10 @@ public class ProductServiceTest {
             assertAll(
                     "상품 정보 그룹 Assertions",
                     () -> assertNotNull(actual.getId()),
-                    () -> assertEquals(response.getName(), actual.getName()),
-                    () -> assertEquals(response.getPrice(), actual.getPrice())
+                    () -> assertEquals(response.getProductName(), actual.getProductName()),
+                    () -> assertEquals(response.getProductPrice(), actual.getProductPrice())
             );
         }
-
-        @Test
-        @DisplayName("[실패] 싱픔의 가격은 필수로 입력해야한다.")
-        void priceFailTest() {
-            var product = new Product();
-
-            assertThrows(IllegalArgumentException.class, () -> productService.create(product));
-        }
-
-        @ParameterizedTest
-        @ValueSource(longs = {-1_000L, -10_000L, -1L})
-        @DisplayName("[실패] 0원보다 적게 입력하는 경우 등록할 수 없다.")
-        void priceFailTest2(final long input) {
-            final var product = createProduct(input);
-
-            assertThrows(IllegalArgumentException.class, () -> productService.create(product));
-        }
-
-        @Test
-        @DisplayName("[실패] 상품 이름을 입력하지 않는 경우 등록할 수 없다.")
-        void nameFailTest() {
-            final var product = createProductWithoutName();
-
-            assertThrows(IllegalArgumentException.class, () -> productService.create(product));
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"욕설", "욕설 포함된"})
-        @DisplayName("[실패] 상품 이름에 욕설이 포함되어있는 경우 등록할 수 없다.")
-        void nameFailTest2(final String name) {
-            final var product = createProduct(name);
-
-            assertThrows(IllegalArgumentException.class, () -> productService.create(product));
-        }
-
-
     }
 
     @Nested
@@ -123,7 +88,7 @@ public class ProductServiceTest {
             given(productRepository.findById(product.getId())).willReturn(Optional.ofNullable(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
 
-            product.setPrice(BigDecimal.valueOf(changingPrice));
+            product.setProductPrice(new ProductPrice(BigDecimal.valueOf(changingPrice)));
 
             Product response = productService.changePrice(product.getId(), product);
 
@@ -131,29 +96,8 @@ public class ProductServiceTest {
             assertAll(
                     "변경된 상품 정보 그룹 Assertions",
                     () -> assertEquals(response.getId(), product.getId()),
-                    () -> assertEquals(response.getPrice(), BigDecimal.valueOf(changingPrice))
+                    () -> assertEquals(response.getProductPrice(), BigDecimal.valueOf(changingPrice))
             );
-        }
-
-        @Test
-        @DisplayName(FAIL_PREFIX + "변경 가격을 입력하지 않는 경우 변경할 수 없다.")
-        void priceFailTest() {
-            final var product = createProduct(만원);
-
-            product.setPrice(null);
-
-            assertThrows(IllegalArgumentException.class, () -> productService.changePrice(product.getId(), product));
-        }
-
-        @ParameterizedTest
-        @ValueSource(longs = {-1L, -10_000L})
-        @DisplayName(FAIL_PREFIX + "0원보다 적게 입력하는 경우 변경할 수 없다.")
-        void priceFailTest2(final long changingPrice) {
-            final var product = createProduct(만원);
-
-            product.setPrice(BigDecimal.valueOf(changingPrice));
-
-            assertThrows(IllegalArgumentException.class, () -> productService.changePrice(product.getId(), product));
         }
 
         @Test
@@ -173,7 +117,7 @@ public class ProductServiceTest {
             given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
 
-            product.setPrice(BigDecimal.valueOf(오천원));
+            product.setProductPrice(new ProductPrice(BigDecimal.valueOf(오천원)));
             productService.changePrice(product.getId(), product);
 
             assertFalse(menu.isDisplayed());

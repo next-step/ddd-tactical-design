@@ -16,6 +16,10 @@ public class ProductPrice {
     protected ProductPrice() {
     }
 
+    public ProductPrice(Long price) {
+        this(BigDecimal.valueOf(price));
+    }
+
     public ProductPrice(BigDecimal price) {
         this.price = price;
         validate();

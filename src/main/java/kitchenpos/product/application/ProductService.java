@@ -72,7 +72,7 @@ public class ProductService {
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                         menuProduct.getProduct()
-                                .getPrice()
+                                .getProductPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
