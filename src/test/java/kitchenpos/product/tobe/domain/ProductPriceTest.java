@@ -4,9 +4,13 @@ import kitchenpos.exception.IllegalPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProductPriceTest {
@@ -21,11 +25,12 @@ class ProductPriceTest {
         assertThat(price2).isEqualTo(price1);
     }
 
-    @Test
     @DisplayName("[실패] 싱픔의 가격은 필수로 입력해야한다.")
-    void priceFailTest() {
+    @ParameterizedTest
+    @NullSource
+    void priceFailTest(BigDecimal input) {
 
-        assertThrows(IllegalPriceException.class, ProductPrice::new);
+        assertThrows(IllegalPriceException.class, () -> new ProductPrice(input));
     }
 
     @ParameterizedTest

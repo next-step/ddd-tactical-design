@@ -6,9 +6,11 @@ import kitchenpos.infra.PurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProductNameTest {
@@ -24,11 +26,12 @@ class ProductNameTest {
         assertThat(name2).isEqualTo(name1);
     }
 
-    @Test
     @DisplayName("[실패] 상품 이름을 입력하지 않는 경우 등록할 수 없다.")
-    void nameFailTest() {
+    @ParameterizedTest
+    @NullSource
+    void nameFailTest(String input) {
 
-        assertThrows(IllegalNameException.class, ProductName::new);
+        assertThrows(IllegalNameException.class, () -> new ProductName(input, false));
     }
 
     @ParameterizedTest
