@@ -3,12 +3,12 @@ package kitchenpos.products.tobe.domain
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.BehaviorSpec
-import kitchenpos.products.tobe.adapter.FakeSlangChecker
+import kitchenpos.products.tobe.adapter.FakeProductNameSlangChecker
 import java.math.BigDecimal
 
 class CreateProductServiceTest : BehaviorSpec({
     val createProductService = CreateProductService(
-        productNameValidator = ProductNameValidator(FakeSlangChecker())
+        productNameValidator = ProductNameValidator(FakeProductNameSlangChecker())
     )
 
     Given("상품 생성 시") {

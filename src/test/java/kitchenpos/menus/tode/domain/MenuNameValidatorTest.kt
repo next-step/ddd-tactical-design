@@ -5,10 +5,10 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
-import kitchenpos.products.tobe.adapter.FakeSlangChecker
+import kitchenpos.products.tobe.adapter.FakeProductNameSlangChecker
 
 class MenuNameValidatorTest : BehaviorSpec({
-    val menuNameValidator = MenuNameValidator(FakeSlangChecker())
+    val menuNameValidator = MenuNameValidator(FakeProductNameSlangChecker())
 
     Given("메뉴 이름 검증 시") {
         When("상품 이름이 null 이라면") {

@@ -1,12 +1,12 @@
 package kitchenpos.products.tobe.adpater
 
 import kitchenpos.products.infra.PurgomalumClient
-import kitchenpos.products.tobe.port.SlangChecker
+import kitchenpos.products.tobe.port.ProductNameSlangChecker
 import org.springframework.stereotype.Component
 
 @Component
-class DefaultSlangChecker(
+class DefaultProductNameSlangChecker(
     private val purgomalumClient: PurgomalumClient,
-) : SlangChecker {
+) : ProductNameSlangChecker {
     override fun containSlang(text: String): Boolean = purgomalumClient.containsProfanity(text)
 }

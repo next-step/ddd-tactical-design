@@ -1,11 +1,11 @@
 package kitchenpos.menus.tode.domain
 
-import kitchenpos.products.tobe.port.SlangChecker
+import kitchenpos.products.tobe.port.ProductNameSlangChecker
 import org.springframework.stereotype.Component
 
 @Component
 class MenuNameValidator(
-    private val slangChecker: SlangChecker,
+    private val slangChecker: ProductNameSlangChecker,
 ) {
     fun requireNormalName(
         name: String?,
