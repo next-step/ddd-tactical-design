@@ -53,7 +53,7 @@ public class Menu {
                 boolean displayed, List<MenuProduct> menuProducts) {
         this (
                 id,
-                new DisplayedName(displayed, new Name(name)),
+                new DisplayedName(displayed, new CleanName(name)),
                 new Price(price),
                 menuGroup,
                 menuGroupId,

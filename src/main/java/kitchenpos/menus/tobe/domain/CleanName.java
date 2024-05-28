@@ -6,20 +6,20 @@ import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Name {
+public class CleanName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected Name() {}
+    protected CleanName() {}
 
-    public Name(String name, MenuNameValidationService menuNameValidationService) {
+    public CleanName(String name, MenuNameValidationService menuNameValidationService) {
         this(name);
         if (menuNameValidationService.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
     }
 
-    public Name(String name) {
+    public CleanName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -34,8 +34,8 @@ public class Name {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Name name1 = (Name) o;
-        return Objects.equals(name, name1.name);
+        CleanName cleanName1 = (CleanName) o;
+        return Objects.equals(name, cleanName1.name);
     }
 
     @Override

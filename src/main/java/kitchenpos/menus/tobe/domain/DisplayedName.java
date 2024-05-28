@@ -11,21 +11,21 @@ public class DisplayedName {
     private boolean displayed;
 
     @Embedded
-    private Name name;
+    private CleanName cleanName;
 
     protected DisplayedName() {}
 
     public DisplayedName(boolean displayed, String name) {
-        this(displayed, new Name(name));
+        this(displayed, new CleanName(name));
     }
 
     public DisplayedName(boolean displayed, String name, MenuNameValidationService menuNameValidationService) {
-        this(displayed, new Name(name, menuNameValidationService));
+        this(displayed, new CleanName(name, menuNameValidationService));
     }
 
-    public DisplayedName(boolean displayed, Name name) {
+    public DisplayedName(boolean displayed, CleanName cleanName) {
         this.displayed = displayed;
-        this.name = name;
+        this.cleanName = cleanName;
     }
 
     public void display() {

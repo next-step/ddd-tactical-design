@@ -13,7 +13,7 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private CleanName name;
 
     @Embedded
     private Price price;
@@ -26,7 +26,7 @@ public class Product {
 
     public Product(UUID id, String name, Price price, ProductNameValidationService productNameValidationService) {
         this.id = id;
-        this.name = new DisplayedName(name, productNameValidationService);
+        this.name = new CleanName(name, productNameValidationService);
         this.price = price;
     }
 
