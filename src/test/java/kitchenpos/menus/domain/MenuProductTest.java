@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @DisplayName("메뉴 상품 도메인 테스트")
 public class MenuProductTest {
@@ -52,9 +51,7 @@ public class MenuProductTest {
     @Test
     @DisplayName("상품 금액 * 수량 금액을 반환한다.")
     void totalPrice() {
-        MenuProduct 메뉴_상품 = new MenuProduct(
-                random.nextLong(), 후라이드, 10
-        );
+        MenuProduct 메뉴_상품 = ToBeFixtures.menuProductOf(10, BigDecimal.valueOf(20_000));
 
         Assertions.assertThat(메뉴_상품.totalPrice().compareTo(BigDecimal.valueOf(200_000))).isZero();
     }
@@ -84,7 +81,7 @@ public class MenuProductTest {
                     random.nextLong(), 5, 후라이드.getId(), 후라이드.getPrice()
             );
 
-            Assertions.assertThat(메뉴_상품.totalPrice2().equals(십만원.getPrice())).isTrue();
+            Assertions.assertThat(메뉴_상품.totalPrice().equals(십만원.getPrice())).isTrue();
         }
 
         @Test
@@ -100,9 +97,21 @@ public class MenuProductTest {
             List<MenuProduct> 메뉴_치킨_목록 = List.of(메뉴_후라이드, 메뉴_양념치킨);
             MenuProducts menuProducts = new MenuProducts(메뉴_치킨_목록);
 
-            BigDecimal 총_금액 = menuProducts.calculateTotalPrice2();
+            BigDecimal 총_금액 = menuProducts.price();
 
             Assertions.assertThat(총_금액.compareTo(BigDecimal.valueOf(120_000))).isZero();
+        }
+
+        @Test
+        @DisplayName("메뉴 상품의 가격과 메뉴 가격을 비교한다.")
+        void isLessThenMenuPrice() {
+            List<MenuProduct> 메뉴_상품_목록 = List.of(
+                    ToBeFixtures.menuProductOf(1, BigDecimal.valueOf(9_000))
+            );
+            MenuProducts menuProducts = new MenuProducts(메뉴_상품_목록);
+            BigDecimal 메뉴_가격 = BigDecimal.valueOf(10_000);
+
+            Assertions.assertThat(menuProducts.isLessThenMenuPrice(메뉴_가격)).isTrue();
         }
     }
 }

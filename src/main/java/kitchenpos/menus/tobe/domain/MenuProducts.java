@@ -22,27 +22,25 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public void checkNotLessThenMenuPrice(BigDecimal menuPrice) {
-        if (isLessThenMenuPrice(menuPrice)) {
+    public void checkLessThenMenuPrice(Price price) {
+        if (isLessThenMenuPrice(price)) {
             throw new IllegalArgumentException();
         }
     }
 
-    public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
-        BigDecimal sumResult  = calculateTotalPrice2();
-        return menuPrice.compareTo(sumResult) > 0;
+    public boolean isLessThenMenuPrice(Price menuPrice) {
+        Price menuProductsPrice = new Price(price());
+        return menuProductsPrice.isLessThen(menuPrice);
     }
 
-    public BigDecimal calculateTotalPrice() {
+    public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
+        Price menuProductsPrice = new Price(price());
+        return menuProductsPrice.isLessThen(menuPrice);
+    }
+
+    public BigDecimal price() {
         return menuProducts.stream()
                 .map(menuProduct -> menuProduct.totalPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-
-    public BigDecimal calculateTotalPrice2() {
-        return menuProducts.stream()
-                .map(menuProduct -> menuProduct.totalPrice2())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

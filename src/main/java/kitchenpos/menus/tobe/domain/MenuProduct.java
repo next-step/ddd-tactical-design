@@ -47,11 +47,6 @@ public class MenuProduct {
     }
 
     public BigDecimal totalPrice() {
-        BigDecimal quantity = BigDecimal.valueOf(getQuantity());
-        return product.getPrice().multiply(quantity);
-    }
-
-    public BigDecimal totalPrice2() {
         return price.getPrice();
     }
 
