@@ -142,8 +142,10 @@ docker compose -p kitchenpos up -d
 ## 모델링
 - MenuGroup의 name을 지정하여 생성한다
 - Product의 name과 price를 지정하여 생성한다
-- Menu의 price와 name과 displayStatus, 속하게될 MenuGroup, 포함하는 MenuProduct의 price와 quantity 목록을 지정하여 메뉴를 생성한다
-  - MenuProduct의 quantity는 0보다 크거나 같아야한다
-  - Menu의 price는 MenuProduct 목록의 Price의 합보다 작거나 같아야한다
+- Menu는 반드시 하나의 MenuGroup에 속해야한다
+- Menu의 price와 name과 displayStatus를 가진다
+- MenuProduct은 지정한 상품의 quantity와 productId만 가진다
+  - quantity는 0보다 크거나 같아야한다
+  - Menu의 price는 MenuProduct Price의 합보다 작거나 같아야한다
 
 <img width="1503" alt="Screenshot 2024-05-22 at 9 11 40 PM" src="https://github.com/next-step/ddd-strategic-design/assets/124428341/1bb3da02-bdab-4101-a33d-e7bcc4278a26">
