@@ -25,19 +25,19 @@ public class Product {
 
     }
 
-    public Product(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public Product(String name, int price, PurgomalumClient purgomalumClient) {
         this.id = UUID.randomUUID();
         this.name = new ProductName(name, purgomalumClient);
         this.price = new ProductPrice(price);
     }
 
-    public Product(UUID id, String name, BigDecimal price){
+    public Product(UUID id, String name, int price){
         this.id = id;
         this.name = new ProductName(name);
         this.price = new ProductPrice(price);
     }
 
-    public void changePrice(BigDecimal price){
+    public void changePrice(int price){
         this.price = new ProductPrice(price);
     }
 

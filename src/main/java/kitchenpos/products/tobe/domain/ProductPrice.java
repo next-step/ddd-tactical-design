@@ -10,13 +10,13 @@ import java.util.Objects;
 public class ProductPrice {
 
     @Column(name = "price", nullable = false)
-    private final BigDecimal value;
+    private final int value;
 
     protected ProductPrice() {
-        this.value = new BigDecimal(String.valueOf(BigDecimal.ZERO));
+        this.value = 0;
     }
-    public ProductPrice(BigDecimal value) {
-        if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
+    public ProductPrice(int value) {
+        if (Objects.isNull(value) || value < 0) {
             throw new IllegalArgumentException();
         }
         this.value = value;
@@ -36,4 +36,7 @@ public class ProductPrice {
     }
 
 
+    public int getValue() {
+        return this.value;
+    }
 }
