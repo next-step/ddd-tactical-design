@@ -23,6 +23,8 @@ import org.springframework.util.CollectionUtils;
 
 import kitchenpos.common.tobe.domain.PurgomalumClient;
 import kitchenpos.common.tobe.infra.FakePurgomalumClient;
+import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
+import kitchenpos.menus.tobe.application.adapter.ProductServiceAdapter;
 import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menugroups.tobe.domain.MenuGroupRepository;
@@ -42,6 +44,8 @@ class DefaultMenuServiceTest {
 	private ProductRepository productRepository;
 
 	private ProductService productService;
+
+	private ProductServiceAdapter productServiceAdapter;
 	private PurgomalumClient purgomalumClient;
 	private MenuService menuService;
 	private UUID menuGroupId;
@@ -54,7 +58,7 @@ class DefaultMenuServiceTest {
 		productRepository = new InMemoryProductRepository();
 		productService = new DefaultProductService(productRepository, menuService, purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
-		menuService = new DefaultMenuService(menuRepository, menuGroupRepository, productService, purgomalumClient);
+		menuService = new DefaultMenuService(menuRepository, menuGroupRepository, new DefaultProductServiceAdapter(productService), purgomalumClient);
 		menuGroupId = menuGroupRepository.save(menuGroup()).getId();
 		product = productRepository.save(product("후라이드", 16_000L));
 	}

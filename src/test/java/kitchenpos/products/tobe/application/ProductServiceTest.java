@@ -19,6 +19,8 @@ import kitchenpos.common.tobe.domain.PurgomalumClient;
 import kitchenpos.common.tobe.infra.FakePurgomalumClient;
 import kitchenpos.menus.tobe.application.DefaultMenuService;
 import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
+import kitchenpos.menus.tobe.application.adapter.ProductServiceAdapter;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
@@ -33,13 +35,14 @@ class ProductServiceTest {
 	private MenuRepository menuRepository;
 	private MenuService menuService;
 	private PurgomalumClient purgomalumClient;
-	private DefaultProductService productService;
+	private ProductServiceAdapter productServiceAdapter;
+	private ProductService productService;
 
 	@BeforeEach
 	void setUp() {
 		productRepository = new InMemoryProductRepository();
 		menuRepository = new InMemoryMenuRepository();
-		menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), productService, purgomalumClient);
+		menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), new DefaultProductServiceAdapter(productService), purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
 		productService = new DefaultProductService(productRepository, menuService, purgomalumClient);
 	}
