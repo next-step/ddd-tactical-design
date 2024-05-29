@@ -2,15 +2,11 @@ package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -23,56 +19,62 @@ public class MenuProduct {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
+
+    @Column(name = "price", nullable = false)
+    private ProductPrice price;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID productId;
-
-    public MenuProduct() {
+    protected MenuProduct() {
     }
 
-    public BigDecimal multiplyPriceAndQuantity() {
-        return this.product.priceMultiple(BigDecimal.valueOf(this.quantity));
+    protected MenuProduct(UUID productId, ProductPrice price, long quantity) {
+        this(null, productId, price, quantity);
+    }
+
+    public MenuProduct(Long seq, UUID productId, ProductPrice price, long quantity) {
+        validateQuantity(quantity);
+        this.seq = seq;
+        this.productId = productId;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public static MenuProduct from(UUID productId, long quantity, ProductClient productClient) {
+        ProductPrice productPrice = ProductPrice.from(productClient.productPrice(productId));
+        return new MenuProduct(productId, productPrice, quantity);
+    }
+
+    public void changeProductPrice(ProductPrice price) {
+        this.price = price;
+    }
+
+    public BigDecimal totalPrice() {
+        return this.price.priceValue().multiply(BigDecimal.valueOf(this.quantity));
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
     }
 
     public UUID getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public ProductPrice getPrice() {
+        return price;
+    }
+
+    private void validateQuantity(long quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException();
+        }
     }
 }

@@ -60,7 +60,7 @@ public class Menu {
 
     public BigDecimal sumMenuProducts() {
         return this.menuProducts.stream()
-                .map(MenuProduct::multiplyPriceAndQuantity)
+                .map(MenuProduct::totalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -114,13 +114,5 @@ public class Menu {
 
     public void setMenuProducts(final List<MenuProduct> menuProducts) {
         this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 }

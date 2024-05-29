@@ -7,6 +7,7 @@ import kitchenpos.menus.dto.MenuProductCreateRequest;
 import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.ProductClient;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
@@ -41,6 +42,7 @@ class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
+    private ProductClient productClient;
     private PurgomalumClient purgomalumClient;
     private MenuService menuService;
     private UUID menuGroupId;
@@ -52,7 +54,8 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        productClient = new FakeProductClient(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, productClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
