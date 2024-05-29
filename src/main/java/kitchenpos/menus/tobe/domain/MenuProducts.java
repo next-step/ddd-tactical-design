@@ -29,13 +29,20 @@ public class MenuProducts {
     }
 
     public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
-        BigDecimal sumResult  = calculateTotalPrice();
+        BigDecimal sumResult  = calculateTotalPrice2();
         return menuPrice.compareTo(sumResult) > 0;
     }
 
     public BigDecimal calculateTotalPrice() {
         return menuProducts.stream()
                 .map(menuProduct -> menuProduct.totalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+
+    public BigDecimal calculateTotalPrice2() {
+        return menuProducts.stream()
+                .map(menuProduct -> menuProduct.totalPrice2())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
