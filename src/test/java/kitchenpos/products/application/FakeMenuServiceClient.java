@@ -10,7 +10,7 @@ public class FakeMenuServiceClient implements MenuServiceClient {
     private final MenuService menuService;
 
     public FakeMenuServiceClient(MenuRepository menuRepository) {
-        this.menuService = new MenuService(menuRepository, null, null, null, null);
+        this.menuService = new MenuService(menuRepository, null, null, null);
     }
 
     @Override

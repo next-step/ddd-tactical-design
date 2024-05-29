@@ -6,6 +6,7 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -20,5 +21,10 @@ public class ProductClientImpl implements ProductClient {
     public BigDecimal productPrice(UUID productId) {
         return productRepository.findById(productId).map(Product::getPrice)
                 .orElseThrow();
+    }
+
+    @Override
+    public int countMatchingProductIdIn(List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds).size();
     }
 }

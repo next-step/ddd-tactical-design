@@ -37,7 +37,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("메뉴")
 class MenuServiceTest {
     private MenuRepository menuRepository;
     private MenuGroupRepository menuGroupRepository;
@@ -55,7 +54,7 @@ class MenuServiceTest {
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
         productClient = new FakeProductClient(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, productClient);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, purgomalumClient);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

@@ -9,6 +9,7 @@ import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuGroupName;
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
@@ -39,7 +40,7 @@ public class Fixtures {
         menu.setPrice(BigDecimal.valueOf(price));
         menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+        menu.setMenuProducts(MenuProducts.from(Arrays.asList(menuProducts)));
         return menu;
     }
 

@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -54,6 +55,19 @@ public class MenuProduct {
 
     public BigDecimal totalPrice() {
         return this.price.priceValue().multiply(BigDecimal.valueOf(this.quantity));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProduct that = (MenuProduct) o;
+        return quantity == that.quantity && Objects.equals(seq, that.seq) && Objects.equals(productId, that.productId) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq, productId, price, quantity);
     }
 
     public Long getSeq() {

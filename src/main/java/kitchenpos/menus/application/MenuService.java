@@ -8,16 +8,13 @@ import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.MenuProducts;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.ProductClient;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -27,22 +24,19 @@ import java.util.UUID;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
     private final ProductClient productClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient,
-        final ProductClient productClient
+        final ProductClient productClient,
+        final PurgomalumClient purgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
         this.productClient = productClient;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
@@ -54,25 +48,8 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final List<MenuProductCreateRequest> menuProductRequests = request.menuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                .map(MenuProductCreateRequest::productId)
-                .toList()
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProductCreateRequest menuProductRequest : menuProductRequests) {
-            final MenuProduct menuProduct = MenuProduct.from(menuProductRequest.productId(), menuProductRequest.quantity(), productClient);
-            sum = sum.add(menuProduct.totalPrice());
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
+        final MenuProducts menuProducts = MenuProducts.from(menuProductRequests, productClient);
+        if (price.compareTo(menuProducts.sumPrice()) > 0) {
             throw new IllegalArgumentException();
         }
         final String name = request.name();

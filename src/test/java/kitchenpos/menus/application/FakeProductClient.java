@@ -5,6 +5,7 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public class FakeProductClient implements ProductClient {
@@ -18,5 +19,10 @@ public class FakeProductClient implements ProductClient {
     public BigDecimal productPrice(UUID productId) {
         return productRepository.findById(productId).map(Product::getPrice)
                 .orElseThrow();
+    }
+
+    @Override
+    public int countMatchingProductIdIn(List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds).size();
     }
 }
