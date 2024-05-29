@@ -36,7 +36,6 @@ public class MenuTest {
     @Nested
     @DisplayName("메뉴 생성 테스트")
     class CreateTest {
-
         @Test
         @DisplayName("메뉴를 생성한다.")
         public void create() {
@@ -46,9 +45,9 @@ public class MenuTest {
                     UUID.randomUUID(),
                     "튀김",
                     BigDecimal.valueOf(400_000),
-                    치킨,
                     true,
-                    치킨_상품_목록
+                    치킨_상품_목록,
+                    치킨.getId()
             );
 
             Assertions.assertThat(메뉴.getId()).isNotNull();
@@ -141,10 +140,9 @@ public class MenuTest {
     }
 
     private Menu createMenu(String name, BigDecimal price, boolean displayed) {
-        MenuGroup menuGroup = toBeFixtures.치킨;
         List<MenuProduct> menuProducts = createMenuProducts();
         Menu menu = ToBeFixtures.menuCreateOf(
-                name, menuNameValidationService, price, menuGroup, displayed, menuProducts
+                name, menuNameValidationService, price, displayed, menuProducts
         );
         return menu;
     }

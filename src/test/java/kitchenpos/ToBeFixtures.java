@@ -36,16 +36,15 @@ public class ToBeFixtures {
     }
 
     public static Menu menuCreateOf(String name, MenuNameValidationService menuNameValidationService,
-                                    BigDecimal price, MenuGroup menuGroup,
-                                    boolean displayed, List<MenuProduct> menuProducts) {
+                                    BigDecimal price, boolean displayed, List<MenuProduct> menuProducts) {
         Menu menu = new Menu(
                 UUID.randomUUID(),
                 name,
                 menuNameValidationService,
                 price,
-                menuGroup,
                 displayed,
-                menuProducts
+                menuProducts,
+                UUID.randomUUID()
         );
         return menu;
     }
