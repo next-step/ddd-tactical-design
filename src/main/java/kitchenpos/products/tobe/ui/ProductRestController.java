@@ -1,8 +1,9 @@
 package kitchenpos.products.tobe.ui;
 
-import kitchenpos.products.tobe.application.ProductService;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
+import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
+import kitchenpos.products.tobe.domain.Product;
 
 @RequestMapping("/api/products")
 @RestController

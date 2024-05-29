@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import java.util.Objects;
 
@@ -8,17 +8,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class ProductName {
-	public static final String NULL_OR_EMPTY_NAME_ERROR = "상품 이름은 비워 둘 수 없습니다.";
-	public static final String NAME_WITH_PROFANITY_ERROR = "상품 이름에 비속어가 포함될 수 없습니다.";
+public class MenuName {
+	public static final String NULL_OR_EMPTY_NAME_ERROR = "메뉴 이름은 비워 둘 수 없습니다.";
 
 	@Column(name = "name", nullable = false)
 	private String value;
 
-	protected ProductName() {
+	protected MenuName() {
 	}
 
-	public ProductName(String value) {
+	public MenuName(String value) {
 		if (!StringUtils.hasText(value)) {
 			throw new IllegalArgumentException(NULL_OR_EMPTY_NAME_ERROR);
 		}
@@ -36,8 +35,8 @@ public class ProductName {
 			return true;
 		if (object == null || getClass() != object.getClass())
 			return false;
-		ProductName that = (ProductName)object;
-		return Objects.equals(value, that.value);
+		MenuName menuName = (MenuName)object;
+		return Objects.equals(value, menuName.value);
 	}
 
 	@Override
