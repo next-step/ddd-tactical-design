@@ -1,9 +1,8 @@
-package kitchenpos.acceptance.product
+package kitchenpos.tobe.acceptance.product
 
-import domain.ProductFixtures.makeProductOne
 import io.kotest.matchers.shouldBe
 import kitchenpos.acceptance.CommonAcceptanceTest
-import kitchenpos.product.domain.ProductRepository
+import kitchenpos.tobe.product.domain.repository.ProductRepository
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
 
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 class ProductAcceptanceTest(
     @LocalServerPort
     override var port: Int,
-    productRepository: ProductRepository,
+    private val productRepository: ProductRepository,
 ) : CommonAcceptanceTest() {
     init {
         given("가게 사장님이 로그인한 뒤에") {
@@ -28,7 +27,7 @@ class ProductAcceptanceTest(
                                 }
                                 """.trimIndent(),
                             )
-                            .post("/api/products")
+                            .post("/api/v2/products")
                             .then()
                             .log().everything()
                             .extract().response()
@@ -43,7 +42,23 @@ class ProductAcceptanceTest(
 
             `when`("가격을 변경하면") {
                 then("상품의 가격이 변경된다.") {
-                    val product = productRepository.save(makeProductOne())
+                    val createProductResponse =
+                        commonRequestSpec()
+                            .given()
+                            .body(
+                                """
+                                {
+                                    "name": "후라이드 치킨",
+                                    "price": 16000
+                                }
+                                """.trimIndent(),
+                            )
+                            .post("/api/v2/products")
+                            .then()
+                            .log().everything()
+                            .extract().response()
+
+                    val createdProductId = createProductResponse.jsonPath().getString("id")
 
                     val response =
                         commonRequestSpec()
@@ -55,7 +70,7 @@ class ProductAcceptanceTest(
                                 }
                                 """.trimIndent(),
                             )
-                            .put("/api/products/${product.id}/price")
+                            .put("/api/products/$createdProductId/price")
                             .then()
                             .log().everything()
                             .extract().response()
