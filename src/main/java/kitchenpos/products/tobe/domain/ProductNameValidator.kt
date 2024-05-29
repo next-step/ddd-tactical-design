@@ -1,11 +1,11 @@
 package kitchenpos.products.tobe.domain
 
-import kitchenpos.products.tobe.port.SlangChecker
+import kitchenpos.products.tobe.port.ProductNameSlangChecker
 import org.springframework.stereotype.Component
 
 @Component
 class ProductNameValidator(
-    private val slangChecker: SlangChecker,
+    private val productNameSlangChecker: ProductNameSlangChecker,
 ) {
     fun requireNormalName(
         name: String?,
@@ -13,5 +13,5 @@ class ProductNameValidator(
 
     private fun isNotContainProfanity(
         name: String,
-    ) = !(slangChecker.containSlang(name))
+    ) = !(productNameSlangChecker.containSlang(name))
 }

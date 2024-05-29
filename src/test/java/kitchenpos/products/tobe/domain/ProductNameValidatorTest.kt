@@ -5,10 +5,10 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
-import kitchenpos.products.tobe.adapter.FakeSlangChecker
+import kitchenpos.products.tobe.adapter.FakeProductNameSlangChecker
 
 class ProductNameValidatorTest : BehaviorSpec({
-    val productNameValidator = ProductNameValidator(FakeSlangChecker())
+    val productNameValidator = ProductNameValidator(FakeProductNameSlangChecker())
 
     Given("상품 이름 검증 시") {
         When("욕설이 포함되어 있다면") {

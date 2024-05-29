@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.port
 
-interface SlangChecker {
+interface ProductNameSlangChecker {
     fun containSlang(
         text: String,
     ): Boolean

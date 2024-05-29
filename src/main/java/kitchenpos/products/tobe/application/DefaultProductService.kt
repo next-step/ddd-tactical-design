@@ -1,11 +1,10 @@
 package kitchenpos.products.tobe.application
 
-import kitchenpos.menus.tode.application.PriceChangeDrivenMenuUpdater
 import kitchenpos.products.application.ProductService
 import kitchenpos.products.domain.Product
 import kitchenpos.products.domain.ProductRepository
 import kitchenpos.products.tobe.domain.CreateProductService
-import org.springframework.core.annotation.Order
+import kitchenpos.products.tobe.dto.PriceChangeEvent
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -16,8 +15,8 @@ class DefaultProductService(
     private val productRepository: ProductRepository,
     private val createProductService: CreateProductService,
     private val changeProductPriceService: ChangeProductPriceService,
-    private val priceChangeDrivenMenuUpdater: PriceChangeDrivenMenuUpdater,
-): ProductService {
+    private val priceChangeEventPublisher: PriceChangeEventPublisher,
+) : ProductService {
     override fun create(request: Product): Product {
         val product = createProductService.createProduct(
             price = request.price,
@@ -36,7 +35,7 @@ class DefaultProductService(
             price = request.price,
         )
 
-        priceChangeDrivenMenuUpdater.menuDisplayUpdateByProductId(productId)
+        priceChangeEventPublisher.publishPriceChange(PriceChangeEvent(productId))
 
         return product
     }

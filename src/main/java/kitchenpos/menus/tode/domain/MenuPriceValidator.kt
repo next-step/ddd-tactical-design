@@ -1,13 +1,20 @@
 package kitchenpos.menus.tode.domain
 
-import kitchenpos.menus.domain.Menu
+import java.math.BigDecimal
 
 object MenuPriceValidator {
-    fun isMenuDisplayable(
-        menu: Menu,
-    ): Boolean {
-        val sum = menu.menuProducts.sumOf { it.product.price * it.quantity.toBigDecimal() }
+    fun requireNormalPrice(
+        price: BigDecimal?,
+    ) = require(!(price == null || isNegativePrice(price)))
 
-        return menu.price > sum
+    fun requireMenuPriceUnderSum(
+        menuPrice: BigDecimal,
+        sum: BigDecimal,
+    ) = require(menuPrice <= sum){
+        "$menuPrice , sum = ${sum}"
     }
+
+    private fun isNegativePrice(
+        price: BigDecimal,
+    ) = price < BigDecimal.ZERO
 }

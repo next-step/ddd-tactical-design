@@ -6,8 +6,15 @@ object RenewMenuDisplay {
     fun renewMenusDisplay(
         menu: Menu,
     ) {
-        if (MenuPriceValidator.isMenuDisplayable(menu)) {
+        if (MenuDisplayableChecker.isMenuDisplayable(menu)) {
             menu.isDisplayed = false
         }
+    }
+
+    fun updateDisplay(
+        menu: Menu,
+        displayed: Boolean,
+    ) {
+        menu.isDisplayed = displayed
     }
 }

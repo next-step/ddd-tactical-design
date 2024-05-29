@@ -1,9 +1,9 @@
-package kitchenpos.products.tobe.adapter
+package kitchenpos.menus.tode.adapter
 
+import kitchenpos.menus.tode.port.MenuNameSlangChecker
 import kitchenpos.products.application.FakePurgomalumClient
-import kitchenpos.products.tobe.port.SlangChecker
 
-class FakeSlangChecker : SlangChecker {
+class FakeMenuNameSlangChecker : MenuNameSlangChecker {
     private val fakePurgomalumClient = FakePurgomalumClient()
 
     override fun containSlang(text: String): Boolean = fakePurgomalumClient.containsProfanity(text)
