@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.repository;
+package kitchenpos.menus.tobe.infra;
 
 import java.util.UUID;
 
