@@ -63,20 +63,20 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
-        this.menuProducts.checkNotLessThenMenuPrice(price.getPrice());
+        this.menuProducts.checkLessThenMenuPrice(price);
     }
 
     public void changePrice(BigDecimal changedMenuPrice) {
-        menuProducts.checkNotLessThenMenuPrice(changedMenuPrice);
-        price = new Price(changedMenuPrice);
+        Price changedPrice = new Price(changedMenuPrice);
+        menuProducts.checkLessThenMenuPrice(changedPrice);
+        price = changedPrice;
     }
 
     public void display() {
-        if (menuProducts.isLessThenMenuPrice(price.getPrice())) {
+        if (menuProducts.isLessThenMenuPrice(price)) {
             hide();
             return;
         }
-
         displayed = true;
     }
 
