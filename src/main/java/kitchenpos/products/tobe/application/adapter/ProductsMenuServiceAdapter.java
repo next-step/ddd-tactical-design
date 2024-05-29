@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import kitchenpos.menus.tobe.application.MenuService;
 
 @Service
-public class DefaultMenuServiceAdapter implements MenuServiceAdapter {
+public class ProductsMenuServiceAdapter implements MenuServiceAdapter {
     private final MenuService menuService;
 
-    public DefaultMenuServiceAdapter(MenuService menuService) {
+    public ProductsMenuServiceAdapter(MenuService menuService) {
         this.menuService = menuService;
     }
 

@@ -19,6 +19,10 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import kitchenpos.common.tobe.domain.PurgomalumClient;
+import kitchenpos.common.tobe.infra.FakePurgomalumClient;
+import kitchenpos.eatinorders.tobe.application.adapter.EatInOrderMenuServiceAdapter;
+import kitchenpos.eatinorders.tobe.application.adapter.MenuServiceAdapter;
 import kitchenpos.eatinorders.tobe.application.dto.OrderCreationRequest;
 import kitchenpos.eatinorders.tobe.application.dto.OrderLineItemCreationRequest;
 import kitchenpos.eatinorders.tobe.domain.EatInOrder;
@@ -34,12 +38,29 @@ import kitchenpos.eatinorders.tobe.infra.FakeKitchenridersClient;
 import kitchenpos.eatinorders.tobe.infra.InMemoryOrderFactoryProvider;
 import kitchenpos.eatinorders.tobe.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.tobe.infra.InMemoryOrderTableRepository;
+import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
+import kitchenpos.menus.tobe.application.DefaultMenuService;
+import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
+import kitchenpos.products.tobe.application.DefaultProductService;
+import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.adapter.ProductsMenuServiceAdapter;
+import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 
 class OrderServiceTest {
     private OrderRepository orderRepository;
+
     private MenuRepository menuRepository;
+
+    private MenuService menuService;
+    private MenuServiceAdapter menuServiceAdapter;
+
+    private ProductService productService;
+
+    private PurgomalumClient purgomalumClient;
+
     private OrderTableRepository orderTableRepository;
     private FakeKitchenridersClient kitchenridersClient;
     private OrderFactoryProvider orderFactoryProvider;
@@ -47,12 +68,16 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        orderRepository = new InMemoryOrderRepository();
         menuRepository = new InMemoryMenuRepository();
+        orderRepository = new InMemoryOrderRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
+        productService = new DefaultProductService(new InMemoryProductRepository(), new ProductsMenuServiceAdapter(menuService), purgomalumClient);
+        menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), new DefaultProductServiceAdapter(productService), purgomalumClient);
+        menuServiceAdapter = new EatInOrderMenuServiceAdapter(menuService);
         kitchenridersClient = new FakeKitchenridersClient();
+        purgomalumClient = new FakePurgomalumClient();
         orderFactoryProvider = new InMemoryOrderFactoryProvider();
-        orderService = new OrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient, orderFactoryProvider);
+        orderService = new OrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

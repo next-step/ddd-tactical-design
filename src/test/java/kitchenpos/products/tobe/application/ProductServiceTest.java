@@ -20,13 +20,11 @@ import kitchenpos.common.tobe.infra.FakePurgomalumClient;
 import kitchenpos.menus.tobe.application.DefaultMenuService;
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
-import kitchenpos.menus.tobe.application.adapter.ProductServiceAdapter;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
-import kitchenpos.products.tobe.application.adapter.DefaultMenuServiceAdapter;
-import kitchenpos.products.tobe.application.adapter.MenuServiceAdapter;
+import kitchenpos.products.tobe.application.adapter.ProductsMenuServiceAdapter;
 import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -45,7 +43,7 @@ class ProductServiceTest {
 		menuRepository = new InMemoryMenuRepository();
 		menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), new DefaultProductServiceAdapter(productService), purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
-		productService = new DefaultProductService(productRepository, new DefaultMenuServiceAdapter(menuService), purgomalumClient);
+		productService = new DefaultProductService(productRepository, new ProductsMenuServiceAdapter(menuService), purgomalumClient);
 	}
 
 	@DisplayName("상품을 등록할 수 있다.")
