@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class MenuGroupServiceTest {
+class LegacyMenuGroupServiceTest {
     private MenuGroupRepository menuGroupRepository;
-    private MenuGroupService menuGroupService;
+    private LegacyMenuGroupService menuGroupService;
 
     @BeforeEach
     void setUp() {
         menuGroupRepository = new InMemoryMenuGroupRepository();
-        menuGroupService = new MenuGroupService(menuGroupRepository);
+        menuGroupService = new LegacyMenuGroupService(menuGroupRepository);
     }
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")

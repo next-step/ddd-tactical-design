@@ -10,4 +10,6 @@ interface ProductRepository {
     fun findAll(): List<Product>
 
     fun findAllByIdIn(ids: List<UUID>): List<Product>
+
+    fun flush()
 }

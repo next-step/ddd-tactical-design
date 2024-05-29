@@ -10,10 +10,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class MenuGroupService {
+public class LegacyMenuGroupService {
     private final MenuGroupRepository menuGroupRepository;
 
-    public MenuGroupService(final MenuGroupRepository menuGroupRepository) {
+    public LegacyMenuGroupService(final MenuGroupRepository menuGroupRepository) {
         this.menuGroupRepository = menuGroupRepository;
     }
 

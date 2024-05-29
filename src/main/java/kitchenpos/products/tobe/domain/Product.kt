@@ -4,31 +4,32 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import kitchenpos.common.Price
 import java.util.*
 
 @Table(name = "product")
 @Entity
 class Product(
-    displayedName: String,
-    price: ProductPrice,
+    name: String,
+    price: Price,
     productNameValidatorService: ProductNameValidatorService
 ) {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     val id: UUID = UUID.randomUUID()
 
-    @Column(name = "displayed_name", nullable = false)
-    val displayedName: String = displayedName
+    @Column(name = "name", nullable = false)
+    val name: String = name
 
     @Column(name = "price", nullable = false)
-    var price: ProductPrice = price
+    var price: Price = price
         private set
 
     init {
-        productNameValidatorService.validate(displayedName)
+        productNameValidatorService.validate(name)
     }
 
-    fun changePrice(price: ProductPrice) {
+    fun changePrice(price: Price) {
         this.price = price
     }
 

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Table(name = "menu")
-@Entity
+@Entity(name = "LegacyMenu")
 public class Menu {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

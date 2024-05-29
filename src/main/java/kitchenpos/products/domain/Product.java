@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity(name = "legacyProduct")
+@Entity(name = "LegacyProduct")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

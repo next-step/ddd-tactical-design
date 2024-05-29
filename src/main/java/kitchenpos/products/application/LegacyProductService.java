@@ -16,12 +16,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class ProductService {
+public class LegacyProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public ProductService(
+    public LegacyProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
         final PurgomalumClient purgomalumClient

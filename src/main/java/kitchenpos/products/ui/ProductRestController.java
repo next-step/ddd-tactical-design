@@ -1,6 +1,6 @@
 package kitchenpos.products.ui;
 
-import kitchenpos.products.application.ProductService;
+import kitchenpos.products.application.LegacyProductService;
 import kitchenpos.products.domain.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +18,9 @@ import java.util.UUID;
 @RequestMapping("/api/products")
 @RestController
 public class ProductRestController {
-    private final ProductService productService;
+    private final LegacyProductService productService;
 
-    public ProductRestController(final ProductService productService) {
+    public ProductRestController(final LegacyProductService productService) {
         this.productService = productService;
     }
 
