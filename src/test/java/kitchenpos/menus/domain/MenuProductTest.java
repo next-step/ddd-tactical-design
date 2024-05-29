@@ -37,6 +37,16 @@ public class MenuProductTest {
     }
 
     @Test
+    @DisplayName("가격을 가지는 메뉴 상품을 생성한다.")
+    void create_price() {
+        MenuProduct 메뉴_상품 = new MenuProduct(
+                random.nextLong(), 10, 후라이드.getId(), 후라이드.getPrice()
+        );
+
+        Assertions.assertThat(메뉴_상품.getSeq()).isNotNull();
+    }
+
+    @Test
     @DisplayName("메뉴 상품의 수량은 0보다 커야 한다.")
     void create_exception_quantity() {
         long 수량 = -1;
@@ -46,35 +56,21 @@ public class MenuProductTest {
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    @DisplayName("상품 금액 * 수량 금액을 반환한다.")
-    void totalPrice() {
-        MenuProduct 메뉴_상품 = ToBeFixtures.menuProductOf(10, BigDecimal.valueOf(20_000));
-
-        Assertions.assertThat(메뉴_상품.totalPrice().compareTo(BigDecimal.valueOf(200_000))).isZero();
-    }
-
     @Nested
-    @DisplayName("메뉴 상품 도메인 리팩터링 용 테스트 코드")
-    class RefactoringTest {
+    @DisplayName("메뉴 상품 가격 관련 테스트")
+    class PriceTest {
         @Test
-        @DisplayName("가격을 가지는 메뉴 상품을 생성한다.")
-        void create_price() {
-            MenuProduct 메뉴_상품 = new MenuProduct(
-                    random.nextLong(), 10, 후라이드.getId(), 후라이드.getPrice()
-            );
+        @DisplayName("상품 금액 * 수량 금액을 반환한다.")
+        void totalPrice() {
+            MenuProduct 메뉴_상품 = ToBeFixtures.menuProductOf(10, BigDecimal.valueOf(20_000));
 
-            Assertions.assertThat(메뉴_상품.getSeq()).isNotNull();
+            Assertions.assertThat(메뉴_상품.totalPrice().compareTo(BigDecimal.valueOf(200_000))).isZero();
         }
 
         @Test
         @DisplayName("메뉴 상품의 금액을 반환한다.")
         void totalPrice2() {
-            Price 메뉴_상품_가격 = new Price(후라이드.getPrice(), 5);
             Price 십만원 = new Price(BigDecimal.valueOf(100_000));
-
-            Assertions.assertThat(메뉴_상품_가격.equals(십만원)).isTrue();
-
             MenuProduct 메뉴_상품 = new MenuProduct(
                     random.nextLong(), 5, 후라이드.getId(), 후라이드.getPrice()
             );
