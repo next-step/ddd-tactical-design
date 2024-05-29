@@ -148,8 +148,8 @@ public class MenuTest {
     }
 
     private List<MenuProduct> createMenuProducts() {
-        MenuProduct 치킨_후라이드_10개 = ToBeFixtures.menuProductOf(toBeFixtures.후라이드_20000, 10);
-        MenuProduct 치킨_양념치킨_10개 = ToBeFixtures.menuProductOf(toBeFixtures.양념치킨_20000, 10);
+        MenuProduct 치킨_후라이드_10개 = ToBeFixtures.menuProductOf(10, toBeFixtures.후라이드_20000.getPrice());
+        MenuProduct 치킨_양념치킨_10개 = ToBeFixtures.menuProductOf(10, toBeFixtures.양념치킨_20000.getPrice());
         List<MenuProduct> 치킨_상품_목록 = List.of(치킨_후라이드_10개, 치킨_양념치킨_10개);
         return 치킨_상품_목록;
     }

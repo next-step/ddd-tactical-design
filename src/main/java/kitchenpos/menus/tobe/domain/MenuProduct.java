@@ -28,6 +28,9 @@ public class MenuProduct {
     @Embedded
     private Quantity quantity;
 
+    @Transient
+    private Price price;
+
     protected MenuProduct() {}
 
     public MenuProduct(Long seq, Product product, long quantity) {
@@ -36,9 +39,20 @@ public class MenuProduct {
         this.quantity = new Quantity(quantity);
     }
 
+    public MenuProduct(Long seq, long quantity, UUID productId, BigDecimal productPrice) {
+        this.seq = seq;
+        this.quantity = new Quantity(quantity);
+        this.productId = productId;
+        this.price = new Price(productPrice, quantity);
+    }
+
     public BigDecimal totalPrice() {
         BigDecimal quantity = BigDecimal.valueOf(getQuantity());
         return product.getPrice().multiply(quantity);
+    }
+
+    public BigDecimal totalPrice2() {
+        return price.getPrice();
     }
 
     public Long getSeq() {

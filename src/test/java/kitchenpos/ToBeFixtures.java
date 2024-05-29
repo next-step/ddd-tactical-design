@@ -35,6 +35,13 @@ public class ToBeFixtures {
         return menuProduct;
     }
 
+    public static MenuProduct menuProductOf(long productQuantity, BigDecimal productPrice) {
+        MenuProduct menuProduct = new MenuProduct(
+                new Random().nextLong(), productQuantity, UUID.randomUUID(), productPrice
+        );
+        return menuProduct;
+    }
+
     public static Menu menuCreateOf(String name, MenuNameValidationService menuNameValidationService,
                                     BigDecimal price, boolean displayed, List<MenuProduct> menuProducts) {
         Menu menu = new Menu(
