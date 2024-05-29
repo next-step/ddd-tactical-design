@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.acl.menu.MenuServiceClient;
-import kitchenpos.menus.tobe.domain.ProductClient;
+import kitchenpos.support.acl.menu.MenuServiceClient;
+import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.products.application.ProductChangePriceEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

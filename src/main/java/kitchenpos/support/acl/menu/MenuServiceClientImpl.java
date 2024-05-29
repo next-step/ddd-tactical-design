@@ -1,4 +1,4 @@
-package kitchenpos.common.acl.menu;
+package kitchenpos.support.acl.menu;
 
 import kitchenpos.menus.application.MenuService;
 import org.springframework.stereotype.Component;

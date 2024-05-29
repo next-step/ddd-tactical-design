@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.tobe.domain.ProfanityChecker;
+import kitchenpos.menus.tobe.domain.menu.ProfanityChecker;
 
 import java.util.List;
 

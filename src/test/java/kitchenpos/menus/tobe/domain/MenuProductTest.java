@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.menus.application.FakeProductClient;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
+import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;

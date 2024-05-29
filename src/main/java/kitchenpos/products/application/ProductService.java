@@ -1,6 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.acl.menu.MenuServiceClient;
+import kitchenpos.support.acl.menu.MenuServiceClient;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;

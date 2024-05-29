@@ -1,8 +1,8 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.acl.menu.MenuServiceClient;
+import kitchenpos.support.acl.menu.MenuServiceClient;
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.menu.Menu;
 
 import java.math.BigDecimal;
 import java.util.UUID;

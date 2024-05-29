@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.exception.ProductNameNullPointerException;
 import kitchenpos.products.exception.ProductNameProfanityException;
-import kitchenpos.common.infra.PurgomalumClient;
+import kitchenpos.support.infra.PurgomalumClient;
 import kitchenpos.products.infra.ProductProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

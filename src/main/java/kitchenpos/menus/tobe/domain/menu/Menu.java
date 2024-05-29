@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
