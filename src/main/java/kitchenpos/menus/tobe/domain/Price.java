@@ -33,6 +33,7 @@ public class Price {
     public boolean isLessThen(Price inputPrice) {
         return price.compareTo(inputPrice.price) < 0;
     }
+
     public boolean isLessThen(BigDecimal inputPrice) {
         return price.compareTo(inputPrice) < 0;
     }
