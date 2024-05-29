@@ -262,9 +262,9 @@ docker compose -p kitchenpos up -d
 
 - `Eat-In Order`을 등록할 수 있다.
   - `Eat-In Order`의 모든 속성의 비즈니스 규칙을 만족하지 못하면 등록할 수 없다.
-- 등록된 `Eat-In Order`가 `Eat-In Order Waiting`이면, `Delivery Order Accepted`로 변경할 수 있다.
-- 등록된 `Eat-In Order`가 `Eat-In Order Accepted`이면, `Delivery Order Served`로 변경할 수 있다.
-- 등록된 `Eat-In Order`가 `Eat-In Order Served`이면, `Delivery Order Completed`로 변경할 수 있다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Waiting`이면, `Eat-In Order Accepted`로 변경할 수 있다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Accepted`이면, `Eat-In Order Served`로 변경할 수 있다.
+- 등록된 `Eat-In Order`가 `Eat-In Order Served`이면, `Eat-In Order Completed`로 변경할 수 있다.
 - `Eat-In Order Completed`이면, `Order Table`을 `Cleared Order Table`로 변경할 수 있다.
 
 ### 포장 주문(Takeout Order)

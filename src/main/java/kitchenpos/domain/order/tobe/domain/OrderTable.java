@@ -13,9 +13,6 @@ class OrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "order_id", nullable = false)
-    private UUID orderId;
-
     @Embedded
     private OrderTableName name;
 
@@ -30,13 +27,6 @@ class OrderTable {
     }
 
     public OrderTable(Name name, Guest guest) {
-        this.name = new OrderTableName(name);
-        this.guest = guest;
-        this.occupied = false;
-    }
-
-    public OrderTable(UUID orderId, Name name, Guest guest) {
-        this.orderId = orderId;
         this.name = new OrderTableName(name);
         this.guest = guest;
         this.occupied = false;
