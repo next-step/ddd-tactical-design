@@ -3,6 +3,7 @@ package kitchenpos.common.acl.menu;
 import kitchenpos.menus.application.MenuService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Component
@@ -14,7 +15,7 @@ public class MenuServiceClientImpl implements MenuServiceClient {
     }
 
     @Override
-    public void hideMenuBasedOnProductPrice(UUID productId) {
-        menuService.hideMenuBasedOnProductPrice(productId);
+    public void hideMenuBasedOnProductPrice(UUID productId, BigDecimal productPrice) {
+        menuService.hideMenuBasedOnProductPrice(productId, productPrice);
     }
 }

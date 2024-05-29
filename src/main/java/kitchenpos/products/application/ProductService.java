@@ -51,7 +51,7 @@ public class ProductService {
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
         applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId));
-        menuServiceClient.hideMenuBasedOnProductPrice(productId);
+        menuServiceClient.hideMenuBasedOnProductPrice(productId, price.priceValue());
         return ProductResponse.of(product);
     }
 

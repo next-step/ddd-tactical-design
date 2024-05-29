@@ -1,6 +1,5 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.infra.PurgomalumClient;
 import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
@@ -8,7 +7,7 @@ import kitchenpos.menus.dto.MenuResponse;
 import kitchenpos.menus.tobe.domain.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.domain.ProductClient;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.menus.tobe.domain.ProfanityChecker;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -42,7 +41,7 @@ class MenuServiceTest {
     private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private ProductClient productClient;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityChecker profanityChecker;
     private MenuService menuService;
     private UUID menuGroupId;
     private Product product;
@@ -52,9 +51,9 @@ class MenuServiceTest {
         menuRepository = new InMemoryMenuRepository();
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        profanityChecker = new FakeProfanityChecker();
         productClient = new FakeProductClient(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, purgomalumClient);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productClient, profanityChecker);
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }

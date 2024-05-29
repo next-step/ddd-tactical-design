@@ -7,6 +7,8 @@ import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.MenuName;
+import kitchenpos.menus.tobe.domain.MenuPrice;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuGroupName;
 import kitchenpos.menus.tobe.domain.MenuProducts;
@@ -34,14 +36,13 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(MenuProducts.from(Arrays.asList(menuProducts)));
-        return menu;
+        return new Menu(
+                MenuName.from("후라이드+후라이드"),
+                MenuPrice.from(price),
+                menuGroup(),
+                displayed,
+                MenuProducts.from(Arrays.asList(menuProducts))
+        );
     }
 
     public static MenuGroup menuGroup() {

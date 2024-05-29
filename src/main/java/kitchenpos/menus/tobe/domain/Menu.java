@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,10 +23,10 @@ public class Menu {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private MenuName name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -44,15 +45,43 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    protected Menu() {
+    }
+
+    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        this(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts);
+    }
+
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+    }
+
+    public static Menu from(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+        checkCreateComparedPrice(price, menuProducts);
+        return new Menu(name, price, menuGroup, displayed, menuProducts);
+    }
+
+    public void changePrice(final MenuPrice price) {
+        checkChangePriceComparedPrice(price);
+        this.price = price;
+    }
+
+    public void changeMenuProductPrice(UUID productId, final BigDecimal productPrice) {
+        menuProducts.changeProductsPrice(productId, ProductPrice.from(productPrice));
     }
 
     public boolean isPriceGreaterThanMenuProductsSum() {
-        return this.price.compareTo(sumMenuProducts()) > 0;
+        return this.price.priceValue().compareTo(this.menuProducts.sumPrice()) > 0;
     }
 
-    public BigDecimal sumMenuProducts() {
-        return this.menuProducts.sumPrice();
+    public void display() {
+        checkDisplayComparedPrice();
+        this.displayed = true;
     }
 
     public void hide() {
@@ -63,47 +92,41 @@ public class Menu {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.nameValue();
     }
 
     public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+        return price.priceValue();
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
     }
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts.getValues();
     }
 
-    public void setMenuProducts(final MenuProducts menuProducts) {
-        this.menuProducts = menuProducts;
+    private void checkDisplayComparedPrice() {
+        if (this.price.priceValue().compareTo(this.menuProducts.sumPrice()) > 0) {
+            throw new IllegalStateException();
+        }
+    }
+
+    private void checkChangePriceComparedPrice(MenuPrice price) {
+        if (price.priceValue().compareTo(menuProducts.sumPrice()) > 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static void checkCreateComparedPrice(MenuPrice price, MenuProducts menuProducts) {
+        if (price.priceValue().compareTo(menuProducts.sumPrice()) > 0) {
+            throw new IllegalArgumentException();
+        }
     }
 }

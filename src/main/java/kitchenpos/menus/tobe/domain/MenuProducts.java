@@ -7,6 +7,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -98,5 +99,11 @@ public class MenuProducts {
         return requests.stream()
                 .map(MenuProductCreateRequest::productId)
                 .toList();
+    }
+
+    public void changeProductsPrice(UUID productId, ProductPrice price) {
+        values.stream()
+                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .forEach(menuProduct -> menuProduct.changeProductPrice(price));
     }
 }
