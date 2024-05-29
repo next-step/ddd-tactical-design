@@ -31,9 +31,7 @@ public class MenuProductTest {
     @Test
     @DisplayName("메뉴 상품을 생성한다.")
     void create() {
-        MenuProduct 메뉴_상품 = new MenuProduct(
-                random.nextLong(), 후라이드, 10
-        );
+        MenuProduct 메뉴_상품 = ToBeFixtures.menuProductOf(1L, 후라이드.getPrice());
 
         Assertions.assertThat(메뉴_상품.getSeq()).isNotNull();
     }
@@ -44,7 +42,7 @@ public class MenuProductTest {
         long 수량 = -1;
 
         Assertions.assertThatThrownBy(
-                () -> new MenuProduct(random.nextLong(), 후라이드, 수량)
+                () -> ToBeFixtures.menuProductOf(수량, 후라이드.getPrice())
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
