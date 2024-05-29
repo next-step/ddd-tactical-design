@@ -1,13 +1,10 @@
 package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Optional;
 
-@Getter
 @Embeddable
 public class Price {
     private BigDecimal priceValue;
@@ -32,5 +29,9 @@ public class Price {
         if (Optional.ofNullable(price).isEmpty() || price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("price is not zero");
         }
+    }
+
+    public BigDecimal getPriceValue() {
+        return priceValue;
     }
 }

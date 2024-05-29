@@ -1,20 +1,23 @@
 package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
+import kitchenpos.products.infra.tobe.Profanities;
 
 import java.util.Optional;
 
-@Getter
 @Embeddable
-public class DispayedName {
+public class DisplayedName {
 
     private String name;
 
-    protected DispayedName() {
+    protected DisplayedName() {
     }
 
-    public DispayedName(final String name, final Profanities profanities) {
+    private DisplayedName(final String name) {
+        this.name = name;
+    }
+
+    public static final DisplayedName createDisplayedName(final String name, final Profanities profanities) {
         if (Optional.ofNullable(name).isEmpty()){
             throw new IllegalArgumentException("이름을 반드시 입력해주세요.");
         }
@@ -23,7 +26,11 @@ public class DispayedName {
             throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
         }
 
-        this.name = name;
+        return new DisplayedName(name);
+    }
+
+    public String getName() {
+        return name;
     }
 }
 

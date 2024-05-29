@@ -5,9 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.products.infra.PurgomalumClient;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
+import kitchenpos.products.infra.tobe.Profanities;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -19,7 +17,6 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-@Getter
 public class Product {
 
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -28,26 +25,23 @@ public class Product {
 
     @Column(name = "name", nullable = false)
     @Embedded
-    private DispayedName dispayedName;
+    private DisplayedName dispayedName;
 
     @Column(name = "price", nullable = false)
     @Embedded
     private Price price;
 
-    @Autowired
-    private static PurgomalumClient defaultPurgomalumClient;
-
     protected Product() {
     }
 
-    private Product(final DispayedName name, final Price price) {
+    private Product(final DisplayedName name, final Price price) {
         this.id = UUID.randomUUID();
         this.dispayedName = name;
         this.price = price;
     }
 
     public static final Product createProduct(final String name, final BigDecimal price, final Profanities profanities){
-        DispayedName displayedName = new DispayedName(name, profanities);
+        DisplayedName displayedName = DisplayedName.createDisplayedName(name, profanities);
         Price displayedPrice = Price.createPrice(price);
 
         return new Product(displayedName, displayedPrice);
@@ -59,4 +53,11 @@ public class Product {
         return this;
     }
 
+    public DisplayedName getDispayedName() {
+        return dispayedName;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
 }

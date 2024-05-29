@@ -1,5 +1,7 @@
 package kitchenpos.products.domain.tobe;
 
+import kitchenpos.products.infra.tobe.Profanities;
+
 import java.util.Arrays;
 import java.util.List;
 
