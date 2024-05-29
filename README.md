@@ -212,12 +212,13 @@ docker compose -p kitchenpos up -d
 ![delivery_order_flow](images/delivery_order_flow.png)
 
 #### 속성
-- `Delivery Order`는, `Order Line Item`, `Delivery Address`를 가진다.
-  - `Order Line Item`의 개수는 0개 이상이어야 한다.
+- `Delivery Order`는 `Order Line Item`, `Delivery Address`를 가진다.
+  - `Order Line Item`의 수량은 0개 이상이어야 한다.
   - `Order Line Item`는 `Menu`가 존재해야 한다.
   - `Order Line Item`는 `Hide Menu`이면 안된다.
   - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
   - `Delivery Address`는 빈 값이면 안된다.
+- `Delivery Order`는 1개 이상의 `Order Line Item`를 가진다.
 
 #### 행위
 - `Delivery Order`을 등록할 수 있다.
@@ -239,12 +240,13 @@ docker compose -p kitchenpos up -d
 
 
 - `Eat-In Order`는 `Order Line Item`, `Order Table`를 가진다.
-  - `Order Line Item`의 개수는 정수만 가능하다.
+  - `Order Line Item`의 수량은 정수만 가능하다.
   - `Order Line Item`는 `Menu`가 존재해야 한다.
   - `Order Line Item`는 `Hide Menu`이면 안된다.
   - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
   - `Order Table`이 존재하지 않으면 안된다.
   - `Order Table`이 `Cleared Order Table`이면 안된다.
+- `Eat-In Order`는 1개 이상의 `Order Line Item`를 가진다.
 
 #### 행위
 - `Order Table`을 등록할 수 있다.
@@ -270,10 +272,11 @@ docker compose -p kitchenpos up -d
 
 #### 속성
 - `Takeout Order`는 `Order Line Item`를 가진다.
-  - `Order Line Item`의 개수는 0개 이상이어야 한다.
+  - `Order Line Item`의 수량은 0개 이상이어야 한다.
   - `Order Line Item`는 `Menu`가 존재해야 한다.
   - `Order Line Item`는 `Hide Menu`이면 안된다.
   - `Order Line Item`의 `Menu Price`는 등록된 `Menu`의 `Menu Price`와 일치해야 한다.
+- `Takeout Order`는 1개 이상의 `Order Line Item`를 가진다.
 
 #### 행위
 - `Takeout Order`을 등록할 수 있다.
