@@ -1,6 +1,5 @@
-package kitchenpos.menus.tobe.service.dto;
+package kitchenpos.menus.tobe.application.dto;
 
-import io.micrometer.observation.ObservationTextPublisher;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 
 import java.util.UUID;
