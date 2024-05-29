@@ -12,11 +12,13 @@ public class ProductName {
 
     protected ProductName() {}
 
-    protected ProductName(String name, PurgomalumClient purgomalumClient) {
+    protected ProductName(final String name,
+                          final PurgomalumClient purgomalumClient) {
         this.setName(name, purgomalumClient);
     }
 
-    private void setName(String name, PurgomalumClient purgomalumClient) {
+    private void setName(final String name,
+                         final PurgomalumClient purgomalumClient) {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException("이름을 입력하지 않았거나, 공백을 입력할 수 없습니다.");
         }

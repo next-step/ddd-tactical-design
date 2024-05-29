@@ -13,7 +13,7 @@ public class ProductPrice {
 
     protected ProductPrice() {}
 
-    protected ProductPrice(BigDecimal price) {
+    protected ProductPrice(final BigDecimal price) {
         this.setPrice(price);
     }
 

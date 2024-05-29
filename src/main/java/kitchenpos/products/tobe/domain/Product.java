@@ -21,14 +21,23 @@ public class Product {
     protected Product() {
     }
 
-    protected Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    protected Product(final UUID id,
+                      final String name,
+                      final BigDecimal price,
+                      final PurgomalumClient purgomalumClient) {
         this.id = id;
         this.name = new ProductName(name, purgomalumClient);
         this.price = new ProductPrice(price);
     }
 
-    public static Product create(String name, BigDecimal price, PurgomalumClient purgomalumClient) {
-        return new Product(UUID.randomUUID(), name, price, purgomalumClient);
+    public static Product create(final String name,
+                                 final BigDecimal price,
+                                 final PurgomalumClient purgomalumClient) {
+        return new Product(
+                UUID.randomUUID(),
+                name,
+                price,
+                purgomalumClient);
     }
 
     public void changePrice(final BigDecimal price) {
