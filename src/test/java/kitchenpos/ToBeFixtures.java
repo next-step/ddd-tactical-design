@@ -28,13 +28,6 @@ public class ToBeFixtures {
             new ProductNameValidationService(new FakePurgomalumClient())
     );
 
-    public static Product productOf(String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
-        Product product = new Product(
-                UUID.randomUUID(), name, price, productNameValidationService
-        );
-        return product;
-    }
-
     public static MenuProduct menuProductOf(Product product, long quantity) {
         MenuProduct menuProduct = new MenuProduct(
                 new Random().nextLong(), product, quantity
