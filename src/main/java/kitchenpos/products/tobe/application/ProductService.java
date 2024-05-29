@@ -30,16 +30,21 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductCreationResponseDto create(final String name, final BigDecimal price) {
-        final Product product = productRepository.save(Product.create(name, price, purgomalumClient));
-        return ProductCreationResponseDto.of(product);
+    public ProductResponse create(final ProductRequest productRequest) {
+        final Product product = productRepository.save(
+                Product.create(
+                        productRequest.getName(),
+                        productRequest.getPrice(),
+                        purgomalumClient)
+        );
+        return ProductResponse.of(product);
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final BigDecimal price) {
+    public ProductResponse changePrice(final UUID productId, final ProductRequest productRequest) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(price);
+        product.changePrice(productRequest.getPrice());
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -54,11 +59,12 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ProductResponse.of(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(ProductResponse::of).toList();
     }
 }
