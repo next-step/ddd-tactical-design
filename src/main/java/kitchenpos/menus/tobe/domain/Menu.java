@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.*;
 
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -23,52 +22,47 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
-
     @Embedded
     private MenuProducts menuProducts;
+
+    @Transient
+    private UUID menuGroupId;
 
     protected Menu() {}
 
     public Menu(UUID id, String name, MenuNameValidationService menuNameValidationService,
-                   BigDecimal price, MenuGroup menuGroup, boolean displayed,
-                   List<MenuProduct> menuProducts) {
+                BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+                UUID menuGroupId) {
         this(
                 id,
                 new CleanName(name, menuNameValidationService),
                 new Price(price),
                 displayed,
-                menuGroup,
-                new MenuProducts(menuProducts)
+                new MenuProducts(menuProducts),
+                menuGroupId
         );
     }
 
-    public Menu(UUID id, String name, BigDecimal price, MenuGroup menuGroup,
-                boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed,
+                List<MenuProduct> menuProducts, UUID menuGroupId) {
         this (
                 id,
                 new CleanName(name),
                 new Price(price),
                 displayed,
-                menuGroup,
-                new MenuProducts(menuProducts)
+                new MenuProducts(menuProducts),
+                menuGroupId
         );
     }
 
     public Menu(UUID id, CleanName name, Price price, boolean displayed,
-                MenuGroup menuGroup, MenuProducts menuProducts) {
+                MenuProducts menuProducts, UUID menuGroupId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.displayed = displayed;
-        this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
         this.menuProducts.checkNotLessThenMenuPrice(price.getPrice());
     }
 
