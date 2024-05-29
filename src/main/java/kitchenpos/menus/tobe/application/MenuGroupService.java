@@ -1,13 +1,9 @@
-package kitchenpos.menus.tobe.service;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.repository.MenuGroupRepository;
-import kitchenpos.menus.tobe.service.dto.MenuGroupCreationResponseDto;
-import kitchenpos.menus.tobe.service.dto.MenuGroupsCreationResponseDto;
+import kitchenpos.menus.tobe.infra.MenuGroupRepository;
+import kitchenpos.menus.tobe.application.dto.MenuGroupCreationResponseDto;
+import kitchenpos.menus.tobe.application.dto.MenuGroupsCreationResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

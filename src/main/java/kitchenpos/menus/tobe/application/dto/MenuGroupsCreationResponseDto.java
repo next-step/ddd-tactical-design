@@ -1,8 +1,8 @@
-package kitchenpos.menus.tobe.service.dto;
+package kitchenpos.menus.tobe.application.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 import kitchenpos.menus.tobe.domain.MenuGroup;
 
 public class MenuGroupsCreationResponseDto {
