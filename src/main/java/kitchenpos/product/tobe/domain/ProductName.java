@@ -1,5 +1,6 @@
 package kitchenpos.product.tobe.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import kitchenpos.common.infra.PurgomalumClient;
 
@@ -7,6 +8,7 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductName {
+    @Column(name = "name", nullable = false)
     private String name;
 
     protected ProductName() {
