@@ -1,8 +1,8 @@
 package kitchenpos.menus.domain;
 
 import kitchenpos.menus.application.FakeMenuPurgomalumClient;
-import kitchenpos.menus.tobe.domain.common.CleanName;
-import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.CleanName;
+import kitchenpos.menus.tobe.domain.MenuNameValidationService;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
