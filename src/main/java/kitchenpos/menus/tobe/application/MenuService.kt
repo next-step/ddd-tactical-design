@@ -68,21 +68,15 @@ class MenuService(
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun syncMenusDisplayStatus(productPriceChanged: ProductPriceChanged) {
         val menus = menuRepository.findAllByProductId(productPriceChanged.productId)
 
-        val productIds = menus.flatMap { it.menuProducts }.map { it.productId }
-        val productPriceById = productRepository.findAllByIdIn(productIds)
-            .associate { it.id to it.price }
-            .toMutableMap()
-        productPriceById[productPriceChanged.productId] = productPriceChanged.price
-
-        menus.forEach { syncMenuDisplayStatus(it, productPriceById) }
+        menus.forEach { syncMenuDisplayStatus(it) }
     }
 
-    private fun syncMenuDisplayStatus(menu: Menu, productPriceById: Map<UUID, Price>) =
+    private fun syncMenuDisplayStatus(menu: Menu) =
         runCatching {
-            menuPriceValidatorService.validate(menu, productPriceById)
+            menuPriceValidatorService.validate(menu)
         }.onFailure { menu.inActivateDisplayStatus() }
 }

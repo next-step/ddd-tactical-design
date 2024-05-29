@@ -23,14 +23,6 @@ class DefaultMenuPriceValidatorService(
         }
     }
 
-    override fun validate(menu: Menu, productPriceById: Map<UUID, Price>) {
-        val totalMenuProductPrice = calculateTotalMenuProductPrice(menu, productPriceById)
-
-        if (menu.displayStatus && menu.price > totalMenuProductPrice) {
-            throw IllegalArgumentException("전시중인 메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
-        }
-    }
-
     private fun calculateTotalMenuProductPrice(menu: Menu, productPriceById: Map<UUID, Price>): Price =
         menu.menuProducts.map {
             val menuProductPrice = productPriceById[it.productId]
