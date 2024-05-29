@@ -1,8 +1,7 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.products.tobe.domain;
 
 import java.util.UUID;
 
-import kitchenpos.products.tobe.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaProductRepository extends ProductRepository, JpaRepository<Product, UUID> {

@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.infra;
+package kitchenpos.products.tobe.domain;
 
 public interface PurgomalumClient {
     boolean containsProfanity(String text);

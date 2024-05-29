@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 import java.util.UUID;

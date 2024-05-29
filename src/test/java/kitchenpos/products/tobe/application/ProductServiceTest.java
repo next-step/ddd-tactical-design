@@ -1,10 +1,8 @@
 package kitchenpos.products.tobe.application;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.math.BigDecimal;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.infra.ProductRepository;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
