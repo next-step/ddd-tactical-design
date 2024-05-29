@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface JpaProductRepositoryV2 : JpaRepository<ProductV2, UUID>, ProductRepository {
-    override fun findProductById(id: UUID): ProductV2?
+    override fun findById(id: UUID): Optional<ProductV2>
 }
