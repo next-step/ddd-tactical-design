@@ -5,6 +5,8 @@ import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.products.application.ProductChangePriceEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -19,6 +21,7 @@ public class ProductChangePriceListener {
     }
 
     @EventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void hideMenuHandler(final ProductChangePriceEvent event) {
         UUID productId = event.productId();
         menuServiceClient.hideMenuBasedOnProductPrice(productId, productClient.productPrice(productId));
