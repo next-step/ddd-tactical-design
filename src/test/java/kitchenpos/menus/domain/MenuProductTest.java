@@ -15,6 +15,7 @@ import java.util.Random;
 @DisplayName("메뉴 상품 도메인 테스트")
 public class MenuProductTest {
     private ToBeFixtures toBeFixtures;
+    private Random random = new Random();
 
     @BeforeEach
     void setUp() {
@@ -26,7 +27,7 @@ public class MenuProductTest {
     void create() {
         Product 후라이드 = toBeFixtures.후라이드_20000;
         MenuProduct 메뉴_상품 = new MenuProduct(
-                new Random().nextLong(), 후라이드, 10
+                random.nextLong(), 후라이드, 10
         );
 
         Assertions.assertThat(메뉴_상품.getSeq()).isNotNull();
@@ -39,7 +40,7 @@ public class MenuProductTest {
         long 수량 = -1;
 
         Assertions.assertThatThrownBy(
-                () -> new MenuProduct(new Random().nextLong(), 후라이드, 수량)
+                () -> new MenuProduct(random.nextLong(), 후라이드, 수량)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -48,7 +49,7 @@ public class MenuProductTest {
     void totalPrice() {
         Product 후라이드 = toBeFixtures.후라이드_20000;
         MenuProduct 메뉴_상품 = new MenuProduct(
-                new Random().nextLong(), 후라이드, 10
+                random.nextLong(), 후라이드, 10
         );
 
         Assertions.assertThat(메뉴_상품.totalPrice().compareTo(BigDecimal.valueOf(200_000))).isZero();
