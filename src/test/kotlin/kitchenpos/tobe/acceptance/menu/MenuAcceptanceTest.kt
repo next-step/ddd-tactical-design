@@ -6,9 +6,9 @@ import kitchenpos.tobe.menu.domain.repository.MenuGroupRepositoryV2
 import kitchenpos.tobe.menu.domain.repository.MenuRepositoryV2
 import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import org.springframework.boot.test.web.server.LocalServerPort
-import tobe.domain.MenuFixtures.createMenu
-import tobe.domain.MenuGroupFixtures.createMenuGroup
-import tobe.domain.ProductFixtures.createProduct
+import tobe.domain.MenuGroupV2Fixtures.createMenuGroup
+import tobe.domain.MenuV2Fixtures.createMenu
+import tobe.domain.ProductV2Fixtures.createProduct
 
 class MenuAcceptanceTest(
     @LocalServerPort

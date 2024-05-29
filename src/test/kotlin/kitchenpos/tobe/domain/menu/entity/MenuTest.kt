@@ -5,9 +5,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import kitchenpos.tobe.domain.menu.FakeMenuPugomalumClient
 import kitchenpos.tobe.menu.domain.entity.MenuV2
-import tobe.domain.MenuFixtures.createMenu
-import tobe.domain.MenuGroupFixtures.createMenuGroup
-import tobe.domain.MenuProductsFixtures.createMenuProduct
+import tobe.domain.MenuGroupV2Fixtures.createMenuGroup
+import tobe.domain.MenuProductV2Fixtures.createMenuProduct
+import tobe.domain.MenuV2Fixtures.createMenu
 
 class MenuTest : DescribeSpec() {
     init {

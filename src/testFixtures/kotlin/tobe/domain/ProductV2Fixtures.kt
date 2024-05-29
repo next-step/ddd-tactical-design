@@ -3,7 +3,7 @@ package tobe.domain
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
 import kitchenpos.tobe.product.domain.entity.ProductV2
 
-object ProductFixtures {
+object ProductV2Fixtures {
     fun createProduct(): ProductV2 {
         val purgomalumClient =
             object : ProductPurgomalumClient {

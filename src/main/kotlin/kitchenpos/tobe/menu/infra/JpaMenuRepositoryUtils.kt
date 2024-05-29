@@ -13,5 +13,5 @@ fun MenuRepositoryV2.getMenuById(menuId: UUID): MenuV2 {
 
 fun MenuGroupRepositoryV2.getMenuGroupById(menuGroupId: UUID): MenuGroupV2 {
     return this.findMenuGroupById(menuGroupId)
-        ?: throw IllegalArgumentException("[$menuGroupId]존재하지 않는 메뉴 그룹입니다.")
+        ?: throw IllegalArgumentException("[$menuGroupId] 존재하지 않는 메뉴 그룹입니다.")
 }

@@ -14,7 +14,8 @@ class ProductClientImpl(
         val products = productRepository.findAllByIdIn(productIds)
 
         if (products.size != productIds.size) {
-            throw IllegalArgumentException("상품이 존재하지 않습니다.")
+            val notFoundProductIds = productIds.subtract(products.map { it.id }.toSet())
+            throw IllegalArgumentException("아이디가 ${notFoundProductIds.joinToString { ", " }} 상품들이 존재하지 않습니다.")
         }
 
         return products.map { ProductPrice(it.id, it.getPrice()) }
