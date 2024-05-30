@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.support.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -29,7 +29,7 @@ public class ProductPrice {
         return new ProductPrice(price);
     }
 
-    protected ProductPrice multiply(BigDecimal number) {
+    public ProductPrice multiply(BigDecimal number) {
         return ProductPrice.from(price.multiply(number));
     }
 

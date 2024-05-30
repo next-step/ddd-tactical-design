@@ -6,7 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.menus.tobe.exception.InvalidMenuProductQuantityException;
+import kitchenpos.support.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -57,6 +58,10 @@ public class MenuProduct {
         return this.price.priceValue().multiply(BigDecimal.valueOf(this.quantity));
     }
 
+    public boolean isExistsByProductId(UUID productId) {
+        return this.productId.equals(productId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,7 +93,7 @@ public class MenuProduct {
 
     private void validateQuantity(long quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException();
+            throw new InvalidMenuProductQuantityException(quantity);
         }
     }
 }

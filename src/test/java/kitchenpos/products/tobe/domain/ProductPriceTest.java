@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.exception.InvalidProductPriceException;
+import kitchenpos.support.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,9 +18,9 @@ class ProductPriceTest {
     @DisplayName("[성공] 상품가격을 생성한다.")
     @Test
     void create() {
-        ProductPrice price = ProductPrice.from(10_000);
+        ProductPrice price = ProductPrice.from(BigDecimal.valueOf(10_000));
 
-        assertThat(price).isEqualTo(new ProductPrice(BigDecimal.valueOf(10_000)));
+        assertThat(price).isEqualTo(ProductPrice.from(10_000));
     }
 
     @DisplayName("[실패] 상품의 가격은 0원 이상이어야 한다.")

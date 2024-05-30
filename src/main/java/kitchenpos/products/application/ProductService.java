@@ -1,12 +1,12 @@
 package kitchenpos.products.application;
 
-import kitchenpos.support.acl.menu.MenuServiceClient;
+import kitchenpos.support.application.MenuServiceClient;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.support.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
 import org.springframework.context.ApplicationEventPublisher;

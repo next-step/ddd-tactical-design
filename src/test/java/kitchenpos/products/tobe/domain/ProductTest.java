@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.exception.InvalidProductPriceException;
+import kitchenpos.support.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

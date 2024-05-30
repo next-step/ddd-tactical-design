@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.support.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.List;

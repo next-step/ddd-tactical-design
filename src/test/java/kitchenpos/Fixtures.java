@@ -15,7 +15,7 @@ import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.support.domain.ProductPrice;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

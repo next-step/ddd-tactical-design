@@ -2,8 +2,11 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.application.FakeProductClient;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
+import kitchenpos.menus.exception.InvalidMenuProductsException;
+import kitchenpos.menus.exception.MenuProductsNoSuchElementException;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.domain.ProductPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("메뉴구성상품 목록")
 class MenuProductsTest {
     private static MenuProductCreateRequest menuProductA;
+    private static UUID productA_ID;
 
     List<MenuProductCreateRequest> menuProductsRequest;
     private ProductClient productClient;
@@ -35,7 +39,7 @@ class MenuProductsTest {
         ProductRepository productRepository = new InMemoryProductRepository();
         productClient = new FakeProductClient(productRepository);
 
-        UUID productA_ID = productRepository.save(product("후라이드치킨", 10_000)).getId();
+        productA_ID = productRepository.save(product("후라이드치킨", 10_000)).getId();
         UUID productB_ID = productRepository.save(product("양념치킨", 12_000)).getId();
         menuProductA = new MenuProductCreateRequest(productA_ID, 1L);
         MenuProductCreateRequest menuProductB = new MenuProductCreateRequest(productB_ID, 2L);
@@ -58,7 +62,7 @@ class MenuProductsTest {
     @ParameterizedTest
     void fail_create(final List<MenuProductCreateRequest> menuProducts) {
         assertThatThrownBy(() -> MenuProducts.from(menuProducts, productClient))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidMenuProductsException.class);
     }
 
 
@@ -67,7 +71,7 @@ class MenuProductsTest {
     @ParameterizedTest
     void fail2_create(final List<MenuProductCreateRequest> menuProducts) {
         assertThatThrownBy(() -> MenuProducts.from(menuProducts, productClient))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidMenuProductsException.class);
     }
 
     @DisplayName("[성공] 메뉴구성상품 목록의 가격의 총합을 구할 수 있다.")
@@ -79,6 +83,27 @@ class MenuProductsTest {
 
         assertThat(actual).isEqualTo(BigDecimal.valueOf(34_000));
     }
+
+    @DisplayName("[실패] 메뉴구성상품 목록을 구성하는 해당 메뉴구성상품을 찾을 수 있다.")
+    @Test
+    void fail_getMenuProductByProductId() {
+        MenuProducts menuProducts = MenuProducts.from(menuProductsRequest, productClient);
+
+        assertThatThrownBy(() -> menuProducts.getMenuProductByProductId(INVALID_ID))
+                .isInstanceOf(MenuProductsNoSuchElementException.class);
+    }
+
+    @DisplayName("[성공] 메뉴구성상품 목록에 해당 상품의 가격을 변경한다.")
+    @Test
+    void changeProductsPrice() {
+        MenuProducts menuProducts = MenuProducts.from(menuProductsRequest, productClient);
+
+        menuProducts.changeProductsPrice(productA_ID, ProductPrice.from(11_000));
+        MenuProduct actual = menuProducts.getMenuProductByProductId(productA_ID);
+
+        assertThat(actual.getPrice()).isEqualTo(ProductPrice.from(11_000));
+    }
+
 
     private static List<Arguments> nullOrEmptyMenuProducts() {
         return Arrays.asList(

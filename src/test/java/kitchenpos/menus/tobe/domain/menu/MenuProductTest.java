@@ -1,9 +1,10 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.application.FakeProductClient;
+import kitchenpos.menus.tobe.exception.InvalidMenuProductQuantityException;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.support.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +52,7 @@ class MenuProductTest {
     @ParameterizedTest
     void fail_quantity(long quantity) {
         assertThatThrownBy(() -> MenuProduct.from(productId, quantity, productClient))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidMenuProductQuantityException.class);
     }
 
     @DisplayName("[성공] 메뉴구성상품의 가격을 변경한다.")
@@ -62,9 +63,7 @@ class MenuProductTest {
 
         menuProduct.changeProductPrice(price);
 
-        assertAll(
-                () -> assertThat(menuProduct.getPrice()).isEqualTo(ProductPrice.from(20_000L))
-        );
+        assertThat(menuProduct.getPrice()).isEqualTo(ProductPrice.from(20_000L));
     }
 
     @DisplayName("[성공] 메뉴구성상품의 총 가격(상품의 가격 * 수량)을 구할 수 있다.")
@@ -72,9 +71,6 @@ class MenuProductTest {
     void totalPrice() {
         MenuProduct menuProduct = menuProduct();
 
-        assertAll(
-                () -> assertThat(menuProduct.totalPrice()).isEqualTo(BigDecimal.valueOf(32_000L))
-        );
+        assertThat(menuProduct.totalPrice()).isEqualTo(BigDecimal.valueOf(32_000L));
     }
-
 }

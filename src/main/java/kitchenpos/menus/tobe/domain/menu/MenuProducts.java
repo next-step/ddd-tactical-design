@@ -7,7 +7,9 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.menus.exception.InvalidMenuProductsException;
+import kitchenpos.menus.exception.MenuProductsNoSuchElementException;
+import kitchenpos.support.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -56,6 +58,18 @@ public class MenuProducts {
         return values;
     }
 
+    public void changeProductsPrice(UUID productId, ProductPrice price) {
+        final MenuProduct menuProduct = getMenuProductByProductId(productId);
+        menuProduct.changeProductPrice(price);
+    }
+
+    public MenuProduct getMenuProductByProductId(UUID productId) {
+        return values.stream()
+                .filter(menuProduct -> menuProduct.isExistsByProductId(productId))
+                .findAny()
+                .orElseThrow(() -> new MenuProductsNoSuchElementException(productId));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,7 +85,7 @@ public class MenuProducts {
 
     private static void validateNullOrEmptyList(List<MenuProduct> values) {
         if (Objects.isNull(values) || values.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new InvalidMenuProductsException();
         }
     }
 
@@ -82,7 +96,7 @@ public class MenuProducts {
 
     private static void validateNullOrEmptyRequestList(List<MenuProductCreateRequest> values) {
         if (Objects.isNull(values) || values.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new InvalidMenuProductsException();
         }
     }
 
@@ -91,7 +105,7 @@ public class MenuProducts {
         List<UUID> productIds = getProductIds(requests);
         int productSize = productClient.countMatchingProductIdIn(productIds);
         if (productSize != requests.size()) {
-            throw new IllegalArgumentException();
+            throw new InvalidMenuProductsException();
         }
     }
 
@@ -99,11 +113,5 @@ public class MenuProducts {
         return requests.stream()
                 .map(MenuProductCreateRequest::productId)
                 .toList();
-    }
-
-    public void changeProductsPrice(UUID productId, ProductPrice price) {
-        values.stream()
-                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.changeProductPrice(price));
     }
 }
