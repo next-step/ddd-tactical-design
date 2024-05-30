@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -53,7 +54,7 @@ public class OrderService {
         final List<Menu> menus = menuRepository.findAllByIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
-                .toList()
+                .collect(Collectors.toList())
         );
         if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
