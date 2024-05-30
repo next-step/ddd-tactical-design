@@ -7,6 +7,7 @@ import kitchenpos.product.tobe.application.dto.ChangePriceRequest;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.validate.ProductNameValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class ProductService {
 
     @Transactional
     public Product create(final CreateProductRequest request) {
-        final Product product = new Product(UUID.randomUUID(), request.name(), request.price(), purgomalumClient);
+        final Product product = new Product(UUID.randomUUID(), request.name(), request.price(), new ProductNameValidator(purgomalumClient));
         return productRepository.save(product);
     }
 

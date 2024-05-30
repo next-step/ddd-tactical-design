@@ -2,9 +2,7 @@ package kitchenpos.product.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.common.infra.PurgomalumClient;
-
-import java.util.Objects;
+import kitchenpos.product.tobe.domain.validate.ProductNameValidator;
 
 @Embeddable
 public class ProductName {
@@ -14,18 +12,9 @@ public class ProductName {
     protected ProductName() {
     }
 
-    protected ProductName(String name, PurgomalumClient purgomalumClient) {
-        validateName(name, purgomalumClient);
+    public ProductName(String name, ProductNameValidator validator) {
+        validator.validate(name);
         this.name = name;
-    }
-
-    private void validateName(String name, PurgomalumClient purgomalumClient) {
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException("상품명이 비어있습니다.");
-        }
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다: " + name);
-        }
     }
 
     public String getName() {
@@ -37,11 +26,11 @@ public class ProductName {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductName that = (ProductName) o;
-        return Objects.equals(name, that.name);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return name.hashCode();
     }
 }

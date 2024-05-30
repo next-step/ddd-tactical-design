@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.common.infra.PurgomalumClient;
+import kitchenpos.product.tobe.domain.validate.ProductNameValidator;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -26,9 +27,9 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+    public Product(UUID id, String name, BigDecimal price, ProductNameValidator productNameValidator) {
         this.id = id;
-        this.name = new ProductName(name, purgomalumClient);
+        this.name = new ProductName(name, productNameValidator);
         this.price = new ProductPrice(price);
     }
 
