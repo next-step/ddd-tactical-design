@@ -1,8 +1,6 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import kitchenpos.menus.application.FakeProductClient;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -24,13 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("메뉴구성상품")
 class MenuProductTest {
-    private ProductRepository productRepository;
     private ProductClient productClient;
     private UUID productId;
 
     @BeforeEach
     void setUp() {
-        productRepository = new InMemoryProductRepository();
+        ProductRepository productRepository = new InMemoryProductRepository();
         productClient = new FakeProductClient(productRepository);
         Product product = productRepository.save(product());
         productId = product.getId();
