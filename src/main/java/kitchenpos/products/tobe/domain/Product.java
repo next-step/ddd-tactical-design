@@ -27,10 +27,10 @@ public class Product {
   protected Product() {
   }
 
-  public Product(ProductProfanityValidator profanityValidator, String name, BigDecimal price) {
+  public Product(ProductName name, ProductPrice price) {
     this.id = UUID.randomUUID();
-    this.name = new ProductName(profanityValidator, name);
-    this.price = new ProductPrice(price);
+    this.name = name;
+    this.price = price;
   }
 
   public UUID getId() {
@@ -45,7 +45,7 @@ public class Product {
     return price;
   }
 
-  public void changePrice(final BigDecimal price) {
-    this.price = new ProductPrice(price);
+  public void changePrice(final ProductPrice price) {
+    this.price = price;
   }
 }
