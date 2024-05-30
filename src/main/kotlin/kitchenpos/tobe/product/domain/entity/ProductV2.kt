@@ -6,8 +6,10 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
+import kitchenpos.tobe.product.domain.event.ProductPriceChangedEvent
 import kitchenpos.tobe.product.domain.vo.ProductName
 import kitchenpos.tobe.product.domain.vo.ProductPrice
+import org.springframework.context.ApplicationEventPublisher
 import java.math.BigDecimal
 import java.util.*
 
@@ -36,9 +38,16 @@ class ProductV2 private constructor(
         }
     }
 
-    fun changePrice(price: BigDecimal): ProductV2 {
+    fun changePrice(
+        price: BigDecimal,
+        eventPublisher: ApplicationEventPublisher,
+    ): ProductV2 {
         this.price = this.price.changePrice(price)
-        return this
+        return this.also {
+            eventPublisher.publishEvent(
+                ProductPriceChangedEvent(id, getPrice()),
+            )
+        }
     }
 
     fun getName(): String {

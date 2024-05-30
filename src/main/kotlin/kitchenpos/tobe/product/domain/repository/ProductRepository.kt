@@ -6,7 +6,7 @@ import java.util.*
 interface ProductRepository {
     fun save(productV2: ProductV2): ProductV2
 
-    fun findById(id: UUID): Optional<ProductV2>
+    fun findProductById(id: UUID): ProductV2?
 
     fun findAll(): List<ProductV2>
 
