@@ -20,8 +20,9 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Column(name = "id", columnDefinition = "binary(16)")
     private UUID id;
 
+    @Embedded
     @Column(name = "name", nullable = false)
-    private String name;
+    private ProductName productName;
 
     @Embedded
     @Column(name = "price", nullable = false)
@@ -30,14 +31,13 @@ public class Product extends AbstractAggregateRoot<Product> {
     protected Product() {
     }
 
-    private Product(UUID id, String name, ProductPrice productPrice) {
-        validateName(name);
+    private Product(UUID id, ProductName name, ProductPrice productPrice) {
         this.id = id;
-        this.name = name;
+        this.productName = name;
         this.productPrice = productPrice;
     }
 
-    public static Product create(String name, ProductPrice price) {
+    public static Product create(ProductName name, ProductPrice price) {
         return new Product(UUID.randomUUID(), name, price);
     }
 
@@ -46,18 +46,13 @@ public class Product extends AbstractAggregateRoot<Product> {
     }
 
     public String getName() {
-        return name;
+        return productName.name();
     }
 
     public BigDecimal getPrice() {
         return productPrice.price();
     }
 
-    public void validateName(String name) {
-        if (Objects.isNull(name) || name.isBlank()) {
-            throw new IllegalArgumentException("상품명은 필수값입니다.");
-        }
-    }
 
     public void changePrice(BigDecimal price) {
         this.productPrice = ProductPrice.of(price);
@@ -70,13 +65,13 @@ public class Product extends AbstractAggregateRoot<Product> {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return Objects.equals(id, product.id)
-                && Objects.equals(name, product.name)
+                && Objects.equals(productName, product.productName)
                 && Objects.equals(productPrice.price(), product.productPrice.price());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, productPrice);
+        return Objects.hash(id, productName, productPrice);
     }
 
 }

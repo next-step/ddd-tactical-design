@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.application;
 
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.dto.request.ProductCreateRequest;
@@ -37,10 +38,7 @@ public class TobeProductService {
     public ProductResponse create(final ProductCreateRequest request) {
 
         final ProductPrice price = ProductPrice.of(request.price());
-        final String name = request.name();
-
-        if (purgomalumClient.containsProfanity(name))
-            throw new IllegalArgumentException("비속어가 포함된 상품명은 등록할 수 없습니다.");
+        final ProductName name = ProductName.of(request.name(), purgomalumClient);
 
         final Product product = Product.create(name, price);
         final Product saved = productRepository.save(product);
