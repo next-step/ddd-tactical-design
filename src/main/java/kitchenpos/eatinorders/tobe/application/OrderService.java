@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,16 @@ import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.order.domain.DeliveryOrder;
 
 @Service
-public class OrderService {
-    private static final String ORDER_TABLE_NOT_FOUND_ERROR = "주문 테이블을 찾을 수 없습니다.";
+public abstract class OrderService {
+    protected static final String ORDER_TABLE_NOT_FOUND_ERROR = "주문 테이블을 찾을 수 없습니다.";
 
-    private final OrderRepository orderRepository;
-    private final MenuServiceAdapter menuServiceAdapter;
-    private final OrderTableRepository orderTableRepository;
-    private final KitchenridersClient kitchenridersClient;
-    private final OrderFactoryProvider orderFactoryProvider;
+    protected static final String WRONG_ORDER_TYPE_ERROR = "잘못된 주문 타입입니다.";
+
+    protected final OrderRepository orderRepository;
+    protected final MenuServiceAdapter menuServiceAdapter;
+    protected final OrderTableRepository orderTableRepository;
+    protected final KitchenridersClient kitchenridersClient;
+    protected final OrderFactoryProvider orderFactoryProvider;
 
     public OrderService(
         final OrderRepository orderRepository,
@@ -50,8 +53,9 @@ public class OrderService {
         this.orderFactoryProvider = orderFactoryProvider;
     }
 
-    @Transactional
-    public Order create(final OrderCreationRequest request) {
+    public abstract Order create(final OrderCreationRequest request);
+
+    protected OrderLineItems createOrderLineItems(OrderCreationRequest request) {
         Map<UUID, Menu> menus = menuServiceAdapter.findAllByIdIn(
             request.orderLineItemsRequest()
                 .stream()
@@ -60,22 +64,7 @@ public class OrderService {
         ).stream()
         .collect(Collectors.toMap(Menu::getId, Function.identity()));
 
-        OrderLineItems orderLineItems = OrderLineItems.fromRequests(request.orderLineItemsRequest(), menus);
-
-        OrderTable orderTable = null;
-        if (request.type() == OrderType.EAT_IN) {
-            orderTable = orderTableRepository.findById(request.orderTableId())
-                .orElseThrow(() -> new NoSuchElementException(ORDER_TABLE_NOT_FOUND_ERROR));
-
-            if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
-            }
-        }
-
-        OrderFactory orderFactory = orderFactoryProvider.getFactory(request.type());
-        Order order = orderFactory.createOrder(orderLineItems, orderTable, request.deliveryAddress());
-
-        return orderRepository.save(order);
+        return OrderLineItems.fromRequests(request.orderLineItemsRequest(), menus);
     }
 
     @Transactional

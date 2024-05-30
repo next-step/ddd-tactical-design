@@ -49,7 +49,7 @@ import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.application.adapter.ProductsMenuServiceAdapter;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
 
-class OrderServiceTest {
+class EatInOrderServiceTest {
     private OrderRepository orderRepository;
 
     private MenuRepository menuRepository;
@@ -77,7 +77,7 @@ class OrderServiceTest {
         kitchenridersClient = new FakeKitchenridersClient();
         purgomalumClient = new FakePurgomalumClient();
         orderFactoryProvider = new InMemoryOrderFactoryProvider();
-        orderService = new OrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
+        orderService = new EatInOrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -176,23 +176,6 @@ class OrderServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("배달 주소가 올바르지 않으면 배달 주문을 등록할 수 없다.")
-    @NullAndEmptySource
-    @ParameterizedTest
-    void create(final String deliveryAddress) {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-
-        final OrderCreationRequest expected = new OrderCreationRequest(
-            OrderType.DELIVERY,
-            List.of(orderLineCreationRequest(OrderType.DELIVERY, menuId, 19_000L, 3)),
-            deliveryAddress,
-            null
-        );
-
-        assertThatThrownBy(() -> orderService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
     @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
     @Test
     void createEmptyTableEatInOrder() {
@@ -215,7 +198,7 @@ class OrderServiceTest {
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
         final OrderCreationRequest expected = new OrderCreationRequest(
-            OrderType.TAKEOUT,
+            OrderType.EAT_IN,
             List.of(orderLineCreationRequest(OrderType.TAKEOUT, menuId, 19_000L, 3L)),
             null,
             null
