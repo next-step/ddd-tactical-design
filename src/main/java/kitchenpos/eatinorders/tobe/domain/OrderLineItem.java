@@ -45,7 +45,7 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
-    public OrderLineItem() {
+    protected OrderLineItem() {
     }
 
     public OrderLineItem(OrderType orderType, BigDecimal price, long quantity, Menu menu) {
