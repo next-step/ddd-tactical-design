@@ -147,8 +147,6 @@ docker compose -p kitchenpos up -d
 - MenuProduct은 지정한 상품의 quantity와 productId만 가진다
   - quantity는 0보다 크거나 같아야한다
   - Menu의 price는 MenuProduct Price의 합보다 작거나 같아야한다
-
+- OrderLineItem은 menuPrice, quantity를 가진다
+- OrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
 <img width="1503" alt="Screenshot 2024-05-22 at 9 11 40 PM" src="https://github.com/next-step/ddd-strategic-design/assets/124428341/1bb3da02-bdab-4101-a33d-e7bcc4278a26">
-
-OrderLineItem은 menuPrice, quantity를 가진다
-OrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
