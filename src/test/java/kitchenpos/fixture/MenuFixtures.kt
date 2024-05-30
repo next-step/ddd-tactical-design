@@ -5,6 +5,8 @@ import kitchenpos.common.price
 import kitchenpos.menus.application.tobe.FakeMenuNameValidatorService
 import kitchenpos.menus.application.tobe.FakeMenuPriceValidatorService
 import kitchenpos.menus.tobe.domain.*
+import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
+import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -24,6 +26,22 @@ object MenuFixtures {
             menuProducts = menuProducts,
             menuNameValidatorService,
             menuPriceValidatorService
+        )
+    }
+
+    fun menuCreateRequest(
+        menuGroupId: UUID,
+        name: String = "양념치킨",
+        price: Price = BigDecimal.valueOf(10000).price(),
+        displayStatus: Boolean = true,
+        menuProducts: List<MenuProductCreateRequest>
+    ): MenuCreateRequest {
+        return MenuCreateRequest(
+            name = name,
+            price = price,
+            menuGroupId = menuGroupId,
+            displayed = displayStatus,
+            menuProducts = menuProducts
         )
     }
 

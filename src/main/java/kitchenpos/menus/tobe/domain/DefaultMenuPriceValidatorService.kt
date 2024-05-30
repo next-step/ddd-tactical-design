@@ -18,8 +18,8 @@ class DefaultMenuPriceValidatorService(
 
         val totalMenuProductPrice = calculateTotalMenuProductPrice(menu, productPriceById)
 
-        if (menu.displayStatus && menu.price > totalMenuProductPrice) {
-            throw IllegalArgumentException("전시중인 메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
+        if (menu.price > totalMenuProductPrice) {
+            throw IllegalArgumentException("메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
         }
     }
 
