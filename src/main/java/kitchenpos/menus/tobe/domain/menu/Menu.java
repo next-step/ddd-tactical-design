@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.menus.exception.InvalidMenuPriceDisplayException;
+import kitchenpos.menus.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.support.domain.ProductPrice;
 
@@ -68,7 +70,7 @@ public class Menu {
     }
 
     public void changePrice(final MenuPrice price) {
-        checkChangePriceComparedPrice(price);
+        checkCreateComparedPrice(price, this.menuProducts);
         this.price = price;
     }
 
@@ -109,25 +111,25 @@ public class Menu {
         return displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
+    }
+
+    public List<MenuProduct> getMenuProductList() {
         return menuProducts.getValues();
     }
 
     private void checkDisplayComparedPrice() {
-        if (this.price.priceValue().compareTo(this.menuProducts.sumPrice()) > 0) {
-            throw new IllegalStateException();
-        }
-    }
-
-    private void checkChangePriceComparedPrice(MenuPrice price) {
-        if (price.priceValue().compareTo(menuProducts.sumPrice()) > 0) {
-            throw new IllegalArgumentException();
+        BigDecimal menuProductsPrice = this.menuProducts.sumPrice();
+        if (this.price.priceValue().compareTo(menuProductsPrice) > 0) {
+            throw new InvalidMenuPriceDisplayException(price, menuProductsPrice);
         }
     }
 
     private static void checkCreateComparedPrice(MenuPrice price, MenuProducts menuProducts) {
-        if (price.priceValue().compareTo(menuProducts.sumPrice()) > 0) {
-            throw new IllegalArgumentException();
+        BigDecimal menuProductsPrice = menuProducts.sumPrice();
+        if (price.priceValue().compareTo(menuProductsPrice) > 0) {
+            throw new InvalidMenuPriceException(price, menuProductsPrice);
         }
     }
 }

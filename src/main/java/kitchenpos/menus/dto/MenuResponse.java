@@ -21,7 +21,7 @@ public record MenuResponse(
                 menu.getPrice(),
                 MenuGroupResponse.of(menu.getMenuGroup()),
                 menu.isDisplayed(),
-                menu.getMenuProducts().stream()
+                menu.getMenuProductList().stream()
                         .map(MenuProductResponse::of)
                         .toList()
         );
