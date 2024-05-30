@@ -140,8 +140,8 @@ docker compose -p kitchenpos up -d
 - 비속어/욕설                  | profanity
 
 ## 모델링
-- MenuGroup의 name을 지정하여 생성한다
-- Product의 name과 price를 지정하여 생성한다
+- MenuGroup은 name을 가지고있다
+- Product은 name과 price를 가지고있다
 - Menu는 반드시 하나의 MenuGroup에 속해야한다
 - Menu의 price와 name과 displayStatus를 가진다
 - MenuProduct은 지정한 상품의 quantity와 productId만 가진다

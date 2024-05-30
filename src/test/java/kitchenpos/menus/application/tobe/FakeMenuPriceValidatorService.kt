@@ -5,7 +5,7 @@ import kitchenpos.menus.tobe.domain.Menu
 import kitchenpos.menus.tobe.domain.MenuPriceValidatorService
 import java.math.BigDecimal
 
-val FAKE_MENU_PRODUCTS_TOTAL_PRICES = BigDecimal.valueOf(10000).price()
+val FAKE_MENU_PRODUCTS_TOTAL_PRICES = BigDecimal.valueOf(500).price()
 
 object FakeMenuPriceValidatorService : MenuPriceValidatorService {
     override fun validate(menu: Menu) {

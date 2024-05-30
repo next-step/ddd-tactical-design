@@ -50,7 +50,7 @@ class MenuService(
     fun changeMenuPrice(menuId: UUID, price: Price) {
         val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu")
 
-        menu.inActivateDisplayStatus()
+        menu.changePrice(price, menuPriceValidatorService)
     }
 
     @Transactional
