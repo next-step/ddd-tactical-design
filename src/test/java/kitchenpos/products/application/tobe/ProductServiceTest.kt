@@ -7,17 +7,24 @@ import kitchenpos.menus.tobe.domain.MenuRepository
 import kitchenpos.menus.tobe.domain.findByIdOrNull
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest
+import kitchenpos.products.infra.PurgomalumClient
 import kitchenpos.products.tobe.application.ProductService
 import kitchenpos.products.tobe.domain.ProductRepository
 import kitchenpos.products.tobe.dto.int.ProductCreateRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import java.math.BigDecimal
 
 @SpringBootTest
 class ProductServiceTest {
+    @MockBean
+    private lateinit var purgomalumClient: PurgomalumClient
+
     @Autowired
     private lateinit var menuGroupService: MenuGroupService
 
@@ -36,6 +43,8 @@ class ProductServiceTest {
     @Test
     fun `상품 변경 시 해당 상품을 포함하는 메뉴 가격 정책에 맞지 않는 전시 중인 메뉴의 전시상태 INACTIVATE`() {
         //given
+        `when`(purgomalumClient.containsProfanity(any())).thenReturn(false)
+
         val menuGroup = menuGroupService.createMenuGroup("주 메뉴")
         val product = productService.createProduct(
             ProductCreateRequest(

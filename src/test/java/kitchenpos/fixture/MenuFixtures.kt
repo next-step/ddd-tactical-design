@@ -32,7 +32,7 @@ object MenuFixtures {
     fun menuCreateRequest(
         menuGroupId: UUID,
         name: String = "양념치킨",
-        price: Price = BigDecimal.valueOf(10000).price(),
+        price: Price = BigDecimal.valueOf(1000).price(),
         displayStatus: Boolean = true,
         menuProducts: List<MenuProductCreateRequest>
     ): MenuCreateRequest {

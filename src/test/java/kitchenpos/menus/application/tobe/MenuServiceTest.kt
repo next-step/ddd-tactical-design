@@ -32,7 +32,20 @@ class MenuServiceTest {
     )
 
     @Test
-    fun `메뉴의 가격이 메뉴 상품의 총 가격보다 클 경우 메뉴 생성 실패`() {
+    fun `메뉴상품이 없을 경우 메뉴생성 실패`() {
+        val menuGroup = menuGroupRepository.save(MenuFixtures.menuGroup())
+        assertThatThrownBy {
+            menuService.createMenu(
+                menuCreateRequest(
+                    menuGroupId = menuGroup.id,
+                    menuProducts = emptyList()
+                )
+            )
+        }.isInstanceOf(IllegalArgumentException::class.java).withFailMessage("적어도 1개 이상의 상품을 등록해야합니다")
+    }
+
+    @Test
+    fun `메뉴의 가격이 메뉴 상품의 총 가격보다 클 경우 메뉴생성 실패`() {
         val menuGroup = menuGroupRepository.save(MenuFixtures.menuGroup())
         val product = productRepository.save(ProductFixtures.product(BigDecimal.valueOf(10000)))
 
@@ -47,5 +60,23 @@ class MenuServiceTest {
                 )
             )
         }.isInstanceOf(IllegalArgumentException::class.java).withFailMessage("메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
+    }
+
+    @Test
+    fun `메뉴 상품의 수량이 0보다 작을 경우 메뉴생성 실패`() {
+        val menuGroup = menuGroupRepository.save(MenuFixtures.menuGroup())
+        val product = productRepository.save(ProductFixtures.product(BigDecimal.valueOf(10000)))
+
+        assertThatThrownBy {
+            menuService.createMenu(
+                menuCreateRequest(
+                    menuGroupId = menuGroup.id,
+                    menuProducts = listOf(
+                        MenuProductCreateRequest(product.id, -1L)
+                    )
+                )
+            )
+        }.isInstanceOf(IllegalArgumentException::class.java).withFailMessage("메뉴의 상품 수량은 0보다 크거나 같아야합니다")
+
     }
 }
