@@ -5,7 +5,7 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,6 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
-                    .getPrice()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -94,25 +93,6 @@ public class MenuService {
     }
 
     @Transactional
-    public void changeProductPrice(final UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-    }
-
-    @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
@@ -124,7 +104,6 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
                     .getPrice()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
@@ -144,7 +123,6 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
                     .getPrice()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
