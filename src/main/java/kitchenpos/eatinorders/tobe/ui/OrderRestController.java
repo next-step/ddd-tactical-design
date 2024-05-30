@@ -43,16 +43,6 @@ public class OrderRestController {
         return ResponseEntity.ok(orderService.serve(orderId));
     }
 
-    @PutMapping("/{orderId}/start-delivery")
-    public ResponseEntity<Order> startDelivery(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(orderService.startDelivery(orderId));
-    }
-
-    @PutMapping("/{orderId}/complete-delivery")
-    public ResponseEntity<Order> completeDelivery(@PathVariable final UUID orderId) {
-        return ResponseEntity.ok(orderService.completeDelivery(orderId));
-    }
-
     @PutMapping("/{orderId}/complete")
     public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderService.complete(orderId));

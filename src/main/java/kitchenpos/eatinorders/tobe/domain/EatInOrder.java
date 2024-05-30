@@ -46,16 +46,6 @@ public class EatInOrder extends Order {
 	}
 
 	@Override
-	public Order delivering() {
-		throw new UnsupportedOperationException("매장 주문에는 배달 상태가 없습니다.");
-	}
-
-	@Override
-	public Order delivered() {
-		throw new UnsupportedOperationException("매장 주문에는 배달 상태가 없습니다.");
-	}
-
-	@Override
 	public Order completed(OrderRepository orderRepository) {
 		if (status != OrderStatus.SERVED) {
 			throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);

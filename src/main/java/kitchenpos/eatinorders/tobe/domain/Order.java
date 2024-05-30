@@ -125,9 +125,5 @@ public abstract class Order {
 
     public abstract Order served();
 
-    public abstract Order delivering();
-
-    public abstract Order delivered();
-
     public abstract Order completed(OrderRepository orderRepository);
 }

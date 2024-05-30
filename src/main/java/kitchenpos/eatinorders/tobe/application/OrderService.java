@@ -24,6 +24,7 @@ import kitchenpos.eatinorders.tobe.factory.OrderFactory;
 import kitchenpos.eatinorders.tobe.factory.OrderFactoryProvider;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.order.domain.DeliveryOrder;
 
 @Service
 public class OrderService {
@@ -89,20 +90,6 @@ public class OrderService {
         final Order order = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         return order.served();
-    }
-
-    @Transactional
-    public Order startDelivery(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        return order.delivering();
-    }
-
-    @Transactional
-    public Order completeDelivery(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        return order.delivered();
     }
 
     @Transactional

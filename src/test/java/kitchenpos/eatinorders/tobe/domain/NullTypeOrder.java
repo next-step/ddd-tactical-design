@@ -21,16 +21,6 @@ public class NullTypeOrder extends Order {
 	}
 
 	@Override
-	public Order delivering() {
-		return null;
-	}
-
-	@Override
-	public Order delivered() {
-		return null;
-	}
-
-	@Override
 	public Order completed(OrderRepository orderRepository) {
 		return null;
 	}
