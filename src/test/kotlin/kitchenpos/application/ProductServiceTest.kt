@@ -21,7 +21,12 @@ class ProductServiceTest : DescribeSpec() {
             val productRepository = mockk<ProductRepository>()
             val menuRepository = mockk<MenuRepository>()
             val defaultPurgomalumClient = mockk<DefaultPurgomalumClient>()
-            val productService = ProductService(productRepository, menuRepository, defaultPurgomalumClient)
+            val productService =
+                ProductService(
+                    productRepository,
+                    menuRepository,
+                    defaultPurgomalumClient,
+                )
 
             describe("create 메서드는") {
                 context("정상적인 상품 요청이 주어졌을 때") {
