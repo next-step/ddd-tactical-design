@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.tobe.application.ProductEventHandler;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPrice;
@@ -19,16 +18,13 @@ import java.util.UUID;
 public class TobeProductService {
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
-    private final ProductEventHandler productEventHandler;
 
     public TobeProductService(
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient,
-            final ProductEventHandler productEventHandler
+            final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
-        this.productEventHandler = productEventHandler;
     }
 
     /**
@@ -70,12 +66,9 @@ public class TobeProductService {
                 .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않습니다."));
 
         product.changePrice(price);
-        productEventHandler.productPriceChangeEvent(productId);
+        productRepository.save(product);
 
-        return ProductResponse.of(
-                product.getId(),
-                product.getName(),
-                product.getPrice()
+        return ProductResponse.of(product.getId(), product.getName(), product.getPrice()
         );
     }
 

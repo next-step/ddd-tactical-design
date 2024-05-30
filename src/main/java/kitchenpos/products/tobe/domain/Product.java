@@ -5,6 +5,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.menus.tobe.application.ProductPriceChangeEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -12,7 +14,7 @@ import java.util.UUID;
 
 @Entity(name = "TobeProduct")
 @Table(name = "product")
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -59,6 +61,7 @@ public class Product {
 
     public void changePrice(BigDecimal price) {
         this.productPrice = ProductPrice.of(price);
+        this.registerEvent(new ProductPriceChangeEvent(this.id));
     }
 
     @Override
