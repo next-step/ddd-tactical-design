@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.menus.exception.InvalidMenuPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class MenuPrice {
 
     private void validatePrice(BigDecimal price) {
         if (Objects.isNull(price) || isNegativeNumber(price)) {
-            throw new IllegalArgumentException();
+            throw new InvalidMenuPriceException(price);
         }
     }
 

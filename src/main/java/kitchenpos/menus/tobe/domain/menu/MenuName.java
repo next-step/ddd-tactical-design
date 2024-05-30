@@ -2,6 +2,8 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.menus.exception.MenuNameNullPointerException;
+import kitchenpos.menus.exception.MenuNameProfanityException;
 
 import java.util.Objects;
 
@@ -50,13 +52,13 @@ public class MenuName {
 
     private void nullCheck(String name) {
         if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
+            throw new MenuNameNullPointerException();
         }
     }
 
     private void containsProfanity(String name, ProfanityChecker profanityChecker) {
         if (profanityChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException();
+            throw new MenuNameProfanityException(name);
         }
     }
 }
