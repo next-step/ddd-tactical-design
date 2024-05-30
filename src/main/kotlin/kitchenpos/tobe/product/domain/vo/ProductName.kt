@@ -6,7 +6,7 @@ import kitchenpos.tobe.product.domain.ProductPurgomalumClient
 import kitchenpos.tobe.product.exception.ProductNameException
 
 @Embeddable
-data class ProductName(
+class ProductName private constructor(
     @Column(name = "name", nullable = false)
     val name: String,
 ) {

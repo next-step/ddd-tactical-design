@@ -1,9 +1,9 @@
-package kitchenpos.tobe.domain.vo
+package kitchenpos.tobe.domain.product.vo
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import kitchenpos.tobe.domain.FakeProductPugomalumClient
+import kitchenpos.tobe.domain.product.FakeProductPugomalumClient
 import kitchenpos.tobe.product.domain.vo.ProductName
 import kitchenpos.tobe.product.exception.ProductNameException
 

@@ -1,4 +1,4 @@
-package kitchenpos.tobe.domain
+package kitchenpos.tobe.domain.product
 
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
 

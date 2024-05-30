@@ -1,4 +1,4 @@
-package kitchenpos.tobe.domain.repository
+package kitchenpos.tobe.domain.product.repository
 
 import kitchenpos.tobe.product.domain.entity.ProductV2
 import kitchenpos.tobe.product.domain.repository.ProductRepository
@@ -12,8 +12,8 @@ class FakeProductRepository : ProductRepository {
         return productV2
     }
 
-    override fun findById(id: UUID): Optional<ProductV2> {
-        return Optional.ofNullable(products[id])
+    override fun findProductById(id: UUID): ProductV2? {
+        return products[id]
     }
 
     override fun findAll(): List<ProductV2> {

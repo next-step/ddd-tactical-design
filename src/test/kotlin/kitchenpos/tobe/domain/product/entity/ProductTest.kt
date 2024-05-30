@@ -1,10 +1,10 @@
-package kitchenpos.tobe.domain.entity
+package kitchenpos.tobe.domain.product.entity
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import kitchenpos.tobe.domain.FakeProductPugomalumClient
+import kitchenpos.tobe.domain.product.FakeProductPugomalumClient
 import kitchenpos.tobe.product.domain.entity.ProductV2
 import kitchenpos.tobe.product.exception.ProductNameException
 import kitchenpos.tobe.product.exception.ProductPriceException
