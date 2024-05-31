@@ -63,21 +63,27 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
-        this.menuProducts.checkLessThenMenuPrice(price);
+        checkLessThenMenuProductsPrice(price);
     }
 
     public void changePrice(BigDecimal changedMenuPrice) {
         Price changedPrice = new Price(changedMenuPrice);
-        menuProducts.checkLessThenMenuPrice(changedPrice);
+        checkLessThenMenuProductsPrice(changedPrice);
         price = changedPrice;
     }
 
     public void display() {
-        if (menuProducts.isLessThenMenuPrice(price)) {
+        if (menuProducts.isLessThenPrice(price)) {
             hide();
             return;
         }
         displayed = true;
+    }
+
+    private void checkLessThenMenuProductsPrice(Price price) {
+        if (menuProducts.isLessThenPrice(price)) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public void hide() {
