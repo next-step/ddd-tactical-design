@@ -1,5 +1,5 @@
 package kitchenpos.menus.tobe.domain
 
-interface MenuPriceValidatorService {
+interface MenuPriceValidator {
     fun validate(menu: Menu)
 }

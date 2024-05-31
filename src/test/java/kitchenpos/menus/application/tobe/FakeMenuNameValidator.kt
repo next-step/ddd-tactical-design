@@ -1,16 +1,16 @@
-package kitchenpos.menus.tobe.domain
+package kitchenpos.menus.application.tobe
 
-import kitchenpos.products.infra.PurgomalumClient
-import org.springframework.stereotype.Component
+import kitchenpos.menus.tobe.domain.MenuNameValidator
+import kitchenpos.products.application.FakePurgomalumClient
 import java.lang.IllegalArgumentException
 
-@Component
-class DefaultMenuNameValidatorService(
-    private val purgomalumClient: PurgomalumClient
-) : MenuNameValidatorService {
+object FakeMenuNameValidator : MenuNameValidator {
+    private val purgomalumClient = FakePurgomalumClient()
+
     override fun validate(name: String) {
         if (purgomalumClient.containsProfanity(name)) {
             throw IllegalArgumentException("메뉴 이름에는 욕설 및 비속어가 포함될 수 없습니다")
         }
     }
 }
+

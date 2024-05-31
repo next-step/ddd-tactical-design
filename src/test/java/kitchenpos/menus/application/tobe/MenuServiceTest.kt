@@ -17,15 +17,14 @@ class MenuServiceTest {
     private val menuRepository: MenuRepository = FakeMenuRepository()
     private val menuGroupRepository: MenuGroupRepository = FakeMenuGroupRepository()
     private val productRepository: ProductRepository = FakeProductRepository()
-    private val menuPriceValidatorService: MenuPriceValidatorService =
-        DefaultMenuPriceValidatorService(productRepository)
+    private val menuPriceValidator: MenuPriceValidator =
+        DefaultMenuPriceValidator(productRepository)
 
     private val menuService: MenuService = MenuService(
         menuRepository,
         menuGroupRepository,
-        FakeMenuNameValidatorService,
-        menuPriceValidatorService,
-        productRepository
+        FakeMenuNameValidator,
+        menuPriceValidator
     )
 
     @Test

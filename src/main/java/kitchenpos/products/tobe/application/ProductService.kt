@@ -13,7 +13,7 @@ import java.util.*
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
-    private val productNameValidatorService: ProductNameValidatorService,
+    private val productNameValidator: ProductNameValidator,
     private val applicationEventPublisher: ApplicationEventPublisher
 ) {
     @Transactional
@@ -21,7 +21,7 @@ class ProductService(
         val product = Product(
             request.displayedName,
             request.price,
-            productNameValidatorService
+            productNameValidator
         )
 
         return productRepository.save(product)

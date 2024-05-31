@@ -6,7 +6,6 @@ import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.out.MenuResponse
 import kitchenpos.menus.tobe.dto.out.fromMenu
 import kitchenpos.products.domain.ProductPriceChanged
-import kitchenpos.products.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -18,9 +17,8 @@ import java.util.*
 class MenuService(
     private val menuRepository: MenuRepository,
     private val menuGroupRepository: MenuGroupRepository,
-    private val menuNameValidatorService: MenuNameValidatorService,
-    private val menuPriceValidatorService: MenuPriceValidatorService,
-    private val productRepository: ProductRepository,
+    private val menuNameValidator: MenuNameValidator,
+    private val menuPriceValidator: MenuPriceValidator,
 ) {
 
     @Transactional
@@ -39,8 +37,8 @@ class MenuService(
             price = request.price,
             displayStatus = request.displayed,
             menuProducts = menuProducts,
-            menuNameValidatorService,
-            menuPriceValidatorService
+            menuNameValidator,
+            menuPriceValidator
         )
 
         return fromMenu(menuRepository.save(menu))
@@ -50,14 +48,14 @@ class MenuService(
     fun changeMenuPrice(menuId: UUID, price: Price) {
         val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu: $menuId")
 
-        menu.changePrice(price, menuPriceValidatorService)
+        menu.changePrice(price, menuPriceValidator)
     }
 
     @Transactional
     fun activateMenuDisplayStatus(menuId: UUID) {
         val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu: $menuId")
 
-        menu.activateDisplayStatus(menuPriceValidatorService)
+        menu.activateDisplayStatus(menuPriceValidator)
     }
 
     @Transactional
@@ -77,6 +75,6 @@ class MenuService(
 
     private fun syncMenuDisplayStatus(menu: Menu) =
         runCatching {
-            menuPriceValidatorService.validate(menu)
+            menuPriceValidator.validate(menu)
         }.onFailure { menu.inActivateDisplayStatus() }
 }

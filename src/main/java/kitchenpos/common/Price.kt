@@ -10,11 +10,11 @@ value class Price(val value: BigDecimal) {
         }
     }
 
-    operator fun plus(other: Price): Price = other.value.plus(value).price()
+    operator fun plus(other: Price): Price = Price(value + other.value)
 
     operator fun compareTo(other: Price): Int = value.compareTo(other.value)
 
-    operator fun times(other: Long): Price = value.multiply(BigDecimal.valueOf(other)).price()
+    operator fun times(other: Long): Price = Price(value * other.toBigDecimal())
 }
 
 val ZERO: Price = Price(BigDecimal.ZERO)

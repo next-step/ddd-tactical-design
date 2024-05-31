@@ -1,10 +1,10 @@
 package kitchenpos.products.application
 
-import kitchenpos.products.tobe.domain.ProductNameValidatorService
+import kitchenpos.products.tobe.domain.ProductNameValidator
 
 private val fakePurgomalumClient = FakePurgomalumClient()
 
-object FakeProductNameValidatorService : ProductNameValidatorService {
+object FakeProductNameValidator : ProductNameValidator {
     override fun validate(name: String) {
         fakePurgomalumClient.containsProfanity(name)
     }

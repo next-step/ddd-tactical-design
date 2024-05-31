@@ -1,5 +1,5 @@
 package kitchenpos.menus.tobe.domain
 
-interface MenuNameValidatorService {
+interface MenuNameValidator {
     fun validate(name: String)
 }

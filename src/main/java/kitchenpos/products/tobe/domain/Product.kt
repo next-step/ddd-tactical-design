@@ -12,7 +12,7 @@ import java.util.*
 class Product(
     name: String,
     price: Price,
-    productNameValidatorService: ProductNameValidatorService
+    productNameValidator: ProductNameValidator
 ) {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -26,7 +26,7 @@ class Product(
         private set
 
     init {
-        productNameValidatorService.validate(name)
+        productNameValidator.validate(name)
     }
 
     fun changePrice(price: Price) {

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class DefaultMenuPriceValidatorService(
+class DefaultMenuPriceValidator(
     private val productRepository: ProductRepository
-) : MenuPriceValidatorService {
+) : MenuPriceValidator {
     override fun validate(menu: Menu) {
         val productIds = menu.menuProducts.map { it.productId }
 

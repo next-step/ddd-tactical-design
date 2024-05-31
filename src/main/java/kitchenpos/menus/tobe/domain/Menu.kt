@@ -12,8 +12,8 @@ class Menu(
     price: Price,
     displayStatus: Boolean,
     menuProducts: MenuProducts,
-    menuNameValidatorService: MenuNameValidatorService,
-    menuPriceValidatorService: MenuPriceValidatorService
+    menuNameValidator: MenuNameValidator,
+    menuPriceValidator: MenuPriceValidator
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -44,12 +44,12 @@ class Menu(
     init {
         this.menuProducts.forEach { it.menu = this }
 
-        menuNameValidatorService.validate(name)
-        menuPriceValidatorService.validate(this)
+        menuNameValidator.validate(name)
+        menuPriceValidator.validate(this)
     }
 
-    fun activateDisplayStatus(menuPriceValidatorService: MenuPriceValidatorService) {
-        menuPriceValidatorService.validate(this)
+    fun activateDisplayStatus(menuPriceValidator: MenuPriceValidator) {
+        menuPriceValidator.validate(this)
 
         this.displayStatus = true
     }
@@ -58,9 +58,9 @@ class Menu(
         this.displayStatus = false
     }
 
-    fun changePrice(price: Price, menuPriceValidatorService: MenuPriceValidatorService) {
+    fun changePrice(price: Price, menuPriceValidator: MenuPriceValidator) {
         this.price = price
 
-        menuPriceValidatorService.validate(this)
+        menuPriceValidator.validate(this)
     }
 }

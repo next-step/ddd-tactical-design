@@ -2,8 +2,8 @@ package kitchenpos.fixture
 
 import kitchenpos.common.Price
 import kitchenpos.common.price
-import kitchenpos.menus.application.tobe.FakeMenuNameValidatorService
-import kitchenpos.menus.application.tobe.FakeMenuPriceValidatorService
+import kitchenpos.menus.application.tobe.FakeMenuNameValidator
+import kitchenpos.menus.application.tobe.FakeMenuPriceValidator
 import kitchenpos.menus.tobe.domain.*
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest
@@ -14,8 +14,8 @@ object MenuFixtures {
     fun menu(
         price: Price = BigDecimal.valueOf(15000).price(),
         menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
-        menuNameValidatorService: MenuNameValidatorService = FakeMenuNameValidatorService,
-        menuPriceValidatorService: MenuPriceValidatorService = FakeMenuPriceValidatorService,
+        menuNameValidator: MenuNameValidator = FakeMenuNameValidator,
+        menuPriceValidator: MenuPriceValidator = FakeMenuPriceValidator,
         displayStatus: Boolean = true
     ): Menu {
         return Menu(
@@ -24,8 +24,8 @@ object MenuFixtures {
             price = price,
             displayStatus = displayStatus,
             menuProducts = menuProducts,
-            menuNameValidatorService,
-            menuPriceValidatorService
+            menuNameValidator,
+            menuPriceValidator
         )
     }
 

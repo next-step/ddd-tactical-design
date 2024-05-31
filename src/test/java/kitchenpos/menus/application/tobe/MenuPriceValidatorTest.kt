@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import java.math.BigDecimal
 
-class MenuPriceValidatorServiceTest {
+class MenuPriceValidatorTest {
     private val productRepository: ProductRepository = mock(ProductRepository::class.java)
 
-    private val menuPriceValidatorService: MenuPriceValidatorService =
-        DefaultMenuPriceValidatorService(productRepository)
+    private val menuPriceValidator: MenuPriceValidator =
+        DefaultMenuPriceValidator(productRepository)
 
     @Test
     fun `전시 중인 메뉴의 가격보다 메뉴상품의 가격의 총합이 더 클 경우 예외발생`() {
@@ -40,7 +40,7 @@ class MenuPriceValidatorServiceTest {
         `when`(productRepository.findAllByIdIn(anyList())).thenReturn(listOf(`7천원 상품`, `6천원 상품`))
 
         //7000*1 + 6000*2 < 20000
-        assertThatThrownBy { menuPriceValidatorService.validate(`전시 중인 2만원 메뉴`) }
+        assertThatThrownBy { menuPriceValidator.validate(`전시 중인 2만원 메뉴`) }
             .isInstanceOf(IllegalArgumentException::class.java).withFailMessage("메뉴상품 가격의 총합보다 메뉴의 가격이 클 수 없습니다")
     }
 }

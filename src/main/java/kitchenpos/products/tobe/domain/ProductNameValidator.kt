@@ -1,5 +1,5 @@
 package kitchenpos.products.tobe.domain
 
-interface ProductNameValidatorService {
+interface ProductNameValidator {
     fun validate(name: String)
 }
