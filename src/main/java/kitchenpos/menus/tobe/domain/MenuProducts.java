@@ -22,20 +22,9 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public void checkLessThenMenuPrice(Price price) {
-        if (isLessThenMenuPrice(price)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public boolean isLessThenMenuPrice(Price menuPrice) {
+    public boolean isLessThenPrice(Price inputPrice) {
         Price menuProductsPrice = totalPrice();
-        return menuProductsPrice.isLessThen(menuPrice);
-    }
-
-    public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
-        Price menuProductsPrice = totalPrice();
-        return menuProductsPrice.isLessThen(menuPrice);
+        return menuProductsPrice.isLessThen(inputPrice);
     }
 
     private Price totalPrice() {

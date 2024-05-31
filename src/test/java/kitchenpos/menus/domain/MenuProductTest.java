@@ -88,9 +88,9 @@ public class MenuProductTest {
                     ToBeFixtures.menuProductOf(1, BigDecimal.valueOf(9_000))
             );
             MenuProducts menuProducts = new MenuProducts(메뉴_상품_목록);
-            BigDecimal 메뉴_가격 = BigDecimal.valueOf(10_000);
+            Price 메뉴_가격 = new Price(BigDecimal.valueOf(10_000));
 
-            Assertions.assertThat(menuProducts.isLessThenMenuPrice(메뉴_가격)).isTrue();
+            Assertions.assertThat(menuProducts.isLessThenPrice(메뉴_가격)).isTrue();
         }
     }
 }
