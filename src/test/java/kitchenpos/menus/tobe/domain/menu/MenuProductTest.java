@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.application.FakeProductClient;
 import kitchenpos.menus.tobe.exception.InvalidMenuProductQuantityException;
+import kitchenpos.menus.tobe.infra.ProductClientImpl;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.support.domain.ProductPrice;
@@ -29,7 +29,7 @@ class MenuProductTest {
     @BeforeEach
     void setUp() {
         ProductRepository productRepository = new InMemoryProductRepository();
-        productClient = new FakeProductClient(productRepository);
+        productClient = new ProductClientImpl(productRepository);
         Product product = productRepository.save(product());
         productId = product.getId();
     }

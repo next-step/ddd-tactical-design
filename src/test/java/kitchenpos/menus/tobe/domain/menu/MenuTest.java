@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.application.FakeProductClient;
 import kitchenpos.menus.application.FakeProfanityChecker;
 import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
@@ -9,6 +8,7 @@ import kitchenpos.menus.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.tobe.infra.ProductClientImpl;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.support.domain.ProductPrice;
@@ -45,7 +45,7 @@ class MenuTest {
         ProductRepository productRepository = new InMemoryProductRepository();
         MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
         profanityChecker = new FakeProfanityChecker();
-        productClient = new FakeProductClient(productRepository);
+        productClient = new ProductClientImpl(productRepository);
 
         menuGroup = menuGroupRepository.save(MenuGroup.from(MenuGroupName.from("메뉴그룹 이름")));
         productA_ID = productRepository.save(product("후라이드치킨", 10_000)).getId();
