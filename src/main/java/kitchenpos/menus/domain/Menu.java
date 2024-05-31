@@ -30,9 +30,9 @@ public class Menu {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
@@ -41,10 +41,10 @@ public class Menu {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 
@@ -108,5 +108,18 @@ public class Menu {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    /**
+     * 메뉴 구성 상품의 가격이 변동 시 메뉴의 가격을 체크 후 display 여부를 결정한다.
+     */
+    public void updateDisplayStatusOnPriceChange() {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (final MenuProduct menuProduct : menuProducts) {
+            sum = sum.add(menuProduct.getCalculatePrice());
+        }
+        if (price.compareTo(sum) > 0) {
+            displayed = false;
+        }
     }
 }
