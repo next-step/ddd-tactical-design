@@ -1,6 +1,7 @@
 package kitchenpos.product.tobe.domain;
 
 import kitchenpos.common.infra.FakePurgomalumClient;
+import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class ProductTest {
         String name = "name";
         BigDecimal price = BigDecimal.valueOf(1000);
 
-        Product product = new Product(id, name, price, new FakePurgomalumClient(false));
+        Product product = new Product(id, name, price, new ProfanityValidator(new FakePurgomalumClient(false)));
 
         Assertions.assertThat(product).isNotNull();
         Assertions.assertThat(product.getId()).isEqualTo(id);
@@ -30,7 +31,7 @@ class ProductTest {
     void test2() {
         // gjven
         UUID id = UUID.randomUUID();
-        Product product = new Product(id, "name", new BigDecimal(1000L), new FakePurgomalumClient(false));
+        Product product = new Product(id, "name", new BigDecimal(1000L), new ProfanityValidator(new FakePurgomalumClient(false)));
         BigDecimal newPrice = new BigDecimal(2000L);
 
         // when
