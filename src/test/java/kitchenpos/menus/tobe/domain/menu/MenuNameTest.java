@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.application.FakeProfanityChecker;
 import kitchenpos.menus.exception.MenuNameNullPointerException;
 import kitchenpos.menus.exception.MenuNameProfanityException;
 import org.junit.jupiter.api.BeforeEach;

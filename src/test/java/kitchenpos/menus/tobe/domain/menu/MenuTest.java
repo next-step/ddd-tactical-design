@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.application.FakeProfanityChecker;
 import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
 import kitchenpos.menus.exception.InvalidMenuPriceDisplayException;

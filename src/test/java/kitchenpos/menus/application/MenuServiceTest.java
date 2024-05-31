@@ -4,6 +4,7 @@ import kitchenpos.menus.dto.MenuChangePriceRequest;
 import kitchenpos.menus.dto.MenuCreateRequest;
 import kitchenpos.menus.dto.MenuProductCreateRequest;
 import kitchenpos.menus.dto.MenuResponse;
+import kitchenpos.menus.tobe.domain.menu.FakeProfanityChecker;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.ProductClient;
 import kitchenpos.menus.tobe.domain.menu.ProfanityChecker;
