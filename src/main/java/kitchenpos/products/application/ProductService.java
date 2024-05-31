@@ -40,7 +40,7 @@ public class ProductService {
         final ProductPrice price = ProductPrice.from(request.price());
         final ProductName name = ProductName.from(request.name(), profanityChecker);
         final Product product = productRepository.save(Product.from(name, price));
-        return ProductResponse.of(product);
+        return ProductResponse.from(product);
     }
 
     @Transactional
@@ -51,14 +51,14 @@ public class ProductService {
         product.changePrice(price);
         applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId, price));
         menuServiceClient.hideMenuBasedOnProductPrice(productId, price.priceValue());
-        return ProductResponse.of(product);
+        return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         final List<Product> productList = productRepository.findAll();
         return productList.stream()
-                .map(ProductResponse::of)
+                .map(ProductResponse::from)
                 .toList();
     }
 }

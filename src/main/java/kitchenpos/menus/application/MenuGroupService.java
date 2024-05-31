@@ -22,13 +22,13 @@ public class MenuGroupService {
     public MenuGroupResponse create(final MenuGroupCreateRequest request) {
         final MenuGroupName name = MenuGroupName.from(request.name());
         final MenuGroup menuGroup = MenuGroup.from(name);
-        return MenuGroupResponse.of(menuGroupRepository.save(menuGroup));
+        return MenuGroupResponse.from(menuGroupRepository.save(menuGroup));
     }
 
     @Transactional(readOnly = true)
     public List<MenuGroupResponse> findAll() {
         return menuGroupRepository.findAll().stream()
-                .map(MenuGroupResponse::of)
+                .map(MenuGroupResponse::from)
                 .toList();
     }
 }

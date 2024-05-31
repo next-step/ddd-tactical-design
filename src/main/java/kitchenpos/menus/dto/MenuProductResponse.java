@@ -9,7 +9,7 @@ public record MenuProductResponse(
         UUID productId,
         long quantity
 ) {
-    public static MenuProductResponse of(MenuProduct menuProduct) {
+    public static MenuProductResponse from(MenuProduct menuProduct) {
         return new MenuProductResponse(
                 menuProduct.getSeq(),
                 menuProduct.getProductId(),

@@ -14,15 +14,15 @@ public record MenuResponse(
         boolean displayed,
         List<MenuProductResponse> menuProducts
 ) {
-    public static MenuResponse of(Menu menu) {
+    public static MenuResponse from(Menu menu) {
         return new MenuResponse(
                 menu.getId(),
                 menu.getName(),
                 menu.getPrice(),
-                MenuGroupResponse.of(menu.getMenuGroup()),
+                MenuGroupResponse.from(menu.getMenuGroup()),
                 menu.isDisplayed(),
                 menu.getMenuProductList().stream()
-                        .map(MenuProductResponse::of)
+                        .map(MenuProductResponse::from)
                         .toList()
         );
     }

@@ -48,7 +48,7 @@ public class MenuService {
                 request.displayed(),
                 MenuProducts.from(request.menuProducts(), productClient)
         );
-        return MenuResponse.of(menuRepository.save(menu));
+        return MenuResponse.from(menuRepository.save(menu));
     }
 
     @Transactional
@@ -56,27 +56,27 @@ public class MenuService {
         final MenuPrice price = MenuPrice.from(request.price());
         final Menu menu = getMenu(menuId);
         menu.changePrice(price);
-        return MenuResponse.of(menu);
+        return MenuResponse.from(menu);
     }
 
     @Transactional
     public MenuResponse display(final UUID menuId) {
         final Menu menu = getMenu(menuId);
         menu.display();
-        return MenuResponse.of(menu);
+        return MenuResponse.from(menu);
     }
 
     @Transactional
     public MenuResponse hide(final UUID menuId) {
         final Menu menu = getMenu(menuId);
         menu.hide();
-        return MenuResponse.of(menu);
+        return MenuResponse.from(menu);
     }
 
     @Transactional(readOnly = true)
     public List<MenuResponse> findAll() {
         return menuRepository.findAll().stream()
-                .map(MenuResponse::of)
+                .map(MenuResponse::from)
                 .toList();
     }
 

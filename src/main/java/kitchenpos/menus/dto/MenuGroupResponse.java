@@ -7,7 +7,7 @@ import java.util.UUID;
 public record MenuGroupResponse(
         UUID id, String name
 ) {
-    public static MenuGroupResponse of(MenuGroup menuGroup) {
+    public static MenuGroupResponse from(MenuGroup menuGroup) {
         return new MenuGroupResponse(menuGroup.getId(), menuGroup.getName());
     }
 }
