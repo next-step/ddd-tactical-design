@@ -49,7 +49,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId, price));
+        applicationEventPublisher.publishEvent(ProductPriceChangedEvent.of(productId, price));
         menuServiceClient.hideMenuBasedOnProductPrice(productId, price.priceValue());
         return ProductResponse.from(product);
     }

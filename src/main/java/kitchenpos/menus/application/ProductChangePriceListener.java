@@ -1,7 +1,7 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.products.application.MenuServiceClient;
-import kitchenpos.products.application.ProductChangePriceEvent;
+import kitchenpos.products.application.ProductPriceChangedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,7 +17,7 @@ public class ProductChangePriceListener {
 
     @EventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void hideMenuHandler(final ProductChangePriceEvent event) {
+    public void hideMenuHandler(final ProductPriceChangedEvent event) {
         menuServiceClient.hideMenuBasedOnProductPrice(event.productId(), event.price().priceValue());
     }
 }
