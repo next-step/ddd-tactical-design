@@ -30,6 +30,11 @@ public class Price {
         }
     }
 
+    public Price add(Price inputPrice) {
+        this.price = this.price.add(inputPrice.price);
+        return new Price(price);
+    }
+
     public boolean isLessThen(Price inputPrice) {
         return price.compareTo(inputPrice.price) < 0;
     }

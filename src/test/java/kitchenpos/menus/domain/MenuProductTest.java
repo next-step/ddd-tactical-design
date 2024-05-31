@@ -42,8 +42,9 @@ public class MenuProductTest {
         MenuProduct 메뉴_상품 = new MenuProduct(
                 random.nextLong(), 10, 후라이드.getId(), 후라이드.getPrice()
         );
+        Price 메뉴_상품_가격 = 메뉴_상품.totalPrice();
 
-        Assertions.assertThat(메뉴_상품.getSeq()).isNotNull();
+        Assertions.assertThat(메뉴_상품_가격.getPrice()).isEqualTo(BigDecimal.valueOf(200_000));
     }
 
     @Test
@@ -64,7 +65,8 @@ public class MenuProductTest {
         void totalPrice() {
             MenuProduct 메뉴_상품 = ToBeFixtures.menuProductOf(10, BigDecimal.valueOf(20_000));
 
-            Assertions.assertThat(메뉴_상품.totalPrice().compareTo(BigDecimal.valueOf(200_000))).isZero();
+            int result = 메뉴_상품.totalPrice().getPrice().compareTo(BigDecimal.valueOf(200_000));
+            Assertions.assertThat(result).isZero();
         }
 
         @Test
@@ -75,25 +77,8 @@ public class MenuProductTest {
                     random.nextLong(), 5, 후라이드.getId(), 후라이드.getPrice()
             );
 
-            Assertions.assertThat(메뉴_상품.totalPrice().equals(십만원.getPrice())).isTrue();
-        }
-
-        @Test
-        @DisplayName("메뉴 상품들의 총 금액을 반환한다.")
-        void calculateTotalPrice2() {
-            Product 양념_치킨 = toBeFixtures.양념치킨_20000;
-            MenuProduct 메뉴_후라이드 = new MenuProduct(
-                    random.nextLong(), 3, 후라이드.getId(), 후라이드.getPrice()
-            );
-            MenuProduct 메뉴_양념치킨 = new MenuProduct(
-                    random.nextLong(), 3, 양념_치킨.getId(), 양념_치킨.getPrice()
-            );
-            List<MenuProduct> 메뉴_치킨_목록 = List.of(메뉴_후라이드, 메뉴_양념치킨);
-            MenuProducts menuProducts = new MenuProducts(메뉴_치킨_목록);
-
-            BigDecimal 총_금액 = menuProducts.price();
-
-            Assertions.assertThat(총_금액.compareTo(BigDecimal.valueOf(120_000))).isZero();
+            boolean result = 메뉴_상품.totalPrice().equals(십만원);
+            Assertions.assertThat(result).isTrue();
         }
 
         @Test
