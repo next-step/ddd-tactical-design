@@ -13,31 +13,29 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private DisplayedName name;
+    private CleanName name;
 
     @Embedded
     private Price price;
 
     public Product() {}
 
-    public Product(UUID id, String name, Price price, ProductNameValidationService productNameValidationService) {
-        this.id = id;
-        this.name = new DisplayedName(name, productNameValidationService);
-        this.price = price;
+    public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
+        this(id, name, new Price(price),productNameValidationService);
     }
 
-    public Product(UUID id, String name, BigDecimal price, ProductNameValidationService productNameValidationService) {
+    public Product(UUID id, String name, Price price, ProductNameValidationService productNameValidationService) {
         this.id = id;
-        this.name = new DisplayedName(name, productNameValidationService);
-        this.price = new Price(price);
+        this.name = new CleanName(name, productNameValidationService);
+        this.price = price;
     }
 
     public void changePrice(BigDecimal changedPrice) {
         price = new Price(changedPrice);
     }
 
-    public boolean isSamePrice(BigDecimal price) {
-        return this.price.equals(new Price(price));
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     public UUID getId() {
