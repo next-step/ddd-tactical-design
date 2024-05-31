@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class ProductChangePriceListener {
+public class ProductPriceChangedListener {
     final MenuServiceClient menuServiceClient;
 
-    public ProductChangePriceListener(MenuServiceClient menuServiceClient) {
+    public ProductPriceChangedListener(MenuServiceClient menuServiceClient) {
         this.menuServiceClient = menuServiceClient;
     }
 
