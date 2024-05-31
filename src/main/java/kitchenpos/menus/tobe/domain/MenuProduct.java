@@ -31,15 +31,15 @@ public class MenuProduct {
         this.price = new Price(productPrice, quantity);
     }
 
-    public BigDecimal totalPrice() {
-        return price.getPrice();
-    }
-
     public Long getSeq() {
         return seq;
     }
 
-    public long getQuantity() {
-        return quantity.getQuantity();
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public Price totalPrice() {
+        return price;
     }
 }

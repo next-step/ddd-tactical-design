@@ -29,18 +29,18 @@ public class MenuProducts {
     }
 
     public boolean isLessThenMenuPrice(Price menuPrice) {
-        Price menuProductsPrice = new Price(price());
+        Price menuProductsPrice = totalPrice();
         return menuProductsPrice.isLessThen(menuPrice);
     }
 
     public boolean isLessThenMenuPrice(BigDecimal menuPrice) {
-        Price menuProductsPrice = new Price(price());
+        Price menuProductsPrice = totalPrice();
         return menuProductsPrice.isLessThen(menuPrice);
     }
 
-    public BigDecimal price() {
+    private Price totalPrice() {
         return menuProducts.stream()
                 .map(menuProduct -> menuProduct.totalPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(new Price(BigDecimal.ZERO), Price::add);
     }
 }
