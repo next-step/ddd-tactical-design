@@ -32,6 +32,14 @@ public class MenuProduct {
 
     }
 
+    public void changePrice(int price){
+        this.price = price;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
     public int getAmount(){
         return price * quantity;
     }

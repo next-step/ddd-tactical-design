@@ -76,6 +76,10 @@ public class Menu {
     }
 
 
+    public UUID getId() {
+        return id;
+    }
+
     public String getName() {
         return name.getValue();
     }
