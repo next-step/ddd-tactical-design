@@ -9,6 +9,6 @@ public record MenuProductCreateRequest(
         UUID productId, long quantity
 ) {
     public MenuProduct toMenuProduct(ProductClient productClient) {
-        return MenuProduct.from(this.productId, this.quantity, productClient);
+        return MenuProduct.of(this.productId, this.quantity, productClient);
     }
 }

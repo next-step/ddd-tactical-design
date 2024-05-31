@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("메뉴")
 class MenuTest {
-    private static MenuProductCreateRequest menuProductA;
     private static UUID productA_ID;
     private static MenuName name;
     private static MenuPrice price;
@@ -36,20 +35,18 @@ class MenuTest {
     private static MenuProducts menuProducts;
 
     List<MenuProductCreateRequest> menuProductsRequest;
-    private ProfanityChecker profanityChecker;
-    private ProductClient productClient;
 
     @BeforeEach
     void setUp() {
         ProductRepository productRepository = new InMemoryProductRepository();
         MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
-        profanityChecker = new FakeProfanityChecker();
-        productClient = new ProductClientImpl(productRepository);
+        ProfanityChecker profanityChecker = new FakeProfanityChecker();
+        ProductClient productClient = new ProductClientImpl(productRepository);
 
         menuGroup = menuGroupRepository.save(MenuGroup.from(MenuGroupName.from("메뉴그룹 이름")));
         productA_ID = productRepository.save(product("후라이드치킨", 10_000)).getId();
         UUID productB_ID = productRepository.save(product("양념치킨", 12_000)).getId();
-        menuProductA = new MenuProductCreateRequest(productA_ID, 1L);
+        MenuProductCreateRequest menuProductA = new MenuProductCreateRequest(productA_ID, 1L);
         MenuProductCreateRequest menuProductB = new MenuProductCreateRequest(productB_ID, 2L);
         menuProductsRequest = List.of(menuProductA, menuProductB);
         name = MenuName.from("메뉴 이름", profanityChecker);
@@ -61,7 +58,7 @@ class MenuTest {
     @DisplayName("[성공] 메뉴를 생성한다.")
     @Test
     void create() {
-        Menu actual = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu actual = Menu.of(name, price, menuGroup, true, menuProducts);
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
@@ -78,14 +75,14 @@ class MenuTest {
     @ParameterizedTest
     void fail_create(long price) {
         MenuPrice invalidPrice = MenuPrice.from(price);
-        assertThatThrownBy(() -> Menu.from(name, invalidPrice, menuGroup, true, menuProducts))
+        assertThatThrownBy(() -> Menu.of(name, invalidPrice, menuGroup, true, menuProducts))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("[성공] 메뉴의 가격을 변경한다.")
     @Test
     void changePrice() {
-        Menu menu = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, true, menuProducts);
         MenuPrice newPrice = MenuPrice.from(29_900);
 
         menu.changePrice(newPrice);
@@ -98,7 +95,7 @@ class MenuTest {
     @ParameterizedTest
     void fail_changePrice(long newPrice) {
         MenuPrice invalidPrice = MenuPrice.from(newPrice);
-        Menu menu = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, true, menuProducts);
 
         assertThatThrownBy(() -> menu.changePrice(invalidPrice))
                 .isInstanceOf(InvalidMenuPriceException.class);
@@ -107,7 +104,7 @@ class MenuTest {
     @DisplayName("[성공] 메뉴를 구성하는 메뉴구성상품의 가격을 변경한다.")
     @Test
     void changeMenuProductPrice() {
-        Menu menu = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, true, menuProducts);
         BigDecimal newPrice = BigDecimal.valueOf(11_000);
 
         menu.changeMenuProductPrice(productA_ID, newPrice);
@@ -122,7 +119,7 @@ class MenuTest {
     @DisplayName("[성공] 메뉴의 가격은 메뉴구성상품의 가격의 총합보다 크다.")
     @Test
     void isPriceGreaterThanMenuProductsSum() {
-        Menu menu = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, true, menuProducts);
         BigDecimal newProductPrice = BigDecimal.valueOf(5_000);
         menu.changeMenuProductPrice(productA_ID, newProductPrice);
 
@@ -132,7 +129,7 @@ class MenuTest {
     @DisplayName("[성공] 메뉴를 노출시킨다.")
     @Test
     void display() {
-        Menu menu = Menu.from(name, price, menuGroup, false, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, false, menuProducts);
 
         menu.display();
 
@@ -142,7 +139,7 @@ class MenuTest {
     @DisplayName("[실패] 메뉴의 가격이 메뉴구성상품의 가격의 총합보다 크면 메뉴는 노출될 수 없다.")
     @Test
     void fail_display() {
-        Menu menu = Menu.from(name, price, menuGroup, false, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, false, menuProducts);
         BigDecimal invalidProductPrice = BigDecimal.valueOf(5_000);
         menu.changeMenuProductPrice(productA_ID, invalidProductPrice);
 
@@ -153,7 +150,7 @@ class MenuTest {
     @DisplayName("[성공] 메뉴가 숨겨진다.")
     @Test
     void hide() {
-        Menu menu = Menu.from(name, price, menuGroup, true, menuProducts);
+        Menu menu = Menu.of(name, price, menuGroup, true, menuProducts);
 
         menu.hide();
 

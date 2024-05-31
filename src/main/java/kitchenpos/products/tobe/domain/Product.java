@@ -32,7 +32,7 @@ public class Product {
         this.price = price;
     }
 
-    public static Product from(ProductName name, ProductPrice price) {
+    public static Product of(ProductName name, ProductPrice price) {
         return new Product(UUID.randomUUID(), name, price);
     }
 

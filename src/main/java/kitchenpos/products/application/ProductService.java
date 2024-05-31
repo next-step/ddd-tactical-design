@@ -39,7 +39,7 @@ public class ProductService {
     public ProductResponse create(final ProductCreateRequest request) {
         final ProductPrice price = ProductPrice.from(request.price());
         final ProductName name = ProductName.from(request.name(), profanityChecker);
-        final Product product = productRepository.save(Product.from(name, price));
+        final Product product = productRepository.save(Product.of(name, price));
         return ProductResponse.from(product);
     }
 

@@ -117,10 +117,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return Product.from(ProductName.from(name), ProductPrice.from(price));
+        return Product.of(ProductName.from(name), ProductPrice.from(price));
     }
 
     public static Product product(final String name, final long price, ProfanityChecker profanityChecker) {
-        return Product.from(ProductName.from(name, profanityChecker), ProductPrice.from(price));
+        return Product.of(ProductName.from(name, profanityChecker), ProductPrice.from(price));
     }
 }

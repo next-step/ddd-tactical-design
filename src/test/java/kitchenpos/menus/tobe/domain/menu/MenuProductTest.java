@@ -37,7 +37,7 @@ class MenuProductTest {
     @DisplayName("[성공] 메뉴구성상품을 생성한다.")
     @Test
     void create() {
-        MenuProduct actual = MenuProduct.from(productId, 2L, productClient);
+        MenuProduct actual = MenuProduct.of(productId, 2L, productClient);
 
         assertAll(
                 () -> assertThat(actual.getSeq()).isNull(),
@@ -51,7 +51,7 @@ class MenuProductTest {
     @ValueSource(longs = {-1, -2, -100, -9999})
     @ParameterizedTest
     void fail_quantity(long quantity) {
-        assertThatThrownBy(() -> MenuProduct.from(productId, quantity, productClient))
+        assertThatThrownBy(() -> MenuProduct.of(productId, quantity, productClient))
                 .isInstanceOf(InvalidMenuProductQuantityException.class);
     }
 
@@ -59,7 +59,7 @@ class MenuProductTest {
     @Test
     void changeProductPrice() {
         ProductPrice price = ProductPrice.from(20_000L);
-        MenuProduct menuProduct = MenuProduct.from(productId, 2L, productClient);
+        MenuProduct menuProduct = MenuProduct.of(productId, 2L, productClient);
 
         menuProduct.changeProductPrice(price);
 

@@ -64,7 +64,7 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public static Menu from(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
+    public static Menu of(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts) {
         checkCreateComparedPrice(price, menuProducts);
         return new Menu(name, price, menuGroup, displayed, menuProducts);
     }

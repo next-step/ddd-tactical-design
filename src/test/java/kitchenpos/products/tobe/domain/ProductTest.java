@@ -22,7 +22,7 @@ class ProductTest {
     @DisplayName("[성공] 상품을 생성한다.")
     @Test
     void create() {
-        Product actual = Product.from(상품이름, 상품가격);
+        Product actual = Product.of(상품이름, 상품가격);
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
@@ -34,7 +34,7 @@ class ProductTest {
     @DisplayName("[성공] 상품의 가격을 바꾼다.")
     @Test
     void changePrice() {
-        Product product = Product.from(상품이름, 상품가격);
+        Product product = Product.of(상품이름, 상품가격);
         BigDecimal newPrice = BigDecimal.valueOf(15_000);
 
         product.changePrice(ProductPrice.from(newPrice));
@@ -46,7 +46,7 @@ class ProductTest {
     @DisplayName("[성공] 상품의 가격에 숫자를 곱한다.")
     @Test
     void priceMultiple() {
-        Product product = Product.from(상품이름, 상품가격);
+        Product product = Product.of(상품이름, 상품가격);
 
         BigDecimal actual = product.priceMultiple(BigDecimal.TEN);
 
@@ -57,7 +57,7 @@ class ProductTest {
     @ValueSource(strings = {"-1", "-2", "-10"})
     @ParameterizedTest
     void fail_priceMultiple(BigDecimal input) {
-        Product product = Product.from(상품이름, 상품가격);
+        Product product = Product.of(상품이름, 상품가격);
 
         assertThatThrownBy(() -> product.priceMultiple(input))
                 .isInstanceOf(InvalidProductPriceException.class);

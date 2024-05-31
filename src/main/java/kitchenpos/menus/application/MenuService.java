@@ -41,7 +41,7 @@ public class MenuService {
 
     @Transactional
     public MenuResponse create(final MenuCreateRequest request) {
-        final Menu menu = Menu.from(
+        final Menu menu = Menu.of(
                 MenuName.from(request.name(), profanityChecker),
                 MenuPrice.from(request.price()),
                 getMenuGroup(request.menuGroupId()),

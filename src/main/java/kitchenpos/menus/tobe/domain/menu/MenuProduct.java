@@ -45,7 +45,7 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static MenuProduct from(UUID productId, long quantity, ProductClient productClient) {
+    public static MenuProduct of(UUID productId, long quantity, ProductClient productClient) {
         ProductPrice productPrice = ProductPrice.from(productClient.productPrice(productId));
         return new MenuProduct(productId, productPrice, quantity);
     }
