@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -57,13 +58,20 @@ public class Menu {
 
     public Menu(UUID id, CleanName name, Price price, boolean displayed,
                 MenuProducts menuProducts, UUID menuGroupId) {
-        this.id = id;
+        this.id = checkId(id);
         this.name = name;
         this.price = price;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
+        this.menuGroupId = checkId(menuGroupId);
         checkLessThenMenuProductsPrice(price);
+    }
+
+    private UUID checkId(UUID id) {
+        if (Objects.isNull(id)) {
+            throw new IllegalArgumentException();
+        }
+        return id;
     }
 
     public void changePrice(BigDecimal changedMenuPrice) {
