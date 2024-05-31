@@ -42,7 +42,7 @@ class OrderTable {
 
     public void changeCountOfGuest(int count) {
         if (!occupied) {
-            throw new IllegalArgumentException("Cleared Order Table이면 손님 수를 변경할 수 없습니다.");
+            throw new IllegalArgumentException("Cleared Order Table 이면, countOfGuest를 변경할 수 없습니다.");
         }
         this.guest = new Guest(count);
     }

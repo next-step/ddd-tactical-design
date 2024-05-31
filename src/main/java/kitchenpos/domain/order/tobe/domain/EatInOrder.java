@@ -2,7 +2,6 @@ package kitchenpos.domain.order.tobe.domain;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,14 +20,8 @@ public class EatInOrder {
     )
     private OrderTable orderTable;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "eat_in_order_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_eat_in_order")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
@@ -38,10 +31,7 @@ public class EatInOrder {
     }
 
     public EatInOrder(OrderTable orderTable, List<OrderLineItem> orderLineItems) {
-        if (orderLineItems == null || orderLineItems.isEmpty()) {
-            throw new IllegalArgumentException("주문항목은 1개 이상이어야 합니다.");
-        }
-        this.orderLineItems = new ArrayList<>(orderLineItems);
+        this.orderLineItems = new OrderLineItems(orderLineItems);
         this.orderTable = orderTable;
         this.status = OrderStatus.WAITING;
     }
@@ -64,7 +54,7 @@ public class EatInOrder {
     }
 
     public List<OrderLineItem> orderLineItems() {
-        return orderLineItems;
+        return orderLineItems.get();
     }
 
     public OrderStatus status() {
