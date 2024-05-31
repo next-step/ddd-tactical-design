@@ -75,7 +75,7 @@ class MenuV2 private constructor(
         }
     }
 
-    fun getMenuProductsPriceSum(): BigDecimal {
+    private fun getMenuProductsPriceSum(): BigDecimal {
         return menuProducts.getPriceSum()
     }
 

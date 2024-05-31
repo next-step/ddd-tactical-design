@@ -5,4 +5,6 @@ import java.util.UUID
 
 interface MenuGroupRepositoryV2 {
     fun findMenuGroupById(id: UUID): MenuGroupV2?
+
+    fun save(menuGroup: MenuGroupV2): MenuGroupV2
 }
