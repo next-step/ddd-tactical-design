@@ -23,10 +23,10 @@ public class ProductName {
     public ProductName(String productName, PurgomalumClient purgomalumClient) {
         this.name = productName;
         this.purgomalumClient = purgomalumClient;
-        validate(name);
+        validate();
     }
 
-    private void validate(String name) {
+    private void validate() {
         if (Objects.isNull(name)) {
             throw new IllegalNameException(null);
         }
