@@ -13,7 +13,7 @@ public class ProductName {
     private final String value;
 
     protected ProductName() {
-        this.value = new String();
+        this(new String());
     }
     public ProductName(String value){
         if (Objects.isNull(value)) {

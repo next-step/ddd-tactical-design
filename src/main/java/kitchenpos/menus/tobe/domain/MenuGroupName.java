@@ -11,7 +11,7 @@ public class MenuGroupName {
     private final String value;
 
     protected MenuGroupName(){
-        this.value = new String();
+        this(new String());
     }
     public MenuGroupName(String value) {
         checkGroupName(value);

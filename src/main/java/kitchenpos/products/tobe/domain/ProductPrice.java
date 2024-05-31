@@ -13,7 +13,7 @@ public class ProductPrice {
     private final int value;
 
     protected ProductPrice() {
-        this.value = 0;
+        this(0);
     }
     public ProductPrice(int value) {
         if (Objects.isNull(value) || value < 0) {

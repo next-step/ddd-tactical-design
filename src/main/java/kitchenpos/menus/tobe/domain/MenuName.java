@@ -8,7 +8,7 @@ public class MenuName {
     private final String value;
 
     protected MenuName(){
-        this.value = new String();
+        this(new String());
     }
 
     public MenuName(String value) {

@@ -12,7 +12,7 @@ public class MenuPrice {
     private final int value;
 
     public MenuPrice() {
-        this.value = 0;
+        this(0);
     }
 
     public MenuPrice(int value) {
