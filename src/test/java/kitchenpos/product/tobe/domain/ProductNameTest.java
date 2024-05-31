@@ -20,8 +20,8 @@ class ProductNameTest {
     @ParameterizedTest
     @ValueSource(strings = {"테스트이름"})
     void success(String input) {
-        final var name1 = new ProductName(input, purgomalumClient.containsProfanity(input));
-        final var name2 = new ProductName(input, purgomalumClient.containsProfanity(input));
+        final var name1 = new ProductName(input, purgomalumClient);
+        final var name2 = new ProductName(input, purgomalumClient);
 
         assertThat(name2).isEqualTo(name1);
     }
@@ -31,7 +31,7 @@ class ProductNameTest {
     @NullSource
     void nameFailTest(String input) {
 
-        assertThrows(IllegalNameException.class, () -> new ProductName(input, false));
+        assertThrows(IllegalNameException.class, () -> new ProductName(input, purgomalumClient));
     }
 
     @ParameterizedTest
@@ -39,6 +39,6 @@ class ProductNameTest {
     @DisplayName("[실패] 상품 이름에 욕설이 포함되어있는 경우 등록할 수 없다.")
     void nameFailTest2(final String name) {
 
-        assertThrows(IllegalArgumentException.class, () -> new ProductName(name, purgomalumClient.containsProfanity(name)));
+        assertThrows(IllegalArgumentException.class, () -> new ProductName(name, purgomalumClient));
     }
 }

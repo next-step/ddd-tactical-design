@@ -1,6 +1,7 @@
 package kitchenpos.fixture.tobe;
 
 import jakarta.validation.constraints.NotNull;
+import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductName;
 import kitchenpos.product.tobe.domain.ProductPrice;
@@ -12,6 +13,7 @@ import static kitchenpos.MoneyConstants.만원;
 public class ProductFixture {
 
     public static final String 상품명 = "상품명";
+    public static FakePurgomalumClient fakePurgomalumClient = new FakePurgomalumClient();
 
     public static Product createProductWithoutName() {
         return createProduct(null, 만원);
@@ -20,6 +22,7 @@ public class ProductFixture {
     public static Product createProductWithoutPrice() {
         return createProduct(상품명, null);
     }
+
     public static Product createProduct() {
         return createProduct(상품명, 만원);
     }
@@ -33,7 +36,7 @@ public class ProductFixture {
     }
 
     public static @NotNull Product createProduct(String name, Long price) {
-        return new Product(new ProductName(name, false),
+        return new Product(new ProductName(name, fakePurgomalumClient),
                 new ProductPrice(BigDecimal.valueOf(price)));
     }
 }

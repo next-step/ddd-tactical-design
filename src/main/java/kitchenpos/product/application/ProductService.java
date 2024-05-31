@@ -37,15 +37,11 @@ public class ProductService {
     public Product create(final Product request) {
         final String name = request.getProductName();
         final BigDecimal price = request.getProductPrice();
-        final var productName = new ProductName(name, checkContainsProfanity(name));
+        final var productName = new ProductName(name, purgomalumClient);
         final var productPrice = new ProductPrice(price);
 
         final Product product = new Product(productName, productPrice);
         return productRepository.save(product);
-    }
-
-    boolean checkContainsProfanity(String name) {
-        return purgomalumClient.containsProfanity(name);
     }
 
     @Transactional

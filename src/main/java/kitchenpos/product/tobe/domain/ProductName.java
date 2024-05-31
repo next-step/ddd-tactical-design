@@ -2,7 +2,9 @@ package kitchenpos.product.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import kitchenpos.exception.IllegalNameException;
+import kitchenpos.infra.PurgomalumClient;
 
 import java.util.Objects;
 
@@ -12,19 +14,23 @@ public class ProductName {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Transient
+    private PurgomalumClient purgomalumClient;
+
     protected ProductName() {
     }
 
-    public ProductName(String productName, boolean isProfanity) {
+    public ProductName(String productName, PurgomalumClient purgomalumClient) {
         this.name = productName;
-        validate(isProfanity);
+        this.purgomalumClient = purgomalumClient;
+        validate(name);
     }
 
-    private void validate(boolean isProfanity) {
+    private void validate(String name) {
         if (Objects.isNull(name)) {
             throw new IllegalNameException(null);
         }
-        if (isProfanity) {
+        if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalNameException("(비속어 포함 이름) " + name);
         }
     }
