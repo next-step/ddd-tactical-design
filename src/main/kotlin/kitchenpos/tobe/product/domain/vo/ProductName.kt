@@ -3,7 +3,7 @@ package kitchenpos.tobe.product.domain.vo
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
-import kitchenpos.tobe.product.exception.ProductNameException
+import kitchenpos.tobe.product.exception.product.ProductNameException
 
 @Embeddable
 class ProductName private constructor(

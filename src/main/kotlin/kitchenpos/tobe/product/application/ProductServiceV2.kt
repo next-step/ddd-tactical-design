@@ -7,7 +7,7 @@ import kitchenpos.tobe.product.application.dto.response.CreateProductResponse
 import kitchenpos.tobe.product.application.dto.response.GetProductResponse
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
 import kitchenpos.tobe.product.domain.entity.ProductV2
-import kitchenpos.tobe.product.domain.repository.ProductRepository
+import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +16,7 @@ import java.util.*
 @Service
 @Transactional
 class ProductServiceV2(
-    private val productRepository: ProductRepository,
+    private val productRepository: ProductRepositoryV2,
     private val pugomalumClient: ProductPurgomalumClient,
     private val eventPublisher: ApplicationEventPublisher,
 ) {

@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import kitchenpos.tobe.domain.product.FakeProductPugomalumClient
 import kitchenpos.tobe.product.domain.vo.ProductName
-import kitchenpos.tobe.product.exception.ProductNameException
+import kitchenpos.tobe.product.exception.product.ProductNameException
 
 class ProductNameTest : DescribeSpec() {
     init {

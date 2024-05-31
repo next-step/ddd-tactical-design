@@ -1,4 +1,4 @@
-package kitchenpos.tobe.menu.domain.entity
+package kitchenpos.tobe.menu.domain.vo
 
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Embeddable
@@ -19,7 +19,7 @@ class MenuProducts(
     )
     val menuProducts: MutableList<MenuProductV2>,
 ) {
-    fun changeProductPrice(
+    fun handleProductPriceChanged(
         productId: UUID,
         price: BigDecimal,
     ) {
@@ -30,7 +30,7 @@ class MenuProducts(
 
     fun getPriceSum(): BigDecimal {
         return menuProducts.sumOf {
-            it.price
+            it.price * it.quantity.toBigDecimal()
         }
     }
 }

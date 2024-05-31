@@ -2,7 +2,7 @@ package kitchenpos.tobe.product.domain.vo
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
-import kitchenpos.tobe.product.exception.ProductPriceException
+import kitchenpos.tobe.product.exception.product.ProductPriceException
 import java.math.BigDecimal
 
 @Embeddable

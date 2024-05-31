@@ -6,8 +6,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import kitchenpos.tobe.domain.product.FakeProductPugomalumClient
 import kitchenpos.tobe.product.domain.entity.ProductV2
-import kitchenpos.tobe.product.exception.ProductNameException
-import kitchenpos.tobe.product.exception.ProductPriceException
+import kitchenpos.tobe.product.exception.product.ProductNameException
+import kitchenpos.tobe.product.exception.product.ProductPriceException
 import java.math.BigDecimal
 
 class ProductTest() : DescribeSpec() {

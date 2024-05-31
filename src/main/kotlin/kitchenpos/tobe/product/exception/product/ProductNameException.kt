@@ -1,4 +1,4 @@
-package kitchenpos.tobe.product.exception
+package kitchenpos.tobe.product.exception.product
 
 class ProductNameException(
     override val message: String?,

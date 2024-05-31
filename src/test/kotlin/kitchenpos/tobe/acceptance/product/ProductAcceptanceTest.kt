@@ -2,7 +2,7 @@ package kitchenpos.tobe.acceptance.product
 
 import io.kotest.matchers.shouldBe
 import kitchenpos.acceptance.CommonAcceptanceTest
-import kitchenpos.tobe.product.domain.repository.ProductRepository
+import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
 
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 class ProductAcceptanceTest(
     @LocalServerPort
     override var port: Int,
-    private val productRepository: ProductRepository,
+    private val productRepository: ProductRepositoryV2,
 ) : CommonAcceptanceTest() {
     init {
         given("가게 사장님이 로그인한 뒤에") {

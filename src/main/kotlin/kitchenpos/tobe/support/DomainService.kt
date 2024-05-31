@@ -1,4 +1,4 @@
-package kitchenpos.tobe.menu.domain.service
+package kitchenpos.tobe.support
 
 import org.springframework.stereotype.Service
 

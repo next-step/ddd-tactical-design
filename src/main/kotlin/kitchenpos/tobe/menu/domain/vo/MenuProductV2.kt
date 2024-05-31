@@ -1,4 +1,4 @@
-package kitchenpos.tobe.menu.domain.entity
+package kitchenpos.tobe.menu.domain.vo
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import jakarta.persistence.Transient
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,7 +20,7 @@ class MenuProductV2 private constructor(
     var price: BigDecimal,
     @Column(name = "quantity")
     var quantity: Long,
-    @Transient
+    @Column(name = "product_id")
     val productId: UUID,
 ) {
     companion object {

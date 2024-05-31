@@ -1,25 +1,26 @@
 package tobe.domain
 
-import kitchenpos.tobe.menu.domain.entity.MenuProductV2
+import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
 import kitchenpos.tobe.menu.domain.entity.MenuV2
 import tobe.domain.MenuGroupFixtures.createMenuGroup
-import java.util.*
+import tobe.domain.MenuProductsFixtures.createMenuProduct
 
 object MenuFixtures {
     fun createMenu(): MenuV2 {
+        val menuPurgomalumClient =
+            object : MenuPurgomalumClient {
+                override fun containsProfanity(text: String): Boolean {
+                    return false
+                }
+            }
+
         return MenuV2.of(
             name = "후라이드치킨",
             price = 16000.toBigDecimal(),
             displayed = true,
             menuGroup = createMenuGroup(),
-            menuProducts =
-                mutableListOf(
-                    MenuProductV2.of(
-                        price = 16000.toBigDecimal(),
-                        quantity = 1,
-                        productId = UUID.randomUUID(),
-                    ),
-                ),
+            menuProducts = mutableListOf(createMenuProduct()),
+            menuPurgomalumClient = menuPurgomalumClient,
         )
     }
 }

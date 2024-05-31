@@ -1,5 +1,5 @@
-package kitchenpos.tobe.product.exception
+package kitchenpos.tobe.product.exception.menu
 
-class ProductPriceException(
+class MenuNameException(
     override val message: String?,
 ) : IllegalArgumentException(message)

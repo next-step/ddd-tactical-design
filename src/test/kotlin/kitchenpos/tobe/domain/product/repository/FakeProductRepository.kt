@@ -1,10 +1,10 @@
 package kitchenpos.tobe.domain.product.repository
 
 import kitchenpos.tobe.product.domain.entity.ProductV2
-import kitchenpos.tobe.product.domain.repository.ProductRepository
+import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import java.util.*
 
-class FakeProductRepository : ProductRepository {
+class FakeProductRepository : ProductRepositoryV2 {
     private val products: MutableMap<UUID, ProductV2> = mutableMapOf()
 
     override fun save(productV2: ProductV2): ProductV2 {

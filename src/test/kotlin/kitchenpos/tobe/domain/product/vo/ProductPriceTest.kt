@@ -4,7 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import kitchenpos.tobe.product.domain.vo.ProductPrice
-import kitchenpos.tobe.product.exception.ProductPriceException
+import kitchenpos.tobe.product.exception.product.ProductPriceException
 import java.math.BigDecimal
 
 class ProductPriceTest : DescribeSpec() {

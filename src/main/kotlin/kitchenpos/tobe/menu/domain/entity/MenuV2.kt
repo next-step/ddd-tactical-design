@@ -8,6 +8,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
+import kitchenpos.tobe.menu.domain.vo.MenuName
+import kitchenpos.tobe.menu.domain.vo.MenuPrice
+import kitchenpos.tobe.menu.domain.vo.MenuProductV2
+import kitchenpos.tobe.menu.domain.vo.MenuProducts
 import java.math.BigDecimal
 import java.util.*
 
@@ -17,10 +22,10 @@ class MenuV2 private constructor(
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     val id: UUID,
-    @Column(name = "name", nullable = false)
-    val name: String,
-    @Column(name = "price", nullable = false)
-    val price: BigDecimal,
+    @Embedded
+    private val name: MenuName,
+    @Embedded
+    private var price: MenuPrice,
     @Column(name = "displayed", nullable = false)
     var displayed: Boolean,
     @ManyToOne(optional = false)
@@ -40,32 +45,65 @@ class MenuV2 private constructor(
             displayed: Boolean,
             menuGroup: MenuGroupV2,
             menuProducts: MutableList<MenuProductV2>,
+            menuPurgomalumClient: MenuPurgomalumClient,
         ): MenuV2 {
+            val menuPrice =
+                MenuPrice.of(
+                    price = price,
+                    productsPrice = menuProducts.sumOf { it.price * it.quantity.toBigDecimal() },
+                )
+
             return MenuV2(
                 id = UUID.randomUUID(),
-                name = name,
-                price = price,
+                name = MenuName.of(name, menuPurgomalumClient),
+                price = menuPrice,
                 displayed = displayed,
                 menuGroup = menuGroup,
-                menuProducts =
-                    MenuProducts(
-                        menuProducts = menuProducts,
-                    ),
+                menuProducts = MenuProducts(menuProducts),
             )
         }
     }
 
-    fun changeProductPrice(
+    fun handleProductPriceChanged(
         productId: UUID,
         price: BigDecimal,
     ) {
-        menuProducts.changeProductPrice(productId, price)
-        if (menuProducts.getPriceSum() <= this.price) {
-            this.displayed = false
+        menuProducts.handleProductPriceChanged(productId, price)
+
+        if (getPrice() > getMenuProductsPriceSum()) {
+            unDisplay()
         }
+    }
+
+    fun getMenuProductsPriceSum(): BigDecimal {
+        return menuProducts.getPriceSum()
+    }
+
+    fun getPrice(): BigDecimal {
+        return price.price
+    }
+
+    fun getName(): String {
+        return name.name
     }
 
     fun getMenuProducts(): List<MenuProductV2> {
         return menuProducts.menuProducts
+    }
+
+    fun unDisplay() {
+        displayed = false
+    }
+
+    fun changeMenuPrice(price: BigDecimal) {
+        this.price =
+            MenuPrice.of(
+                price = price,
+                productsPrice = getMenuProductsPriceSum(),
+            )
+    }
+
+    fun display() {
+        displayed = true
     }
 }
