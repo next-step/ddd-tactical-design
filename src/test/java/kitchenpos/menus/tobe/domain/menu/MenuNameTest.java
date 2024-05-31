@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.exception.MenuNameNullPointerException;
 import kitchenpos.menus.exception.MenuNameProfanityException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +35,7 @@ class MenuNameTest {
     @ParameterizedTest
     void fail1(String name) {
         assertThatThrownBy(() -> MenuName.from(name, profanityChecker))
-                .isInstanceOf(MenuNameNullPointerException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("[실패] 메뉴 이름은 비속어를 포함할 수 없다.")

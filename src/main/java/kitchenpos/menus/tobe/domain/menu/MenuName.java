@@ -2,13 +2,14 @@ package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.menus.exception.MenuNameNullPointerException;
 import kitchenpos.menus.exception.MenuNameProfanityException;
 
 import java.util.Objects;
 
 @Embeddable
 public class MenuName {
+    private static final String MENU_NAME_NULL_OR_BLANK_MESSAGE = "메뉴 이름은 비워둘 수 없습니다.";
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -17,7 +18,7 @@ public class MenuName {
 
     public MenuName(final String name) {
         this.name = name;
-        nullCheck(name);
+        checkNullOrBlank(name);
     }
 
     public MenuName(final String name, ProfanityChecker profanityChecker) {
@@ -50,9 +51,9 @@ public class MenuName {
         return Objects.hash(name);
     }
 
-    private void nullCheck(String name) {
-        if (Objects.isNull(name)) {
-            throw new MenuNameNullPointerException();
+    private void checkNullOrBlank(String name) {
+        if (Objects.isNull(name) || name.isBlank()) {
+            throw new IllegalArgumentException(MENU_NAME_NULL_OR_BLANK_MESSAGE);
         }
     }
 
