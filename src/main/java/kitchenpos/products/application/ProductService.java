@@ -1,6 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.support.application.MenuServiceClient;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
@@ -50,7 +49,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId));
+        applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId, price));
         menuServiceClient.hideMenuBasedOnProductPrice(productId, price.priceValue());
         return ProductResponse.of(product);
     }

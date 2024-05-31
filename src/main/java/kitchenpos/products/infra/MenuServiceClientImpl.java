@@ -1,6 +1,7 @@
-package kitchenpos.support.application;
+package kitchenpos.products.infra;
 
 import kitchenpos.menus.application.MenuService;
+import kitchenpos.products.application.MenuServiceClient;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

@@ -1,6 +1,5 @@
 package kitchenpos.products.application;
 
-import kitchenpos.support.application.MenuServiceClient;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 
