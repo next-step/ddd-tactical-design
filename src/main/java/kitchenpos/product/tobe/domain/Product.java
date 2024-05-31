@@ -1,6 +1,7 @@
 package kitchenpos.product.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.exception.IllegalPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class Product {
     @Embedded
     private ProductName productName;
 
-    @Column(name = "price", nullable = false)
+    @Embedded
     private ProductPrice productPrice;
 
     protected Product() {
@@ -46,8 +47,8 @@ public class Product {
         return productPrice.getPrice();
     }
 
-    public void setProductPrice(ProductPrice productPrice) {
-        this.productPrice = productPrice;
+    public void updateProductPrice(BigDecimal newProductPrice) {
+        this.productPrice = new ProductPrice(newProductPrice);
     }
 
     @Override

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -46,15 +45,12 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getProductPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+        final BigDecimal newPrice = request.getProductPrice();
+
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
 
-        final var productPrice = new ProductPrice(price);
-        product.setProductPrice(productPrice);
+        product.updateProductPrice(newPrice);
 
         changeMenuDisplayStatus(productId);
 

@@ -88,7 +88,7 @@ public class ProductServiceTest {
             given(productRepository.findById(product.getId())).willReturn(Optional.ofNullable(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
 
-            product.setProductPrice(new ProductPrice(BigDecimal.valueOf(changingPrice)));
+            product.updateProductPrice(BigDecimal.valueOf(changingPrice));
 
             Product response = productService.changePrice(product.getId(), product);
 
@@ -117,7 +117,7 @@ public class ProductServiceTest {
             given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
 
-            product.setProductPrice(new ProductPrice(BigDecimal.valueOf(오천원)));
+            product.updateProductPrice(BigDecimal.valueOf(오천원));
             productService.changePrice(product.getId(), product);
 
             assertFalse(menu.isDisplayed());
