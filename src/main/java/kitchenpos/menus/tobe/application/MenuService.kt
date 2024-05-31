@@ -26,7 +26,7 @@ class MenuService(
     @Transactional
     fun createMenu(request: MenuCreateRequest): MenuResponse {
         val menuGroup = menuGroupRepository.findByIdOrNull(request.menuGroupId)
-            ?: throw NoSuchElementException("can not found menu group")
+            ?: throw NoSuchElementException("can not found menu group : ${request.menuGroupId}")
 
         val menuProducts = request.menuProducts
             .map {
@@ -48,21 +48,21 @@ class MenuService(
 
     @Transactional
     fun changeMenuPrice(menuId: UUID, price: Price) {
-        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu")
+        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu: $menuId")
 
         menu.changePrice(price, menuPriceValidatorService)
     }
 
     @Transactional
     fun activateMenuDisplayStatus(menuId: UUID) {
-        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu")
+        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu: $menuId")
 
         menu.activateDisplayStatus(menuPriceValidatorService)
     }
 
     @Transactional
     fun inActivateMenuDisplayStatus(menuId: UUID) {
-        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu")
+        val menu = menuRepository.findByIdOrNull(menuId) ?: throw NoSuchElementException("can not found menu: $menuId")
 
         menu.inActivateDisplayStatus()
     }

@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain
 
 import jakarta.persistence.*
 import kitchenpos.common.Price
-import kitchenpos.products.domain.ProductPriceChanged
 import java.util.*
 
 @Table(name = "menu")

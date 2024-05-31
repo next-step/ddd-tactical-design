@@ -36,7 +36,7 @@ class ProductService(
 
     @Transactional
     fun changePrice(productId: UUID, price: Price) {
-        val product = productRepository.findById(productId) ?: throw NoSuchElementException("can not found product")
+        val product = productRepository.findById(productId) ?: throw NoSuchElementException("can not found product: $productId")
         product.changePrice(price)
 
         productRepository.save(product)

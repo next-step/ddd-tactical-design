@@ -2,7 +2,7 @@ package kitchenpos.products.application.tobe
 
 import kitchenpos.common.price
 import kitchenpos.menus.tobe.application.MenuService
-import kitchenpos.menus.tobe.domain.MenuGroupService
+import kitchenpos.menus.tobe.application.MenuGroupService
 import kitchenpos.menus.tobe.domain.MenuRepository
 import kitchenpos.menus.tobe.domain.findByIdOrNull
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
