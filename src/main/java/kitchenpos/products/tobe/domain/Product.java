@@ -2,14 +2,18 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.products.infra.PurgomalumClient;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.domain.DomainEvents;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractAggregateRoot<Product> {
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -39,6 +43,8 @@ public class Product {
 
     public void changePrice(int price){
         this.price = new ProductPrice(price);
+        registerEvent(new ProductPriceChangedEvent(
+                this, this.id, this.price));
     }
 
     public UUID getId() {
@@ -66,4 +72,5 @@ public class Product {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
