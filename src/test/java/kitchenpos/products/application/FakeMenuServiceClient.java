@@ -1,9 +1,9 @@
 package kitchenpos.products.application;
 
-import kitchenpos.acl.menu.MenuServiceClient;
 import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class FakeMenuServiceClient implements MenuServiceClient {
@@ -14,7 +14,7 @@ public class FakeMenuServiceClient implements MenuServiceClient {
     }
 
     @Override
-    public void hideMenuBasedOnProductPrice(UUID productId) {
-        menuService.hideMenuBasedOnProductPrice(productId);
+    public void hideMenuBasedOnProductPrice(UUID productId, BigDecimal productPrice) {
+        menuService.hideMenuBasedOnProductPrice(productId, productPrice);
     }
 }

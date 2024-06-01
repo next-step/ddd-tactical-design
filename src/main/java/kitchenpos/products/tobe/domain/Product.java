@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.support.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class Product {
         this.price = price;
     }
 
-    public static Product from(ProductName name, ProductPrice price) {
+    public static Product of(ProductName name, ProductPrice price) {
         return new Product(UUID.randomUUID(), name, price);
     }
 

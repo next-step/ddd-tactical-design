@@ -1,12 +1,11 @@
 package kitchenpos.products.application;
 
-import kitchenpos.acl.menu.MenuServiceClient;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
+import kitchenpos.support.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
 import org.springframework.context.ApplicationEventPublisher;
@@ -40,8 +39,8 @@ public class ProductService {
     public ProductResponse create(final ProductCreateRequest request) {
         final ProductPrice price = ProductPrice.from(request.price());
         final ProductName name = ProductName.from(request.name(), profanityChecker);
-        final Product product = productRepository.save(Product.from(name, price));
-        return ProductResponse.of(product);
+        final Product product = productRepository.save(Product.of(name, price));
+        return ProductResponse.from(product);
     }
 
     @Transactional
@@ -50,16 +49,16 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        applicationEventPublisher.publishEvent(ProductChangePriceEvent.from(productId));
-        menuServiceClient.hideMenuBasedOnProductPrice(productId);
-        return ProductResponse.of(product);
+        applicationEventPublisher.publishEvent(ProductPriceChangedEvent.of(productId, price));
+        menuServiceClient.hideMenuBasedOnProductPrice(productId, price.priceValue());
+        return ProductResponse.from(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
         final List<Product> productList = productRepository.findAll();
         return productList.stream()
-                .map(ProductResponse::of)
+                .map(ProductResponse::from)
                 .toList();
     }
 }

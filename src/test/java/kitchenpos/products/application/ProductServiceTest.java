@@ -1,13 +1,14 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.dto.ProductChangePriceRequest;
 import kitchenpos.products.dto.ProductCreateRequest;
 import kitchenpos.products.dto.ProductResponse;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.support.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.infra.ProductProfanityChecker;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class ProductServiceTest {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
         purgomalumClient = new FakePurgomalumClient();
-        profanityChecker = new ProfanityChecker(purgomalumClient);
+        profanityChecker = new ProductProfanityChecker(purgomalumClient);
         menuServiceClient = new FakeMenuServiceClient(menuRepository);
         productService = new ProductService(productRepository, profanityChecker, applicationEventPublisher, menuServiceClient);
     }
