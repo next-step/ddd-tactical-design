@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ProductService {
+public class ProductCommandHandler {
     private final CreateProduct createProduct;
     private final ChangePrice changePrice;
 
-    public ProductService(CreateProduct createProduct,
-                          ChangePrice changePrice) {
+    public ProductCommandHandler(CreateProduct createProduct,
+                                 ChangePrice changePrice) {
         this.createProduct = createProduct;
         this.changePrice = changePrice;
     }

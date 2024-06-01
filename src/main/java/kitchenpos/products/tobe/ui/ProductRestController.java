@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.products.tobe.application.ProductQueryHandler;
-import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.ProductCommandHandler;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
 import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/products")
 @RestController
 public class ProductRestController {
-    private final ProductService productService;
+    private final ProductCommandHandler productService;
     private final ProductQueryHandler productQueryHandler;
 
-    public ProductRestController(ProductService productService, ProductQueryHandler productQueryHandler) {
+    public ProductRestController(ProductCommandHandler productService, ProductQueryHandler productQueryHandler) {
         this.productService = productService;
         this.productQueryHandler = productQueryHandler;
     }
