@@ -1,5 +1,7 @@
 package kitchenpos.order.application;
 
+import static kitchenpos.orders.tobe.domain.OrderTable.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -26,8 +28,6 @@ import kitchenpos.order.factory.OrderFactoryProvider;
 
 @Service
 public class OrderService {
-    private static final String ORDER_TABLE_NOT_FOUND_ERROR = "주문 테이블을 찾을 수 없습니다.";
-
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;

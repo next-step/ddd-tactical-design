@@ -10,14 +10,13 @@ import java.util.UUID;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menugroups.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.eatinorders.tobe.application.dto.OrderCreationRequest;
-import kitchenpos.eatinorders.tobe.application.dto.OrderLineItemCreationRequest;
-import kitchenpos.eatinorders.tobe.domain.EatInOrder;
-import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
-import kitchenpos.eatinorders.tobe.domain.OrderStatus;
-import kitchenpos.eatinorders.tobe.domain.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.OrderType;
-import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
+import kitchenpos.orders.tobe.application.dto.OrderCreationRequest;
+import kitchenpos.orders.tobe.application.dto.OrderLineItemCreationRequest;
+import kitchenpos.orders.tobe.domain.EatInOrder;
+import kitchenpos.orders.tobe.domain.OrderLineItems;
+import kitchenpos.orders.tobe.domain.OrderStatus;
+import kitchenpos.orders.tobe.domain.OrderTable;
+import kitchenpos.orders.tobe.domain.OrderType;
 import kitchenpos.products.tobe.domain.Product;
 
 public class TobeFixtures {

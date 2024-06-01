@@ -1,23 +1,25 @@
 package kitchenpos.common.tobe.infra;
 
 import kitchenpos.common.tobe.domain.PurgomalumClient;
-import kitchenpos.eatinorders.tobe.application.EatInOrderService;
-import kitchenpos.eatinorders.tobe.application.OrderService;
-import kitchenpos.eatinorders.tobe.application.adapter.EatInOrderMenuServiceAdapter;
-import kitchenpos.eatinorders.tobe.application.adapter.MenuServiceAdapter;
-import kitchenpos.eatinorders.tobe.domain.OrderRepository;
-import kitchenpos.eatinorders.tobe.domain.OrderTableRepository;
-import kitchenpos.eatinorders.tobe.factory.OrderFactoryProvider;
-import kitchenpos.eatinorders.tobe.infra.FakeKitchenridersClient;
-import kitchenpos.eatinorders.tobe.infra.InMemoryOrderFactoryProvider;
-import kitchenpos.eatinorders.tobe.infra.InMemoryOrderRepository;
-import kitchenpos.eatinorders.tobe.infra.InMemoryOrderTableRepository;
 import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.application.DefaultMenuService;
 import kitchenpos.menus.tobe.application.MenuService;
 import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
 import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
+import kitchenpos.orders.tobe.application.DeliveryOrderService;
+import kitchenpos.orders.tobe.application.EatInOrderService;
+import kitchenpos.orders.tobe.application.OrderService;
+import kitchenpos.orders.tobe.application.TakeoutOrderService;
+import kitchenpos.orders.tobe.application.adapter.MenuServiceAdapter;
+import kitchenpos.orders.tobe.application.adapter.OrderMenuServiceAdapter;
+import kitchenpos.orders.tobe.domain.OrderRepository;
+import kitchenpos.orders.tobe.domain.OrderTableRepository;
+import kitchenpos.orders.tobe.domain.factory.OrderFactoryProvider;
+import kitchenpos.orders.tobe.infra.FakeKitchenridersClient;
+import kitchenpos.orders.tobe.infra.InMemoryOrderFactoryProvider;
+import kitchenpos.orders.tobe.infra.InMemoryOrderRepository;
+import kitchenpos.orders.tobe.infra.InMemoryOrderTableRepository;
 import kitchenpos.products.tobe.application.DefaultProductService;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.application.adapter.ProductsMenuServiceAdapter;
@@ -36,7 +38,9 @@ public class TestContainer {
     public OrderTableRepository orderTableRepository;
     public FakeKitchenridersClient kitchenridersClient;
     public OrderFactoryProvider orderFactoryProvider;
-    public OrderService orderService;
+    public EatInOrderService eatInOrderService;
+    public DeliveryOrderService deliveryOrderService;
+    public TakeoutOrderService takeoutOrderService;
 
     public TestContainer() {
         this.menuRepository = new InMemoryMenuRepository();
@@ -45,9 +49,11 @@ public class TestContainer {
         this.purgomalumClient = new FakePurgomalumClient();
         this.productService = new DefaultProductService(new InMemoryProductRepository(), new ProductsMenuServiceAdapter(menuService), purgomalumClient);
         this.menuService = new DefaultMenuService(menuRepository, new InMemoryMenuGroupRepository(), new DefaultProductServiceAdapter(productService), purgomalumClient);
-        this.menuServiceAdapter = new EatInOrderMenuServiceAdapter(menuService);
+        this.menuServiceAdapter = new OrderMenuServiceAdapter(menuService);
         this.kitchenridersClient = new FakeKitchenridersClient();
         this.orderFactoryProvider = new InMemoryOrderFactoryProvider();
-        this.orderService = new EatInOrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
+        this.eatInOrderService = new EatInOrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
+        this.deliveryOrderService = new DeliveryOrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
+        this.takeoutOrderService = new TakeoutOrderService(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
     }
 }
