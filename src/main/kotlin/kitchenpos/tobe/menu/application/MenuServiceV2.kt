@@ -28,12 +28,7 @@ class MenuServiceV2(
     fun createMenu(request: CreateMenuRequest): CreateMenuResponse {
         val menuGroup = menuGroupRepository.getMenuGroupById(request.menuGroupId)
         val quantityPerProductIds = request.menuProducts.associate { it.productId to it.quantity }
-        val productPrices =
-            productClient.fetchProductPrices(quantityPerProductIds.keys.toList()).also {
-                if (it.size != quantityPerProductIds.size) {
-                    throw IllegalArgumentException("상품이 존재하지 않습니다.")
-                }
-            }
+        val productPrices = productClient.getProductPrices(quantityPerProductIds.keys.toList())
         val menuProducts =
             productPrices.map {
                 MenuProductV2.from(

@@ -10,12 +10,13 @@ import java.util.*
 class ProductClientImpl(
     private val productRepository: ProductRepositoryV2,
 ) : ProductClient {
-    override fun fetchProductPrices(productIds: List<UUID>): List<ProductPrice> {
-        return productRepository.findAllByIdIn(productIds).map {
-            ProductPrice(
-                id = it.id,
-                price = it.getPrice(),
-            )
+    override fun getProductPrices(productIds: List<UUID>): List<ProductPrice> {
+        val products = productRepository.findAllByIdIn(productIds)
+
+        if (products.size != productIds.size) {
+            throw IllegalArgumentException("상품이 존재하지 않습니다.")
         }
+
+        return products.map { ProductPrice(it.id, it.getPrice()) }
     }
 }
