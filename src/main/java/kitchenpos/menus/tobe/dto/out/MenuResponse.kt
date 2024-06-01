@@ -24,7 +24,7 @@ data class MenuProductResponse(
 fun fromMenu(menu: Menu): MenuResponse = MenuResponse(
     id = menu.id,
     menuGroup = fromMenuGroup(menu.menuGroup),
-    name = menu.name,
+    name = menu.name.value,
     price = menu.price,
     displayStatus = menu.displayStatus,
     menuProducts = menu.menuProducts.map { fromMenuProduct(it) }

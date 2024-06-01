@@ -8,11 +8,10 @@ import java.util.*
 @Entity
 class Menu(
     menuGroup: MenuGroup,
-    name: String,
+    name: MenuName,
     price: Price,
     displayStatus: Boolean,
     menuProducts: MenuProducts,
-    menuNameValidator: MenuNameValidator,
     menuPriceValidator: MenuPriceValidator
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -28,7 +27,7 @@ class Menu(
     val menuGroup: MenuGroup = menuGroup
 
     @Column(name = "name", nullable = false)
-    val name: String = name
+    val name: MenuName = name
 
     @Column(name = "price", nullable = false)
     var price: Price = price
@@ -43,8 +42,6 @@ class Menu(
 
     init {
         this.menuProducts.forEach { it.menu = this }
-
-        menuNameValidator.validate(name)
         menuPriceValidator.validate(this)
     }
 

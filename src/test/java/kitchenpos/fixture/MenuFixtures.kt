@@ -20,11 +20,10 @@ object MenuFixtures {
     ): Menu {
         return Menu(
             menuGroup = menuGroup(),
-            name = "양념치킨",
+            name = MenuName.of("양념치킨", menuNameValidator),
             price = price,
             displayStatus = displayStatus,
             menuProducts = menuProducts,
-            menuNameValidator,
             menuPriceValidator
         )
     }

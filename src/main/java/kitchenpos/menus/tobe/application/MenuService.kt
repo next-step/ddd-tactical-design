@@ -27,17 +27,15 @@ class MenuService(
             ?: throw NoSuchElementException("can not found menu group : ${request.menuGroupId}")
 
         val menuProducts = request.menuProducts
-            .map {
-                MenuProduct(it.productId, MenuProductQuantity(it.quantity))
-            }.let { MenuProducts(it) }
+            .map { MenuProduct(it.productId, MenuProductQuantity(it.quantity)) }
+            .let { MenuProducts(it) }
 
         val menu = Menu(
             menuGroup = menuGroup,
-            name = request.name,
+            name = MenuName.of(request.name, menuNameValidator),
             price = request.price,
             displayStatus = request.displayed,
             menuProducts = menuProducts,
-            menuNameValidator,
             menuPriceValidator
         )
 
