@@ -10,9 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.products.domain.Product;
-
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.entity.Product;
 
 @Table(name = "menu_product")
 @Entity

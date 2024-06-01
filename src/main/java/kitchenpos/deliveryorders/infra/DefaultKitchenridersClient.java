@@ -10,4 +10,5 @@ public class DefaultKitchenridersClient implements KitchenridersClient {
     @Override
     public void requestDelivery(final UUID orderId, final BigDecimal amount, final String deliveryAddress) {
     }
+
 }

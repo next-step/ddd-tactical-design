@@ -1,5 +1,10 @@
 package kitchenpos;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
 import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
@@ -8,13 +13,7 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
+import kitchenpos.products.tobe.domain.entity.Product;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
