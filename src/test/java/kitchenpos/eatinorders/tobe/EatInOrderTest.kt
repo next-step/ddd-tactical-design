@@ -147,7 +147,7 @@ class EatInOrderTest {
     private fun createOrderTableFixture(
         occupied: Boolean = true,
     ) = OrderTable("1번 테이블").apply {
-        this.changeNumberOfGuests(4)
+        this.numberOfGuests = 4
         this.occupied = occupied
     }
 }
