@@ -37,7 +37,7 @@ public class Menu {
     }
 
     private Menu(final DisplayedName name, final MenuGroup menuGroup, final Price price, final MenuProducts menuProducts) {
-        if (this.isExpensiveToTotalProductPrice(price, menuProducts)) {
+        if (this.isExpensiveToTotalProductPrice(menuProducts, price)) {
             throw new IllegalArgumentException("메뉴의 가격은 상품의 총 금액보다 적거나 같아야 된다.");
         }
 
@@ -49,14 +49,6 @@ public class Menu {
         this.displayed = true;
     }
 
-    private boolean isExpensiveToTotalProductPrice(final Price price, final MenuProducts menuProducts) {
-        if (price.comparePrice(menuProducts.totalAmount()) >= 1) {
-            return true;
-        }
-
-        return false;
-    }
-
     public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities){
         DisplayedName displayedName = DisplayedName.createDisplayedName(name, profanities);
         Price displayedPrice = Price.createPrice(price);
@@ -65,15 +57,11 @@ public class Menu {
     }
 
     public void changePrice(final Price price){
-        if (this.isExpensiveToTotalProductPrice(price, menuProducts)) {
+        if (this.isExpensiveToTotalProductPrice(this.getMenuProducts(), price)) {
             this.hideMenu();
         }
 
         this.price = price;
-    }
-
-    private void hideMenu() {
-        this.displayed = false;
     }
 
     public UUID getId() {
@@ -98,5 +86,30 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public void checkHideMenu(final UUID productId, final BigDecimal price) {
+        Price changePrice = Price.createPrice(price);
+
+        menuProducts.getMenuProducts()
+                .stream()
+                .filter(a -> productId.equals(a.getProductId()))
+                .forEach(a -> a.changePrice(changePrice));
+
+        if (this.isExpensiveToTotalProductPrice(menuProducts, changePrice)){
+            this.hideMenu();
+        }
+    }
+
+    private boolean isExpensiveToTotalProductPrice(final MenuProducts menuProducts, final Price price) {
+        if (price.comparePrice(menuProducts.totalAmount()) >= 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void hideMenu() {
+        this.displayed = false;
     }
 }

@@ -47,8 +47,8 @@ public class Product {
         return new Product(displayedName, displayedPrice);
     }
 
-    public Product changePrice(final Price price){
-        this.price = this.price.changePrice(price);
+    public Product changePrice(final BigDecimal price){
+        this.price = this.price.changePrice(Price.createPrice(price));
 
         return this;
     }

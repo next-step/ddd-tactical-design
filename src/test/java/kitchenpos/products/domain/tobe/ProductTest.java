@@ -51,7 +51,7 @@ class ProductTest {
         final Product product = createProductRequest("후라이드", new BigDecimal(16000));
 
         final BigDecimal changePrice = BigDecimal.valueOf(15000);
-        final Product actual = product.changePrice(Price.createPrice(changePrice));
+        final Product actual = product.changePrice(changePrice);
 
         assertThat(actual.getPrice().getPriceValue()).isEqualTo(changePrice);
     }
@@ -63,7 +63,7 @@ class ProductTest {
     void changePrice(final BigDecimal price) {
         final Product product = createProductRequest("후라이드", new BigDecimal(16000));
 
-        assertThatThrownBy(() -> product.changePrice(Price.createPrice(price)))
+        assertThatThrownBy(() -> product.changePrice(price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
