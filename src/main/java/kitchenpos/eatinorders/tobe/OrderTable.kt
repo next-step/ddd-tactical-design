@@ -6,7 +6,9 @@ class OrderTable(
     val name: String,
 ) {
     init {
-        require(name.isNotEmpty())
+        require(name.isNotEmpty()) {
+            "주문 테이블의 이름은 비어있으면 안됩니다."
+        }
     }
 
     val id = UUID.randomUUID()
