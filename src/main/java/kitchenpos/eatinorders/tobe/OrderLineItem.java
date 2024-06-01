@@ -18,6 +18,8 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
+    protected OrderLineItem() {}
+
     public OrderLineItem(Long seq, long quantity, BigDecimal price) {
         this.seq = seq;
         this.quantity = quantity;

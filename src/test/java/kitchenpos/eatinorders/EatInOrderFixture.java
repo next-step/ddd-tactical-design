@@ -1,15 +1,13 @@
 package kitchenpos.eatinorders;
 
-import kitchenpos.eatinorders.tobe.OrderLineItem;
-import kitchenpos.eatinorders.tobe.OrderTable;
+import kitchenpos.eatinorders.tobe.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
 
 public class EatInOrderFixture {
-    public OrderTable 주문_테이블 = emptyOrderTableOf("주문_테이블");
-
     public static OrderTable emptyOrderTableOf(String name) {
         OrderTable orderTable = new OrderTable(
                 UUID.randomUUID(),
@@ -36,5 +34,13 @@ public class EatInOrderFixture {
                 new Random().nextLong(), quantity, price
         );
         return orderLineItem;
+    }
+
+    public static EatInOrder eatInOrderOf(OrderLineItems orderLineItems, UUID orderTableId) {
+        EatInOrder eatInOrder = new EatInOrder(
+                UUID.randomUUID(), EatInOrderType.EAT_IN, EatInOrderStatus.WAITING,
+                LocalDateTime.now(), orderLineItems, orderTableId
+        );
+        return eatInOrder;
     }
 }
