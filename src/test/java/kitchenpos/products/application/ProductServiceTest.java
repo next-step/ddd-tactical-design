@@ -1,71 +1,33 @@
 package kitchenpos.products.application;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
 import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.domain.application.ChangePrice;
 import kitchenpos.products.tobe.domain.application.CreateProduct;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
+import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
-    private CreateProduct createProduct;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
-        createProduct = (request) -> new Product();
-        productService = new ProductService(productRepository, menuRepository, createProduct);
+        CreateProduct dummyCreateProduct = (request) -> new Product();
+        ChangePrice dummyChangeProduct = (uuid, request) -> new Product();
+        productService = new ProductService(productRepository, dummyCreateProduct, dummyChangeProduct);
     }
 
-    @DisplayName("상품의 가격을 변경할 수 있다.")
-    @Test
-    void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
-        final Product actual = productService.changePrice(productId, expected);
-        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-    }
-
-    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
-        assertThatThrownBy(() -> productService.changePrice(productId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-    @Test
-    void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
-        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
@@ -84,13 +46,11 @@ class ProductServiceTest {
         return new ProductCreateDto(name, price);
     }
 
-    private Product changePriceRequest(final long price) {
+    private ProductPriceChangeDto changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
+    private ProductPriceChangeDto changePriceRequest(final BigDecimal price) {
+        return new ProductPriceChangeDto(price);
     }
 }

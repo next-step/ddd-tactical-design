@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
+import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 import kitchenpos.products.tobe.ui.view.ProductViewModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +34,15 @@ public class ProductRestController {
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+    public ResponseEntity<ProductViewModel> changePrice(@PathVariable final UUID productId, @RequestBody final ProductPriceChangeDto request) {
+        final ProductViewModel response = ProductViewModel.from(productService.changePrice(productId, request));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductViewModel>> findAll() {
+        List<Product> products = productService.findAll();
+        List<ProductViewModel> response = products.stream().map(ProductViewModel::from).toList();
+        return ResponseEntity.ok(response);
     }
 }
