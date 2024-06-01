@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.entity;
 import jakarta.persistence.*;
 import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
+import kitchenpos.eatinorders.tobe.service.EatInOrderDomainService;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,6 +33,18 @@ public class EatInOrder {
     private UUID orderTableId;
 
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
+                      OrderLineItems orderLineItems, UUID orderTableId,
+                      EatInOrderDomainService orderDomainService) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
+        checkOrderTableOccupied(orderDomainService);
+    }
+
+    public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
                       OrderLineItems orderLineItems, UUID orderTableId) {
         this.id = id;
         this.type = type;
@@ -39,6 +52,12 @@ public class EatInOrder {
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
+    }
+
+    private void checkOrderTableOccupied(EatInOrderDomainService orderDomainService) {
+        if (orderDomainService.isNotOccupiedOrderTable(this)) {
+            throw new IllegalStateException();
+        }
     }
 
     public void accept() {
@@ -62,6 +81,14 @@ public class EatInOrder {
         status = EatInOrderStatus.COMPLETED;
     }
 
+    public void complete(EatInOrderDomainService eatInOrderDomainService) {
+        if (status != EatInOrderStatus.SERVED) {
+            throw new IllegalStateException();
+        }
+        status = EatInOrderStatus.COMPLETED;
+        eatInOrderDomainService.clearOrderTable(this);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -72,5 +99,9 @@ public class EatInOrder {
 
     public EatInOrderStatus getStatus() {
         return status;
+    }
+
+    public UUID getOrderTableId() {
+        return orderTableId;
     }
 }

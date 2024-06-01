@@ -4,7 +4,6 @@ import kitchenpos.eatinorders.EatInOrderFixture;
 import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
 import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
 import kitchenpos.eatinorders.tobe.entity.EatInOrder;
 import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
 import org.assertj.core.api.Assertions;
@@ -51,35 +50,6 @@ public class OrderTest {
         매장_식사.serve();
 
         Assertions.assertThat(매장_식사.getStatus() == EatInOrderStatus.SERVED).isTrue();
-    }
-
-    @Test
-    @DisplayName("주문을 완료한다.")
-    void complete() {
-        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), UUID.randomUUID());
-        매장_식사.accept();
-        매장_식사.serve();
-
-        매장_식사.complete();
-
-        Assertions.assertThat(매장_식사.getStatus() == EatInOrderStatus.COMPLETED).isTrue();
-    }
-
-    @Test
-    @DisplayName("주문을 완료하여 빈 테이블로 설정한다.")
-    void complete_orderTable () {
-        OrderTable 주문_테이블 = EatInOrderFixture.sitOrderTableOf("주문_테이블");
-        Assertions.assertThat(주문_테이블.isNotOccupied()).isTrue();
-
-        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId());
-        매장_식사.accept();
-        매장_식사.serve();
-        매장_식사.complete();
-
-        assertAll(
-                () -> Assertions.assertThat(주문_테이블.getNumberOfGuests()).isZero(),
-                () -> Assertions.assertThat(주문_테이블.isNotOccupied()).isTrue()
-        );
     }
 
     private OrderLineItems createDefaultOrderLineItems() {

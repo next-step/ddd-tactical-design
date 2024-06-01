@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface OrderTableRepository {
 
-    void save(OrderTable orderTable);
+    OrderTable save(OrderTable orderTable);
 
     Optional<OrderTable> findBy(UUID id);
 }

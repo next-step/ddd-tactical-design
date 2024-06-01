@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.tobe.entity.EatInOrder;
 import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
 import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
 import kitchenpos.eatinorders.tobe.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.service.EatInOrderDomainService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,6 +40,16 @@ public class EatInOrderFixture {
                 new Random().nextLong(), quantity, price
         );
         return orderLineItem;
+    }
+
+    public static EatInOrder eatInOrderOf(OrderLineItems orderLineItems, UUID orderTableId,
+                                          EatInOrderDomainService orderDomainService) {
+        EatInOrder eatInOrder = new EatInOrder(
+                UUID.randomUUID(), EatInOrderType.EAT_IN, EatInOrderStatus.WAITING,
+                LocalDateTime.now(), orderLineItems, orderTableId,
+                orderDomainService
+        );
+        return eatInOrder;
     }
 
     public static EatInOrder eatInOrderOf(OrderLineItems orderLineItems, UUID orderTableId) {
