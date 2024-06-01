@@ -22,7 +22,7 @@ import java.util.UUID;
  * - `MenuProduct`는 가격과 수량을 가진다.
  */
 @Table(name = "menu")
-@Entity(name = "menu")
+@Entity
 public class Menu {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

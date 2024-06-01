@@ -1,12 +1,9 @@
 package kitchenpos.menus.domain.tobe;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("tobeMenuRepository")
 public interface MenuRepository {
     Menu save(Menu menu);
 
