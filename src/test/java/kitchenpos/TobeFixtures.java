@@ -10,6 +10,8 @@ import java.util.UUID;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menugroups.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.orders.tobe.domain.DeliveryOrder;
+import kitchenpos.orders.tobe.domain.TakeoutOrder;
 import kitchenpos.orders.tobe.application.dto.OrderCreationRequest;
 import kitchenpos.orders.tobe.application.dto.OrderLineItemCreationRequest;
 import kitchenpos.orders.tobe.domain.EatInOrder;
@@ -78,9 +80,29 @@ public class TobeFixtures {
 		return new Product(name, BigDecimal.valueOf(price));
 	}
 
-	public static OrderCreationRequest orderCreationRequest(OrderType type, UUID menuId) {
+	public static OrderCreationRequest orderCreationRequest(
+		OrderType type, UUID menuId) {
 		List<OrderLineItemCreationRequest> orderLineItemRequests = List.of(
-			createOrderLineItemRequest(type, menuId, 19_000L, 3L));
+			createOrderLineItemRequest(type, menuId, 19_000L, 3L)
+		);
+
+		if (type == OrderType.TAKEOUT) {
+			return new OrderCreationRequest(
+				OrderType.TAKEOUT,
+				orderLineItemRequests,
+				null,
+				null
+			);
+		}
+
+		if (type == OrderType.DELIVERY) {
+			return new OrderCreationRequest(
+				OrderType.DELIVERY,
+				orderLineItemRequests,
+				"서울시 송파구 위례성대로 2",
+				null
+			);
+		}
 
 		if (type == OrderType.EAT_IN) {
 			return new OrderCreationRequest(
@@ -99,17 +121,22 @@ public class TobeFixtures {
 		);
 	}
 
-	public static OrderLineItemCreationRequest createOrderLineItemRequest(final OrderType orderType, final UUID menuId, final long price, final long quantity) {
-		return new OrderLineItemCreationRequest(
-			orderType,
-			menuId,
-			BigDecimal.valueOf(price),
-			quantity
+	public static DeliveryOrder deliveryOrder(final OrderStatus status, final String deliveryAddress) {
+		OrderLineItemCreationRequest request = orderLineItemCreationRequest(
+			OrderType.DELIVERY);
+		Menu menu = menu(request.menuId());
+
+		return new DeliveryOrder(
+			status,
+			LocalDateTime.of(2020, 1, 1, 12, 0),
+			OrderLineItems.fromRequests(List.of(request), Map.of(request.menuId(), menu)),
+			deliveryAddress
 		);
 	}
 
 	public static EatInOrder eatInOrder(final OrderStatus status, final OrderTable orderTable) {
-		OrderLineItemCreationRequest request = orderLineItemCreationRequest(OrderType.EAT_IN);
+		OrderLineItemCreationRequest request = orderLineItemCreationRequest(
+			OrderType.EAT_IN);
 		Menu menu = menu(request.menuId());
 
 		return new EatInOrder(
@@ -117,6 +144,28 @@ public class TobeFixtures {
 			LocalDateTime.of(2020, 1, 1, 12, 0),
 			OrderLineItems.fromRequests(List.of(request), Map.of(request.menuId(), menu)),
 			orderTable
+		);
+	}
+
+	public static TakeoutOrder takeoutOrder(final OrderStatus status) {
+		OrderLineItemCreationRequest request = orderLineItemCreationRequest(
+			OrderType.TAKEOUT);
+		Menu menu = menu(request.menuId());
+		return new TakeoutOrder(
+			status,
+			LocalDateTime.of(2020, 1, 1, 12, 0),
+			OrderLineItems.fromRequests(List.of(request), Map.of(request.menuId(), menu))
+		);
+	}
+	
+	
+	
+	public static OrderLineItemCreationRequest createOrderLineItemRequest(final OrderType orderType, final UUID menuId, final long price, final long quantity) {
+		return new OrderLineItemCreationRequest(
+			orderType,
+			menuId,
+			BigDecimal.valueOf(price),
+			quantity
 		);
 	}
 
