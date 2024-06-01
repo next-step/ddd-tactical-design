@@ -38,7 +38,8 @@ class OrderTable(
     }
 
     fun changeNumberOfGuests(numberOfGuests: Int) {
-        check(numberOfGuests >= MINIMUM_NUMBER_OF_GUEST)
+        require(numberOfGuests >= MINIMUM_NUMBER_OF_GUEST) { "테이블 손님 수는 0명 이상이어야 합니다." }
+        check(occupied) { "점유 중인 테이블만 손님 수 변경이 가능합니다." }
         this.numberOfGuests = numberOfGuests
     }
 

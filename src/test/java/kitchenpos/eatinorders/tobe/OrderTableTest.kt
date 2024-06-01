@@ -50,7 +50,7 @@ class OrderTableTest {
         orderTable.occupied shouldBe false
     }
 
-    @DisplayName("주문 테이블의 손님 수를 변경할 수 있다..")
+    @DisplayName("주문 테이블의 손님 수를 변경할 수 있다.")
     @Test
     fun test5() {
         val orderTable = createOrderTableFixture()
@@ -60,13 +60,23 @@ class OrderTableTest {
         orderTable.numberOfGuests shouldBe 5
     }
 
-    @DisplayName("주문 테이블의 손님 수는 음수로 변경할 수 없고, IllegalStateException 예외 처리를 한다.")
+    @DisplayName("주문 테이블의 손님 수는 음수로 변경할 수 없고, IllegalArgumentException 예외 처리를 한다.")
     @Test
     fun test6() {
         val orderTable = createOrderTableFixture()
 
-        shouldThrowExactly<IllegalStateException> {
+        shouldThrowExactly<IllegalArgumentException> {
             orderTable.changeNumberOfGuests(-1)
+        }
+    }
+
+    @DisplayName("점유 중인 상태의 테이블만 손님 수 변경이 가능하다.")
+    @Test
+    fun test7() {
+        val orderTable = createOrderTableFixture(occupied = false)
+
+        shouldThrowExactly<IllegalStateException> {
+            orderTable.changeNumberOfGuests(1)
         }
     }
 
