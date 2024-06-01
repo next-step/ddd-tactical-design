@@ -3,7 +3,7 @@ package kitchenpos;
 import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.todo.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
