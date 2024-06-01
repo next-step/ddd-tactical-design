@@ -60,4 +60,8 @@ public class Product {
     public Price getPrice() {
         return price;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }
