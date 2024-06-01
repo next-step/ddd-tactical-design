@@ -1,5 +1,6 @@
 package kitchenpos;
 
+import kitchenpos.eatinorders.tobe.OrderTable;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuGroup;
 import kitchenpos.menus.tobe.domain.MenuNameValidationService;
@@ -47,5 +48,26 @@ public class ToBeFixtures {
                 UUID.randomUUID()
         );
         return menu;
+    }
+
+    public static OrderTable emptyOrderTableOf(String name) {
+        OrderTable orderTable = new OrderTable(
+                UUID.randomUUID(),
+                name,
+                0,
+                false
+        );
+        return orderTable;
+    }
+
+    public static OrderTable sitOrderTableOf(String name) {
+        OrderTable orderTable = new OrderTable(
+                UUID.randomUUID(),
+                name,
+                0,
+                false
+        );
+        orderTable.sit();
+        return orderTable;
     }
 }
