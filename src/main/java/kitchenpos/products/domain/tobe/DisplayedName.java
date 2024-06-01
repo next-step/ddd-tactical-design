@@ -1,9 +1,11 @@
 package kitchenpos.products.domain.tobe;
 
+import jakarta.persistence.Embeddable;
 import kitchenpos.products.infra.tobe.Profanities;
 
 import java.util.Optional;
 
+@Embeddable
 public class DisplayedName {
     private String name;
 
@@ -15,7 +17,7 @@ public class DisplayedName {
     }
 
     public static final DisplayedName createDisplayedName(final String name, final Profanities profanities) {
-        if (Optional.ofNullable(name).isEmpty()){
+        if (Optional.ofNullable(name).isEmpty()) {
             throw new IllegalArgumentException("이름을 반드시 입력해주세요.");
         }
 

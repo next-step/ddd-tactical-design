@@ -1,8 +1,11 @@
 package kitchenpos.products.domain.tobe;
 
+import jakarta.persistence.Embeddable;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@Embeddable
 public class Price {
     private BigDecimal priceValue;
 

@@ -1,7 +1,8 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.application.tobe;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+
+import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.menus.domain.tobe.MenuRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(final UUID productId) {
         return menus.values()
                 .stream()
-                .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+                .filter(menu -> menu.getMenuProducts().getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
                 .toList();
     }
 }

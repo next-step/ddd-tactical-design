@@ -30,7 +30,7 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public static final MenuProduct createMenuProduct(final UUID productId, final BigDecimal price, final int quantity){
+    public static final MenuProduct createMenuProduct(final UUID productId, final BigDecimal price, final int quantity) {
         return new MenuProduct(productId, Price.createPrice(price), quantity);
     }
 

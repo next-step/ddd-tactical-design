@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ class ProductTest {
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
-    public void createProductTest(){
+    public void createProductTest() {
         final Product expected = createProductRequest("후라이드", new BigDecimal(16000));
 
         Product actual = Product.createProduct("후라이드", new BigDecimal(16000), new FakeProfanities());

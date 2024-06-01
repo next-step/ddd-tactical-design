@@ -23,7 +23,7 @@ public class MenuGroup {
     }
 
     public MenuGroup(final UUID id, final String name) {
-        if(Optional.ofNullable(id).isEmpty()
+        if (Optional.ofNullable(id).isEmpty()
                 || Optional.ofNullable(name).isEmpty()) {
             throw new NoSuchElementException("메뉴그룹이 없습니다.");
         }

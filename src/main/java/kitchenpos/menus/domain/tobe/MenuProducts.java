@@ -31,7 +31,7 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public BigDecimal totalAmount(){
+    public BigDecimal totalAmount() {
         return menuProducts.stream()
                 .map(MenuProduct::amount)
                 .reduce(BigDecimal::add).get();
@@ -41,7 +41,7 @@ public class MenuProducts {
         return menuProducts;
     }
 
-    public void changeMenuProductsPrice(final UUID productId, final BigDecimal price){
+    public void changeMenuProductsPrice(final UUID productId, final BigDecimal price) {
         this.menuProducts.stream()
                 .filter(a -> productId.equals(a.getProductId()))
                 .forEach(a -> a.changePrice(price));

@@ -1,15 +1,12 @@
 package kitchenpos.menus.domain.tobe;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kitchenpos.products.infra.tobe.Profanities;
 
@@ -73,14 +70,14 @@ public class Menu {
         }
     }
 
-    public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities){
+    public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities) {
         DisplayedName displayedName = DisplayedName.createDisplayedName(name, profanities);
         Price displayedPrice = Price.createPrice(price);
 
         return new Menu(displayedName, menuGroup, displayedPrice, menuProducts);
     }
 
-    public void changePrice(final Price price){
+    public void changePrice(final Price price) {
         this.price = price;
 
         if (this.menuProducts.isExpensiveTotalPrice(this.getPrice())) {
@@ -91,7 +88,7 @@ public class Menu {
     public void changeProductPrice(final UUID productId, final BigDecimal price) {
         this.menuProducts.changeMenuProductsPrice(productId, price);
 
-        if (this.menuProducts.isExpensiveTotalPrice(this.price)){
+        if (this.menuProducts.isExpensiveTotalPrice(this.price)) {
             this.hideMenu();
         }
     }
