@@ -1,6 +1,9 @@
 package kitchenpos.domain.product.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.domain.support.BlackWordClient;
+import kitchenpos.domain.support.Name;
+import kitchenpos.domain.support.Price;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,10 +16,10 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductName name;
+    private Name name;
 
     @Embedded
-    private ProductPrice price;
+    private Price price;
 
     protected Product() {
     }
@@ -27,18 +30,18 @@ public class Product {
 
     public Product(UUID id, String name, BigDecimal price) {
         this.id = id;
-        this.name = new ProductName(name);
-        this.price = new ProductPrice(price);
+        this.name = new Name(name);
+        this.price = new Price(price);
     }
 
     public Product(UUID id, String name, BigDecimal price, BlackWordClient blackWordClient) {
         this.id = id;
-        this.name = new ProductName(name, blackWordClient);
-        this.price = new ProductPrice(price);
+        this.name = new Name(name, blackWordClient);
+        this.price = new Price(price);
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
+        this.price = new Price(price);
     }
 
     public String name() {

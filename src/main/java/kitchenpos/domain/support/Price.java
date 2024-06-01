@@ -1,4 +1,4 @@
-package kitchenpos.domain.menu.tobe.domain;
+package kitchenpos.domain.support;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-class MenuPrice {
+public class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected MenuPrice() {
+    protected Price() {
     }
 
-    public MenuPrice(BigDecimal price) {
+    public Price(BigDecimal price) {
         validatePrice(price);
         this.price = price;
     }
@@ -25,6 +25,10 @@ class MenuPrice {
         }
     }
 
+    public boolean isOver(Price other) {
+        return price.compareTo(other.getPrice()) > 0;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -33,7 +37,7 @@ class MenuPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MenuPrice menuPrice = (MenuPrice) o;
+        Price menuPrice = (Price) o;
         return Objects.equals(getPrice(), menuPrice.getPrice());
     }
 

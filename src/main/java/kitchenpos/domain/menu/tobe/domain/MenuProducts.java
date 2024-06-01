@@ -1,6 +1,7 @@
 package kitchenpos.domain.menu.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.domain.support.Price;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,9 +32,9 @@ class MenuProducts {
         }
     }
 
-    public BigDecimal getTotalPrice() {
-        return menuProducts.stream()
+    public Price getTotalPrice() {
+        return new Price(menuProducts.stream()
                 .map(MenuProduct::totalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }
