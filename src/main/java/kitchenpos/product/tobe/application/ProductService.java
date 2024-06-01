@@ -1,17 +1,16 @@
 package kitchenpos.product.tobe.application;
 
 import kitchenpos.common.infra.PurgomalumClient;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.product.tobe.application.dto.ChangePriceRequest;
 import kitchenpos.product.tobe.application.dto.CreateProductRequest;
+import kitchenpos.common.event.publisher.ProductPriceChangedEvent;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -19,17 +18,18 @@ import java.util.UUID;
 @Service("newProductService")
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient,
+            final ApplicationEventPublisher eventPublisher
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.eventPublisher = eventPublisher;
+
     }
 
     @Transactional
@@ -44,26 +44,9 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.price());
 
-        updateMenusDisplayStatus(productId);
+        eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, request.price()));
 
         return product;
-    }
-
-    private void updateMenusDisplayStatus(UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            updateMenuDisplayStatus(menu);
-        }
-    }
-
-    private void updateMenuDisplayStatus(Menu menu) {
-        BigDecimal totalMenuPrice = menu.getMenuProducts().stream()
-                .map(menuProduct -> menuProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        if (menu.getPrice().compareTo(totalMenuPrice) > 0) {
-            menu.setDisplayed(false);
-        }
     }
 
     @Transactional(readOnly = true)
