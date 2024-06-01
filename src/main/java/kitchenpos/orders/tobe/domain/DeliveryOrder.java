@@ -68,4 +68,14 @@ public class DeliveryOrder extends Order {
 		status = OrderStatus.DELIVERED;
 		return this;
 	}
+
+	@Override
+	public Order completed() {
+		if (status != OrderStatus.DELIVERED) {
+			throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
+		}
+
+		status = OrderStatus.COMPLETED;
+		return this;
+	}
 }

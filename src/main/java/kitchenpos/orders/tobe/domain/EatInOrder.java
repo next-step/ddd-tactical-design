@@ -1,5 +1,7 @@
 package kitchenpos.orders.tobe.domain;
 
+import static kitchenpos.orders.tobe.domain.OrderTable.*;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.DiscriminatorValue;
@@ -25,16 +27,19 @@ public class EatInOrder extends Order {
 		if (orderTable == null) {
 			throw new IllegalArgumentException(ORDER_TABLE_NOT_FOUND_ERROR);
 		}
+
+		if (!orderTable.isOccupied()) {
+			throw new IllegalStateException(NOT_OCCUPIED_ORDER_TABLE_ERROR);
+		}
 	}
 
 	@Override
-	public Order completed(OrderRepository orderRepository) {
-		super.completed(orderRepository);
-
-		if (!orderRepository.existsByOrderTableAndStatusNot(getOrderTable(), OrderStatus.COMPLETED)) {
-			getOrderTable().used(false);
+	public Order completed() {
+		if (status != OrderStatus.SERVED) {
+			throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
 		}
 
+		status = OrderStatus.COMPLETED;
 		return this;
 	}
 }

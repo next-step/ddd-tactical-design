@@ -103,13 +103,7 @@ public abstract class OrderService {
         return ((DeliveryOrder)order).delivered();
     }
 
-    @Transactional
-    public Order complete(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-
-        return order.completed(orderRepository);
-    }
+    public abstract Order complete(final UUID orderId);
 
     @Transactional(readOnly = true)
     public List<Order> findAll() {

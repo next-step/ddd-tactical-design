@@ -133,16 +133,10 @@ public abstract class Order {
         if (status != OrderStatus.ACCEPTED) {
             throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
         }
+
         status = OrderStatus.SERVED;
         return this;
     }
 
-    public Order completed(OrderRepository orderRepository) {
-        if (status != OrderStatus.SERVED) {
-            throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
-        }
-
-        status = OrderStatus.COMPLETED;
-        return this;
-    }
+    public abstract Order completed();
 }

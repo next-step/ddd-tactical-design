@@ -1,5 +1,8 @@
 package kitchenpos.orders.tobe.application;
 
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +39,14 @@ public class TakeoutOrderService extends OrderService {
         Order order = orderFactory.createOrder(request.type(), orderLineItems, null, null);
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public Order complete(final UUID orderId) {
+        final Order order = orderRepository.findById(orderId)
+            .orElseThrow(NoSuchElementException::new);
+
+        return order.completed();
     }
 }

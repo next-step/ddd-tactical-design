@@ -21,7 +21,7 @@ public class NullTypeOrder extends Order {
 	}
 
 	@Override
-	public Order completed(OrderRepository orderRepository) {
+	public Order completed() {
 		return null;
 	}
 

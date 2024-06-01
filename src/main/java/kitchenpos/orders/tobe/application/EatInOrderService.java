@@ -1,9 +1,11 @@
 package kitchenpos.orders.tobe.application;
 
+import static kitchenpos.orders.tobe.domain.Order.*;
 import static kitchenpos.orders.tobe.domain.OrderTable.*;
 import static kitchenpos.orders.tobe.domain.OrderType.*;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import kitchenpos.orders.tobe.domain.KitchenridersClient;
 import kitchenpos.orders.tobe.domain.Order;
 import kitchenpos.orders.tobe.domain.OrderLineItems;
 import kitchenpos.orders.tobe.domain.OrderRepository;
+import kitchenpos.orders.tobe.domain.OrderStatus;
 import kitchenpos.orders.tobe.domain.OrderTable;
 import kitchenpos.orders.tobe.domain.OrderTableRepository;
 import kitchenpos.orders.tobe.domain.OrderType;
@@ -45,13 +48,28 @@ public class EatInOrderService extends OrderService {
         OrderTable orderTable = orderTableRepository.findById(request.orderTableId())
             .orElseThrow(() -> new NoSuchElementException(ORDER_TABLE_NOT_FOUND_ERROR));
 
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException(NOT_OCCUPIED_ORDER_TABLE_ERROR);
-        }
-
         OrderFactory orderFactory = orderFactoryProvider.getFactory(request.type());
         Order order = orderFactory.createOrder(EAT_IN, orderLineItems, orderTable, request.deliveryAddress());
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public Order complete(final UUID orderId) {
+        final Order order = orderRepository.findById(orderId)
+            .orElseThrow(NoSuchElementException::new);
+
+        if (order.getStatus() != OrderStatus.SERVED) {
+            throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
+        }
+
+        Order completedOrder = order.completed();
+
+        if (!orderRepository.existsByOrderTableAndStatusNot(order.getOrderTable(), OrderStatus.COMPLETED)) {
+            order.getOrderTable().used(false);
+        }
+
+        return completedOrder;
     }
 }

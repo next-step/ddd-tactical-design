@@ -1,9 +1,7 @@
 package kitchenpos.orders.tobe.application;
 
-import static kitchenpos.orders.tobe.domain.OrderTable.*;
-import static kitchenpos.orders.tobe.domain.OrderType.*;
-
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +12,7 @@ import kitchenpos.orders.tobe.domain.KitchenridersClient;
 import kitchenpos.orders.tobe.domain.Order;
 import kitchenpos.orders.tobe.domain.OrderLineItems;
 import kitchenpos.orders.tobe.domain.OrderRepository;
-import kitchenpos.orders.tobe.domain.OrderTable;
 import kitchenpos.orders.tobe.domain.OrderTableRepository;
-import kitchenpos.orders.tobe.domain.OrderType;
 import kitchenpos.orders.tobe.domain.factory.OrderFactory;
 import kitchenpos.orders.tobe.domain.factory.OrderFactoryProvider;
 
@@ -33,7 +29,6 @@ public class DeliveryOrderService extends OrderService {
         super(orderRepository, menuServiceAdapter, orderTableRepository, kitchenridersClient, orderFactoryProvider);
     }
 
-
     @Override
     @Transactional
     public Order create(final OrderCreationRequest request) {
@@ -43,5 +38,14 @@ public class DeliveryOrderService extends OrderService {
         Order order = orderFactory.createOrder(request.type(), orderLineItems, null, request.deliveryAddress());
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    @Transactional
+    public Order complete(final UUID orderId) {
+        final Order order = orderRepository.findById(orderId)
+            .orElseThrow(NoSuchElementException::new);
+
+        return order.completed();
     }
 }

@@ -20,4 +20,15 @@ public class TakeoutOrder extends Order {
 	) {
 		super(OrderType.TAKEOUT, status, orderDateTime, orderLineItems, null);
 	}
+
+	@Override
+	public Order completed() {
+		if (status != OrderStatus.SERVED) {
+			throw new IllegalStateException(INVALID_ORDER_STATUS_ERROR);
+		}
+
+		status = OrderStatus.COMPLETED;
+
+		return this;
+	}
 }

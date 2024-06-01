@@ -216,10 +216,12 @@ class EatInOrderServiceTest {
         orderRepository.save(expected);
 
         final Order actual = orderService.complete(expected.getId());
+        OrderTable foundOrderTable = orderTableRepository.findById(actual.getOrderTable().getId()).get();
+
         assertAll(
             () -> assertThat(actual.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().isOccupied()).isFalse(),
-            () -> assertThat(orderTableRepository.findById(orderTable.getId()).get().getNumberOfGuests()).isEqualTo(0)
+            () -> assertThat(foundOrderTable.isOccupied()).isFalse(),
+            () -> assertThat(foundOrderTable.getNumberOfGuests()).isZero()
         );
     }
 
