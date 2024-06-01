@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.vo.ProductName;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
 @Table(name = "product")
 @Entity
@@ -24,6 +26,12 @@ public class Product {
     public Product() {
     }
 
+    public Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
+        this.name = name.getValue();
+        this.price = price.getValue();
+    }
+
     public UUID getId() {
         return id;
     }
@@ -36,15 +44,15 @@ public class Product {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void changeName(final ProductName name) {
+        this.name = name.getValue();
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(final ProductPrice price) {
+        this.price = price.getValue();
     }
 }
