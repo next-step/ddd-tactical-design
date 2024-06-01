@@ -4,15 +4,15 @@ import kitchenpos.tobe.menu.application.dto.request.ChangeMenuPriceRequest
 import kitchenpos.tobe.menu.application.dto.request.CreateMenuRequest
 import kitchenpos.tobe.menu.application.dto.response.ChangeMenuPriceResponse
 import kitchenpos.tobe.menu.application.dto.response.CreateMenuResponse
-import kitchenpos.tobe.menu.domain.MenuDisplayChecker
+import kitchenpos.tobe.menu.application.dto.response.GetMenusResponse
 import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
+import kitchenpos.tobe.menu.domain.ProductQueryClient
 import kitchenpos.tobe.menu.domain.entity.MenuV2
 import kitchenpos.tobe.menu.domain.repository.MenuGroupRepositoryV2
 import kitchenpos.tobe.menu.domain.repository.MenuRepositoryV2
 import kitchenpos.tobe.menu.domain.vo.MenuProductV2
-import kitchenpos.tobe.menu.infra.findMenuByIdOrThrow
-import kitchenpos.tobe.product.domain.event.ProductPriceChangedEvent
-import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
+import kitchenpos.tobe.menu.infra.getMenuById
+import kitchenpos.tobe.menu.infra.getMenuGroupById
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -20,30 +20,31 @@ import java.util.*
 @Service
 @Transactional
 class MenuServiceV2(
-    private val menuDisplayChecker: MenuDisplayChecker,
     private val menuGroupRepository: MenuGroupRepositoryV2,
-    private val productRepository: ProductRepositoryV2,
+    private val productQueryClient: ProductQueryClient,
     private val menuPurgomalumClient: MenuPurgomalumClient,
     private val menuRepository: MenuRepositoryV2,
 ) {
     fun createMenu(request: CreateMenuRequest): CreateMenuResponse {
-        val menuGroup =
-            menuGroupRepository.findMenuGroupById(request.menuGroupId)
-                ?: throw IllegalArgumentException("존재하지 않는 메뉴 그룹입니다.")
+        val menuGroup = menuGroupRepository.getMenuGroupById(request.menuGroupId)
+        val quantityPerProductIds = request.menuProducts.associate { it.productId to it.quantity }
+        val productPrices =
+            productQueryClient.getProductPrices(quantityPerProductIds.keys.toList()).also {
+                if (it.size != quantityPerProductIds.size) {
+                    throw IllegalArgumentException("상품이 존재하지 않습니다.")
+                }
+            }
         val menuProducts =
-            request.menuProducts.map { menuProduct ->
-                val product =
-                    productRepository.findProductById(menuProduct.productId)
-                        ?: throw IllegalArgumentException("존재하지 않는 상품입니다.")
-
-                MenuProductV2.of(
-                    productId = product.id,
-                    price = product.getPrice(),
-                    quantity = menuProduct.quantity,
+            productPrices.map {
+                MenuProductV2.from(
+                    productId = it.id,
+                    price = it.price,
+                    quantity = quantityPerProductIds[it.id]!!,
                 )
             }.toMutableList()
+
         val menu =
-            MenuV2.of(
+            MenuV2.from(
                 name = request.name,
                 price = request.price,
                 displayed = request.displayed,
@@ -60,28 +61,25 @@ class MenuServiceV2(
         menuId: UUID,
         request: ChangeMenuPriceRequest,
     ): ChangeMenuPriceResponse {
-        val menu = menuRepository.findMenuByIdOrThrow(menuId)
+        val menu = menuRepository.getMenuById(menuId)
         menu.changeMenuPrice(price = request.price)
         return ChangeMenuPriceResponse.of(menu)
     }
 
     fun display(menuId: UUID): UUID {
-        val menu = menuRepository.findMenuByIdOrThrow(menuId)
+        val menu = menuRepository.getMenuById(menuId)
         menu.display()
         return menu.id
     }
 
-    fun unDisplay(menuId: UUID): UUID {
-        val menu = menuRepository.findMenuByIdOrThrow(menuId)
-        menu.unDisplay()
+    fun hide(menuId: UUID): UUID {
+        val menu = menuRepository.getMenuById(menuId)
+        menu.hide()
         return menu.id
     }
 
-    fun findAll(menuId: UUID) {
-        val menu = menuRepository.findAll()
-    }
-
-    fun handleProductPriceChanged(event: ProductPriceChangedEvent) {
-        menuDisplayChecker.handleProductPriceChanged(event.productId, event.price)
+    fun findAll(): GetMenusResponse {
+        val menus = menuRepository.findAll()
+        return GetMenusResponse.of(menus)
     }
 }

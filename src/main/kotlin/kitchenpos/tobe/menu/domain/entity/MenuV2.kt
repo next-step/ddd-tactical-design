@@ -39,7 +39,7 @@ class MenuV2 private constructor(
     val menuProducts: MenuProducts,
 ) {
     companion object {
-        fun of(
+        fun from(
             name: String,
             price: BigDecimal,
             displayed: Boolean,
@@ -48,14 +48,14 @@ class MenuV2 private constructor(
             menuPurgomalumClient: MenuPurgomalumClient,
         ): MenuV2 {
             val menuPrice =
-                MenuPrice.of(
+                MenuPrice.from(
                     price = price,
                     productsPrice = menuProducts.sumOf { it.price * it.quantity.toBigDecimal() },
                 )
 
             return MenuV2(
                 id = UUID.randomUUID(),
-                name = MenuName.of(name, menuPurgomalumClient),
+                name = MenuName.from(name, menuPurgomalumClient),
                 price = menuPrice,
                 displayed = displayed,
                 menuGroup = menuGroup,
@@ -71,7 +71,7 @@ class MenuV2 private constructor(
         menuProducts.handleProductPriceChanged(productId, price)
 
         if (getPrice() > getMenuProductsPriceSum()) {
-            unDisplay()
+            hide()
         }
     }
 
@@ -91,13 +91,13 @@ class MenuV2 private constructor(
         return menuProducts.menuProducts
     }
 
-    fun unDisplay() {
+    fun hide() {
         displayed = false
     }
 
     fun changeMenuPrice(price: BigDecimal) {
         this.price =
-            MenuPrice.of(
+            MenuPrice.from(
                 price = price,
                 productsPrice = getMenuProductsPriceSum(),
             )

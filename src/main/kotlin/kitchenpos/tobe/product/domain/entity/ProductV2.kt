@@ -25,14 +25,14 @@ class ProductV2 private constructor(
     var price: ProductPrice,
 ) {
     companion object {
-        fun of(
+        fun from(
             name: String,
             price: BigDecimal,
             purgomalumClient: ProductPurgomalumClient,
         ): ProductV2 {
             return ProductV2(
                 UUID.randomUUID(),
-                ProductName.of(name, purgomalumClient),
+                ProductName.from(name, purgomalumClient),
                 ProductPrice.of(price),
             )
         }

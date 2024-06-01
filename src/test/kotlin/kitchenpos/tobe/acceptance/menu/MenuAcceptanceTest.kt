@@ -6,6 +6,7 @@ import kitchenpos.tobe.menu.domain.repository.MenuGroupRepositoryV2
 import kitchenpos.tobe.menu.domain.repository.MenuRepositoryV2
 import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import org.springframework.boot.test.web.server.LocalServerPort
+import tobe.domain.MenuFixtures.createMenu
 import tobe.domain.MenuGroupFixtures.createMenuGroup
 import tobe.domain.ProductFixtures.createProduct
 
@@ -53,52 +54,55 @@ class MenuAcceptanceTest(
                 }
             }
 
-//            `when`("메뉴의 가격을 변경하면") {
-//                then("가격이 변경된다.") {
-//                    productRepository.save(createProduct())
-//                    val menuGroup = menuGroupRepository.save(createMenuGroup())
-//                    val menu = menuRepository.save(createMenu(menuGroup))
-//
-//                    val response =
-//                        commonRequestSpec()
-//                            .given()
-//                            .body(
-//                                mapOf(
-//                                    "price" to 15000,
-//                                ),
-//                            )
-//                            .put("/api/v2/menus/${menu.id}/price")
-//                            .then()
-//                            .log().everything()
-//                            .extract().response()
-//
-//                    val jsonPathEvaluator = response.jsonPath()
-//
-//                    jsonPathEvaluator.getInt("price") shouldBe 15000
-//                    response.statusCode shouldBe 200
-//                }
-//
-//                then("메뉴의 가격이 메뉴 상품들의 가격과 개수보다 작으면 가격을 변경할 수 없다.") {
-//                    productRepository.save(createProduct())
-//                    menuGroupRepository.save(createMenuGroup())
-//                    val menu = menuRepository.save(createMenu())
-//
-//                    val response =
-//                        commonRequestSpec()
-//                            .given()
-//                            .body(
-//                                mapOf(
-//                                    "price" to 17000,
-//                                ),
-//                            )
-//                            .put("/api/v2/menus/${menu.id}/price")
-//                            .then()
-//                            .log().everything()
-//                            .extract().response()
-//
-//                    response.statusCode shouldBe 500
-//                }
-//            }
+            `when`("메뉴의 가격을 변경하면") {
+                then("가격이 변경된다.") {
+                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+                    val product = productRepository.save(createProduct())
+                    println(product.id)
+                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+                    val menuGroup = menuGroupRepository.save(createMenuGroup())
+                    val menu = menuRepository.save(createMenu(menuGroup, product))
+
+                    val response =
+                        commonRequestSpec()
+                            .given()
+                            .body(
+                                mapOf(
+                                    "price" to 15000,
+                                ),
+                            )
+                            .put("/api/v2/menus/${menu.id}/price")
+                            .then()
+                            .log().everything()
+                            .extract().response()
+
+                    val jsonPathEvaluator = response.jsonPath()
+
+                    jsonPathEvaluator.getInt("price") shouldBe 15000
+                    response.statusCode shouldBe 200
+                }
+
+                then("메뉴의 가격이 메뉴 상품들의 가격과 개수보다 작으면 가격을 변경할 수 없다.") {
+                    val product = productRepository.save(createProduct())
+                    val menuGroup = menuGroupRepository.save(createMenuGroup())
+                    val menu = menuRepository.save(createMenu(menuGroup, product))
+
+                    val response =
+                        commonRequestSpec()
+                            .given()
+                            .body(
+                                mapOf(
+                                    "price" to 17000,
+                                ),
+                            )
+                            .put("/api/v2/menus/${menu.id}/price")
+                            .then()
+                            .log().everything()
+                            .extract().response()
+
+                    response.statusCode shouldBe 500
+                }
+            }
         }
     }
 }

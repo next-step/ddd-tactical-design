@@ -5,7 +5,9 @@ import kitchenpos.tobe.menu.application.dto.request.ChangeMenuPriceRequest
 import kitchenpos.tobe.menu.application.dto.request.CreateMenuRequest
 import kitchenpos.tobe.menu.application.dto.response.ChangeMenuPriceResponse
 import kitchenpos.tobe.menu.application.dto.response.CreateMenuResponse
+import kitchenpos.tobe.menu.application.dto.response.GetMenusResponse
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -52,12 +54,19 @@ class MenuRestControllerV2(
         )
     }
 
-    @PutMapping("/{menuId}/unDisplay")
-    fun unDisplay(
+    @PutMapping("/{menuId}/hide")
+    fun hide(
         @PathVariable("menuId") menuId: UUID,
     ): ResponseEntity<UUID> {
         return ResponseEntity.ok(
-            menuServiceV2.unDisplay(menuId),
+            menuServiceV2.hide(menuId),
+        )
+    }
+
+    @GetMapping
+    fun findAll(): ResponseEntity<GetMenusResponse> {
+        return ResponseEntity.ok(
+            menuServiceV2.findAll(),
         )
     }
 }

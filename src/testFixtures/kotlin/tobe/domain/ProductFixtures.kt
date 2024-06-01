@@ -11,7 +11,7 @@ object ProductFixtures {
                     return false
                 }
             }
-        return ProductV2.of(
+        return ProductV2.from(
             name = "후라이드치킨",
             price = 16000.toBigDecimal(),
             purgomalumClient = purgomalumClient,

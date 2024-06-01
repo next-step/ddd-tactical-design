@@ -3,7 +3,6 @@ package kitchenpos.tobe.menu.domain.vo
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
-import kitchenpos.tobe.product.exception.menu.MenuNameException
 
 @Embeddable
 class MenuName private constructor(
@@ -11,12 +10,12 @@ class MenuName private constructor(
     val name: String,
 ) {
     companion object {
-        fun of(
+        fun from(
             name: String,
             menuPurgomalumClient: MenuPurgomalumClient,
         ): MenuName {
             require(menuPurgomalumClient.containsProfanity(name).not()) {
-                throw MenuNameException("메뉴의 이름에 욕설이 포함되어 있습니다.")
+                throw IllegalArgumentException("메뉴의 이름에 욕설이 포함되어 있습니다.")
             }
             return MenuName(name)
         }
