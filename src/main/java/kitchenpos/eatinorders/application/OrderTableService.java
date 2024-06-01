@@ -3,13 +3,13 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
+import kitchenpos.eatinorders.todo.domain.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,16 +23,8 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+    public OrderTable create(final OrderTableName request) {
+        final OrderTable orderTable = OrderTable.from(request);
         return orderTableRepository.save(orderTable);
     }
 

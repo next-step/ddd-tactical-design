@@ -5,6 +5,7 @@ import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.todo.domain.OrderTableName;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
@@ -104,12 +105,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return OrderTable.from(OrderTableName.from("1번"), numberOfGuests, occupied);
     }
 
     public static Product product() {

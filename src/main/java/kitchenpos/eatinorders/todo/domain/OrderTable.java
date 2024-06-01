@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.todo.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,31 +16,44 @@ public class OrderTable {
     private UUID id;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private OrderTableName name;
 
     @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    private int numberOfGuests = 0;
 
     @Column(name = "occupied", nullable = false)
-    private boolean occupied;
+    private boolean occupied = false;
 
-    public OrderTable() {
+    protected OrderTable() {
+    }
+
+    protected OrderTable(UUID id, OrderTableName name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
+        this.id = id;
+        this.name = name;
+        this.numberOfGuests = numberOfGuests;
+        this.occupied = occupied;
+    }
+
+    public static OrderTable from(OrderTableName name) {
+        return new OrderTable(UUID.randomUUID(), name);
+    }
+
+    public static OrderTable from(OrderTableName name, int numberOfGuests, boolean occupied) {
+        return new OrderTable(UUID.randomUUID(), name, numberOfGuests, occupied);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+    public String name() {
+        return name.nameValue();
     }
 
     public int getNumberOfGuests() {

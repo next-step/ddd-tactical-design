@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
+import kitchenpos.eatinorders.todo.domain.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,12 +36,12 @@ class OrderTableServiceTest {
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
-        final OrderTable expected = createOrderTableRequest("1번");
+        final OrderTableName expected = createOrderTableRequest("1번");
         final OrderTable actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+            () -> assertThat(actual.name()).isEqualTo(expected.nameValue()),
             () -> assertThat(actual.getNumberOfGuests()).isZero(),
             () -> assertThat(actual.isOccupied()).isFalse()
         );
@@ -50,9 +51,8 @@ class OrderTableServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
-        assertThatThrownBy(() -> orderTableService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> createOrderTableRequest(name))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("빈 테이블을 해지할 수 있다.")
@@ -120,14 +120,12 @@ class OrderTableServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
+    private OrderTableName createOrderTableRequest(final String name) {
+        return OrderTableName.from(name);
     }
 
     private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
+        final OrderTable orderTable = OrderTable.from(OrderTableName.from("1번"));
         orderTable.setNumberOfGuests(numberOfGuests);
         return orderTable;
     }
