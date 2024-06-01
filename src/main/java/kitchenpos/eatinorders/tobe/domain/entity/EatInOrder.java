@@ -35,13 +35,9 @@ public class EatInOrder {
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
                       OrderLineItems orderLineItems, UUID orderTableId,
                       EatInOrderServiceAdapter orderDomainService) {
-        this.id = id;
-        this.type = type;
-        this.status = status;
-        this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
-        this.orderTableId = orderTableId;
+        this(id, type, status, orderDateTime, orderLineItems, orderTableId);
         checkOrderTableOccupied(orderDomainService);
+        checkAllMenuIsDisplayed(orderDomainService);
     }
 
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
@@ -54,8 +50,14 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
+    private void checkAllMenuIsDisplayed(EatInOrderServiceAdapter orderDomainService) {
+        if (orderLineItems.hasDisplayedMenu(orderDomainService)) {
+            throw new IllegalStateException();
+        }
+    }
+
     private void checkOrderTableOccupied(EatInOrderServiceAdapter orderDomainService) {
-        if (orderDomainService.isNotOccupiedOrderTable(this)) {
+        if (orderDomainService.existIsNotOccupiedOrderTable(this)) {
             throw new IllegalStateException();
         }
     }
@@ -72,13 +74,6 @@ public class EatInOrder {
             throw new IllegalStateException();
         }
         status = EatInOrderStatus.SERVED;
-    }
-
-    public void complete() {
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-        status = EatInOrderStatus.COMPLETED;
     }
 
     public void complete(EatInOrderServiceAdapter eatInOrderServiceAdapter) {

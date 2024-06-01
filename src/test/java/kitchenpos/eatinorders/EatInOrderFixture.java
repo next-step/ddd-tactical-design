@@ -35,6 +35,13 @@ public class EatInOrderFixture {
         return orderTable;
     }
 
+    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price, UUID menuId) {
+        OrderLineItem orderLineItem = new OrderLineItem(
+                new Random().nextLong(), quantity, price, menuId
+        );
+        return orderLineItem;
+    }
+
     public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price) {
         OrderLineItem orderLineItem = new OrderLineItem(
                 new Random().nextLong(), quantity, price

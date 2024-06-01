@@ -100,6 +100,10 @@ public class Menu {
         displayed = false;
     }
 
+    public boolean isNotDisplayed() {
+        return !displayed;
+    }
+
     public boolean isDisplayed() {
         return displayed;
     }

@@ -15,6 +15,21 @@ import java.util.UUID;
 
 public class ToBeFixtures {
     public MenuGroup 치킨 = new MenuGroup(UUID.randomUUID(), "치킨");
+    public MenuProduct 튀김_치킨 = new MenuProduct(
+            new Random().nextLong(),
+            1,
+            UUID.randomUUID(),
+            BigDecimal.valueOf(20_000)
+    );
+    public Menu 메뉴_치킨 = new Menu(
+            UUID.randomUUID(),
+            "튀김",
+            BigDecimal.valueOf(20_000),
+            true,
+            List.of(튀김_치킨),
+            치킨.getId()
+    );
+
     public Product 후라이드_20000 = new Product(
             UUID.randomUUID(),
             "후라이드",

@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.ToBeFixtures;
 import kitchenpos.eatinorders.EatInOrderFixture;
 import kitchenpos.eatinorders.domain.FakeEatInOrderRepository;
 import kitchenpos.eatinorders.domain.FakeOrderTableRepository;
@@ -10,6 +11,9 @@ import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
+import kitchenpos.menus.domain.FakeMenuRepository;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,28 +21,79 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("주문 ACL 서비스 테스트")
 public class EatInOrderServiceAdapterTest {
+    private ToBeFixtures toBeFixtures;
     private EatInOrderRepository orderRepository;
     private OrderTableRepository orderTableRepository;
-
+    private MenuRepository menuRepository;
     private EatInOrderServiceAdapter eatInOrderServiceAdapter;
 
     @BeforeEach
     void setUp() {
+        toBeFixtures = new ToBeFixtures();
         orderRepository = new FakeEatInOrderRepository();
         orderTableRepository = new FakeOrderTableRepository();
-        eatInOrderServiceAdapter = new EatInOrderServiceAdapter(orderRepository, orderTableRepository);
+        menuRepository = new FakeMenuRepository();
+        eatInOrderServiceAdapter = new EatInOrderServiceAdapter(
+                orderRepository,
+                orderTableRepository,
+                menuRepository
+        );
+    }
+
+    @Test
+    @DisplayName("주문을 생성한다.")
+    void create() {
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
+        OrderLineItems orderLineItems = createDefaultOrderLineItems();
+        EatInOrder 주문 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId(), eatInOrderServiceAdapter);
+
+        Assertions.assertThat(주문.getId()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("메뉴가 없으면 등록할 수 없다.")
+    void create_exception_nonMenu() {
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
+        OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, UUID.randomUUID());
+        OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
+
+        Assertions.assertThatThrownBy(
+                () -> EatInOrderFixture.eatInOrderOf(
+                        orderLineItems,
+                        주문_테이블.getId(),
+                        eatInOrderServiceAdapter)
+        ).isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
+    void create_exception_hide_menu() {
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
+        Menu 메뉴_튀김 = toBeFixtures.메뉴_치킨;
+        메뉴_튀김.hide();
+        menuRepository.save(메뉴_튀김);
+        OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, 메뉴_튀김.getId());
+        OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
+
+        Assertions.assertThatThrownBy(
+                () -> EatInOrderFixture.eatInOrderOf(
+                        orderLineItems,
+                        주문_테이블.getId(),
+                        eatInOrderServiceAdapter)
+        ).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
     void create_exception_emptyOrderTable() {
-        OrderTable 빈_테이블 = EatInOrderFixture.emptyOrderTableOf("주문_테이블");
-        orderTableRepository.save(빈_테이블);
+        OrderTable 빈_테이블 = orderTableRepository.save(EatInOrderFixture.emptyOrderTableOf("주문_테이블"));
 
         Assertions.assertThatThrownBy(
                 () -> EatInOrderFixture.eatInOrderOf(
@@ -88,8 +143,15 @@ public class EatInOrderServiceAdapterTest {
     }
 
     private OrderLineItems createDefaultOrderLineItems() {
-        OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
-        OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
+        Menu menu = toBeFixtures.메뉴_치킨;
+        menuRepository.save(menu);
+
+        OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(
+                5, BigDecimal.valueOf(10_000), menu.getId()
+        );
+        OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(
+                5, BigDecimal.valueOf(10_000), menu.getId()
+        );
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }
 }

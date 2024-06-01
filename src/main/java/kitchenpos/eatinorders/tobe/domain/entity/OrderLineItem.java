@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe.domain.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity
@@ -18,7 +19,15 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
+    @Transient
+    private UUID menuId;
+
     protected OrderLineItem() {}
+
+    public OrderLineItem(Long seq, long quantity, BigDecimal price, UUID menuId) {
+        this(seq, quantity, price);
+        this.menuId = menuId;
+    }
 
     public OrderLineItem(Long seq, long quantity, BigDecimal price) {
         this.seq = seq;
@@ -36,5 +45,9 @@ public class OrderLineItem {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public UUID getMenuId() {
+        return menuId;
     }
 }
