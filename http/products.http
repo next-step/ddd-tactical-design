@@ -3,16 +3,16 @@ POST {{host}}/api/products
 Content-Type: application/json
 
 {
-  "name": "강정치킨",
+  "name": "하이",
   "price": 17000
 }
 
 ###
-PUT {{host}}/api/products/3b528244-34f7-406b-bb7e-690912f66b10/price
+PUT {{host}}/api/products/b5882c67-c743-460a-839e-2838121f2266/price
 Content-Type: application/json
 
 {
-  "price": 18000
+  "price": 500
 }
 
 ###

@@ -22,7 +22,7 @@ public class ProductViewModel {
     }
 
     private static String createPrice(BigDecimal price) {
-        return price.toPlainString() + KOREA_CURRENCY;
+        return price.longValueExact() + KOREA_CURRENCY;
     }
 
     public String getId() {
@@ -35,5 +35,14 @@ public class ProductViewModel {
 
     public String getPrice() {
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductViewModel{" +
+            "id='" + id + '\'' +
+            ", name='" + name + '\'' +
+            ", price='" + price + '\'' +
+            '}';
     }
 }

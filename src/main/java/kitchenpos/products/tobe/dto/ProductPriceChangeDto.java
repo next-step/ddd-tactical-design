@@ -6,6 +6,9 @@ public class ProductPriceChangeDto {
 
     private BigDecimal price;
 
+    private ProductPriceChangeDto() {
+    }
+
     public ProductPriceChangeDto(BigDecimal price) {
         this.price = price;
     }
