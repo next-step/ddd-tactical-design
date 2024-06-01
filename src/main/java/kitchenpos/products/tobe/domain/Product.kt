@@ -9,25 +9,17 @@ import java.util.*
 
 @Table(name = "product")
 @Entity
-class Product(
-    name: String,
-    price: Price,
-    productNameValidator: ProductNameValidator
-) {
+class Product(name: ProductName, price: Price) {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     val id: UUID = UUID.randomUUID()
 
     @Column(name = "name", nullable = false)
-    val name: String = name
+    val name: ProductName = name
 
     @Column(name = "price", nullable = false)
     var price: Price = price
         private set
-
-    init {
-        productNameValidator.validate(name)
-    }
 
     fun changePrice(price: Price) {
         this.price = price

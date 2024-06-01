@@ -19,16 +19,15 @@ class ProductService(
     @Transactional
     fun createProduct(request: ProductCreateRequest): ProductResponse {
         val product = Product(
-            request.displayedName,
+            ProductName.of(request.displayedName, productNameValidator),
             request.price,
-            productNameValidator
         )
 
         return productRepository.save(product)
             .let {
                 ProductResponse(
                     id = it.id,
-                    name = it.name,
+                    name = it.name.value,
                     price = it.price
                 )
             }
@@ -38,8 +37,6 @@ class ProductService(
     fun changePrice(productId: UUID, price: Price) {
         val product = productRepository.findById(productId) ?: throw NoSuchElementException("can not found product: $productId")
         product.changePrice(price)
-
-        productRepository.save(product)
 
         applicationEventPublisher.publishEvent(
             ProductPriceChanged(
