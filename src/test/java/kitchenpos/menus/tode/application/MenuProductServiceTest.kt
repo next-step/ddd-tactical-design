@@ -41,7 +41,7 @@ class MenuProductServiceTest : BehaviorSpec({
             Then("IllegalArgumentException 예외 처리한다.") {
                 shouldThrowExactly<IllegalArgumentException> {
                     menuProductService.createMenuProduct(
-                        menuPrice = BigDecimal.TWO, menuProductRequests = listOf(
+                        menuPrice = BigDecimal.TEN, menuProductRequests = listOf(
                             createMenuProductRequest(quantity = -1)
                         )
                     )
@@ -52,7 +52,7 @@ class MenuProductServiceTest : BehaviorSpec({
             Then("NoSuchElementException 예외 처리 한다.") {
                 shouldThrowExactly<NoSuchElementException> {
                     menuProductService.createMenuProduct(
-                        menuPrice = BigDecimal.TWO, menuProductRequests = listOf(
+                        menuPrice = BigDecimal.TEN, menuProductRequests = listOf(
                             createMenuProductRequest(productId = UUID.randomUUID())
                         )
                     )
@@ -72,7 +72,7 @@ class MenuProductServiceTest : BehaviorSpec({
                         product = product,
                     )
                     menuProductService.createMenuProduct(
-                        menuPrice = BigDecimal.TWO,
+                        menuPrice = BigDecimal.TEN,
                         menuProductRequests = listOf(
                             element
                         )
@@ -83,7 +83,7 @@ class MenuProductServiceTest : BehaviorSpec({
         When("메뉴 가격이 더 작다면") {
             Then("메뉴에 속한 상품 객체를 생성해서 반환한다.") {
                 val product = Product().apply {
-                    this.price = BigDecimal.TWO
+                    this.price = BigDecimal.TEN
                 }
                 productAdapter.returnValueFindById = product
 
