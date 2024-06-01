@@ -4,7 +4,7 @@ import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.ToBeFixtures;
 
 import kitchenpos.menus.tobe.domain.MenuProducts;
-import kitchenpos.menus.tobe.domain.Price;
+import kitchenpos.menus.tobe.domain.common.Price;
 import kitchenpos.products.tobe.domain.Product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +43,9 @@ public class MenuProductTest {
                 random.nextLong(), 10, 후라이드.getId(), 후라이드.getPrice()
         );
         Price 메뉴_상품_가격 = 메뉴_상품.totalPrice();
+        Price 이십만원 = new Price(BigDecimal.valueOf(200_000));
 
-        Assertions.assertThat(메뉴_상품_가격.getPrice()).isEqualTo(BigDecimal.valueOf(200_000));
+        Assertions.assertThat(메뉴_상품_가격.equals(이십만원)).isTrue();
     }
 
     @Test

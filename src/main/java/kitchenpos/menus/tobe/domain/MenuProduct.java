@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.domain.common.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class MenuProduct {
         this.seq = seq;
         this.quantity = new Quantity(quantity);
         this.productId = productId;
-        this.price = new Price(productPrice, quantity);
+        this.price = new Price(productPrice).multiplyBy(quantity);
     }
 
     public Long getSeq() {
