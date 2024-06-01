@@ -15,9 +15,9 @@ class OrderTableServiceV2(
 ) {
     fun create(
         request: CreateOrderTableRequest,
-    ) {
+    ): OrderTable {
         val orderTable = OrderTable(name = request.name)
-        orderTableRepository.save(orderTable)
+        return orderTableRepository.save(orderTable)
     }
 
     fun sit(
@@ -40,7 +40,7 @@ class OrderTableServiceV2(
     @Transactional(readOnly = true)
     fun findAll() = orderTableRepository.findAll()
 
-    private fun getOrderTable(
+    fun getOrderTable(
         orderTableId: UUID,
     ) = orderTableRepository.findByIdOrNull(orderTableId) ?: throw NoSuchElementException()
 }

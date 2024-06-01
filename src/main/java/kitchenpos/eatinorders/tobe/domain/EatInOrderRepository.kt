@@ -1,6 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain
 
-import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface EatInOrderRepository : JpaRepository<EatInOrder, UUID>
+interface EatInOrderRepository {
+    fun save(eatInOrder: EatInOrder): EatInOrder
+    fun findByIdOrNull(eatInOrderId: UUID): EatInOrder?
+    fun findAll(): List<EatInOrder>
+}
