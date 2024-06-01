@@ -68,7 +68,7 @@ public class Menu {
     }
 
     private void validateMenuPrice(final Price price, final MenuProducts menuProducts) {
-        if (menuProducts.isExpensiveToPrice(price)) {
+        if (menuProducts.isExpensiveTotalPrice(price)) {
             throw new IllegalArgumentException("메뉴의 가격은 상품의 총 금액보다 적거나 같아야 된다.");
         }
     }
@@ -83,44 +83,48 @@ public class Menu {
     public void changePrice(final Price price){
         this.price = price;
 
-        if (menuProducts.isExpensiveToPrice(this.getPrice())) {
+        if (this.menuProducts.isExpensiveTotalPrice(this.getPrice())) {
             this.hideMenu();
         }
     }
 
     public void changeProductPrice(final UUID productId, final BigDecimal price) {
-        this.getMenuProducts().changeMenuProductsPrice(productId, price);
+        this.menuProducts.changeMenuProductsPrice(productId, price);
 
-        if (menuProducts.isExpensiveToPrice(this.price)){
+        if (this.menuProducts.isExpensiveTotalPrice(this.price)){
             this.hideMenu();
         }
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
     public DisplayedName getDisplayedName() {
-        return displayedName;
+        return this.displayedName;
     }
 
     public Price getPrice() {
-        return price;
+        return this.price;
     }
 
     public MenuGroup getMenuGroup() {
-        return menuGroup;
+        return this.menuGroup;
     }
 
     public MenuProducts getMenuProducts() {
-        return menuProducts;
+        return this.menuProducts;
     }
 
     public boolean isDisplayed() {
-        return displayed;
+        return this.displayed;
     }
 
-    private void hideMenu() {
+    public void hideMenu() {
         this.displayed = false;
+    }
+
+    public void displayMenu() {
+        this.displayed = true;
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MenuProducts {
@@ -23,6 +24,10 @@ public class MenuProducts {
     }
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
+        if (Optional.ofNullable(menuProducts).isEmpty() || menuProducts.size() < 1) {
+            throw new IllegalArgumentException("메뉴상품 1개 이상 필요합니다.");
+        }
+
         this.menuProducts = menuProducts;
     }
 
@@ -42,7 +47,7 @@ public class MenuProducts {
                 .forEach(a -> a.changePrice(price));
     }
 
-    public boolean isExpensiveToPrice(final Price price) {
+    public boolean isExpensiveTotalPrice(final Price price) {
         if (price.comparePrice(this.totalAmount()) >= 1) {
             return true;
         }
