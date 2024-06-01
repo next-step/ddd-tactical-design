@@ -2,7 +2,6 @@ package kitchenpos.menus.domain.tobe;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 public class MenuProducts {
     private final List<MenuProduct> menuProducts;

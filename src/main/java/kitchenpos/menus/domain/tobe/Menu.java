@@ -49,19 +49,19 @@ public class Menu {
         this.displayed = true;
     }
 
-    public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities){
-        DisplayedName displayedName = DisplayedName.createDisplayedName(name, profanities);
-        Price displayedPrice = Price.createPrice(price);
-
-        return new Menu(displayedName, menuGroup, displayedPrice, menuProducts);
-    }
-
     private boolean isExpensiveToTotalProductPrice(final Price price, final MenuProducts menuProducts) {
         if (price.comparePrice(menuProducts.totalAmount()) >= 1) {
             return true;
         }
 
         return false;
+    }
+
+    public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities){
+        DisplayedName displayedName = DisplayedName.createDisplayedName(name, profanities);
+        Price displayedPrice = Price.createPrice(price);
+
+        return new Menu(displayedName, menuGroup, displayedPrice, menuProducts);
     }
 
     public void changePrice(final Price price){

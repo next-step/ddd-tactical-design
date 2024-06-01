@@ -26,7 +26,7 @@ public class MenuProduct {
         return productId;
     }
 
-    public void changePrice(Price price) {
+    public void changePrice(final Price price) {
         this.price = price;
     }
 }
