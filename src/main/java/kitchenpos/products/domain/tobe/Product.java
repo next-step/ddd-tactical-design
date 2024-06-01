@@ -15,6 +15,7 @@ import java.util.UUID;
  * DisplayedName에는 Profanity가 포함될 수 없다.
  */
 @Table(name = "product")
+@Entity
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
