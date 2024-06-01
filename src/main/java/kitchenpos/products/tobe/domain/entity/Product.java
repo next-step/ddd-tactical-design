@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(UUID id, ProductName name, ProductPrice price) {
@@ -36,16 +36,8 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void changeName(final ProductName name) {
-        this.name = name.getValue();
     }
 
     public BigDecimal getPrice() {

@@ -123,10 +123,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.changeName(ProductName.of(name, (text) -> false));
-        product.changePrice(ProductPrice.of(BigDecimal.valueOf(price)));
-        return product;
+        return new Product(
+            UUID.randomUUID(),
+            ProductName.of(name, (text) -> false),
+            ProductPrice.of(BigDecimal.valueOf(price))
+        );
     }
 }
