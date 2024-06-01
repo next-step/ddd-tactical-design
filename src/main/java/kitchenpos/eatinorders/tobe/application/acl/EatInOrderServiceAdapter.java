@@ -1,18 +1,18 @@
-package kitchenpos.eatinorders.tobe.service;
+package kitchenpos.eatinorders.tobe.application.acl;
 
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.repository.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.repository.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-public class EatInOrderDomainService {
+public class EatInOrderServiceAdapter {
     private final EatInOrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
 
-    public EatInOrderDomainService(EatInOrderRepository orderRepository, OrderTableRepository orderTableRepository) {
+    public EatInOrderServiceAdapter(EatInOrderRepository orderRepository, OrderTableRepository orderTableRepository) {
         this.orderRepository = orderRepository;
         this.orderTableRepository = orderTableRepository;
     }

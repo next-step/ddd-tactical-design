@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.constant;
+package kitchenpos.eatinorders.tobe.domain.constant;
 
 public enum OrderTableStatus {
     EMPTY_TABLE,

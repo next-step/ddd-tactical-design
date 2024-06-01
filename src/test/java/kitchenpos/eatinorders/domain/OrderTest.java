@@ -1,11 +1,11 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.EatInOrderFixture;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderType;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItems;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

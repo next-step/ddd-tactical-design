@@ -1,14 +1,15 @@
-package kitchenpos.eatinorders.domain;
+package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.EatInOrderFixture;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.repository.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.repository.OrderTableRepository;
-import kitchenpos.eatinorders.tobe.service.EatInOrderDomainService;
+import kitchenpos.eatinorders.domain.FakeEatInOrderRepository;
+import kitchenpos.eatinorders.domain.FakeOrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,21 +17,20 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("주문 도메인 서비스 테스트")
-public class EatInOrderDomainServiceTest {
+@DisplayName("주문 ACL 서비스 테스트")
+public class EatInOrderServiceAdapterTest {
     private EatInOrderRepository orderRepository;
     private OrderTableRepository orderTableRepository;
-    private EatInOrderDomainService eatInOrderDomainService;
+    private EatInOrderServiceAdapter eatInOrderServiceAdapter;
 
     @BeforeEach
     void setUp() {
         orderRepository = new FakeEatInOrderRepository();
         orderTableRepository = new FakeOrderTableRepository();
-        eatInOrderDomainService = new EatInOrderDomainService(orderRepository, orderTableRepository);
+        eatInOrderServiceAdapter = new EatInOrderServiceAdapter(orderRepository, orderTableRepository);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class EatInOrderDomainServiceTest {
                 () -> EatInOrderFixture.eatInOrderOf(
                         createDefaultOrderLineItems(),
                         빈_테이블.getId(),
-                        eatInOrderDomainService)
+                        eatInOrderServiceAdapter)
         ).isInstanceOf(IllegalStateException.class);
     }
 
@@ -56,7 +56,7 @@ public class EatInOrderDomainServiceTest {
         );
         statusAcceptToServe(매장_식사);
 
-        매장_식사.complete(eatInOrderDomainService);
+        매장_식사.complete(eatInOrderServiceAdapter);
 
         assertAll(
                 () -> Assertions.assertThat(주문_테이블.getNumberOfGuests()).isZero(),
@@ -76,7 +76,7 @@ public class EatInOrderDomainServiceTest {
         );
         statusAcceptToServe(매장_식사);
 
-        매장_식사.complete(eatInOrderDomainService);
+        매장_식사.complete(eatInOrderServiceAdapter);
 
         Assertions.assertThat(주문_테이블.isOccupied()).isTrue();
     }
@@ -87,7 +87,7 @@ public class EatInOrderDomainServiceTest {
     }
 
     private OrderLineItems createDefaultOrderLineItems() {
-        kitchenpos.eatinorders.tobe.entity.OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
+        OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
         OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }

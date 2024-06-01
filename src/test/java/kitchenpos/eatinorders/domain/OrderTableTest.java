@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.EatInOrderFixture;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

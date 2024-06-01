@@ -1,9 +1,9 @@
-package kitchenpos.eatinorders.tobe.entity;
+package kitchenpos.eatinorders.tobe.domain.entity;
 
 import jakarta.persistence.*;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
-import kitchenpos.eatinorders.tobe.service.EatInOrderDomainService;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderType;
+import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class EatInOrder {
 
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
                       OrderLineItems orderLineItems, UUID orderTableId,
-                      EatInOrderDomainService orderDomainService) {
+                      EatInOrderServiceAdapter orderDomainService) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -54,7 +54,7 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    private void checkOrderTableOccupied(EatInOrderDomainService orderDomainService) {
+    private void checkOrderTableOccupied(EatInOrderServiceAdapter orderDomainService) {
         if (orderDomainService.isNotOccupiedOrderTable(this)) {
             throw new IllegalStateException();
         }
@@ -81,12 +81,12 @@ public class EatInOrder {
         status = EatInOrderStatus.COMPLETED;
     }
 
-    public void complete(EatInOrderDomainService eatInOrderDomainService) {
+    public void complete(EatInOrderServiceAdapter eatInOrderServiceAdapter) {
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException();
         }
         status = EatInOrderStatus.COMPLETED;
-        eatInOrderDomainService.clearOrderTable(this);
+        eatInOrderServiceAdapter.clearOrderTable(this);
     }
 
     public UUID getId() {

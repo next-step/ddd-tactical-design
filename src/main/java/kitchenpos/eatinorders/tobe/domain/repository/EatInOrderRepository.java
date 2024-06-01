@@ -1,7 +1,7 @@
-package kitchenpos.eatinorders.tobe.repository;
+package kitchenpos.eatinorders.tobe.domain.repository;
 
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.repository.OrderTableRepository;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 
 import java.util.HashMap;
 import java.util.Map;

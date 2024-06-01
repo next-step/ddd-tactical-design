@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.entity;
+package kitchenpos.eatinorders.tobe.domain.entity;
 
 import jakarta.persistence.*;
 

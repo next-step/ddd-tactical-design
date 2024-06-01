@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.repository.EatInOrderRepository;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 
 import java.util.HashMap;
 import java.util.Map;

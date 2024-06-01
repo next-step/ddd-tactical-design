@@ -1,12 +1,12 @@
 package kitchenpos.eatinorders;
 
-import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
-import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
-import kitchenpos.eatinorders.tobe.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
-import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
-import kitchenpos.eatinorders.tobe.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.service.EatInOrderDomainService;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderType;
+import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItem;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItems;
+import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
+import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,7 +43,7 @@ public class EatInOrderFixture {
     }
 
     public static EatInOrder eatInOrderOf(OrderLineItems orderLineItems, UUID orderTableId,
-                                          EatInOrderDomainService orderDomainService) {
+                                          EatInOrderServiceAdapter orderDomainService) {
         EatInOrder eatInOrder = new EatInOrder(
                 UUID.randomUUID(), EatInOrderType.EAT_IN, EatInOrderStatus.WAITING,
                 LocalDateTime.now(), orderLineItems, orderTableId,

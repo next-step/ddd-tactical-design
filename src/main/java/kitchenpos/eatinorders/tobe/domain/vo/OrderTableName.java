@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.vo;
+package kitchenpos.eatinorders.tobe.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
