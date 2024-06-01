@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class EatInOrderServiceAdapterTest {
     private EatInOrderRepository orderRepository;
     private OrderTableRepository orderTableRepository;
+
     private EatInOrderServiceAdapter eatInOrderServiceAdapter;
 
     @BeforeEach

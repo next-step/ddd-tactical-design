@@ -2,10 +2,10 @@ package kitchenpos.menus.domain;
 
 import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.application.FakeMenuPurgomalumClient;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuNameValidationService;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

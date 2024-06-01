@@ -1,9 +1,9 @@
 package kitchenpos.menus.domain;
 
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.ToBeFixtures;
 
-import kitchenpos.menus.tobe.domain.MenuProducts;
+import kitchenpos.menus.tobe.domain.entity.MenuProducts;
 import kitchenpos.menus.tobe.domain.common.Price;
 import kitchenpos.products.tobe.domain.Product;
 import org.assertj.core.api.Assertions;

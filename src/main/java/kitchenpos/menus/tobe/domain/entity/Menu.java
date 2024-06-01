@@ -1,6 +1,7 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
 import kitchenpos.menus.tobe.domain.common.*;
 
 import java.math.BigDecimal;

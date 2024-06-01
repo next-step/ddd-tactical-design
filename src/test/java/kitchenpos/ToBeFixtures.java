@@ -1,9 +1,9 @@
 package kitchenpos;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuNameValidationService;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductNameValidationService;
