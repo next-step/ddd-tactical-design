@@ -6,7 +6,7 @@ import kitchenpos.tobe.menu.application.dto.response.ChangeMenuPriceResponse
 import kitchenpos.tobe.menu.application.dto.response.CreateMenuResponse
 import kitchenpos.tobe.menu.application.dto.response.GetMenusResponse
 import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
-import kitchenpos.tobe.menu.domain.ProductQueryClient
+import kitchenpos.tobe.menu.domain.ProductClient
 import kitchenpos.tobe.menu.domain.entity.MenuV2
 import kitchenpos.tobe.menu.domain.repository.MenuGroupRepositoryV2
 import kitchenpos.tobe.menu.domain.repository.MenuRepositoryV2
@@ -21,7 +21,7 @@ import java.util.*
 @Transactional
 class MenuServiceV2(
     private val menuGroupRepository: MenuGroupRepositoryV2,
-    private val productQueryClient: ProductQueryClient,
+    private val productClient: ProductClient,
     private val menuPurgomalumClient: MenuPurgomalumClient,
     private val menuRepository: MenuRepositoryV2,
 ) {
@@ -29,7 +29,7 @@ class MenuServiceV2(
         val menuGroup = menuGroupRepository.getMenuGroupById(request.menuGroupId)
         val quantityPerProductIds = request.menuProducts.associate { it.productId to it.quantity }
         val productPrices =
-            productQueryClient.getProductPrices(quantityPerProductIds.keys.toList()).also {
+            productClient.fetchProductPrices(quantityPerProductIds.keys.toList()).also {
                 if (it.size != quantityPerProductIds.size) {
                     throw IllegalArgumentException("상품이 존재하지 않습니다.")
                 }
