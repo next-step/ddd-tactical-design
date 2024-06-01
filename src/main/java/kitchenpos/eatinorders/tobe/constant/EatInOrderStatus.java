@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe;
+package kitchenpos.eatinorders.tobe.constant;
 
 public enum EatInOrderStatus {
     WAITING, ACCEPTED, SERVED, COMPLETED

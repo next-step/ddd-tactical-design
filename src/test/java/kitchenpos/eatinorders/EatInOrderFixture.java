@@ -1,6 +1,11 @@
 package kitchenpos.eatinorders;
 
-import kitchenpos.eatinorders.tobe.*;
+import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
+import kitchenpos.eatinorders.tobe.entity.EatInOrder;
+import kitchenpos.eatinorders.tobe.entity.OrderLineItem;
+import kitchenpos.eatinorders.tobe.entity.OrderLineItems;
+import kitchenpos.eatinorders.tobe.entity.OrderTable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

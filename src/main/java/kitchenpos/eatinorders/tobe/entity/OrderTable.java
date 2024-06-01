@@ -1,6 +1,9 @@
-package kitchenpos.eatinorders.tobe;
+package kitchenpos.eatinorders.tobe.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorders.tobe.vo.NumberOfGuests;
+import kitchenpos.eatinorders.tobe.vo.OrderTableName;
+import kitchenpos.eatinorders.tobe.constant.OrderTableStatus;
 
 import java.util.UUID;
 

@@ -1,6 +1,8 @@
-package kitchenpos.eatinorders.tobe;
+package kitchenpos.eatinorders.tobe.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorders.tobe.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.constant.EatInOrderType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
