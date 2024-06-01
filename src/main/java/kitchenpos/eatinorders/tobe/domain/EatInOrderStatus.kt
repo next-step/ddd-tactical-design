@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe
+package kitchenpos.eatinorders.tobe.domain
 
 enum class EatInOrderStatus {
     WAITING,

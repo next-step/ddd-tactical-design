@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe
+package kitchenpos.eatinorders.tobe.domain
 
 import java.time.LocalDateTime
 import java.util.*

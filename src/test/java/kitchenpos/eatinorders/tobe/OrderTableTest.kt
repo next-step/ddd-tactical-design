@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.tobe
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
+import kitchenpos.eatinorders.tobe.domain.OrderTable
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.lang.IllegalStateException

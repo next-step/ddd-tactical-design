@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe
+package kitchenpos.eatinorders.tobe.domain
 
 class OrderLineItem(
     val orderMenu: OrderMenu,
