@@ -1,8 +1,15 @@
 package kitchenpos.eatinorders.tobe.domain
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.util.*
 
+@Table(name = "order_tables")
+@Entity
 class OrderTable(
+    @Column(name = "name", nullable = false)
     val name: String,
 ) {
     init {
@@ -11,8 +18,14 @@ class OrderTable(
         }
     }
 
+    @Id
+    @Column(name = "id", columnDefinition = "binary(16)")
     val id = UUID.randomUUID()
+
+    @Column(name = "occupied", nullable = false)
     var occupied: Boolean = false
+
+    @Column(name = "number_of_guests", nullable = false)
     var numberOfGuests: Int = NUMBER_OF_GUEST_INITIAL_VALUE
 
     fun sit() {
