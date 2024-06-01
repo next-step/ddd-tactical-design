@@ -16,9 +16,9 @@ class MenuProductsTest {
     void totalAmount(){
         List<MenuProduct> menuProductList = new ArrayList<>();
 
-        menuProductList.add(MenuProduct.createMenuProduct(BigDecimal.valueOf(30000), 3));
-        menuProductList.add(MenuProduct.createMenuProduct(BigDecimal.valueOf(20000), 2));
-        menuProductList.add(MenuProduct.createMenuProduct(BigDecimal.valueOf(10000), 1));
+        menuProductList.add(MenuProduct.createMenuProduct(UUID.randomUUID(), BigDecimal.valueOf(30000), 3));
+        menuProductList.add(MenuProduct.createMenuProduct(UUID.randomUUID(), BigDecimal.valueOf(20000), 2));
+        menuProductList.add(MenuProduct.createMenuProduct(UUID.randomUUID(), BigDecimal.valueOf(10000), 1));
 
         MenuProducts menuProducts = new MenuProducts(menuProductList);
         assertThat(menuProducts.totalAmount()).isEqualTo(BigDecimal.valueOf(140000));

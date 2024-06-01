@@ -1,13 +1,10 @@
 package kitchenpos.products.domain.tobe;
 
-import jakarta.persistence.Embeddable;
 import kitchenpos.products.infra.tobe.Profanities;
 
 import java.util.Optional;
 
-@Embeddable
 public class DisplayedName {
-
     private String name;
 
     protected DisplayedName() {

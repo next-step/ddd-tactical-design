@@ -7,7 +7,6 @@ import java.util.Optional;
 
 @Embeddable
 public class DisplayedName {
-
     private String name;
 
     protected DisplayedName() {

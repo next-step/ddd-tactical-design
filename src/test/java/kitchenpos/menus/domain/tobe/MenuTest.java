@@ -21,7 +21,7 @@ class MenuTest {
     void setUp() {
         product = Product.createProduct("후라이드", BigDecimal.valueOf(16000), new FakeProfanities());
         menuGroup = new MenuGroup("세트메뉴");
-        menuProducts = new MenuProducts(Arrays.asList(MenuProduct.createMenuProduct(BigDecimal.valueOf(20000), 2)));
+        menuProducts = new MenuProducts(Arrays.asList(MenuProduct.createMenuProduct(product.getId(), product.getPrice().getPriceValue(), 2)));
         price = BigDecimal.valueOf(19000);
     }
 

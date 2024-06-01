@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Service
 public class ProductService {
     private final Product product;
     private final Menu menu;
@@ -18,7 +17,7 @@ public class ProductService {
 
     public Product changePrice(final BigDecimal price) {
         product.changePrice(price);
-        menu.checkHideMenu(product.getId(), price);
+        menu.changeProductPrice(product.getId(), price);
 
         return product;
     }

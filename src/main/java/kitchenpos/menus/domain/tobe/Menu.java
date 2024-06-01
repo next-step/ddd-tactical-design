@@ -1,10 +1,16 @@
 package kitchenpos.menus.domain.tobe;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import kitchenpos.products.infra.tobe.Profanities;
 
 import java.math.BigDecimal;
@@ -18,35 +24,53 @@ import java.util.UUID;
  * - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
  * - `MenuProduct`는 가격과 수량을 가진다.
  */
-@Entity
+@Table(name = "menu")
+@Entity(name = "menu")
 public class Menu {
-    @Id
     @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
     private UUID id;
+
     @Embedded
-    private DisplayedName name;
-    @Embedded
+    @Column(name = "name", nullable = false)
+    private DisplayedName displayedName;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(
+            name = "menu_group_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+    )
     private MenuGroup menuGroup;
+
     @Embedded
+    @Column(name = "price", nullable = false)
     private Price price;
-    @ElementCollection
+
+    @Embedded
     private MenuProducts menuProducts;
+
+    @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
     protected Menu() {
     }
 
-    private Menu(final DisplayedName name, final MenuGroup menuGroup, final Price price, final MenuProducts menuProducts) {
-        if (this.isExpensiveToTotalProductPrice(menuProducts, price)) {
-            throw new IllegalArgumentException("메뉴의 가격은 상품의 총 금액보다 적거나 같아야 된다.");
-        }
+    private Menu(final DisplayedName displayedName, final MenuGroup menuGroup, final Price price, final MenuProducts menuProducts) {
+        this.validateMenuPrice(price, menuProducts);
 
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.displayedName = displayedName;
         this.menuGroup = menuGroup;
         this.price = price;
         this.menuProducts = menuProducts;
         this.displayed = true;
+    }
+
+    private void validateMenuPrice(final Price price, final MenuProducts menuProducts) {
+        if (menuProducts.isExpensiveToPrice(price)) {
+            throw new IllegalArgumentException("메뉴의 가격은 상품의 총 금액보다 적거나 같아야 된다.");
+        }
     }
 
     public static final Menu createMenu(final String name, final MenuGroup menuGroup, final BigDecimal price, final MenuProducts menuProducts, final Profanities profanities){
@@ -57,11 +81,19 @@ public class Menu {
     }
 
     public void changePrice(final Price price){
-        if (this.isExpensiveToTotalProductPrice(this.getMenuProducts(), price)) {
+        this.price = price;
+
+        if (menuProducts.isExpensiveToPrice(this.getPrice())) {
             this.hideMenu();
         }
+    }
 
-        this.price = price;
+    public void changeProductPrice(final UUID productId, final BigDecimal price) {
+        this.getMenuProducts().changeMenuProductsPrice(productId, price);
+
+        if (menuProducts.isExpensiveToPrice(this.price)){
+            this.hideMenu();
+        }
     }
 
     public UUID getId() {
@@ -69,7 +101,7 @@ public class Menu {
     }
 
     public DisplayedName getDisplayedName() {
-        return name;
+        return displayedName;
     }
 
     public Price getPrice() {
@@ -86,27 +118,6 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public void checkHideMenu(final UUID productId, final BigDecimal price) {
-        Price changePrice = Price.createPrice(price);
-
-        menuProducts.getMenuProducts()
-                .stream()
-                .filter(a -> productId.equals(a.getProductId()))
-                .forEach(a -> a.changePrice(changePrice));
-
-        if (this.isExpensiveToTotalProductPrice(menuProducts, changePrice)){
-            this.hideMenu();
-        }
-    }
-
-    private boolean isExpensiveToTotalProductPrice(final MenuProducts menuProducts, final Price price) {
-        if (price.comparePrice(menuProducts.totalAmount()) >= 1) {
-            return true;
-        }
-
-        return false;
     }
 
     private void hideMenu() {

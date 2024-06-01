@@ -13,7 +13,7 @@ class MenuProductTest {
     void amount(){
         BigDecimal price = BigDecimal.valueOf(20000);
         int quantity = 2;
-        MenuProduct menuProduct = MenuProduct.createMenuProduct(BigDecimal.valueOf(20000), quantity);
+        MenuProduct menuProduct = MenuProduct.createMenuProduct(UUID.randomUUID(), BigDecimal.valueOf(20000), quantity);
 
         assertThat(menuProduct.amount()).isEqualTo(price.multiply(BigDecimal.valueOf(quantity)));
     }
