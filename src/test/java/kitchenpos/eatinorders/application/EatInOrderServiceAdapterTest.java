@@ -37,9 +37,17 @@ public class EatInOrderServiceAdapterTest {
     @BeforeEach
     void setUp() {
         toBeFixtures = new ToBeFixtures();
+        initializeRepository();
+        injectionRepositoryToAdapter();
+    }
+
+    private void initializeRepository() {
         orderRepository = new FakeEatInOrderRepository();
         orderTableRepository = new FakeOrderTableRepository();
         menuRepository = new FakeMenuRepository();
+    }
+
+    private void injectionRepositoryToAdapter() {
         eatInOrderServiceAdapter = new EatInOrderServiceAdapter(
                 orderRepository,
                 orderTableRepository,
@@ -50,8 +58,8 @@ public class EatInOrderServiceAdapterTest {
     @Test
     @DisplayName("주문을 생성한다.")
     void create() {
-        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
         OrderLineItems orderLineItems = createDefaultOrderLineItems();
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
         EatInOrder 주문 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId(), eatInOrderServiceAdapter);
 
         Assertions.assertThat(주문.getId()).isNotNull();
@@ -60,9 +68,9 @@ public class EatInOrderServiceAdapterTest {
     @Test
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     void create_exception_nonMenu() {
-        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
         OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, UUID.randomUUID());
         OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
 
         Assertions.assertThatThrownBy(
                 () -> EatInOrderFixture.eatInOrderOf(
@@ -75,12 +83,12 @@ public class EatInOrderServiceAdapterTest {
     @Test
     @DisplayName("숨겨진 메뉴는 주문할 수 없다.")
     void create_exception_hide_menu() {
-        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
         Menu 메뉴_튀김 = toBeFixtures.메뉴_치킨;
         메뉴_튀김.hide();
         menuRepository.save(메뉴_튀김);
         OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, 메뉴_튀김.getId());
         OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
+        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
 
         Assertions.assertThatThrownBy(
                 () -> EatInOrderFixture.eatInOrderOf(
@@ -143,8 +151,7 @@ public class EatInOrderServiceAdapterTest {
     }
 
     private OrderLineItems createDefaultOrderLineItems() {
-        Menu menu = toBeFixtures.메뉴_치킨;
-        menuRepository.save(menu);
+        Menu menu = saveMenuBeforeTest(toBeFixtures.메뉴_치킨);
 
         OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(
                 5, BigDecimal.valueOf(10_000), menu.getId()
@@ -153,5 +160,10 @@ public class EatInOrderServiceAdapterTest {
                 5, BigDecimal.valueOf(10_000), menu.getId()
         );
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
+    }
+
+    private Menu saveMenuBeforeTest(Menu menu) {
+        menuRepository.save(menu);
+        return menu;
     }
 }
