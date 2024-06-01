@@ -6,13 +6,12 @@ import java.util.*
 
 @Table(name = "menu")
 @Entity
-class Menu(
+class Menu private constructor(
     menuGroup: MenuGroup,
     name: MenuName,
     price: Price,
     displayStatus: Boolean,
-    menuProducts: MenuProducts,
-    menuPriceValidator: MenuPriceValidator
+    menuProducts: MenuProducts
 ) {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -40,9 +39,25 @@ class Menu(
     @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], mappedBy = "menu", fetch = FetchType.LAZY)
     val menuProducts: List<MenuProduct> = menuProducts.items
 
+    companion object {
+        fun of(
+            menuGroup: MenuGroup,
+            name: MenuName,
+            price: Price,
+            displayStatus: Boolean,
+            menuProducts: MenuProducts,
+            menuPriceValidator: MenuPriceValidator
+        ): Menu = Menu(
+            menuGroup = menuGroup,
+            name = name,
+            price = price,
+            displayStatus = displayStatus,
+            menuProducts = menuProducts
+        ).also { menuPriceValidator.validate(it) }
+    }
+
     init {
         this.menuProducts.forEach { it.menu = this }
-        menuPriceValidator.validate(this)
     }
 
     fun activateDisplayStatus(menuPriceValidator: MenuPriceValidator) {

@@ -18,7 +18,7 @@ object MenuFixtures {
         menuPriceValidator: MenuPriceValidator = FakeMenuPriceValidator,
         displayStatus: Boolean = true
     ): Menu {
-        return Menu(
+        return Menu.of(
             menuGroup = menuGroup(),
             name = MenuName.of("양념치킨", menuNameValidator),
             price = price,

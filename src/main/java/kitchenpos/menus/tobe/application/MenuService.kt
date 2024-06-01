@@ -30,7 +30,7 @@ class MenuService(
             .map { MenuProduct(it.productId, MenuProductQuantity(it.quantity)) }
             .let { MenuProducts(it) }
 
-        val menu = Menu(
+        val menu = Menu.of(
             menuGroup = menuGroup,
             name = MenuName.of(request.name, menuNameValidator),
             price = request.price,
