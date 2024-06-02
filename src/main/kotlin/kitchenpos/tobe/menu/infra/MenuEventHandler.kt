@@ -1,6 +1,6 @@
 package kitchenpos.tobe.menu.infra
 
-import kitchenpos.tobe.menu.application.MenuServiceV2
+import kitchenpos.tobe.menu.application.MenuEventHandleService
 import kitchenpos.tobe.product.domain.event.ProductPriceChangedEvent
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -9,7 +9,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Service
 class MenuEventHandler(
-    private val menuService: MenuServiceV2,
+    private val menuEventHandleService: MenuEventHandleService,
 ) {
     @Async
     @TransactionalEventListener(
@@ -17,6 +17,6 @@ class MenuEventHandler(
         phase = TransactionPhase.AFTER_COMMIT,
     )
     fun handle(event: ProductPriceChangedEvent) {
-        menuService.handleProductPriceChanged(event)
+        menuEventHandleService.handleProductPriceChanged(event)
     }
 }

@@ -7,7 +7,8 @@ import kitchenpos.tobe.product.application.dto.response.CreateProductResponse
 import kitchenpos.tobe.product.application.dto.response.GetProductResponse
 import kitchenpos.tobe.product.domain.ProductPurgomalumClient
 import kitchenpos.tobe.product.domain.entity.ProductV2
-import kitchenpos.tobe.product.domain.repository.ProductRepository
+import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
+import kitchenpos.tobe.product.infra.getProductById
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,14 +17,14 @@ import java.util.*
 @Service
 @Transactional
 class ProductServiceV2(
-    private val productRepository: ProductRepository,
+    private val productRepository: ProductRepositoryV2,
     private val pugomalumClient: ProductPurgomalumClient,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     fun create(request: CreateProductRequest): CreateProductResponse {
         val saved =
             productRepository.save(
-                ProductV2.of(
+                ProductV2.from(
                     name = request.name,
                     price = request.price,
                     purgomalumClient = pugomalumClient,
@@ -41,8 +42,7 @@ class ProductServiceV2(
         productId: UUID,
         request: ChangeProductPriceRequest,
     ): ChangeProductPriceResponse {
-        val product =
-            productRepository.findProductById(productId) ?: throw IllegalArgumentException("상품을 찾을 수 없습니다.")
+        val product = productRepository.getProductById(productId)
         val changed = product.changePrice(request.price, eventPublisher)
         return ChangeProductPriceResponse(
             productId = changed.id,

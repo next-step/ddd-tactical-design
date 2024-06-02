@@ -47,6 +47,7 @@ dependencies {
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("org.mockito:mockito-inline:2.21.0")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
+    testImplementation("com.appmattus.fixture:fixture:1.1.0")
 }
 
 tasks.withType<KotlinCompile> {
