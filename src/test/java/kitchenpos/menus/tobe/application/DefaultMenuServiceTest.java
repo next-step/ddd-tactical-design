@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import kitchenpos.common.tobe.domain.PurgomalumClient;
 import kitchenpos.common.tobe.infra.FakePurgomalumClient;
+import kitchenpos.menus.tobe.application.adapter.DefaultProductServiceAdapter;
 import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menugroups.tobe.domain.MenuGroupRepository;
@@ -32,6 +33,7 @@ import kitchenpos.menugroups.tobe.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.infra.InMemoryMenuRepository;
 import kitchenpos.products.tobe.application.DefaultProductService;
 import kitchenpos.products.tobe.application.ProductService;
+import kitchenpos.products.tobe.application.adapter.ProductsMenuServiceAdapter;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.tobe.infra.InMemoryProductRepository;
@@ -52,9 +54,9 @@ class DefaultMenuServiceTest {
 		menuRepository = new InMemoryMenuRepository();
 		menuGroupRepository = new InMemoryMenuGroupRepository();
 		productRepository = new InMemoryProductRepository();
-		productService = new DefaultProductService(productRepository, menuService, purgomalumClient);
+		productService = new DefaultProductService(productRepository, new ProductsMenuServiceAdapter(menuService), purgomalumClient);
 		purgomalumClient = new FakePurgomalumClient();
-		menuService = new DefaultMenuService(menuRepository, menuGroupRepository, productService, purgomalumClient);
+		menuService = new DefaultMenuService(menuRepository, menuGroupRepository, new DefaultProductServiceAdapter(productService), purgomalumClient);
 		menuGroupId = menuGroupRepository.save(menuGroup()).getId();
 		product = productRepository.save(product("후라이드", 16_000L));
 	}

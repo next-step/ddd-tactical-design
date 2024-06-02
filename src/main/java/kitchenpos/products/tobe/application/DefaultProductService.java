@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.products.tobe.application.adapter.MenuServiceAdapter;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -21,17 +22,17 @@ import kitchenpos.products.tobe.application.dto.ProductCreationRequest;
 @Service
 public class DefaultProductService implements ProductService {
 	private final ProductRepository productRepository;
-	private final MenuService menuService;
+	private final MenuServiceAdapter menuServiceAdapter;
 	private final PurgomalumClient purgomalumClient;
 
 
 	public DefaultProductService(
 		final ProductRepository productRepository,
-		final MenuService menuService,
+		final MenuServiceAdapter menuServiceAdapter,
 		final PurgomalumClient purgomalumClient
 	) {
 		this.productRepository = productRepository;
-		this.menuService = menuService;
+		this.menuServiceAdapter = menuServiceAdapter;
 		this.purgomalumClient = purgomalumClient;
 	}
 
@@ -64,7 +65,7 @@ public class DefaultProductService implements ProductService {
 			.orElseThrow(NoSuchElementException::new);
 
 		product.changePrice(price);
-		menuService.hideMenusBasedOnProductPrice(productId);
+		menuServiceAdapter.hideMenusBasedOnProductPrice(productId);
 
 		return product;
 	}

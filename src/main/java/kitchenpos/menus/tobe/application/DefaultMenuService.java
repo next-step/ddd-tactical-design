@@ -18,13 +18,13 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import kitchenpos.common.tobe.domain.PurgomalumClient;
-import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
-import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menugroups.tobe.domain.MenuGroup;
 import kitchenpos.menugroups.tobe.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.application.adapter.ProductServiceAdapter;
+import kitchenpos.menus.tobe.application.dto.MenuCreationRequest;
+import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.menus.tobe.domain.MenuRepository;
-import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
 
 @Service
@@ -37,19 +37,19 @@ public class DefaultMenuService implements MenuService {
 
     private final MenuGroupRepository menuGroupRepository;
 
-    private final ProductService productService;
+    private final ProductServiceAdapter productServiceAdapter;
 
     private final PurgomalumClient purgomalumClient;
 
     public DefaultMenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductService productService,
+        final ProductServiceAdapter productServiceAdapter,
         final PurgomalumClient purgomalumClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productService = productService;
+        this.productServiceAdapter = productServiceAdapter;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -61,7 +61,7 @@ public class DefaultMenuService implements MenuService {
             .orElseThrow(() -> new NoSuchElementException(MENU_GROUP_NOT_FOUND_ERROR));
 
         final Map<UUID, Product> products =
-            productService.findAllByIdIn(new ArrayList<>(request.menuProductQuantities().keySet()))
+            productServiceAdapter.findAllByIdIn(new ArrayList<>(request.menuProductQuantities().keySet()))
                 .stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
 
@@ -125,6 +125,11 @@ public class DefaultMenuService implements MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Override
+    public List<Menu> findAllByIdIn(List<UUID> ids) {
+        return menuRepository.findAllByIdIn(ids);
     }
 
     @Override
