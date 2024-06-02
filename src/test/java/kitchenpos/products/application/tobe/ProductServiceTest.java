@@ -22,8 +22,8 @@ public class ProductServiceTest {
         Name name = new Name("name");
         Product pd = new Product(name, price);
 
-        ProductService service = new ProductService(pd, new InMemoryProductRepository());
-        service.register();
+        ProductService service = new ProductService(new InMemoryProductRepository());
+        service.register(pd);
 
         service.changeName(pd.getId(), "new-name");
 
@@ -39,8 +39,8 @@ public class ProductServiceTest {
         Name name = new Name("name");
         Product pd = new Product(name, price);
 
-        ProductService service = new ProductService(pd, new InMemoryProductRepository());
-        service.register();
+        ProductService service = new ProductService(new InMemoryProductRepository());
+        service.register(pd);
 
         List<Product> pdList = service.getList();
         assertThat(pdList).hasSize(1);
