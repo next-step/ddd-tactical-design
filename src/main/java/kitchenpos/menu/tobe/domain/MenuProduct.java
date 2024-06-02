@@ -1,10 +1,10 @@
 package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.exception.IllegalQuantityException;
 import kitchenpos.product.tobe.domain.Product;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Table(name = "menu_product")
 @Entity
@@ -28,14 +28,21 @@ public class MenuProduct {
     private Product product;
 
     @Column(name = "quantity", nullable = false)
-    private int quantity;
+    private long quantity;
 
     private BigDecimal price;
 
-    public MenuProduct(Product product, int quantity) {
+    public MenuProduct(Product product, long quantity) {
         this.product = product;
         this.quantity = quantity;
         calculateMenuProductPrice(product, BigDecimal.valueOf(quantity));
+        validateQuantity(quantity);
+    }
+
+    private static void validateQuantity(long quantity) {
+        if (quantity < 0) {
+            throw new IllegalQuantityException("수량은 0개보다 적을 수 없습니다.");
+        }
     }
 
     protected MenuProduct() {
@@ -51,7 +58,7 @@ public class MenuProduct {
         return product;
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
