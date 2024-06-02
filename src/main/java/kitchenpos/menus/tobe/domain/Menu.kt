@@ -15,7 +15,7 @@ import java.util.UUID
 @Table(name = "menu")
 @Entity
 class Menu(
-    name: DisplayedName,
+    name: MenuName,
     price: Amount,
     menuGroup: MenuGroup,
     menuProducts: MenuProducts,
@@ -29,7 +29,7 @@ class Menu(
     @AttributeOverrides(
         AttributeOverride(name = "value", column = Column(name = "name", nullable = false)),
     )
-    var name: DisplayedName = name
+    var name: MenuName = name
 
     @Embedded
     @AttributeOverrides(
