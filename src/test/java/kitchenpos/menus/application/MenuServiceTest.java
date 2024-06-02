@@ -1,5 +1,20 @@
 package kitchenpos.menus.application;
 
+import static kitchenpos.Fixtures.INVALID_ID;
+import static kitchenpos.Fixtures.menu;
+import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.Fixtures.product;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
@@ -7,7 +22,6 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakeProfanityValidator;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductTest;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,22 +32,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
-import static kitchenpos.Fixtures.INVALID_ID;
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuGroup;
-import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.product;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MenuServiceTest {
     private MenuRepository menuRepository;

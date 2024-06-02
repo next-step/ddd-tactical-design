@@ -29,7 +29,9 @@ public class ProductName {
       throw new IllegalArgumentException("상품의 이름에는 비속어가 포함될 수 없다.");
     }
   }
-
+  public String getName(){
+    return name;
+  }
   @Override
   public boolean equals(Object o) {
     if (this == o) {
