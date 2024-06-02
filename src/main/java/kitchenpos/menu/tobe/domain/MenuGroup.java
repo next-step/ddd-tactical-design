@@ -21,9 +21,9 @@ public class MenuGroup {
     private String MenuGroupName;
 
     public MenuGroup(String menuGroupName) {
+        validate(menuGroupName);
         this.id = UUID.randomUUID();
         this.MenuGroupName = menuGroupName;
-        validate(menuGroupName);
     }
 
     private static void validate(String menuGroupName) {

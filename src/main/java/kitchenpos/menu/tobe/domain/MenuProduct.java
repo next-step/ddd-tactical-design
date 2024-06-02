@@ -32,21 +32,21 @@ public class MenuProduct {
 
     private BigDecimal price;
 
+    protected MenuProduct() {
+
+    }
+
     public MenuProduct(Product product, long quantity) {
+        validateQuantity(quantity);
         this.product = product;
         this.quantity = quantity;
         calculateMenuProductPrice(product, BigDecimal.valueOf(quantity));
-        validateQuantity(quantity);
     }
 
     private static void validateQuantity(long quantity) {
         if (quantity < 0) {
             throw new IllegalQuantityException("수량은 0개보다 적을 수 없습니다.");
         }
-    }
-
-    protected MenuProduct() {
-
     }
 
     private void calculateMenuProductPrice(Product product, BigDecimal quantity) {

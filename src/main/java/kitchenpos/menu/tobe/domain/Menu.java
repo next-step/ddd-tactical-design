@@ -3,6 +3,7 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.exception.IllegalPriceException;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,8 +18,8 @@ public class Menu {
     @Embedded
     private MenuName menuName;
 
-    @Column(name = "price", nullable = false)
-    private Long menuPrice;
+    @Embedded
+    private MenuPrice menuPrice;
 
     @ManyToOne
     @JoinColumn(
@@ -38,19 +39,19 @@ public class Menu {
 
     }
 
-    public Menu(MenuName menuName, Long menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
+    public Menu(MenuName menuName, MenuPrice menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
+        validatePrice(menuPrice);
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;
         this.menuDisplayStatus = menuDisplayStatus;
         this.menuProducts = menuProducts;
-        validatePrice(menuPrice);
     }
 
-    private static void validatePrice(Long menuPrice) {
-        if (Objects.isNull(menuPrice) || menuPrice < 0) {
-            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice);
+    private static void validatePrice(MenuPrice menuPrice) {
+        if (Objects.isNull(menuPrice) || menuPrice.getPrice().compareTo(BigDecimal.ZERO)< 0) {
+            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
         }
     }
 
@@ -62,8 +63,8 @@ public class Menu {
         return menuName.getName();
     }
 
-    public Long getMenuPrice() {
-        return menuPrice;
+    public BigDecimal getMenuPrice() {
+        return menuPrice.getPrice();
     }
 
     public MenuGroup getMenuGroup() {

@@ -21,7 +21,11 @@ public class MenuProducts {
     }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
+        validate(menuProducts);
         this.menuProducts = new ArrayList<>(menuProducts);
+    }
+
+    private static void validate(List<MenuProduct> menuProducts) {
         if (menuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴상품 정보는 빈값일 수 없습니다.");
         }

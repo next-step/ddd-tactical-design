@@ -14,7 +14,11 @@ public class MenuName {
     }
 
     MenuName(String menuName) {
+        validateName(menuName);
         this.name = menuName;
+    }
+
+    private static void validateName(String menuName) {
         if (Objects.isNull(menuName)) {
             throw new IllegalArgumentException();
         }
