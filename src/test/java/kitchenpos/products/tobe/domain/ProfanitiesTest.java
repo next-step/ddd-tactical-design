@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ProfanitiesTest {
 
-    Profanities profanities;
+    private Profanities profanities;
 
     @BeforeEach
     void setUp() {
