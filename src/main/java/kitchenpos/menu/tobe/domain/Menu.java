@@ -42,7 +42,8 @@ public class Menu {
 
     public Menu(MenuName menuName, MenuPrice menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
         validatePrice(menuPrice);
-        validateMenuProductPrice(menuPrice.getPrice() > menuProducts.getTotalPrice(), new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice()));
+
+        validateMenuProductPrice(menuPrice.getPrice().compareTo(menuProducts.getTotalPrice()) > 0, new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice()));
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -67,8 +68,8 @@ public class Menu {
 
     }
 
-    public void changeMenuPrice(long newPrice) {
-        validateMenuProductPrice(newPrice > menuProducts.getTotalPrice(), new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice));
+    public void changeMenuPrice(Long newPrice) {
+        validateMenuProductPrice(newPrice.compareTo(menuProducts.getTotalPrice()) > 0, new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice));
         this.menuPrice = new MenuPrice(newPrice);
     }
 
@@ -78,6 +79,7 @@ public class Menu {
         }
         this.menuDisplayStatus = newStatus;
     }
+
 
     public UUID getId() {
         return id;
