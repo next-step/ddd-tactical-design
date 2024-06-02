@@ -28,10 +28,10 @@ public class ProductName {
 
     private void validate() {
         if (Objects.isNull(name)) {
-            throw new IllegalNameException(null);
+            throw new IllegalNameException("이름은 빈값일 수 없습니다", null);
         }
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalNameException("(비속어 포함 이름) " + name);
+            throw new IllegalNameException("이름에 비속어를 포함할 수 없습니다.", name);
         }
     }
 
