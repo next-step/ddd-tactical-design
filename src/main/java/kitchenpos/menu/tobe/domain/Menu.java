@@ -55,6 +55,9 @@ public class Menu {
     }
 
     public void changeMenuPrice(long newPrice) {
+        if (newPrice > menuProducts.getTotalPrice()) {
+            throw new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice);
+        }
         this.menuPrice = new MenuPrice(newPrice);
     }
 

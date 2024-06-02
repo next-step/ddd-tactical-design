@@ -3,6 +3,7 @@ package kitchenpos.menu.tobe.domain;
 import kitchenpos.exception.IllegalPriceException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -22,8 +23,8 @@ class MenuPriceTest {
 
     @ParameterizedTest
     @ValueSource(longs = {-1L, -10_000L})
-    @DisplayName("0원보다 적은 금액을 입력하는 경우 메뉴를 등록할 수 없다.")
-    void priceFail2(final long input) {
+    @DisplayName("0원보다 적은 금액을 입력하는 경우 메뉴가격을 등록할 수 없다.")
+    void priceFail1(final long input) {
 
         assertThrows(IllegalPriceException.class, () -> new MenuPrice(input));
     }

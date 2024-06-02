@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import kitchenpos.exception.IllegalQuantityException;
 import kitchenpos.product.tobe.domain.Product;
 
-import java.math.BigDecimal;
-
 @Table(name = "menu_product")
 @Entity
 public class MenuProduct {
@@ -30,7 +28,7 @@ public class MenuProduct {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    private BigDecimal price;
+    private Long price;
 
     protected MenuProduct() {
 
@@ -40,7 +38,7 @@ public class MenuProduct {
         validateQuantity(quantity);
         this.product = product;
         this.quantity = quantity;
-        calculateMenuProductPrice(product, BigDecimal.valueOf(quantity));
+        calculateMenuProductPrice(product, quantity);
     }
 
     private static void validateQuantity(long quantity) {
@@ -49,8 +47,8 @@ public class MenuProduct {
         }
     }
 
-    private void calculateMenuProductPrice(Product product, BigDecimal quantity) {
-        this.price = product.getProductPrice().multiply(quantity);
+    private void calculateMenuProductPrice(Product product, long quantity) {
+        this.price = product.getProductPrice().longValue() * quantity;
     }
 
 
@@ -62,7 +60,7 @@ public class MenuProduct {
         return quantity;
     }
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 

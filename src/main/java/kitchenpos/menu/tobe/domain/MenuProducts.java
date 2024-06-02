@@ -34,4 +34,8 @@ public class MenuProducts {
     public List<MenuProduct> getMenuProducts() {
         return Collections.unmodifiableList(menuProducts);
     }
+
+    public long getTotalPrice() {
+        return menuProducts.stream().mapToLong(MenuProduct::getPrice).sum();
+    }
 }
