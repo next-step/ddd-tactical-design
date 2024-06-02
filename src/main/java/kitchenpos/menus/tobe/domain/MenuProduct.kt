@@ -10,6 +10,7 @@ import jakarta.persistence.Transient
 import java.util.UUID
 
 private const val MIN_QUANTITY = 1L
+private const val MIN_PRODUCT_PRICE = 0L
 
 @Table(name = "menu_product")
 @Entity
@@ -27,12 +28,13 @@ class MenuProduct(
     var quantity: Int = quantity
 
     @Transient
-    var productId: UUID? = productId
+    var productId: UUID = productId
 
     val productPrice: Int = productPrice
 
     init {
         require(MIN_QUANTITY <= quantity) { "메뉴 상품의 수량은 ${MIN_QUANTITY}개 이상이어야 합니다." }
+        require(MIN_PRODUCT_PRICE <= productPrice) { "메뉴 상품의 금액은 ${MIN_PRODUCT_PRICE}원 이상이어야 합니다." }
     }
 
     fun amount(): Amount {

@@ -9,7 +9,7 @@ private val DEFAULT_PRODUCT_ID = UUID.randomUUID()
 
 class MenuProductTest : BehaviorSpec({
     Given("메뉴 상품을 생성할 때") {
-        When("메뉴 상품의 수량이 0 이하인 경우") {
+        When("메뉴 상품의 수량이 1 미만인 경우") {
             val invalidQuantity = 0
 
             Then("예외가 발생한다") {
@@ -28,6 +28,28 @@ class MenuProductTest : BehaviorSpec({
                 menuProduct.productId shouldBe DEFAULT_PRODUCT_ID
                 menuProduct.quantity shouldBe 1
                 menuProduct.productPrice shouldBe 1000
+            }
+        }
+
+        When("메뉴 상품의 금액이 0 미만인 경우") {
+            val invalidProductPrice = -1
+
+            Then("예외가 발생한다") {
+                shouldThrow<IllegalArgumentException> {
+                    MenuProduct(1, DEFAULT_PRODUCT_ID, invalidProductPrice)
+                }
+            }
+        }
+
+        When("메뉴 상품의 금액이 0 이상인 경우") {
+            val validProductPrice = 0
+
+            Then("메뉴 상품이 생성된다") {
+                val menuProduct = MenuProduct(1, DEFAULT_PRODUCT_ID, validProductPrice)
+
+                menuProduct.productId shouldBe DEFAULT_PRODUCT_ID
+                menuProduct.quantity shouldBe 1
+                menuProduct.productPrice shouldBe 0
             }
         }
     }
