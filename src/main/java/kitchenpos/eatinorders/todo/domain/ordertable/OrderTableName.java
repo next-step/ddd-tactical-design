@@ -41,7 +41,7 @@ public class OrderTableName {
     }
 
     private static void checkNullOrBlank(String name) {
-        if (Objects.isNull(name) || name.isEmpty()) {
+        if (Objects.isNull(name) || name.isBlank()) {
             throw new KitchenPosIllegalArgumentException(INVALID_ORDER_TABLE_NAME);
         }
     }
