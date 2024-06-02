@@ -3,11 +3,13 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import kitchenpos.exception.IllegalNameException;
 
 import java.util.Objects;
 import java.util.UUID;
 
+@Table(name = "menu_group")
 @Entity
 public class MenuGroup {
 
