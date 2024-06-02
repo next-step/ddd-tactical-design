@@ -1,24 +1,18 @@
 package kitchenpos.products.tobe;
 
-import java.math.BigDecimal;
 import kitchenpos.products.tobe.domain.FakeProductProfanityValidator;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import kitchenpos.products.tobe.domain.ProductProfanityValidator;
+import kitchenpos.supports.domain.tobe.Price;
+import kitchenpos.supports.domain.tobe.PriceFixture;
 
 public class ProductFixture {
-  private static final ProductProfanityValidator profanityValidator = new FakeProductProfanityValidator();
-  public static ProductPrice normalProductPrice() {
-    return createProductPrice(new BigDecimal(1_000L));
-  }
 
-  public static ProductPrice createProductPrice(BigDecimal price) {
-    return new ProductPrice(price);
-  }
+  private static final ProductProfanityValidator profanityValidator = new FakeProductProfanityValidator();
 
   public static ProductName normalProductName() {
-    return createProductName( "상품명");
+    return createProductName("상품명");
   }
 
   public static ProductName createProductName(String name) {
@@ -26,10 +20,10 @@ public class ProductFixture {
   }
 
   public static Product normal() {
-    return create(normalProductName(), normalProductPrice());
+    return create(normalProductName(), PriceFixture.normal());
   }
 
-  public static Product create(ProductName name, ProductPrice price) {
+  public static Product create(ProductName name, Price price) {
     return new Product(name, price);
   }
 }

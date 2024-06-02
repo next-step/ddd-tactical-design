@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import kitchenpos.products.tobe.ProductFixture;
+import kitchenpos.supports.domain.tobe.Price;
+import kitchenpos.supports.domain.tobe.PriceFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ class ProductTest {
   @DisplayName("상품의 가격을 변경할 수 있다.")
   @Test
   void changePrice() {
-    ProductPrice expected = ProductFixture.createProductPrice(new BigDecimal(10_000L));
+    Price expected = PriceFixture.create(new BigDecimal(10_000L));
     Product actual = ProductFixture.normal();
     actual.changePrice(expected);
     assertThat(actual.getPrice()).isEqualTo(expected);
