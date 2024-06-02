@@ -27,7 +27,7 @@ public class ProductPrice {
 
     private void validate() {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalPriceException("가격은 0원보다 작을 수 없습니다. " + price);
+            throw new IllegalPriceException("가격은 0원보다 작을 수 없습니다. ", price.toString());
         }
     }
 

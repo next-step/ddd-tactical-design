@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.domain;
 
+import kitchenpos.exception.IllegalPriceException;
 import kitchenpos.fixture.tobe.ProductFixture;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,7 +37,7 @@ class MenuTest {
         final var menuProduct = new MenuProduct(product, 2);
         final var menuProducts = new MenuProducts(List.of(menuProduct));
 
-        Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        Assertions.assertThatExceptionOfType(IllegalPriceException.class)
                 .isThrownBy(() -> new Menu("메뉴이름", input, menuGroup, true, menuProducts));
     }
 
@@ -48,6 +50,6 @@ class MenuTest {
         final var menuProduct = new MenuProduct(product, 2);
         final var menuProducts = new MenuProducts(List.of(menuProduct));
 
-        assertThrows(IllegalArgumentException.class, () -> new Menu("메뉴이름", input, menuGroup, true, menuProducts));
+        assertThrows(IllegalPriceException.class, () -> new Menu("메뉴이름", input, menuGroup, true, menuProducts));
     }
 }

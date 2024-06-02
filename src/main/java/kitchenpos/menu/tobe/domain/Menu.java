@@ -1,7 +1,9 @@
 package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.exception.IllegalPriceException;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -16,7 +18,7 @@ public class Menu {
     private String menuName;
 
     @Column(name = "price", nullable = false)
-    private long menuPrice;
+    private Long menuPrice;
 
     @ManyToOne
     @JoinColumn(
@@ -36,13 +38,20 @@ public class Menu {
 
     }
 
-    public Menu(String menuName, long menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
+    public Menu(String menuName, Long menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;
         this.menuDisplayStatus = menuDisplayStatus;
         this.menuProducts = menuProducts;
+        validatePrice(menuPrice);
+    }
+
+    private static void validatePrice(Long menuPrice) {
+        if (Objects.isNull(menuPrice) || menuPrice < 0) {
+            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice);
+        }
     }
 
     public UUID getId() {
@@ -53,7 +62,7 @@ public class Menu {
         return menuName;
     }
 
-    public long getMenuPrice() {
+    public Long getMenuPrice() {
         return menuPrice;
     }
 

@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Embeddable
 public class MenuProducts {
@@ -22,6 +23,9 @@ public class MenuProducts {
 
     public MenuProducts(List<MenuProduct> menuProducts) {
         this.menuProducts = new ArrayList<>(menuProducts);
+        if (menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("메뉴상품 정보는 빈값일 수 없습니다.");
+        }
     }
 
     public List<MenuProduct> getMenuProducts() {

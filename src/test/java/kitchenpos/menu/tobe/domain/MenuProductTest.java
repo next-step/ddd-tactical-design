@@ -22,4 +22,6 @@ class MenuProductTest {
                 () -> assertThat(menuProduct.getPrice()).isEqualTo(product.getProductPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
         );
     }
+
+
 }
