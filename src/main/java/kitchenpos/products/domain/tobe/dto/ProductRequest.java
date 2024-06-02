@@ -1,4 +1,4 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.domain.tobe.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,20 +8,14 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "product")
-@Entity
-public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
+public class ProductRequest {
     private UUID id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    private Long price;
 
-    public Product() {
+    public ProductRequest() {
     }
 
     public UUID getId() {
@@ -40,11 +34,11 @@ public class Product {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void setPrice(final Long price) {
         this.price = price;
     }
 }

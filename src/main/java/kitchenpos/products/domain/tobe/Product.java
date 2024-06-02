@@ -33,19 +33,18 @@ public class Product {
     this.name = name;
     this.price = price;
   }
-  public static Product from(String name, long price, ProfanityValidator profanityValidator) {
+  public static Product from(String name, Long price, ProfanityValidator profanityValidator) {
 
     return new Product(ProductName.from(name, profanityValidator), ProductPrice.from(price));
   }
 
-  public void changeProductPrice(long price){
+  public void changeProductPrice(Long price){
     this.price = ProductPrice.from(price);
   }
 
   public UUID getId(){
     return id;
   }
-
   public String getProductName(){
     return name.getName();
   }

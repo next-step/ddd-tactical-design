@@ -37,7 +37,7 @@ public class ProductPriceTest {
   @ParameterizedTest
   @NullSource
   void changeProductPriceWithNullPrice(Long price) {
-    assertThatExceptionOfType(NullPointerException.class)
+    assertThatExceptionOfType(IllegalArgumentException.class)
         .isThrownBy(() -> ProductPrice.from(price));
   }
 }

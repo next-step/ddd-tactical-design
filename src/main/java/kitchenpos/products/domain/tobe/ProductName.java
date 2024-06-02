@@ -23,15 +23,18 @@ public class ProductName {
   }
 
   private void validate(String name, ProfanityValidator profanityValidator) {
-    Objects.requireNonNull(name, "상품의 이름이 올바르지 않으면 등록할 수 없다.");
-
-    if (profanityValidator.containsProfanity(name)){
+    if (Objects.isNull(name)) {
+      throw new IllegalArgumentException("상품의 이름이 올바르지 않으면 등록할 수 없다.");
+    }
+    if (profanityValidator.containsProfanity(name)) {
       throw new IllegalArgumentException("상품의 이름에는 비속어가 포함될 수 없다.");
     }
   }
-  public String getName(){
+
+  public String getName() {
     return name;
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

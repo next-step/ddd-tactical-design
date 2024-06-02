@@ -46,7 +46,7 @@ public class ProductNameTest {
   @ParameterizedTest
   @NullSource
   void changeProductNameWithNull(String name){
-    assertThatExceptionOfType(NullPointerException.class)
+    assertThatExceptionOfType(IllegalArgumentException.class)
         .isThrownBy(() -> ProductName.from(name, profanityValidator))
         .withMessageContaining("상품의 이름이 올바르지 않으면 등록할 수 없다.");
   }
