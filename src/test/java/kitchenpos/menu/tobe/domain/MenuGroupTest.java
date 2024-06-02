@@ -1,25 +1,35 @@
 package kitchenpos.menu.tobe.domain;
 
-import kitchenpos.fixture.tobe.ProductFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import java.math.BigDecimal;
-
+import static kitchenpos.fixture.MenuGroupFixture.createMenuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MenuProductTest {
+class MenuGroupTest {
+
     @Test
-    @DisplayName("메뉴 상품은 상품, 수량, 싱픔과 수량에 대한 총 가격을 가진다.")
+    @DisplayName("메뉴 그룹은 식별자, 메뉴 그룹이름을 갖는다.")
     void success() {
-        final var product = ProductFixture.createProduct();
-        final var menuProduct = new MenuProduct(product, 2);
+        final var menuGroup = new MenuGroup("메뉴그룹이름");
 
         assertAll(
-                "메뉴 상품 정보 group assertions",
-                () -> assertThat(menuProduct.getProduct()).isEqualTo(product),
-                () -> assertThat(menuProduct.getPrice()).isEqualTo(product.getProductPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
+                "메뉴 그룹 정보 group assertions",
+                () -> assertThat(menuGroup).isNotNull(),
+                () -> assertThat(menuGroup.getMenuGroupName()).isNotNull()
         );
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("[실패] 메뉴 그룹의 이름은 필수로 입력해야한다.")
+    void name(final String input) {
+
+        assertThrows(IllegalArgumentException.class, () -> new MenuGroup(input));
     }
 }
