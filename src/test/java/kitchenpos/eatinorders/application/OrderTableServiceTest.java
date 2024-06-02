@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.dto.OrderTableResponse;
 import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
@@ -38,13 +39,13 @@ class OrderTableServiceTest {
     @Test
     void create() {
         final OrderTableName expected = OrderTableName.from("1번");
-        final OrderTable actual = orderTableService.create(expected);
+        final OrderTableResponse actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
+            () -> assertThat(actual.id()).isNotNull(),
             () -> assertThat(actual.name()).isEqualTo(expected.nameValue()),
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(actual.numberOfGuests()).isZero(),
+            () -> assertThat(actual.occupied()).isFalse()
         );
     }
 
@@ -60,18 +61,18 @@ class OrderTableServiceTest {
     @Test
     void sit() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
-        assertThat(actual.isOccupied()).isTrue();
+        final OrderTableResponse actual = orderTableService.sit(orderTableId);
+        assertThat(actual.occupied()).isTrue();
     }
 
     @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
     void clear() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
+        final OrderTableResponse actual = orderTableService.clear(orderTableId);
         assertAll(
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(actual.numberOfGuests()).isZero(),
+            () -> assertThat(actual.occupied()).isFalse()
         );
     }
 
@@ -90,8 +91,8 @@ class OrderTableServiceTest {
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
         final NumberOfGuests expected = NumberOfGuests.from(4);
-        final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
-        assertThat(actual.getNumberOfGuests()).isEqualTo(4);
+        final OrderTableResponse actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
+        assertThat(actual.numberOfGuests()).isEqualTo(4);
     }
 
     @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
@@ -116,7 +117,7 @@ class OrderTableServiceTest {
     @Test
     void findAll() {
         orderTableRepository.save(orderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
+        final List<OrderTableResponse> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
 }

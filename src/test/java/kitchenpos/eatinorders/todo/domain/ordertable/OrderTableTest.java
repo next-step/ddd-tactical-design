@@ -4,7 +4,7 @@ import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kitchenpos.eatinorders.todo.domain.ordertable.OrderTable.OCCUPIED;
+import static kitchenpos.eatinorders.todo.domain.ordertable.OrderTable.UNOCCUPIED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -42,10 +42,10 @@ class OrderTableTest {
     @DisplayName("[실패] 주문 테이블 착석한 고객의 수를 변경할 때, 테이블 상태는 점유 상태여야 한다.")
     @Test
     void fail_changeNumberOfGuests() {
-        NumberOfGuests numberOfGuests = NumberOfGuests.from(4);
-        OrderTable orderTable = OrderTable.from(주문테이블_이름, NumberOfGuests.ZERO_NUMBER_OF_GUESTS, OCCUPIED);
+        NumberOfGuests newNumberOfGuests = NumberOfGuests.from(4);
+        OrderTable orderTable = OrderTable.from(주문테이블_이름, NumberOfGuests.ZERO_NUMBER_OF_GUESTS, UNOCCUPIED);
 
-        assertThatThrownBy(() -> orderTable.changeNumberOfGuests(numberOfGuests))
+        assertThatThrownBy(() -> orderTable.changeNumberOfGuests(newNumberOfGuests))
                 .isInstanceOf(KitchenPosIllegalStateException.class);
     }
 }

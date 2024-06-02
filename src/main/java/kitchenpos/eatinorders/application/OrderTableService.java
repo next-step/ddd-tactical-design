@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.dto.OrderTableResponse;
 import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
@@ -24,40 +25,44 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTableName request) {
+    public OrderTableResponse create(final OrderTableName request) {
         final OrderTable orderTable = OrderTable.from(request);
-        return orderTableRepository.save(orderTable);
+        return OrderTableResponse.from(orderTableRepository.save(orderTable));
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+    public OrderTableResponse sit(final UUID orderTableId) {
+        final OrderTable orderTable = getOrderTable(orderTableId);
         orderTable.sit();
-        return orderTable;
+        return OrderTableResponse.from(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+    public OrderTableResponse clear(final UUID orderTableId) {
+        final OrderTable orderTable = getOrderTable(orderTableId);
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();
-        return orderTable;
+        return OrderTableResponse.from(orderTable);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final NumberOfGuests request) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
+    public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final NumberOfGuests request) {
+        final OrderTable orderTable = getOrderTable(orderTableId);
         orderTable.changeNumberOfGuests(request);
-        return orderTable;
+        return OrderTableResponse.from(orderTable);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableResponse> findAll() {
+        return orderTableRepository.findAll().stream()
+                .map(OrderTableResponse::from)
+                .toList();
+    }
+
+    private OrderTable getOrderTable(UUID orderTableId) {
+        return orderTableRepository.findById(orderTableId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }

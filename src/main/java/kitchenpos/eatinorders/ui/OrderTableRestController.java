@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.OrderTableService;
+import kitchenpos.eatinorders.dto.OrderTableResponse;
 import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
-import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,24 +27,24 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final OrderTableName request) {
-        final OrderTable response = orderTableService.create(request);
-        return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
+    public ResponseEntity<OrderTableResponse> create(@RequestBody final OrderTableName request) {
+        final OrderTableResponse response = orderTableService.create(request);
+        return ResponseEntity.created(URI.create("/api/order-tables/" + response.id()))
             .body(response);
     }
 
     @PutMapping("/{orderTableId}/sit")
-    public ResponseEntity<OrderTable> sit(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<OrderTableResponse> sit(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
+    public ResponseEntity<OrderTableResponse> clear(@PathVariable final UUID orderTableId) {
         return ResponseEntity.ok(orderTableService.clear(orderTableId));
     }
 
     @PutMapping("/{orderTableId}/number-of-guests")
-    public ResponseEntity<OrderTable> changeNumberOfGuests(
+    public ResponseEntity<OrderTableResponse> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
         @RequestBody final NumberOfGuests request
     ) {
@@ -52,7 +52,7 @@ public class OrderTableRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderTable>> findAll() {
+    public ResponseEntity<List<OrderTableResponse>> findAll() {
         return ResponseEntity.ok(orderTableService.findAll());
     }
 }
