@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.domain.vo;
 
-public class Name {
+public class DisplayedName {
     private final String value;
-    public Name(String value){
+    public DisplayedName(String value){
         this.value = value;
     }
 
