@@ -2,9 +2,9 @@ package kitchenpos.menus.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.tobe.MenuGroupRepository;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.tobe.MenuRepository;
+import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
