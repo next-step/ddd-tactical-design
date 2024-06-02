@@ -1,17 +1,12 @@
-package kitchenpos.menus.domain.tobe;
+package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.util.UUID;
-import kitchenpos.products.domain.tobe.Product;
 
 @Table(name = "menu_product")
 @Entity
@@ -21,21 +16,25 @@ public class MenuProduct {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
   private Long seq;
-
-  @ManyToOne(optional = false)
-  @JoinColumn(
-      name = "product_id",
-      columnDefinition = "binary(16)",
-      foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-  )
-  private Product product;
-
+  @Column(name = "productId", nullable = false)
+  private UUID productId;
+  @Column(name = "price", nullable = false)
+  private long price;
   @Column(name = "quantity", nullable = false)
   private long quantity;
 
-  @Transient
-  private UUID productId;
-
   protected MenuProduct() {
+  }
+
+  public long amount(){
+    return price * quantity;
+  }
+
+  public UUID getProductId(){
+    return productId;
+  }
+
+  public void changePrice(int price){
+    this.price = price;
   }
 }
