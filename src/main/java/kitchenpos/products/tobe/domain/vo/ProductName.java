@@ -13,7 +13,7 @@ public class ProductName {
     public static ProductName of(String value, PurgomalumClient purgomalumClient) {
         if (Objects.isNull(value)) {
             throw new IllegalArgumentException("Product name cannot be null");
-        } else if(purgomalumClient.containsProfanity(value)) {
+        } else if (purgomalumClient.containsProfanity(value)) {
             throw new IllegalArgumentException("Product name contains profanity");
         }
         return new ProductName(value);

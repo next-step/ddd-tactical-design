@@ -10,10 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.menus.domain.Menu;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.menus.domain.Menu;
 
 @Table(name = "order_line_item")
 @Entity

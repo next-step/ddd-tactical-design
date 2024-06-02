@@ -10,7 +10,6 @@ public class ProductViewModel {
     private final String price;
 
 
-
     private ProductViewModel(String id, String name, String price) {
         this.id = id;
         this.name = name;

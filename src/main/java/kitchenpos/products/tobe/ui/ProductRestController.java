@@ -3,8 +3,8 @@ package kitchenpos.products.tobe.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.products.tobe.application.ProductQueryHandler;
 import kitchenpos.products.tobe.application.ProductCommandHandler;
+import kitchenpos.products.tobe.application.ProductQueryHandler;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
 import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
@@ -33,11 +33,12 @@ public class ProductRestController {
     public ResponseEntity<ProductViewModel> create(@RequestBody final ProductCreateDto request) {
         final ProductViewModel response = ProductViewModel.from(productService.create(request));
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
-            .body(response);
+                             .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<ProductViewModel> changePrice(@PathVariable final UUID productId, @RequestBody final ProductPriceChangeDto request) {
+    public ResponseEntity<ProductViewModel> changePrice(@PathVariable final UUID productId,
+                                                        @RequestBody final ProductPriceChangeDto request) {
         final ProductViewModel response = ProductViewModel.from(productService.changePrice(productId, request));
         return ResponseEntity.ok(response);
     }
