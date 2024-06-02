@@ -14,8 +14,8 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String menuName;
+    @Embedded
+    private MenuName menuName;
 
     @Column(name = "price", nullable = false)
     private Long menuPrice;
@@ -38,7 +38,7 @@ public class Menu {
 
     }
 
-    public Menu(String menuName, Long menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
+    public Menu(MenuName menuName, Long menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -59,7 +59,7 @@ public class Menu {
     }
 
     public String getMenuName() {
-        return menuName;
+        return menuName.getName();
     }
 
     public Long getMenuPrice() {
@@ -76,5 +76,18 @@ public class Menu {
 
     public MenuProducts getMenuProducts() {
         return menuProducts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
