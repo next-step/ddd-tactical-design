@@ -3,7 +3,9 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.dto.OrderTableResponse;
+import kitchenpos.eatinorders.infra.OrderClientImpl;
 import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderClient;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableRepository;
@@ -32,7 +34,8 @@ class OrderTableServiceTest {
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        OrderClient orderClient = new OrderClientImpl(orderRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderClient);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

@@ -14,8 +14,8 @@ import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.ORDER_
 @Table(name = "order_table")
 @Entity
 public class OrderTable {
-    static final boolean OCCUPIED = true;
-    static final boolean UNOCCUPIED = false;
+    public static final boolean OCCUPIED = true;
+    public static final boolean UNOCCUPIED = false;
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -61,6 +61,12 @@ public class OrderTable {
     public void clear() {
         changeNumberOfGuests(NumberOfGuests.ZERO_NUMBER_OF_GUESTS);
         this.occupied = UNOCCUPIED;
+    }
+
+    public void clear(final OrderClient orderClient) {
+        final OrderTableClearPolicy policy = new OrderTableClearPolicy(orderClient);
+        policy.checkClear(this);
+        clear();
     }
 
     public void changeNumberOfGuests(NumberOfGuests numberOfGuests) {

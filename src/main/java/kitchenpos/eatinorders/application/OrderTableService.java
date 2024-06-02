@@ -1,9 +1,8 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.dto.OrderTableResponse;
 import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderClient;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableRepository;
@@ -17,11 +16,11 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final OrderClient orderClient;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderClient orderClient) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.orderClient = orderClient;
     }
 
     @Transactional
@@ -40,10 +39,7 @@ public class OrderTableService {
     @Transactional
     public OrderTableResponse clear(final UUID orderTableId) {
         final OrderTable orderTable = getOrderTable(orderTableId);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.clear();
+        orderTable.clear(orderClient);
         return OrderTableResponse.from(orderTable);
     }
 
