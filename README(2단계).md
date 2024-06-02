@@ -28,4 +28,5 @@
 - [ ] `MenuPrice(메뉴 가격)` 가 `MenuProduct(메뉴 상품)` 의 총 `Price(가격)` 를 초과하는 경우 `DisplayedMenu(노출된 메뉴)` 로 변경할 수 없다.
 - [X] `Menu(메뉴)` 에서 `MenuPrice(메뉴 가격)` 를 변경한다.
 - [X] `MenuPrice(메뉴 가격)` 륿 변경할 때 `MenuProduct(메뉴 상품)` 의 총 `Price(가격)` 를 초과하는 경우 변경할 수 없다.
+    - [X] 0원보다 적은 금액을 입력하는 경우 메뉴 가격을 변경할할 수 없다.
 

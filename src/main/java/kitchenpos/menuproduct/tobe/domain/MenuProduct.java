@@ -1,7 +1,8 @@
-package kitchenpos.menu.tobe.domain;
+package kitchenpos.menuproduct.tobe.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.exception.IllegalQuantityException;
+import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.product.tobe.domain.Product;
 
 @Table(name = "menu_product")

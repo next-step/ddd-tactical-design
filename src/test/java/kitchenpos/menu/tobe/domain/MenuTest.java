@@ -4,6 +4,9 @@ import kitchenpos.exception.IllegalPriceException;
 import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.menuGroup.tobe.domain.MenuGroup;
+import kitchenpos.menuproduct.tobe.domain.MenuProduct;
+import kitchenpos.menuproduct.tobe.domain.MenuProducts;
 import kitchenpos.product.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static kitchenpos.MoneyConstants.만원;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MenuTest {
     PurgomalumClient purgomalumClient;
@@ -68,5 +71,17 @@ class MenuTest {
         final var menu = new Menu(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup, true, menuProducts);
 
         assertThrows(IllegalPriceException.class, () -> menu.changeMenuPrice(30_000L));
+    }
+
+    @Test
+    @DisplayName("메뉴상품 금액 총 합보다 메뉴 가격이 비싸지면 메뉴는 숨겨진다.")
+    void priceFail3() {
+        final var menu = new Menu(menuName.create("메뉴이름"), new MenuPrice(20_000L), menuGroup, true, menuProducts);
+
+        assertTrue(menu.isMenuDisplayStatus());
+
+        product.updateProductPrice(BigDecimal.valueOf(5_000L));
+
+        assertFalse(menu.isMenuDisplayStatus());
     }
 }

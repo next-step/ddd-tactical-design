@@ -1,7 +1,10 @@
 package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.exception.CanNotChangeDisplay;
 import kitchenpos.exception.IllegalPriceException;
+import kitchenpos.menuGroup.tobe.domain.MenuGroup;
+import kitchenpos.menuproduct.tobe.domain.MenuProducts;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -35,11 +38,11 @@ public class Menu {
     private MenuProducts menuProducts;
 
     protected Menu() {
-
     }
 
     public Menu(MenuName menuName, MenuPrice menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
         validatePrice(menuPrice);
+        validateMenuProductPrice(menuPrice.getPrice() > menuProducts.getTotalPrice(), new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice()));
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -48,17 +51,32 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    private static void validatePrice(MenuPrice menuPrice) {
-        if (Objects.isNull(menuPrice) || menuPrice.getPrice() < 0) {
-            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
+    private static void validateMenuProductPrice(boolean menuPrice, IllegalPriceException exception) {
+        if (menuPrice) {
+            throw exception;
         }
     }
 
-    public void changeMenuPrice(long newPrice) {
-        if (newPrice > menuProducts.getTotalPrice()) {
-            throw new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice);
+    private static void validatePrice(MenuPrice menuPrice) {
+        if (Objects.isNull(menuPrice)) {
+            throw new IllegalPriceException("가격정보는 필수로 입력해야 합니다.");
         }
+        if (menuPrice.getPrice() < 0) {
+            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
+        }
+
+    }
+
+    public void changeMenuPrice(long newPrice) {
+        validateMenuProductPrice(newPrice > menuProducts.getTotalPrice(), new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice));
         this.menuPrice = new MenuPrice(newPrice);
+    }
+
+    public void changeMenuDisplayStatus(boolean newStatus) {
+        if (newStatus && (menuProducts.getTotalPrice() > this.menuPrice.getPrice())) {
+            throw new CanNotChangeDisplay("메뉴 가격이 메뉴상품 가격을 초과해 노출시킬 수 없습니다.");
+        }
+        this.menuDisplayStatus = newStatus;
     }
 
     public UUID getId() {

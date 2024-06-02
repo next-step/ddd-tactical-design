@@ -2,9 +2,11 @@ package kitchenpos.menu.tobe.domain;
 
 import kitchenpos.exception.IllegalNameException;
 import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.menu.tobe.domain.annotation.DomainService;
 
 import java.util.Objects;
 
+@DomainService
 public class MenuNameFactory {
     private final PurgomalumClient purgomalumClient;
 
