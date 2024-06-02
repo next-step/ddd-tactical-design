@@ -16,6 +16,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -128,5 +129,13 @@ public class Fixtures {
             ProductName.of(name, (text) -> false),
             ProductPrice.of(BigDecimal.valueOf(price))
         );
+    }
+
+    public static ProductPriceChangeDto changePriceRequest(final long price) {
+        return changePriceRequest(BigDecimal.valueOf(price));
+    }
+
+    public static ProductPriceChangeDto changePriceRequest(final BigDecimal price) {
+        return new ProductPriceChangeDto(price);
     }
 }
