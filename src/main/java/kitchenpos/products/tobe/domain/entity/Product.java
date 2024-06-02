@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.common.purgomalum.PurgomalumClient;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
@@ -25,10 +26,14 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, ProductName name, ProductPrice price) {
+    private Product(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name.getValue();
         this.price = price.getValue();
+    }
+
+    public static Product createProduct(UUID id, String name, BigDecimal price, PurgomalumClient purgomalumClient) {
+        return new Product(id, ProductName.of(name, purgomalumClient), ProductPrice.of(price));
     }
 
     public UUID getId() {

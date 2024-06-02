@@ -4,8 +4,6 @@ import java.util.UUID;
 import kitchenpos.common.purgomalum.PurgomalumClient;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
-import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +25,7 @@ class DefaultCreateProduct implements CreateProduct {
 
     @Override
     public Product execute(ProductCreateDto request) {
-        final ProductPrice price = ProductPrice.of(request.getPrice());
-        final ProductName name = ProductName.of(request.getName(), purgomalumClient);
-        final Product product = new Product(
-            UUID.randomUUID(),
-            name,
-            price
-        );
+        final Product product = Product.createProduct(UUID.randomUUID(), request.getName(), request.getPrice(), purgomalumClient);
         return productRepository.save(product);
     }
 }

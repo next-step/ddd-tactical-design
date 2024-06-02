@@ -14,8 +14,6 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.vo.ProductName;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
 import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 
 public class Fixtures {
@@ -124,10 +122,11 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        return new Product(
+        return Product.createProduct(
             UUID.randomUUID(),
-            ProductName.of(name, (text) -> false),
-            ProductPrice.of(BigDecimal.valueOf(price))
+            name,
+            BigDecimal.valueOf(price),
+            (text) -> false
         );
     }
 
