@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.domain;
 
-import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 
 import java.util.List;
 import java.util.Optional;

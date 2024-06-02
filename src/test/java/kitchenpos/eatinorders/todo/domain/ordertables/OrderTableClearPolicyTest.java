@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.todo.domain.ordertable;
+package kitchenpos.eatinorders.todo.domain.ordertables;
 
 import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static kitchenpos.eatinorders.todo.domain.ordertable.OrderTable.OCCUPIED;
+import static kitchenpos.eatinorders.todo.domain.ordertables.OrderTable.OCCUPIED;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.given;

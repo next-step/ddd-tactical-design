@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.todo.domain.ordertable;
+package kitchenpos.eatinorders.todo.domain.ordertables;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.todo.domain.ordertable;
+package kitchenpos.eatinorders.todo.domain.ordertables;
 
 import jakarta.persistence.Embeddable;
 import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;

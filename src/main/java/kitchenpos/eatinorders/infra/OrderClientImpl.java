@@ -2,8 +2,8 @@ package kitchenpos.eatinorders.infra;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.todo.domain.ordertable.OrderClient;
-import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderClient;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import org.springframework.stereotype.Component;
 
 @Component
