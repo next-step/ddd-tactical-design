@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class MenuTest {
@@ -38,5 +39,12 @@ class MenuTest {
         assertNotNull(menu.getId());
     }
 
+    @Test
+    @DisplayName("메뉴 가격을 변경할 수 있다.")
+    void success2() {
+        final var menu = new Menu(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup, true, menuProducts);
+        menu.changeMenuPrice(5_000L);
 
+        assertThat(menu.getMenuPrice()).isEqualTo(5_000L);
+    }
 }

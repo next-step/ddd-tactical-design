@@ -3,7 +3,6 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.exception.IllegalPriceException;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -51,8 +50,12 @@ public class Menu {
 
     private static void validatePrice(MenuPrice menuPrice) {
         if (Objects.isNull(menuPrice) || menuPrice.getPrice() < 0) {
-            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.toString());
+            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
         }
+    }
+
+    public void changeMenuPrice(long newPrice) {
+        this.menuPrice = new MenuPrice(newPrice);
     }
 
     public UUID getId() {

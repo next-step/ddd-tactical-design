@@ -2,6 +2,7 @@ package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.exception.IllegalNameException;
 
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class MenuName {
 
     private static void validateName(String menuName) {
         if (Objects.isNull(menuName)) {
-            throw new IllegalArgumentException();
+            throw new IllegalNameException("이름은 빈값일 수 없습니다.");
         }
     }
 

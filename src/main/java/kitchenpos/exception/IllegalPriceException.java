@@ -10,4 +10,8 @@ public class IllegalPriceException extends IllegalArgumentException {
     public IllegalPriceException(String descriptions, BigDecimal price) {
         super(descriptions + " " + price);
     }
+
+    public IllegalPriceException(String descriptions, Long price) {
+        super(descriptions + " " + price);
+    }
 }
