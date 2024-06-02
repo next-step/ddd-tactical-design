@@ -50,8 +50,8 @@ public class Menu {
     }
 
     private static void validatePrice(MenuPrice menuPrice) {
-        if (Objects.isNull(menuPrice) || menuPrice.getPrice().compareTo(BigDecimal.ZERO)< 0) {
-            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
+        if (Objects.isNull(menuPrice) || menuPrice.getPrice() < 0) {
+            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.toString());
         }
     }
 
@@ -63,7 +63,7 @@ public class Menu {
         return menuName.getName();
     }
 
-    public BigDecimal getMenuPrice() {
+    public Long getMenuPrice() {
         return menuPrice.getPrice();
     }
 

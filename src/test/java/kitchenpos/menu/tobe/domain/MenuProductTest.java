@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MenuProductTest {
+
     @Test
     @DisplayName("메뉴 상품은 상품, 수량, 싱픔과 수량에 대한 총 가격을 가진다.")
     void success() {
