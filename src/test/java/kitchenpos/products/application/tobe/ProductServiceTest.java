@@ -1,9 +1,9 @@
 package kitchenpos.products.application.tobe;
 
 import kitchenpos.products.tobe.domain.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.ProductService;
-import kitchenpos.products.tobe.domain.vo.Name;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,16 +11,29 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ProductServiceTest {
+    @DisplayName("상품의 이름에는 비속어가 포함될 수 없다")
+    @Test
+    void changeWrongNameTest() throws Exception {
+        Price price = new Price(10);
+        DisplayedName displayedName = new DisplayedName("wrong-name");
+        Product pd = new Product(displayedName, price);
+
+        ProductService service = new ProductService(new InMemoryProductRepository());
+        assertThatThrownBy(() -> service.register(pd))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 
     @DisplayName("상품의 이름을 변경할 수 있다")
     @Test
     void changeGetNameTest() throws Exception {
         Price price = new Price(10);
-        Name name = new Name("name");
-        Product pd = new Product(name, price);
+        DisplayedName displayedName = new DisplayedName("name");
+        Product pd = new Product(displayedName, price);
 
         ProductService service = new ProductService(new InMemoryProductRepository());
         service.register(pd);
@@ -36,8 +49,8 @@ public class ProductServiceTest {
     @Test
     void registerTest() {
         Price price = new Price(10);
-        Name name = new Name("name");
-        Product pd = new Product(name, price);
+        DisplayedName displayedName = new DisplayedName("name");
+        Product pd = new Product(displayedName, price);
 
         ProductService service = new ProductService(new InMemoryProductRepository());
         service.register(pd);

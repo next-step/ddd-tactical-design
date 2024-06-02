@@ -1,6 +1,8 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.vo.Name;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.strategy.Profanity;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +21,6 @@ public class ProductService {
     }
 
     public void changeName(UUID productId, String name) throws Exception {
-        // pseudocode
-        // this.nameValidator.execute(name);
-
         Optional<Product> optionalProduct = this.productRepository.findById(productId);
         if (optionalProduct.isEmpty()) {
             // Handle the case when the product is not found
@@ -29,7 +28,9 @@ public class ProductService {
         }
 
         Product product = optionalProduct.get();
-        Product changedProduct = new Product(productId, new Name(name), product.getPrice());
+        Product changedProduct = new Product(productId, new DisplayedName(name), product.getPrice(), new Profanity());
+        changedProduct.checkValidName();
+
         this.productRepository.update(changedProduct);
     }
 

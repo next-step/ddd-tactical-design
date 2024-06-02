@@ -1,6 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.vo.Name;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 
 import java.util.UUID;
@@ -8,18 +8,18 @@ import java.util.UUID;
 
 public class Product {
     private final UUID id;
-    private final Name name;
+    private final DisplayedName displayedName;
     private final Price price;
 
-    public Product(UUID id, Name name, Price price) {
+    public Product(UUID id, DisplayedName displayedName, Price price) {
         this.id = (id != null) ? id : UUID.randomUUID();
-        this.name = name;
+        this.displayedName = displayedName;
         this.price = price;
     }
 
     // Constructor that generates a random UUID
-    public Product(Name name, Price price) {
-        this(UUID.randomUUID(), name, price);
+    public Product(DisplayedName displayedName, Price price) {
+        this(UUID.randomUUID(), displayedName, price);
     }
 
     public UUID getId() {
@@ -30,16 +30,16 @@ public class Product {
         return this.price;
     }
 
-    public Name getName(){
-        return this.name;
+    public DisplayedName getName(){
+        return this.displayedName;
     }
 
     public void validateProperty() {
         this.checkValidPrice(this.price);
-        this.checkValidName(this.name);
+        this.checkValidName(this.displayedName);
     }
 
-    private void checkValidName(Name name) {
+    private void checkValidName(DisplayedName displayedName) {
         // add third-party service to check name
     }
 

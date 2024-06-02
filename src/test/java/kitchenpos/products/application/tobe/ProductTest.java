@@ -1,8 +1,8 @@
 package kitchenpos.products.application.tobe;
 
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.vo.Name;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -18,24 +18,24 @@ public class ProductTest {
     @Test
     void ProductGetNameTest() {
         Price price = new Price(10);
-        Name name = new Name("아이씨");
-        assertThatThrownBy(()->new Product(name, price)).isInstanceOf(IllegalArgumentException.class);
+        DisplayedName displayedName = new DisplayedName("아이씨");
+        assertThatThrownBy(()->new Product(displayedName, price)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격은 0원 이상이어야 한다.")
     @Test
     void ProductPriceTest() {
         Price price = new Price(0);
-        Name name = new Name("my-product");
-        assertThatThrownBy(()->new Product(name, price).validateProperty()).isInstanceOf(IllegalArgumentException.class);
+        DisplayedName displayedName = new DisplayedName("my-product");
+        assertThatThrownBy(()->new Product(displayedName, price).validateProperty()).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품에는 가격과 이름이 필요로 하다")
     @Test
     void EntityPropertyTest() {
         Price price = new Price(100);
-        Name name = new Name("my-product");
-        Product pd = new Product(name, price);
+        DisplayedName displayedName = new DisplayedName("my-product");
+        Product pd = new Product(displayedName, price);
         Assertions.assertNotNull(pd);
     }
 }
