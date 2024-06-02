@@ -1,5 +1,5 @@
 package kitchenpos.products.domain;
 
-public class ProductName {
+public class ProductNameTest {
 
 }
