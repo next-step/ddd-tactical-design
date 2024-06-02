@@ -33,12 +33,6 @@ public class ProductPrice {
     }
   }
 
-  public ProductPrice add(final ProductPrice price){
-    BigDecimal addedPrice = price.getPrice();
-
-    return ProductPrice.from(this.price.add(addedPrice));
-  }
-
   public BigDecimal getPrice(){
     return price;
   }
