@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.todo.domain;
 
-import kitchenpos.eatinorders.exception.OrderIllegalArgumentException;
+import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +27,6 @@ class OrderTableNameTest {
     @ParameterizedTest
     void fail_create(String name) {
         assertThatThrownBy(() -> OrderTableName.from(name))
-                .isInstanceOf(OrderIllegalArgumentException.class);
+                .isInstanceOf(KitchenPosIllegalArgumentException.class);
     }
 }

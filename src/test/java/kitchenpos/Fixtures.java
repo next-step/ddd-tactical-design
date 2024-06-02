@@ -3,6 +3,7 @@ package kitchenpos;
 import kitchenpos.eatinorders.domain.Order;
 import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.todo.domain.NumberOfGuests;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.eatinorders.todo.domain.OrderTableName;
@@ -105,7 +106,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        return OrderTable.from(OrderTableName.from("1번"), numberOfGuests, occupied);
+        return OrderTable.from(OrderTableName.from("1번"), NumberOfGuests.from(numberOfGuests), occupied);
     }
 
     public static Product product() {

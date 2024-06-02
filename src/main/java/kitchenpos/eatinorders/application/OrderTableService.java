@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.todo.domain.NumberOfGuests;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
 import kitchenpos.eatinorders.todo.domain.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.OrderTableRepository;
@@ -32,7 +33,7 @@ public class OrderTableService {
     public OrderTable sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
+        orderTable.sit();
         return orderTable;
     }
 
@@ -43,23 +44,15 @@ public class OrderTableService {
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+        orderTable.clear();
         return orderTable;
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
-        final int numberOfGuests = request.getNumberOfGuests();
-        if (numberOfGuests < 0) {
-            throw new IllegalArgumentException();
-        }
+    public OrderTable changeNumberOfGuests(final UUID orderTableId, final NumberOfGuests request) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        orderTable.setNumberOfGuests(numberOfGuests);
+        orderTable.changeNumberOfGuests(request);
         return orderTable;
     }
 

@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.OrderTableService;
+import kitchenpos.eatinorders.todo.domain.NumberOfGuests;
 import kitchenpos.eatinorders.todo.domain.OrderTable;
 import kitchenpos.eatinorders.todo.domain.OrderTableName;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class OrderTableRestController {
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,
-        @RequestBody final OrderTable request
+        @RequestBody final NumberOfGuests request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }

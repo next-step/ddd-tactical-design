@@ -1,11 +1,11 @@
 package kitchenpos.eatinorders.todo.domain;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.eatinorders.exception.OrderIllegalArgumentException;
+import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 
 import java.util.Objects;
 
-import static kitchenpos.eatinorders.exception.OrderExceptionCode.INVALID_ORDER_TABLE_NAME;
+import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.INVALID_ORDER_TABLE_NAME;
 
 @Embeddable
 public class OrderTableName {
@@ -42,7 +42,7 @@ public class OrderTableName {
 
     private static void checkNullOrBlank(String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new OrderIllegalArgumentException(INVALID_ORDER_TABLE_NAME);
+            throw new KitchenPosIllegalArgumentException(INVALID_ORDER_TABLE_NAME);
         }
     }
 }
