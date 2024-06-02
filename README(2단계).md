@@ -1,6 +1,6 @@
 ### 메뉴 그룹
 
-- `MenuGroup(메뉴 그룹)` 은 식별자, `MenuGroupName(메뉴 그룹 이름)` 를 항상 가진다.
+- [X] `MenuGroup(메뉴 그룹)` 은 식별자, `MenuGroupName(메뉴 그룹 이름)` 를 항상 가진다.
 
 ### 메뉴
 
