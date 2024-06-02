@@ -1,8 +1,9 @@
-package kitchenpos.products.tobe.application;
+package kitchenpos.products.application;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.products.tobe.domain.Product;
+
+import kitchenpos.products.domain.Product;
 
 public class ProductResponse {
     private final UUID id;
