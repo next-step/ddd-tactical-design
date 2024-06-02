@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.todo.domain;
+package kitchenpos.eatinorders.todo.domain.ordertable;
 
 import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;

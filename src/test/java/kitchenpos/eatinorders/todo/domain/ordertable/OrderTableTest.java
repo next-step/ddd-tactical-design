@@ -1,10 +1,10 @@
-package kitchenpos.eatinorders.todo.domain;
+package kitchenpos.eatinorders.todo.domain.ordertable;
 
 import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kitchenpos.eatinorders.todo.domain.OrderTable.OCCUPIED;
+import static kitchenpos.eatinorders.todo.domain.ordertable.OrderTable.OCCUPIED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

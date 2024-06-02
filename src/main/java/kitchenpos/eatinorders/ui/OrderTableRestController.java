@@ -1,9 +1,9 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.OrderTableService;
-import kitchenpos.eatinorders.todo.domain.NumberOfGuests;
-import kitchenpos.eatinorders.todo.domain.OrderTable;
-import kitchenpos.eatinorders.todo.domain.OrderTableName;
+import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

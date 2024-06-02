@@ -2,10 +2,10 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.todo.domain.NumberOfGuests;
-import kitchenpos.eatinorders.todo.domain.OrderTable;
-import kitchenpos.eatinorders.todo.domain.OrderTableName;
-import kitchenpos.eatinorders.todo.domain.OrderTableRepository;
+import kitchenpos.eatinorders.todo.domain.ordertable.NumberOfGuests;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableName;
+import kitchenpos.eatinorders.todo.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
