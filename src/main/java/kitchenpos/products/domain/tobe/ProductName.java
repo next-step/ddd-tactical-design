@@ -1,10 +1,9 @@
 package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 
-//    - 상품의 이름이 올바르지 않으면 등록할 수 없다.
-//    - 상품의 이름에는 비속어가 포함될 수 없다.
 @Embeddable
 public class ProductName {
 

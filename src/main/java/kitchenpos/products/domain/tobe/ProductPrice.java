@@ -1,11 +1,11 @@
 package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Embeddable;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
-//    - 상품의 가격이 올바르지 않으면 등록할 수 없다.
-//    - 상품의 가격은 0원 이상이어야 한다.
+
 @Embeddable
 public class ProductPrice {
 
