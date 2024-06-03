@@ -16,7 +16,8 @@ public class OrderTableClientImpl implements OrderTableClient {
         this.orderTableRepository = orderTableRepository;
     }
 
-    @Override public OrderTable getOrderTable(UUID orderTableId) {
+    @Override
+    public OrderTable getOrderTable(UUID orderTableId) {
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
     }

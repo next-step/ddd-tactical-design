@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.infra.OrderTableClientImpl;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
@@ -53,7 +54,8 @@ class EatInOrderServiceTest {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
         OrderTableClient orderTableClient = new OrderTableClientImpl(orderTableRepository);
-        orderService = new EatInOrderService(orderRepository, menuClient, orderTableClient);
+        EatInOrderPolicy eatInOrderPolicy = new EatInOrderPolicy(orderRepository, orderTableClient);
+        orderService = new EatInOrderService(orderRepository, menuClient, orderTableClient, eatInOrderPolicy);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")

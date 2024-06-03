@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ForeignKey;

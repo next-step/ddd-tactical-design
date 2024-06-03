@@ -9,12 +9,15 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import kitchenpos.support.domain.OrderLineItem;
 import kitchenpos.support.domain.OrderLineItems;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.INVALID_ORDER_STATUS;
 
 @Table(name = "eat_in_orders")
 @Entity
@@ -66,16 +69,28 @@ public class EatInOrder {
         return new EatInOrder(orderLineItems, orderTableId);
     }
 
+    public EatInOrder accept() {
+        changeStatus(EatInOrderStatus.WAITING);
+        return this;
+    }
+
+    public EatInOrder serve() {
+        changeStatus(EatInOrderStatus.ACCEPTED);
+        return this;
+    }
+
+    public EatInOrder complete(EatInOrderPolicy eatInOrderPolicy) {
+        changeStatus(EatInOrderStatus.SERVED);
+        eatInOrderPolicy.clearOrderTable(this.getOrderTableId());
+        return this;
+    }
+
     public UUID getId() {
         return id;
     }
 
     public EatInOrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final EatInOrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
@@ -93,5 +108,12 @@ public class EatInOrder {
     private static void validateOrderTable(UUID orderTableId, OrderTableClient orderTableClient) {
         EatInOrderTablePolicy policy = new EatInOrderTablePolicy(orderTableClient);
         policy.checkClearOrderTable(orderTableId);
+    }
+
+    private void changeStatus(EatInOrderStatus status) {
+        if (this.status != status) {
+            throw new KitchenPosIllegalStateException(INVALID_ORDER_STATUS, status);
+        }
+        this.status = status.next();
     }
 }

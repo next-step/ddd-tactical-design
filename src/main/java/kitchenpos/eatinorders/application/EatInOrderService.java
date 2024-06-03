@@ -1,10 +1,9 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
-import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.support.domain.MenuClient;
 import kitchenpos.support.domain.OrderLineItems;
 import org.springframework.stereotype.Service;
@@ -19,15 +18,18 @@ public class EatInOrderService {
     private final EatInOrderRepository orderRepository;
     private final MenuClient menuClient;
     private final OrderTableClient orderTableClient;
+    private final EatInOrderPolicy eatInOrderPolicy;
 
     public EatInOrderService(
         final EatInOrderRepository orderRepository,
         final MenuClient menuClient,
-        final OrderTableClient orderTableClient
+        final OrderTableClient orderTableClient,
+        final EatInOrderPolicy eatInOrderPolicy
     ) {
         this.orderRepository = orderRepository;
         this.menuClient = menuClient;
         this.orderTableClient = orderTableClient;
+        this.eatInOrderPolicy = eatInOrderPolicy;
     }
 
     @Transactional
@@ -39,45 +41,31 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder accept(final UUID orderId) {
-        final EatInOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != EatInOrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(EatInOrderStatus.ACCEPTED);
-        return order;
+        final EatInOrder order = getOrder(orderId);
+        return order.accept();
     }
 
     @Transactional
     public EatInOrder serve(final UUID orderId) {
-        final EatInOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(EatInOrderStatus.SERVED);
-        return order;
+        final EatInOrder order = getOrder(orderId);
+        return order.serve();
     }
 
 
     @Transactional
     public EatInOrder complete(final UUID orderId) {
-        final EatInOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        final EatInOrderStatus status = order.getStatus();
-            if (status != EatInOrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
-        order.setStatus(EatInOrderStatus.COMPLETED);
-        final OrderTable orderTable = orderTableClient.getOrderTable(order.getOrderTableId());
-        if (!orderRepository.existsByOrderTableIdAndStatusNot(order.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
-            orderTable.clear();
-        }
-        return order;
+        final EatInOrder order = getOrder(orderId);
+        return order.complete(eatInOrderPolicy);
     }
 
     @Transactional(readOnly = true)
     public List<EatInOrder> findAll() {
         return orderRepository.findAll();
+    }
+
+
+    private EatInOrder getOrder(UUID orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
