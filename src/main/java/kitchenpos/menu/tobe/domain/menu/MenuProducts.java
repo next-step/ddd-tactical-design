@@ -25,10 +25,10 @@ public class MenuProducts {
             throw new IllegalArgumentException("메뉴에 속한 상품이 비어있습니다.");
         }
         this.menuProducts = menuProducts;
-        validateMenuPriceDoesNotExceedTotalProductPrice(menuPrice);
+        validateMenuPricePolicy(menuPrice);
     }
 
-    public void validateMenuPriceDoesNotExceedTotalProductPrice(BigDecimal menuPrice) {
+    public void validateMenuPricePolicy(BigDecimal menuPrice) {
         BigDecimal totalPrice = menuProducts.stream()
                 .map(menuProduct -> menuProduct.getPrice().multiply(new BigDecimal(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

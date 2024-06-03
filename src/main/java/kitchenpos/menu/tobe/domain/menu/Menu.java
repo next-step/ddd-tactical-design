@@ -47,12 +47,12 @@ public class Menu {
 
     public void changePrice(BigDecimal price) {
         MenuPrice newMenuPrice = new MenuPrice(price);
-        this.menuProducts.validateMenuPriceDoesNotExceedTotalProductPrice(newMenuPrice.getPrice());
+        this.menuProducts.validateMenuPricePolicy(newMenuPrice.getPrice());
         this.menuPrice = newMenuPrice;
     }
 
     public void display() {
-        this.menuProducts.validateMenuPriceDoesNotExceedTotalProductPrice(this.menuPrice.getPrice());
+        this.menuProducts.validateMenuPricePolicy(this.menuPrice.getPrice());
         this.displayed = true;
     }
 
