@@ -1,16 +1,20 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
+import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.eatinorders.domain.OrderLineItem;
+import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
@@ -118,10 +122,19 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return Product.createProduct(
+            UUID.randomUUID(),
+            name,
+            BigDecimal.valueOf(price),
+            (text) -> false
+        );
+    }
+
+    public static ProductPriceChangeDto changePriceRequest(final long price) {
+        return changePriceRequest(BigDecimal.valueOf(price));
+    }
+
+    public static ProductPriceChangeDto changePriceRequest(final BigDecimal price) {
+        return new ProductPriceChangeDto(price);
     }
 }

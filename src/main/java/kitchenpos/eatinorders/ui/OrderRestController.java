@@ -1,13 +1,18 @@
 package kitchenpos.eatinorders.ui;
 
-import kitchenpos.eatinorders.application.OrderService;
-import kitchenpos.eatinorders.domain.Order;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.eatinorders.application.OrderService;
+import kitchenpos.eatinorders.domain.Order;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/orders")
 @RestController
@@ -22,7 +27,7 @@ public class OrderRestController {
     public ResponseEntity<Order> create(@RequestBody final Order request) {
         final Order response = orderService.create(request);
         return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
-            .body(response);
+                             .body(response);
     }
 
     @PutMapping("/{orderId}/accept")

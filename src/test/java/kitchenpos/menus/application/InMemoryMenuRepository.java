@@ -3,8 +3,12 @@ package kitchenpos.menus.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 public class InMemoryMenuRepository implements MenuRepository {
     private final Map<UUID, Menu> menus = new HashMap<>();
@@ -30,7 +34,7 @@ public class InMemoryMenuRepository implements MenuRepository {
         return menus.values()
             .stream()
             .filter(menu -> ids.contains(menu.getId()))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -38,6 +42,6 @@ public class InMemoryMenuRepository implements MenuRepository {
         return menus.values()
             .stream()
             .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
-            .collect(Collectors.toList());
+            .toList();
     }
 }
