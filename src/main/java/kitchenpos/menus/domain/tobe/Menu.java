@@ -22,32 +22,32 @@ import java.util.UUID;
  * - `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
  * - `MenuProduct`는 가격과 수량을 가진다.
  */
-@Table(name = "menu")
-@Entity
+//@Table(name = "menu")
+//@Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
+//    @Column(name = "id", columnDefinition = "binary(16)")
+//    @Id
     private UUID id;
 
-    @Embedded
-    @Column(name = "name", nullable = false)
+//    @Embedded
+//    @Column(name = "name", nullable = false)
     private DisplayedName displayedName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
+//    @ManyToOne(optional = false)
+//    @JoinColumn(
+//            name = "menu_group_id",
+//            columnDefinition = "binary(16)",
+//            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+//    )
     private MenuGroup menuGroup;
 
-    @Embedded
+//    @Embedded
     private Price price;
 
-    @Embedded
+//    @Embedded
     private MenuProducts menuProducts;
 
-    @Column(name = "displayed", nullable = false)
+//    @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
     protected Menu() {

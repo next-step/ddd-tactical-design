@@ -9,14 +9,14 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-@Table(name = "menu_group")
-@Entity(name = "menu_group")
+//@Table(name = "menu_group")
+//@Entity(name = "menu_group")
 public class MenuGroup {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
+//    @Column(name = "id", columnDefinition = "binary(16)")
+//    @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+//    @Column(name = "name", nullable = false)
     private String name;
 
     protected MenuGroup() {

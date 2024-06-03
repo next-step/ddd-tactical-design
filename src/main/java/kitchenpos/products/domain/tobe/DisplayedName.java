@@ -5,7 +5,7 @@ import kitchenpos.products.infra.tobe.Profanities;
 
 import java.util.Optional;
 
-@Embeddable
+//@Embeddable
 public class DisplayedName {
     private String name;
 

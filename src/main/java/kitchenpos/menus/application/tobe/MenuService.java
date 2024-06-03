@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+//@Service
 public class MenuService {
     private final MenuRepository menuRepository;
 

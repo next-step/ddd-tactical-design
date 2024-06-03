@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Service
+//@Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuService menuService;
