@@ -3,6 +3,8 @@ package kitchenpos.menus.domain.tobe.domain;
 import jakarta.persistence.Embeddable;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 @Embeddable
 public class MenuGroupName {
 
@@ -20,5 +22,18 @@ public class MenuGroupName {
 
     public static MenuGroupName of(String name) {
         return new MenuGroupName(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuGroupName that = (MenuGroupName) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }
