@@ -24,7 +24,6 @@ public class Product {
     @Column(name = "name", nullable = false)
     private DisplayedName dispayedName;
     @Embedded
-    @Column(name = "price", nullable = false)
     private Price price;
 
     protected Product() {

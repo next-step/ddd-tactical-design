@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.math.BigDecimal;
@@ -7,6 +8,7 @@ import java.util.Optional;
 
 @Embeddable
 public class Price {
+    @Column(name = "price", nullable = false)
     private BigDecimal priceValue;
 
     protected Price() {

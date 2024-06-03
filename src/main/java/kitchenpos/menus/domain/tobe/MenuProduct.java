@@ -1,17 +1,26 @@
 package kitchenpos.menus.domain.tobe;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Embeddable
+@Table(name = "menu_product")
+@Entity
 public class MenuProduct {
-
+    @Column(name = "productId", columnDefinition = "binary(16)")
+    @Id
     private UUID productId;
 
+    @Transient
     private Price price;
 
-    private int quantity;
+    @Column(name = "quantity", nullable = false)
+    private long quantity;
 
     protected MenuProduct() {
     }

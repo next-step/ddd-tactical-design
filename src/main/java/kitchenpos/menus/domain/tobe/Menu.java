@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kitchenpos.products.infra.tobe.Profanities;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -41,7 +42,6 @@ public class Menu {
     private MenuGroup menuGroup;
 
     @Embedded
-    @Column(name = "price", nullable = false)
     private Price price;
 
     @Embedded
