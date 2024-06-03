@@ -23,7 +23,7 @@ class OrderTableTest {
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.name()).isEqualTo("주문테이블 이름"),
                 () -> assertThat(actual.getNumberOfGuests()).isZero(),
-                () -> assertThat(actual.isOccupied()).isFalse()
+                () -> assertThat(actual.isOccupied()).isEqualTo(UNOCCUPIED)
         );
     }
 

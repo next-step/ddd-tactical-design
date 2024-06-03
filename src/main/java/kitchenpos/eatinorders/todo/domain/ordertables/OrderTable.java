@@ -65,13 +65,19 @@ public class OrderTable {
 
     public void clear(final OrderClient orderClient) {
         final OrderTableClearPolicy policy = new OrderTableClearPolicy(orderClient);
-        policy.checkClear(this);
+        policy.checkClear(this.id);
         clear();
     }
 
     public void changeNumberOfGuests(NumberOfGuests numberOfGuests) {
-        validateChangeNumberOfGuests();
+        checkClear();
         this.numberOfGuests = numberOfGuests;
+    }
+
+    public void checkClear() {
+        if (this.isOccupied() == UNOCCUPIED) {
+            throw new KitchenPosIllegalStateException(ORDER_TABLE_UNOCCUPIED_STATUS, this.id);
+        }
     }
 
     public UUID getId() {
@@ -88,11 +94,5 @@ public class OrderTable {
 
     public boolean isOccupied() {
         return occupied;
-    }
-
-    private void validateChangeNumberOfGuests() {
-        if (this.isOccupied() == UNOCCUPIED) {
-            throw new KitchenPosIllegalStateException(ORDER_TABLE_UNOCCUPIED_STATUS, this.id);
-        }
     }
 }

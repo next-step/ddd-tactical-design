@@ -3,8 +3,9 @@ package kitchenpos.eatinorders.infra;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderClient;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class OrderClientImpl implements OrderClient {
@@ -14,7 +15,7 @@ public class OrderClientImpl implements OrderClient {
         this.orderRepository = orderRepository;
     }
 
-    public boolean containsInvalidOrderForClearOrderTable(OrderTable orderTable) {
-        return orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED);
+    public boolean containsInvalidOrderForClearOrderTable(UUID orderTableId) {
+        return orderRepository.existsByOrderTableIdAndStatusNot(orderTableId, EatInOrderStatus.COMPLETED);
     }
 }

@@ -66,13 +66,7 @@ public class Fixtures {
     }
 
     public static EatInOrder order(final EatInOrderStatus status, final OrderTable orderTable) {
-        final EatInOrder order = new EatInOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        order.setOrderTable(orderTable);
-        return order;
+        return new EatInOrder(status, List.of(orderLineItem()), orderTable.getId());
     }
 
     public static OrderLineItem orderLineItem() {

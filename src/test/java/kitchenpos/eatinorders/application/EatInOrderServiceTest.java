@@ -1,8 +1,10 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.eatinorders.infra.OrderTableClientImpl;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
-import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
+import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
@@ -45,7 +47,8 @@ class EatInOrderServiceTest {
         orderRepository = new InMemoryEatInOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
-        orderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository);
+        OrderTableClient orderTableClient = new OrderTableClientImpl(orderTableRepository);
+        orderService = new EatInOrderService(orderRepository, menuRepository, orderTableClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 매장 주문을 등록할 수 있다.")
@@ -61,7 +64,7 @@ class EatInOrderServiceTest {
             () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.WAITING),
             () -> assertThat(actual.getOrderDateTime()).isNotNull(),
             () -> assertThat(actual.getOrderLineItems()).hasSize(1),
-            () -> assertThat(actual.getOrderTable().getId()).isEqualTo(expected.getOrderTableId())
+            () -> assertThat(actual.getOrderTableId()).isEqualTo(expected.getOrderTableId())
         );
     }
 
@@ -206,19 +209,14 @@ class EatInOrderServiceTest {
     }
 
     private EatInOrder createOrderRequest(final List<OrderLineItem> orderLineItems) {
-        final EatInOrder order = new EatInOrder();
-        order.setOrderLineItems(orderLineItems);
-        return order;
+        return new EatInOrder(EatInOrderStatus.WAITING, orderLineItems, orderTable().getId());
     }
 
     private EatInOrder createOrderRequest(
         final UUID orderTableId,
         final OrderLineItem... orderLineItems
     ) {
-        final EatInOrder order = new EatInOrder();
-        order.setOrderTableId(orderTableId);
-        order.setOrderLineItems(Arrays.asList(orderLineItems));
-        return order;
+        return new EatInOrder(EatInOrderStatus.WAITING, Arrays.asList(orderLineItems), orderTableId);
     }
 
     private static OrderLineItem createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {

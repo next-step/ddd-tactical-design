@@ -1,17 +1,16 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
-import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
+import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.support.domain.OrderLineItem;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,16 +21,16 @@ import java.util.UUID;
 public class EatInOrderService {
     private final EatInOrderRepository orderRepository;
     private final MenuRepository menuRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final OrderTableClient orderTableClient;
 
     public EatInOrderService(
         final EatInOrderRepository orderRepository,
         final MenuRepository menuRepository,
-        final OrderTableRepository orderTableRepository
+        final OrderTableClient orderTableClient
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
-        this.orderTableRepository = orderTableRepository;
+        this.orderTableClient = orderTableClient;
     }
 
     @Transactional
@@ -64,17 +63,7 @@ public class EatInOrderService {
             orderLineItem.setQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
-        EatInOrder order = new EatInOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(EatInOrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
-        order.setOrderLineItems(orderLineItems);
-            final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
-            }
-            order.setOrderTable(orderTable);
+        EatInOrder order = new EatInOrder(orderLineItems, request.getOrderTableId(), orderTableClient);
         return orderRepository.save(order);
     }
 
@@ -110,10 +99,10 @@ public class EatInOrderService {
                 throw new IllegalStateException();
             }
         order.setStatus(EatInOrderStatus.COMPLETED);
-            final OrderTable orderTable = order.getOrderTable();
-            if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
-                orderTable.clear();
-            }
+        final OrderTable orderTable = orderTableClient.getOrderTable(order.getOrderTableId());
+        if (!orderRepository.existsByOrderTableIdAndStatusNot(order.getOrderTableId(), EatInOrderStatus.COMPLETED)) {
+            orderTable.clear();
+        }
         return order;
     }
 

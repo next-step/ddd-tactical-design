@@ -2,6 +2,8 @@ package kitchenpos.eatinorders.todo.domain.ordertables;
 
 import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 
+import java.util.UUID;
+
 import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.ORDER_TABLE_CONTAINS_INVALID_ORDER;
 
 public class OrderTableClearPolicy {
@@ -11,9 +13,9 @@ public class OrderTableClearPolicy {
         this.orderClient = orderClient;
     }
 
-    public void checkClear(OrderTable orderTable) {
-        if (orderClient.containsInvalidOrderForClearOrderTable(orderTable)) {
-            throw new KitchenPosIllegalStateException(ORDER_TABLE_CONTAINS_INVALID_ORDER, orderTable.getId());
+    public void checkClear(UUID orderTableId) {
+        if (orderClient.containsInvalidOrderForClearOrderTable(orderTableId)) {
+            throw new KitchenPosIllegalStateException(ORDER_TABLE_CONTAINS_INVALID_ORDER, orderTableId);
         }
     }
 }

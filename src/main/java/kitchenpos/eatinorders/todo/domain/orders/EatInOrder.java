@@ -8,11 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.support.domain.OrderLineItem;
 
 import java.time.LocalDateTime;
@@ -42,18 +39,23 @@ public class EatInOrder {
     )
     private List<OrderLineItem> orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_eat_in_orders_to_order_table")
-    )
-    private OrderTable orderTable;
-
-    @Transient
+    @Column(name = "order_table_id", nullable = false, columnDefinition = "binary(16)")
     private UUID orderTableId;
 
-    public EatInOrder() {
+    protected EatInOrder() {
+    }
+
+    public EatInOrder(List<OrderLineItem> orderLineItems, UUID orderTableId, OrderTableClient orderTableClient) {
+        this(EatInOrderStatus.WAITING, orderLineItems, orderTableId);
+        validateOrderTable(orderTableId, orderTableClient);
+    }
+
+    public EatInOrder(EatInOrderStatus status, List<OrderLineItem> orderLineItems, UUID orderTableId) {
+        this.id = UUID.randomUUID();
+        this.status = status;
+        this.orderDateTime = LocalDateTime.now();
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
     }
 
     public UUID getId() {
@@ -88,19 +90,12 @@ public class EatInOrder {
         this.orderLineItems = orderLineItems;
     }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
-
     public UUID getOrderTableId() {
         return orderTableId;
     }
 
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+    private void validateOrderTable(UUID orderTableId, OrderTableClient orderTableClient) {
+        EatInOrderPolicy policy = new EatInOrderPolicy(orderTableClient);
+        policy.checkClearOrderTable(orderTableId);
     }
 }

@@ -34,17 +34,17 @@ class OrderTableClearPolicyTest {
     @DisplayName("[성공] 주문테이블을 초기화 하기에 유효한 주문들만 포함되면 예외가 발생하지 않는다.")
     @Test
     void checkClear() {
-        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable)).willReturn(false);
+        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable.getId())).willReturn(false);
 
-        assertDoesNotThrow(() -> orderTableClearPolicy.checkClear(orderTable));
+        assertDoesNotThrow(() -> orderTableClearPolicy.checkClear(orderTable.getId()));
     }
 
     @DisplayName("[실패] 주문테이블을 초기화 하기에 유효하지 않은 주문이 포함되면 예외가 발생한다.")
     @Test
     void fail_checkClear() {
-        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable)).willReturn(true);
+        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable.getId())).willReturn(true);
 
-        assertThatThrownBy(() -> orderTableClearPolicy.checkClear(orderTable))
+        assertThatThrownBy(() -> orderTableClearPolicy.checkClear(orderTable.getId()))
                 .isInstanceOf(KitchenPosIllegalStateException.class);
     }
 }
