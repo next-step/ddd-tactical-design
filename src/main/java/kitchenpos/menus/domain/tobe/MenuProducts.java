@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain.tobe;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -11,13 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class MenuProducts {
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
+    @ElementCollection
     private List<MenuProduct> menuProducts;
 
     protected MenuProducts() {

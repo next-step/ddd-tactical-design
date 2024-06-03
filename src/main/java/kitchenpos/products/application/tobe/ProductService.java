@@ -1,34 +1,32 @@
 package kitchenpos.products.application.tobe;
 
 import jakarta.transaction.Transactional;
-import kitchenpos.menus.domain.tobe.Menu;
-import kitchenpos.menus.domain.tobe.MenuRepository;
+import kitchenpos.menus.application.tobe.MenuService;
+import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
-    private final Product product;
-    private final MenuRepository menuRepository;
+    private final ProductRepository productRepository;
+    private final MenuService menuService;
 
-    public ProductService(final Product product, final MenuRepository menuRepository) {
-        this.product = product;
-        this.menuRepository = menuRepository;
+    public ProductService(ProductRepository productRepository, MenuService menuService) {
+        this.productRepository = productRepository;
+        this.menuService = menuService;
     }
 
     @Transactional
-    public Product changePrice(final BigDecimal price) {
+    public Product changePrice(final UUID productId, final BigDecimal price) throws Exception {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("product can't find by id"));
+
         product.changePrice(price);
 
-        List<Menu> menus = menuRepository.findAllByProductId(product.getId());
-        menus.stream().forEach(a -> a.changeProductPrice(product.getId(), price));
-
-        for (Menu menu : menus) {
-            menuRepository.save(menu);
-        }
+        menuService.changePriceOfProduct(productId, price);
 
         return product;
     }
