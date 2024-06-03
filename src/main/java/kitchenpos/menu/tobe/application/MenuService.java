@@ -1,6 +1,5 @@
 package kitchenpos.menu.tobe.application;
 
-import kitchenpos.common.infra.PurgomalumClient;
 import kitchenpos.menu.tobe.application.dto.ChangeMenuPrice;
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
@@ -20,16 +19,16 @@ import java.util.UUID;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityValidator profanityValidator;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final PurgomalumClient purgomalumClient
+            final ProfanityValidator profanityValidator
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityValidator = profanityValidator;
     }
 
     @Transactional
@@ -38,7 +37,7 @@ public class MenuService {
         MenuGroup menuGroup = getMenuGroup(request.menuGroupId());
 
         List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
-        MenuName menuName = new MenuName(request.name(), new ProfanityValidator(purgomalumClient));
+        MenuName menuName = new MenuName(request.name(), profanityValidator);
 
         Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice.getPrice()));
         return menuRepository.save(menu);

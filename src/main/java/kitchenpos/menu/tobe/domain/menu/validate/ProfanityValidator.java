@@ -1,7 +1,9 @@
 package kitchenpos.menu.tobe.domain.menu.validate;
 
 import kitchenpos.common.infra.PurgomalumClient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProfanityValidator {
     private final PurgomalumClient purgomalumClient;
 
