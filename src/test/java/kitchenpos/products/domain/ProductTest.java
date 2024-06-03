@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 
 import kitchenpos.Fixtures;
-import kitchenpos.products.application.FakeProfanityValidator;
+import kitchenpos.products.infra.FakeProfanityValidator;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;

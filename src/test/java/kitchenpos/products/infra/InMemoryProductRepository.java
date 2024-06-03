@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.infra;
 
 import java.util.ArrayList;
 import java.util.HashMap;

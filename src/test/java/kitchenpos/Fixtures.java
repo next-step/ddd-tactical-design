@@ -8,7 +8,7 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.application.FakeProfanityValidator;
+import kitchenpos.products.infra.FakeProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
 
 import java.math.BigDecimal;
