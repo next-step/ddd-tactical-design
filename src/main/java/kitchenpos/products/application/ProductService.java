@@ -6,14 +6,13 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
-import kitchenpos.products.domain.tobe.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service

@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
-import kitchenpos.products.domain.tobe.dto.ProductRequest;
 
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
