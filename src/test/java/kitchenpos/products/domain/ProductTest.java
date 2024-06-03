@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 @DisplayName("상품 테스트")
 class ProductTest {
 
-  public static final String UDON = "udon";
-  public static final long VAL = 10_000L;
+  public static final String PRODUCT_NAME = "udon";
+  public static final long PRODUCT_PRICE = 10_000L;
   private ProfanityValidator profanityValidator;
 
   @BeforeEach
@@ -28,11 +28,11 @@ class ProductTest {
   @DisplayName("상품을 생성할 수 있다.")
   @Test
   void createProduct(){
-    Product actual = Product.from(UDON, VAL, profanityValidator);
+    Product actual = Product.from(PRODUCT_NAME, PRODUCT_PRICE, profanityValidator);
 
     assertAll(
-        () -> assertThat(actual.getProductPrice()).isEqualTo(BigDecimal.valueOf(VAL)),
-        () -> assertThat(actual.getProductName()).isEqualTo(UDON),
+        () -> assertThat(actual.getProductPrice()).isEqualTo(BigDecimal.valueOf(PRODUCT_PRICE)),
+        () -> assertThat(actual.getProductName()).isEqualTo(PRODUCT_NAME),
         () -> assertThat(actual.getId()).isNotNull()
     );
   }
