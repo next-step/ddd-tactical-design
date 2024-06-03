@@ -21,23 +21,23 @@ class ProductTest {
     @DisplayName("이름과 가격 그리고 UUID 생성 여부 확인하기")
     void create() {
         //given
-        Product product = new Product("후라이드치킨", BigDecimal.valueOf(18000L), purgomalumClient);
+        Product product = new Product("후라이드치킨", 18000, purgomalumClient);
 
         //when then
         assertThat(product.getId()).isNotNull();
         assertThat(product.getName()).isEqualTo(new ProductName("후라이드치킨"));
-        assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(18000L)));
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(18000));
     }
 
     @Test
     @DisplayName("욕설이 있으면 생성 불가")
     void canNotCreateHaveProfanity() {
 
-        assertThatThrownBy(() -> new Product("욕설치킨", BigDecimal.valueOf(18000L), purgomalumClient))
+        assertThatThrownBy(() -> new Product("욕설치킨", 18000, purgomalumClient))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new Product("욕설비속어", BigDecimal.valueOf(18000L), purgomalumClient))
+        assertThatThrownBy(() -> new Product("욕설비속어", 18000, purgomalumClient))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new Product("비속어치킨욕설", BigDecimal.valueOf(18000L), purgomalumClient))
+        assertThatThrownBy(() -> new Product("비속어치킨욕설", 18000, purgomalumClient))
                 .isExactlyInstanceOf(IllegalArgumentException.class);
 
     }
@@ -47,12 +47,12 @@ class ProductTest {
     void get() {
         //given
         UUID id = UUID.randomUUID();
-        Product product = new Product(id, "후라이드치킨", BigDecimal.valueOf(18000L));
+        Product product = new Product(id, "후라이드치킨", 18000);
 
         //when then
         assertThat(product.getId()).isEqualTo(id);
         assertThat(product.getName()).isEqualTo(new ProductName("후라이드치킨"));
-        assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(18000L)));
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(18000));
     }
 
     @Nested
@@ -63,28 +63,26 @@ class ProductTest {
         void setUp() {
             //given
             UUID id = UUID.randomUUID();
-            product = new Product(id, "후라이드치킨", BigDecimal.valueOf(18000L));
+            product = new Product(id, "후라이드치킨",18000);
         }
 
         @Test
         @DisplayName("가격 변경 성공")
         void success() {
             //when
-            product.changePrice(BigDecimal.valueOf(20000L));
+            product.changePrice(20000);
 
             //then
-            assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(20000L)));
+            assertThat(product.getPrice()).isEqualTo(new ProductPrice(20000));
         }
 
         @Test
         @DisplayName("가격을 null 또는 음수를 입력할 수 없다.")
         void canNotPriceNullOrMinus() {
             //when then
-            assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-1000L)))
+            assertThatThrownBy(() -> product.changePrice(-1000))
                     .isExactlyInstanceOf(IllegalArgumentException.class);
-            assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-1L)))
-                    .isExactlyInstanceOf(IllegalArgumentException.class);
-            assertThatThrownBy(() -> product.changePrice(null))
+            assertThatThrownBy(() -> product.changePrice(-1))
                     .isExactlyInstanceOf(IllegalArgumentException.class);
 
         }
