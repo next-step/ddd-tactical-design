@@ -19,7 +19,7 @@ class EatInOrder(
 
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
-    val id = UUID.randomUUID()
+    val id: UUID = UUID.randomUUID()
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
@@ -54,5 +54,18 @@ class EatInOrder(
 
     private fun checkStatusBeforeComplete() = check(status == EatInOrderStatus.SERVED) {
         "현재 주문 상태가 served 일 때만, complete 상태로 변경 가능합니다."
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EatInOrder) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
     }
 }
