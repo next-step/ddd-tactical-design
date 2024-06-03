@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.todo.domain.orders;
 
+import kitchenpos.eatinorders.application.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.application.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
@@ -58,8 +59,54 @@ class EatInOrderTest {
         );
     }
 
+    @DisplayName("매장 주문이 수락된다.")
+    @Test
+    void accept() {
+        EatInOrderCreateRequest request = createOrderRequest();
+        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        EatInOrder order = new EatInOrder(EatInOrderStatus.WAITING, orderLineItems, request.orderTableId());
+
+        EatInOrder actual = order.accept();
+
+        assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.ACCEPTED);
+    }
+
+    @DisplayName("매장 주문이 고객에게 서빙된다.")
+    @Test
+    void serve() {
+        EatInOrderCreateRequest request = createOrderRequest();
+        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        EatInOrder order = new EatInOrder(EatInOrderStatus.ACCEPTED, orderLineItems, request.orderTableId());
+
+        EatInOrder actual = order.serve();
+
+        assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.SERVED);
+    }
+
+
+    @DisplayName("매장 주문이 완료된다.")
+    @Test
+    void complete() {
+        EatInOrderCreateRequest request = createOrderRequest();
+        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        EatInOrder order = new EatInOrder(EatInOrderStatus.SERVED, orderLineItems, request.orderTableId());
+
+        EatInOrder actual = order.complete(eatInOrderPolicy());
+        OrderTable orderTableActual = orderTableClient.getOrderTable(actual.getOrderTableId());
+
+        assertAll(
+                () -> assertThat(actual.getStatus()).isEqualTo(EatInOrderStatus.COMPLETED),
+                () -> assertThat(orderTableActual.isOccupied()).isFalse(),
+                () -> assertThat(orderTableActual.getNumberOfGuests()).isZero()
+        );
+    }
+
     private EatInOrderCreateRequest createOrderRequest() {
         orderTable.sit();
         return new EatInOrderCreateRequest(List.of(orderLineItem), orderTable.getId());
+    }
+
+    private EatInOrderPolicy eatInOrderPolicy() {
+        return new EatInOrderPolicy(new InMemoryEatInOrderRepository(), orderTableClient);
     }
 }
