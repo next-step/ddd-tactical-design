@@ -116,12 +116,6 @@ class TobeProductTest {
         }
     }
 
-    private static TobeProduct createProduct() {
-        var name = "후라이드";
-        var price = 10_000;
-        return createProduct(name, price);
-    }
-
     private static TobeProduct createProduct(int price) {
         var name = "후라이드";
         return createProduct(name, price);
