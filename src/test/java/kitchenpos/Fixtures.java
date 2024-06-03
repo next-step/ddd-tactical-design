@@ -21,6 +21,8 @@ import kitchenpos.products.domain.tobe.ProfanityValidator;
 public class Fixtures {
     public static final UUID INVALID_ID = new UUID(0L, 0L);
     public static ProfanityValidator profanityValidator = new FakeProfanityValidator();
+    public static Product product = createProduct();
+
     public static Menu menu() {
         return menu(19_000L, true, menuProduct());
     }
@@ -125,5 +127,13 @@ public class Fixtures {
 
     public static Product product(final String name, final long price) {
         return Product.from(name, price, profanityValidator);
+    }
+
+    public static Product createProduct() {
+        return Product.from("우동", 10_000L, new FakeProfanityValidator());
+    }
+
+    public static Product createProduct(String productName) {
+        return Product.from(productName, 10_000L, new FakeProfanityValidator());
     }
 }
