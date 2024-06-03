@@ -30,7 +30,7 @@ class OrderTableTest {
     @DisplayName("[성공] 주문 테이블에 매장고객이 착석한다.")
     @Test
     void sit() {
-        OrderTable orderTable = OrderTable.from(주문테이블_이름);;
+        OrderTable orderTable = OrderTable.from(주문테이블_이름);
 
         orderTable.sit();
 
@@ -67,7 +67,7 @@ class OrderTableTest {
     @DisplayName("[실패] 주문 테이블에 유효하지 않은 주문이 포함되면 주문테이블은 초기화 될 수 없다.")
     @Test
     void fail_clear() {
-        OrderTable orderTable = OrderTable.from(주문테이블_이름, NumberOfGuests.from(4), OCCUPIED);;;
+        OrderTable orderTable = OrderTable.from(주문테이블_이름, NumberOfGuests.from(4), OCCUPIED);
 
         assertThatThrownBy(() -> orderTable.clear(containsInvalidOrder -> true))
                 .isInstanceOf(KitchenPosIllegalStateException.class);

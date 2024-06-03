@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static kitchenpos.eatinorders.todo.domain.ordertables.OrderTable.OCCUPIED;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -24,27 +26,27 @@ class OrderTableClearPolicyTest {
     @InjectMocks
     private OrderTableClearPolicy orderTableClearPolicy;
 
-    private OrderTable orderTable;
+    private UUID orderTableId;
 
     @BeforeEach
     void setUp() {
-        orderTable = OrderTable.from(orderTableName, numberOfGuests, OCCUPIED);
+        orderTableId = OrderTable.from(orderTableName, numberOfGuests, OCCUPIED).getId();
     }
 
     @DisplayName("[성공] 주문테이블을 초기화 하기에 유효한 주문들만 포함되면 예외가 발생하지 않는다.")
     @Test
     void checkClear() {
-        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable.getId())).willReturn(false);
+        given(orderClient.containsInvalidOrderForClearOrderTable(orderTableId)).willReturn(false);
 
-        assertDoesNotThrow(() -> orderTableClearPolicy.checkClear(orderTable.getId()));
+        assertDoesNotThrow(() -> orderTableClearPolicy.checkClear(orderTableId));
     }
 
     @DisplayName("[실패] 주문테이블을 초기화 하기에 유효하지 않은 주문이 포함되면 예외가 발생한다.")
     @Test
     void fail_checkClear() {
-        given(orderClient.containsInvalidOrderForClearOrderTable(orderTable.getId())).willReturn(true);
+        given(orderClient.containsInvalidOrderForClearOrderTable(orderTableId)).willReturn(true);
 
-        assertThatThrownBy(() -> orderTableClearPolicy.checkClear(orderTable.getId()))
+        assertThatThrownBy(() -> orderTableClearPolicy.checkClear(orderTableId))
                 .isInstanceOf(KitchenPosIllegalStateException.class);
     }
 }
