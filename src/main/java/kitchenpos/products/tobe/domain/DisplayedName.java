@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -14,12 +15,16 @@ public class DisplayedName {
     private DisplayedName() {
     }
 
-    private DisplayedName(String name) {
+    private DisplayedName(String name, Profanities profanities) {
+        if (StringUtils.isBlank(name) || profanities.contains(name)) {
+            throw new IllegalArgumentException();
+        }
+
         this.name = name;
     }
 
-    public static DisplayedName of(String name) {
-        return new DisplayedName(name);
+    public static DisplayedName of(String name, Profanities profanities) {
+        return new DisplayedName(name, profanities);
     }
 
     public String getName() {

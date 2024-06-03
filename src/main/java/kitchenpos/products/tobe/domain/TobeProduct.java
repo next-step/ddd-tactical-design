@@ -22,11 +22,8 @@ public class TobeProduct {
     }
 
     public TobeProduct(UUID id, String name, int price, Profanities profanities) {
-        if (StringUtils.isBlank(name) || profanities.contains(name)) {
-            throw new IllegalArgumentException();
-        }
         this.id = id;
-        this.name = DisplayedName.of(name);
+        this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
     }
 
