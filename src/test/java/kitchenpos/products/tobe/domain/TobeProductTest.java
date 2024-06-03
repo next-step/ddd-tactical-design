@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.UUID;
 
@@ -81,15 +83,12 @@ class TobeProductTest {
         }
 
         @DisplayName("상품의 이름이 존재해야 한다.")
-        @Test
-        void case_1() {
-            // given
-            var name = "";
-
+        @NullAndEmptySource
+        @ParameterizedTest
+        void case_1(String name) {
             // when
             // then
             assertThatIllegalArgumentException().isThrownBy(() -> createProduct(name, profanities));
-            assertThatIllegalArgumentException().isThrownBy(() -> createProduct(null, profanities));
         }
 
         @DisplayName("상품의 이름에 비속어가 포함될 수 없다.")
