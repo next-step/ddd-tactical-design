@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
@@ -33,34 +35,36 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrder request) {
-        OrderLineItems orderLineItems = OrderLineItems.of(request.getOrderLineItems(), menuClient);
-        EatInOrder order = EatInOrder.create(orderLineItems, request.getOrderTableId(), orderTableClient);
-        return orderRepository.save(order);
+    public EatInOrderResponse create(final EatInOrderCreateRequest request) {
+        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        EatInOrder order = EatInOrder.create(orderLineItems, request.orderTableId(), orderTableClient);
+        return EatInOrderResponse.from(orderRepository.save(order));
     }
 
     @Transactional
-    public EatInOrder accept(final UUID orderId) {
+    public EatInOrderResponse accept(final UUID orderId) {
         final EatInOrder order = getOrder(orderId);
-        return order.accept();
+        return EatInOrderResponse.from(order.accept());
     }
 
     @Transactional
-    public EatInOrder serve(final UUID orderId) {
+    public EatInOrderResponse serve(final UUID orderId) {
         final EatInOrder order = getOrder(orderId);
-        return order.serve();
+        return EatInOrderResponse.from(order.serve());
     }
 
 
     @Transactional
-    public EatInOrder complete(final UUID orderId) {
+    public EatInOrderResponse complete(final UUID orderId) {
         final EatInOrder order = getOrder(orderId);
-        return order.complete(eatInOrderPolicy);
+        return EatInOrderResponse.from(order.complete(eatInOrderPolicy));
     }
 
     @Transactional(readOnly = true)
-    public List<EatInOrder> findAll() {
-        return orderRepository.findAll();
+    public List<EatInOrderResponse> findAll() {
+        return orderRepository.findAll().stream()
+                .map(EatInOrderResponse::from)
+                .toList();
     }
 
 

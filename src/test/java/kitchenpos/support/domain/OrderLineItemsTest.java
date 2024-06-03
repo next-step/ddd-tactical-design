@@ -1,5 +1,6 @@
 package kitchenpos.support.domain;
 
+import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -28,14 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class OrderLineItemsTest {
     private MenuRepository menuRepository;
     private MenuClient menuClient;
-    private OrderLineItem orderLineItem;
+    private OrderLineItemCreateRequest orderLineItem;
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         menuClient = new MenuClientImpl(menuRepository);
         UUID menuId = menuRepository.save(menu(19_000, true, menuProduct())).getId();
-        orderLineItem = new OrderLineItem(menuId, BigDecimal.valueOf(19_000), 2L);
+        orderLineItem = new OrderLineItemCreateRequest(menuId, BigDecimal.valueOf(19_000), 2L);
     }
 
     @DisplayName("[성공] 주문아이템 목록이 생성된다.")
@@ -48,7 +49,7 @@ class OrderLineItemsTest {
     @DisplayName("[실패] 주문아이템 목록에 구성할 주문아이템이 없으면 생성할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
-    void fail_create(final List<OrderLineItem> orderLineItems) {
+    void fail_create(final List<OrderLineItemCreateRequest> orderLineItems) {
         assertThatThrownBy(() -> OrderLineItems.of(orderLineItems, menuClient))
                 .isInstanceOf(KitchenPosIllegalArgumentException.class);
     }
@@ -56,8 +57,8 @@ class OrderLineItemsTest {
     @DisplayName("[실패] 주문아이템 목록에 미리 등록된 메뉴가 중복으로 구성되지 않아야 한다.")
     @Test
     void fail2_create() {
-        OrderLineItem invalidOrderLineItem = new OrderLineItem(INVALID_ID, BigDecimal.valueOf(19_000), 1L);
-        List<OrderLineItem> orderLineItems = List.of(invalidOrderLineItem);
+        OrderLineItemCreateRequest invalidOrderLineItem = new OrderLineItemCreateRequest(INVALID_ID, BigDecimal.valueOf(19_000), 1L);
+        List<OrderLineItemCreateRequest> orderLineItems = List.of(invalidOrderLineItem);
         assertThatThrownBy(() -> OrderLineItems.of(orderLineItems, menuClient))
                 .isInstanceOf(KitchenPosIllegalArgumentException.class);
     }

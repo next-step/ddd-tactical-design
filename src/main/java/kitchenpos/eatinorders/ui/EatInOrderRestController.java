@@ -1,7 +1,8 @@
 package kitchenpos.eatinorders.ui;
 
 import kitchenpos.eatinorders.application.EatInOrderService;
-import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
+import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
+import kitchenpos.eatinorders.dto.EatInOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +26,29 @@ public class EatInOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<EatInOrder> create(@RequestBody final EatInOrder request) {
-        final EatInOrder response = orderService.create(request);
-        return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
+    public ResponseEntity<EatInOrderResponse> create(@RequestBody final EatInOrderCreateRequest request) {
+        final EatInOrderResponse response = orderService.create(request);
+        return ResponseEntity.created(URI.create("/api/orders/" + response.id()))
             .body(response);
     }
 
     @PutMapping("/{orderId}/accept")
-    public ResponseEntity<EatInOrder> accept(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrderResponse> accept(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderService.accept(orderId));
     }
 
     @PutMapping("/{orderId}/serve")
-    public ResponseEntity<EatInOrder> serve(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrderResponse> serve(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderService.serve(orderId));
     }
 
     @PutMapping("/{orderId}/complete")
-    public ResponseEntity<EatInOrder> complete(@PathVariable final UUID orderId) {
+    public ResponseEntity<EatInOrderResponse> complete(@PathVariable final UUID orderId) {
         return ResponseEntity.ok(orderService.complete(orderId));
     }
 
     @GetMapping
-    public ResponseEntity<List<EatInOrder>> findAll() {
+    public ResponseEntity<List<EatInOrderResponse>> findAll() {
         return ResponseEntity.ok(orderService.findAll());
     }
 }
