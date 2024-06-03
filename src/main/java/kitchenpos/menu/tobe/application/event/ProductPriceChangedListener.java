@@ -1,9 +1,8 @@
 package kitchenpos.menu.tobe.application.event;
 
-
+import kitchenpos.common.event.publisher.ProductPriceChangedEvent;
 import kitchenpos.menu.tobe.domain.menu.Menu;
 import kitchenpos.menu.tobe.domain.menu.MenuRepository;
-import kitchenpos.common.event.publisher.ProductPriceChangedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +24,5 @@ public class ProductPriceChangedListener {
         for (Menu menu : menus) {
             menu.changeMenuProductPrice(event.productId(), event.price());
         }
-
     }
 }

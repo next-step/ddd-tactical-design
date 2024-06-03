@@ -4,6 +4,7 @@ import kitchenpos.menu.tobe.application.dto.ChangeMenuPrice;
 import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
 import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
 import kitchenpos.menu.tobe.domain.menu.*;
+import kitchenpos.menu.tobe.domain.menu.validate.ProductValidator;
 import kitchenpos.menu.tobe.domain.menu.validate.ProfanityValidator;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
@@ -20,15 +21,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProfanityValidator profanityValidator;
+    private final ProductValidator productValidator;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
-            final ProfanityValidator profanityValidator
+            final ProfanityValidator profanityValidator,
+            final ProductValidator productValidator
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.profanityValidator = profanityValidator;
+        this.productValidator = productValidator;
     }
 
     @Transactional
@@ -39,7 +43,7 @@ public class MenuService {
         List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
         MenuName menuName = new MenuName(request.name(), profanityValidator);
 
-        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice.getPrice()));
+        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice.getPrice(), productValidator));
         return menuRepository.save(menu);
     }
 

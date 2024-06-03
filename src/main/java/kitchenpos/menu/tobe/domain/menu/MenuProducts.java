@@ -1,6 +1,7 @@
 package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.menu.tobe.domain.menu.validate.ProductValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,17 +22,24 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts, BigDecimal menuPrice) {
-        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+    public MenuProducts(List<MenuProduct> menuProducts, BigDecimal menuPrice, ProductValidator productValidator) {
+        validateMenuProductsNotEmpty(menuProducts);
+        productValidator.validateProductExistence(menuProducts);
+
+        this.menuProducts = menuProducts;
+
+        validateMenuPricePolicy(menuPrice);
+    }
+
+    private void validateMenuProductsNotEmpty(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴에 속한 상품이 비어있습니다.");
         }
-        this.menuProducts = menuProducts;
-        validateMenuPricePolicy(menuPrice);
     }
 
     public void validateMenuPricePolicy(BigDecimal menuPrice) {
         BigDecimal totalPrice = menuProducts.stream()
-                .map(menuProduct -> menuProduct.getPrice().multiply(new BigDecimal(menuProduct.getQuantity())))
+                .map(menuProduct -> menuProduct.getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (menuPrice.compareTo(totalPrice) > 0) {
