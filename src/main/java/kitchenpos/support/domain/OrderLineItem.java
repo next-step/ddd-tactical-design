@@ -2,15 +2,11 @@ package kitchenpos.support.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderOrderLineItemPolicy;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -23,63 +19,44 @@ public class OrderLineItem {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
-    )
-    private Menu menu;
+    @Column(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
+    private UUID menuId;
+
+    @Column(name = "price", nullable = false)
+    private MenuPrice price;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
-    private UUID menuId;
-
-    @Transient
-    private BigDecimal price;
-
-    public OrderLineItem() {
+    protected OrderLineItem() {
     }
 
-    public Long getSeq() {
-        return seq;
+    public OrderLineItem(UUID menuId, BigDecimal price, long quantity) {
+        this(null, menuId, price, quantity);
     }
 
-    public void setSeq(final Long seq) {
+    public OrderLineItem(OrderLineItem orderLineItem, MenuClient menuClient) {
+        this(orderLineItem.getMenuId(), orderLineItem.getPrice(), orderLineItem.getQuantity());
+        EatInOrderOrderLineItemPolicy orderLineItemPolicy = new EatInOrderOrderLineItemPolicy(menuClient);
+        orderLineItemPolicy.checkMenu(orderLineItem);
+    }
+
+    public OrderLineItem(Long seq, UUID menuId, BigDecimal price, long quantity) {
         this.seq = seq;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(final Menu menu) {
-        this.menu = menu;
+        this.menuId = menuId;
+        this.price = MenuPrice.from(price);
+        this.quantity = quantity;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
-    }
-
     public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+        return price.priceValue();
     }
 }

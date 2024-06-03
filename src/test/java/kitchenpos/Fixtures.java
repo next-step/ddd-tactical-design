@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableName;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
-import kitchenpos.menus.tobe.domain.menu.MenuPrice;
+import kitchenpos.support.domain.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
@@ -18,7 +18,6 @@ import kitchenpos.products.tobe.domain.ProfanityChecker;
 import kitchenpos.support.domain.OrderLineItem;
 import kitchenpos.support.domain.ProductPrice;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -70,10 +69,7 @@ public class Fixtures {
     }
 
     public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+        return new OrderLineItem(new Random().nextLong(), menu().getId(), menu().getPrice(), 0);
     }
 
     public static OrderTable orderTable() {

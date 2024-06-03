@@ -10,6 +10,7 @@ import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menus.tobe.infra.ProductClientImpl;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.support.domain.MenuPrice;
 import kitchenpos.support.domain.ProductPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

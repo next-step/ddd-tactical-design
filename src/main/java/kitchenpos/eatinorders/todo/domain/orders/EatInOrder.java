@@ -10,10 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kitchenpos.support.domain.MenuClient;
 import kitchenpos.support.domain.OrderLineItem;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "eat_in_orders")
@@ -45,25 +47,26 @@ public class EatInOrder {
     protected EatInOrder() {
     }
 
-    public EatInOrder(List<OrderLineItem> orderLineItems, UUID orderTableId, OrderTableClient orderTableClient) {
+    private EatInOrder(List<OrderLineItem> orderLineItems, UUID orderTableId) {
         this(EatInOrderStatus.WAITING, orderLineItems, orderTableId);
-        validateOrderTable(orderTableId, orderTableClient);
     }
 
     public EatInOrder(EatInOrderStatus status, List<OrderLineItem> orderLineItems, UUID orderTableId) {
         this.id = UUID.randomUUID();
         this.status = status;
         this.orderDateTime = LocalDateTime.now();
-        this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
+        this.orderLineItems = orderLineItems;
+    }
+
+    public static EatInOrder create(EatInOrder request, MenuClient menuClient,OrderTableClient orderTableClient) {
+        validateOrderLineItems(request.getOrderLineItems(), menuClient);
+        validateOrderTable(request.getOrderTableId(), orderTableClient);
+        return new EatInOrder(mapping(request.getOrderLineItems(), menuClient), request.getOrderTableId());
     }
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(final UUID id) {
-        this.id = id;
     }
 
     public EatInOrderStatus getStatus() {
@@ -78,24 +81,33 @@ public class EatInOrder {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public List<OrderLineItem> getOrderLineItems() {
         return orderLineItems;
-    }
-
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
     }
 
     public UUID getOrderTableId() {
         return orderTableId;
     }
 
-    private void validateOrderTable(UUID orderTableId, OrderTableClient orderTableClient) {
-        EatInOrderPolicy policy = new EatInOrderPolicy(orderTableClient);
+    private static void validateOrderTable(UUID orderTableId, OrderTableClient orderTableClient) {
+        EatInOrderTablePolicy policy = new EatInOrderTablePolicy(orderTableClient);
         policy.checkClearOrderTable(orderTableId);
+    }
+
+    private static void validateOrderLineItems(List<OrderLineItem> orderLineItemRequests, MenuClient menuClient) {
+        checkNullOrEmptyOrderLineItems(orderLineItemRequests);
+        new EatInOrderOrderLineItemsPolicy(menuClient).checkDuplicatedMenu(orderLineItemRequests);
+    }
+
+    private static void checkNullOrEmptyOrderLineItems(List<OrderLineItem> orderLineItemRequests) {
+        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static List<OrderLineItem> mapping(List<OrderLineItem> orderLineItems, MenuClient menuClient) {
+        return orderLineItems.stream()
+                .map(orderLineItem -> new OrderLineItem(orderLineItem, menuClient))
+                .toList();
     }
 }

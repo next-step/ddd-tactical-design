@@ -4,10 +4,10 @@ import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 
 import java.util.UUID;
 
-public class EatInOrderPolicy {
+public class EatInOrderTablePolicy {
     private final OrderTableClient orderTableClient;
 
-    public EatInOrderPolicy(OrderTableClient orderTableClient) {
+    public EatInOrderTablePolicy(OrderTableClient orderTableClient) {
         this.orderTableClient = orderTableClient;
     }
 
