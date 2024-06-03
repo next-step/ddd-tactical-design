@@ -42,4 +42,12 @@ public class MenuProduct {
         return productId;
     }
 
+    public boolean isSameProductId(UUID productId) {
+        return this.productId.equals(productId);
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.productPrice = new ProductPrice(price);
+    }
+
 }

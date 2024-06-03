@@ -51,6 +51,14 @@ public class Menu {
         this.menuPrice = newMenuPrice;
     }
 
+    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+        try {
+            this.menuProducts.changeMenuProductPrice(productId, price);
+        } catch (IllegalArgumentException e) {
+            this.hide();
+        }
+    }
+
     public void display() {
         this.menuProducts.validateMenuPricePolicy(this.menuPrice.getPrice());
         this.displayed = true;

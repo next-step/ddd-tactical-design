@@ -22,15 +22,9 @@ public class ProductPriceChangedListener {
     @Transactional
     public void handle(ProductPriceChangedEvent event) {
         List<Menu> menus = menuRepository.findAllByProductId(event.productId());
-
         for (Menu menu : menus) {
-            try {
-                menu.changePrice(event.price());
-            } catch (IllegalArgumentException e) {
-                menu.hide();
-            }
+            menu.changeMenuProductPrice(event.productId(), event.price());
         }
 
-        menuRepository.saveAll(menus);
     }
 }

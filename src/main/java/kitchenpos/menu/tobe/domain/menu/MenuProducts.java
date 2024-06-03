@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class MenuProducts {
@@ -36,6 +37,13 @@ public class MenuProducts {
         if (menuPrice.compareTo(totalPrice) > 0) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품의 가격보다 클 수 없습니다.");
         }
+    }
+
+    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+        menuProducts.stream()
+                .filter(menuProduct -> menuProduct.isSameProductId(productId))
+                .findFirst()
+                .ifPresent(menuProduct -> menuProduct.changePrice(price));
     }
 
     public List<MenuProduct> getMenuProducts() {
