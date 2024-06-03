@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 
 import java.util.ArrayList;
@@ -12,27 +12,27 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class InMemoryOrderRepository implements OrderRepository {
-    private final Map<UUID, Order> orders = new HashMap<>();
+public class InMemoryEatInOrderRepository implements EatInOrderRepository {
+    private final Map<UUID, EatInOrder> orders = new HashMap<>();
 
     @Override
-    public Order save(final Order order) {
+    public EatInOrder save(final EatInOrder order) {
         orders.put(order.getId(), order);
         return order;
     }
 
     @Override
-    public Optional<Order> findById(final UUID id) {
+    public Optional<EatInOrder> findById(final UUID id) {
         return Optional.ofNullable(orders.get(id));
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<EatInOrder> findAll() {
         return new ArrayList<>(orders.values());
     }
 
     @Override
-    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final OrderStatus status) {
+    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final EatInOrderStatus status) {
         return orders.values()
             .stream()
             .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
