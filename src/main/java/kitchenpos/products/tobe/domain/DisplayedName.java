@@ -9,7 +9,10 @@ import java.util.Objects;
 public class DisplayedName {
 
     @Column(name = "name", nullable = false)
-    private final String name;
+    private String name;
+
+    private DisplayedName() {
+    }
 
     private DisplayedName(String name) {
         this.name = name;

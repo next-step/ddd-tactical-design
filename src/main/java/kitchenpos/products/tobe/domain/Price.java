@@ -9,7 +9,10 @@ import java.util.Objects;
 public class Price {
 
     @Column(name = "price", nullable = false)
-    private final int price;
+    private int price;
+
+    private Price() {
+    }
 
     private Price(int price) {
         this.price = price;

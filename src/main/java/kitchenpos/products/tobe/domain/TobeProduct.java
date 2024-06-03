@@ -10,13 +10,16 @@ import java.util.UUID;
 public class TobeProduct {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private final UUID id;
+    private UUID id;
 
     @Embedded
-    private final DisplayedName name;
+    private DisplayedName name;
 
     @Embedded
     private Price price;
+
+    private TobeProduct() {
+    }
 
     public TobeProduct(UUID id, String name, int price, Profanities profanities) {
         if (StringUtils.isBlank(name) || profanities.contains(name)) {
