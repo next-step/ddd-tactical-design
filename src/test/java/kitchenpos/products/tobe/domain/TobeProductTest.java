@@ -45,14 +45,15 @@ class TobeProductTest {
         void case_3() {
             // given
             var product = createProduct(10_000);
-            var targetPrice = 6_000;
+            var newPrice = 6_000;
 
             // when
-            product.changePrice(targetPrice);
+            product.changePrice(newPrice);
 
             // then
-            var price = product.getPrice();
-            assertThat(price).isEqualTo(targetPrice);
+            var changedPrice = product.getPrice();
+            var expectedPrice = Price.of(newPrice);
+            assertThat(changedPrice).isEqualTo(expectedPrice);
         }
 
         @DisplayName("상품의 가격이 0원 미만이면 가격을 변경할 수 있다.")

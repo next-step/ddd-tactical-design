@@ -38,8 +38,8 @@ public class TobeProduct {
         return name.getName();
     }
 
-    public int getPrice() {
-        return price.getPrice();
+    public Price getPrice() {
+        return price;
     }
 
     @Override
