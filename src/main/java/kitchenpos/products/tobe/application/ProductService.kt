@@ -29,7 +29,7 @@ class ProductService(
 
         save(newProduct)
 
-        return ProductResponse.of(newProduct)
+        return ProductResponse.from(newProduct)
     }
 
     @Transactional
@@ -46,13 +46,13 @@ class ProductService(
 
         save(product)
 
-        return ProductResponse.of(product)
+        return ProductResponse.from(product)
     }
 
     @Transactional(readOnly = true)
     fun findAll(): List<ProductResponse> {
         return productRepository.findAll()
-            .map(ProductResponse::of)
+            .map(ProductResponse::from)
     }
 
     private fun save(product: Product): Product {

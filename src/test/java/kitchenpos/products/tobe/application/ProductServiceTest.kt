@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import kitchenpos.products.tobe.infra.InMemoryProductRepository
 import org.springframework.context.ApplicationEventPublisher
 import java.math.BigDecimal
 
