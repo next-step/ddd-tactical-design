@@ -21,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 class OrderTableClearPolicyTest {
     private static final OrderTableName orderTableName = OrderTableName.from("1번");
     private static final NumberOfGuests numberOfGuests = NumberOfGuests.from(3);
+
     @Mock
     private OrderClient orderClient;
     @InjectMocks

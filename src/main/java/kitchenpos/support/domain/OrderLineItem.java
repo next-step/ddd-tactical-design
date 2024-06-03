@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderOrderLineItemPolicy;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_line_item")
@@ -37,8 +38,7 @@ public class OrderLineItem {
 
     public OrderLineItem(OrderLineItem orderLineItem, MenuClient menuClient) {
         this(orderLineItem.getMenuId(), orderLineItem.getPrice(), orderLineItem.getQuantity());
-        EatInOrderOrderLineItemPolicy orderLineItemPolicy = new EatInOrderOrderLineItemPolicy(menuClient);
-        orderLineItemPolicy.checkMenu(orderLineItem);
+        new EatInOrderOrderLineItemPolicy(menuClient).checkMenu(orderLineItem);
     }
 
     public OrderLineItem(Long seq, UUID menuId, BigDecimal price, long quantity) {
@@ -58,5 +58,18 @@ public class OrderLineItem {
 
     public BigDecimal getPrice() {
         return price.priceValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderLineItem that = (OrderLineItem) o;
+        return quantity == that.quantity && Objects.equals(seq, that.seq) && Objects.equals(menuId, that.menuId) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(seq, menuId, price, quantity);
     }
 }

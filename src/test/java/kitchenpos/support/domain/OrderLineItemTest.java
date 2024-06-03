@@ -2,7 +2,6 @@ package kitchenpos.support.domain;
 
 import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.support.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +28,6 @@ class OrderLineItemTest {
         menuClient = new MenuClientImpl(menuRepository);
     }
 
-
     @DisplayName("[성공] 주문아이템을 생성한다.")
     @Test
     void create() {
@@ -49,14 +47,14 @@ class OrderLineItemTest {
     @DisplayName("[실패] 메뉴가 숨긴상태인 주문 아이템은 주문을 생성할 수 없다.")
     @Test
     void fail_create() {
-        UUID menuId = setUpMenu(19_000, false).getId();
+        UUID menuId = getMenuId();
         OrderLineItem orderLineItem = new OrderLineItem(menuId, BigDecimal.valueOf(19_000), 1L);
 
         assertThatThrownBy(() -> new OrderLineItem(orderLineItem, menuClient))
                 .isInstanceOf(KitchenPosIllegalStateException.class);
     }
 
-    private Menu setUpMenu(long price, boolean displayed) {
-        return menuRepository.save(menu(price, displayed, menuProduct()));
+    private UUID getMenuId() {
+        return menuRepository.save(menu(19_000, false, menuProduct())).getId();
     }
 }

@@ -9,6 +9,7 @@ import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.support.domain.MenuClient;
 import kitchenpos.support.domain.OrderLineItem;
+import kitchenpos.support.domain.OrderLineItems;
 import kitchenpos.support.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +45,8 @@ class EatInOrderTest {
     @Test
     void create() {
         EatInOrder request = createOrderRequest();
-        EatInOrder actual = EatInOrder.create(request, menuClient, orderTableClient);
+        OrderLineItems orderLineItems = OrderLineItems.of(request.getOrderLineItems(), menuClient);
+        EatInOrder actual = EatInOrder.create(orderLineItems, request.getOrderTableId(), orderTableClient);
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),

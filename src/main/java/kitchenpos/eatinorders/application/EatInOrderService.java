@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.support.domain.MenuClient;
+import kitchenpos.support.domain.OrderLineItems;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,8 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrder request) {
-        EatInOrder order = EatInOrder.create(request, menuClient, orderTableClient);
+        OrderLineItems orderLineItems = OrderLineItems.of(request.getOrderLineItems(), menuClient);
+        EatInOrder order = EatInOrder.create(orderLineItems, request.getOrderTableId(), orderTableClient);
         return orderRepository.save(order);
     }
 

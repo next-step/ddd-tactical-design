@@ -76,8 +76,7 @@ class EatInOrderServiceTest {
     @MethodSource("orderLineItems")
     @ParameterizedTest
     void create(final List<OrderLineItem> orderLineItems) {
-        final EatInOrder expected = createOrderRequest(orderTableId, orderLineItems);
-        assertThatThrownBy(() -> orderService.create(expected))
+        assertThatThrownBy(() -> orderService.create(createOrderRequest(orderTableId, orderLineItems)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
