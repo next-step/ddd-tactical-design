@@ -6,8 +6,8 @@ import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "menu")
-@Entity
+@Table(name = "new_menu")
+@Entity(name = "newMenu")
 public class Menu {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -21,9 +21,9 @@ public class Menu {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "menu_group_id",
+            name = "new_menu_group_id",
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            foreignKey = @ForeignKey(name = "fk_new_menu_to_new_menu_group")
     )
     private MenuGroup menuGroup;
 

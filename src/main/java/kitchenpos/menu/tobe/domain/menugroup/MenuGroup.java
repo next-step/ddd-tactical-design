@@ -8,8 +8,8 @@ import jakarta.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "menu_group")
-@Entity
+@Table(name = "new_menu_group")
+@Entity(name = "newMenuGroup")
 public class MenuGroup {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

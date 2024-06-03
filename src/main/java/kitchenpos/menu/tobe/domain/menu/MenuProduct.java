@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
+@Table(name = "new_menu_product")
+@Entity(name = "newMenuProduct")
 public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
