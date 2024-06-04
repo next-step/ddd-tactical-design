@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.UUID;
 
 
