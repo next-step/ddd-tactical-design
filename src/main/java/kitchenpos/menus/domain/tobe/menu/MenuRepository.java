@@ -3,16 +3,16 @@ package kitchenpos.menus.domain.tobe.menu;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.application.dto.MenuRequest;
 
 public interface MenuRepository {
-    kitchenpos.menus.domain.Menu save(kitchenpos.menus.domain.Menu menu);
+    Menu save(Menu menu);
 
-    Optional<kitchenpos.menus.domain.Menu> findById(UUID id);
+    Optional<Menu> findById(UUID id);
 
-    List<kitchenpos.menus.domain.Menu> findAll();
+    List<Menu> findAll();
 
-    List<kitchenpos.menus.domain.Menu> findAllByIdIn(List<UUID> ids);
+    List<Menu> findAllByIdIn(List<UUID> ids);
 
     List<Menu> findAllByProductId(UUID productId);
 }
