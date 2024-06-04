@@ -1,6 +1,6 @@
 package kitchenpos.menus.infra;
 
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 

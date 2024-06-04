@@ -3,12 +3,11 @@ package kitchenpos.menus.domain.tobe.menugroup;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menus.domain.MenuGroup;
 
 public interface MenuGroupRepository {
-    kitchenpos.menus.domain.MenuGroup save(kitchenpos.menus.domain.MenuGroup menuGroup);
+    MenuGroup save(MenuGroup menuGroupRequest);
 
-    Optional<kitchenpos.menus.domain.MenuGroup> findById(UUID id);
+    Optional<MenuGroup> findById(UUID id);
 
     List<MenuGroup> findAll();
 }

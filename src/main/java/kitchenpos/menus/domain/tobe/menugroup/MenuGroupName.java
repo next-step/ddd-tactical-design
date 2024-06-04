@@ -1,9 +1,7 @@
 package kitchenpos.menus.domain.tobe.menugroup;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -25,11 +23,10 @@ public class MenuGroupName {
 
   private void validate(String name){
     if(Objects.isNull(name)){
-      throw new IllegalArgumentException("- 메뉴 그룹의 이름은 비워 둘 수 없다.");
+      throw new IllegalArgumentException("메뉴 그룹의 이름은 비워 둘 수 없다.");
     }
     if(ObjectUtils.isEmpty(name)){
       throw new IllegalArgumentException("메뉴 그룹의 이름은 비워 둘 수 없다.");
-
     }
   }
 

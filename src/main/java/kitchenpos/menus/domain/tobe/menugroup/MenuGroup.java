@@ -3,10 +3,7 @@ package kitchenpos.menus.domain.tobe.menugroup;
 import jakarta.persistence.*;
 
 import java.util.UUID;
-//    - 메뉴 그룹을 등록할 수 있다.
-//    - 메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.
-//    - 메뉴 그룹의 이름은 비워 둘 수 없다.
-//    - 메뉴 그룹의 목록을 조회할 수 있다.
+
 @Table(name = "menu_group")
 @Entity
 public class MenuGroup {
@@ -19,5 +16,22 @@ public class MenuGroup {
   private MenuGroupName menuGroupName;
 
   protected MenuGroup() {
+  }
+
+  private MenuGroup(UUID id, MenuGroupName menuGroupName) {
+    this.id = id;
+    this.menuGroupName = menuGroupName;
+  }
+
+  public static MenuGroup of(UUID id, String name){
+    return new MenuGroup(id, MenuGroupName.of(name));
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public String  getMenuGroupName() {
+    return menuGroupName.getName();
   }
 }
