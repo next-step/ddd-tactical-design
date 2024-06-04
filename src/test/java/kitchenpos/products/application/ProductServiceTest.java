@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.util.List;
-
 import kitchenpos.fake.FakePurgomalumClient;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
@@ -21,7 +20,6 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -51,7 +49,7 @@ class ProductServiceTest {
 
     @Test
     void 상품을_등록할_수_있다() {
-        ProductCreateRequest request = ProductFixture.createRequest("후라이드", 20_000L);
+        Product request = ProductFixture.createRequest("후라이드", 20_000L);
         Product actual = productService.create(request);
 
         assertThat(actual.getId()).isNotNull();
@@ -60,14 +58,14 @@ class ProductServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설이 포함된 단어"})
     void 상품의_이름에_욕설이_포함되어있으면_예외를_던진다(final String name) {
-        ProductCreateRequest request = ProductFixture.createRequest(name);
+        Product request = ProductFixture.createRequest(name);
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> productService.create(request));
     }
 
     @Test
     void 상품가격이_0보다_작으면_예외를_던진다() {
-        ProductCreateRequest request = ProductFixture.createRequest(-10_000L);
+        Product request = ProductFixture.createRequest(-10_000L);
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> productService.create(request));
     }

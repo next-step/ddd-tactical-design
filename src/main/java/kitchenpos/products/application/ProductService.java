@@ -1,23 +1,22 @@
 package kitchenpos.products.application;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.UUID;
+
 @Service
 public class ProductService {
-
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
@@ -33,15 +32,20 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final ProductCreateRequest request) {
-        validateProductName(request.getName());
-        return productRepository.save(request.to());
-    }
-
-    private void validateProductName(String name) {
-        if (purgomalumClient.containsProfanity(name)) {
+    public Product create(final Product request) {
+        final BigDecimal price = request.getPrice();
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
+        final String name = request.getName();
+        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
+        final Product product = new Product();
+        product.setId(UUID.randomUUID());
+        product.setName(name);
+        product.setPrice(price);
+        return productRepository.save(product);
     }
 
     @Transactional

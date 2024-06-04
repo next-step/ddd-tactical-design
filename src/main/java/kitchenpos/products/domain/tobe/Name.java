@@ -1,8 +1,9 @@
-package kitchenpos.products.domain;
+package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
+import kitchenpos.products.domain.PurgomalumClient;
 
 @Embeddable
 public class Name {
@@ -13,8 +14,8 @@ public class Name {
     public Name() {
     }
 
-    public Name(String name) {
-        if(Objects.isNull(name)){
+    public Name(String name, PurgomalumClient purgomalumClient) {
+        if(Objects.isNull(name) || purgomalumClient.containsProfanity(name)){
             throw new IllegalArgumentException();
         }
 
