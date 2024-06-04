@@ -37,30 +37,24 @@ public class Menu {
   protected Menu() {
   }
 
-  public Menu(UUID id, MenuName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+  public Menu(UUID id, MenuName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts, MenuDisplayPolicy menuDisplayPolicy) {
+    menuDisplayPolicy.validateSatisfied(price, menuProducts);
     this.id = id;
     this.name = name;
     this.price = price;
     this.menuGroupId = menuGroupId;
     this.displayed = displayed;
     this.menuProducts = menuProducts;
-    validateSatisfiedSellingCondition();
   }
 
-  private void validateSatisfiedSellingCondition() {
-    if(!this.price.isLessOrEqualThen(this.menuProducts.getTotalPrice())) {
-      throw new IllegalArgumentException();
-    }
-  }
-
-  public void changePrice(Price price) {
+  public void changePrice(Price price, MenuDisplayPolicy menuDisplayPolicy) {
+    menuDisplayPolicy.validateSatisfied(price, menuProducts);
     this.price = price;
-    validateSatisfiedSellingCondition();
   }
 
-  public void display() {
+  public void display(MenuDisplayPolicy menuDisplayPolicy) {
+    menuDisplayPolicy.validateSatisfied(price, menuProducts);
     this.displayed = true;
-    validateSatisfiedSellingCondition();
   }
 
   public void hide() {

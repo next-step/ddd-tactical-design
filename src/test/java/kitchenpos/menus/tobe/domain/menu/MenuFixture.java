@@ -10,7 +10,7 @@ import kitchenpos.supports.domain.tobe.Quantity;
 import kitchenpos.supports.domain.tobe.QuantityFixture;
 
 public class MenuFixture {
-
+  private final static MenuDisplayPolicy menuDisplayPolicy = new DefaultMenuDisplayPolicy();
   private static final MenuProfanityValidator menuProfanityValidator = new FakeMenuProfanityValidator();
 
   public static MenuName normalMenuName() {
@@ -47,7 +47,7 @@ public class MenuFixture {
   }
 
   public static Menu normal() {
-    return new Menu(UUID.randomUUID(),
+    return create(UUID.randomUUID(),
         MenuFixture.normalMenuName(),
         PriceFixture.normal(),
         UUID.randomUUID(),
@@ -57,6 +57,6 @@ public class MenuFixture {
   }
 
   public static Menu create(UUID id, MenuName name, Price price, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
-    return new Menu(id, name, price, menuGroupId, displayed, menuProducts);
+    return new Menu(id, name, price, menuGroupId, displayed, menuProducts, menuDisplayPolicy);
   }
 }

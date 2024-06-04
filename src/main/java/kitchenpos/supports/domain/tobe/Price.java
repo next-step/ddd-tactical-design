@@ -59,8 +59,8 @@ public class Price {
     return new Price(newPrice);
   }
 
-  public boolean isLessOrEqualThen(Price other) {
-    return compareTo(other) <= 0;
+  public boolean isGreaterThan(Price other) {
+    return compareTo(other) > 0;
   }
 
   private int compareTo(Price other) {
