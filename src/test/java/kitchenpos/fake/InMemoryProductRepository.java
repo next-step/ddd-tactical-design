@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.ProductRepository;
 
 public class InMemoryProductRepository implements ProductRepository {
