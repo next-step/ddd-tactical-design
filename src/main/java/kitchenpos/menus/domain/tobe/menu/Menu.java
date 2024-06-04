@@ -1,35 +1,19 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.*;
+import kitchenpos.products.domain.tobe.ProfanityValidator;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.UUID;
 
-//- 1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.
-//    - 상품이 없으면 등록할 수 없다.
-//    - 메뉴에 속한 상품의 수량은 0 이상이어야 한다.
-//    - 메뉴의 가격이 올바르지 않으면 등록할 수 없다.
-//    - 메뉴의 가격은 0원 이상이어야 한다.
-//    - 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
-//    - 메뉴는 특정 메뉴 그룹에 속해야 한다.
-//    - 메뉴의 이름이 올바르지 않으면 등록할 수 없다.
-//    - 메뉴의 이름에는 비속어가 포함될 수 없다.
-//    - 메뉴의 가격을 변경할 수 있다.
-//    - 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
-//    - 메뉴의 가격은 0원 이상이어야 한다.
-//    - 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
-//    - 메뉴를 노출할 수 있다.
-//    - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
-//    - 메뉴를 숨길 수 있다.
-//    - 메뉴의 목록을 조회할 수 있다.
+
 @Table(name = "menu")
 @Entity
 public class Menu {
 
+  public static final int ZERO = 0;
   @Column(name = "id", columnDefinition = "binary(16)")
   @Id
   private UUID id;
@@ -49,5 +33,63 @@ public class Menu {
   private MenuProducts menuProducts;
 
   protected Menu() {
+  }
+
+  private Menu(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+    validate(menuPrice, menuProducts.sum(), menuProducts);
+
+    this.id = UUID.randomUUID();
+    this.menuName = menuName;
+    this.menuPrice = menuPrice;
+    this.menuGroupId = menuGroupId;
+    this.displayed = displayed;
+    this.menuProducts = menuProducts;
+  }
+
+  public static Menu of(final String name, final Long price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
+
+    return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
+  }
+
+  private void validate(final MenuPrice menuPrice, final BigDecimal price, final MenuProducts menuProducts) {
+    if (menuPrice.isBigger(price)) {
+      throw new IllegalArgumentException("`메뉴 상품 가격`의 총액보다 `메뉴 가격`이 클 수 없다.");
+    }
+
+    if (menuProducts.sum().compareTo(BigDecimal.ZERO) > ZERO) {
+      throw new IllegalArgumentException("`메뉴`의 `메뉴 가격`은 양수이어야한다.");
+    }
+  }
+
+  public void hide() {
+    this.displayed = false;
+  }
+
+  public void display() {
+    validate(menuPrice, menuProducts.sum(), menuProducts);
+    this.displayed = true;
+  }
+
+  public void changePrice(BigDecimal price) {
+    MenuPrice menuPriceRequest = MenuPrice.of(price);
+    validate(menuPriceRequest, menuProducts.sum(), menuProducts);
+
+    this.menuPrice = menuPriceRequest;
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public MenuProducts getMenuProducts() {
+    return getMenuProducts();
+  }
+
+  public boolean isDisplayed() {
+    return displayed;
+  }
+
+  public MenuPrice getMenuPrice() {
+    return menuPrice;
   }
 }
