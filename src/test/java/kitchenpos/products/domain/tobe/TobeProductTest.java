@@ -1,5 +1,6 @@
 package kitchenpos.products.domain.tobe;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
@@ -42,6 +43,31 @@ class TobeProductTest {
     void 이름에_비속어가들어가는_Product를_생성하면_예외를_던진다(final String name) {
         assertThatThrownBy(
                 () -> new TobeProduct(name, purgomalumClient, BigDecimal.valueOf(20_000L)))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void Product의_가격을_변경할_수_있다() {
+        TobeProduct product = new TobeProduct("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+
+        product.changePrice(BigDecimal.valueOf(25_000L));
+
+        assertThat(product.isSamePrice(new Price(BigDecimal.valueOf(25_000L)))).isTrue();
+    }
+
+    @Test
+    void Product의_가격을_null로_변경하면_예외를_던진다() {
+        TobeProduct product = new TobeProduct("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+
+        assertThatThrownBy(() -> product.changePrice(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void Product의_가격을_마이너스로_변경하면_예외를_던진다() {
+        TobeProduct product = new TobeProduct("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+
+        assertThatThrownBy(() -> product.changePrice(BigDecimal.valueOf(-20_000L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
