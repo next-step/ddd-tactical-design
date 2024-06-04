@@ -1,6 +1,7 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 import kitchenpos.products.domain.Product;
@@ -43,6 +44,15 @@ public class MenuProduct {
 
   public String getMenuProductName() {
     return product.getName();
+  }
+
+  public BigDecimal getProductPrice() {
+    return product.getPrice();
+  }
+
+  public BigDecimal multiplyByProductPriceAndQuantity() {
+    final BigDecimal quantity = BigDecimal.valueOf(this.quantity.getQuantity());
+    return this.product.getPrice().multiply(quantity);
   }
 
   public Long getQuantity() {
