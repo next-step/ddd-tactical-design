@@ -1,8 +1,9 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 @Table(name = "menu")
 @Entity
@@ -57,6 +58,30 @@ public class Menu {
       final PurgomalumClient purgomalumClient) {
 
     return new Menu(menuName, menuPrice, menuGroup, menuProducts, menuDisplayed, purgomalumClient);
+  }
+
+  public void changePrice(BigDecimal menuPrice) {
+    final BigDecimal sum = this.menuProducts.getTotalPrice();
+
+    if (menuPrice.compareTo(sum) > 0) {
+      throw new IllegalArgumentException();
+    }
+
+    this.price = new MenuPrice(menuPrice);
+  }
+
+  public void displayed() {
+    final BigDecimal sum = this.menuProducts.getTotalPrice();
+
+    if (this.price.getPrice().compareTo(sum) > 0) {
+      throw new IllegalStateException();
+    }
+
+    this.displayed = new MenuDisplayed(true);
+  }
+
+  public void hide() {
+    this.displayed = new MenuDisplayed(false);
   }
 
   public UUID getId() {
