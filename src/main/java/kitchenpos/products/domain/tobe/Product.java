@@ -12,7 +12,7 @@ import kitchenpos.products.domain.PurgomalumClient;
 
 @Table(name = "product")
 @Entity
-public class TobeProduct {
+public class Product {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -24,25 +24,36 @@ public class TobeProduct {
     @Embedded
     private Price price;
 
-    public TobeProduct() {
+    public Product() {
     }
 
-    public TobeProduct(String name, PurgomalumClient purgomalumClient, BigDecimal price) {
+    public Product(String name, PurgomalumClient purgomalumClient, BigDecimal price) {
         this(UUID.randomUUID(), new Name(name, purgomalumClient), new Price(price));
     }
 
-    public TobeProduct(UUID id, Name name, Price price) {
+    public Product(UUID id, Name name, Price price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public void changePrice(BigDecimal bigDecimal) {
-        this.price = new Price(bigDecimal);
+    public void changePrice(Price price) {
+        if(Objects.isNull(price)){
+            throw new IllegalArgumentException();
+        }
+        this.price = price;
     }
 
     public boolean isSamePrice(Price price) {
         return this.price.equals(price);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     @Override
@@ -53,7 +64,7 @@ public class TobeProduct {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TobeProduct product = (TobeProduct) o;
+        Product product = (Product) o;
         return Objects.equals(id, product.id) && Objects.equals(name, product.name)
                 && Objects.equals(price, product.price);
     }
