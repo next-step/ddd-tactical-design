@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.application.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,29 +14,16 @@ import kitchenpos.products.domain.tobe.Product;
 
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
-public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
+public class MenuProductRequest {
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
     private UUID productId;
 
-    public MenuProduct() {
+    public MenuProductRequest() {
     }
 
     public Long getSeq() {
