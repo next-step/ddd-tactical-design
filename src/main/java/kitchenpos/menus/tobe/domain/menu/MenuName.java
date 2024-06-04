@@ -2,8 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.menus.tobe.infra.PurgomalumClient;
-
 import java.util.Objects;
 
 @Embeddable
@@ -23,6 +21,10 @@ public class MenuName {
         }
 
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
