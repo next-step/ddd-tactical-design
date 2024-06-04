@@ -62,17 +62,4 @@ class MenuService(
 
         menu.inActivateDisplayStatus()
     }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun syncMenusDisplayStatus(productPriceChanged: ProductPriceChanged) {
-        val menus = menuRepository.findAllByProductId(productPriceChanged.productId)
-
-        menus.forEach { syncMenuDisplayStatus(it) }
-    }
-
-    private fun syncMenuDisplayStatus(menu: Menu) =
-        runCatching {
-            menuPriceValidator.validate(menu)
-        }.onFailure { menu.inActivateDisplayStatus() }
 }

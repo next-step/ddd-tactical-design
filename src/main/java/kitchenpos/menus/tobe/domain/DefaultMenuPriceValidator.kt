@@ -23,6 +23,15 @@ class DefaultMenuPriceValidator(
         }
     }
 
+    override fun isValid(menu: Menu): Boolean {
+        val productIds = menu.menuProducts.map { it.productId }
+
+        val productPriceById = productRepository.findAllByIdIn(productIds)
+            .associate { it.id to it.price }
+
+        return menu.price <= calculateTotalMenuProductPrice(menu, productPriceById)
+    }
+
     private fun calculateTotalMenuProductPrice(menu: Menu, productPriceById: Map<UUID, Price>): Price =
         menu.menuProducts.map {
             val menuProductPrice = productPriceById[it.productId]
