@@ -26,6 +26,10 @@ public class MenuName {
       throw new IllegalArgumentException("메뉴의 이름이 올바르지 않으면 등록할 수 없다.");
     }
 
+    if (name.isEmpty()){
+      throw new IllegalArgumentException("`메뉴`는 이름은 1글자 이상이어야한다");
+    }
+
     if (profanityValidator.containsProfanity(name)){
       throw new IllegalArgumentException("메뉴의 이름에는 비속어가 포함될 수 없다.");
     }
