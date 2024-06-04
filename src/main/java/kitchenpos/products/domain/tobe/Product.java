@@ -5,12 +5,11 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-//### 상품
-//    - 상품을 등록할 수 있다.
-//    - 상품의 목록을 조회할 수 있다.
+
 @Table(name = "product")
 @Entity
 public class Product {
@@ -28,29 +27,34 @@ public class Product {
 
   protected Product() {
   }
-  private Product(ProductName name, ProductPrice price){
+
+  private Product(ProductName name, ProductPrice price) {
     this.id = UUID.randomUUID();
     this.name = name;
     this.price = price;
   }
+
   public static Product from(String name, Long price, ProfanityValidator profanityValidator) {
 
     return new Product(ProductName.from(name, profanityValidator), ProductPrice.from(price));
   }
 
-  public void changeProductPrice(Long price){
+  public void changeProductPrice(Long price) {
     this.price = ProductPrice.from(price);
   }
 
-  public UUID getId(){
+  public UUID getId() {
     return id;
   }
-  public String getProductName(){
+
+  public String getProductName() {
     return name.getName();
   }
-  public BigDecimal getProductPrice(){
+
+  public BigDecimal getProductPrice() {
     return price.getPrice();
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

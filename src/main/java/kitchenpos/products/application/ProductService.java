@@ -6,7 +6,7 @@ import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
-import kitchenpos.products.domain.tobe.dto.ProductRequest;
+import kitchenpos.products.application.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.domain.tobe.dto.ProductRequest;
 
 import java.util.UUID;
 
