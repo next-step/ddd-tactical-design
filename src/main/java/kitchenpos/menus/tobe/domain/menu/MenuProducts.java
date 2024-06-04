@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -17,15 +17,26 @@ public class MenuProducts {
   protected MenuProducts() {}
 
   protected MenuProducts(List<MenuProduct> menuProducts, MenuPrice menuPrice) {
-    sum = sum.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+    BigDecimal sum = BigDecimal.ZERO;
+    for (MenuProduct menuProduct : menuProducts) {
+      sum = sum.add(menuProduct.multiplyByProductPriceAndQuantity());
+    }
 
-    menuProducts.stream().map(o -> o.get)
-
-    if (price.compareTo(sum) > 0) {
+    if (menuPrice.getPrice().compareTo(sum) > 0) {
       throw new IllegalArgumentException();
     }
 
     this.menuProducts = menuProducts;
+  }
+
+  public BigDecimal getTotalPrice() {
+    BigDecimal sum = BigDecimal.ZERO;
+    for (MenuProduct menuProduct : this.menuProducts) {
+      final BigDecimal quantity = BigDecimal.valueOf(menuProduct.getQuantity());
+      sum = sum.add(menuProduct.getProductPrice().multiply(quantity));
+    }
+
+    return sum;
   }
 
   public List<MenuProduct> getMenuProducts() {
