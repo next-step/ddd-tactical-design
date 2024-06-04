@@ -36,8 +36,8 @@ class Menu private constructor(
     var displayStatus: Boolean = displayStatus
         private set
 
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], mappedBy = "menu", fetch = FetchType.LAZY)
-    val menuProducts: List<MenuProduct> = menuProducts.items
+    @Embedded
+    val menuProducts: MenuProducts = menuProducts
 
     companion object {
         fun of(
@@ -57,7 +57,7 @@ class Menu private constructor(
     }
 
     init {
-        this.menuProducts.forEach { it.menu = this }
+        this.menuProducts.apply(this)
     }
 
     fun activateDisplayStatus(menuPriceValidator: MenuPriceValidator) {

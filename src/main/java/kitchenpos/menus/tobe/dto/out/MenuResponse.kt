@@ -27,7 +27,7 @@ fun fromMenu(menu: Menu): MenuResponse = MenuResponse(
     name = menu.name.value,
     price = menu.price,
     displayStatus = menu.displayStatus,
-    menuProducts = menu.menuProducts.map { fromMenuProduct(it) }
+    menuProducts = menu.menuProducts.items.map { fromMenuProduct(it) }
 )
 
 fun fromMenuProduct(menuProduct: MenuProduct): MenuProductResponse = MenuProductResponse(

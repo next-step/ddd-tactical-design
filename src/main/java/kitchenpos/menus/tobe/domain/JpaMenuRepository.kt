@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import java.util.*
 
 interface JpaMenuRepository : JpaRepository<Menu, UUID>, MenuRepository {
-    @Query("select m from Menu m join m.menuProducts mp where mp.productId = :productId")
+    @Query("select m from Menu m join m.menuProducts.items mp where mp.productId = :productId")
     override fun findAllByProductId(productId: UUID): List<Menu>
 }

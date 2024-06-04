@@ -14,7 +14,7 @@ class FakeMenuRepository : MenuRepository {
     }
 
     override fun findAllByProductId(productId: UUID): List<Menu> {
-        return menuMap.filterValues { menu -> menu.menuProducts.map { it.productId }.contains(productId) }
+        return menuMap.filterValues { it.menuProducts.productIds.contains(productId) }
             .values.toList()
     }
 
