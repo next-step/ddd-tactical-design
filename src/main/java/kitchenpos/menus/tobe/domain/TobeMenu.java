@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -29,7 +30,7 @@ public class TobeMenu {
     @Column(name = "price", nullable = false)
     private MenuPrice menuPrice;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_group_id", columnDefinition = "binary(16)")
     private TobeMenuGroup menuGroup;
 
@@ -44,8 +45,8 @@ public class TobeMenu {
     }
 
     public TobeMenu(UUID id, DisplayName name, MenuPrice menuPrice, TobeMenuGroup menuGroup, Displayed displayed, MenuProducts menuProducts) {
-
-        if (menuPrice.price().compareTo(menuProducts.getTotalPrice()) > 0) {
+        // if (menuPrice.price().compareTo(menuProducts.calculateTotalPrice()) > 0) {
+        if (menuProducts.isOverProductPrice(menuPrice.price())) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품의 가격보다 적거나 같아야합니다.");
         }
 
@@ -71,7 +72,7 @@ public class TobeMenu {
      * 상품의 가격이 변경될 경우 메뉴의 가격을 체크 해야한다.
      */
     public void updateDisplayStatusOnPriceChange() {
-        if (menuPrice.price().compareTo(menuProducts.getTotalPrice()) > 0) {
+        if (menuProducts.isOverProductPrice(menuPrice.price())) {
             this.displayed = Displayed.HIDDEN;
         }
     }

@@ -24,16 +24,27 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public static MenuProducts of(TobeMenuProduct ... menuProducts) {
+    public static MenuProducts of(TobeMenuProduct... menuProducts) {
         return new MenuProducts(List.of(menuProducts));
     }
 
     /**
-     * 메뉴의 총 가격을 계산합니다.
+     * 메뉴의 가격이 메뉴에 속한 상품의 가격보다 적거나 같은지 확인합니다.
+     *
+     * @param menuPrice the menu price
+     * @return the boolean
+     */
+    public Boolean isOverProductPrice(BigDecimal menuPrice) {
+        BigDecimal productTotalPrice = calculateTotalPrice();
+        return menuPrice.compareTo(productTotalPrice) > 0;
+    }
+
+    /**
+     * 메뉴 상품의 총 가격을 계산합니다.
      *
      * @return the total price
      */
-    public BigDecimal getTotalPrice() {
+    public BigDecimal calculateTotalPrice() {
         return menuProducts.stream()
                 .map(TobeMenuProduct::calculatedPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

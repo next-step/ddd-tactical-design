@@ -8,12 +8,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MenuProductsTest {
 
     @Test
     @DisplayName("메뉴 상품의 총 가격을 계산 할 수 있다.")
-    void getTotalPrice() {
+    void calculateTotalPrice() {
         // given
         BigDecimal price = BigDecimal.valueOf(10000);
         MenuProducts menuProducts = MenuProducts.of(
@@ -22,7 +24,7 @@ class MenuProductsTest {
         );
 
         // when
-        BigDecimal totalPrice = menuProducts.getTotalPrice();
+        BigDecimal totalPrice = menuProducts.calculateTotalPrice();
 
         // then
         assertEquals(BigDecimal.valueOf(20000), totalPrice);
@@ -30,13 +32,13 @@ class MenuProductsTest {
 
     @Test
     @DisplayName("메뉴 상품이 없을 경우 총 가격은 0이다.")
-    void getTotalPriceWhenEmpty() {
+    void calculateTotalPriceWhenEmpty() {
 
         // given
         MenuProducts menuProducts = MenuProducts.of();
 
         // when
-        BigDecimal totalPrice = menuProducts.getTotalPrice();
+        BigDecimal totalPrice = menuProducts.calculateTotalPrice();
 
         // then
         assertEquals(BigDecimal.ZERO, totalPrice);
@@ -77,6 +79,25 @@ class MenuProductsTest {
 
         // then
         assertEquals(Optional.empty(), menuProduct);
+    }
+
+    @Test
+    @DisplayName("메뉴의 가격이 상품 가격의 총합에 비교 할 수 있다.")
+    void isOverProductPrice() {
+        // given
+        BigDecimal price = BigDecimal.valueOf(10000);
+
+        MenuProducts menuProducts = MenuProducts.of(
+                TobeMenuProduct.create(UUID.randomUUID(), price, 1L),
+                TobeMenuProduct.create(UUID.randomUUID(), price, 1L)
+        );
+        // when
+        boolean isFalse = menuProducts.isOverProductPrice(BigDecimal.valueOf(20000));
+        boolean isTrue = menuProducts.isOverProductPrice(BigDecimal.valueOf(21000));
+
+        // then
+        assertFalse(isFalse);
+        assertTrue(isTrue);
     }
 
 }
