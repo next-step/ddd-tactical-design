@@ -1,8 +1,7 @@
 package kitchenpos.menus.tobe.application.dto;
 
-import kitchenpos.menus.tobe.domain.MenuGroup;
-
 import java.util.UUID;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 public class MenuGroupCreationResponseDto {
     private final UUID id;
