@@ -66,4 +66,12 @@ public class EatInOrderFixture {
         );
         return eatInOrder;
     }
+
+    public static EatInOrder eatInOrderOf(EatInOrderStatus status, OrderLineItems orderLineItems, UUID orderTableId) {
+        EatInOrder eatInOrder = new EatInOrder(
+                UUID.randomUUID(), EatInOrderType.EAT_IN, status,
+                LocalDateTime.now(), orderLineItems, orderTableId
+        );
+        return eatInOrder;
+    }
 }

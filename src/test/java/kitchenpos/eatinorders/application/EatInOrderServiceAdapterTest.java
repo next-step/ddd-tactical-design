@@ -111,45 +111,6 @@ public class EatInOrderServiceAdapterTest {
         ).isInstanceOf(IllegalStateException.class);
     }
 
-    @Test
-    @DisplayName("주문 테이블에 있는 모든 주문이 완료되면 빈 테이블로 설정한다.")
-    void complete_orderTable () {
-        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
-        EatInOrder 매장_식사 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
-        statusAcceptToServe(매장_식사);
-
-        매장_식사.complete(eatInOrderServiceAdapter);
-
-        assertAll(
-                () -> Assertions.assertThat(주문_테이블.getNumberOfGuests()).isZero(),
-                () -> Assertions.assertThat(주문_테이블.isNotOccupied()).isTrue()
-        );
-    }
-
-    @Test
-    @DisplayName("주문 테이블에 있는 모든 주문이 완료되지 않으면 빈 테이블로 설정되지 않는다.")
-    void complete_orderTable_exception() {
-        OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
-        EatInOrder 매장_식사 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
-        EatInOrder 매장_식사2 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
-        statusAcceptToServe(매장_식사);
-
-        매장_식사.complete(eatInOrderServiceAdapter);
-
-        Assertions.assertThat(주문_테이블.isOccupied()).isTrue();
-    }
-
-    private void statusAcceptToServe(EatInOrder order) {
-        order.accept();
-        order.serve();
-    }
-
     private OrderLineItems createDefaultOrderLineItems() {
         Menu menu = saveMenuBeforeTest(toBeFixtures.메뉴_치킨);
 

@@ -29,8 +29,9 @@ public class EatInOrder {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @Transient
     private UUID orderTableId;
+
+    protected EatInOrder() {}
 
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
                       OrderLineItems orderLineItems, UUID orderTableId,
@@ -76,12 +77,15 @@ public class EatInOrder {
         status = EatInOrderStatus.SERVED;
     }
 
-    public void complete(EatInOrderServiceAdapter eatInOrderServiceAdapter) {
+    public void complete() {
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException();
         }
         status = EatInOrderStatus.COMPLETED;
-        eatInOrderServiceAdapter.clearOrderTable(this);
+    }
+
+    public boolean isComplete() {
+        return status == EatInOrderStatus.COMPLETED;
     }
 
     public UUID getId() {

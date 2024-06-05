@@ -42,13 +42,6 @@ public class EatInOrderServiceAdapter {
         return orderTable.isNotOccupied();
     }
 
-    public void clearOrderTable(EatInOrder order) {
-        OrderTable orderTable = findOrderTableBy(order.getOrderTableId());
-        if (orderRepository.isAllCompleteByOrderTable(orderTable)) {
-            orderTable.clear();
-        }
-    }
-
     private OrderTable findOrderTableBy(UUID id) {
         return orderTableRepository.findBy(id)
                 .orElseThrow(() -> new NoSuchElementException());
