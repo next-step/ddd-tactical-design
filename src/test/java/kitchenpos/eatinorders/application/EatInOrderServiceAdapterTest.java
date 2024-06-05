@@ -10,7 +10,7 @@ import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
-import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
+import kitchenpos.eatinorders.tobe.domain.service.EatInOrderAccept;
 import kitchenpos.menus.domain.FakeMenuRepository;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
@@ -24,21 +24,19 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 @DisplayName("주문 ACL 서비스 테스트")
 public class EatInOrderServiceAdapterTest {
     private ToBeFixtures toBeFixtures;
     private EatInOrderRepository orderRepository;
     private OrderTableRepository orderTableRepository;
     private MenuRepository menuRepository;
-    private EatInOrderServiceAdapter eatInOrderServiceAdapter;
+    private EatInOrderAccept orderAccept;
 
     @BeforeEach
     void setUp() {
         toBeFixtures = new ToBeFixtures();
         initializeRepository();
-        injectionRepositoryToAdapter();
+        orderAccept = new EatInOrderAccept(orderTableRepository, menuRepository);
     }
 
     private void initializeRepository() {
@@ -47,22 +45,16 @@ public class EatInOrderServiceAdapterTest {
         menuRepository = new FakeMenuRepository();
     }
 
-    private void injectionRepositoryToAdapter() {
-        eatInOrderServiceAdapter = new EatInOrderServiceAdapter(
-                orderRepository,
-                orderTableRepository,
-                menuRepository
-        );
-    }
-
     @Test
     @DisplayName("주문을 생성한다.")
     void create() {
         OrderLineItems orderLineItems = createDefaultOrderLineItems();
         OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
-        EatInOrder 주문 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId(), eatInOrderServiceAdapter);
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId());
 
-        Assertions.assertThat(주문.getId()).isNotNull();
+        orderAccept.checkRequiredList(매장_식사);
+
+        Assertions.assertThat(매장_식사.getId()).isNotNull();
     }
 
     @Test
@@ -71,12 +63,10 @@ public class EatInOrderServiceAdapterTest {
         OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, UUID.randomUUID());
         OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
         OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId());
 
         Assertions.assertThatThrownBy(
-                () -> EatInOrderFixture.eatInOrderOf(
-                        orderLineItems,
-                        주문_테이블.getId(),
-                        eatInOrderServiceAdapter)
+                () -> orderAccept.checkRequiredList(매장_식사)
         ).isInstanceOf(NoSuchElementException.class);
     }
 
@@ -85,30 +75,25 @@ public class EatInOrderServiceAdapterTest {
     void create_exception_hide_menu() {
         Menu 메뉴_튀김 = toBeFixtures.메뉴_치킨;
         메뉴_튀김.hide();
-        menuRepository.save(메뉴_튀김);
         OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, 메뉴_튀김.getId());
         OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
         OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(orderLineItems, 주문_테이블.getId());
 
         Assertions.assertThatThrownBy(
-                () -> EatInOrderFixture.eatInOrderOf(
-                        orderLineItems,
-                        주문_테이블.getId(),
-                        eatInOrderServiceAdapter)
-        ).isInstanceOf(IllegalStateException.class);
+                () -> orderAccept.checkRequiredList(매장_식사)
+        ).hasMessage("숨긴 메뉴가 존재합니다.");
     }
 
     @Test
     @DisplayName("빈 테이블에는 매장 주문을 등록할 수 없다.")
     void create_exception_emptyOrderTable() {
         OrderTable 빈_테이블 = orderTableRepository.save(EatInOrderFixture.emptyOrderTableOf("주문_테이블"));
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 빈_테이블.getId());
 
         Assertions.assertThatThrownBy(
-                () -> EatInOrderFixture.eatInOrderOf(
-                        createDefaultOrderLineItems(),
-                        빈_테이블.getId(),
-                        eatInOrderServiceAdapter)
-        ).isInstanceOf(IllegalStateException.class);
+                () -> orderAccept.checkRequiredList(매장_식사)
+        ).hasMessage("빈 테이블입니다.");
     }
 
     private OrderLineItems createDefaultOrderLineItems() {

@@ -3,9 +3,9 @@ package kitchenpos.eatinorders.tobe.domain.entity;
 import jakarta.persistence.*;
 import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderType;
-import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Table(name = "orders2")
@@ -34,14 +34,6 @@ public class EatInOrder {
     protected EatInOrder() {}
 
     public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
-                      OrderLineItems orderLineItems, UUID orderTableId,
-                      EatInOrderServiceAdapter orderDomainService) {
-        this(id, type, status, orderDateTime, orderLineItems, orderTableId);
-        checkOrderTableOccupied(orderDomainService);
-        checkAllMenuIsDisplayed(orderDomainService);
-    }
-
-    public EatInOrder(UUID id, EatInOrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
                       OrderLineItems orderLineItems, UUID orderTableId) {
         this.id = id;
         this.type = type;
@@ -49,18 +41,6 @@ public class EatInOrder {
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
-    }
-
-    private void checkAllMenuIsDisplayed(EatInOrderServiceAdapter orderDomainService) {
-        if (orderLineItems.hasDisplayedMenu(orderDomainService)) {
-            throw new IllegalStateException();
-        }
-    }
-
-    private void checkOrderTableOccupied(EatInOrderServiceAdapter orderDomainService) {
-        if (orderDomainService.existIsNotOccupiedOrderTable(this)) {
-            throw new IllegalStateException();
-        }
     }
 
     public void accept() {
@@ -86,6 +66,10 @@ public class EatInOrder {
 
     public boolean isComplete() {
         return status == EatInOrderStatus.COMPLETED;
+    }
+
+    public Set<UUID> allMenuId() {
+        return orderLineItems.allMenuId();
     }
 
     public UUID getId() {
