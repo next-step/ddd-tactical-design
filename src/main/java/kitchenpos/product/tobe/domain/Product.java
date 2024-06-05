@@ -32,6 +32,10 @@ public class Product {
         this.price = new ProductPrice(price);
     }
 
+    public void changePrice(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -44,7 +48,4 @@ public class Product {
         return this.price.getPrice();
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
-    }
 }

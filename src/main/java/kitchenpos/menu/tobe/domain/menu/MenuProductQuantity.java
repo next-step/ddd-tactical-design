@@ -10,10 +10,6 @@ public class MenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    public long getQuantity() {
-        return quantity;
-    }
-
     protected MenuProductQuantity() {
     }
 
@@ -22,6 +18,10 @@ public class MenuProductQuantity {
             throw new IllegalArgumentException();
         }
         this.quantity = quantity;
+    }
+
+    public long getQuantity() {
+        return quantity;
     }
 
     @Override
