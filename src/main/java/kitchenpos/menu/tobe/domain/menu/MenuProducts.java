@@ -12,10 +12,10 @@ import java.util.UUID;
 public class MenuProducts {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-            name = "new_menu_id",
+            name = "menu_id",
             nullable = false,
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_new_menu_product_to_new_menu")
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 

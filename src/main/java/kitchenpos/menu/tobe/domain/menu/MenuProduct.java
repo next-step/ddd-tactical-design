@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "new_menu_product")
+@Table(name = "menu_product")
 @Entity(name = "newMenuProduct")
 public class MenuProduct {
     @Column(name = "seq")

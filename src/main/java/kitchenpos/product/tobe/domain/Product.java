@@ -10,7 +10,7 @@ import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "new_product")
+@Table(name = "product")
 @Entity(name = "newProduct")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
