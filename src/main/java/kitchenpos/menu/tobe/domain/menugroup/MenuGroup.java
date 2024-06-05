@@ -43,14 +43,19 @@ public class MenuGroup {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MenuGroup menuGroup = (MenuGroup) o;
-        return Objects.equals(id, menuGroup.id) && Objects.equals(name, menuGroup.name);
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MenuGroup menuGroup)) {
+            return false;
+        }
+
+        return this.getId() != null && Objects.equals(this.getId(), menuGroup.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(getId());
     }
+
 }

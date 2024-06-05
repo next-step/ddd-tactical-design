@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -48,4 +49,20 @@ public class Product {
         return this.price.getPrice();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product product)) {
+            return false;
+        }
+
+        return this.getId() != null && Objects.equals(this.getId(), product.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

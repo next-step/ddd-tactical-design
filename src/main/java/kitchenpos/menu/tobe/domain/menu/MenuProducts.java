@@ -64,11 +64,16 @@ public class MenuProducts {
         return menuProducts;
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MenuProducts that = (MenuProducts) o;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MenuProducts that)) {
+            return false;
+        }
+
         return Objects.equals(menuProducts, that.menuProducts);
     }
 

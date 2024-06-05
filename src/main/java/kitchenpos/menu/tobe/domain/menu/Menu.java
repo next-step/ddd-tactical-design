@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -68,4 +69,24 @@ public class Menu {
         this.displayed = false;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Menu menu)) {
+            return false;
+        }
+
+        return this.getId() != null && Objects.equals(this.getId(), menu.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
