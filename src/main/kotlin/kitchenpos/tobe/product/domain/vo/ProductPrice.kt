@@ -10,7 +10,7 @@ data class ProductPrice(
     val price: BigDecimal,
 ) {
     companion object {
-        fun of(price: BigDecimal): ProductPrice {
+        fun from(price: BigDecimal): ProductPrice {
             validate(price)
             return ProductPrice(price)
         }

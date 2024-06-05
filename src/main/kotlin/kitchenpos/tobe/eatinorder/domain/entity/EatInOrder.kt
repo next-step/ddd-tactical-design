@@ -40,7 +40,7 @@ class EatInOrder private constructor(
     val orderTable: OrderTableV2,
 ) {
     companion object {
-        fun from(
+        fun of(
             orderDateTime: LocalDateTime,
             orderLineItems: List<OrderLineItemV2>,
             orderTable: OrderTableV2,
@@ -50,7 +50,7 @@ class EatInOrder private constructor(
                 status = EatInOrderStatus.WAITING,
                 orderDateTime = orderDateTime,
                 orderLineItems =
-                    OrderLineItems.of(
+                    OrderLineItems.from(
                         orderLineItems,
                     ),
                 orderTable = orderTable,

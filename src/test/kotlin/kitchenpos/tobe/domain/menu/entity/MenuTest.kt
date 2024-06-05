@@ -46,7 +46,7 @@ class MenuTest : DescribeSpec() {
                         val menuPurgomalumClient = FakeMenuPugomalumClient()
 
                         shouldThrow<IllegalArgumentException> {
-                            MenuV2.from(
+                            MenuV2.of(
                                 name = "욕1",
                                 price = 16000.toBigDecimal(),
                                 displayed = true,
@@ -63,7 +63,7 @@ class MenuTest : DescribeSpec() {
                         val menuPurgomalumClient = FakeMenuPugomalumClient()
 
                         shouldThrow<IllegalArgumentException> {
-                            MenuV2.from(
+                            MenuV2.of(
                                 name = "테스트 메뉴 이름",
                                 price = 20000.toBigDecimal(),
                                 displayed = true,

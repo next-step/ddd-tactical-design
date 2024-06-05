@@ -13,7 +13,7 @@ class ProductPriceTest : DescribeSpec() {
                 context("0원 이하의 상품 가격이 주어졌을 때") {
                     it("ProductPriceException 던진다") {
                         shouldThrow<IllegalArgumentException> {
-                            ProductPrice.of(BigDecimal.valueOf(-1))
+                            ProductPrice.from(BigDecimal.valueOf(-1))
                         }.message shouldBe "상품 가격은 0원 이상이어야 합니다."
                     }
                 }

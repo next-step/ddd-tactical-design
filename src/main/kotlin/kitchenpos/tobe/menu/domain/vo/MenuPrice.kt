@@ -10,7 +10,7 @@ class MenuPrice private constructor(
     val price: BigDecimal,
 ) {
     companion object {
-        fun from(
+        fun of(
             price: BigDecimal,
             productsPrice: BigDecimal,
         ): MenuPrice {

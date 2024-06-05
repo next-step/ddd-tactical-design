@@ -56,10 +56,7 @@ class MenuAcceptanceTest(
 
             `when`("메뉴의 가격을 변경하면") {
                 then("가격이 변경된다.") {
-                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                     val product = productRepository.save(createProduct())
-                    println(product.id)
-                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                     val menuGroup = menuGroupRepository.save(createMenuGroup())
                     val menu = menuRepository.save(createMenu(menuGroup, product))
 

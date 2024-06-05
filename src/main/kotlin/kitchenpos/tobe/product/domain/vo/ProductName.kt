@@ -10,7 +10,7 @@ class ProductName private constructor(
     val name: String,
 ) {
     companion object {
-        fun from(
+        fun of(
             name: String,
             productPurgomalumClient: ProductPurgomalumClient,
         ): ProductName {

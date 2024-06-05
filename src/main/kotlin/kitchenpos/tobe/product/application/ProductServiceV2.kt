@@ -24,7 +24,7 @@ class ProductServiceV2(
     fun create(request: CreateProductRequest): CreateProductResponse {
         val saved =
             productRepository.save(
-                ProductV2.from(
+                ProductV2.of(
                     name = request.name,
                     price = request.price,
                     purgomalumClient = pugomalumClient,

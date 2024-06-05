@@ -21,7 +21,7 @@ data class GetOrderResponse(
     )
 
     companion object {
-        fun of(it: EatInOrder): GetOrderResponse {
+        fun from(it: EatInOrder): GetOrderResponse {
             return GetOrderResponse(
                 id = it.id,
                 orderTableId = it.orderTable.id,

@@ -15,7 +15,7 @@ class ProductTest() : DescribeSpec() {
                 context("정상적인 상품 요청이 주어졌을 때") {
                     it("Product 객체를 생성한다") {
                         val pugomalumClient = FakeProductPugomalumClient()
-                        val productV2 = ProductV2.from("테스트 상품 이름", BigDecimal.valueOf(1000), pugomalumClient)
+                        val productV2 = ProductV2.of("테스트 상품 이름", BigDecimal.valueOf(1000), pugomalumClient)
 
                         assertSoftly {
                             productV2.getName() shouldBe "테스트 상품 이름"
@@ -29,7 +29,7 @@ class ProductTest() : DescribeSpec() {
                         val pugomalumClient = FakeProductPugomalumClient()
                         assertSoftly {
                             shouldThrow<IllegalArgumentException> {
-                                ProductV2.from("욕1", BigDecimal.valueOf(1000), pugomalumClient)
+                                ProductV2.of("욕1", BigDecimal.valueOf(1000), pugomalumClient)
                             }.message shouldBe "상품명에 욕설이 포함되어 있습니다."
                         }
                     }
@@ -40,7 +40,7 @@ class ProductTest() : DescribeSpec() {
                         val pugomalumClient = FakeProductPugomalumClient()
                         assertSoftly {
                             shouldThrow<IllegalArgumentException> {
-                                ProductV2.from("", BigDecimal.valueOf(1000), pugomalumClient)
+                                ProductV2.of("", BigDecimal.valueOf(1000), pugomalumClient)
                             }.message shouldBe "상품명은 공백이 될 수 없습니다."
                         }
                     }
@@ -51,7 +51,7 @@ class ProductTest() : DescribeSpec() {
                         val pugomalumClient = FakeProductPugomalumClient()
                         assertSoftly {
                             shouldThrow<IllegalArgumentException> {
-                                ProductV2.from("테스트 상품 이름", BigDecimal.valueOf(-1), pugomalumClient)
+                                ProductV2.of("테스트 상품 이름", BigDecimal.valueOf(-1), pugomalumClient)
                             }
                         }
                     }

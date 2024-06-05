@@ -17,7 +17,7 @@ class EatInOrderTest : DescribeSpec() {
                 context("적절한 요청이 주어졌을때") {
                     it("매장 내 식사 주문 정보를 반환한다") {
                         val eatInOrder =
-                            EatInOrder.from(
+                            EatInOrder.of(
                                 orderDateTime = LocalDateTime.now(),
                                 orderLineItems = listOf(createOrderLineItemV2()),
                                 orderTable = createOrderTableV2(),

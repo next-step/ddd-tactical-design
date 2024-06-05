@@ -24,7 +24,7 @@ data class CreateMenuResponse(
     )
 
     companion object {
-        fun of(saved: MenuV2): CreateMenuResponse {
+        fun from(saved: MenuV2): CreateMenuResponse {
             return CreateMenuResponse(
                 id = saved.id,
                 name = saved.getName(),

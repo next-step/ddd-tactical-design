@@ -9,7 +9,7 @@ data class ChangeMenuPriceResponse(
     val price: BigDecimal,
 ) {
     companion object {
-        fun of(menu: MenuV2): ChangeMenuPriceResponse {
+        fun from(menu: MenuV2): ChangeMenuPriceResponse {
             return ChangeMenuPriceResponse(
                 menuId = menu.id,
                 price = menu.getPrice(),

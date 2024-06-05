@@ -17,7 +17,7 @@ class OrderTableTest() : DescribeSpec() {
                     val numberOfGuests = 4
                     val occupied = false
 
-                    val orderTable = OrderTableV2.from(id, name, numberOfGuests, occupied)
+                    val orderTable = OrderTableV2.of(id, name, numberOfGuests, occupied)
 
                     orderTable.id shouldBe id
                     orderTable.name shouldBe name

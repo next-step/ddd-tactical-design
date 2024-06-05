@@ -20,7 +20,7 @@ class OrderTableV2(
     var occupied: Boolean = false,
 ) {
     companion object {
-        fun from(
+        fun of(
             id: UUID,
             name: String,
             numberOfGuests: Int,

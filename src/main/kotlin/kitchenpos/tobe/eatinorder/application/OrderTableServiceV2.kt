@@ -16,7 +16,7 @@ class OrderTableServiceV2(
 ) {
     fun createOrderTable(request: CreateOrderTableRequest): CreateOrderTableResponse {
         val orderTable =
-            OrderTableV2.from(
+            OrderTableV2.of(
                 id = request.id,
                 name = request.name,
                 numberOfGuests = request.numberOfGuests,

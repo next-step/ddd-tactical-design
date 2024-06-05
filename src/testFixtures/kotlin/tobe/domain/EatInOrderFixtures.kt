@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 object EatInOrderFixtures {
     fun createEatInOrder(): EatInOrder {
-        return EatInOrder.from(
+        return EatInOrder.of(
             orderDateTime = LocalDateTime.now(),
             orderLineItems =
                 listOf(createOrderLineItemV2()),

@@ -18,7 +18,7 @@ class OrderLineItems private constructor(
     val orderLineItems: List<OrderLineItemV2>,
 ) {
     companion object {
-        fun of(orderLineItems: List<OrderLineItemV2>): OrderLineItems {
+        fun from(orderLineItems: List<OrderLineItemV2>): OrderLineItems {
             return OrderLineItems(orderLineItems = orderLineItems)
         }
     }

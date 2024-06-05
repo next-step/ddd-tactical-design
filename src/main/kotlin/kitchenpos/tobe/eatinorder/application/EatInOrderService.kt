@@ -26,7 +26,7 @@ class EatInOrderService(
         require(menus.all { it.displayed }) { "미노출 메뉴가 존재합니다." }
 
         val order =
-            EatInOrder.from(
+            EatInOrder.of(
                 orderDateTime = LocalDateTime.now(),
                 orderLineItems =
                     request.orderLineItems.map { orderLineItem ->
@@ -44,7 +44,7 @@ class EatInOrderService(
                     ),
             )
 
-        return CreateEatInOrderResponse.of(eatInOrderRepository.save(order))
+        return CreateEatInOrderResponse.from(eatInOrderRepository.save(order))
     }
 
     fun accept(orderId: UUID): UUID {
@@ -64,6 +64,6 @@ class EatInOrderService(
     }
 
     fun findAll(): List<GetOrderResponse> {
-        return eatInOrderRepository.findAll().map { GetOrderResponse.of(it) }
+        return eatInOrderRepository.findAll().map { GetOrderResponse.from(it) }
     }
 }
