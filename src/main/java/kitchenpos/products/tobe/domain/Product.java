@@ -5,8 +5,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.supports.domain.tobe.Price;
 
 @Table(name = "product")
 @Entity
@@ -22,12 +22,12 @@ public class Product {
 
   @Embedded
   @Column(name = "price", nullable = false)
-  private ProductPrice price;
+  private Price price;
 
   protected Product() {
   }
 
-  public Product(ProductName name, ProductPrice price) {
+  public Product(ProductName name, Price price) {
     this.id = UUID.randomUUID();
     this.name = name;
     this.price = price;
@@ -41,11 +41,11 @@ public class Product {
     return name;
   }
 
-  public ProductPrice getPrice() {
+  public Price getPrice() {
     return price;
   }
 
-  public void changePrice(final ProductPrice price) {
+  public void changePrice(final Price price) {
     this.price = price;
   }
 }
