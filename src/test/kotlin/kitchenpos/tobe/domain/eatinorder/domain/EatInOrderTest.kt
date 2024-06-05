@@ -64,6 +64,17 @@ class EatInOrderTest : DescribeSpec() {
                         exception.message?.contains("제공됨 상태의 주문만 수락할 수 있습니다.")
                     }
                 }
+
+                context("주문테이블에 완료되지 않은 주문이 존재하면") {
+                    it("예외를 던진다") {
+                        val eatInOrder =
+                            createEatInOrder().also {
+                                it.status = EatInOrderStatus.SERVED
+                            }
+                        val exception = shouldThrow<IllegalArgumentException> { eatInOrder.complete() }
+                        exception.message?.contains("주문 테이블의 모든 주문이 완료되지 않았습니다.")
+                    } 
+                }
             }
         }
     }

@@ -14,17 +14,18 @@ class EatInOrderCompleteService(
      * 테이블을 초기화한다.
      */
     fun complete(orderId: UUID): UUID {
-        val eatInOrder = eatInOrderRepository.findEatInOrderById(orderId)
-        eatInOrder.complete()
         val orderTable = eatInOrderRepository.findEatInOrderById(orderId).orderTable
-        if (
+        val isAllCompleted =
             eatInOrderRepository.existsByOrderTableAndStatusNot(
                 orderTable,
                 OrderStatus.COMPLETED,
             ).not()
-        ) {
-            orderTable.clear()
-        }
+
+        check(isAllCompleted) { "주문 테이블의 모든 주문이 완료되지 않았습니다." }
+
+        val eatInOrder = eatInOrderRepository.findEatInOrderById(orderId)
+        eatInOrder.complete()
+        orderTable.clear()
 
         return eatInOrder.id
     }
