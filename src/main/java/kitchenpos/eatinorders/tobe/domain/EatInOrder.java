@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.domain;
 
 import jakarta.persistence.*;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
 
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -87,6 +88,7 @@ public class EatInOrder {
             throw new IllegalStateException();
         }
         this.status = OrderStatus.COMPLETED;
+        registerEvent(new EatInOrderCompletedEvent(this.orderTable.getId()));
 
     }
 
