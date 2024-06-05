@@ -13,6 +13,7 @@ public class MenuProduct {
     @Id
     private Long seq;
 
+    @Column(name = "product_id", columnDefinition = "binary(16)")
     private UUID productId;
 
     @Embedded
