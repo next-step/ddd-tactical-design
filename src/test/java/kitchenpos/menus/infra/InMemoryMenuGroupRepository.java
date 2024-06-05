@@ -1,7 +1,7 @@
-package kitchenpos.menus.application;
+package kitchenpos.menus.infra;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,9 @@ public class InMemoryMenuGroupRepository implements MenuGroupRepository {
     private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();
 
     @Override
-    public MenuGroup save(final MenuGroup menuGroup) {
-        menuGroups.put(menuGroup.getId(), menuGroup);
-        return menuGroup;
+    public MenuGroup save(final MenuGroup menuGroupRequest) {
+        menuGroups.put(menuGroupRequest.getId(), menuGroupRequest);
+        return menuGroupRequest;
     }
 
     @Override

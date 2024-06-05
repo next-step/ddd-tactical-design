@@ -10,9 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+
+import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.menus.application.dto.MenuRequest;
+import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
@@ -100,6 +102,7 @@ class ProductServiceTest {
     final Product product = productRepository.save(product("후라이드", 16_000L));
     final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
     productService.changePrice(product.getId(), changePriceRequest(8_000L));
+
     assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
   }
 

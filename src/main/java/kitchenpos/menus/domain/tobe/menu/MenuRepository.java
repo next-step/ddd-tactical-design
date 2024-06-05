@@ -1,8 +1,9 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menus.domain.tobe.menu;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.menus.application.dto.MenuRequest;
 
 public interface MenuRepository {
     Menu save(Menu menu);
