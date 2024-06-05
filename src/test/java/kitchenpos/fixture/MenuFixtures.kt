@@ -3,19 +3,17 @@ package kitchenpos.fixture
 import kitchenpos.common.Price
 import kitchenpos.common.price
 import kitchenpos.menus.application.tobe.FakeMenuNameValidator
-import kitchenpos.menus.application.tobe.FakeMenuPriceValidator
 import kitchenpos.menus.tobe.domain.*
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 
 object MenuFixtures {
     fun menu(
         price: Price = BigDecimal.valueOf(15000).price(),
         menuProducts: MenuProducts = MenuProducts(listOf(menuProduct())),
         menuNameValidator: MenuNameValidator = FakeMenuNameValidator,
-        menuPriceValidator: MenuPriceValidator = FakeMenuPriceValidator,
         displayStatus: Boolean = true
     ): Menu {
         return Menu.of(
@@ -24,7 +22,6 @@ object MenuFixtures {
             price = price,
             displayStatus = displayStatus,
             menuProducts = menuProducts,
-            menuPriceValidator
         )
     }
 
@@ -50,8 +47,9 @@ object MenuFixtures {
 
     fun menuProduct(
         productId: UUID = ProductFixtures.product().id,
-        quantity: MenuProductQuantity = MenuProductQuantity(1)
+        quantity: MenuProductQuantity = MenuProductQuantity(1),
+        price: Price = BigDecimal.valueOf(20000).price()
     ): MenuProduct {
-        return MenuProduct(productId = productId, quantity = quantity)
+        return MenuProduct(productId = productId, quantity = quantity, price = price)
     }
 }

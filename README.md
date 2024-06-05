@@ -144,7 +144,7 @@ docker compose -p kitchenpos up -d
 - Product은 name과 price를 가지고있다
 - Menu는 반드시 하나의 MenuGroup에 속해야한다
 - Menu의 price와 name과 displayStatus를 가진다
-- MenuProduct은 지정한 상품의 quantity와 productId만 가진다
+- MenuProduct은 지정한 상품의 quantity와 price와 productId를 가진다
   - quantity는 0보다 크거나 같아야한다
   - Menu의 price는 MenuProduct Price의 합보다 작거나 같아야한다
 - OrderLineItem은 menuPrice, quantity를 가진다

@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain
 
 import jakarta.persistence.*
+import kitchenpos.common.Price
 import java.util.*
 
 @Table(name = "menu_product")
@@ -11,6 +12,9 @@ class MenuProduct(
 
     @Column(name = "quantity", nullable = false)
     val quantity: MenuProductQuantity,
+
+    @Column(name = "price", nullable = false)
+    val price: Price
 ) {
     @ManyToOne
     @JoinColumn(

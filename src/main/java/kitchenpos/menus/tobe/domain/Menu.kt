@@ -39,6 +39,9 @@ class Menu private constructor(
     @Embedded
     val menuProducts: MenuProducts = menuProducts
 
+    val isMenuPriceValid: Boolean
+        get() = price > menuProducts.totalPrice
+
     companion object {
         fun of(
             menuGroup: MenuGroup,
@@ -46,34 +49,40 @@ class Menu private constructor(
             price: Price,
             displayStatus: Boolean,
             menuProducts: MenuProducts,
-            menuPriceValidator: MenuPriceValidator
         ): Menu = Menu(
             menuGroup = menuGroup,
             name = name,
             price = price,
             displayStatus = displayStatus,
             menuProducts = menuProducts
-        ).also { menuPriceValidator.validate(it) }
+        )
     }
 
     init {
+        validateMenuPrice()
         this.menuProducts.apply(this)
     }
 
-    fun activateDisplayStatus(menuPriceValidator: MenuPriceValidator) {
-        menuPriceValidator.validate(this)
-
+    fun activateDisplayStatus() {
         this.displayStatus = true
+
+        validateMenuPrice()
     }
 
     fun inActivateDisplayStatus() {
         this.displayStatus = false
     }
 
-    fun changePrice(price: Price, menuPriceValidator: MenuPriceValidator) {
+    fun changePrice(price: Price) {
         this.price = price
 
-        menuPriceValidator.validate(this)
+        validateMenuPrice()
+    }
+
+    private fun validateMenuPrice() {
+        if (displayStatus && isMenuPriceValid) {
+            throw IllegalArgumentException("메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
+        }
     }
 
     override fun equals(other: Any?): Boolean {

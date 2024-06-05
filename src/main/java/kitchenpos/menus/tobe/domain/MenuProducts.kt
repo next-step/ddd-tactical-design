@@ -13,6 +13,9 @@ class MenuProducts(
     @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], mappedBy = "menu", fetch = FetchType.LAZY)
     val items: List<MenuProduct>
 ) {
+    val totalPrice: Price
+        get() = items.map { it.price }.foldRight(ZERO) { acc, price -> acc + price }
+
     init {
         require(items.isNotEmpty()) { "적어도 1개 이상의 상품을 등록해야합니다" }
     }
@@ -24,9 +27,4 @@ class MenuProducts(
 
     val productIds: List<UUID>
         get() = items.map { it.productId }
-
-    fun calculateTotalPrice(productPriceById: Map<UUID, Price>): Price =
-        items.map { productPriceById[it.productId] ?: throw IllegalArgumentException("메뉴 상품의 가격이 존재하지 않습니다") }
-            .foldRight(ZERO) { acc, price -> acc + price }
-
 }

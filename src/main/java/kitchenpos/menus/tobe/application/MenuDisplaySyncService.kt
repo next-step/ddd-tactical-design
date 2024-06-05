@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.application
 
 import kitchenpos.menus.tobe.domain.Menu
-import kitchenpos.menus.tobe.domain.MenuPriceValidator
 import kitchenpos.menus.tobe.domain.MenuRepository
 import kitchenpos.products.domain.ProductPriceChanged
 import org.springframework.stereotype.Service
@@ -13,7 +12,6 @@ import org.springframework.transaction.event.TransactionalEventListener
 @Service
 class MenuDisplaySyncService(
     private val menuRepository: MenuRepository,
-    private val menuPriceValidator: MenuPriceValidator
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -24,7 +22,7 @@ class MenuDisplaySyncService(
     }
 
     private fun syncMenuDisplayStatus(menu: Menu) {
-        if (!menuPriceValidator.isValid(menu)) {
+        if (!menu.isMenuPriceValid) {
             menu.inActivateDisplayStatus()
         }
     }
