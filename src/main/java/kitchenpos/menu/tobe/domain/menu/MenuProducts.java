@@ -25,10 +25,9 @@ public class MenuProducts {
     public MenuProducts(List<MenuProduct> menuProducts, BigDecimal menuPrice, ProductValidator productValidator) {
         validateMenuProductsNotEmpty(menuProducts);
         productValidator.validateProductExistence(menuProducts);
+        validateMenuPricePolicy(menuPrice, menuProducts);
 
         this.menuProducts = menuProducts;
-
-        validateMenuPricePolicy(menuPrice);
     }
 
     private void validateMenuProductsNotEmpty(List<MenuProduct> menuProducts) {
@@ -37,7 +36,7 @@ public class MenuProducts {
         }
     }
 
-    public void validateMenuPricePolicy(BigDecimal menuPrice) {
+    public void validateMenuPricePolicy(BigDecimal menuPrice, List<MenuProduct> menuProducts) {
         BigDecimal totalPrice = menuProducts.stream()
                 .map(menuProduct -> menuProduct.getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

@@ -47,7 +47,7 @@ public class Menu {
 
     public void changePrice(BigDecimal price) {
         MenuPrice newMenuPrice = new MenuPrice(price);
-        this.menuProducts.validateMenuPricePolicy(newMenuPrice.getPrice());
+        this.menuProducts.validateMenuPricePolicy(newMenuPrice.getPrice(), this.menuProducts.getMenuProducts());
         this.menuPrice = newMenuPrice;
     }
 
@@ -60,7 +60,7 @@ public class Menu {
     }
 
     public void display() {
-        this.menuProducts.validateMenuPricePolicy(this.menuPrice.getPrice());
+        this.menuProducts.validateMenuPricePolicy(this.menuPrice.getPrice(), this.menuProducts.getMenuProducts());
         this.displayed = true;
     }
 
