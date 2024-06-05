@@ -1,20 +1,21 @@
 package kitchenpos.eatinorders.tobe.domain.service;
 
+import kitchenpos.eatinorders.tobe.domain.entity.CompletedOrderEvent;
 import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
-import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
-import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@Component
 public class EatInOrderCompletePolicy {
     private final EatInOrderRepository orderRepository;
-    private final OrderTableRepository tableRepository;
+    private final ApplicationEventPublisher publisher;
 
-    public EatInOrderCompletePolicy(EatInOrderRepository orderRepository, OrderTableRepository tableRepository) {
+    public EatInOrderCompletePolicy(EatInOrderRepository orderRepository, ApplicationEventPublisher publisher) {
         this.orderRepository = orderRepository;
-        this.tableRepository = tableRepository;
+        this.publisher = publisher;
     }
 
     public void complete(EatInOrder order) {
@@ -24,9 +25,7 @@ public class EatInOrderCompletePolicy {
                 .allMatch(thisOrder -> thisOrder.isComplete());
 
         if (allOrderCompleted) {
-            OrderTable table = tableRepository.findBy(order.getOrderTableId())
-                    .orElseThrow(() -> new NoSuchElementException());
-            table.clear();
+            publisher.publishEvent(new CompletedOrderEvent(order.getOrderTableId()));
         }
     }
 }

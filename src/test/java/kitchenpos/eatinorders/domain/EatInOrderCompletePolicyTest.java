@@ -17,17 +17,26 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SpringBootTest
 @DisplayName("매장 주문 도메인 서비스 테스트")
 public class EatInOrderCompletePolicyTest {
-    private EatInOrderRepository orderRepository;
-    private OrderTableRepository tableRepository;
+    @Autowired
     private EatInOrderCompletePolicy completePolicy;
+    @MockBean
+    private EatInOrderRepository orderRepository;
+    @MockBean
+    private OrderTableRepository tableRepository;
 
     private MenuRepository menuRepository;
     private ToBeFixtures toBeFixtures;
@@ -35,10 +44,6 @@ public class EatInOrderCompletePolicyTest {
 
     @BeforeEach
     void setUp() {
-        orderRepository = new FakeEatInOrderRepository();
-        tableRepository = new FakeOrderTableRepository();
-        completePolicy = new EatInOrderCompletePolicy(orderRepository, tableRepository);
-
         menuRepository = new FakeMenuRepository();
         toBeFixtures = new ToBeFixtures();
     }
@@ -46,11 +51,13 @@ public class EatInOrderCompletePolicyTest {
     @Test
     @DisplayName("주문 테이블에 있는 모든 주문이 완료되면 빈 테이블로 설정한다.")
     void complete() {
-        OrderTable 주문_테이블 = tableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
-        EatInOrder 매장_식사 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(EatInOrderStatus.SERVED, createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
+        OrderTable 주문_테이블 = EatInOrderFixture.sitOrderTableOf("주문_테이블");
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(EatInOrderStatus.SERVED, createDefaultOrderLineItems(), 주문_테이블.getId());
 
+        Mockito.when(orderRepository.findAllByOrderTableId(주문_테이블.getId()))
+                        .thenReturn(List.of(매장_식사));
+        Mockito.when(tableRepository.findBy(매장_식사.getOrderTableId()))
+                        .thenReturn(Optional.of(주문_테이블));
         completePolicy.complete(매장_식사);
 
         assertAll(
@@ -62,14 +69,12 @@ public class EatInOrderCompletePolicyTest {
     @Test
     @DisplayName("주문 테이블에 있는 모든 주문이 완료되지 않으면 빈 테이블로 설정되지 않는다.")
     void complete_not_emptyTable() {
-        OrderTable 주문_테이블 = tableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));
-        EatInOrder 매장_식사 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(EatInOrderStatus.SERVED, createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
-        EatInOrder 매장_식사2 = orderRepository.save(
-                EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId())
-        );
+        OrderTable 주문_테이블 = EatInOrderFixture.sitOrderTableOf("주문_테이블");
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(EatInOrderStatus.SERVED, createDefaultOrderLineItems(), 주문_테이블.getId());
+        EatInOrder 매장_식사2 = EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), 주문_테이블.getId());
 
+        Mockito.when(orderRepository.findAllByOrderTableId(주문_테이블.getId()))
+                .thenReturn(List.of(매장_식사, 매장_식사2));
         completePolicy.complete(매장_식사);
 
         Assertions.assertThat(주문_테이블.isOccupied()).isTrue();
