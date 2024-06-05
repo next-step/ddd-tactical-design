@@ -2,8 +2,8 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.dto.OrderTableResponse;
 import kitchenpos.eatinorders.todo.domain.ordertables.NumberOfGuests;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderClient;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableClearPolicy;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,11 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderClient orderClient;
+    private final OrderTableClearPolicy orderTableClearPolicy;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderClient orderClient) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderTableClearPolicy orderTableClearPolicy) {
         this.orderTableRepository = orderTableRepository;
-        this.orderClient = orderClient;
+        this.orderTableClearPolicy = orderTableClearPolicy;
     }
 
     @Transactional
@@ -39,7 +39,8 @@ public class OrderTableService {
     @Transactional
     public OrderTableResponse clear(final UUID orderTableId) {
         final OrderTable orderTable = getOrderTable(orderTableId);
-        orderTable.clear(orderClient);
+        orderTableClearPolicy.checkClear(orderTableId);
+        orderTable.clear();
         return OrderTableResponse.from(orderTable);
     }
 

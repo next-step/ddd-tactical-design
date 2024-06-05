@@ -3,10 +3,9 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
 import kitchenpos.eatinorders.dto.OrderTableResponse;
-import kitchenpos.eatinorders.infra.OrderClientImpl;
 import kitchenpos.eatinorders.todo.domain.ordertables.NumberOfGuests;
-import kitchenpos.eatinorders.todo.domain.ordertables.OrderClient;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableClearPolicy;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableName;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,8 +33,8 @@ class OrderTableServiceTest {
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryEatInOrderRepository();
-        OrderClient orderClient = new OrderClientImpl(orderRepository);
-        orderTableService = new OrderTableService(orderTableRepository, orderClient);
+        OrderTableClearPolicy orderTableClearPolicy = new OrderTableClearPolicy(orderRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableClearPolicy);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")

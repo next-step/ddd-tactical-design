@@ -63,12 +63,6 @@ public class OrderTable {
         this.occupied = UNOCCUPIED;
     }
 
-    public void clear(final OrderClient orderClient) {
-        final OrderTableClearPolicy policy = new OrderTableClearPolicy(orderClient);
-        policy.checkClear(this.id);
-        clear();
-    }
-
     public void changeNumberOfGuests(NumberOfGuests numberOfGuests) {
         checkClear();
         this.numberOfGuests = numberOfGuests;
