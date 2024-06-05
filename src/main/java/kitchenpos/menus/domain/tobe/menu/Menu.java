@@ -55,7 +55,7 @@ public class Menu {
       throw new IllegalArgumentException("`메뉴 상품 가격`의 총액보다 `메뉴 가격`이 클 수 없다.");
     }
 
-    if (menuProducts.sum().compareTo(BigDecimal.ZERO) > ZERO) {
+    if (menuProducts.sum().compareTo(BigDecimal.ZERO) < ZERO) {
       throw new IllegalArgumentException("`메뉴`의 `메뉴 가격`은 양수이어야한다.");
     }
   }
@@ -91,4 +91,9 @@ public class Menu {
   public MenuPrice getMenuPrice() {
     return menuPrice;
   }
+
+  public MenuName getMenuName() {
+    return menuName;
+  }
+
 }

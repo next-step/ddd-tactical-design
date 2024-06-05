@@ -30,7 +30,7 @@ public class MenuPriceTest {
   void changeMenuPriceWithNegativePrice(long price) {
     assertThatExceptionOfType(IllegalArgumentException.class)
             .isThrownBy(() -> MenuPrice.of(price))
-            .withMessageContaining("상품의 가격은 0원 이상이어야 한다.");
+            .withMessageContaining("메뉴의 가격은 0원 이상이어야 한다.");
   }
 
   @DisplayName("상품의 가격은 Null일수 없어야 한다.")

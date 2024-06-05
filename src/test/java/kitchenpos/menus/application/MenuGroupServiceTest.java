@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,6 +60,7 @@ class MenuGroupServiceTest {
     private MenuGroupRequest createMenuGroupRequest(final String name) {
         final MenuGroupRequest menuGroupRequest = new MenuGroupRequest();
         menuGroupRequest.setName(name);
+        menuGroupRequest.setId(UUID.randomUUID());
         return menuGroupRequest;
     }
 }

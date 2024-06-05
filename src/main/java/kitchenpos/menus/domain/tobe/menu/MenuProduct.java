@@ -32,7 +32,7 @@ public class MenuProduct {
     this.quantity = quantity;
   }
   private void validate(Integer quantity){
-    if (quantity > ZERO) {
+    if (quantity <= ZERO) {
       throw new IllegalArgumentException("`메뉴`에 등록된 `상품 개수`는 1개 이상이어야 한다.");
     }
   }

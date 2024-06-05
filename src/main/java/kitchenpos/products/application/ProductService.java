@@ -44,7 +44,6 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changeProductPrice(price);
-
         return product;
     }
 
