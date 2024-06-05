@@ -24,15 +24,15 @@ public class OrderLineItem {
 
     protected OrderLineItem() {}
 
-    public OrderLineItem(Long seq, long quantity, BigDecimal price, UUID menuId) {
-        this(seq, quantity, price);
-        this.menuId = menuId;
+    public OrderLineItem(Long seq, long quantity, BigDecimal price) {
+        this(seq, quantity, price, null);
     }
 
-    public OrderLineItem(Long seq, long quantity, BigDecimal price) {
+    public OrderLineItem(Long seq, long quantity, BigDecimal price, UUID menuId) {
         this.seq = seq;
         this.quantity = quantity;
         this.price = price;
+        this.menuId = menuId;
     }
 
     public Long getSeq() {

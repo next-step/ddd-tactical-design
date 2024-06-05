@@ -1,14 +1,11 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.domain;
 
 import kitchenpos.ToBeFixtures;
 import kitchenpos.eatinorders.EatInOrderFixture;
-import kitchenpos.eatinorders.domain.FakeEatInOrderRepository;
-import kitchenpos.eatinorders.domain.FakeOrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.entity.EatInOrder;
 import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItems;
 import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.repository.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import kitchenpos.eatinorders.tobe.domain.service.EatInOrderAccept;
 import kitchenpos.menus.domain.FakeMenuRepository;
@@ -25,22 +22,20 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @DisplayName("주문 ACL 서비스 테스트")
-public class EatInOrderServiceAdapterTest {
-    private ToBeFixtures toBeFixtures;
-    private EatInOrderRepository orderRepository;
+public class EatInOrderAcceptTest {
     private OrderTableRepository orderTableRepository;
     private MenuRepository menuRepository;
     private EatInOrderAccept orderAccept;
+    private ToBeFixtures toBeFixtures;
 
     @BeforeEach
     void setUp() {
-        toBeFixtures = new ToBeFixtures();
         initializeRepository();
         orderAccept = new EatInOrderAccept(orderTableRepository, menuRepository);
+        toBeFixtures = new ToBeFixtures();
     }
 
     private void initializeRepository() {
-        orderRepository = new FakeEatInOrderRepository();
         orderTableRepository = new FakeOrderTableRepository();
         menuRepository = new FakeMenuRepository();
     }
@@ -75,6 +70,7 @@ public class EatInOrderServiceAdapterTest {
     void create_exception_hide_menu() {
         Menu 메뉴_튀김 = toBeFixtures.메뉴_치킨;
         메뉴_튀김.hide();
+        menuRepository.save(메뉴_튀김);
         OrderLineItem 주문_항목 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE, 메뉴_튀김.getId());
         OrderLineItems orderLineItems = new OrderLineItems(List.of(주문_항목));
         OrderTable 주문_테이블 = orderTableRepository.save(EatInOrderFixture.sitOrderTableOf("주문_테이블"));

@@ -44,8 +44,9 @@ public class OrderTest {
     @Test
     @DisplayName("주문을 서빙한다.")
     void serve() {
-        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(createDefaultOrderLineItems(), UUID.randomUUID());
-        매장_식사.accept();
+        EatInOrder 매장_식사 = EatInOrderFixture.eatInOrderOf(
+                EatInOrderStatus.ACCEPTED, createDefaultOrderLineItems(), UUID.randomUUID()
+        );
 
         매장_식사.serve();
 
