@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "menu")
-@Entity
+@Table(name = "menu2")
+@Entity(name = "Menu2")
 public class Menu {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

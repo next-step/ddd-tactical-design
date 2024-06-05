@@ -7,8 +7,8 @@ import kitchenpos.menus.tobe.domain.common.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
+@Table(name = "menu_product2")
+@Entity(name = "MenuProduct2")
 public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,8 +7,8 @@ import kitchenpos.eatinorders.tobe.domain.constant.OrderTableStatus;
 
 import java.util.UUID;
 
-@Table(name = "order_table")
-@Entity
+@Table(name = "order_table2")
+@Entity(name = "OrderTable2")
 public class OrderTable {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

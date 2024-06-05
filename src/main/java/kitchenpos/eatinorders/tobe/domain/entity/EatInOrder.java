@@ -8,8 +8,8 @@ import kitchenpos.eatinorders.tobe.application.acl.EatInOrderServiceAdapter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table(name = "orders")
-@Entity
+@Table(name = "orders2")
+@Entity(name = "EatInOrder")
 public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
