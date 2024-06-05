@@ -7,8 +7,8 @@ import java.util.UUID;
 
 @Component
 public class EatInOrderPolicy {
-    private EatInOrderRepository orderRepository;
-    private OrderTableClient orderTableClient;
+    private final EatInOrderRepository orderRepository;
+    private final OrderTableClient orderTableClient;
 
     public EatInOrderPolicy(EatInOrderRepository orderRepository, OrderTableClient orderTableClient) {
         this.orderRepository = orderRepository;

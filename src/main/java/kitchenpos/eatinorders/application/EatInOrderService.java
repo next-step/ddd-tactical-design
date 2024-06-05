@@ -7,7 +7,6 @@ import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
 import kitchenpos.support.domain.MenuClient;
-import kitchenpos.support.domain.OrderLineItems;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +35,9 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrderResponse create(final EatInOrderCreateRequest request) {
-        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
-        EatInOrder order = EatInOrder.create(orderLineItems, request.orderTableId(), orderTableClient);
+        EatInOrder order = EatInOrder.create(
+                new OrderLineItemsFactory(menuClient).create(request.orderLineItems()),
+                request.orderTableId(), orderTableClient);
         return EatInOrderResponse.from(orderRepository.save(order));
     }
 

@@ -10,9 +10,7 @@ import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.support.domain.MenuClient;
 import kitchenpos.support.domain.OrderLineItems;
-import kitchenpos.support.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("매장 주문")
 class EatInOrderTest {
-    private MenuClient menuClient;
     private OrderTableClient orderTableClient;
 
     private OrderLineItemCreateRequest orderLineItem;
@@ -36,7 +33,6 @@ class EatInOrderTest {
     void setUp() {
         MenuRepository menuRepository = new InMemoryMenuRepository();
         OrderTableRepository orderTableRepository = new InMemoryOrderTableRepository();
-        menuClient = new MenuClientImpl(menuRepository);
         orderTableClient = new OrderTableClientImpl(orderTableRepository);
         Menu menu = menuRepository.save(menu());
         orderLineItem = new OrderLineItemCreateRequest(menu.getId(), menu.getPrice(), 1L);
@@ -47,7 +43,7 @@ class EatInOrderTest {
     @Test
     void create() {
         EatInOrderCreateRequest request = createOrderRequest();
-        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        OrderLineItems orderLineItems = OrderLineItems.from(request.orderLineItems());
         EatInOrder actual = EatInOrder.create(orderLineItems, request.orderTableId(), orderTableClient);
 
         assertAll(
@@ -63,7 +59,7 @@ class EatInOrderTest {
     @Test
     void accept() {
         EatInOrderCreateRequest request = createOrderRequest();
-        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        OrderLineItems orderLineItems = OrderLineItems.from(request.orderLineItems());
         EatInOrder order = new EatInOrder(EatInOrderStatus.WAITING, orderLineItems, request.orderTableId());
 
         EatInOrder actual = order.accept();
@@ -75,7 +71,7 @@ class EatInOrderTest {
     @Test
     void serve() {
         EatInOrderCreateRequest request = createOrderRequest();
-        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        OrderLineItems orderLineItems = OrderLineItems.from(request.orderLineItems());
         EatInOrder order = new EatInOrder(EatInOrderStatus.ACCEPTED, orderLineItems, request.orderTableId());
 
         EatInOrder actual = order.serve();
@@ -88,7 +84,7 @@ class EatInOrderTest {
     @Test
     void complete() {
         EatInOrderCreateRequest request = createOrderRequest();
-        OrderLineItems orderLineItems = OrderLineItems.of(request.orderLineItems(), menuClient);
+        OrderLineItems orderLineItems = OrderLineItems.from(request.orderLineItems());
         EatInOrder order = new EatInOrder(EatInOrderStatus.SERVED, orderLineItems, request.orderTableId());
 
         EatInOrder actual = order.complete(eatInOrderPolicy());

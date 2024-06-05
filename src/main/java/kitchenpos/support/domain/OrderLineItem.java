@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.eatinorders.todo.domain.orders.EatInOrderOrderLineItemPolicy;
+import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -36,9 +36,12 @@ public class OrderLineItem {
         this(null, menuId, price, quantity);
     }
 
-    public OrderLineItem(OrderLineItem orderLineItem, MenuClient menuClient) {
+    public OrderLineItem(OrderLineItem orderLineItem) {
         this(orderLineItem.getMenuId(), orderLineItem.getPrice(), orderLineItem.getQuantity());
-        new EatInOrderOrderLineItemPolicy(menuClient).checkMenu(orderLineItem);
+    }
+
+    public OrderLineItem(OrderLineItemCreateRequest orderLineItem) {
+        this(orderLineItem.menuId(), orderLineItem.price(), orderLineItem.quantity());
     }
 
     public OrderLineItem(Long seq, UUID menuId, BigDecimal price, long quantity) {
