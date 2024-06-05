@@ -3,7 +3,7 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.transaction.Transactional;
 import kitchenpos.exception.IllegalNameException;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.menu.tobe.domain.annotation.DomainService;
+import kitchenpos.annotation.DomainService;
 
 import java.util.Objects;
 

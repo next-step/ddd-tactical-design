@@ -1,4 +1,4 @@
-package kitchenpos.menu.tobe.domain.annotation;
+package kitchenpos.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

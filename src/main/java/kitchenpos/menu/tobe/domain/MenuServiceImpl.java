@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.domain;
 
 import jakarta.transaction.Transactional;
-import kitchenpos.menu.tobe.domain.annotation.DomainService;
+import kitchenpos.annotation.DomainService;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 

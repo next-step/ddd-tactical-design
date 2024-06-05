@@ -23,13 +23,14 @@ public class Menu {
     @Embedded
     private MenuPrice menuPrice;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
+//    @ManyToOne
+//    @JoinColumn(
+//            name = "menu_group_id",
+//            columnDefinition = "binary(16)",
+//            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+//    )
     private MenuGroup menuGroup;
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean menuDisplayStatus;
