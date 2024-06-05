@@ -26,7 +26,8 @@ class TobeMenuTest {
         // given
         DisplayName name = DisplayName.of("후라이드 치킨", purgomalumClient);
         MenuPrice menuPrice = MenuPrice.of(BigDecimal.valueOf(21000L));
-        TobeMenuGroup menuGroup = TobeMenuGroup.create("후라이드 치킨 세트");
+        UUID menuGroup = UUID.randomUUID();
+
         Displayed displayed = Displayed.DISPLAYED;
 
         final BigDecimal price = BigDecimal.valueOf(10000L);
@@ -46,7 +47,8 @@ class TobeMenuTest {
         // given
         DisplayName name = DisplayName.of("후라이드 치킨", purgomalumClient);
         MenuPrice menuPrice = MenuPrice.of(BigDecimal.valueOf(20000L));
-        TobeMenuGroup menuGroup = TobeMenuGroup.create("후라이드 치킨 세트");
+        UUID menuGroup = UUID.randomUUID();
+
         Displayed displayed = Displayed.DISPLAYED;
 
         final BigDecimal price = BigDecimal.valueOf(10000L);
@@ -71,7 +73,7 @@ class TobeMenuTest {
         // given
         DisplayName name = DisplayName.of("후라이드 치킨", purgomalumClient);
         MenuPrice menuPrice = MenuPrice.of(BigDecimal.valueOf(20000L));
-        TobeMenuGroup menuGroup = TobeMenuGroup.create("후라이드 치킨 세트");
+        UUID menuGroup = UUID.randomUUID();
         Displayed displayed = Displayed.DISPLAYED;
 
         final BigDecimal price = BigDecimal.valueOf(10000L);
