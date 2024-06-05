@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -56,7 +57,6 @@ public class OrderTable {
     }
 
     public void clear(){
-        //checkOrder
         this.occupied = false;
     }
 
@@ -74,5 +74,18 @@ public class OrderTable {
 
     public boolean isOccupied() {
         return occupied;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderTable that = (OrderTable) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
