@@ -31,7 +31,7 @@ class MenuServiceV2(
         val productPrices = productClient.getProductPrices(quantityPerProductIds.keys.toList())
         val menuProducts =
             productPrices.map {
-                MenuProductV2.from(
+                MenuProductV2.of(
                     productId = it.id,
                     price = it.price,
                     quantity = quantityPerProductIds[it.id]!!,
@@ -39,7 +39,7 @@ class MenuServiceV2(
             }.toMutableList()
 
         val menu =
-            MenuV2.from(
+            MenuV2.of(
                 name = request.name,
                 price = request.price,
                 displayed = request.displayed,
@@ -49,7 +49,7 @@ class MenuServiceV2(
             )
 
         val saved = menuRepository.save(menu)
-        return CreateMenuResponse.of(saved)
+        return CreateMenuResponse.from(saved)
     }
 
     fun changeMenuPrice(
@@ -58,7 +58,7 @@ class MenuServiceV2(
     ): ChangeMenuPriceResponse {
         val menu = menuRepository.getMenuById(menuId)
         menu.changeMenuPrice(price = request.price)
-        return ChangeMenuPriceResponse.of(menu)
+        return ChangeMenuPriceResponse.from(menu)
     }
 
     fun display(menuId: UUID): UUID {
@@ -75,6 +75,6 @@ class MenuServiceV2(
 
     fun findAll(): GetMenusResponse {
         val menus = menuRepository.findAll()
-        return GetMenusResponse.of(menus)
+        return GetMenusResponse.from(menus)
     }
 }

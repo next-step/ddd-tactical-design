@@ -4,10 +4,10 @@ import kitchenpos.tobe.menu.domain.MenuPurgomalumClient
 import kitchenpos.tobe.menu.domain.entity.MenuGroupV2
 import kitchenpos.tobe.menu.domain.entity.MenuV2
 import kitchenpos.tobe.product.domain.entity.ProductV2
-import tobe.domain.MenuGroupFixtures.createMenuGroup
-import tobe.domain.MenuProductsFixtures.createMenuProduct
+import tobe.domain.MenuGroupV2Fixtures.createMenuGroup
+import tobe.domain.MenuProductV2Fixtures.createMenuProduct
 
-object MenuFixtures {
+object MenuV2Fixtures {
     fun createMenu(
         menuGroup: MenuGroupV2? = null,
         product: ProductV2? = null,
@@ -19,7 +19,7 @@ object MenuFixtures {
                 }
             }
 
-        return MenuV2.from(
+        return MenuV2.of(
             name = "후라이드치킨",
             price = 16000.toBigDecimal(),
             displayed = true,

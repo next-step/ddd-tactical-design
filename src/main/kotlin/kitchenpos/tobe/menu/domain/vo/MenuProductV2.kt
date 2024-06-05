@@ -24,7 +24,7 @@ class MenuProductV2 private constructor(
     val productId: UUID,
 ) {
     companion object {
-        fun from(
+        fun of(
             price: BigDecimal,
             quantity: Long,
             productId: UUID,

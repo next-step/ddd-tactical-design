@@ -14,7 +14,7 @@ class ProductNameTest : DescribeSpec() {
                     val productPurgomalumClient = FakeProductPugomalumClient()
                     context("정상적인 상품 이름이 주어졌을 때") {
                         it("ProductName 객체를 생성한다") {
-                            val productName = ProductName.from("테스트 상품 이름", productPurgomalumClient)
+                            val productName = ProductName.of("테스트 상품 이름", productPurgomalumClient)
                             productName.name shouldBe "테스트 상품 이름"
                         }
                     }
@@ -22,7 +22,7 @@ class ProductNameTest : DescribeSpec() {
                     context("비속어가 포함된 상품 이름이 주어졌을 때") {
                         it("ProductNameException을 던진다") {
                             shouldThrow<IllegalArgumentException> {
-                                ProductName.from("욕1", productPurgomalumClient)
+                                ProductName.of("욕1", productPurgomalumClient)
                             }.message shouldBe "상품명에 욕설이 포함되어 있습니다."
                         }
                     }
@@ -30,7 +30,7 @@ class ProductNameTest : DescribeSpec() {
                     context("공백 상품 이름이 주어졌을 때") {
                         it("ProductNameException을 던진다") {
                             shouldThrow<IllegalArgumentException> {
-                                ProductName.from("", productPurgomalumClient)
+                                ProductName.of("", productPurgomalumClient)
                             }.message shouldBe "상품명은 공백이 될 수 없습니다."
                         }
                     }

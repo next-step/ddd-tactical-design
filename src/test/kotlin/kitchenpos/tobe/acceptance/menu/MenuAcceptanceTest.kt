@@ -6,9 +6,9 @@ import kitchenpos.tobe.menu.domain.repository.MenuGroupRepositoryV2
 import kitchenpos.tobe.menu.domain.repository.MenuRepositoryV2
 import kitchenpos.tobe.product.domain.repository.ProductRepositoryV2
 import org.springframework.boot.test.web.server.LocalServerPort
-import tobe.domain.MenuFixtures.createMenu
-import tobe.domain.MenuGroupFixtures.createMenuGroup
-import tobe.domain.ProductFixtures.createProduct
+import tobe.domain.MenuGroupV2Fixtures.createMenuGroup
+import tobe.domain.MenuV2Fixtures.createMenu
+import tobe.domain.ProductV2Fixtures.createProduct
 
 class MenuAcceptanceTest(
     @LocalServerPort
@@ -56,10 +56,7 @@ class MenuAcceptanceTest(
 
             `when`("메뉴의 가격을 변경하면") {
                 then("가격이 변경된다.") {
-                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                     val product = productRepository.save(createProduct())
-                    println(product.id)
-                    println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
                     val menuGroup = menuGroupRepository.save(createMenuGroup())
                     val menu = menuRepository.save(createMenu(menuGroup, product))
 

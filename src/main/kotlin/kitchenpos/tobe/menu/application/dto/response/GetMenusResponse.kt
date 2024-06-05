@@ -29,7 +29,7 @@ data class GetMenusResponse(
     )
 
     companion object {
-        fun of(menus: List<MenuV2>): GetMenusResponse {
+        fun from(menus: List<MenuV2>): GetMenusResponse {
             return GetMenusResponse(
                 menus =
                     menus.map {

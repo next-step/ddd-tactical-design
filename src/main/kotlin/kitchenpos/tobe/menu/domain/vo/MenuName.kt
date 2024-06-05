@@ -10,7 +10,7 @@ class MenuName private constructor(
     val name: String,
 ) {
     companion object {
-        fun from(
+        fun of(
             name: String,
             menuPurgomalumClient: MenuPurgomalumClient,
         ): MenuName {

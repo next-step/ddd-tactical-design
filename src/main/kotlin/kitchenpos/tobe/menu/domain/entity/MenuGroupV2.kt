@@ -16,7 +16,7 @@ class MenuGroupV2(
     val name: String,
 ) {
     companion object {
-        fun of(name: String): MenuGroupV2 {
+        fun from(name: String): MenuGroupV2 {
             return MenuGroupV2(
                 id = UUID.randomUUID(),
                 name = name,

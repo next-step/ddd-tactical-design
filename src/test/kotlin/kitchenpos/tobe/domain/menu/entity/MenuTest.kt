@@ -5,9 +5,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import kitchenpos.tobe.domain.menu.FakeMenuPugomalumClient
 import kitchenpos.tobe.menu.domain.entity.MenuV2
-import tobe.domain.MenuFixtures.createMenu
-import tobe.domain.MenuGroupFixtures.createMenuGroup
-import tobe.domain.MenuProductsFixtures.createMenuProduct
+import tobe.domain.MenuGroupV2Fixtures.createMenuGroup
+import tobe.domain.MenuProductV2Fixtures.createMenuProduct
+import tobe.domain.MenuV2Fixtures.createMenu
 
 class MenuTest : DescribeSpec() {
     init {
@@ -46,7 +46,7 @@ class MenuTest : DescribeSpec() {
                         val menuPurgomalumClient = FakeMenuPugomalumClient()
 
                         shouldThrow<IllegalArgumentException> {
-                            MenuV2.from(
+                            MenuV2.of(
                                 name = "욕1",
                                 price = 16000.toBigDecimal(),
                                 displayed = true,
@@ -63,7 +63,7 @@ class MenuTest : DescribeSpec() {
                         val menuPurgomalumClient = FakeMenuPugomalumClient()
 
                         shouldThrow<IllegalArgumentException> {
-                            MenuV2.from(
+                            MenuV2.of(
                                 name = "테스트 메뉴 이름",
                                 price = 20000.toBigDecimal(),
                                 displayed = true,
