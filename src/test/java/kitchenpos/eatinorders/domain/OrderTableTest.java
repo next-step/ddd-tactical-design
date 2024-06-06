@@ -85,4 +85,5 @@ public class OrderTableTest {
                 () -> Assertions.assertThat(주문_테이블.isNotOccupied()).isTrue()
         );
     }
+
 }

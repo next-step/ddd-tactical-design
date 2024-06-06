@@ -58,4 +58,5 @@ public class OrderTest {
         OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }
+
 }

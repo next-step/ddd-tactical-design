@@ -77,4 +77,5 @@ public class OrderTable {
     public int getNumberOfGuests() {
         return numberOfGuests.getNumberOfGuests();
     }
+
 }

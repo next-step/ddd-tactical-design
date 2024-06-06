@@ -5,7 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.entity.OrderTable;
 import kitchenpos.eatinorders.tobe.domain.repository.OrderTableRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
 import java.util.NoSuchElementException;
 
 @Component

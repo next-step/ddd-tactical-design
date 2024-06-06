@@ -13,5 +13,4 @@ public interface EatInOrderRepository {
     Optional<EatInOrder> findById(UUID id);
 
     List<EatInOrder> findAllByOrderTableId(UUID id);
-
 }

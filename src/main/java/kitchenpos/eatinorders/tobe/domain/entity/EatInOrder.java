@@ -87,4 +87,5 @@ public class EatInOrder {
     public UUID getOrderTableId() {
         return orderTableId;
     }
+
 }

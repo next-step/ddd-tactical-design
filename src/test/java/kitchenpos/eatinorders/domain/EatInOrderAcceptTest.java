@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-@DisplayName("주문 ACL 서비스 테스트")
+@DisplayName("매장 주문 접수 도메인 서비스 테스트")
 public class EatInOrderAcceptTest {
     private OrderTableRepository orderTableRepository;
     private MenuRepository menuRepository;

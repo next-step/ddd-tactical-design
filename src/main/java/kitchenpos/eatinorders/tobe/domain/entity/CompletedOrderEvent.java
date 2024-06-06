@@ -12,4 +12,5 @@ public class CompletedOrderEvent {
     public UUID getOrderTableId() {
         return orderTableId;
     }
+
 }

@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FakeEatInOrderRepository implements EatInOrderRepository {
+
     private Map<UUID, EatInOrder> repository = new HashMap<>();
 
     @Override

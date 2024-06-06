@@ -24,4 +24,5 @@ public class OrderLineItemTest {
                 () -> Assertions.assertThat(주문_항목.getPrice()).isNotNull()
         );
     }
+
 }

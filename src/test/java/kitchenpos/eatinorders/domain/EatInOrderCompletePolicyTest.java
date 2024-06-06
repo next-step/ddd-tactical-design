@@ -29,7 +29,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
-@DisplayName("매장 주문 도메인 서비스 테스트")
+@DisplayName("매장 주문 완료 도메인 서비스 테스트")
 public class EatInOrderCompletePolicyTest {
     @Autowired
     private EatInOrderCompletePolicy completePolicy;

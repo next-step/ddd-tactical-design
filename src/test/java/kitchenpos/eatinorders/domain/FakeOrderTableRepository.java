@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class FakeOrderTableRepository implements OrderTableRepository {
+
     private final Map<UUID, OrderTable> repository = new HashMap<>();
 
     @Override
