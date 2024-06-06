@@ -11,7 +11,7 @@ public class MenuGroupFixture {
         return menuGroup;
     }
 
-    public static MenuGroup createChicken(){
+    public static MenuGroup createChicken() {
         MenuGroup menuGroup = new MenuGroup();
         menuGroup.setId(UUID.randomUUID());
         menuGroup.setName("치킨");

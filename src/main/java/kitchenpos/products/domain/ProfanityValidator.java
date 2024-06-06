@@ -1,5 +1,8 @@
 package kitchenpos.products.domain;
 
-public interface PurgomalumClient {
+public interface ProfanityValidator {
+
     boolean containsProfanity(String text);
+
+    void validate(String text);
 }

@@ -6,23 +6,26 @@ import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.tobe.Product;
 
 public class MenuFixture {
 
-    public static Menu createRequest(Long price, MenuGroup menuGroup, Product product, Integer quantity) {
+    public static Menu createRequest(Long price, MenuGroup menuGroup, Product product,
+            Integer quantity) {
         return createRequest("후라이드1+1", price, menuGroup, true, product, quantity);
     }
 
-    public static Menu createRequest(String name, Long price, MenuGroup menuGroup, Product product, Integer quantity) {
+    public static Menu createRequest(String name, Long price, MenuGroup menuGroup, Product product,
+            Integer quantity) {
         return createRequest(name, price, menuGroup, true, product, quantity);
     }
 
-    public static Menu createRequest(String name, Long price, MenuGroup menuGroup, Boolean displayed, Product product, Integer quantity){
+    public static Menu createRequest(String name, Long price, MenuGroup menuGroup,
+            Boolean displayed, Product product, Integer quantity) {
         Menu menu = new Menu();
         menu.setName(name);
         menu.setPrice(BigDecimal.valueOf(price));
-        if(menuGroup != null){
+        if (menuGroup != null) {
             menu.setMenuGroupId(menuGroup.getId());
         }
         menu.setDisplayed(displayed);
@@ -35,13 +38,13 @@ public class MenuFixture {
         return menu;
     }
 
-    public static Menu changePriceRequest(Long price){
+    public static Menu changePriceRequest(Long price) {
         Menu menu = new Menu();
         menu.setPrice(BigDecimal.valueOf(price));
         return menu;
     }
 
-    public static Menu createFriedOnePlusOne(MenuGroup menuGroup, Product product){
+    public static Menu createFriedOnePlusOne(MenuGroup menuGroup, Product product) {
         Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드1+1");

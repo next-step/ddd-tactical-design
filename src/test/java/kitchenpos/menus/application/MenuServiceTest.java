@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import kitchenpos.fake.FakePurgomalumClient;
+import kitchenpos.fake.FakeProfanityValidator;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
 import kitchenpos.fake.InMemoryProductRepository;
@@ -18,9 +18,9 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.ProfanityValidator;
+import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -34,14 +34,14 @@ class MenuServiceTest {
     private MenuRepository menuRepository = new InMemoryMenuRepository();
     private MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
     private ProductRepository productRepository = new InMemoryProductRepository();
-    private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+    private ProfanityValidator profanityValidator = new FakeProfanityValidator();
 
     private MenuService menuService;
 
     @BeforeEach
     void setUp() {
         menuService = new MenuService(menuRepository, menuGroupRepository, productRepository,
-                purgomalumClient);
+                profanityValidator);
     }
 
     @Test

@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import kitchenpos.fake.FakePurgomalumClient;
+import kitchenpos.fake.FakeProfanityValidator;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
 import kitchenpos.fake.InMemoryProductRepository;
@@ -18,9 +17,11 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.ProfanityValidator;
+import kitchenpos.products.domain.tobe.ProductPrice;
+import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -39,18 +40,18 @@ class ProductServiceTest {
 
     private MenuRepository menuRepository = new InMemoryMenuRepository();
 
-    private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
+    private ProfanityValidator profanityValidator = new FakeProfanityValidator();
 
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductService(productRepository, menuRepository, profanityValidator);
     }
 
     @Test
     void 상품을_등록할_수_있다() {
-        Product request = ProductFixture.createRequest("후라이드", 20_000L);
+        ProductCreateRequest request = ProductFixture.createRequest("후라이드", 20_000L);
         Product actual = productService.create(request);
 
         assertThat(actual.getId()).isNotNull();
@@ -59,25 +60,24 @@ class ProductServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"비속어", "욕설이 포함된 단어"})
     void 상품의_이름에_욕설이_포함되어있으면_예외를_던진다(final String name) {
-        Product request = ProductFixture.createRequest(name);
+        ProductCreateRequest request = ProductFixture.createRequest(name);
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> productService.create(request));
     }
 
     @Test
     void 상품가격이_0보다_작으면_예외를_던진다() {
-        Product request = ProductFixture.createRequest(-10_000L);
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> productService.create(request));
+                .isThrownBy(() -> productService.create(ProductFixture.createRequest(-10_000L)));
     }
 
     @Test
     void 상품의_가격을_변경한다() {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
-        Product changePriceRequest = ProductFixture.changePriceRequest(15_000L);
 
-        Product actualProduct = productService.changePrice(saved.getId(), changePriceRequest);
+        Product actualProduct = productService.changePrice(saved.getId(),
+                new ProductPrice(BigDecimal.valueOf(15_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
@@ -90,13 +90,14 @@ class ProductServiceTest {
     void 상품가격변경시_수정한_상품이_속해있는_메뉴가격이_상품가격x상품갯수의_총합을_넘는다면_해당_메뉴는_손님들에게_숨긴다() {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
-        Product changePriceRequest = ProductFixture.changePriceRequest(10_000L);
 
-        Product actualProduct = productService.changePrice(saved.getId(), changePriceRequest);
+        Product actualProduct = productService.changePrice(saved.getId(),
+                new ProductPrice(BigDecimal.valueOf(12_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
-                () -> assertThat(actualProduct.getPrice()).isEqualTo(BigDecimal.valueOf(10_000L)),
+                () -> assertThat(
+                        actualProduct.isSamePrice(new ProductPrice(BigDecimal.valueOf(12_000L)))).isTrue(),
                 () -> assertThat(actualMenu.isDisplayed()).isFalse()
         );
     }

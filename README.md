@@ -382,6 +382,8 @@ classDiagram
   OrderLineItem "1" ..> "1" Menu
   Menu "1" ..> "*" MenuProduct
   MenuProduct "1" ..> "1" Product
+  Product "1" ..> "1" ProductName
+  Product "1" ..> "1" ProductPrice
 
   class OrderLineItem {
     -Long seq
@@ -428,9 +430,17 @@ classDiagram
 
   class Product {
     -UUID id
-    -String name
-    -BigDecimal price
+    -ProductName name
+    -ProductPrice price
     
     +changePrice()
   }
+
+    class ProductName {
+        -String name
+    }
+
+    class ProductPrice {
+        -BigDecimal price
+    }
 ```
