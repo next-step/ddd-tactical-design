@@ -30,8 +30,4 @@ public class ProductCreateRequest {
     public Product to() {
         return new Product(name, price);
     }
-
-    public Name getName() {
-        return name;
-    }
 }

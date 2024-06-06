@@ -17,10 +17,10 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.tobe.Price;
-import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.tobe.Price;
+import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,9 +67,8 @@ class ProductServiceTest {
 
     @Test
     void 상품가격이_0보다_작으면_예외를_던진다() {
-        ProductCreateRequest request = ProductFixture.createRequest(-10_000L);
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> productService.create(request));
+                .isThrownBy(() -> productService.create(ProductFixture.createRequest(-10_000L)));
     }
 
     @Test
@@ -77,7 +76,8 @@ class ProductServiceTest {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
 
-        Product actualProduct = productService.changePrice(saved.getId(), new Price(BigDecimal.valueOf(15_000L)));
+        Product actualProduct = productService.changePrice(saved.getId(),
+                new Price(BigDecimal.valueOf(15_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
@@ -91,11 +91,13 @@ class ProductServiceTest {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
 
-        Product actualProduct = productService.changePrice(saved.getId(), new Price(BigDecimal.valueOf(12_000L)));
+        Product actualProduct = productService.changePrice(saved.getId(),
+                new Price(BigDecimal.valueOf(12_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
-                () -> assertThat(actualProduct.isSamePrice(new Price(BigDecimal.valueOf(12_000L)))).isTrue(),
+                () -> assertThat(
+                        actualProduct.isSamePrice(new Price(BigDecimal.valueOf(12_000L)))).isTrue(),
                 () -> assertThat(actualMenu.isDisplayed()).isFalse()
         );
     }
