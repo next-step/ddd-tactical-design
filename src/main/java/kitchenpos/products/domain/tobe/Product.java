@@ -28,7 +28,11 @@ public class Product {
     }
 
     public Product(String name, BigDecimal price) {
-        this(UUID.randomUUID(), new Name(name), new Price(price));
+        this(new Name(name), new Price(price));
+    }
+
+    public Product(Name name, Price price) {
+        this(UUID.randomUUID(), name, price);
     }
 
     public Product(UUID id, Name name, Price price) {
