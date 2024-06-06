@@ -34,7 +34,7 @@ public class Menu {
 
     public static Menu of(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean menuDisplayStatus, MenuProducts menuProducts) {
         validatePrice(menuPrice);
-        validateMenuProductPrice(menuPrice.getPrice().compareTo(menuProducts.getTotalPrice()) > 0, new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice()));
+        validateMenuProductPrice(menuPrice, menuProducts);
         return new Menu(menuName, menuPrice, menuGroupId, menuDisplayStatus, menuProducts);
     }
 
@@ -47,9 +47,9 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    private static void validateMenuProductPrice(boolean menuPrice, IllegalPriceException exception) {
-        if (menuPrice) {
-            throw exception;
+    private static void validateMenuProductPrice(MenuPrice menuPrice, MenuProducts menuProducts) {
+        if (menuPrice.getPrice().compareTo(menuProducts.getTotalPrice()) > 0) {
+            throw new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice());
         }
     }
 
@@ -57,12 +57,17 @@ public class Menu {
         if (Objects.isNull(menuPrice)) {
             throw new IllegalPriceException("가격정보는 필수로 입력해야 합니다.");
         }
-
     }
 
     public void changeMenuPrice(Long newPrice) {
-        validateMenuProductPrice(newPrice.compareTo(menuProducts.getTotalPrice()) > 0, new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice));
+        validateMenuProductPrice(newPrice);
         this.menuPrice = new MenuPrice(newPrice);
+    }
+
+    private void validateMenuProductPrice(Long newPrice) {
+        if (newPrice.compareTo(menuProducts.getTotalPrice()) > 0) {
+            throw new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", newPrice);
+        }
     }
 
     public void changeMenuDisplayStatus(boolean newStatus) {

@@ -45,7 +45,7 @@
 
 
 ### 피드백 TODO
-- [ ] boolean 값을 받기 보단 비즈니스 로직을 메서드 내부에서 처리 (Exception)
+- [X] boolean 값을 받기 보단 비즈니스 로직을 메서드 내부에서 처리 (Exception)
 - [x] Menu 에서 가격검증 -> 삭제
 - [ ] 메뉴의 노출 / 비노출 정책은 Product의 가격 변경이 일어나는 경우 필요한 요구사항입니다. 도메인 서비스를 구현하는 주체가 어디가 될지 고민해보세요 ! 
   - [link](https://github.com/next-step/ddd-tactical-design/pull/295#discussion_r1623946968)
