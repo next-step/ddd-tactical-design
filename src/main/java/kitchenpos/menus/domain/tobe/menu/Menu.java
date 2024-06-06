@@ -49,7 +49,10 @@ public class Menu {
 
     return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
   }
+  public static Menu of(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
 
+    return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
+  }
   private void validate(final MenuPrice menuPrice, final BigDecimal price, final MenuProducts menuProducts) {
     if (menuPrice.isBigger(price)) {
       throw new IllegalArgumentException("`메뉴 상품 가격`의 총액보다 `메뉴 가격`이 클 수 없다.");
@@ -81,15 +84,15 @@ public class Menu {
   }
 
   public MenuProducts getMenuProducts() {
-    return getMenuProducts();
+    return menuProducts;
   }
 
   public boolean isDisplayed() {
     return displayed;
   }
 
-  public MenuPrice getMenuPrice() {
-    return menuPrice;
+  public BigDecimal getMenuPrice() {
+    return menuPrice.getPrice();
   }
 
   public MenuName getMenuName() {
