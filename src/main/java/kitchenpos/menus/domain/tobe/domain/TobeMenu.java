@@ -57,4 +57,12 @@ public class TobeMenu {
     public void changePrice(int price) {
         this.price = Price.of(price);
     }
+
+    public void display() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
 }
