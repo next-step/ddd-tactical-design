@@ -1,4 +1,4 @@
-package kitchenpos.menuproduct.tobe.domain;
+package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.*;
 

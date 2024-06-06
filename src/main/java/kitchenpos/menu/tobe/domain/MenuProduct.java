@@ -1,9 +1,9 @@
-package kitchenpos.menuproduct.tobe.domain;
+package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.exception.IllegalQuantityException;
-import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.product.tobe.domain.Product;
+
+import java.util.UUID;
 
 @Table(name = "menu_product")
 @Entity
@@ -18,28 +18,26 @@ public class MenuProduct {
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "product_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
+    private UUID productId;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    private Long price;
+    private long price;
 
     protected MenuProduct() {
 
     }
 
-    public MenuProduct(Product product, long quantity) {
+    public static MenuProduct of(final UUID productId, final long price,  final long quantity) {
         validateQuantity(quantity);
-        this.product = product;
+        return new MenuProduct(productId, price, quantity);
+    }
+
+    private MenuProduct(final UUID productId, final long price,  final long quantity) {
+        this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
-        calculateMenuProductPrice(product, quantity);
     }
 
     private static void validateQuantity(long quantity) {
@@ -48,13 +46,13 @@ public class MenuProduct {
         }
     }
 
-    private void calculateMenuProductPrice(Product product, long quantity) {
-        this.price = product.getProductPrice().longValue() * quantity;
+    public Long getMenuProductPrice() {
+        return price * quantity;
     }
 
 
-    public Product getProduct() {
-        return product;
+    public UUID getProductId() {
+        return productId;
     }
 
     public long getQuantity() {

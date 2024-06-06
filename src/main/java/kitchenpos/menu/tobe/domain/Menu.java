@@ -3,8 +3,6 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.exception.CanNotChangeDisplay;
 import kitchenpos.exception.IllegalPriceException;
-import kitchenpos.menuGroup.tobe.domain.MenuGroup;
-import kitchenpos.menuproduct.tobe.domain.MenuProducts;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -23,13 +21,6 @@ public class Menu {
     @Embedded
     private MenuPrice menuPrice;
 
-//    @ManyToOne
-//    @JoinColumn(
-//            name = "menu_group_id",
-//            columnDefinition = "binary(16)",
-//            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-//    )
-    private MenuGroup menuGroup;
     private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
@@ -41,14 +32,17 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuName menuName, MenuPrice menuPrice, MenuGroup menuGroup, boolean menuDisplayStatus, MenuProducts menuProducts) {
+    public static Menu of(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean menuDisplayStatus, MenuProducts menuProducts) {
         validatePrice(menuPrice);
-
         validateMenuProductPrice(menuPrice.getPrice().compareTo(menuProducts.getTotalPrice()) > 0, new IllegalPriceException("메뉴상품의 총 가격을 초과할 수 없습니다.", menuPrice.getPrice()));
+        return new Menu(menuName, menuPrice, menuGroupId, menuDisplayStatus, menuProducts);
+    }
+
+    private Menu(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean menuDisplayStatus, MenuProducts menuProducts) {
         this.id = UUID.randomUUID();
         this.menuName = menuName;
         this.menuPrice = menuPrice;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.menuDisplayStatus = menuDisplayStatus;
         this.menuProducts = menuProducts;
     }
@@ -94,8 +88,8 @@ public class Menu {
         return menuPrice.getPrice();
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
+    public UUID getMenuGroup() {
+        return menuGroupId;
     }
 
     public boolean isMenuDisplayStatus() {

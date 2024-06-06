@@ -1,6 +1,5 @@
 package kitchenpos.menu.tobe.domain;
 
-import kitchenpos.menuproduct.tobe.domain.MenuProduct;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 
