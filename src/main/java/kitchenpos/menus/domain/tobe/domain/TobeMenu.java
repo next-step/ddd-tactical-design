@@ -43,8 +43,11 @@ public class TobeMenu {
         this.id = UUID.randomUUID();
         this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
-        this.menuGroupId = menuGroupId;
         this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
+        if (price > this.menuProducts.getTotalPrice()) {
+            throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
+        }
+        this.menuGroupId = menuGroupId;
     }
 
     public static TobeMenu of(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {

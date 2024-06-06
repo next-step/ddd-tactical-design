@@ -49,6 +49,19 @@ class TobeMenuTest {
                 .isThrownBy(() -> createTobeMenu(emptyMenuProducts));
     }
 
+    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
+    @Test
+    void case_4() {
+        // given
+        var menuProduct = new TobeMenuProduct(1, 5_000, UUID.randomUUID());
+        var menuProducts = List.of(menuProduct);
+
+        // when
+        // then
+        Assertions.assertThatIllegalStateException()
+                .isThrownBy(() -> createTobeMenu(menuProducts));
+    }
+
     private TobeMenu createTobeMenu(int price) {
         var name = "후라이드";
         var profanities = new FakeProfanities("비속어");
