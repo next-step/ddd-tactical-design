@@ -12,7 +12,7 @@ public class TobeMenuProducts {
             name = "menu_id",
             nullable = false,
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu_2")
     )
     private final List<TobeMenuProduct> menuProducts;
 

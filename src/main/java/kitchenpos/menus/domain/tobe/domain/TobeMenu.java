@@ -26,7 +26,7 @@ public class TobeMenu {
     @JoinColumn(
             name = "menu_group_id",
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group_2")
     )
     private MenuGroup menuGroup;
 
