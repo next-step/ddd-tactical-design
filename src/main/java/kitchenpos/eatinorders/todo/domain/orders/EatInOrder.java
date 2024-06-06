@@ -52,16 +52,20 @@ public class EatInOrder {
         this(EatInOrderStatus.WAITING, orderLineItems, orderTableId);
     }
 
-    public EatInOrder(EatInOrderStatus status, List<OrderLineItem> orderLineItems, UUID orderTableId) {
+    protected EatInOrder(EatInOrderStatus status, List<OrderLineItem> orderLineItems, UUID orderTableId) {
         this(status, new OrderLineItems(orderLineItems), orderTableId);
     }
 
-    public EatInOrder(EatInOrderStatus status, OrderLineItems orderLineItems, UUID orderTableId) {
+    protected EatInOrder(EatInOrderStatus status, OrderLineItems orderLineItems, UUID orderTableId) {
         this.id = UUID.randomUUID();
         this.status = status;
         this.orderDateTime = LocalDateTime.now();
         this.orderLineItems = orderLineItems;
         this.orderTableId = orderTableId;
+    }
+
+    public static EatInOrder of(EatInOrderStatus status, List<OrderLineItem> orderLineItems, UUID orderTableId) {
+        return new EatInOrder(status, orderLineItems, orderTableId);
     }
 
     public static EatInOrder create(OrderLineItems orderLineItems, UUID orderTableId, OrderTableClient orderTableClient) {

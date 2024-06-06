@@ -65,7 +65,7 @@ public class Fixtures {
     }
 
     public static EatInOrder order(final EatInOrderStatus status, final OrderTable orderTable) {
-        return new EatInOrder(status, List.of(orderLineItem()), orderTable.getId());
+        return EatInOrder.of(status, List.of(orderLineItem()), orderTable.getId());
     }
 
     public static OrderLineItem orderLineItem() {
