@@ -49,6 +49,6 @@
 - [x] Menu 에서 가격검증 -> 삭제
 - [ ] 메뉴의 노출 / 비노출 정책은 Product의 가격 변경이 일어나는 경우 필요한 요구사항입니다. 도메인 서비스를 구현하는 주체가 어디가 될지 고민해보세요 ! 
   - [link](https://github.com/next-step/ddd-tactical-design/pull/295#discussion_r1623946968)
-- [ ] menuService -> getter대신 메시지보내는 구조로 변경
+- [x] menuService -> getter대신 메시지보내는 구조로 변경
 - [ ] 도메인 서비스는 어떻게 호출될수 있을까요 ?
 

@@ -77,6 +77,10 @@ public class Menu {
         this.menuDisplayStatus = newStatus;
     }
 
+    public boolean isMenuPriceHigherThanTotalPrice() {
+        return getMenuPrice().compareTo(getMenuProducts().getTotalPrice()) > 0;
+    }
+
 
     public UUID getId() {
         return id;

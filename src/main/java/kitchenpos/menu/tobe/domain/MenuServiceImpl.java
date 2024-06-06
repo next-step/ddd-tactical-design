@@ -30,7 +30,7 @@ public class MenuServiceImpl implements MenuService {
 
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
-            if (menu.getMenuPrice().compareTo(menu.getMenuProducts().getTotalPrice()) > 0) {
+            if (menu.isMenuPriceHigherThanTotalPrice()) {
                 menu.changeMenuDisplayStatus(false);
             }
         }

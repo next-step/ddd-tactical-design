@@ -12,7 +12,7 @@ public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long seq;
+    private long seq;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
@@ -46,7 +46,7 @@ public class MenuProduct {
         }
     }
 
-    public Long getMenuProductPrice() {
+    public long getMenuProductPrice() {
         return price * quantity;
     }
 
@@ -59,7 +59,7 @@ public class MenuProduct {
         return quantity;
     }
 
-    public Long getPrice() {
+    public long getPrice() {
         return price;
     }
 
