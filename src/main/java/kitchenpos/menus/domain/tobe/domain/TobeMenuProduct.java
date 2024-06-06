@@ -13,11 +13,10 @@ public class TobeMenuProduct {
     @Id
     private Long seq;
 
-    @Column(name = "quantity", nullable = false)
+
     @Embedded
     private Quantity quantity;
 
-    @Column(name = "price", nullable = false)
     @Embedded
     private Price price;
 

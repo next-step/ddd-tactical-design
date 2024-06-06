@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,6 +9,7 @@ import java.util.Objects;
 @Embeddable
 public class MenuGroupName {
 
+    @Column(name = "name", nullable = false)
     private String name;
 
     private MenuGroupName() {

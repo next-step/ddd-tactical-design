@@ -1,5 +1,6 @@
 package kitchenpos.menus.domain.tobe.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
@@ -7,6 +8,7 @@ import java.util.Objects;
 @Embeddable
 public class Quantity {
 
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
     private Quantity() {

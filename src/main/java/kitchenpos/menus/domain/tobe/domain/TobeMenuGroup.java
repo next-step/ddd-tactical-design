@@ -12,7 +12,6 @@ public class TobeMenuGroup {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
     @Embedded
     private MenuGroupName name;
 
