@@ -31,6 +31,10 @@ public class TobeProduct {
         this.price = Price.of(price);
     }
 
+    public void changePrice(Price price) {
+        this.price = price;
+    }
+
     public String getName() {
         return name.getName();
     }
