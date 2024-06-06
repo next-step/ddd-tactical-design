@@ -3,6 +3,7 @@ package kitchenpos.menus.domain.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.shared.domain.Profanities;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,16 +33,22 @@ public class TobeMenu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<TobeMenuProduct> menuProducts;
+    @Embedded
+    private TobeMenuProducts menuProducts;
 
-    private TobeMenu() {
+    @Transient
+    private UUID menuGroupId;
+
+    private TobeMenu(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {
+        this.id = UUID.randomUUID();
+        this.name = DisplayedName.of(name, profanities);
+        this.price = Price.of(price);
+        this.menuGroupId = menuGroupId;
+        this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
+    }
+
+    public static TobeMenu of(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {
+        return new TobeMenu(name, price, profanities, menuGroupId, tobeMenuProducts);
     }
 
 }
