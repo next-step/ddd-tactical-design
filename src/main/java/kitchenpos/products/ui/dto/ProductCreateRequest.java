@@ -1,7 +1,7 @@
 package kitchenpos.products.ui.dto;
 
 import java.math.BigDecimal;
-import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Name;
 import kitchenpos.products.domain.tobe.Price;
 import kitchenpos.products.domain.tobe.Product;
@@ -12,7 +12,7 @@ public class ProductCreateRequest {
 
     private final Price price;
 
-    public ProductCreateRequest(String name, BigDecimal price){
+    public ProductCreateRequest(String name, BigDecimal price) {
         this(new Name(name), new Price(price));
     }
 
@@ -21,8 +21,8 @@ public class ProductCreateRequest {
         this.price = price;
     }
 
-    public void validateName(PurgomalumClient purgomalumClient){
-        if(purgomalumClient.containsProfanity(name.getName())){
+    public void validateName(ProfanityValidator profanityValidator) {
+        if (profanityValidator.containsProfanity(name.getName())) {
             throw new IllegalArgumentException();
         }
     }

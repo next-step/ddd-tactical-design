@@ -3,7 +3,6 @@ package kitchenpos.products.domain.tobe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
-import kitchenpos.products.domain.PurgomalumClient;
 
 @Embeddable
 public class Name {
@@ -15,7 +14,7 @@ public class Name {
     }
 
     public Name(String name) {
-        if(Objects.isNull(name)){
+        if (Objects.isNull(name)) {
             throw new IllegalArgumentException();
         }
 

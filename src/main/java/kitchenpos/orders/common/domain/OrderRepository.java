@@ -6,6 +6,7 @@ import java.util.UUID;
 import kitchenpos.orders.eatin.domain.OrderTable;
 
 public interface OrderRepository {
+
     Order save(Order order);
 
     Optional<Order> findById(UUID id);

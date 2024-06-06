@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.products.domain.PurgomalumClient;
 
 @Table(name = "product")
 @Entity
@@ -42,7 +41,7 @@ public class Product {
     }
 
     public void changePrice(Price price) {
-        if(Objects.isNull(price)){
+        if (Objects.isNull(price)) {
             throw new IllegalArgumentException();
         }
         this.price = price;

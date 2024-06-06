@@ -8,7 +8,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Price;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
@@ -20,21 +20,21 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityValidator profanityValidator;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final ProfanityValidator profanityValidator
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityValidator = profanityValidator;
     }
 
     @Transactional
     public Product create(final ProductCreateRequest request) {
-        request.validateName(purgomalumClient);
+        request.validateName(profanityValidator);
         return productRepository.save(request.to());
     }
 

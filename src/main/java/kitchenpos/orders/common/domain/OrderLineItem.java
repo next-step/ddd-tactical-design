@@ -10,14 +10,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.menus.domain.Menu;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.menus.domain.Menu;
 
 @Table(name = "order_line_item")
 @Entity
 public class OrderLineItem {
+
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -25,9 +25,9 @@ public class OrderLineItem {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
+            name = "menu_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
     )
     private Menu menu;
 

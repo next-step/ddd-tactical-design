@@ -1,8 +1,6 @@
 package kitchenpos.fixture;
 
 import java.math.BigDecimal;
-import kitchenpos.fake.FakePurgomalumClient;
-import kitchenpos.products.domain.PurgomalumClient;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 

@@ -1,5 +1,8 @@
 package kitchenpos.menus.ui;
 
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.List;
-import java.util.UUID;
-
 @RequestMapping("/api/menus")
 @RestController
 public class MenuRestController {
+
     private final MenuService menuService;
 
     public MenuRestController(final MenuService menuService) {
@@ -28,11 +28,12 @@ public class MenuRestController {
     public ResponseEntity<Menu> create(@RequestBody final Menu request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId,
+            @RequestBody final Menu request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 
