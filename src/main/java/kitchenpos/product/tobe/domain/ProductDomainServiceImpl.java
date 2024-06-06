@@ -1,5 +1,7 @@
 package kitchenpos.product.tobe.domain;
 
+import jakarta.transaction.Transactional;
+import kitchenpos.annotation.DomainService;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 
@@ -8,34 +10,30 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-public class FakeProductService implements ProductService {
+@DomainService
+public class ProductDomainServiceImpl implements ProductDomainService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
 
-    public FakeProductService(ProductRepository productRepository, MenuRepository menuRepository) {
+    public ProductDomainServiceImpl(ProductRepository productRepository, MenuRepository menuRepository) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
     }
 
     @Override
-    public void syncMenuDisplayStatisWithProductPrices(UUID productId, BigDecimal newPrice) {
+    @Transactional
+    public Product syncMenuDisplayStatusWithProductPrices(UUID productId, BigDecimal newPrice) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
 
         product.updateProductPrice(newPrice);
-        productRepository.save(product);
 
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
-// TODO
-//            for (MenuProduct menuProduct : menu.getMenuProducts().getMenuProducts()) {
-//                if (menuProduct.getProduct().getId().equals(product.getId())) {
-//                }
-//            }
-
-            if (menu.getMenuPrice().compareTo(menu.getMenuProducts().getTotalPrice()) > 0) {
+            if (menu.isMenuPriceHigherThanTotalPrice()) {
                 menu.changeMenuDisplayStatus(false);
             }
         }
+        return product;
     }
 }

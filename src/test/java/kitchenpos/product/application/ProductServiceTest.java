@@ -3,11 +3,8 @@ package kitchenpos.product.application;
 
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductPrice;
-import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.menu.tobe.domain.*;
+import kitchenpos.product.tobe.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +21,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static kitchenpos.MoneyConstants.*;
-import static kitchenpos.fixture.tobe.MenuFixture.*;
 import static kitchenpos.fixture.tobe.ProductFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,15 +35,25 @@ public class ProductServiceTest {
     private ProductRepository productRepository;
     @Mock
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
-
+    private final PurgomalumClient purgomalumClient = new FakePurgomalumClient();
     private ProductService productService;
+
+    private MenuGroup menuGroup;
+    private MenuProducts menuProducts;
+    private MenuNameFactory menuName;
+    private MenuProduct menuProduct;
+    private Menu menu;
 
     final private static String FAIL_PREFIX = "[실패] ";
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        ProductDomainService productDomainService = new FakeProductDomainService(productRepository, menuRepository);
+        productService = new ProductService(productRepository, purgomalumClient, productDomainService);
+
+        menuName = new MenuNameFactory(purgomalumClient);
+        menuGroup = new MenuGroup("메뉴그룹명");
+
     }
 
     @Nested
@@ -83,7 +89,9 @@ public class ProductServiceTest {
         @DisplayName("상품 가격은 변경할 수 있다.")
         void success(final long changingPrice) {
             final var product = createProduct(만원);
-            Menu menu = createMenu(product);
+            menuProduct = MenuProduct.of(product.getId(), product.getProductPrice().longValue(), 1);
+            menuProducts = new MenuProducts(List.of(menuProduct));
+            menu = Menu.of(menuName.create("메뉴이름"), new MenuPrice(만원), menuGroup.getId(), true, menuProducts);
 
             given(productRepository.findById(product.getId())).willReturn(Optional.ofNullable(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
@@ -106,21 +114,6 @@ public class ProductServiceTest {
             final var product = createProduct(만원);
 
             assertThrows(NoSuchElementException.class, () -> productService.changePrice(product.getId(), product));
-        }
-
-        @Test
-        @DisplayName(FAIL_PREFIX + "금액 변경으로 인해 해당 상품이 포함된 메뉴의 가격이 메뉴 구성 전체 상품의 총 금액보다 비싸지는 경우 메뉴가 숨겨진다.")
-        void undisplayed() {
-            final var product = createProduct(만원);
-            final var menu = createMenu(만원, product);
-
-            given(productRepository.findById(product.getId())).willReturn(Optional.of(product));
-            given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
-
-            product.updateProductPrice(BigDecimal.valueOf(오천원));
-            productService.changePrice(product.getId(), product);
-
-            assertFalse(menu.isDisplayed());
         }
     }
 

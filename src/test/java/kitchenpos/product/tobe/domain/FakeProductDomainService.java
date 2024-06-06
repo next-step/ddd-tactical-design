@@ -1,7 +1,5 @@
 package kitchenpos.product.tobe.domain;
 
-import jakarta.transaction.Transactional;
-import kitchenpos.annotation.DomainService;
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
 
@@ -10,23 +8,22 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-@DomainService
-public class ProductServiceImpl implements ProductService {
+public class FakeProductDomainService implements ProductDomainService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, MenuRepository menuRepository) {
+    public FakeProductDomainService(ProductRepository productRepository, MenuRepository menuRepository) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
     }
 
     @Override
-    @Transactional
-    public void syncMenuDisplayStatisWithProductPrices(UUID productId, BigDecimal newPrice) {
+    public Product syncMenuDisplayStatusWithProductPrices(UUID productId, BigDecimal newPrice) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
 
         product.updateProductPrice(newPrice);
+        productRepository.save(product);
 
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
@@ -34,5 +31,6 @@ public class ProductServiceImpl implements ProductService {
                 menu.changeMenuDisplayStatus(false);
             }
         }
+        return product;
     }
 }

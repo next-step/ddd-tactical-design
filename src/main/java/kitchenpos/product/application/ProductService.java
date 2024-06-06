@@ -1,35 +1,27 @@
 package kitchenpos.product.application;
 
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductName;
-import kitchenpos.product.tobe.domain.ProductPrice;
-import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ProductDomainService productDomainService;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
-    ) {
+            final PurgomalumClient purgomalumClient,
+            ProductDomainService productDomainServiceImpl) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.productDomainService = productDomainServiceImpl;
     }
 
     @Transactional
@@ -47,31 +39,7 @@ public class ProductService {
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal newPrice = request.getProductPrice();
 
-        final Product product = productRepository.findById(productId)
-                .orElseThrow(NoSuchElementException::new);
-
-        product.updateProductPrice(newPrice);
-
-        changeMenuDisplayStatus(productId);
-
-        return product;
-    }
-
-    private void changeMenuDisplayStatus(UUID productId) {
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getProductPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        return productDomainService.syncMenuDisplayStatusWithProductPrices(productId, newPrice);
     }
 
     @Transactional(readOnly = true)

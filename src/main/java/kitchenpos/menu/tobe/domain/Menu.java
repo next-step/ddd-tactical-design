@@ -118,4 +118,16 @@ public class Menu {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", menuName=" + menuName +
+                ", menuPrice=" + menuPrice +
+                ", menuGroupId=" + menuGroupId +
+                ", menuDisplayStatus=" + menuDisplayStatus +
+                ", menuProducts=" + menuProducts +
+                '}';
+    }
 }
