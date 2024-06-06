@@ -59,7 +59,6 @@ public class MenuService {
         }
         final MenuProducts menuProducts = MenuProducts.of();
 
-
         for (final MenuProductRequest menuProductRequest : menuProductRequests) {
             Product product = menuProductRequest.getProduct();
             final MenuProduct menuProduct = MenuProduct.of(menuProductRequest.getProductId(),

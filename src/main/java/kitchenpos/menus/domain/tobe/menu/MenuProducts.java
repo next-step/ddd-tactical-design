@@ -46,6 +46,10 @@ public class MenuProducts {
     return this.products.stream().anyMatch(product -> product.getId().equals(productId));
   }
 
+  public boolean containsZeroProducts(){
+    return this.products.isEmpty();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

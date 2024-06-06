@@ -86,7 +86,7 @@ class MenuServiceTest {
     assertThat(actual).isNotNull();
     assertAll(
         () -> assertThat(actual.getId()).isNotNull(),
-        () -> assertThat(actual.getMenuName().getName()).isEqualTo(expected.getName()),
+        () -> assertThat(actual.getMenuName()).isEqualTo(expected.getName()),
         () -> assertThat(actual.getMenuPrice()).isEqualTo(expected.getPrice()),
         () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
         () -> assertThat(actual.getMenuProducts()).isNotNull()

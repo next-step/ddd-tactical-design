@@ -36,7 +36,7 @@ public class Menu {
   }
 
   private Menu(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
-    validate(menuPrice, menuProducts.sum(), menuProducts);
+    validate(menuPrice, menuProducts.sum(), menuProducts, menuGroupId);
 
     this.id = UUID.randomUUID();
     this.menuName = menuName;
@@ -54,7 +54,15 @@ public class Menu {
 
     return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
   }
-  private void validate(final MenuPrice menuPrice, final BigDecimal price, final MenuProducts menuProducts) {
+  private void validate(final MenuPrice menuPrice, final BigDecimal price, final MenuProducts menuProducts, final UUID menuGroupId) {
+    if (Objects.isNull(menuGroupId)){
+      throw new IllegalArgumentException("`메뉴는 특정 메뉴 그룹에 속해야 한다.");
+    }
+
+    if (menuProducts.containsZeroProducts()){
+      throw new IllegalArgumentException("`메뉴상품`들이 한개 이상 있어야한다.");
+    }
+
     if (menuPrice.isBigger(price)) {
       throw new IllegalArgumentException("`메뉴 상품 가격`의 총액보다 `메뉴 가격`이 클 수 없다.");
     }
@@ -62,6 +70,7 @@ public class Menu {
     if (menuProducts.sum().compareTo(BigDecimal.ZERO) < ZERO) {
       throw new IllegalArgumentException("`메뉴`의 `메뉴 가격`은 양수이어야한다.");
     }
+
   }
 
   public void hide() {
@@ -69,13 +78,13 @@ public class Menu {
   }
 
   public void display() {
-    validate(menuPrice, menuProducts.sum(), menuProducts);
+    validate(menuPrice, menuProducts.sum(), menuProducts, menuGroupId);
     this.displayed = true;
   }
 
   public void changePrice(BigDecimal price) {
     MenuPrice menuPriceRequest = MenuPrice.of(price);
-    validate(menuPriceRequest, menuProducts.sum(), menuProducts);
+    validate(menuPriceRequest, menuProducts.sum(), menuProducts, menuGroupId);
 
     this.menuPrice = menuPriceRequest;
   }
@@ -96,8 +105,12 @@ public class Menu {
     return menuPrice.getPrice();
   }
 
-  public MenuName getMenuName() {
-    return menuName;
+  public String getMenuName() {
+    return menuName.getName();
+  }
+
+  public UUID getMenuGroupId() {
+    return menuGroupId;
   }
 
   @Override

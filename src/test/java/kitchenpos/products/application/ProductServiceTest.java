@@ -1,24 +1,11 @@
 package kitchenpos.products.application;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.product;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
-
-import kitchenpos.menus.domain.tobe.menu.Menu;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.domain.tobe.ProfanityValidator;
-import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.infra.FakeProfanityValidator;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +14,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+import static kitchenpos.Fixtures.product;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
 
