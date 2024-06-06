@@ -58,21 +58,20 @@ public class OrderLineItemsFactory {
                 .toList();
     }
 
-    private static void checkNullOrEmptyOrderLineItems(List<OrderLineItemCreateRequest> orderLineItemsRequest) {
+    private void checkNullOrEmptyOrderLineItems(List<OrderLineItemCreateRequest> orderLineItemsRequest) {
         if (Objects.isNull(orderLineItemsRequest) || orderLineItemsRequest.isEmpty()) {
             throw new KitchenPosIllegalArgumentException(INVALID_ORDER_LINE_ITEMS_SIZE);
         }
     }
 
-
-    private static void checkDisMatchMenuPrice(BigDecimal menuPriceRequest, Menu menu) {
+    private void checkDisMatchMenuPrice(BigDecimal menuPriceRequest, Menu menu) {
         if (menu.getPrice().compareTo(menuPriceRequest) != 0) {
             throw new KitchenPosIllegalArgumentException(
                     MENU_PRICE_IS_NOT_SAME, menu.getId(), menu.getPrice(), menuPriceRequest);
         }
     }
 
-    private static void checkHiddenMenu(Menu menu) {
+    private void checkHiddenMenu(Menu menu) {
         if (!menu.isDisplayed()) {
             throw new KitchenPosIllegalStateException(MENU_IS_HIDE, menu.getId());
         }

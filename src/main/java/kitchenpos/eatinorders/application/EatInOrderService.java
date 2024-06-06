@@ -53,7 +53,6 @@ public class EatInOrderService {
         return EatInOrderResponse.from(order.serve());
     }
 
-
     @Transactional
     public EatInOrderResponse complete(final UUID orderId) {
         final EatInOrder order = getOrder(orderId);
@@ -66,7 +65,6 @@ public class EatInOrderService {
                 .map(EatInOrderResponse::from)
                 .toList();
     }
-
 
     private EatInOrder getOrder(UUID orderId) {
         return orderRepository.findById(orderId)
