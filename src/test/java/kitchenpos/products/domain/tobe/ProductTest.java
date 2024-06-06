@@ -52,9 +52,9 @@ class ProductTest {
         final Product product = createProductRequest("후라이드", new BigDecimal(16000));
 
         final BigDecimal changePrice = BigDecimal.valueOf(15000);
-        final Product actual = product.changePrice(changePrice);
+        product.changePrice(changePrice);
 
-        assertThat(actual.getPrice().getPriceValue()).isEqualTo(changePrice);
+        assertThat(product.getPrice().getPriceValue()).isEqualTo(changePrice);
     }
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")

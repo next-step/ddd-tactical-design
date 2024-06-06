@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.products.infra.tobe.Profanities;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,16 +15,16 @@ import java.util.UUID;
  * Product는 식별자와 DisplayedName, 가격을 가진다.
  * DisplayedName에는 Profanity가 포함될 수 없다.
  */
-//@Table(name = "product")
-//@Entity
-public class Product {
-//    @Column(name = "id", columnDefinition = "binary(16)")
-//    @Id
+@Table(name = "product")
+@Entity
+public class Product extends AbstractAggregateRoot<Product>{
+    @Column(name = "id", columnDefinition = "binary(16)")
+    @Id
     private UUID id;
-//    @Embedded
+    @Embedded
 //    @Column(name = "name", nullable = false)
     private DisplayedName dispayedName;
-//    @Embedded
+    @Embedded
     private Price price;
 
     protected Product() {
@@ -42,10 +43,11 @@ public class Product {
         return new Product(displayedName, displayedPrice);
     }
 
-    public Product changePrice(final BigDecimal price) {
+    public void changePrice(final BigDecimal price) {
         this.price = this.price.changePrice(Price.createPrice(price));
 
-        return this;
+        registerEvent(new ProductPriceChangedEvent(
+                this, this.id, this.price.getPriceValue()));
     }
 
     public DisplayedName getDispayedName() {
