@@ -7,7 +7,7 @@ import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
-import kitchenpos.menus.tobe.domain.menu.MenuPrice;
+import kitchenpos.support.domain.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.domain.menu.ProductClient;

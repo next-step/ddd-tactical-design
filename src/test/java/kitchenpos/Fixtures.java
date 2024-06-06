@@ -1,23 +1,23 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
+import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
+import kitchenpos.eatinorders.todo.domain.ordertables.NumberOfGuests;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
+import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableName;
 import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menu.MenuName;
-import kitchenpos.menus.tobe.domain.menu.MenuPrice;
+import kitchenpos.support.domain.MenuPrice;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.menus.tobe.domain.menu.MenuProducts;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroupName;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProfanityChecker;
+import kitchenpos.support.domain.OrderLineItem;
 import kitchenpos.support.domain.ProductPrice;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -60,43 +60,16 @@ public class Fixtures {
         return new MenuProduct(new Random().nextLong(), product.getId(), ProductPrice.from(product.getPrice()), quantity);
     }
 
-    public static Order order(final OrderStatus status, final String deliveryAddress) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.DELIVERY);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
+    public static EatInOrder order(final EatInOrderStatus status) {
+        return order(status, OrderTable.from(OrderTableName.from("1번")));
     }
 
-    public static Order order(final OrderStatus status) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.TAKEOUT);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        return order;
-    }
-
-    public static Order order(final OrderStatus status, final OrderTable orderTable) {
-        final Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        order.setOrderTable(orderTable);
-        return order;
+    public static EatInOrder order(final EatInOrderStatus status, final OrderTable orderTable) {
+        return EatInOrder.of(status, List.of(orderLineItem()), orderTable.getId());
     }
 
     public static OrderLineItem orderLineItem() {
-        final OrderLineItem orderLineItem = new OrderLineItem();
-        orderLineItem.setSeq(new Random().nextLong());
-        orderLineItem.setMenu(menu());
-        return orderLineItem;
+        return new OrderLineItem(new Random().nextLong(), menu().getId(), menu().getPrice(), 0);
     }
 
     public static OrderTable orderTable() {
@@ -104,12 +77,7 @@ public class Fixtures {
     }
 
     public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+        return OrderTable.from(OrderTableName.from("1번"), NumberOfGuests.from(numberOfGuests), occupied);
     }
 
     public static Product product() {

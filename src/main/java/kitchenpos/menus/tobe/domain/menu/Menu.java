@@ -12,6 +12,7 @@ import jakarta.persistence.Transient;
 import kitchenpos.menus.exception.InvalidMenuPriceDisplayException;
 import kitchenpos.menus.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.support.domain.MenuPrice;
 import kitchenpos.support.domain.ProductPrice;
 
 import java.math.BigDecimal;
