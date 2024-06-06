@@ -7,14 +7,9 @@ import java.util.*
 @Table(name = "menu_product")
 @Entity
 class MenuProduct(
-    @Column(name = "product_id", nullable = false)
-    val productId: UUID,
-
-    @Column(name = "quantity", nullable = false)
-    val quantity: MenuProductQuantity,
-
-    @Column(name = "price", nullable = false)
-    val price: Price
+    productId: UUID,
+    quantity: MenuProductQuantity,
+    price: Price
 ) {
     @ManyToOne
     @JoinColumn(
@@ -29,6 +24,21 @@ class MenuProduct(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     val seq: Long = 0L
+
+
+    @Column(name = "product_id", nullable = false)
+    val productId: UUID = productId
+
+    @Column(name = "quantity", nullable = false)
+    val quantity: MenuProductQuantity = quantity
+
+    @Column(name = "price", nullable = false)
+    var price: Price = price
+        private set
+
+    fun changePrice(price: Price) {
+        this.price = price
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.application
 
-import kitchenpos.menus.tobe.domain.Menu
 import kitchenpos.menus.tobe.domain.MenuRepository
 import kitchenpos.products.domain.ProductPriceChanged
 import org.springframework.stereotype.Service
@@ -10,7 +9,7 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Service
-class MenuDisplaySyncService(
+class MenuProductSyncService(
     private val menuRepository: MenuRepository,
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -18,12 +17,6 @@ class MenuDisplaySyncService(
     fun syncMenusDisplayStatus(productPriceChanged: ProductPriceChanged) {
         val menus = menuRepository.findAllByProductId(productPriceChanged.productId)
 
-        menus.forEach { syncMenuDisplayStatus(it) }
-    }
-
-    private fun syncMenuDisplayStatus(menu: Menu) {
-        if (!menu.isMenuPriceValid) {
-            menu.inActivateDisplayStatus()
-        }
+        menus.forEach { it.changeMenuProduct(productPriceChanged.productId, productPriceChanged.price) }
     }
 }

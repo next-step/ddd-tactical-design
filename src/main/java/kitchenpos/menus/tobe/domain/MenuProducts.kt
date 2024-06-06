@@ -25,6 +25,13 @@ class MenuProducts(
         items.forEach { it.menu = menu }
     }
 
+    fun changeMenuProduct(productId: UUID, productPrice: Price) {
+        val menuProduct = items.find { it.productId == productId }
+            ?: throw NoSuchElementException("can not found menu product:$productId")
+
+        menuProduct.changePrice(productPrice)
+    }
+
     val productIds: List<UUID>
         get() = items.map { it.productId }
 }

@@ -39,8 +39,8 @@ class Menu private constructor(
     @Embedded
     val menuProducts: MenuProducts = menuProducts
 
-    val isMenuPriceValid: Boolean
-        get() = price > menuProducts.totalPrice
+    private val isMenuPriceValid: Boolean
+        get() = price <= menuProducts.totalPrice
 
     companion object {
         fun of(
@@ -79,8 +79,16 @@ class Menu private constructor(
         validateMenuPrice()
     }
 
+    fun changeMenuProduct(productId: UUID, productPrice: Price) {
+        menuProducts.changeMenuProduct(productId, productPrice)
+
+        if (!isMenuPriceValid) {
+            inActivateDisplayStatus()
+        }
+    }
+
     private fun validateMenuPrice() {
-        if (displayStatus && isMenuPriceValid) {
+        if (displayStatus && !isMenuPriceValid) {
             throw IllegalArgumentException("메뉴의 가격이 메뉴상품 가격의 총합보다 클 수 없습니다")
         }
     }
