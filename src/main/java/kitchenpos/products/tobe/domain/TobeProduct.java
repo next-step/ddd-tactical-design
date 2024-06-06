@@ -39,6 +39,10 @@ public class TobeProduct {
         return price;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
