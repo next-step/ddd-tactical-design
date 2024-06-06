@@ -23,4 +23,7 @@ public class TobeMenuGroup {
         this.name = MenuGroupName.of(name);
     }
 
+    public MenuGroupName getName() {
+        return name;
+    }
 }
