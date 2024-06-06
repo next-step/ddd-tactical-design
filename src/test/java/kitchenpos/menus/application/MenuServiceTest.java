@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import kitchenpos.Fixtures;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
@@ -57,6 +59,7 @@ class MenuServiceTest {
   private static MenuProductRequest createMenuProductRequest(final UUID productId, final long quantity) {
     final MenuProductRequest menuProduct = new MenuProductRequest();
     menuProduct.setProductId(productId);
+    menuProduct.setProduct(Fixtures.product());
     menuProduct.setQuantity(quantity);
     return menuProduct;
   }
@@ -83,7 +86,7 @@ class MenuServiceTest {
     assertThat(actual).isNotNull();
     assertAll(
         () -> assertThat(actual.getId()).isNotNull(),
-        () -> assertThat(actual.getMenuName()).isEqualTo(expected.getName()),
+        () -> assertThat(actual.getMenuName().getName()).isEqualTo(expected.getName()),
         () -> assertThat(actual.getMenuPrice()).isEqualTo(expected.getPrice()),
         () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
         () -> assertThat(actual.getMenuProducts()).isNotNull()
@@ -194,9 +197,8 @@ class MenuServiceTest {
   @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
   @Test
   void displayExpensiveMenu() {
-    final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
-    assertThatThrownBy(() -> menuService.display(menuId))
-        .isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> menuRepository.save(menu(33_000L, true, menuProduct(product, 2L))))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @DisplayName("메뉴를 숨길 수 있다.")

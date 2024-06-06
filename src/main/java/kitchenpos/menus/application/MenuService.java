@@ -45,6 +45,10 @@ public class MenuService {
 
         final List<MenuProductRequest> menuProductRequests = request.getMenuProducts();
 
+        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         final List<Product> products = productRepository.findAllByIdIn(
             menuProductRequests.stream()
                 .map(MenuProductRequest::getProductId)
@@ -59,12 +63,12 @@ public class MenuService {
         for (final MenuProductRequest menuProductRequest : menuProductRequests) {
             Product product = menuProductRequest.getProduct();
             final MenuProduct menuProduct = MenuProduct.of(menuProductRequest.getProductId(),
-                    product.getProductPrice().longValue(),
-                    Long.valueOf(menuProductRequest.getQuantity()).intValue());
+                    product.getProductPrice(),
+                    Long.valueOf(menuProductRequest.getQuantity()));
             menuProducts.add(menuProduct);
         }
 
-        final Menu menu = Menu.of(request.getName(), price.longValue(), menuGroup.getId(), request.isDisplayed(), menuProducts, profanityValidator);
+        final Menu menu = Menu.of(request.getName(), price, menuGroup.getId(), request.isDisplayed(), menuProducts, profanityValidator);
 
         return menuRepository.save(menu);
     }

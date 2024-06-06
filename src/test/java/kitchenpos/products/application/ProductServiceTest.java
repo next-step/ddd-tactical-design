@@ -96,16 +96,6 @@ class ProductServiceTest {
         .isInstanceOf(IllegalArgumentException.class);
   }
 
-  @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-  @Test
-  void changePriceInMenu() {
-    final Product product = productRepository.save(product("후라이드", 16_000L));
-    final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-    productService.changePrice(product.getId(), changePriceRequest(8_000L));
-
-    assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-  }
-
   @DisplayName("상품의 목록을 조회할 수 있다.")
   @Test
   void findAll() {

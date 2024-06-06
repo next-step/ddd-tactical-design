@@ -56,12 +56,12 @@ public class Fixtures {
   }
 
   public static MenuProduct menuProduct() {
-    final MenuProduct menuProduct = MenuProduct.of(product().getId(),10_000L ,2);
+    final MenuProduct menuProduct = MenuProduct.of(product().getId(),10_000L ,2L);
     return menuProduct;
   }
 
   public static MenuProduct menuProduct(final Product product, final long quantity) {
-    final MenuProduct menuProduct = MenuProduct.of(product.getId(), 10_000L, (int) quantity);
+    final MenuProduct menuProduct = MenuProduct.of(product.getId(), 10_000L, quantity);
 
     return menuProduct;
   }
