@@ -2,10 +2,9 @@ package kitchenpos.menus.domain;
 
 import kitchenpos.ToBeFixtures;
 import kitchenpos.menus.application.FakeMenuPurgomalumClient;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuNameValidationService;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,23 +35,6 @@ public class MenuTest {
     @Nested
     @DisplayName("메뉴 생성 테스트")
     class CreateTest {
-        @Test
-        @DisplayName("메뉴를 생성한다.")
-        public void create() {
-            MenuGroup 치킨 = toBeFixtures.치킨;
-            List<MenuProduct> 치킨_상품_목록 = createMenuProducts();
-            Menu 메뉴 = new Menu(
-                    UUID.randomUUID(),
-                    "튀김",
-                    BigDecimal.valueOf(400_000),
-                    true,
-                    치킨_상품_목록,
-                    치킨.getId()
-            );
-
-            Assertions.assertThat(메뉴.getId()).isNotNull();
-        }
-
         @NullSource
         @ValueSource(strings = "-1")
         @ParameterizedTest

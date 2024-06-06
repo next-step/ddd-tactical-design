@@ -1,9 +1,10 @@
 package kitchenpos;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuGroup;
-import kitchenpos.menus.tobe.domain.MenuNameValidationService;
-import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.application.FakeMenuPurgomalumClient;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductNameValidationService;
@@ -14,6 +15,17 @@ import java.util.Random;
 import java.util.UUID;
 
 public class ToBeFixtures {
+    public Menu 메뉴_치킨 = new kitchenpos.menus.tobe.domain.entity.Menu(
+            UUID.randomUUID(),
+            "치킨",
+            new kitchenpos.menus.tobe.domain.service.MenuNameValidationService(new FakeMenuPurgomalumClient()),
+            BigDecimal.valueOf(100_000),
+            true,
+            List.of(new kitchenpos.menus.tobe.domain.entity.MenuProduct(new Random().nextLong(),5,
+                    UUID.randomUUID(), BigDecimal.valueOf(20_000))),
+            UUID.randomUUID()
+    );
+
     public MenuGroup 치킨 = new MenuGroup(UUID.randomUUID(), "치킨");
     public Product 후라이드_20000 = new Product(
             UUID.randomUUID(),
