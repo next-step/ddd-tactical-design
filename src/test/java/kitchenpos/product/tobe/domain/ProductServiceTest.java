@@ -1,11 +1,9 @@
-package kitchenpos.menu.tobe.domain;
+package kitchenpos.product.tobe.domain;
 
 import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.product.tobe.domain.InMemoryProductRepository;
-import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductRepository;
+import kitchenpos.menu.tobe.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,7 @@ import static kitchenpos.MoneyConstants.만원;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MenuServiceTest {
+class ProductServiceTest {
 
     private MenuGroup menuGroup;
     private Product product;
@@ -26,7 +24,7 @@ class MenuServiceTest {
 
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final MenuRepository menuRepository = new InMemoryMenuRepository();
-    private final MenuService menuService = new FakeMenuService(productRepository, menuRepository);
+    private final ProductService menuService = new FakeProductService(productRepository, menuRepository);
 
     @BeforeEach
     void setUP() {

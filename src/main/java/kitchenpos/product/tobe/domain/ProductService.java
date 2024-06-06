@@ -1,8 +1,8 @@
-package kitchenpos.menu.tobe.domain;
+package kitchenpos.product.tobe.domain;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public interface MenuService {
+public interface ProductService {
     void syncMenuDisplayStatisWithProductPrices(UUID productId, BigDecimal newPrice);
 }
