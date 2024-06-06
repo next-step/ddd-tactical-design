@@ -73,6 +73,14 @@ public class Menu {
         return id;
     }
 
+    public BigDecimal getPrice() {
+        return menuPrice.getPrice();
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

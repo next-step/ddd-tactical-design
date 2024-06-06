@@ -71,22 +71,8 @@ class MenuProductsTest {
     }
 
     @Test
-    @DisplayName("상품 가격 변경 시 존재하지 않는 상품 ID가 주어지면 예외가 발생한다.")
-    void test5() {
-        List<MenuProduct> menuProductList = createMenuProductList();
-        BigDecimal menuPrice = BigDecimal.valueOf(5000);
-        MenuProducts menuProducts = new MenuProducts(menuProductList, menuPrice, productValidator);
-
-        UUID nonExistentProductId = UUID.randomUUID();
-        BigDecimal newPrice = BigDecimal.valueOf(3000);
-
-        Assertions.assertThatThrownBy(() -> menuProducts.changeMenuProductPrice(nonExistentProductId, newPrice))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
     @DisplayName("상품 가격 변경 시 존재하는 상품 ID가 주어지면 가격이 변경된다.")
-    void test6() {
+    void test5() {
         UUID productId1 = UUID.randomUUID();
         UUID productId2 = UUID.randomUUID();
         List<MenuProduct> menuProductList = Arrays.asList(

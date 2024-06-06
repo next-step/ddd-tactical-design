@@ -47,17 +47,12 @@ public class MenuProducts {
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
-        boolean productExists = menuProducts.stream()
-                .anyMatch(menuProduct -> menuProduct.isSameProductId(productId));
-
-        if (!productExists) {
-            throw new IllegalArgumentException("해당 상품 ID를 찾을 수 없습니다: " + productId);
-        }
-
         menuProducts.stream()
                 .filter(menuProduct -> menuProduct.isSameProductId(productId))
                 .findFirst()
                 .ifPresent(menuProduct -> menuProduct.changePrice(price));
+
+        validateMenuPricePolicy(price, menuProducts);
     }
 
     public List<MenuProduct> getMenuProducts() {
