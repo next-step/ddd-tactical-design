@@ -9,17 +9,20 @@ import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-//@Table(name = "menu_product")
-//@Entity
+@Table(name = "menu_product")
+@Entity
 public class MenuProduct {
-//    @Column(name = "productId", columnDefinition = "binary(16)")
-//    @Id
+
+    @Id
+    private UUID id;
+
+    @Column(name = "productId", columnDefinition = "binary(16)", nullable = false)
     private UUID productId;
 
-//    @Transient
+    @Transient
     private Price price;
 
-//    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity", nullable = false)
     private long quantity;
 
     protected MenuProduct() {

@@ -6,9 +6,9 @@ import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-//@Embeddable
+@Embeddable
 public class Price {
-//    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal priceValue;
 
     protected Price() {

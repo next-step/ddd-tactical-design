@@ -22,7 +22,6 @@ public class Product extends AbstractAggregateRoot<Product>{
     @Id
     private UUID id;
     @Embedded
-//    @Column(name = "name", nullable = false)
     private DisplayedName dispayedName;
     @Embedded
     private Price price;
