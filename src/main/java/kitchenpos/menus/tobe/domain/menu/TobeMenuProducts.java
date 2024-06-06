@@ -1,6 +1,7 @@
-package kitchenpos.menus.domain.tobe.domain;
+package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 
 import java.util.List;
 

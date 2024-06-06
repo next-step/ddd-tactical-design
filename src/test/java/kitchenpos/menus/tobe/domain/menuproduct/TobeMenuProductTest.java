@@ -1,6 +1,5 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.menuproduct;
 
-import kitchenpos.menus.domain.tobe.domain.TobeMenuProduct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
