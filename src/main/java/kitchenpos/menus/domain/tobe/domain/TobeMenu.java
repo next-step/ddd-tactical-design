@@ -54,4 +54,7 @@ public class TobeMenu {
         return new TobeMenu(name, price, profanities, menuGroupId, tobeMenuProducts);
     }
 
+    public void changePrice(int price) {
+        this.price = Price.of(price);
+    }
 }

@@ -62,6 +62,18 @@ class TobeMenuTest {
                 .isThrownBy(() -> createTobeMenu(menuProducts));
     }
 
+    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다. - 메뉴의 가격은 0원 이상이어야 한다.")
+    @Test
+    void case_5() {
+        // given
+        var menu = createTobeMenu(10_000);
+
+        // when
+        // then
+        Assertions.assertThatIllegalArgumentException()
+                .isThrownBy(() -> menu.changePrice(-1));
+    }
+
     private TobeMenu createTobeMenu(int price) {
         var name = "후라이드";
         var profanities = new FakeProfanities("비속어");
