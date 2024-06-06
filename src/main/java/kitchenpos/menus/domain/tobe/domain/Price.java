@@ -21,6 +21,10 @@ public class Price {
         this.price = price;
     }
 
+    int getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

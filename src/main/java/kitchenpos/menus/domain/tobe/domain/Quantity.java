@@ -22,6 +22,10 @@ public class Quantity {
         this.quantity = quantity;
     }
 
+    int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

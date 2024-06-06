@@ -30,4 +30,8 @@ public class TobeMenuProduct {
         this.price = new Price(price);
         this.productId = productId;
     }
+
+    public int getTotalPrice() {
+        return price.getPrice() * quantity.getQuantity();
+    }
 }
