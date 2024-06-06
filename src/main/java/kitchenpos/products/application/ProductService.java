@@ -9,8 +9,8 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
+import kitchenpos.products.domain.tobe.Price;
 import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.ui.dto.PriceUpdateRequest;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,10 +45,10 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final PriceUpdateRequest request) {
+    public Product changePrice(final UUID productId, final Price request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.changePrice(request.to());
+        product.changePrice(request);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;

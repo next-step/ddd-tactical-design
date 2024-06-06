@@ -21,7 +21,6 @@ import kitchenpos.products.domain.tobe.Price;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
-import kitchenpos.products.ui.dto.PriceUpdateRequest;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -78,7 +77,7 @@ class ProductServiceTest {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
 
-        Product actualProduct = productService.changePrice(saved.getId(), new PriceUpdateRequest(BigDecimal.valueOf(15_000L)));
+        Product actualProduct = productService.changePrice(saved.getId(), new Price(BigDecimal.valueOf(15_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
@@ -92,7 +91,7 @@ class ProductServiceTest {
         Product saved = productService.create(ProductFixture.createRequest("후라이드", 20_000L));
         Menu menu = createFriedMenu(saved);
 
-        Product actualProduct = productService.changePrice(saved.getId(), new PriceUpdateRequest(BigDecimal.valueOf(12_000L)));
+        Product actualProduct = productService.changePrice(saved.getId(), new Price(BigDecimal.valueOf(12_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
