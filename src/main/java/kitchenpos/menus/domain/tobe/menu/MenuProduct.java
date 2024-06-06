@@ -3,6 +3,7 @@ package kitchenpos.menus.domain.tobe.menu;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -59,4 +60,16 @@ public class MenuProduct {
     this.price = MenuProductPrice.of(price);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    MenuProduct that = (MenuProduct) o;
+    return Objects.equals(seq, that.seq);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(seq);
+  }
 }

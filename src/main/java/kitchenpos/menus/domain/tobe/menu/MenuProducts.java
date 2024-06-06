@@ -9,6 +9,7 @@ import org.springframework.context.event.EventListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -43,5 +44,18 @@ public class MenuProducts {
 
   public boolean findByProductId(UUID productId){
     return this.products.stream().anyMatch(product -> product.getId().equals(productId));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    MenuProducts that = (MenuProducts) o;
+    return Objects.equals(products, that.products);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(products);
   }
 }
