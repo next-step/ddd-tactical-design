@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.share.domain.FakeProfanities;
+import kitchenpos.shared.domain.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

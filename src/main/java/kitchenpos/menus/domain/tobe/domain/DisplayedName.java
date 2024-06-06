@@ -2,7 +2,7 @@ package kitchenpos.menus.domain.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.tobe.domain.Profanities;
+import kitchenpos.shared.domain.Profanities;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
