@@ -47,12 +47,18 @@ public class MenuProducts {
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
-        menuProducts.stream()
+        MenuProduct menuProduct = findMenuProductById(productId);
+        if (menuProduct != null) {
+            menuProduct.changePrice(price);
+            validateMenuPricePolicy(price, menuProducts);
+        }
+    }
+
+    private MenuProduct findMenuProductById(UUID productId) {
+        return menuProducts.stream()
                 .filter(menuProduct -> menuProduct.isSameProductId(productId))
                 .findFirst()
-                .ifPresent(menuProduct -> menuProduct.changePrice(price));
-
-        validateMenuPricePolicy(price, menuProducts);
+                .orElse(null);
     }
 
     public List<MenuProduct> getMenuProducts() {
