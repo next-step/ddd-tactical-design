@@ -13,7 +13,6 @@ public class TobeMenuProduct {
     @Id
     private Long seq;
 
-
     @Embedded
     private Quantity quantity;
 
