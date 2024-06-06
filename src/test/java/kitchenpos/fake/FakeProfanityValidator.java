@@ -12,4 +12,11 @@ public class FakeProfanityValidator implements ProfanityValidator {
         return profanities.stream()
                 .anyMatch(text::contains);
     }
+
+    @Override
+    public void validate(String text) {
+        if(containsProfanity(text)){
+            throw new IllegalArgumentException();
+        }
+    }
 }

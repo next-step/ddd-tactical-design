@@ -22,9 +22,7 @@ public class ProductCreateRequest {
     }
 
     public void validateName(ProfanityValidator profanityValidator) {
-        if (profanityValidator.containsProfanity(name.getName())) {
-            throw new IllegalArgumentException();
-        }
+        profanityValidator.validate(name.getName());
     }
 
     public Product to() {

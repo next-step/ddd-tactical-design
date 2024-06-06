@@ -25,4 +25,11 @@ public class DefaultProfanityValidator implements ProfanityValidator {
                 .toUri();
         return Boolean.parseBoolean(restTemplate.getForObject(url, String.class));
     }
+
+    @Override
+    public void validate(String text) {
+        if(containsProfanity(text)){
+            throw new IllegalArgumentException();
+        }
+    }
 }
