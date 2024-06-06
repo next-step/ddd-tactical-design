@@ -20,23 +20,31 @@ public class MenuProduct {
   @Embedded
   private MenuProductPrice price;
   @Column(name = "quantity", nullable = false)
-  private Integer quantity;
+  private Long quantity;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id", nullable = false, columnDefinition = "binary(16)")
+  private Menu menu;
 
   protected MenuProduct() {
   }
-  private MenuProduct(UUID productId, MenuProductPrice price, Integer quantity) {
+  private MenuProduct(UUID productId, MenuProductPrice price, Long quantity) {
     validate(quantity);
 
     this.productId = productId;
     this.price = price;
     this.quantity = quantity;
   }
-  private void validate(Integer quantity){
+  private void validate(Long quantity){
     if (quantity <= ZERO) {
       throw new IllegalArgumentException("`메뉴`에 등록된 `상품 개수`는 1개 이상이어야 한다.");
     }
   }
-  public static MenuProduct of(UUID productId, Long price, Integer quantity){
+  public static MenuProduct of(UUID productId, Long price, Long quantity){
+    return new MenuProduct(productId, MenuProductPrice.of(price), quantity);
+  }
+
+  public static MenuProduct of(UUID productId, BigDecimal price, Long quantity){
     return new MenuProduct(productId, MenuProductPrice.of(price), quantity);
   }
   public BigDecimal amount(){

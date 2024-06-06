@@ -14,7 +14,7 @@ import java.util.UUID;
 @Embeddable
 public class MenuProducts {
   @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "menu")
-  private List<MenuProduct> menuProducts = new ArrayList<>();
+  private List<MenuProduct> products = new ArrayList<>();
 
   protected MenuProducts() {
   }
@@ -24,24 +24,24 @@ public class MenuProducts {
   }
 
   public BigDecimal sum() {
-    return menuProducts
+    return products
             .stream()
             .map(MenuProduct::amount)
-            .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
   }
   @EventListener
   public void changeMenuProductPrice(final UUID productId, final Long price) {
-    menuProducts.stream()
+    products.stream()
             .filter(menuProduct -> menuProduct.getId().equals(productId))
             .forEach(menuProduct -> menuProduct.changePrice(price));
   }
 
   public void add(MenuProduct menuProduct){
-    this.menuProducts.add(menuProduct);
+    this.products.add(menuProduct);
   }
 
   public boolean findByProductId(UUID productId){
-    return this.menuProducts.stream().anyMatch(product -> product.getId().equals(productId));
+    return this.products.stream().anyMatch(product -> product.getId().equals(productId));
   }
 }
