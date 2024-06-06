@@ -2,21 +2,21 @@ package kitchenpos.products.ui.dto;
 
 import java.math.BigDecimal;
 import kitchenpos.products.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.Name;
-import kitchenpos.products.domain.tobe.Price;
+import kitchenpos.products.domain.tobe.ProductName;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.products.domain.tobe.Product;
 
 public class ProductCreateRequest {
 
-    private final Name name;
+    private final ProductName name;
 
-    private final Price price;
+    private final ProductPrice price;
 
     public ProductCreateRequest(String name, BigDecimal price) {
-        this(new Name(name), new Price(price));
+        this(new ProductName(name), new ProductPrice(price));
     }
 
-    public ProductCreateRequest(Name name, Price price) {
+    public ProductCreateRequest(ProductName name, ProductPrice price) {
         this.name = name;
         this.price = price;
     }

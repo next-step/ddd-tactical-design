@@ -36,9 +36,9 @@ class ProductTest {
     void Product의_가격을_변경할_수_있다() {
         Product product = new Product("치킨", BigDecimal.valueOf(20_000L));
 
-        product.changePrice(new Price(BigDecimal.valueOf(25_000L)));
+        product.changePrice(new ProductPrice(BigDecimal.valueOf(25_000L)));
 
-        assertThat(product.isSamePrice(new Price(BigDecimal.valueOf(25_000L)))).isTrue();
+        assertThat(product.isSamePrice(new ProductPrice(BigDecimal.valueOf(25_000L)))).isTrue();
     }
 
     @Test
@@ -53,7 +53,7 @@ class ProductTest {
     void Product의_가격을_마이너스로_변경하면_예외를_던진다() {
         Product product = new Product("치킨", BigDecimal.valueOf(20_000L));
 
-        assertThatThrownBy(() -> product.changePrice(new Price(BigDecimal.valueOf(-20_000L))))
+        assertThatThrownBy(() -> product.changePrice(new ProductPrice(BigDecimal.valueOf(-20_000L))))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

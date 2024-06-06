@@ -2,28 +2,27 @@ package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class ProductName {
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    protected Price() {
+    protected ProductName() {
     }
 
-    public Price(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+    public ProductName(String name) {
+        if (Objects.isNull(name)) {
             throw new IllegalArgumentException();
         }
 
-        this.price = price;
+        this.name = name;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -34,12 +33,13 @@ public class Price {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Price price1 = (Price) o;
-        return Objects.equals(price, price1.price);
+        ProductName name1 = (ProductName) o;
+        return Objects.equals(name, name1.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price);
+        return Objects.hash(name);
     }
 }
+

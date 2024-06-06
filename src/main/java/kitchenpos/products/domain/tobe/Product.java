@@ -18,36 +18,36 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private ProductName name;
 
     @Embedded
-    private Price price;
+    private ProductPrice price;
 
     protected Product() {
     }
 
     public Product(String name, BigDecimal price) {
-        this(new Name(name), new Price(price));
+        this(new ProductName(name), new ProductPrice(price));
     }
 
-    public Product(Name name, Price price) {
+    public Product(ProductName name, ProductPrice price) {
         this(UUID.randomUUID(), name, price);
     }
 
-    public Product(UUID id, Name name, Price price) {
+    public Product(UUID id, ProductName name, ProductPrice price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public void changePrice(Price price) {
+    public void changePrice(ProductPrice price) {
         if (Objects.isNull(price)) {
             throw new IllegalArgumentException();
         }
         this.price = price;
     }
 
-    public boolean isSamePrice(Price price) {
+    public boolean isSamePrice(ProductPrice price) {
         return this.price.equals(price);
     }
 

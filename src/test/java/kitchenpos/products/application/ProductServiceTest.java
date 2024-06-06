@@ -19,7 +19,7 @@ import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.Price;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +77,7 @@ class ProductServiceTest {
         Menu menu = createFriedMenu(saved);
 
         Product actualProduct = productService.changePrice(saved.getId(),
-                new Price(BigDecimal.valueOf(15_000L)));
+                new ProductPrice(BigDecimal.valueOf(15_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
@@ -92,12 +92,12 @@ class ProductServiceTest {
         Menu menu = createFriedMenu(saved);
 
         Product actualProduct = productService.changePrice(saved.getId(),
-                new Price(BigDecimal.valueOf(12_000L)));
+                new ProductPrice(BigDecimal.valueOf(12_000L)));
         Menu actualMenu = menuRepository.findById(menu.getId()).get();
 
         assertAll(
                 () -> assertThat(
-                        actualProduct.isSamePrice(new Price(BigDecimal.valueOf(12_000L)))).isTrue(),
+                        actualProduct.isSamePrice(new ProductPrice(BigDecimal.valueOf(12_000L)))).isTrue(),
                 () -> assertThat(actualMenu.isDisplayed()).isFalse()
         );
     }

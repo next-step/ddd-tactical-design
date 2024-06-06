@@ -9,7 +9,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.Price;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Price request) {
+    public Product changePrice(final UUID productId, final ProductPrice request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(request);
