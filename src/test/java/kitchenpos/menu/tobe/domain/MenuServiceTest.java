@@ -32,7 +32,7 @@ class MenuServiceTest {
     void setUP() {
         menuGroup = new MenuGroup("메뉴그룹명");
         product = ProductFixture.createProduct("상품명", 만원);
-        MenuProduct menuProduct = new MenuProduct(product, 1);
+        MenuProduct menuProduct = MenuProduct.of(product.getId(), product.getProductPrice().longValue(), 1);
         menuProducts = new MenuProducts(List.of(menuProduct));
         PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         menuName = new MenuNameFactory(purgomalumClient);
@@ -41,7 +41,7 @@ class MenuServiceTest {
     @Test
     @DisplayName("메뉴상품 금액 총 합보다 메뉴 가격이 비싸지면 메뉴는 숨겨진다.")
     void priceFail3() {
-        final var menu = new Menu(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup, true, menuProducts);
+        final var menu = Menu.of(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup.getId(), true, menuProducts);
 
         assertTrue(menu.isMenuDisplayStatus());
 
@@ -55,7 +55,7 @@ class MenuServiceTest {
     @Test
     @DisplayName("메뉴상품 금액 총 합보다 메뉴 가격이 비싸지면 메뉴는 숨겨진다.")
     void priceFail4() {
-        final var menu = new Menu(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup, true, menuProducts);
+        final var menu = Menu.of(menuName.create("메뉴이름"), new MenuPrice(10_000L), menuGroup.getId(), true, menuProducts);
 
         assertTrue(menu.isMenuDisplayStatus());
 

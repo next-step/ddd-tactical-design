@@ -15,6 +15,10 @@
     - [DB도 형상관리를 해보자!](https://meetup.toast.com/posts/173)
 
 
+참고내용 
+- h3 : bounded context
+- h5 : 하위 도메인 (BC와 동일한 경우 생략)
+
 ### 메뉴
 
 - `Menu(메뉴)` 는 식별자, `MenuName(메뉴 이름)`, `MenuPrice(메뉴 가격)`, `MenuGroup(메뉴 그룹)`, `MenuDisplayStatus(메뉴 노출 상태)`, 여러
@@ -38,3 +42,13 @@
 ##### 메뉴 그룹
 
 - `MenuGroup(메뉴 그룹)` 은 식별자, `MenuGroupName(메뉴 그룹 이름)` 를 항상 가진다.
+
+
+### 피드백 TODO
+- [ ] boolean 값을 받기 보단 비즈니스 로직을 메서드 내부에서 처리 (Exception)
+- [x] Menu 에서 가격검증 -> 삭제
+- [ ] 메뉴의 노출 / 비노출 정책은 Product의 가격 변경이 일어나는 경우 필요한 요구사항입니다. 도메인 서비스를 구현하는 주체가 어디가 될지 고민해보세요 ! 
+  - [link](https://github.com/next-step/ddd-tactical-design/pull/295#discussion_r1623946968)
+- [ ] menuService -> getter대신 메시지보내는 구조로 변경
+- [ ] 도메인 서비스는 어떻게 호출될수 있을까요 ?
+

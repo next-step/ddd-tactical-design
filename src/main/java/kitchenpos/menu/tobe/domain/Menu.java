@@ -57,9 +57,6 @@ public class Menu {
         if (Objects.isNull(menuPrice)) {
             throw new IllegalPriceException("가격정보는 필수로 입력해야 합니다.");
         }
-        if (menuPrice.getPrice() < 0) {
-            throw new IllegalPriceException("가격은 0원 미만일 수 없습니다. ", menuPrice.getPrice());
-        }
 
     }
 
