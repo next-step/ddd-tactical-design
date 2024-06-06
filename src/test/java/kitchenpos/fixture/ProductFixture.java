@@ -21,6 +21,6 @@ public class ProductFixture {
     }
 
     public static Product createFired() {
-        return new Product("후라이드", new FakePurgomalumClient(), BigDecimal.valueOf(20_000L));
+        return new Product("후라이드", BigDecimal.valueOf(20_000L));
     }
 }

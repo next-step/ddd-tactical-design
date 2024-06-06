@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
-import kitchenpos.fake.FakePurgomalumClient;
-import kitchenpos.products.domain.PurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -17,38 +15,28 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ProductTest {
 
-    private PurgomalumClient purgomalumClient = new FakePurgomalumClient();
-
     @Test
     void 가격이_null인_Product를_생성하면_예외를_던진다() {
-        assertThatThrownBy(() -> new Product("후라이드", purgomalumClient, null))
+        assertThatThrownBy(() -> new Product("후라이드", null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 가격이_마이너스인_Product를_생성하면_예외를_던진다() {
         assertThatThrownBy(
-                () -> new Product("후라이드", purgomalumClient, BigDecimal.valueOf(-20_000L)))
+                () -> new Product("후라이드", BigDecimal.valueOf(-20_000L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 이름이_null인_Product를_생성하면_예외를_던진다() {
-        assertThatThrownBy(() -> new Product(null, null, BigDecimal.valueOf(20_000L)))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"비속어", "욕설이 포함된 단어"})
-    void 이름에_비속어가들어가는_Product를_생성하면_예외를_던진다(final String name) {
-        assertThatThrownBy(
-                () -> new Product(name, purgomalumClient, BigDecimal.valueOf(20_000L)))
+        assertThatThrownBy(() -> new Product(null, BigDecimal.valueOf(20_000L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void Product의_가격을_변경할_수_있다() {
-        Product product = new Product("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+        Product product = new Product("치킨", BigDecimal.valueOf(20_000L));
 
         product.changePrice(new Price(BigDecimal.valueOf(25_000L)));
 
@@ -57,7 +45,7 @@ class ProductTest {
 
     @Test
     void Product의_가격을_null로_변경하면_예외를_던진다() {
-        Product product = new Product("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+        Product product = new Product("치킨", BigDecimal.valueOf(20_000L));
 
         assertThatThrownBy(() -> product.changePrice(null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -65,7 +53,7 @@ class ProductTest {
 
     @Test
     void Product의_가격을_마이너스로_변경하면_예외를_던진다() {
-        Product product = new Product("치킨", purgomalumClient, BigDecimal.valueOf(20_000L));
+        Product product = new Product("치킨", BigDecimal.valueOf(20_000L));
 
         assertThatThrownBy(() -> product.changePrice(new Price(BigDecimal.valueOf(-20_000L))))
                 .isInstanceOf(IllegalArgumentException.class);

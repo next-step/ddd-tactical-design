@@ -15,7 +15,11 @@ public class ProductCreateRequest {
         this.price = price;
     }
 
-    public Product to(PurgomalumClient purgomalumClient){
-        return new Product(name, purgomalumClient, price);
+    public Product to(){
+        return new Product(name, price);
+    }
+
+    public String getName() {
+        return name;
     }
 }

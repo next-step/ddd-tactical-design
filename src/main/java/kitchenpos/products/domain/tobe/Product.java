@@ -27,8 +27,8 @@ public class Product {
     protected Product() {
     }
 
-    public Product(String name, PurgomalumClient purgomalumClient, BigDecimal price) {
-        this(UUID.randomUUID(), new Name(name, purgomalumClient), new Price(price));
+    public Product(String name, BigDecimal price) {
+        this(UUID.randomUUID(), new Name(name), new Price(price));
     }
 
     public Product(UUID id, Name name, Price price) {
