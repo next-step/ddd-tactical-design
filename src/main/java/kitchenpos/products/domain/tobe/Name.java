@@ -11,7 +11,7 @@ public class Name {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public Name() {
+    protected Name() {
     }
 
     public Name(String name, PurgomalumClient purgomalumClient) {

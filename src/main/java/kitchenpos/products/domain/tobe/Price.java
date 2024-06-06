@@ -11,7 +11,7 @@ public class Price {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    public Price() {
+    protected Price() {
     }
 
     public Price(BigDecimal price) {
