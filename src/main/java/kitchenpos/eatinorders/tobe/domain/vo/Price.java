@@ -30,4 +30,25 @@ public class Price {
     public BigDecimal getPrice() {
         return price;
     }
+
+    public boolean isNotSamePrice(Price price) {
+        return !isSamePrice(price);
+    }
+
+    public boolean isSamePrice(Price price) {
+        return this.equals(price);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price1 = (Price) o;
+        return Objects.equals(price, price1.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(price);
+    }
 }

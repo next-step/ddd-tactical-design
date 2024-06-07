@@ -13,6 +13,8 @@ import java.util.Random;
 import java.util.UUID;
 
 public class EatInOrderFixture {
+    private static Random random = new Random();
+
     public static OrderTable emptyOrderTableOf(String name) {
         OrderTable orderTable = new OrderTable(
                 UUID.randomUUID(),
@@ -34,16 +36,24 @@ public class EatInOrderFixture {
         return orderTable;
     }
 
-    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price, UUID menuId) {
+    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price) {
         OrderLineItem orderLineItem = new OrderLineItem(
-                new Random().nextLong(), quantity, price, menuId
+                random.nextLong(), quantity, price, UUID.randomUUID(), true, BigDecimal.ONE
         );
         return orderLineItem;
     }
 
-    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price) {
+    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price, UUID menuId) {
         OrderLineItem orderLineItem = new OrderLineItem(
-                new Random().nextLong(), quantity, price, UUID.randomUUID()
+                random.nextLong(), quantity, price, menuId, true, BigDecimal.ONE
+        );
+        return orderLineItem;
+    }
+
+    public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price, UUID menuId,
+                                                boolean isDisplayedMenu, BigDecimal menuPrice) {
+        OrderLineItem orderLineItem = new OrderLineItem(
+                random.nextLong(), quantity, price, menuId, isDisplayedMenu, menuPrice
         );
         return orderLineItem;
     }

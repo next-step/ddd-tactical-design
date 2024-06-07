@@ -96,10 +96,10 @@ public class EatInOrderAcceptTest {
         Menu menu = saveMenuBeforeTest(toBeFixtures.메뉴_치킨);
 
         OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(
-                5, BigDecimal.valueOf(10_000), menu.getId()
+                1, BigDecimal.valueOf(100_000), menu.getId(), menu.isDisplayed(), menu.getPrice()
         );
         OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(
-                5, BigDecimal.valueOf(10_000), menu.getId()
+                1, BigDecimal.valueOf(100_000), menu.getId(), menu.isDisplayed(), menu.getPrice()
         );
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }

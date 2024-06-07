@@ -18,10 +18,10 @@ public class ToBeFixtures {
     public Menu 메뉴_치킨 = new kitchenpos.menus.tobe.domain.entity.Menu(
             UUID.randomUUID(),
             "치킨",
-            new kitchenpos.menus.tobe.domain.service.MenuNameValidationService(new FakeMenuPurgomalumClient()),
+            new MenuNameValidationService(new FakeMenuPurgomalumClient()),
             BigDecimal.valueOf(100_000),
             true,
-            List.of(new kitchenpos.menus.tobe.domain.entity.MenuProduct(new Random().nextLong(),5,
+            List.of(new MenuProduct(new Random().nextLong(),5,
                     UUID.randomUUID(), BigDecimal.valueOf(20_000))),
             UUID.randomUUID()
     );
@@ -45,6 +45,20 @@ public class ToBeFixtures {
                 new Random().nextLong(), productQuantity, UUID.randomUUID(), productPrice
         );
         return menuProduct;
+    }
+
+    public static Menu menuCreateOf(UUID id, BigDecimal price, boolean displayed) {
+        Menu menu = new Menu(
+                id,
+                "메뉴",
+                new MenuNameValidationService(new FakeMenuPurgomalumClient()),
+                price,
+                displayed,
+                List.of(new MenuProduct(new Random().nextLong(),1,
+                        UUID.randomUUID(), BigDecimal.valueOf(20_000))),
+                UUID.randomUUID()
+        );
+        return menu;
     }
 
     public static Menu menuCreateOf(String name, MenuNameValidationService menuNameValidationService,

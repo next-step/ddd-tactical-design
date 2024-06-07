@@ -54,9 +54,8 @@ public class OrderTest {
     }
 
     private OrderLineItems createDefaultOrderLineItems() {
-        OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
-        OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(5, BigDecimal.valueOf(10_000));
+        OrderLineItem orderLineItem1 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE);
+        OrderLineItem orderLineItem2 = EatInOrderFixture.orderLineItemOf(1, BigDecimal.ONE);
         return new OrderLineItems(List.of(orderLineItem1, orderLineItem2));
     }
-
 }
