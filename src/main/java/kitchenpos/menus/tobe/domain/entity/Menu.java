@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 
 import java.math.BigDecimal;
@@ -67,15 +68,15 @@ public class Menu {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setName(final MenuName name) {
+        this.name = name.getValue();
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final MenuPrice price) {
+    public void changePrice(final MenuPrice price) {
         this.price = price.getValue();
     }
 

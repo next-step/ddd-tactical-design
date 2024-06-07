@@ -7,6 +7,7 @@ import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -75,14 +76,13 @@ class DefaultCreateMenu implements CreateMenu {
         if (menuPrice.getValue().compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        final String name = menucreateDto.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+
+        final MenuName name = MenuName.of(menucreateDto.getName(), purgomalumClient);
+
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName(name);
-        menu.setPrice(menuPrice);
+        menu.changePrice(menuPrice);
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(menucreateDto.isDisplayed());
         menu.setMenuProducts(menuProducts);

@@ -49,7 +49,7 @@ public class MenuService {
         if (menuPrice.getValue().compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(menuPrice);
+        menu.changePrice(menuPrice);
         return menu;
     }
 

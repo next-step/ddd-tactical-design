@@ -8,6 +8,7 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
@@ -32,8 +33,8 @@ public class Fixtures {
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
-        menu.setName("후라이드+후라이드");
-        menu.setPrice(MenuPrice.of(BigDecimal.valueOf(price)));
+        menu.setName(MenuName.of("후라이드+후라이드", (text)-> false));
+        menu.changePrice(MenuPrice.of(BigDecimal.valueOf(price)));
         menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
