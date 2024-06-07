@@ -12,5 +12,7 @@ public interface TobeMenuGroupRepository {
     Optional<TobeMenuGroup> findById(UUID id);
 
     List<TobeMenuGroup> findAll();
+
+    boolean existsById(UUID id);
 }
 
