@@ -1,10 +1,10 @@
 package kitchenpos.menus.tobe.application;
 
+import kitchenpos.menus.tobe.domain.application.ChangeMenuPrice;
 import kitchenpos.menus.tobe.domain.application.CreateMenu;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.dto.MenuChangePriceDto;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,16 @@ import java.util.UUID;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final CreateMenu createMenu;
+    private final ChangeMenuPrice changeMenuPrice;
 
     public MenuService(
             final MenuRepository menuRepository,
-            CreateMenu createMenu
+            CreateMenu createMenu, ChangeMenuPrice changeMenuPrice
     ) {
         this.menuRepository = menuRepository;
         this.createMenu = createMenu;
+        this.changeMenuPrice = changeMenuPrice;
+
     }
 
     @Transactional
@@ -35,22 +38,7 @@ public class MenuService {
 
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuChangePriceDto request) {
-        final MenuPrice menuPrice = MenuPrice.of(request.getPrice());
-        final Menu menu = menuRepository.findById(menuId)
-                                        .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                               .getPrice()
-                               .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menuPrice.getValue().compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        menu.changePrice(menuPrice);
-        return menu;
+        return changeMenuPrice.execute(menuId, request);
     }
 
     @Transactional

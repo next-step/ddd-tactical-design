@@ -2,6 +2,7 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.purgomalum.PurgomalumClient;
 import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.domain.application.ChangeMenuPriceTestFixture;
 import kitchenpos.menus.tobe.domain.application.CreateMenuTestFixture;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
@@ -53,7 +54,9 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, new CreateMenuTestFixture(menuRepository, productRepository, menuGroupRepository, purgomalumClient));
+        menuService = new MenuService(menuRepository,
+                                      new CreateMenuTestFixture(menuRepository, productRepository, menuGroupRepository, purgomalumClient),
+                                      new ChangeMenuPriceTestFixture(menuRepository));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
