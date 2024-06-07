@@ -25,6 +25,7 @@ public class OrderLineItem {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @Column(name = "price", nullable = false)
     private int price;
 
     public OrderLineItem(UUID id, int quantity, int price) {
@@ -40,7 +41,7 @@ public class OrderLineItem {
 
     private void checkQuantity(int quantity){
         if(quantity < 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("수량이 음수이하일 수 없습니다.");
         }
     }
 }

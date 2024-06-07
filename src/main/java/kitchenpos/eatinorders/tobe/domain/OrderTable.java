@@ -39,18 +39,17 @@ public class OrderTable {
 
     private void checkNumberOfGuests(int numberOfGuests){
         if(numberOfGuests < 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("음수 이하는 입력할 수 없습니다.");
         }
     }
 
     public void changeNumberOfGuests(int numberOfGuests){
         checkNumberOfGuests(numberOfGuests);
         if(!this.occupied){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("비어있는 상태 테이블의 손님수는 변경할 수 없습니다.");
         }
         this.numberOfGuests = numberOfGuests;
     }
-
 
     public void sit(){
         this.occupied = true;
@@ -59,7 +58,6 @@ public class OrderTable {
     public void clear(){
         this.occupied = false;
     }
-
 
     public UUID getId() {
         return id;

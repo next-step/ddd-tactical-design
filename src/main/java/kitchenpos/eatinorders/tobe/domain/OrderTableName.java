@@ -22,7 +22,7 @@ public class OrderTableName {
 
     private void checkName(String value){
         if(Objects.isNull(value) || value.isBlank()){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문테이블 이름이 필요합니다.");
         }
     }
 

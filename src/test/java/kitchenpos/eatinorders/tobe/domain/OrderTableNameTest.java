@@ -1,12 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain;
 
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTableNameTest {
 
@@ -24,7 +22,8 @@ class OrderTableNameTest {
     void canNotEmpty(){
 
         assertThatThrownBy(() -> new OrderTableName())
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("주문테이블 이름이 필요");
     }
 
 }
