@@ -40,18 +40,20 @@ public class TobeMenu {
     protected TobeMenu() {
     }
 
-    public TobeMenu(UUID id, DisplayName name, MenuPrice menuPrice, UUID menuGroup, Displayed displayed, MenuProducts menuProducts) {
-        // if (menuPrice.price().compareTo(menuProducts.calculateTotalPrice()) > 0) {
+    protected TobeMenu(UUID id, DisplayName name, MenuPrice menuPrice, UUID menuGroup, Displayed displayed, MenuProducts menuProducts) {
         if (menuProducts.isOverProductPrice(menuPrice.price())) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품의 가격보다 적거나 같아야합니다.");
         }
-
         this.id = id;
         this.name = name;
         this.menuPrice = menuPrice;
         this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
+    }
+
+    public static TobeMenu create(DisplayName name, MenuPrice menuPrice, UUID menuGroup, Displayed displayed, MenuProducts menuProducts) {
+        return new TobeMenu(UUID.randomUUID(), name, menuPrice, menuGroup, displayed, menuProducts);
     }
 
     /**

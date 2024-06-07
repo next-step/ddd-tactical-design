@@ -28,6 +28,11 @@ public class MenuProducts {
         return new MenuProducts(List.of(menuProducts));
     }
 
+    public static MenuProducts of(List<TobeMenuProduct> menuProducts) {
+        return new MenuProducts(menuProducts);
+    }
+
+
     /**
      * 메뉴의 가격이 메뉴에 속한 상품의 가격보다 적거나 같은지 확인합니다.
      *
