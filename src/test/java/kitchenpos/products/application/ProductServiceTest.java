@@ -1,5 +1,8 @@
 package kitchenpos.products.application;
 
+import kitchenpos.Fixtures;
+import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
@@ -14,29 +17,41 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
+import org.springframework.transaction.reactive.TransactionalEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.Fixtures.menu;
 import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-
+@RecordApplicationEvents
+@SpringBootTest
 class ProductServiceTest {
 
   private ProductRepository productRepository;
   private MenuRepository menuRepository;
   private ProfanityValidator profanityValidator;
   private ProductService productService;
+  @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
+  private ApplicationEvents events;
 
   @BeforeEach
   void setUp() {
     productRepository = new InMemoryProductRepository();
     menuRepository = new InMemoryMenuRepository();
     profanityValidator = new FakeProfanityValidator();
-    productService = new ProductService(productRepository, menuRepository, profanityValidator);
+    productService = new ProductService(productRepository, menuRepository, profanityValidator, publisher);
   }
 
   @DisplayName("상품을 등록할 수 있다.")
@@ -90,6 +105,20 @@ class ProductServiceTest {
     final ProductRequest expected = changePriceRequest(price);
     assertThatThrownBy(() -> productService.changePrice(productId, expected))
         .isInstanceOf(IllegalArgumentException.class);
+  }
+
+
+  @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
+  @Test
+  void changePriceInMenu() {
+    final Product product = productRepository.save(product("후라이드", 16_000L));
+    final Menu menu = menuRepository.save(menu(19_000L, true, Fixtures.menuProduct(product, 2L)));
+    productService.changePrice(product.getId(), changePriceRequest(8_000L));
+
+    List<ProductPriceChangeEvent> changeEvents = events.stream(ProductPriceChangeEvent.class).toList();
+    assertThat(changeEvents.size()).isEqualTo(1);
+    assertThat(changeEvents.getFirst().getProductId()).isEqualTo(product.getId());
+    assertThat(BigDecimal.valueOf(changeEvents.getFirst().getPrice())).isEqualTo(product.getProductPrice());
   }
 
   @DisplayName("상품의 목록을 조회할 수 있다.")
