@@ -2,15 +2,9 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.ProductPriceChangeEvent;
 import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.application.dto.MenuRequest;
-import kitchenpos.menus.domain.tobe.menu.Menu;
-import kitchenpos.menus.domain.tobe.menu.MenuProduct;
-import kitchenpos.menus.domain.tobe.menu.MenuProducts;
-import kitchenpos.menus.domain.tobe.menu.MenuRepository;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menu.*;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
-import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -20,61 +14,27 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
-    private final ProfanityValidator profanityValidator;
+
+    private final MenuDomainService menuDomainService;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final ProfanityValidator profanityValidator
-    ) {
+        final ProfanityValidator profanityValidator,
+        MenuDomainService menuDomainService) {
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
-        this.profanityValidator = profanityValidator;
+        this.menuDomainService = menuDomainService;
     }
 
     @Transactional
     public Menu create(final MenuRequest request) {
-        final BigDecimal price = request.getPrice();
-
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-            .orElseThrow(NoSuchElementException::new);
-
-        final List<MenuProductRequest> menuProductRequests = request.getMenuProducts();
-
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
-        final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                .map(MenuProductRequest::getProductId)
-                .toList()
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuProducts menuProducts = MenuProducts.of();
-
-        for (final MenuProductRequest menuProductRequest : menuProductRequests) {
-            Product product = menuProductRequest.getProduct();
-            final MenuProduct menuProduct = MenuProduct.of(menuProductRequest.getProductId(),
-                    product.getProductPrice(),
-                    Long.valueOf(menuProductRequest.getQuantity()));
-            menuProducts.add(menuProduct);
-        }
-
-        final Menu menu = Menu.of(request.getName(), price, menuGroup.getId(), request.isDisplayed(), menuProducts, profanityValidator);
-
+        final Menu menu = menuDomainService.createMenu(request.getMenuGroupId(), request.getMenuProducts(), request.isDisplayed(), request.getName(), request.getPrice());
         return menuRepository.save(menu);
     }
 
