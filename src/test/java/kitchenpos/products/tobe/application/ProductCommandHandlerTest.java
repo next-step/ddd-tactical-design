@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.application;
 
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.application.CheckMenuPriceTestFixture;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
@@ -40,7 +41,7 @@ class ProductCommandHandlerTest {
         ProductCommandHandler productCommandHandler = new ProductCommandHandler((req) -> null, (id, req) -> {
             product.changePrice(ProductPrice.of(changedPrice));
             return product;
-        }, menuRepository);
+        }, new CheckMenuPriceTestFixture(menuRepository));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
 
         // when
