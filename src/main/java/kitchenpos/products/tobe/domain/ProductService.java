@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ProductService {
-    private final InMemoryProductRepository productRepository;
+    private final ProductRepositoryImpl productRepository;
 
-    public ProductService(InMemoryProductRepository repository) {
+    public ProductService(ProductRepositoryImpl repository) {
         this.productRepository = repository;
     }
 

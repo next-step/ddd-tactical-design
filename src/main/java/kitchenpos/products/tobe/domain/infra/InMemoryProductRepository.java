@@ -1,10 +1,11 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.domain.infra;
 
+import kitchenpos.products.tobe.domain.ProductRepositoryImpl;
 import kitchenpos.products.tobe.domain.entity.Product;
 
 import java.util.*;
 
-public class InMemoryProductRepository {
+public class InMemoryProductRepository implements ProductRepositoryImpl {
     private final Map<UUID, Product> products = new HashMap<>();
 
     public Product save(final Product product) {

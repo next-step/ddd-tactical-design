@@ -1,6 +1,6 @@
 package kitchenpos.products.application.tobe;
 
-import kitchenpos.products.tobe.domain.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.infra.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.ProductService;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
