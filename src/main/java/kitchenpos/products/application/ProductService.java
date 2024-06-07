@@ -1,10 +1,13 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductPriceChangeEvent;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.common.domain.ProfanityValidator;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +20,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final ProfanityValidator profanityValidator;
+    private final ApplicationEventPublisher publisher;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final ProfanityValidator profanityValidator
-    ) {
+        final ProfanityValidator profanityValidator,
+        ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.profanityValidator = profanityValidator;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -44,6 +49,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changeProductPrice(price);
+        publisher.publishEvent(new ProductPriceChangeEvent(productId, price));
         return product;
     }
 

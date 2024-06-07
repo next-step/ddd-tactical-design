@@ -1,5 +1,7 @@
 package kitchenpos.menus.application;
 
+import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
@@ -10,12 +12,16 @@ import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.common.domain.ProfanityValidator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class MenuService {
@@ -80,6 +86,21 @@ public class MenuService {
         menu.changePrice(request.getPrice());
         return menu;
     }
+
+    @TransactionalEventListener
+    @Async
+    public void changeMenuProdutPrice(final ProductPriceChangeEvent productPriceChangeEvent) {
+        final List<Menu> menus = menuRepository.findAllByProductId(productPriceChangeEvent.getProductId());
+
+        for (final Menu menu : menus) {
+            menu.getMenuProducts().changeMenuProductPrice(productPriceChangeEvent.getProductId(), productPriceChangeEvent.getPrice());
+
+            if (menu.getMenuPrice().compareTo(menu.getMenuProducts().sum()) > 0) {
+                menu.hide();
+            }
+        }
+    }
+
 
     @Transactional
     public Menu display(final UUID menuId) {
