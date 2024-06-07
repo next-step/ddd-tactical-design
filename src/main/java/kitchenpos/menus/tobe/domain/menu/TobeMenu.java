@@ -69,4 +69,8 @@ public class TobeMenu {
     public void hide() {
         this.displayed = false;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }

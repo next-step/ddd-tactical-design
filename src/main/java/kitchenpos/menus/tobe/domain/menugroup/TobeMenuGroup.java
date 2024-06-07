@@ -26,4 +26,8 @@ public class TobeMenuGroup {
     public MenuGroupName getName() {
         return name;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }
