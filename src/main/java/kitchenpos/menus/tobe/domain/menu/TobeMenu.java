@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
 import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 import kitchenpos.products.tobe.domain.Price;
 import kitchenpos.shared.domain.Profanities;
@@ -29,7 +29,7 @@ public class TobeMenu {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_to_menu_group_2")
     )
-    private MenuGroup menuGroup;
+    private TobeMenuGroup menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -52,6 +52,17 @@ public class TobeMenu {
             throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
         this.menuGroupId = menuGroupId;
+    }
+
+    public TobeMenu(String name, int price, Profanities profanities, TobeMenuGroup menuGroup, List<TobeMenuProduct> tobeMenuProducts) {
+        this.id = UUID.randomUUID();
+        this.name = DisplayedName.of(name, profanities);
+        this.price = Price.of(price);
+        this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
+        if (price > this.menuProducts.getTotalPrice()) {
+            throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
+        }
+        this.menuGroup = menuGroup;
     }
 
     public void changePrice(int price) {
