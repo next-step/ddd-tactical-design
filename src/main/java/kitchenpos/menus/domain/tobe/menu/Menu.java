@@ -13,7 +13,7 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
-  public static final int ZERO = 0;
+  private static final int ZERO = 0;
   @Column(name = "id", columnDefinition = "binary(16)")
   @Id
   private UUID id;

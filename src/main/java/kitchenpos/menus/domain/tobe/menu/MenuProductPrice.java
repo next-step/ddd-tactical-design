@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Embeddable
 public class MenuProductPrice {
-  public static final int ZERO = 0;
+  private static final int ZERO = 0;
   private BigDecimal price;
 
   protected MenuProductPrice() {

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 public class MenuProduct {
 
-  public static final int ZERO = 0;
+  private static final int ZERO = 0;
   @Column(name = "seq")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
