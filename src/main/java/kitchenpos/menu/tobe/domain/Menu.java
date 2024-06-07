@@ -83,7 +83,7 @@ public class Menu {
     }
 
     public boolean isMenuPriceHigherThanTotalPrice() {
-        return getMenuPrice().compareTo(getMenuProducts().getTotalPrice()) > 0;
+        return getMenuProducts().comparePrice(getMenuPrice());
     }
 
 
