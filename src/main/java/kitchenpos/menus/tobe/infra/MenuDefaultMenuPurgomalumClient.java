@@ -2,17 +2,17 @@ package kitchenpos.menus.tobe.infra;
 
 import java.net.URI;
 import java.util.Objects;
-import kitchenpos.menus.tobe.domain.menu.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.menu.MenuPurgomalumClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class DefaultPurgomalumClient implements PurgomalumClient {
+public class MenuDefaultMenuPurgomalumClient implements MenuPurgomalumClient {
   private final RestTemplate restTemplate;
 
-  public DefaultPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
+  public MenuDefaultMenuPurgomalumClient(final RestTemplateBuilder restTemplateBuilder) {
     this.restTemplate = restTemplateBuilder.build();
   }
 
