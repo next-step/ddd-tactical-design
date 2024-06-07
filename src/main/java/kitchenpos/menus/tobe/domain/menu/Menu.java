@@ -35,14 +35,14 @@ public class Menu {
       final MenuGroup menuGroup,
       final List<MenuProduct> menuProducts,
       final boolean menuDisplayed,
-      final PurgomalumClient purgomalumClient) {
+      final MenuPurgomalumClient menuPurgomalumClient) {
 
     if (Objects.isNull(menuGroup)) {
       throw new NoSuchElementException("메뉴 그룹이 없습니다.");
     }
 
     this.id = UUID.randomUUID();
-    this.name = new MenuName(menuName, purgomalumClient);
+    this.name = new MenuName(menuName, menuPurgomalumClient);
     this.price = new MenuPrice(menuPrice);
     this.menuGroup = menuGroup;
     this.displayed = new MenuDisplayed(menuDisplayed);
@@ -55,15 +55,16 @@ public class Menu {
       final MenuGroup menuGroup,
       final List<MenuProduct> menuProducts,
       final boolean menuDisplayed,
-      final PurgomalumClient purgomalumClient) {
+      final MenuPurgomalumClient menuPurgomalumClient) {
 
-    return new Menu(menuName, menuPrice, menuGroup, menuProducts, menuDisplayed, purgomalumClient);
+    return new Menu(
+        menuName, menuPrice, menuGroup, menuProducts, menuDisplayed, menuPurgomalumClient);
   }
 
   public void changePrice(BigDecimal menuPrice) {
     final BigDecimal sum = this.menuProducts.getTotalPrice();
 
-    if (menuPrice.compareTo(sum) > 0) {
+    if (Objects.isNull(menuPrice) || menuPrice.compareTo(sum) > 0) {
       throw new IllegalArgumentException();
     }
 
@@ -82,6 +83,14 @@ public class Menu {
 
   public void hide() {
     this.displayed = new MenuDisplayed(false);
+  }
+
+  public void productPriceChanges() {
+    final BigDecimal sum = this.menuProducts.getTotalPrice();
+
+    if (this.price.getPrice().compareTo(sum) > 0) {
+      this.displayed = new MenuDisplayed(false);
+    }
   }
 
   public UUID getId() {

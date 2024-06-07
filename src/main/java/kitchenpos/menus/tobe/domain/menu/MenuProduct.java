@@ -58,4 +58,8 @@ public class MenuProduct {
   public Long getQuantity() {
     return quantity.getQuantity();
   }
+
+  public Product getProduct() {
+    return product;
+  }
 }

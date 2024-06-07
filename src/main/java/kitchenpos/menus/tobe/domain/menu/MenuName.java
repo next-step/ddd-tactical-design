@@ -11,12 +11,12 @@ public class MenuName {
 
   protected MenuName() {}
 
-  protected MenuName(String name, PurgomalumClient purgomalumClient) {
+  protected MenuName(String name, MenuPurgomalumClient menuPurgomalumClient) {
     if (Objects.isNull(name) || name.isEmpty()) {
       throw new IllegalArgumentException("메뉴 이름을 입력해주세요.");
     }
 
-    if (purgomalumClient.containsProfanity(name)) {
+    if (menuPurgomalumClient.containsProfanity(name)) {
       throw new IllegalArgumentException("메뉴 이름에 비속어가 들어갈 수 없습니다.");
     }
 
