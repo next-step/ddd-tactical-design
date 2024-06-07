@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Table(name = "menu_group")
-@Entity
+//@Entity
 public class MenuGroup {
 
     @Column(name = "id", columnDefinition = "binary(16)")
