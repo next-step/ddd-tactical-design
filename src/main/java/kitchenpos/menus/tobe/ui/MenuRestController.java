@@ -1,10 +1,11 @@
 package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.menus.tobe.application.MenuQueryHandler;
+import kitchenpos.menus.tobe.application.query.MenuQueryHandler;
 import kitchenpos.menus.tobe.application.MenuCommandHandler;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.dto.MenuChangePriceDto;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
+import kitchenpos.menus.tobe.dto.MenuDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +53,7 @@ public class MenuRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Menu>> findAll() {
+    public ResponseEntity<List<MenuDto>> findAll() {
         return ResponseEntity.ok(menuQueryHandler.findAllMenu());
     }
 }
