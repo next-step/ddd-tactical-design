@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.tobe.Product;
 

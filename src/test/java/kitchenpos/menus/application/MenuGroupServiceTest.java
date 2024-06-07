@@ -6,8 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import java.util.List;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fixture.MenuGroupFixture;
-import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.tobe.MenuGroup;
+import kitchenpos.menus.domain.tobe.MenuGroupName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,26 +30,21 @@ class MenuGroupServiceTest {
 
     @Test
     void 메뉴그룹을_생성한다() {
-        MenuGroup request = MenuGroupFixture.createRequest("치킨");
-
-        MenuGroup actual = menuGroupService.create(request);
+        MenuGroup actual = menuGroupService.create(new MenuGroupName("치킨"));
 
         assertThat(actual.getId()).isNotNull();
     }
 
     @Test
     void 메뉴그룹이름이_비어있으면_예외를던진다() {
-        MenuGroup request = MenuGroupFixture.createRequest("");
-
-        assertThatIllegalArgumentException().isThrownBy(() -> menuGroupService.create(request));
+        assertThatIllegalArgumentException().isThrownBy(
+                () -> menuGroupService.create(new MenuGroupName("")));
     }
 
     @Test
     void 메뉴그룹을_조회한다() {
-        MenuGroup request1 = MenuGroupFixture.createRequest("치킨");
-        menuGroupService.create(request1);
-        MenuGroup request2 = MenuGroupFixture.createRequest("피자");
-        menuGroupService.create(request2);
+        menuGroupService.create(new MenuGroupName("치킨"));
+        menuGroupService.create(new MenuGroupName("피자"));
 
         List<MenuGroup> actual = menuGroupService.findAll();
 

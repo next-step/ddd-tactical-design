@@ -14,7 +14,7 @@ import java.util.UUID;
 import kitchenpos.products.domain.tobe.Product;
 
 @Table(name = "menu_product")
-@Entity
+//@Entity
 public class MenuProduct {
 
     @Column(name = "seq")
