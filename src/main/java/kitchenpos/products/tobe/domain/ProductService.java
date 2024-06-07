@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.strategy.Profanity;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 
@@ -31,8 +30,7 @@ public class ProductService {
         }
 
         Product product = optionalProduct.get();
-        Product changedProduct = new Product(productId, new DisplayedName(name), product.getPrice(), new Profanity());
-        changedProduct.checkValidName();
+        Product changedProduct = new Product(productId, new DisplayedName(name), product.getPrice());
 
         this.productRepository.update(changedProduct);
     }

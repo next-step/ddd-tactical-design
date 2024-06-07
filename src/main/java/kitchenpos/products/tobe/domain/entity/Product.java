@@ -1,7 +1,6 @@
 package kitchenpos.products.tobe.domain.entity;
 
 import kitchenpos.products.tobe.domain.ProductRepositoryImpl;
-import kitchenpos.products.tobe.domain.strategy.Profanity;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 
@@ -12,18 +11,16 @@ public class Product {
     private final UUID id;
     private final DisplayedName displayedName;
     private final Price price;
-    private final Profanity profanity;
 
-    public Product(UUID id, DisplayedName displayedName, Price price, Profanity profanity) {
+    public Product(UUID id, DisplayedName displayedName, Price price) {
         this.id = (id != null) ? id : UUID.randomUUID();
         this.displayedName = displayedName;
         this.price = price;
-        this.profanity = profanity;
     }
 
     // Constructor that generates a random UUID
     public Product(DisplayedName displayedName, Price price) {
-        this(UUID.randomUUID(), displayedName, price, new Profanity());
+        this(UUID.randomUUID(), displayedName, price);
     }
 
     public UUID getId() {
@@ -40,17 +37,13 @@ public class Product {
 
     public void validateProperty() {
         this.checkValidPrice();
-        this.checkValidName();
     }
 
     public void register(ProductRepositoryImpl repo) {
-        Product product = new Product(this.getId(), this.displayedName, this.price,  new Profanity());
+        Product product = new Product(this.getId(), this.displayedName, this.price);
         repo.save(product);
     }
 
-    public void checkValidName() {
-        this.profanity.validate(this.displayedName.value());
-    }
 
     private void checkValidPrice() {
         if (this.price.getValue() <= 0) {
