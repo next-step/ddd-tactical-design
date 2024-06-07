@@ -8,5 +8,5 @@ public interface OrderTableRepository {
 
     OrderTable save(OrderTable orderTable);
 
-    Optional<OrderTable> findBy(UUID id);
+    Optional<OrderTable> findById(UUID id);
 }

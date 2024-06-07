@@ -56,7 +56,7 @@ public class EatInOrderCompletePolicyTest {
 
         Mockito.when(orderRepository.findAllByOrderTableId(주문_테이블.getId()))
                         .thenReturn(List.of(매장_식사));
-        Mockito.when(tableRepository.findBy(매장_식사.getOrderTableId()))
+        Mockito.when(tableRepository.findById(매장_식사.getOrderTableId()))
                         .thenReturn(Optional.of(주문_테이블));
         completePolicy.complete(매장_식사);
 

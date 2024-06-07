@@ -19,7 +19,7 @@ public class FakeOrderTableRepository implements OrderTableRepository {
     }
 
     @Override
-    public Optional<OrderTable> findBy(UUID id) {
+    public Optional<OrderTable> findById(UUID id) {
         return Optional.ofNullable(repository.get(id));
     }
 }

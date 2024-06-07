@@ -18,7 +18,7 @@ public class OrderTableModification {
     @EventListener
     public void setEmptyTable(CompletedOrderEvent event) {
         System.out.println("주문 테이블 빈 테이블 설정");
-        OrderTable table = tableRepository.findBy(event.getOrderTableId())
+        OrderTable table = tableRepository.findById(event.getOrderTableId())
                 .orElseThrow(() -> new NoSuchElementException());
         table.clear();
     }

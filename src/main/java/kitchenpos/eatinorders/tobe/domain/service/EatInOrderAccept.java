@@ -25,7 +25,7 @@ public class EatInOrderAccept {
     }
 
     private void checkOrderTableIsOccupied(UUID orderId) {
-        OrderTable table = tableRepository.findBy(orderId)
+        OrderTable table = tableRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementException());
 
         if (table.isNotOccupied()) {

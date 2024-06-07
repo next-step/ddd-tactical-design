@@ -43,7 +43,7 @@ public class EatInOrderFixture {
 
     public static OrderLineItem orderLineItemOf(long quantity, BigDecimal price) {
         OrderLineItem orderLineItem = new OrderLineItem(
-                new Random().nextLong(), quantity, price
+                new Random().nextLong(), quantity, price, UUID.randomUUID()
         );
         return orderLineItem;
     }
