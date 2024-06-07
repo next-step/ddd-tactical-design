@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class EatInOrderTest {
@@ -20,7 +19,7 @@ class EatInOrderTest {
 
     @BeforeEach
     void setUp() {
-        this.orderLineItems = new OrderLineItems(List.of(new OrderLineItem(UUID.randomUUID(), 1, 10000)));
+        this.orderLineItems = new OrderLineItems(List.of(new OrderLineItem(UUID.randomUUID(), 1, 10_000)));
         this.orderTable = new OrderTable("9번");
     }
 
@@ -28,31 +27,21 @@ class EatInOrderTest {
     @DisplayName("성공")
     void success() {
         //given when
-        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable);
+        EatInOrder eatInOrder = new EatInOrder(orderLineItems, orderTable.getId());
 
         //then
         assertThat(eatInOrder.getId()).isNotNull();
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.WAITING);
-        assertThat(eatInOrder.getOrderTable()).isEqualTo(orderTable);
+        assertThat(eatInOrder.getOrderTableId()).isEqualTo(orderTable.getId());
     }
 
     @Test
     @DisplayName("orderLineItem이 비어있으면 안된다.")
     void mustHaveOneOrderLineItem() {
-        assertThatThrownBy(() -> new EatInOrder(new OrderLineItems(new ArrayList<>()), orderTable))
-                .isExactlyInstanceOf(IllegalArgumentException.class);
-    }
+        assertThatThrownBy(() -> new EatInOrder(new OrderLineItems(new ArrayList<>()), orderTable.getId()))
+                .isExactlyInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("1개 이상의 주문항목이 필요");
 
-    @Test
-    @DisplayName("테이블은 비어 있는 테이블만 매장 주문이 가능하다.")
-    void onlyOrderWhenTableClear() {
-        //given when
-        orderTable.sit();
-        orderTable.changeNumberOfGuests(1);
-
-        //then
-        assertThatThrownBy(() -> new EatInOrder(orderLineItems, orderTable))
-                .isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
 }

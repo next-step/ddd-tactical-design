@@ -25,65 +25,53 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Embedded
     private OrderLineItems orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
+    @Column(name = "order_table_id", columnDefinition = "binary(16)")
+    private UUID orderTableId;
 
 
     protected EatInOrder() {
 
     }
 
-    public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable);
+    public EatInOrder(OrderLineItems orderLineItems, UUID orderTableId) {
+        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTableId);
     }
 
-    public EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, OrderTable orderTable) {
+    public EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
         checkOrderLineItem(orderLineItems);
-        checkOrderTable(orderTable);
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
     }
 
     private void checkOrderLineItem(OrderLineItems orderLineitems) {
         if (Objects.isNull(orderLineitems) || orderLineitems.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("1개 이상의 주문항목이 필요합니다.");
         }
     }
 
-    private void checkOrderTable(OrderTable orderTable) {
-        if (Objects.isNull(orderTable) || orderTable.isOccupied()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void Accepted() {
+    public void accepted() {
         if(!this.status.equals(OrderStatus.WAITING)){
-            throw new IllegalStateException();
+            throw new IllegalStateException("대기상태에서만 수락할 수 있습니다.");
         }
         this.status = OrderStatus.ACCEPTED;
     }
 
-    public void Served() {
+    public void served() {
         if(!this.status.equals(OrderStatus.ACCEPTED)){
-            throw new IllegalStateException();
+            throw new IllegalStateException("수락상태에서만 서빙할 수 있습니다.");
         }
         this.status = OrderStatus.SERVED;
     }
 
-    public void Complete() {
+    public void complete() {
         if(!this.status.equals(OrderStatus.SERVED)){
-            throw new IllegalStateException();
+            throw new IllegalStateException("서빙상태에서만 완료로 변경할 수 있습니다.");
         }
         this.status = OrderStatus.COMPLETED;
-        registerEvent(new EatInOrderCompletedEvent(this.orderTable.getId()));
+        registerEvent(new EatInOrderCompletedEvent(this.orderTableId));
 
     }
 
@@ -103,8 +91,8 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
         return orderLineItems;
     }
 
-    public OrderTable getOrderTable() {
-        return orderTable;
+    public UUID getOrderTableId() {
+        return this.orderTableId;
     }
 
     @Override
