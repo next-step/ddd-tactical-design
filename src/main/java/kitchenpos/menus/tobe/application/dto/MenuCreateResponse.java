@@ -36,7 +36,7 @@ public class MenuCreateResponse {
     final List<MenuProductCreateResponseDto> list = new ArrayList<>();
 
     for (MenuProduct menuProduct : menuProducts.getMenuProducts()) {
-      MenuProductCreateResponseDto.of(menuProduct);
+      list.add(MenuProductCreateResponseDto.of(menuProduct));
     }
 
     final MenuGroupCreationResponseDto menuGroupCreationResponseDto =
@@ -49,5 +49,29 @@ public class MenuCreateResponse {
         menuGroupCreationResponseDto,
         menu.isDisplayed(),
         list);
+  }
+
+  public UUID getMenuId() {
+    return menuId;
+  }
+
+  public String getMenuName() {
+    return menuName;
+  }
+
+  public BigDecimal getMenuPrice() {
+    return menuPrice;
+  }
+
+  public MenuGroupCreationResponseDto getMenuGroupCreationResponseDto() {
+    return menuGroupCreationResponseDto;
+  }
+
+  public boolean isDisplayed() {
+    return displayed;
+  }
+
+  public List<MenuProductCreateResponseDto> getMenuProductCreateResponseDtos() {
+    return menuProductCreateResponseDtos;
   }
 }

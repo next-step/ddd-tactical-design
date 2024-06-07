@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.application.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 
 public class MenuGroupsCreationResponseDto {
@@ -23,5 +22,9 @@ public class MenuGroupsCreationResponseDto {
     }
 
     return new MenuGroupsCreationResponseDto(list);
+  }
+
+  public List<MenuGroupCreationResponseDto> getList() {
+    return menuGroupCreationResponseDtoList;
   }
 }

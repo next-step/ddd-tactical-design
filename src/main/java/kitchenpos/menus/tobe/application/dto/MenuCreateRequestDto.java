@@ -11,6 +11,19 @@ public class MenuCreateRequestDto {
   private UUID menuGroupId;
   private Boolean displayed;
 
+  public MenuCreateRequestDto(
+      String name,
+      BigDecimal price,
+      List<MenuProductCreateRequestDto> menuProductCreateRequestDtos,
+      UUID menuGroupId,
+      Boolean displayed) {
+    this.name = name;
+    this.price = price;
+    this.menuProductCreateRequestDtos = menuProductCreateRequestDtos;
+    this.menuGroupId = menuGroupId;
+    this.displayed = displayed;
+  }
+
   public String getName() {
     return name;
   }
