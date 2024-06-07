@@ -1,4 +1,4 @@
-package kitchenpos.product.tobe.domain;
+package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -7,21 +7,21 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class ProductPrice {
+public class MenuPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected ProductPrice() {
+    protected MenuPrice() {
     }
 
-    protected ProductPrice(BigDecimal price) {
+    public MenuPrice(BigDecimal price) {
         validatePrice(price);
         this.price = price;
     }
 
     private void validatePrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("상품의 가격은 0보다 큰 값이어야 합니다.");
+            throw new IllegalArgumentException();
         }
     }
 
@@ -33,8 +33,8 @@ public class ProductPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductPrice that = (ProductPrice) o;
-        return Objects.equals(price, that.price);
+        MenuPrice menuPrice = (MenuPrice) o;
+        return Objects.equals(price, menuPrice.price);
     }
 
     @Override

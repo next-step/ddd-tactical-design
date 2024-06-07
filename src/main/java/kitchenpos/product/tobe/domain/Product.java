@@ -5,14 +5,14 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.common.infra.PurgomalumClient;
-import kitchenpos.product.tobe.domain.validate.ProductNameValidator;
+import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "newProduct")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -27,9 +27,13 @@ public class Product {
     protected Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price, ProductNameValidator productNameValidator) {
+    public Product(UUID id, String name, BigDecimal price, ProfanityValidator profanityValidator) {
         this.id = id;
-        this.name = new ProductName(name, productNameValidator);
+        this.name = new ProductName(name, profanityValidator);
+        this.price = new ProductPrice(price);
+    }
+
+    public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }
 
@@ -45,7 +49,20 @@ public class Product {
         return this.price.getPrice();
     }
 
-    public void changePrice(BigDecimal price) {
-        this.price = new ProductPrice(price);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product product)) {
+            return false;
+        }
+
+        return this.getId() != null && Objects.equals(this.getId(), product.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
