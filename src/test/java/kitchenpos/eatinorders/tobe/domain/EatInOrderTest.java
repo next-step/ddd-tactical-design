@@ -32,7 +32,6 @@ class EatInOrderTest {
 
         //then
         assertThat(eatInOrder.getId()).isNotNull();
-        assertThat(eatInOrder.getType()).isEqualTo(OrderType.EAT_IN);
         assertThat(eatInOrder.getStatus()).isEqualTo(OrderStatus.WAITING);
         assertThat(eatInOrder.getOrderTable()).isEqualTo(orderTable);
     }

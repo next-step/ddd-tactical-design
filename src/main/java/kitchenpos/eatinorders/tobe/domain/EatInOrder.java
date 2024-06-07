@@ -15,10 +15,6 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Id
     private UUID id;
 
-    @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
-
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -43,14 +39,13 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     }
 
     public EatInOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
-        this(UUID.randomUUID(), OrderType.EAT_IN, OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable);
+        this(UUID.randomUUID(), OrderStatus.WAITING, LocalDateTime.now(), orderLineItems, orderTable);
     }
 
-    public EatInOrder(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, OrderTable orderTable) {
+    public EatInOrder(UUID id, OrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, OrderTable orderTable) {
         checkOrderLineItem(orderLineItems);
         checkOrderTable(orderTable);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
@@ -94,10 +89,6 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
 
     public UUID getId() {
         return id;
-    }
-
-    public OrderType getType() {
-        return type;
     }
 
     public OrderStatus getStatus() {
