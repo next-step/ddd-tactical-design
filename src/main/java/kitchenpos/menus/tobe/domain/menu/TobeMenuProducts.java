@@ -15,7 +15,10 @@ public class TobeMenuProducts {
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_menu_product_to_menu_2")
     )
-    private final List<TobeMenuProduct> menuProducts;
+    private List<TobeMenuProduct> menuProducts;
+
+    private TobeMenuProducts() {
+    }
 
     private TobeMenuProducts(List<TobeMenuProduct> menuProducts) {
         if (menuProducts == null || menuProducts.isEmpty()) {

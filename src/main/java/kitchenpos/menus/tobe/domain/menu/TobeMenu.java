@@ -41,6 +41,9 @@ public class TobeMenu {
     private UUID menuGroupId;
 
     private TobeMenu(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {
+    private TobeMenu() {
+    }
+
         this.id = UUID.randomUUID();
         this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
