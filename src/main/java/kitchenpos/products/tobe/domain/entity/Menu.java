@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain.entity;
 
 import kitchenpos.products.tobe.domain.ProductRepositoryImpl;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
+import kitchenpos.products.tobe.domain.vo.Price;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +13,37 @@ public class Menu {
     private final UUID id;
     private final DisplayedName displayedName;
     private final List<UUID> productIds;
+    private final Price price;
+    private boolean isDisplay;
+    private final ProductRepositoryImpl repo;
 
-    public Menu(UUID id, DisplayedName displayedName) {
+
+    public Menu(UUID id, DisplayedName displayedName, Price price, ProductRepositoryImpl repo) {
         this.id = (id != null) ? id : UUID.randomUUID();
         this.displayedName = displayedName;
+        this.price = price;
         this.productIds = new ArrayList<>();
+        this.isDisplay = true;
+        this.repo = repo;
     }
 
-    public Menu(DisplayedName displayedName) {
-        this(UUID.randomUUID(), displayedName);
+    public Menu(DisplayedName displayedName, Price price, ProductRepositoryImpl repo) {
+        this(UUID.randomUUID(), displayedName, price, repo);
     }
 
     public UUID getId() {
         return this.id;
     }
 
-    public int getPrice(ProductRepositoryImpl repo){
+    public boolean isShow() {
+        return this.isDisplay;
+    }
+
+    public int getProductsTotalPrice() {
         int price = 0;
         for (UUID productId : this.productIds) {
-            Optional<Product> product = repo.findById(productId);
-            if(product.isPresent()){
+            Optional<Product> product = this.repo.findById(productId);
+            if (product.isPresent()) {
                 price += product.get().getPrice().getValue();
             }
         }
@@ -42,13 +54,15 @@ public class Menu {
         return this.displayedName;
     }
 
-    public void addProduct(Product product) {
+    public void registerProduct(Product product) {
         this.productIds.add(product.getId());
+        this.compareProductsTotalPriceWithMenuPrice();
     }
 
-    public void addProducts(List<Product> products) {
-        for (Product product : products) {
-            this.addProduct(product);
+    private void compareProductsTotalPriceWithMenuPrice() {
+        int totalPrice = this.getProductsTotalPrice();
+        if (totalPrice > this.price.getValue()) {
+            this.isDisplay = false;
         }
     }
 }
