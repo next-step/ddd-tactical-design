@@ -79,7 +79,7 @@ class TobeMenuTest {
         var menuGroupId = UUID.randomUUID();
         var menuProducts = List.of(new TobeMenuProduct(1, 10_000, UUID.randomUUID()));
 
-        return TobeMenu.of(name, price, profanities, menuGroupId, menuProducts);
+        return new TobeMenu(name, price, profanities, menuGroupId, menuProducts);
     }
 
     private TobeMenu createTobeMenu(String name) {
@@ -88,7 +88,7 @@ class TobeMenuTest {
         var menuGroupId = UUID.randomUUID();
         var menuProducts = List.of(new TobeMenuProduct(1, 10_000, UUID.randomUUID()));
 
-        return TobeMenu.of(name, price, profanities, menuGroupId, menuProducts);
+        return new TobeMenu(name, price, profanities, menuGroupId, menuProducts);
     }
 
     private TobeMenu createTobeMenu(List<TobeMenuProduct> menuProducts) {
@@ -97,7 +97,7 @@ class TobeMenuTest {
         var profanities = new FakeProfanities("비속어");
         var menuGroupId = UUID.randomUUID();
 
-        return TobeMenu.of(name, price, profanities, menuGroupId, menuProducts);
+        return new TobeMenu(name, price, profanities, menuGroupId, menuProducts);
     }
 
 }
