@@ -1,6 +1,6 @@
 package kitchenpos.menus.ui;
 
-import kitchenpos.menus.application.MenuGroupService;
+import kitchenpos.menus.application.LegacyMenuGroupService;
 import kitchenpos.menus.domain.MenuGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/api/menu-groups")
 @RestController
 public class MenuGroupRestController {
-    private final MenuGroupService menuGroupService;
+    private final LegacyMenuGroupService menuGroupService;
 
-    public MenuGroupRestController(final MenuGroupService menuGroupService) {
+    public MenuGroupRestController(final LegacyMenuGroupService menuGroupService) {
         this.menuGroupService = menuGroupService;
     }
 

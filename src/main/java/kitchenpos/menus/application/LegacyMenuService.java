@@ -19,13 +19,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class MenuService {
+public class LegacyMenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public MenuService(
+    public LegacyMenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,

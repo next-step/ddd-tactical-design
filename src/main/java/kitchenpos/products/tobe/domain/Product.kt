@@ -4,24 +4,24 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import kitchenpos.common.Price
 import java.util.*
 
 @Table(name = "product")
 @Entity
-class Product(
-    @Column(name = "displayed_name", nullable = false)
-    val displayedName: String,
-    price: ProductPrice
-) {
+class Product(name: ProductName, price: Price) {
     @Id
     @Column(name = "id", columnDefinition = "binary(16)")
     val id: UUID = UUID.randomUUID()
 
+    @Column(name = "name", nullable = false)
+    val name: ProductName = name
+
     @Column(name = "price", nullable = false)
-    var price: ProductPrice = price
+    var price: Price = price
         private set
 
-    fun changePrice(price: ProductPrice) {
+    fun changePrice(price: Price) {
         this.price = price
     }
 

@@ -15,7 +15,7 @@ import kitchenpos.products.domain.Product;
 import java.util.UUID;
 
 @Table(name = "menu_product")
-@Entity
+@Entity(name = "LegacyMenuProduct")
 public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
