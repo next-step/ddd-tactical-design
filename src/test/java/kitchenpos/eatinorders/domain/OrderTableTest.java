@@ -36,11 +36,19 @@ public class OrderTableTest {
     @DisplayName("주문 테이블이 등록될 때 방문한 손님의 수는 0으로 설정된다.")
     void create_numberOfGuests() {
         Assertions.assertThatThrownBy(
-                () -> new OrderTable(UUID.randomUUID(), "주문_테이블", -1, true)
+                () -> new OrderTable(UUID.randomUUID(), "주문_테이블", -1, false)
         ).isInstanceOf(IllegalArgumentException.class);
 
         Assertions.assertThatThrownBy(
-                () -> new OrderTable(UUID.randomUUID(), "주문_테이블", 1, true)
+                () -> new OrderTable(UUID.randomUUID(), "주문_테이블", 1, false)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("주문 테이블 등록 시 빈 테이블이어야 한다.")
+    void create_occupied() {
+        Assertions.assertThatThrownBy(
+                () -> new OrderTable(UUID.randomUUID(), "주문_테이블", 0, true)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
