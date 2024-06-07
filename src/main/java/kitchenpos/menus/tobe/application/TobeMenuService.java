@@ -13,16 +13,21 @@ import kitchenpos.menus.tobe.dto.request.MenuCreateRequest;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static kitchenpos.menus.tobe.domain.Displayed.isDisplayed;
 
 @Service
 public class TobeMenuService {
+    private static final Logger log = LoggerFactory.getLogger(TobeMenuService.class);
     private final TobeMenuRepository menuRepository;
     private final TobeMenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
@@ -49,23 +54,36 @@ public class TobeMenuService {
     @Transactional
     public TobeMenu create(final MenuCreateRequest request) {
 
-        DisplayName displayName = DisplayName.of(request.name(), purgomalumClient);
-        MenuPrice menuPrice = MenuPrice.of(request.price());
-        List<MenuCreateRequest.MenuProductRequest> menuProductRequests = request.menuProductRequests();
-        Displayed displayed = isDisplayed(request.display());
+        final DisplayName displayName = DisplayName.of(request.name(), purgomalumClient);
+        final MenuPrice menuPrice = MenuPrice.of(request.price());
+        final List<MenuCreateRequest.MenuProductRequest> menuProductRequests = request.menuProductRequests();
+        final Displayed displayed = isDisplayed(request.display());
 
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
                 .orElseThrow(() -> new NoSuchElementException("메뉴 그룹이 존재하지 않습니다."));
 
-        MenuProducts menuProducts = MenuProducts.of(menuProductRequests.stream()
+        final MenuProducts menuProducts = MenuProducts.of(menuProductRequests.stream()
                 .map(p -> {
                     Product product = productRepository.findById(p.productId())
                             .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않습니다."));
                     return TobeMenuProduct.create(product.getId(), product.getPrice(), p.quantity());
                 }).toList());
 
-
         final TobeMenu menu = TobeMenu.create(displayName, menuPrice, menuGroup.getId(), displayed, menuProducts);
+
         return menuRepository.save(menu);
     }
+
+
+    @Transactional
+    public TobeMenu changePrice(final UUID menuId, final BigDecimal price) {
+        final TobeMenu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NoSuchElementException("메뉴가 존재하지 않습니다."));
+
+        log.info("menu price({}) {} ->{}", menuId, menu.price(), price);
+
+        menu.changePrice(price);
+        return menu;
+    }
+
 }
