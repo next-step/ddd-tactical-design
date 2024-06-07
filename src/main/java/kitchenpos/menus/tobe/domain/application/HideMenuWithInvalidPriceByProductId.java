@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+@FunctionalInterface
 public interface HideMenuWithInvalidPriceByProductId {
     void execute(UUID productId);
 }

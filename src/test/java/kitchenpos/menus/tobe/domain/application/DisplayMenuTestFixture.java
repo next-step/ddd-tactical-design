@@ -3,9 +3,9 @@ package kitchenpos.menus.tobe.domain.application;
 
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 
-public class DisplayMenuTexFixture extends DefaultDisplayMenu{
+public class DisplayMenuTestFixture extends DefaultDisplayMenu{
 
-    public DisplayMenuTexFixture(MenuRepository menuRepository) {
+    public DisplayMenuTestFixture(MenuRepository menuRepository) {
         super(menuRepository);
     }
 }

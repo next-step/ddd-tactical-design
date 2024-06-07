@@ -1,25 +1,24 @@
 package kitchenpos.products.tobe.application;
 
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.application.HideMenuWithInvalidPriceByProductIdTestFixture;
-import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.products.application.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.repository.ProductRepository;
-import kitchenpos.products.tobe.domain.vo.ProductPrice;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-
 import static kitchenpos.Fixtures.changePriceRequest;
 import static kitchenpos.Fixtures.menu;
 import static kitchenpos.Fixtures.menuProduct;
 import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import kitchenpos.menus.tobe.domain.application.HideMenuWithInvalidPriceByProductIdTestFixture;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.repository.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.repository.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
+import kitchenpos.products.tobe.domain.vo.ProductPrice;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class ProductCommandHandlerTest {
     private ProductRepository productRepository;

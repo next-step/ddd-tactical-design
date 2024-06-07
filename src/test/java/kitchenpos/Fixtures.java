@@ -8,6 +8,7 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.products.tobe.domain.entity.Product;
@@ -46,10 +47,7 @@ public class Fixtures {
     }
 
     public static MenuGroup menuGroup(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroup;
+        return new MenuGroup(UUID.randomUUID(), MenuGroupName.of(name));
     }
 
     public static MenuProduct menuProduct() {

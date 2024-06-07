@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@FunctionalInterface
 public interface ChangeMenuPrice {
     Menu execute(UUID menuId, MenuChangePriceDto menuChangePriceDto);
 }

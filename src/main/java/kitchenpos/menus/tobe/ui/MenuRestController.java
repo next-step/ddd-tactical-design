@@ -31,7 +31,7 @@ public class MenuRestController {
 
     @PostMapping
     public ResponseEntity<Menu> create(@RequestBody final MenuCreateDto request) {
-        final Menu response = menuCommandHandler.create(request);
+        final Menu response = menuCommandHandler.createMenu(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
                              .body(response);
     }
@@ -53,6 +53,6 @@ public class MenuRestController {
 
     @GetMapping
     public ResponseEntity<List<Menu>> findAll() {
-        return ResponseEntity.ok(menuQueryHandler.findAll());
+        return ResponseEntity.ok(menuQueryHandler.findAllMenu());
     }
 }

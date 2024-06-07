@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 
 @Table(name = "menu_group")
 @Entity
@@ -16,7 +17,12 @@ public class MenuGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public MenuGroup() {
+    protected MenuGroup() {
+    }
+
+    public MenuGroup(UUID id, MenuGroupName menuGroupName) {
+        this.id = id;
+        this.name = menuGroupName.getValue();
     }
 
     public UUID getId() {

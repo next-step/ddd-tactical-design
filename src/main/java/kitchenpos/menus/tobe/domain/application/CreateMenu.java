@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
+@FunctionalInterface
 public interface CreateMenu {
     Menu execute(MenuCreateDto menucreateDto);
 }

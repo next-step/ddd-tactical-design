@@ -1,7 +1,11 @@
 package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.menus.tobe.application.MenuGroupService;
+import java.net.URI;
+import java.util.List;
+import kitchenpos.menus.tobe.application.MenuCommandHandler;
+import kitchenpos.menus.tobe.application.MenuQueryHandler;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,27 +13,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.List;
-
 @RequestMapping("/api/menu-groups")
 @RestController
 public class MenuGroupRestController {
-    private final MenuGroupService menuGroupService;
+    private final MenuCommandHandler menuCommandHandler;
+    private final MenuQueryHandler menuQueryHandler;
 
-    public MenuGroupRestController(final MenuGroupService menuGroupService) {
-        this.menuGroupService = menuGroupService;
+    public MenuGroupRestController(MenuCommandHandler menuCommandHandler, MenuQueryHandler menuQueryHandler) {
+        this.menuCommandHandler = menuCommandHandler;
+        this.menuQueryHandler = menuQueryHandler;
     }
 
     @PostMapping
-    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroup request) {
-        final MenuGroup response = menuGroupService.create(request);
+    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroupCreateDto request) {
+        final MenuGroup response = menuCommandHandler.createMenuGroup(request);
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
                              .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<MenuGroup>> findAll() {
-        return ResponseEntity.ok(menuGroupService.findAll());
+        return ResponseEntity.ok(menuQueryHandler.findAllMenuGroup());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@FunctionalInterface
 public interface HideMenu {
     Menu execute(UUID menuId);
 }

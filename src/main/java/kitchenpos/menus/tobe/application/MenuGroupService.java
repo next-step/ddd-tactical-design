@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,7 @@ public class MenuGroupService {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+        final MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), MenuGroupName.of(name));
         return menuGroupRepository.save(menuGroup);
     }
 

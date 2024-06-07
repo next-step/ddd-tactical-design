@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.tobe.domain.repository;
 
 
 import java.util.ArrayList;
@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.repository.ProductRepository;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new HashMap<>();

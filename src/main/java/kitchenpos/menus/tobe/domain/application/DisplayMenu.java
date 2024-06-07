@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@FunctionalInterface
 public interface DisplayMenu {
     Menu execute(UUID menuId);
 }
