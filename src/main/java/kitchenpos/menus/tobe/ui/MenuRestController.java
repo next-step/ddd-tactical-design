@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.ui;
 
-import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.application.MenuQueryHandler;
+import kitchenpos.menus.tobe.application.MenuCommandHandler;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.dto.MenuChangePriceDto;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
@@ -20,36 +21,38 @@ import java.util.UUID;
 @RequestMapping("/api/menus")
 @RestController
 public class MenuRestController {
-    private final MenuService menuService;
+    private final MenuCommandHandler menuCommandHandler;
+    private final MenuQueryHandler menuQueryHandler;
 
-    public MenuRestController(final MenuService menuService) {
-        this.menuService = menuService;
+    public MenuRestController(MenuCommandHandler menuCommandHandler, MenuQueryHandler menuQueryHandler) {
+        this.menuCommandHandler = menuCommandHandler;
+        this.menuQueryHandler = menuQueryHandler;
     }
 
     @PostMapping
     public ResponseEntity<Menu> create(@RequestBody final MenuCreateDto request) {
-        final Menu response = menuService.create(request);
+        final Menu response = menuCommandHandler.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
                              .body(response);
     }
 
     @PutMapping("/{menuId}/price")
     public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final MenuChangePriceDto request) {
-        return ResponseEntity.ok(menuService.changePrice(menuId, request));
+        return ResponseEntity.ok(menuCommandHandler.changePrice(menuId, request));
     }
 
     @PutMapping("/{menuId}/display")
     public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
-        return ResponseEntity.ok(menuService.display(menuId));
+        return ResponseEntity.ok(menuCommandHandler.display(menuId));
     }
 
     @PutMapping("/{menuId}/hide")
     public ResponseEntity<Menu> hide(@PathVariable final UUID menuId) {
-        return ResponseEntity.ok(menuService.hide(menuId));
+        return ResponseEntity.ok(menuCommandHandler.hide(menuId));
     }
 
     @GetMapping
     public ResponseEntity<List<Menu>> findAll() {
-        return ResponseEntity.ok(menuService.findAll());
+        return ResponseEntity.ok(menuQueryHandler.findAll());
     }
 }
