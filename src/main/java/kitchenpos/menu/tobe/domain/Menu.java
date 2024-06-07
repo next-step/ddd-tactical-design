@@ -3,6 +3,8 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.exception.CanNotChangeDisplay;
 import kitchenpos.exception.IllegalPriceException;
+import kitchenpos.menu.tobe.domain.vo.MenuName;
+import kitchenpos.menu.tobe.domain.vo.MenuPrice;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -70,11 +72,14 @@ public class Menu {
         }
     }
 
-    public void changeMenuDisplayStatus(boolean newStatus) {
-        if (newStatus && (menuProducts.getTotalPrice() > this.menuPrice.getPrice())) {
+    public void setDisplayed() {
+        if (menuProducts.getTotalPrice() > this.menuPrice.getPrice()) {
             throw new CanNotChangeDisplay("메뉴 가격이 메뉴상품 가격을 초과해 노출시킬 수 없습니다.");
         }
-        this.menuDisplayStatus = newStatus;
+        this.menuDisplayStatus = true;
+    }
+    public void setUndisplayed() {
+        this.menuDisplayStatus = false;
     }
 
     public boolean isMenuPriceHigherThanTotalPrice() {
