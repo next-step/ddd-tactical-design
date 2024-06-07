@@ -13,12 +13,12 @@ public class Price {
   protected Price() {
   }
 
-  private Price(BigDecimal price) {
+  private Price(final BigDecimal price) {
     validate(price);
     this.price = price;
   }
 
-  public static Price from(Long price) {
+  public static Price from(final Long price) {
     if (Objects.isNull(price)) {
       throw new IllegalArgumentException("상품의 가격이 올바르지 않으면 변경할 수 없다.");
     }
@@ -29,7 +29,7 @@ public class Price {
     return new Price(price);
   }
 
-  private void validate(BigDecimal price) {
+  private void validate(final BigDecimal price) {
     if (Objects.isNull(price)) {
       throw new IllegalArgumentException("가격이 올바르지 않으면 변경할 수 없다.");
     }
@@ -43,11 +43,11 @@ public class Price {
     return price;
   }
 
-  public BigDecimal multiply(BigDecimal quantity) {
+  public BigDecimal multiply(final BigDecimal quantity) {
     return getPrice().multiply(quantity);
   }
 
-  public boolean isBigger(BigDecimal price){
+  public boolean isBigger(final BigDecimal price){
     return getPrice().compareTo(price) > 0;
   }
 
