@@ -5,7 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
-import kitchenpos.products.domain.tobe.ProductPrice;
+
+import kitchenpos.common.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,7 @@ public class ProductPriceTest {
   @DisplayName("상품의 가격을 생성할 수 있다.")
   @Test
   void createProductPrice() {
-    ProductPrice actual = ProductPrice.from(20_000L);
+    Price actual = Price.from(20_000L);
 
     assertAll(
         () -> assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(20_000L))
@@ -29,8 +30,8 @@ public class ProductPriceTest {
   @ValueSource(longs = {-10_000L, -1L})
   void changeProductPriceWithNegativePrice(long price) {
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> ProductPrice.from(price))
-        .withMessageContaining("상품의 가격은 0원 이상이어야 한다.");
+        .isThrownBy(() -> Price.from(price))
+        .withMessageContaining("가격은 0원 이상이어야 한다.");
   }
 
   @DisplayName("상품의 가격은 Null일수 없어야 한다.")
@@ -38,6 +39,6 @@ public class ProductPriceTest {
   @NullSource
   void changeProductPriceWithNullPrice(Long price) {
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> ProductPrice.from(price));
+        .isThrownBy(() -> Price.from(price));
   }
 }

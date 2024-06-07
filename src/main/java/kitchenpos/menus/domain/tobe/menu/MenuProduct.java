@@ -1,6 +1,7 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.common.domain.Price;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class MenuProduct {
   private UUID productId;
   @Column(name = "price", nullable = false)
   @Embedded
-  private MenuProductPrice price;
+  private Price price;
   @Column(name = "quantity", nullable = false)
   private Long quantity;
 
@@ -29,7 +30,7 @@ public class MenuProduct {
 
   protected MenuProduct() {
   }
-  private MenuProduct(UUID productId, MenuProductPrice price, Long quantity) {
+  private MenuProduct(UUID productId, Price price, Long quantity) {
     validate(quantity);
 
     this.productId = productId;
@@ -42,11 +43,11 @@ public class MenuProduct {
     }
   }
   public static MenuProduct of(UUID productId, Long price, Long quantity){
-    return new MenuProduct(productId, MenuProductPrice.of(price), quantity);
+    return new MenuProduct(productId, Price.from(price), quantity);
   }
 
   public static MenuProduct of(UUID productId, BigDecimal price, Long quantity){
-    return new MenuProduct(productId, MenuProductPrice.of(price), quantity);
+    return new MenuProduct(productId, Price.from(price), quantity);
   }
   public BigDecimal amount(){
     return price.multiply(BigDecimal.valueOf(quantity));
@@ -57,7 +58,7 @@ public class MenuProduct {
   }
 
   public void changePrice(Long price){
-    this.price = MenuProductPrice.of(price);
+    this.price = Price.from(price);
   }
 
   @Override

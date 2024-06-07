@@ -2,6 +2,7 @@ package kitchenpos.menus.domain.tobe.menu;
 
 
 import jakarta.persistence.*;
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityValidator;
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public class Menu {
   private MenuName menuName;
   @Embedded
   @Column(name = "price", nullable = false)
-  private MenuPrice menuPrice;
+  private Price menuPrice;
 
   @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
   private UUID menuGroupId;
@@ -35,7 +36,7 @@ public class Menu {
   protected Menu() {
   }
 
-  private Menu(MenuName menuName, MenuPrice menuPrice, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
+  private Menu(MenuName menuName, Price menuPrice, UUID menuGroupId, boolean displayed, MenuProducts menuProducts) {
     validate(menuPrice, menuProducts.sum(), menuProducts, menuGroupId);
 
     this.id = UUID.randomUUID();
@@ -48,13 +49,13 @@ public class Menu {
 
   public static Menu of(final String name, final Long price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
 
-    return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
+    return new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
   }
   public static Menu of(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
 
-    return new Menu(MenuName.of(name, profanityValidator), MenuPrice.of(price), menuGroupId, displayed, menuProducts);
+    return new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
   }
-  private void validate(final MenuPrice menuPrice, final BigDecimal price, final MenuProducts menuProducts, final UUID menuGroupId) {
+  private void validate(final Price menuPrice, final BigDecimal price, final MenuProducts menuProducts, final UUID menuGroupId) {
     if (Objects.isNull(menuGroupId)){
       throw new IllegalArgumentException("`메뉴는 특정 메뉴 그룹에 속해야 한다.");
     }
@@ -83,7 +84,7 @@ public class Menu {
   }
 
   public void changePrice(BigDecimal price) {
-    MenuPrice menuPriceRequest = MenuPrice.of(price);
+    Price menuPriceRequest = Price.from(price);
     validate(menuPriceRequest, menuProducts.sum(), menuProducts, menuGroupId);
 
     this.menuPrice = menuPriceRequest;

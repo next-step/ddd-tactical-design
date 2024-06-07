@@ -1,6 +1,6 @@
 package kitchenpos.menus.domain.menu;
 
-import kitchenpos.menus.domain.tobe.menu.MenuPrice;
+import kitchenpos.common.domain.Price;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +17,7 @@ public class MenuPriceTest {
   @DisplayName("상품의 가격을 생성할 수 있다.")
   @Test
   void createMenuPrice() {
-    MenuPrice actual = MenuPrice.of(20_000L);
+    Price actual = Price.from(20_000L);
 
     assertAll(
             () -> assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(20_000L))
@@ -29,8 +29,8 @@ public class MenuPriceTest {
   @ValueSource(longs = {-10_000L, -1L})
   void changeMenuPriceWithNegativePrice(long price) {
     assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> MenuPrice.of(price))
-            .withMessageContaining("메뉴의 가격은 0원 이상이어야 한다.");
+            .isThrownBy(() -> Price.from(price))
+            .withMessageContaining("가격은 0원 이상이어야 한다.");
   }
 
   @DisplayName("상품의 가격은 Null일수 없어야 한다.")
@@ -38,7 +38,7 @@ public class MenuPriceTest {
   @NullSource
   void changeProductPriceWithNullPrice(Long price) {
     assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> MenuPrice.of(price));
+            .isThrownBy(() -> Price.from(price));
   }
 
 }

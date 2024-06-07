@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.common.domain.Price;
 import kitchenpos.common.domain.ProfanityValidator;
 
 import java.math.BigDecimal;
@@ -24,12 +25,12 @@ public class Product {
 
   @Column(name = "price", nullable = false)
   @Embedded
-  private ProductPrice price;
+  private Price price;
 
   protected Product() {
   }
 
-  private Product(ProductName name, ProductPrice price) {
+  private Product(ProductName name, Price price) {
     this.id = UUID.randomUUID();
     this.name = name;
     this.price = price;
@@ -37,11 +38,11 @@ public class Product {
 
   public static Product from(String name, Long price, ProfanityValidator profanityValidator) {
 
-    return new Product(ProductName.from(name, profanityValidator), ProductPrice.from(price));
+    return new Product(ProductName.from(name, profanityValidator), Price.from(price));
   }
 
   public void changeProductPrice(Long price) {
-    this.price = ProductPrice.from(price);
+    this.price = Price.from(price);
   }
 
   public UUID getId() {
