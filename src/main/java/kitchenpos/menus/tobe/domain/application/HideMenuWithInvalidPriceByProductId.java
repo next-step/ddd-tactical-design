@@ -9,15 +9,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public interface CheckMenuPrice {
+public interface HideMenuWithInvalidPriceByProductId {
     void execute(UUID productId);
 }
 
 @Service
-class DefaultCheckMenuPrice implements CheckMenuPrice {
+class DefaultHideMenuWithInvalidPriceByProductId implements HideMenuWithInvalidPriceByProductId {
     private final MenuRepository menuRepository;
 
-    public DefaultCheckMenuPrice(MenuRepository menuRepository) {
+    public DefaultHideMenuWithInvalidPriceByProductId(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
