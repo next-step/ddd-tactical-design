@@ -1,31 +1,16 @@
 package kitchenpos.menus.domain.menu;
 
 import kitchenpos.Fixtures;
-import kitchenpos.menus.application.MenuService;
-import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
-import kitchenpos.menus.domain.tobe.menu.MenuPrice;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
-import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
-import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.products.infra.FakeProfanityValidator;
-import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.Arguments;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;

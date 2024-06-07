@@ -5,7 +5,7 @@ import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.products.infra.FakeProfanityValidator;
 import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;

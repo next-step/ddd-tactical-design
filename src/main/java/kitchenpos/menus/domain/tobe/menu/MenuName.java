@@ -1,7 +1,7 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 
 import java.util.Objects;
 

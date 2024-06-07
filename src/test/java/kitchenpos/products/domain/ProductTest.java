@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 import kitchenpos.Fixtures;
 import kitchenpos.products.infra.FakeProfanityValidator;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

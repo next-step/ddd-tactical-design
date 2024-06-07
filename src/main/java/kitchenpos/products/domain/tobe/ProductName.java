@@ -1,6 +1,7 @@
 package kitchenpos.products.domain.tobe;
 
 import jakarta.persistence.Embeddable;
+import kitchenpos.common.domain.ProfanityValidator;
 
 import java.util.Objects;
 
