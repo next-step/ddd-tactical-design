@@ -4,6 +4,8 @@ import kitchenpos.menus.tobe.domain.application.CreateMenu;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
+import kitchenpos.menus.tobe.dto.MenuChangePriceDto;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -33,11 +34,8 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Menu changePrice(final UUID menuId, final MenuChangePriceDto request) {
+        final MenuPrice menuPrice = MenuPrice.of(request.getPrice());
         final Menu menu = menuRepository.findById(menuId)
                                         .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
@@ -48,10 +46,10 @@ public class MenuService {
                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
-        if (price.compareTo(sum) > 0) {
+        if (menuPrice.getValue().compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(price);
+        menu.setPrice(menuPrice);
         return menu;
     }
 

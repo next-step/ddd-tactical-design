@@ -79,10 +79,6 @@ public class Menu {
         this.price = price.getValue();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
