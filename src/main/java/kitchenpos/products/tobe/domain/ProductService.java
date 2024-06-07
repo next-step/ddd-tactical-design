@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.strategy.Profanity;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
+import kitchenpos.products.tobe.domain.vo.Price;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +16,11 @@ public class ProductService {
         this.productRepository = repository;
     }
 
-    public void register(Product product) {
-        product.validateProperty();
-        this.productRepository.save(product);
+
+    public Product register(DisplayedName name, Price price) {
+        Product product = new Product(name, price);
+        product.register(this.productRepository);
+        return product;
     }
 
     public void changeName(UUID productId, String name) throws Exception {

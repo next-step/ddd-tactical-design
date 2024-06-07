@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain.entity;
 
+import kitchenpos.products.tobe.domain.ProductRepositoryImpl;
 import kitchenpos.products.tobe.domain.strategy.Profanity;
 import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
@@ -40,6 +41,11 @@ public class Product {
     public void validateProperty() {
         this.checkValidPrice();
         this.checkValidName();
+    }
+
+    public void register(ProductRepositoryImpl repo) {
+        Product product = new Product(this.getId(), this.displayedName, this.price,  new Profanity());
+        repo.save(product);
     }
 
     public void checkValidName() {

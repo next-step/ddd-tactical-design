@@ -20,10 +20,9 @@ public class ProductServiceTest {
     void changeWrongNameTest() throws Exception {
         Price price = new Price(10);
         DisplayedName displayedName = new DisplayedName("wrong-name");
-        Product pd = new Product(displayedName, price);
 
         ProductService service = new ProductService(new InMemoryProductRepository());
-        assertThatThrownBy(() -> service.register(pd))
+        assertThatThrownBy(() -> service.register(displayedName, price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -33,10 +32,9 @@ public class ProductServiceTest {
     void changeGetNameTest() throws Exception {
         Price price = new Price(10);
         DisplayedName displayedName = new DisplayedName("name");
-        Product pd = new Product(displayedName, price);
 
         ProductService service = new ProductService(new InMemoryProductRepository());
-        service.register(pd);
+        Product pd = service.register(displayedName, price);
 
         service.changeName(pd.getId(), "new-name");
 
@@ -47,13 +45,12 @@ public class ProductServiceTest {
 
     @DisplayName("상품을 등록할 수 있다")
     @Test
-    void registerTest() {
+    void registerNewTest() {
         Price price = new Price(10);
         DisplayedName displayedName = new DisplayedName("name");
-        Product pd = new Product(displayedName, price);
 
         ProductService service = new ProductService(new InMemoryProductRepository());
-        service.register(pd);
+        service.register(displayedName, price);
 
         List<Product> pdList = service.getList();
         assertThat(pdList).hasSize(1);
