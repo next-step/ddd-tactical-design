@@ -1,25 +1,18 @@
 package kitchenpos.eatinorders.application;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
 import kitchenpos.eatinorders.domain.OrderRepository;
 import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -42,7 +35,7 @@ public class OrderService {
 
     @Transactional
     public Order create(final Order request) {
-        final OrderType type = request.getType();
+        /*final OrderType type = request.getType();
         if (Objects.isNull(type)) {
             throw new IllegalArgumentException();
         }
@@ -100,12 +93,13 @@ public class OrderService {
             }
             order.setOrderTable(orderTable);
         }
-        return orderRepository.save(order);
+        return orderRepository.save(order);*/
+        return null;
     }
 
     @Transactional
     public Order accept(final UUID orderId) {
-        final Order order = orderRepository.findById(orderId)
+        /*final Order order = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
@@ -120,7 +114,8 @@ public class OrderService {
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
         order.setStatus(OrderStatus.ACCEPTED);
-        return order;
+        return order;*/
+        return null;
     }
 
     @Transactional
