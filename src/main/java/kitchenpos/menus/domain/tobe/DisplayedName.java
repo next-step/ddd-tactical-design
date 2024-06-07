@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe;
+package kitchenpos.menus.domain.tobe;
 
 import jakarta.persistence.Embeddable;
 import kitchenpos.products.infra.tobe.Profanities;

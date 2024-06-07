@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe;
+package kitchenpos.menus.domain.tobe;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -35,5 +35,9 @@ public class Price {
 
     public BigDecimal getPriceValue() {
         return priceValue;
+    }
+
+    public int comparePrice(BigDecimal otherPrice) {
+        return priceValue.compareTo(otherPrice);
     }
 }
