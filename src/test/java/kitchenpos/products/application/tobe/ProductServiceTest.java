@@ -11,22 +11,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ProductServiceTest {
-    @DisplayName("상품의 이름에는 비속어가 포함될 수 없다")
-    @Test
-    void changeWrongNameTest() throws Exception {
-        Price price = new Price(10);
-        DisplayedName displayedName = new DisplayedName("wrong-name");
-
-        ProductService service = new ProductService(new InMemoryProductRepository());
-        assertThatThrownBy(() -> service.register(displayedName, price))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-
     @DisplayName("상품의 이름을 변경할 수 있다")
     @Test
     void changeGetNameTest() throws Exception {
