@@ -25,10 +25,16 @@ public class MenuProducts {
     }
 
     public static MenuProducts of(TobeMenuProduct... menuProducts) {
+        if (menuProducts == null) {
+            throw new IllegalArgumentException("1개 이상의 메뉴 상품이 필요합니다.");
+        }
         return new MenuProducts(List.of(menuProducts));
     }
 
     public static MenuProducts of(List<TobeMenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("1개 이상의 메뉴 상품이 필요합니다.");
+        }
         return new MenuProducts(menuProducts);
     }
 
@@ -66,6 +72,10 @@ public class MenuProducts {
         return menuProducts.stream()
                 .filter(menuProduct -> menuProduct.productId().equals(menuProductId))
                 .findFirst();
+    }
+
+    public int size() {
+        return menuProducts.size();
     }
 
 }

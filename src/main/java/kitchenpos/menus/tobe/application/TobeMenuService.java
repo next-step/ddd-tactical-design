@@ -55,20 +55,17 @@ public class TobeMenuService {
         Displayed displayed = isDisplayed(request.display());
 
         final TobeMenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException("메뉴 그룹이 존재하지 않습니다."));
 
         MenuProducts menuProducts = MenuProducts.of(menuProductRequests.stream()
                 .map(p -> {
                     Product product = productRepository.findById(p.productId())
-                            .orElseThrow(NoSuchElementException::new);
+                            .orElseThrow(() -> new NoSuchElementException("상품이 존재하지 않습니다."));
                     return TobeMenuProduct.create(product.getId(), product.getPrice(), p.quantity());
                 }).toList());
 
 
         final TobeMenu menu = TobeMenu.create(displayName, menuPrice, menuGroup.getId(), displayed, menuProducts);
-        TobeMenu save = menuRepository.save(menu);
-        return save;
+        return menuRepository.save(menu);
     }
-
-
 }
