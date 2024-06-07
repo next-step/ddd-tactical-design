@@ -5,11 +5,8 @@ import kitchenpos.menus.tobe.application.dto.MenuChangePriceRequestDto;
 import kitchenpos.menus.tobe.application.dto.MenuCreateRequestDto;
 import kitchenpos.menus.tobe.application.dto.MenuCreateResponse;
 import kitchenpos.menus.tobe.application.dto.MenuProductCreateRequestDto;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.menus.tobe.domain.menu.ProductProviderInterface;
-import kitchenpos.menus.tobe.domain.menu.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menu.MenuPurgomalumClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
 import kitchenpos.menus.tobe.infra.dto.ProductConsumerDto;
@@ -20,17 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class MenuService {
   private final MenuRepository menuRepository;
   private final MenuGroupRepository menuGroupRepository;
-  private final PurgomalumClient purgomalumClient;
+  private final MenuPurgomalumClient menuPurgomalumClient;
   private final ProductProviderInterface productProviderInterface;
 
   public MenuService(
       final MenuRepository menuRepository,
       final MenuGroupRepository menuGroupRepository,
-      final PurgomalumClient purgomalumClient,
-      ProductProviderInterface productProviderInterface) {
+      final MenuPurgomalumClient menuPurgomalumClient,
+      final ProductProviderInterface productProviderInterface) {
     this.menuRepository = menuRepository;
     this.menuGroupRepository = menuGroupRepository;
-    this.purgomalumClient = purgomalumClient;
+    this.menuPurgomalumClient = menuPurgomalumClient;
     this.productProviderInterface = productProviderInterface;
   }
 
@@ -43,7 +40,7 @@ public class MenuService {
             this.getMenuGroup(request),
             this.getMenuProducts(request),
             request.getDisplayed(),
-            purgomalumClient);
+            menuPurgomalumClient);
 
     menuRepository.save(menu);
     return MenuCreateResponse.of(menu);
@@ -87,6 +84,10 @@ public class MenuService {
   }
 
   private List<MenuProduct> getMenuProducts(MenuCreateRequestDto request) {
+    if (Objects.isNull(request.getMenuProductCreateRequestDtos())) {
+      throw new IllegalArgumentException();
+    }
+
     final List<ProductConsumerDto> productConsumerDtos =
         request.getMenuProductCreateRequestDtos().stream()
             .map(MenuProductCreateRequestDto::to)
