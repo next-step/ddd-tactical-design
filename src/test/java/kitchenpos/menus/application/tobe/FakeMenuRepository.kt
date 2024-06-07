@@ -21,4 +21,8 @@ class FakeMenuRepository : MenuRepository {
     override fun findById(menuId: UUID): Optional<Menu> {
         return Optional.ofNullable(menuMap[menuId])
     }
+
+    override fun findByIdIn(menuIds: List<UUID>): List<Menu> {
+        return menuIds.mapNotNull { menuMap[it] }
+    }
 }

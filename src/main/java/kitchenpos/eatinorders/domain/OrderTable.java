@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Table(name = "order_table")
-@Entity
+@Entity(name = "LegacyOrderTable")
 public class OrderTable {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
