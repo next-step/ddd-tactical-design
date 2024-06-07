@@ -1,14 +1,8 @@
 package kitchenpos.products.tobe.domain.application;
 
-import static kitchenpos.Fixtures.product;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
@@ -19,6 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import static kitchenpos.Fixtures.product;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ChangePriceTest {
     ChangePrice changePrice;
