@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
 import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -68,8 +69,20 @@ public class EatInOrder {
         return status == EatInOrderStatus.COMPLETED;
     }
 
+    public void updateMenuInOrders(UUID menuId, BigDecimal price, boolean displayed) {
+        orderLineItems.updateMenuInOrders(menuId, price, displayed);
+    }
+
     public Set<UUID> allMenuId() {
         return orderLineItems.allMenuId();
+    }
+
+    public boolean hasMenuId(UUID inputMenuId) {
+        boolean hasMenuId = orderLineItems.allMenuId()
+                .stream()
+                .anyMatch(thisMenuId -> thisMenuId.equals(inputMenuId));
+
+        return hasMenuId;
     }
 
     public UUID getId() {
@@ -87,5 +100,4 @@ public class EatInOrder {
     public UUID getOrderTableId() {
         return orderTableId;
     }
-
 }

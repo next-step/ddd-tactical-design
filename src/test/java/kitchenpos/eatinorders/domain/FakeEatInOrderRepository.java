@@ -28,4 +28,12 @@ public class FakeEatInOrderRepository implements EatInOrderRepository {
                 .filter(thisOrder -> thisOrder.getOrderTableId().equals(orderTableId))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<EatInOrder> findAllByMenuId(UUID menuId) {
+        return repository.values()
+                .stream()
+                .filter(thisOrder -> thisOrder.hasMenuId(menuId))
+                .collect(Collectors.toList());
+    }
 }

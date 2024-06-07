@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -24,10 +25,15 @@ public class OrderLineItems {
         this.orderLineItems = orderLineItems;
     }
 
+    public void updateMenuInOrders(UUID menuId, BigDecimal price, boolean displayed) {
+        for (OrderLineItem orderLineItem : orderLineItems) {
+            orderLineItem.updateMenuInOrders(menuId, price, displayed);
+        }
+    }
+
     public Set<UUID> allMenuId() {
         return orderLineItems.stream()
                 .map(orderLineItem -> orderLineItem.getMenuId())
                 .collect(Collectors.toSet());
     }
-
 }

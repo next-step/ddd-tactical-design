@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.domain;
 
 import kitchenpos.eatinorders.EatInOrderFixture;
 import kitchenpos.eatinorders.tobe.domain.entity.OrderLineItem;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Random;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -50,7 +52,29 @@ public class OrderLineItemTest {
         @DisplayName("주문 항목 생성 시 메뉴 식별자가 존재하지 않을 경우 예외가 발생한다.")
         void create_checkMenuId() {
             Assertions.assertThatThrownBy(
-                    () -> new OrderLineItem(new Random().nextLong(), 1, BigDecimal.ONE, null)
+                    () -> new OrderLineItem(new Random().nextLong(), 1, BigDecimal.ONE, null, null)
+            ).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        @DisplayName("메뉴가 비공개일 경우 예외가 발생한다.")
+        void create_menuIsHide() {
+            Assertions.assertThatThrownBy(
+                    () -> new OrderLineItem(
+                            new Random().nextLong(), 1, BigDecimal.ONE,
+                            UUID.randomUUID(), BigDecimal.ONE
+                    )
+            ).isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        @DisplayName("메뉴의 가격과 주문 항목의 가격이 다르면 예외가 발생한다.")
+        void create_priceIsNotMenuPrice() {
+            Assertions.assertThatThrownBy(
+                    () -> new OrderLineItem(
+                            new Random().nextLong(), 1, BigDecimal.ONE,
+                            UUID.randomUUID(), true, BigDecimal.TWO
+                    )
             ).isInstanceOf(IllegalArgumentException.class);
         }
     }

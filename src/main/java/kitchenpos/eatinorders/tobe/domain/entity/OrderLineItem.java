@@ -1,10 +1,10 @@
 package kitchenpos.eatinorders.tobe.domain.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorders.tobe.domain.vo.MenuInEatInOrders;
 import kitchenpos.eatinorders.tobe.domain.vo.Price;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_line_item2")
@@ -21,23 +21,36 @@ public class OrderLineItem {
     @Embedded
     private Price price;
 
-    @Transient
-    private UUID menuId;
+    @Embedded
+    private MenuInEatInOrders menuInOrders;
 
     protected OrderLineItem() {}
 
-    public OrderLineItem(Long seq, long quantity, BigDecimal price, UUID menuId) {
+    public OrderLineItem(Long seq, long quantity, BigDecimal price,
+                         UUID menuId, BigDecimal menuPrice) {
+        this(seq, quantity, price, menuId, false, menuPrice);
+    }
+
+    public OrderLineItem(Long seq, long quantity, BigDecimal price,
+                         UUID menuId, boolean isDisplayedMenu, BigDecimal menuPrice) {
         this.seq = seq;
         this.quantity = quantity;
         this.price = new Price(price);
-        this.menuId = checkMenuId(menuId);
+        menuInOrders = new MenuInEatInOrders(menuId, isDisplayedMenu, menuPrice);
+        checkIsEqualPrice();
     }
 
-    private UUID checkMenuId(UUID menuId) {
-        if (Objects.isNull(menuId)) {
-            throw new IllegalArgumentException("메뉴 식별자가 존재하지 않습니다.");
+    private void checkIsEqualPrice() {
+        if (this.price.isNotSamePrice(menuInOrders.getPrice())) {
+            throw new IllegalArgumentException("주문 항목 금액과 메뉴 금액이 서로 다릅니다.");
         }
-        return menuId;
+    }
+
+    public void updateMenuInOrders(UUID menuId, BigDecimal price, boolean displayed) {
+        if (menuInOrders.isSameId(menuId)) {
+            menuInOrders.update(price, displayed);
+            checkIsEqualPrice();
+        }
     }
 
     public Long getSeq() {
@@ -53,6 +66,6 @@ public class OrderLineItem {
     }
 
     public UUID getMenuId() {
-        return menuId;
+        return menuInOrders.getMenuId();
     }
 }
