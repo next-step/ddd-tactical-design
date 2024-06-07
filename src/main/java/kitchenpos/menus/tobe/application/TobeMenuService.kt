@@ -14,6 +14,11 @@ class TobeMenuService(
     private val tobeMenuRepository: TobeMenuRepository,
     private val tobeMenuGroupRepository: TobeMenuGroupRepository,
 ) {
+    /**
+     * TODO :
+     * 1. menuProducts validation (w/ domain service -> product 접근)
+     * 2. displayed constructor 에 추가
+     */
     @Transactional
     fun create(request: CreateMenuRequest): TobeMenu? {
         val menuGroup =
@@ -21,9 +26,7 @@ class TobeMenuService(
                 .orElseThrow { NoSuchElementException() }
         val name = request.name
         val price = request.price
-        // TODO : menuProducts validation (w/ domain service -> product 접근)
         val menuProducts = request.menuProducts.map { TobeMenuProduct(it.quantity, it.price, it.productId) }
-        // TODO : displayed constructor 에 추가
         val displayed = request.displayed
         val profanities = DefaultProfanities()
         val menu = TobeMenu(name, price, profanities, menuGroup, menuProducts)
