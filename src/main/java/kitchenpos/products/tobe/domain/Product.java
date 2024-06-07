@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Entity
-@Table(name = "product")
+@Entity(name = "Product2")
+@Table(name = "product2")
 public class Product {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

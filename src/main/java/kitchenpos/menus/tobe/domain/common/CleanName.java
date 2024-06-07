@@ -1,7 +1,8 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.service.MenuNameValidationService;
 
 import java.util.Objects;
 

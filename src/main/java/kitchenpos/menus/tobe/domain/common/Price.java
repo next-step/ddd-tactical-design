@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -12,6 +12,19 @@ public class Price {
     private BigDecimal price;
 
     protected Price() {}
+
+    public Price multiplyBy(int value) {
+        return multiplyBy(BigDecimal.valueOf(value));
+    }
+
+    public Price multiplyBy(long value) {
+        return multiplyBy(BigDecimal.valueOf(value));
+    }
+
+    public Price multiplyBy(BigDecimal value) {
+        price = price.multiply(value);
+        return new Price(price);
+    }
 
     public Price(BigDecimal price, long quantity) {
         checkValidatedPrice(price);

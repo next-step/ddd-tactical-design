@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.service;
 
 import kitchenpos.products.infra.PurgomalumClient;
 

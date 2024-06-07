@@ -1,11 +1,12 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.domain.common.*;
 
 import java.util.UUID;
 
-@Table(name = "menu_group")
-@Entity
+@Table(name = "menu_group2")
+@Entity(name = "MenuGroup2")
 public class MenuGroup {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id

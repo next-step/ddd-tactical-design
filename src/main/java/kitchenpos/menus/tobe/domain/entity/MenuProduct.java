@@ -1,12 +1,14 @@
-package kitchenpos.menus.tobe.domain;
+package kitchenpos.menus.tobe.domain.entity;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.domain.vo.Quantity;
+import kitchenpos.menus.tobe.domain.common.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
+@Table(name = "menu_product2")
+@Entity(name = "MenuProduct2")
 public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class MenuProduct {
         this.seq = seq;
         this.quantity = new Quantity(quantity);
         this.productId = productId;
-        this.price = new Price(productPrice, quantity);
+        this.price = new Price(productPrice).multiplyBy(quantity);
     }
 
     public Long getSeq() {
