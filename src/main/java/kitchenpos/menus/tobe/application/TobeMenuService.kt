@@ -20,16 +20,17 @@ class TobeMenuService(
      * 2. displayed constructor 에 추가
      */
     @Transactional
-    fun create(request: CreateMenuRequest): TobeMenu? {
-        val menuGroup =
-            tobeMenuGroupRepository.findById(request.groupId)
-                .orElseThrow { NoSuchElementException() }
+    fun create(request: CreateMenuRequest): TobeMenu {
+        val groupId = request.groupId
+        if (!tobeMenuGroupRepository.existsById(request.groupId)) {
+            throw NoSuchElementException()
+        }
         val name = request.name
         val price = request.price
         val menuProducts = request.menuProducts.map { TobeMenuProduct(it.quantity, it.price, it.productId) }
         val displayed = request.displayed
         val profanities = DefaultProfanities()
-        val menu = TobeMenu(name, price, profanities, menuGroup, menuProducts)
+        val menu = TobeMenu(name, price, profanities, groupId, menuProducts)
         return tobeMenuRepository.save(menu)
     }
 }

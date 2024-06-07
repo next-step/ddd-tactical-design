@@ -53,14 +53,15 @@ class JpaTobeMenuRepositoryTest {
         var name = "후라이드";
         var price = 10_000;
         var profanities = new DefaultProfanities();
+        var menuGroupId = menuGroup.getId();
         var menuProducts = List.of(new TobeMenuProduct(1, 10_000, UUID.randomUUID()));
 
         // when
-        var menu = new TobeMenu(name, price, profanities, menuGroup, menuProducts);
-        TobeMenu savedMenu = sut.save(menu);
+        var menu = new TobeMenu(name, price, profanities, menuGroupId, menuProducts);
+        var savedMenu = sut.save(menu);
 
         // then
-        UUID id = savedMenu.getId();
+        assertThat(savedMenu).isNotNull();
     }
 
 }
