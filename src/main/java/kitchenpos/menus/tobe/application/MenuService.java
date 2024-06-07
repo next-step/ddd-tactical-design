@@ -1,18 +1,14 @@
 package kitchenpos.menus.tobe.application;
 
-import kitchenpos.common.purgomalum.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.application.CreateMenu;
 import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.repository.ProductRepository;
+import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -21,75 +17,19 @@ import java.util.UUID;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final CreateMenu createMenu;
 
     public MenuService(
-        final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+            final MenuRepository menuRepository,
+            CreateMenu createMenu
     ) {
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.createMenu = createMenu;
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-                                                       .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                               .map(MenuProduct::getProductId)
-                               .toList()
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                                                     .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                       .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+    public Menu create(final MenuCreateDto request) {
+        return createMenu.execute(request);
     }
 
     @Transactional
@@ -103,9 +43,9 @@ public class MenuService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
-                menuProduct.getProduct()
-                           .getPrice()
-                           .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    menuProduct.getProduct()
+                               .getPrice()
+                               .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
         if (price.compareTo(sum) > 0) {
@@ -122,9 +62,9 @@ public class MenuService {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
-                menuProduct.getProduct()
-                           .getPrice()
-                           .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                    menuProduct.getProduct()
+                               .getPrice()
+                               .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
         if (menu.getPrice().compareTo(sum) > 0) {

@@ -2,10 +2,12 @@ package kitchenpos.menus.application;
 
 import kitchenpos.common.purgomalum.PurgomalumClient;
 import kitchenpos.menus.tobe.application.MenuService;
+import kitchenpos.menus.tobe.domain.application.CreateMenuTestFixture;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
@@ -50,7 +52,7 @@ class MenuServiceTest {
         menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        menuService = new MenuService(menuRepository, new CreateMenuTestFixture(menuRepository, productRepository, menuGroupRepository, purgomalumClient));
         menuGroupId = menuGroupRepository.save(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
@@ -58,7 +60,7 @@ class MenuServiceTest {
     @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
     @Test
     void create() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         final Menu actual = menuService.create(expected);
@@ -77,7 +79,7 @@ class MenuServiceTest {
     @MethodSource("menuProducts")
     @ParameterizedTest
     void create(final List<MenuProduct> menuProducts) {
-        final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
+        final MenuCreateDto expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
         assertThatThrownBy(() -> menuService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -93,7 +95,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
     @Test
     void createNegativeQuantity() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -105,7 +107,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -115,7 +117,7 @@ class MenuServiceTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void createExpensiveMenu() {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -126,7 +128,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final UUID menuGroupId) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -138,7 +140,7 @@ class MenuServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Menu expected = createMenuRequest(
+        final MenuCreateDto expected = createMenuRequest(
             name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
         );
         assertThatThrownBy(() -> menuService.create(expected))
@@ -206,7 +208,7 @@ class MenuServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateDto createMenuRequest(
         final String name,
         final long price,
         final UUID menuGroupId,
@@ -216,7 +218,7 @@ class MenuServiceTest {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateDto createMenuRequest(
         final String name,
         final BigDecimal price,
         final UUID menuGroupId,
@@ -226,7 +228,7 @@ class MenuServiceTest {
         return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateDto createMenuRequest(
         final String name,
         final long price,
         final UUID menuGroupId,
@@ -236,20 +238,17 @@ class MenuServiceTest {
         return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
     }
 
-    private Menu createMenuRequest(
+    private MenuCreateDto createMenuRequest(
         final String name,
         final BigDecimal price,
         final UUID menuGroupId,
         final boolean displayed,
         final List<MenuProduct> menuProducts
     ) {
-        final Menu menu = new Menu();
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(menuProducts);
-        return menu;
+        final MenuCreateDto request = new MenuCreateDto(
+                name, price, displayed, menuGroupId, menuProducts
+        );
+        return request;
     }
 
     private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
