@@ -3,7 +3,10 @@ package kitchenpos.menus.tobe.domain.menu;
 import jakarta.persistence.*;
 import kitchenpos.exception.CanNotChangeDisplay;
 import kitchenpos.exception.IllegalPriceException;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProducts;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -62,7 +65,7 @@ public class Menu {
 
     public void changeMenuPrice(Long newPrice) {
         validateMenuProductPrice(newPrice);
-        this.menuPrice = new MenuPrice(newPrice);
+        this.menuPrice = MenuPrice.of(newPrice);
     }
 
     private void validateMenuProductPrice(Long newPrice) {
@@ -99,7 +102,7 @@ public class Menu {
         return menuPrice.getPrice();
     }
 
-    public UUID getMenuGroup() {
+    public UUID getMenuGroupId() {
         return menuGroupId;
     }
 
@@ -107,8 +110,8 @@ public class Menu {
         return menuDisplayStatus;
     }
 
-    public MenuProducts getMenuProducts() {
-        return menuProducts;
+    public List<MenuProduct> getMenuProducts() {
+        return menuProducts.getMenuProducts();
     }
 
     @Override

@@ -1,10 +1,11 @@
-package kitchenpos.menus.tobe.domain.menu;
+package kitchenpos.menus.tobe.domain.menuproduct;
 
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Embeddable
 public class MenuProducts {
@@ -27,7 +28,7 @@ public class MenuProducts {
     }
 
     private static void validate(List<MenuProduct> menuProducts) {
-        if (menuProducts.isEmpty()) {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException("메뉴상품 정보는 빈값일 수 없습니다.");
         }
     }
@@ -43,5 +44,4 @@ public class MenuProducts {
     public boolean comparePrice(Long price) {
         return  price.compareTo(getTotalPrice()) > 0;
     }
-
 }

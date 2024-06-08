@@ -12,8 +12,12 @@ public class MenuPrice {
     protected MenuPrice() {
     }
 
-    public MenuPrice(Long price) {
+    public static MenuPrice of(Long price) {
         validatePrice(price);
+        return new MenuPrice(price);
+    }
+
+    private MenuPrice(long price) {
         this.price = price;
     }
 
