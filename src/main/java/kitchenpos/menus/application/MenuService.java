@@ -1,10 +1,14 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuFactory;
+import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
+import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +21,34 @@ import java.util.UUID;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-
+    private final ProductRepository productRepository;
     private final MenuFactory menuFactory;
 
     public MenuService(
-        final MenuRepository menuRepository,
-        MenuFactory menuFactory) {
+            final MenuRepository menuRepository,
+            ProductRepository productRepository, MenuFactory menuFactory) {
         this.menuRepository = menuRepository;
+        this.productRepository = productRepository;
         this.menuFactory = menuFactory;
     }
 
     @Transactional
     public Menu create(final MenuRequest request) {
-        final Menu menu = menuFactory.createMenu(request.getMenuGroupId(), request.getMenuProducts(), request.isDisplayed(), request.getName(), request.getPrice());
+        final List<Product> products = productRepository.findAllByIdIn(
+                request.getMenuProducts().stream()
+                        .map(MenuProductRequest::getProductId)
+                        .toList()
+        );
+        if (products.size() != request.sizeOfMenuProducts()) {
+            throw new IllegalArgumentException();
+        }
+
+        List<MenuProduct> menuProducts = request.getMenuProducts()
+                .stream()
+                .map(MenuProductRequest::toMenuProducts)
+                .toList();
+
+        final Menu menu = menuFactory.createMenu(request.getMenuGroupId(), menuProducts, request.isDisplayed(), request.getName(), request.getPrice());
         return menuRepository.save(menu);
     }
 

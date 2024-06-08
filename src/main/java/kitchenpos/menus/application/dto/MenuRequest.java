@@ -75,4 +75,8 @@ public class MenuRequest {
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
     }
+
+    public int sizeOfMenuProducts(){
+        return menuProducts.size();
+    }
 }

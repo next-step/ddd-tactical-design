@@ -1,11 +1,8 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
-import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -17,16 +14,14 @@ import java.util.UUID;
 @Component
 public class MenuFactory {
   private final MenuGroupRepository menuGroupRepository;
-  private final ProductRepository productRepository;
   private final ProfanityValidator profanityValidator;
 
-  public MenuFactory(MenuGroupRepository menuGroupRepository, ProductRepository productRepository, ProfanityValidator profanityValidator) {
+  public MenuFactory(MenuGroupRepository menuGroupRepository, ProfanityValidator profanityValidator) {
     this.menuGroupRepository = menuGroupRepository;
-    this.productRepository = productRepository;
     this.profanityValidator = profanityValidator;
   }
 
-  public Menu createMenu(UUID menuGroupId, List<MenuProductRequest> menuProducts, boolean displayed, String name, BigDecimal price){
+  public Menu createMenu(UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed, String name, BigDecimal price){
 
     validateMenuGroup(menuGroupId);
     validateMenuProducts(menuProducts);
@@ -37,32 +32,21 @@ public class MenuFactory {
   }
 
   private void validateMenuGroup(UUID groupId){
-    final MenuGroup menuGroup = menuGroupRepository.findById(groupId)
+    menuGroupRepository.findById(groupId)
             .orElseThrow(NoSuchElementException::new);
   }
 
-  private void validateMenuProducts(List<MenuProductRequest> menuProductRequests){
-    if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
+  private void validateMenuProducts(List<MenuProduct> menuProducts){
+    if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
       throw new IllegalArgumentException();
     }
   }
 
-  private MenuProducts createMenuProducts(List<MenuProductRequest> menuProductRequests){
-    final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                    .map(MenuProductRequest::getProductId)
-                    .toList()
-    );
-    if (products.size() != menuProductRequests.size()) {
-      throw new IllegalArgumentException();
-    }
+  private MenuProducts createMenuProducts(List<MenuProduct> menuProductsList){
+
     final MenuProducts menuProducts = MenuProducts.of();
 
-    for (final MenuProductRequest menuProductRequest : menuProductRequests) {
-      Product product = menuProductRequest.getProduct();
-      final MenuProduct menuProduct = MenuProduct.of(menuProductRequest.getProductId(),
-              product.getProductPrice(),
-              Long.valueOf(menuProductRequest.getQuantity()));
+    for (final MenuProduct menuProduct : menuProductsList) {
       menuProducts.add(menuProduct);
     }
 

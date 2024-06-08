@@ -72,8 +72,8 @@ class MenuServiceTest {
     menuGroupRepository = new InMemoryMenuGroupRepository();
     productRepository = new InMemoryProductRepository();
     profanityValidator = new FakeProfanityValidator();
-    menuFactory = new MenuFactory(menuGroupRepository, productRepository, profanityValidator);
-    menuService = new MenuService(menuRepository, menuFactory);
+    menuFactory = new MenuFactory(menuGroupRepository, profanityValidator);
+    menuService = new MenuService(menuRepository, productRepository, menuFactory);
     menuGroupId = menuGroupRepository.save(menuGroup()).getId();
     product = productRepository.save(product("후라이드", 16_000L));
   }
