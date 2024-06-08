@@ -1,7 +1,6 @@
-package kitchenpos.product.tobe.domain;
+package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.exception.IllegalPriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
