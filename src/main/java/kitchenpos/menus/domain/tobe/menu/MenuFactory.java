@@ -1,7 +1,6 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Component;
 
@@ -40,15 +39,12 @@ public class MenuFactory {
     if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
       throw new IllegalArgumentException();
     }
+
   }
 
   private MenuProducts createMenuProducts(List<MenuProduct> menuProductsList){
 
-    final MenuProducts menuProducts = MenuProducts.of();
-
-    for (final MenuProduct menuProduct : menuProductsList) {
-      menuProducts.add(menuProduct);
-    }
+    final MenuProducts menuProducts = MenuProducts.of(menuProductsList);
 
     return menuProducts;
   }

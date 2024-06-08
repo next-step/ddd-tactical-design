@@ -93,6 +93,13 @@ public class Menu {
     }
   }
 
+  public void addMenuProduct(MenuProduct menuProduct){
+    menuProducts.addMenuProduct(menuProduct);
+  }
+
+  public BigDecimal sumMenuProducts(){
+    return menuProducts.sum();
+  }
   public UUID getId() {
     return id;
   }

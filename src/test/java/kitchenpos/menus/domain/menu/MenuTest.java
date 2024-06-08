@@ -2,6 +2,7 @@ package kitchenpos.menus.domain.menu;
 
 import kitchenpos.Fixtures;
 import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.common.domain.ProfanityValidator;
@@ -20,13 +21,13 @@ public class MenuTest {
 
   private ProfanityValidator profanityValidator;
   private MenuProducts menuProducts;
+  private Menu menu;
 
   @BeforeEach
   void setUp() {
     profanityValidator = new FakeProfanityValidator();
-
-    menuProducts = MenuProducts.of();
-    menuProducts.add(Fixtures.menuProduct());
+    menu = Fixtures.menu();
+    menuProducts = MenuProducts.of(Fixtures.menuProduct());
   }
 
   @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
@@ -94,5 +95,15 @@ public class MenuTest {
     actual.hide();
 
     assertThat(actual.isDisplayed()).isFalse();
+  }
+
+  @DisplayName("메뉴에 속한 상품 금액의 합을 구할 수 있다.")
+  @Test
+  void makeSummationOfMenuProducts(){
+    MenuProduct menuProduct = Fixtures.menuProduct(Fixtures.createProduct("우동 한사바리"), 2L);
+
+    Menu menu = Menu.of("후라이드+후라이드", 20_000L, menuGroup().getId(), true, MenuProducts.of(menuProduct), profanityValidator);
+
+    assertThat(menu.sumMenuProducts()).isEqualTo(BigDecimal.valueOf(20_000L));
   }
 }

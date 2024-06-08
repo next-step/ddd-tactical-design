@@ -18,6 +18,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -36,6 +37,10 @@ public class MenuService {
 
     @Transactional
     public Menu create(final MenuRequest request) {
+        if(Objects.isNull(request.getMenuProducts())){
+            throw new IllegalArgumentException();
+        }
+
         final List<Product> products = productRepository.findAllByIdIn(
                 request.getMenuProducts().stream()
                         .map(MenuProductRequest::getProductId)

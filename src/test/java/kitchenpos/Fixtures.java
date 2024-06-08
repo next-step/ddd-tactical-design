@@ -24,17 +24,17 @@ public class Fixtures {
   }
 
   public static Menu menu(MenuProduct menuProduct) {
-    MenuProducts menuProducts = MenuProducts.of();
-    menuProducts.add(menuProduct);
+    MenuProducts menuProducts = MenuProducts.of(menuProduct);
+
     return menu(19_000L, true, menuProducts);
   }
   public static Menu menu(final long price, final MenuProducts menuProducts) {
     return menu(price, false, menuProducts);
   }
   public static Menu menu(final long price, final boolean displayed, final MenuProduct menuProduct) {
-    MenuProducts menuProducts = MenuProducts.of();
-    menuProducts.add(menuProduct);
-    final Menu menu = Menu.of("후라이드+후라이드", price, menuGroup().getId(), displayed, menuProducts, profanityValidator);
+
+    MenuProducts menuProducts = MenuProducts.of(menuProduct);
+    Menu menu = Menu.of("후라이드+후라이드", price, menuGroup().getId(), displayed, menuProducts, profanityValidator);
 
     return menu;
   }

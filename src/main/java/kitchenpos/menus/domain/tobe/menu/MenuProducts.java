@@ -4,13 +4,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
-import org.springframework.context.event.EventListener;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Embeddable
 public class MenuProducts {
@@ -20,11 +16,18 @@ public class MenuProducts {
   protected MenuProducts() {
   }
 
-  public static MenuProducts of() {
-    return new MenuProducts();
+  private MenuProducts(List<MenuProduct> menuProducts) {
+    products.addAll(menuProducts);
   }
 
-  public BigDecimal sum() {
+  public static MenuProducts of(MenuProduct... menuProducts) {
+    return new MenuProducts(List.of(menuProducts));
+  }
+
+  public static MenuProducts of(List<MenuProduct> menuProducts) {
+    return new MenuProducts(menuProducts);
+  }
+  protected BigDecimal sum() {
     return products
             .stream()
             .map(MenuProduct::amount)
@@ -32,22 +35,22 @@ public class MenuProducts {
 
   }
 
-  public void changeMenuProductPrice(final UUID productId, final Long price) {
+  protected void changeMenuProductPrice(final UUID productId, final Long price) {
     products.stream()
             .filter(menuProduct -> menuProduct.getId().equals(productId))
             .forEach(menuProduct -> menuProduct.changePrice(price));
   }
 
-  public void add(MenuProduct menuProduct){
+  protected void addMenuProduct(MenuProduct menuProduct){
     this.products.add(menuProduct);
   }
 
-  public boolean findByProductId(UUID productId){
-    return this.products.stream().anyMatch(product -> product.getId().equals(productId));
+  protected boolean containsZeroProducts(){
+    return this.products.isEmpty();
   }
 
-  public boolean containsZeroProducts(){
-    return this.products.isEmpty();
+  public List<MenuProduct> getProducts() {
+    return products;
   }
 
   @Override
