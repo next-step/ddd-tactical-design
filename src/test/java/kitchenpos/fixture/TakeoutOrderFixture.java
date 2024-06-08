@@ -1,4 +1,4 @@
-package fixture;
+package kitchenpos.fixture;
 
 import kitchenpos.takeoutorders.domain.TakeoutOrder;
 import kitchenpos.takeoutorders.domain.TakeoutOrderStatus;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.orderLineItem;
+import static kitchenpos.fixture.Fixtures.orderLineItem;
 
 public class TakeoutOrderFixture {
 

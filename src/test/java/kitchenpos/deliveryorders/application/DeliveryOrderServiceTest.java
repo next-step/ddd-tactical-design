@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import static kitchenpos.DeliveryOrderFixture.deliveryOrder;
-import static kitchenpos.Fixtures.INVALID_ID;
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.fixture.DeliveryOrderFixture.deliveryOrder;
+import static kitchenpos.fixture.Fixtures.INVALID_ID;
+import static kitchenpos.fixture.MenuFixture.menu;
+import static kitchenpos.fixture.MenuFixture.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;

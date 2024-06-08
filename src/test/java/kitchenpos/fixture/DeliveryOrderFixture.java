@@ -1,4 +1,4 @@
-package kitchenpos;
+package kitchenpos.fixture;
 
 import kitchenpos.deliveryorders.domain.DeliveryOrder;
 import kitchenpos.deliveryorders.domain.DeliveryOrderStatus;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.orderLineItem;
+import static kitchenpos.fixture.Fixtures.orderLineItem;
 
 public class DeliveryOrderFixture {
     public static DeliveryOrder deliveryOrder(final DeliveryOrderStatus status) {

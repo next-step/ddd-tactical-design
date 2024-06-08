@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.orderTable;
+import static kitchenpos.fixture.EatInOrderFixture.orderTable;
+import static kitchenpos.fixture.MenuFixture.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
