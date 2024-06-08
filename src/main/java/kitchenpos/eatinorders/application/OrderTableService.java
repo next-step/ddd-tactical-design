@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
-import kitchenpos.eatinorders.domain.eatinorder.OrderStatus;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.common.domain.OrderStatus;
+import kitchenpos.eatinorders.application.dto.OrderTableRequest;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,56 +23,56 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTable request) {
+    public OrderTableRequest create(final OrderTableRequest request) {
         final String name = request.getName();
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTableRepository.save(orderTable);
+        final OrderTableRequest orderTableRequest = new OrderTableRequest();
+        orderTableRequest.setId(UUID.randomUUID());
+        orderTableRequest.setName(name);
+        orderTableRequest.setNumberOfGuests(0);
+        orderTableRequest.setOccupied(false);
+        return orderTableRepository.save(orderTableRequest);
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+    public OrderTableRequest sit(final UUID orderTableId) {
+        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
-        return orderTable;
+        orderTableRequest.setOccupied(true);
+        return orderTableRequest;
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+    public OrderTableRequest clear(final UUID orderTableId) {
+        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTableRequest, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
-        return orderTable;
+        orderTableRequest.setNumberOfGuests(0);
+        orderTableRequest.setOccupied(false);
+        return orderTableRequest;
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTable request) {
+    public OrderTableRequest changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
         final int numberOfGuests = request.getNumberOfGuests();
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
-        final OrderTable orderTable = orderTableRepository.findById(orderTableId)
+        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
+        if (!orderTableRequest.isOccupied()) {
             throw new IllegalStateException();
         }
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        orderTableRequest.setNumberOfGuests(numberOfGuests);
+        return orderTableRequest;
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
+    public List<OrderTableRequest> findAll() {
         return orderTableRepository.findAll();
     }
 }

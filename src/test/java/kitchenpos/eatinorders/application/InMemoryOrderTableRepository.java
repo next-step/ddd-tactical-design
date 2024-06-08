@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.application.dto.OrderTableRequest;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 
 import java.util.ArrayList;
@@ -11,21 +11,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class InMemoryOrderTableRepository implements OrderTableRepository {
-    private final Map<UUID, OrderTable> orderTables = new HashMap<>();
+    private final Map<UUID, OrderTableRequest> orderTables = new HashMap<>();
 
     @Override
-    public OrderTable save(final OrderTable orderTable) {
-        orderTables.put(orderTable.getId(), orderTable);
-        return orderTable;
+    public OrderTableRequest save(final OrderTableRequest orderTableRequest) {
+        orderTables.put(orderTableRequest.getId(), orderTableRequest);
+        return orderTableRequest;
     }
 
     @Override
-    public Optional<OrderTable> findById(final UUID id) {
+    public Optional<OrderTableRequest> findById(final UUID id) {
         return Optional.ofNullable(orderTables.get(id));
     }
 
     @Override
-    public List<OrderTable> findAll() {
+    public List<OrderTableRequest> findAll() {
         return new ArrayList<>(orderTables.values());
     }
 }

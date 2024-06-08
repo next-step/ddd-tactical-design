@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain.ordertable;
+package kitchenpos.eatinorders.application.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
-public class OrderTable {
+public class OrderTableRequest {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -23,7 +23,7 @@ public class OrderTable {
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
 
-    public OrderTable() {
+    public OrderTableRequest() {
     }
 
     public UUID getId() {

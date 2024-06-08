@@ -3,12 +3,13 @@ package kitchenpos.eatinorders.domain.ordertable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.eatinorders.application.dto.OrderTableRequest;
 
 public interface OrderTableRepository {
-    OrderTable save(OrderTable orderTable);
+    OrderTableRequest save(OrderTableRequest orderTableRequest);
 
-    Optional<OrderTable> findById(UUID id);
+    Optional<OrderTableRequest> findById(UUID id);
 
-    List<OrderTable> findAll();
+    List<OrderTableRequest> findAll();
 }
 
