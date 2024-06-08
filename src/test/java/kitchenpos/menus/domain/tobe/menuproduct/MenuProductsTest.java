@@ -16,6 +16,13 @@ import org.junit.jupiter.api.Test;
 class MenuProductsTest {
 
     @Test
+    void 메뉴상품들이_null일_경우_예외를_던진다() {
+        assertThatThrownBy(
+                () -> new MenuProducts(null, new MenuPrice(BigDecimal.valueOf(50_000L))))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     void 메뉴상품들이_비어있을_경우_예외를_던진다() {
         assertThatThrownBy(
                 () -> new MenuProducts(List.of(), new MenuPrice(BigDecimal.valueOf(50_000L))))
