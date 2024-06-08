@@ -1,7 +1,7 @@
 package kitchenpos.menu.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 
 import java.util.UUID;
 

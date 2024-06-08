@@ -9,12 +9,16 @@ import java.util.List;
 @Embeddable
 public class MenuProducts {
 
-    @OneToMany(mappedBy = "menu", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JoinColumn(
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+    )
     private List<MenuProduct> menuProducts = new ArrayList<>();
 
     protected MenuProducts() {
-
     }
 
     public MenuProducts(List<MenuProduct> menuProducts) {
@@ -35,4 +39,9 @@ public class MenuProducts {
     public long getTotalPrice() {
         return menuProducts.stream().mapToLong(MenuProduct::getPrice).sum();
     }
+
+    public boolean comparePrice(Long price) {
+        return  price.compareTo(getTotalPrice()) > 0;
+    }
+
 }

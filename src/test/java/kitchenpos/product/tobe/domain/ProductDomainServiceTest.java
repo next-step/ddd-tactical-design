@@ -4,6 +4,10 @@ import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.tobe.domain.*;
+import kitchenpos.menu.tobe.domain.MenuPrice;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPriceService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +29,7 @@ class ProductDomainServiceTest {
 
     private final ProductRepository productRepository = new InMemoryProductRepository();
     private final MenuRepository menuRepository = new InMemoryMenuRepository();
-    private final ProductDomainService menuService = new FakeProductDomainService(productRepository, menuRepository);
+    private final ProductPriceService menuService = new FakeProductDomainService(productRepository, menuRepository);
 
     @BeforeEach
     void setUP() {

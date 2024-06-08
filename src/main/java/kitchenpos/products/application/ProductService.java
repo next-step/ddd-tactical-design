@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.product.tobe.domain.*;
 import kitchenpos.products.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

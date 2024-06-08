@@ -3,8 +3,6 @@ package kitchenpos.menu.tobe.domain;
 import jakarta.persistence.*;
 import kitchenpos.exception.CanNotChangeDisplay;
 import kitchenpos.exception.IllegalPriceException;
-import kitchenpos.menu.tobe.domain.vo.MenuName;
-import kitchenpos.menu.tobe.domain.vo.MenuPrice;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -23,6 +21,7 @@ public class Menu {
     @Embedded
     private MenuPrice menuPrice;
 
+    @Column(name = "menu_group_id", nullable = false)
     private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
@@ -78,12 +77,13 @@ public class Menu {
         }
         this.menuDisplayStatus = true;
     }
+
     public void setUndisplayed() {
         this.menuDisplayStatus = false;
     }
 
     public boolean isMenuPriceHigherThanTotalPrice() {
-        return getMenuProducts().comparePrice(getMenuPrice());
+        return menuProducts.comparePrice(getMenuPrice());
     }
 
 

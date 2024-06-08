@@ -3,7 +3,7 @@ package kitchenpos.fixture;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;

@@ -14,10 +14,7 @@ public class MenuProduct {
     @Id
     private long seq;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
-
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
     @Column(name = "quantity", nullable = false)
@@ -29,12 +26,12 @@ public class MenuProduct {
 
     }
 
-    public static MenuProduct of(final UUID productId, final long price,  final long quantity) {
+    public static MenuProduct of(final UUID productId, final long price, final long quantity) {
         validateQuantity(quantity);
         return new MenuProduct(productId, price, quantity);
     }
 
-    private MenuProduct(final UUID productId, final long price,  final long quantity) {
+    private MenuProduct(final UUID productId, final long price, final long quantity) {
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;

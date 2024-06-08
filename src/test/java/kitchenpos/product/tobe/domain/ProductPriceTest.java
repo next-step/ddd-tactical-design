@@ -1,8 +1,8 @@
 package kitchenpos.product.tobe.domain;
 
 import kitchenpos.exception.IllegalPriceException;
+import kitchenpos.products.tobe.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProductPriceTest {

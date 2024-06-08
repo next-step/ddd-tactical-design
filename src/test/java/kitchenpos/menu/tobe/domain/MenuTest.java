@@ -4,7 +4,7 @@ import kitchenpos.exception.IllegalPriceException;
 import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

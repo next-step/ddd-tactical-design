@@ -1,4 +1,4 @@
-package kitchenpos.menu.tobe.domain.vo;
+package kitchenpos.menu.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -14,7 +14,7 @@ public class MenuName {
     protected MenuName() {
     }
 
-    protected MenuName(String menuName) {
+    MenuName(String menuName) {
         validateName(menuName);
         this.name = menuName;
     }

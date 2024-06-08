@@ -1,7 +1,7 @@
 package kitchenpos.fixture.tobe;
 
 import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
 import org.jetbrains.annotations.NotNull;
 
 public class MenuProductFixture {

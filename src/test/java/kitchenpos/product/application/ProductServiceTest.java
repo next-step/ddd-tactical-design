@@ -4,7 +4,12 @@ package kitchenpos.product.application;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.tobe.domain.*;
+import kitchenpos.menu.tobe.domain.MenuPrice;
 import kitchenpos.product.tobe.domain.*;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPriceService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -48,7 +53,7 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        ProductDomainService productDomainService = new FakeProductDomainService(productRepository, menuRepository);
+        ProductPriceService productDomainService = new FakeProductDomainService(productRepository, menuRepository);
         productService = new ProductService(productRepository, purgomalumClient, productDomainService);
 
         menuName = new MenuNameFactory(purgomalumClient);

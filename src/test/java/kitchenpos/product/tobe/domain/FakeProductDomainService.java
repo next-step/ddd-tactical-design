@@ -2,13 +2,16 @@ package kitchenpos.product.tobe.domain;
 
 import kitchenpos.menu.tobe.domain.Menu;
 import kitchenpos.menu.tobe.domain.MenuRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductPriceService;
+import kitchenpos.products.tobe.domain.ProductRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-public class FakeProductDomainService implements ProductDomainService {
+public class FakeProductDomainService implements ProductPriceService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
 
@@ -28,7 +31,7 @@ public class FakeProductDomainService implements ProductDomainService {
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
             if (menu.isMenuPriceHigherThanTotalPrice()) {
-                menu.changeMenuDisplayStatus(false);
+                menu.setUndisplayed();
             }
         }
         return product;
