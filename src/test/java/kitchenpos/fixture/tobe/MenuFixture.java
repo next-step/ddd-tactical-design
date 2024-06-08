@@ -1,8 +1,8 @@
 package kitchenpos.fixture.tobe;
 
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.tobe.domain.Product;
 import org.jetbrains.annotations.NotNull;
 

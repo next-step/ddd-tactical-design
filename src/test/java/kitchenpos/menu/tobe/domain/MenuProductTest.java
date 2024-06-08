@@ -2,6 +2,7 @@ package kitchenpos.menu.tobe.domain;
 
 import kitchenpos.exception.IllegalQuantityException;
 import kitchenpos.fixture.tobe.ProductFixture;
+import kitchenpos.menus.tobe.domain.MenuProduct;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

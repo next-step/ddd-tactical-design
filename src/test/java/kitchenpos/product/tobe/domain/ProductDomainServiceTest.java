@@ -4,7 +4,7 @@ import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.tobe.domain.*;
-import kitchenpos.menu.tobe.domain.MenuPrice;
+import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPriceService;
 import kitchenpos.products.tobe.domain.ProductRepository;

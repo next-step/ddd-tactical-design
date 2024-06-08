@@ -1,4 +1,4 @@
-package kitchenpos.menu.tobe.domain;
+package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.*;
 import kitchenpos.exception.IllegalQuantityException;

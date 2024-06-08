@@ -2,8 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.transaction.Transactional;
 import kitchenpos.annotation.DomainService;
-import kitchenpos.menu.tobe.domain.Menu;
-import kitchenpos.menu.tobe.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 
 import java.math.BigDecimal;
 import java.util.List;

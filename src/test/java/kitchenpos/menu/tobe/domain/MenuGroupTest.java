@@ -1,5 +1,6 @@
 package kitchenpos.menu.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

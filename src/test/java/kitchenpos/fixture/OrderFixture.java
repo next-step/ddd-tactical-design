@@ -1,6 +1,6 @@
 package kitchenpos.fixture;
 
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menus.domain.Menu;
 import kitchenpos.order.domain.*;
 import org.jetbrains.annotations.NotNull;
 

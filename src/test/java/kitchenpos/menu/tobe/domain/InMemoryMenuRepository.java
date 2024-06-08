@@ -1,5 +1,8 @@
 package kitchenpos.menu.tobe.domain;
 
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
+
 import java.util.*;
 
 public class InMemoryMenuRepository implements MenuRepository {

@@ -3,6 +3,7 @@ package kitchenpos.menu.tobe.domain;
 import kitchenpos.exception.IllegalNameException;
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.MenuNameFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

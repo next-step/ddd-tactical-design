@@ -2,7 +2,7 @@ package kitchenpos.order.application;
 
 import kitchenpos.fixture.OrderLineItemFixture;
 import kitchenpos.infra.KitchenridersClient;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
