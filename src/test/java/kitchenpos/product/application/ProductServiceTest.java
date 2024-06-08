@@ -3,7 +3,8 @@ package kitchenpos.product.application;
 
 import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.tobe.domain.menu.*;
+import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.product.tobe.domain.*;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;

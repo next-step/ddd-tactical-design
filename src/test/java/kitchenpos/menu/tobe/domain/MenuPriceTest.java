@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.domain;
 
 import kitchenpos.exception.IllegalPriceException;
-import kitchenpos.menus.tobe.domain.MenuPrice;
+import kitchenpos.menus.tobe.domain.menu.MenuPrice;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
