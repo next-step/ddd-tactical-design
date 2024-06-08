@@ -13,14 +13,14 @@ import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -97,7 +97,8 @@ class ProductServiceTest {
 
         assertAll(
                 () -> assertThat(
-                        actualProduct.isSamePrice(new ProductPrice(BigDecimal.valueOf(12_000L)))).isTrue(),
+                        actualProduct.isSamePrice(
+                                new ProductPrice(BigDecimal.valueOf(12_000L)))).isTrue(),
                 () -> assertThat(actualMenu.isDisplayed()).isFalse()
         );
     }
