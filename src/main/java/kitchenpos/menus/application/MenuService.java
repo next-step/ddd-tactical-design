@@ -1,17 +1,15 @@
 package kitchenpos.menus.application;
 
 import kitchenpos.common.domain.ProductPriceChangeEvent;
-import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.menus.application.dto.MenuRequest;
-import kitchenpos.menus.domain.tobe.menu.*;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
-import kitchenpos.products.domain.tobe.ProductRepository;
+import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.menu.MenuFactory;
+import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -20,21 +18,18 @@ import java.util.UUID;
 public class MenuService {
     private final MenuRepository menuRepository;
 
-    private final MenuDomainService menuDomainService;
+    private final MenuFactory menuFactory;
 
     public MenuService(
         final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final ProfanityValidator profanityValidator,
-        MenuDomainService menuDomainService) {
+        MenuFactory menuFactory) {
         this.menuRepository = menuRepository;
-        this.menuDomainService = menuDomainService;
+        this.menuFactory = menuFactory;
     }
 
     @Transactional
     public Menu create(final MenuRequest request) {
-        final Menu menu = menuDomainService.createMenu(request.getMenuGroupId(), request.getMenuProducts(), request.isDisplayed(), request.getName(), request.getPrice());
+        final Menu menu = menuFactory.createMenu(request.getMenuGroupId(), request.getMenuProducts(), request.isDisplayed(), request.getName(), request.getPrice());
         return menuRepository.save(menu);
     }
 

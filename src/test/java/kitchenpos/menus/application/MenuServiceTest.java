@@ -19,7 +19,7 @@ import java.util.UUID;
 import kitchenpos.Fixtures;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
-import kitchenpos.menus.domain.tobe.menu.MenuDomainService;
+import kitchenpos.menus.domain.tobe.menu.MenuFactory;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
@@ -46,7 +46,7 @@ class MenuServiceTest {
   private ProductRepository productRepository;
   private ProfanityValidator profanityValidator;
   private MenuService menuService;
-  private MenuDomainService menuDomainService;
+  private MenuFactory menuFactory;
   private UUID menuGroupId;
   private Product product;
 
@@ -72,9 +72,8 @@ class MenuServiceTest {
     menuGroupRepository = new InMemoryMenuGroupRepository();
     productRepository = new InMemoryProductRepository();
     profanityValidator = new FakeProfanityValidator();
-    menuDomainService = new MenuDomainService(menuGroupRepository, productRepository, profanityValidator);
-    menuService = new MenuService(menuRepository, menuGroupRepository, productRepository,
-        profanityValidator, menuDomainService);
+    menuFactory = new MenuFactory(menuGroupRepository, productRepository, profanityValidator);
+    menuService = new MenuService(menuRepository, menuFactory);
     menuGroupId = menuGroupRepository.save(menuGroup()).getId();
     product = productRepository.save(product("후라이드", 16_000L));
   }

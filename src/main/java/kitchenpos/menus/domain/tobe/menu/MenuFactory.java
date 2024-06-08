@@ -1,7 +1,6 @@
 package kitchenpos.menus.domain.tobe.menu;
 
 import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.menus.application.dto.MenuGroupRequest;
 import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
@@ -16,12 +15,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Component
-public class MenuDomainService {
+public class MenuFactory {
   private final MenuGroupRepository menuGroupRepository;
   private final ProductRepository productRepository;
   private final ProfanityValidator profanityValidator;
 
-  public MenuDomainService(MenuGroupRepository menuGroupRepository, ProductRepository productRepository, ProfanityValidator profanityValidator) {
+  public MenuFactory(MenuGroupRepository menuGroupRepository, ProductRepository productRepository, ProfanityValidator profanityValidator) {
     this.menuGroupRepository = menuGroupRepository;
     this.productRepository = productRepository;
     this.profanityValidator = profanityValidator;
