@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
 import kitchenpos.common.domain.OrderStatus;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class OrderTableService {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final OrderTableRequest orderTableRequest = new OrderTableRequest();
+        final OrderTable orderTableRequest = new OrderTable();
         orderTableRequest.setId(UUID.randomUUID());
         orderTableRequest.setName(name);
         orderTableRequest.setNumberOfGuests(0);
@@ -37,16 +38,16 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTableRequest sit(final UUID orderTableId) {
-        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
+    public OrderTable sit(final UUID orderTableId) {
+        final OrderTable orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         orderTableRequest.setOccupied(true);
         return orderTableRequest;
     }
 
     @Transactional
-    public OrderTableRequest clear(final UUID orderTableId) {
-        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
+    public OrderTable clear(final UUID orderTableId) {
+        final OrderTable orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRepository.existsByOrderTableAndStatusNot(orderTableRequest, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
@@ -57,12 +58,12 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTableRequest changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
+    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
         final int numberOfGuests = request.getNumberOfGuests();
         if (numberOfGuests < 0) {
             throw new IllegalArgumentException();
         }
-        final OrderTableRequest orderTableRequest = orderTableRepository.findById(orderTableId)
+        final OrderTable orderTableRequest = orderTableRepository.findById(orderTableId)
             .orElseThrow(NoSuchElementException::new);
         if (!orderTableRequest.isOccupied()) {
             throw new IllegalStateException();
@@ -72,7 +73,7 @@ public class OrderTableService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTableRequest> findAll() {
+    public List<OrderTable> findAll() {
         return orderTableRepository.findAll();
     }
 }

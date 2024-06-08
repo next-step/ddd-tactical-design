@@ -4,16 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.common.domain.OrderStatus;
-import kitchenpos.eatinorders.application.dto.OrderRequest;
-import kitchenpos.eatinorders.application.dto.OrderTableRequest;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 public interface OrderRepository {
-    OrderRequest save(OrderRequest orderRequest);
+    Order save(Order order);
 
-    Optional<OrderRequest> findById(UUID id);
+    Optional<Order> findById(UUID id);
 
-    List<OrderRequest> findAll();
+    List<Order> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTableRequest orderTableRequest, OrderStatus status);
+    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
 }
 

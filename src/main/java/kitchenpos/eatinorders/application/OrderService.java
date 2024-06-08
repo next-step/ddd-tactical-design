@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.application;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
 import kitchenpos.eatinorders.application.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.application.dto.OrderRequest;
+import kitchenpos.eatinorders.domain.eatinorder.Order;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
 import kitchenpos.common.domain.OrderStatus;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
@@ -93,7 +94,7 @@ public class OrderService {
             orderRequest.setDeliveryAddress(deliveryAddress);
         }
         if (type == OrderType.EAT_IN) {
-            final OrderTableRequest orderTableRequest = orderTableRepository.findById(request.getOrderTableId())
+            final OrderTable orderTableRequest = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
             if (!orderTableRequest.isOccupied()) {
                 throw new IllegalStateException();
@@ -105,7 +106,7 @@ public class OrderService {
 
     @Transactional
     public OrderRequest accept(final UUID orderId) {
-        final OrderRequest orderRequest = orderRepository.findById(orderId)
+        final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRequest.getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
@@ -124,8 +125,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderRequest serve(final UUID orderId) {
-        final OrderRequest orderRequest = orderRepository.findById(orderId)
+    public Order serve(final UUID orderId) {
+        final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRequest.getStatus() != OrderStatus.ACCEPTED) {
             throw new IllegalStateException();
@@ -135,8 +136,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderRequest startDelivery(final UUID orderId) {
-        final OrderRequest orderRequest = orderRepository.findById(orderId)
+    public Order startDelivery(final UUID orderId) {
+        final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRequest.getType() != OrderType.DELIVERY) {
             throw new IllegalStateException();
@@ -149,8 +150,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderRequest completeDelivery(final UUID orderId) {
-        final OrderRequest orderRequest = orderRepository.findById(orderId)
+    public Order completeDelivery(final UUID orderId) {
+        final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (orderRequest.getStatus() != OrderStatus.DELIVERING) {
             throw new IllegalStateException();
@@ -160,8 +161,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderRequest complete(final UUID orderId) {
-        final OrderRequest orderRequest = orderRepository.findById(orderId)
+    public Order complete(final UUID orderId) {
+        final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         final OrderType type = orderRequest.getType();
         final OrderStatus status = orderRequest.getStatus();
@@ -187,7 +188,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderRequest> findAll() {
+    public List<Order> findAll() {
         return orderRepository.findAll();
     }
 }
