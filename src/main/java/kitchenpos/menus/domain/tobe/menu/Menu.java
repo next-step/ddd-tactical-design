@@ -3,6 +3,7 @@ package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.*;
 import kitchenpos.common.domain.Price;
+import kitchenpos.common.domain.ProductPriceChangeEvent;
 import kitchenpos.common.domain.ProfanityValidator;
 
 import java.math.BigDecimal;
@@ -14,7 +15,6 @@ import java.util.UUID;
 @Entity
 public class Menu {
 
-  private static final int ZERO = 0;
   @Column(name = "id", columnDefinition = "binary(16)")
   @Id
   private UUID id;
@@ -84,6 +84,13 @@ public class Menu {
     validate(menuPriceRequest, menuProducts.sum(), menuProducts, menuGroupId);
 
     this.menuPrice = menuPriceRequest;
+  }
+
+  public void changeMenuProductPrice(UUID productId, Long price) {
+    menuProducts.changeMenuProductPrice(productId, price);
+    if (menuPrice.isBigger(menuProducts.sum())) {
+      this.hide();
+    }
   }
 
   public UUID getId() {

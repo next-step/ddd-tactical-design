@@ -119,6 +119,7 @@ class ProductServiceTest {
     assertThat(changeEvents.size()).isEqualTo(1);
     assertThat(changeEvents.getFirst().getProductId()).isEqualTo(product.getId());
     assertThat(BigDecimal.valueOf(changeEvents.getFirst().getPrice())).isEqualTo(product.getProductPrice());
+
   }
 
   @DisplayName("상품의 목록을 조회할 수 있다.")

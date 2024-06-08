@@ -11,7 +11,9 @@ import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
@@ -61,17 +63,14 @@ public class MenuService {
         return menu;
     }
 
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
     public void changeMenuProdutPrice(final ProductPriceChangeEvent productPriceChangeEvent) {
         final List<Menu> menus = menuRepository.findAllByProductId(productPriceChangeEvent.getProductId());
 
         for (final Menu menu : menus) {
-            menu.getMenuProducts().changeMenuProductPrice(productPriceChangeEvent.getProductId(), productPriceChangeEvent.getPrice());
-
-            if (menu.getMenuPrice().compareTo(menu.getMenuProducts().sum()) > 0) {
-                menu.hide();
-            }
+            menu.changeMenuProductPrice(productPriceChangeEvent.getProductId(), productPriceChangeEvent.getPrice());
         }
     }
 

@@ -31,7 +31,7 @@ public class MenuProducts {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
   }
-  @EventListener
+
   public void changeMenuProductPrice(final UUID productId, final Long price) {
     products.stream()
             .filter(menuProduct -> menuProduct.getId().equals(productId))
