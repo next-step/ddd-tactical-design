@@ -18,7 +18,7 @@ class MenuPriceTest {
     void priceFail1(final Long input) {
 
         Assertions.assertThatExceptionOfType(IllegalPriceException.class)
-                .isThrownBy(() -> new MenuPrice(input));
+                .isThrownBy(() -> MenuPrice.of(input));
     }
 
     @ParameterizedTest
@@ -26,6 +26,6 @@ class MenuPriceTest {
     @DisplayName("0원보다 적은 금액을 입력하는 경우 메뉴가격을 등록할 수 없다.")
     void priceFail1(final long input) {
 
-        assertThrows(IllegalPriceException.class, () -> new MenuPrice(input));
+        assertThrows(IllegalPriceException.class, () -> MenuPrice.of(input));
     }
 }

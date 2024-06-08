@@ -6,6 +6,8 @@ import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProducts;
 import kitchenpos.products.tobe.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +31,7 @@ class MenuTest {
     void setUP() {
         menuGroup = new MenuGroup("메뉴그룹명");
         Product product = ProductFixture.createProduct("상품명", 만원);
-        MenuProduct menuProduct = MenuProduct.of(product.getId(), product.getProductPrice().longValue(), 2);
+        MenuProduct menuProduct = MenuProduct.of(product.getId(), product.getPrice().longValue(), 2);
         menuProducts = new MenuProducts(List.of(menuProduct));
         PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         menuName = new MenuNameFactory(purgomalumClient);

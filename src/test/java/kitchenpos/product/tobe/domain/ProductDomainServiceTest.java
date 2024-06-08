@@ -6,6 +6,9 @@ import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProducts;
+import kitchenpos.menus.tobe.domain.menuproduct.Quantity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductPriceService;
 import kitchenpos.products.tobe.domain.ProductRepository;
@@ -36,7 +39,7 @@ class ProductDomainServiceTest {
     void setUP() {
         menuGroup = new MenuGroup("메뉴그룹명");
         product = ProductFixture.createProduct("상품명", 만원);
-        MenuProduct menuProduct = MenuProduct.of(product.getId(), product.getProductPrice().longValue(), 1);
+        MenuProduct menuProduct = MenuProduct.of(product.getId(), Quantity.of(1), product.getPrice().longValue());
         menuProducts = new MenuProducts(List.of(menuProduct));
         PurgomalumClient purgomalumClient = new FakePurgomalumClient();
         menuName = new MenuNameFactory(purgomalumClient);
@@ -45,7 +48,7 @@ class ProductDomainServiceTest {
     @Test
     @DisplayName("메뉴상품 금액 총 합보다 메뉴 가격이 비싸지면 메뉴는 숨겨진다.")
     void priceFail3() {
-        final var menu = Menu.of(menuName.create("메뉴이름"), new MenuPrice(만원), menuGroup.getId(), true, menuProducts);
+        final var menu = Menu.of(menuName.create("메뉴이름"), MenuPrice.of(만원), menuGroup.getId(), true, menuProducts);
 
         assertTrue(menu.isMenuDisplayStatus());
 

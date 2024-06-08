@@ -5,6 +5,9 @@ import kitchenpos.infra.FakePurgomalumClient;
 import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProduct;
+import kitchenpos.menus.tobe.domain.menuproduct.MenuProducts;
+import kitchenpos.menus.tobe.domain.menuproduct.Quantity;
 import kitchenpos.product.tobe.domain.*;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.tobe.domain.Product;
@@ -79,8 +82,8 @@ public class ProductServiceTest {
             assertAll(
                     "상품 정보 그룹 Assertions",
                     () -> assertNotNull(actual.getId()),
-                    () -> assertEquals(response.getProductName(), actual.getProductName()),
-                    () -> assertEquals(response.getProductPrice(), actual.getProductPrice())
+                    () -> assertEquals(response.getName(), actual.getName()),
+                    () -> assertEquals(response.getPrice(), actual.getPrice())
             );
         }
     }
@@ -94,9 +97,9 @@ public class ProductServiceTest {
         @DisplayName("상품 가격은 변경할 수 있다.")
         void success(final long changingPrice) {
             final var product = createProduct(만원);
-            menuProduct = MenuProduct.of(product.getId(), product.getProductPrice().longValue(), 1);
+            menuProduct = MenuProduct.of(product.getId(), Quantity.of(1), product.getPrice().longValue());
             menuProducts = new MenuProducts(List.of(menuProduct));
-            menu = Menu.of(menuName.create("메뉴이름"), new MenuPrice(만원), menuGroup.getId(), true, menuProducts);
+            menu = Menu.of(menuName.create("메뉴이름"), MenuPrice.of(만원), menuGroup.getId(), true, menuProducts);
 
             given(productRepository.findById(product.getId())).willReturn(Optional.ofNullable(product));
             given(menuRepository.findAllByProductId(product.getId())).willReturn(List.of(menu));
@@ -109,7 +112,7 @@ public class ProductServiceTest {
             assertAll(
                     "변경된 상품 정보 그룹 Assertions",
                     () -> assertEquals(response.getId(), product.getId()),
-                    () -> assertEquals(response.getProductPrice(), BigDecimal.valueOf(changingPrice))
+                    () -> assertEquals(response.getPrice(), BigDecimal.valueOf(changingPrice))
             );
         }
 
