@@ -1,23 +1,10 @@
 package kitchenpos.eatinorders.application.dto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.common.domain.OrderStatus;
-import kitchenpos.common.domain.OrderType;
+import kitchenpos.common.domain.orders.OrderStatus;
+import kitchenpos.common.domain.ordertables.OrderType;
 
 
 public class OrderRequest {

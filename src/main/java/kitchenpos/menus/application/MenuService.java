@@ -1,6 +1,6 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.common.domain.products.ProductPriceChangeEvent;
 import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.*;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;

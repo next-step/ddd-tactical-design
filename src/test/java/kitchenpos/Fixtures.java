@@ -2,8 +2,8 @@ package kitchenpos;
 
 import kitchenpos.eatinorders.application.dto.OrderLineItemRequest;
 import kitchenpos.eatinorders.application.dto.OrderRequest;
-import kitchenpos.common.domain.OrderStatus;
-import kitchenpos.common.domain.OrderType;
+import kitchenpos.common.domain.orders.OrderStatus;
+import kitchenpos.common.domain.ordertables.OrderType;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;

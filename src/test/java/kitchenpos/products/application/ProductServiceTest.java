@@ -1,7 +1,7 @@
 package kitchenpos.products.application;
 
 import kitchenpos.Fixtures;
-import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.common.domain.products.ProductPriceChangeEvent;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
@@ -22,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-import org.springframework.transaction.reactive.TransactionalEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.List;

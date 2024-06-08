@@ -1,7 +1,6 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.common.domain.ProductPriceChangeEvent;
+import kitchenpos.common.domain.products.ProductPriceChangeEvent;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.tobe.Product;

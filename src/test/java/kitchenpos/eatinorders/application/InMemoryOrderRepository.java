@@ -1,10 +1,8 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.application.dto.OrderRequest;
 import kitchenpos.eatinorders.domain.eatinorder.Order;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
-import kitchenpos.common.domain.OrderStatus;
-import kitchenpos.eatinorders.application.dto.OrderTableRequest;
+import kitchenpos.common.domain.orders.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;

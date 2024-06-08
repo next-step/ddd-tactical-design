@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.domain.eatinorder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.common.domain.OrderStatus;
+import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 public interface OrderRepository {
