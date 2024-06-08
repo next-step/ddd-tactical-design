@@ -1,6 +1,10 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.eatinorder.Order;
+import kitchenpos.eatinorders.domain.eatinorder.OrderLineItem;
+import kitchenpos.eatinorders.domain.eatinorder.OrderStatus;
+import kitchenpos.eatinorders.domain.eatinorder.OrderType;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;

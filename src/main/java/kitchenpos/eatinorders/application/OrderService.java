@@ -1,13 +1,13 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.domain.eatinorder.Order;
+import kitchenpos.eatinorders.domain.eatinorder.OrderLineItem;
+import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
+import kitchenpos.eatinorders.domain.eatinorder.OrderStatus;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
+import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.domain.eatinorder.OrderType;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import org.springframework.stereotype.Service;
