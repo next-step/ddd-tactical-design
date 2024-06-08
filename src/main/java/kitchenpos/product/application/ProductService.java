@@ -13,12 +13,12 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
-    private final ProductDomainService productDomainService;
+    private final ProductPriceService productDomainService;
 
     public ProductService(
             final ProductRepository productRepository,
             final PurgomalumClient purgomalumClient,
-            ProductDomainService productDomainServiceImpl) {
+            ProductPriceService productDomainServiceImpl) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
         this.productDomainService = productDomainServiceImpl;

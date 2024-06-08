@@ -11,11 +11,11 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @DomainService
-public class ProductDomainServiceImpl implements ProductDomainService {
+public class ProductPriceServiceImpl implements ProductPriceService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
 
-    public ProductDomainServiceImpl(ProductRepository productRepository, MenuRepository menuRepository) {
+    public ProductPriceServiceImpl(ProductRepository productRepository, MenuRepository menuRepository) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
     }
@@ -31,7 +31,7 @@ public class ProductDomainServiceImpl implements ProductDomainService {
         final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
         for (final Menu menu : menus) {
             if (menu.isMenuPriceHigherThanTotalPrice()) {
-                menu.changeMenuDisplayStatus(false);
+                menu.setUndisplayed();
             }
         }
         return product;
