@@ -2,7 +2,7 @@ package kitchenpos.fixture;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
 import kitchenpos.orders.common.domain.OrderStatus;

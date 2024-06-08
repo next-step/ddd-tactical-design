@@ -28,7 +28,7 @@ public class DefaultProfanityValidator implements ProfanityValidator {
 
     @Override
     public void validate(String text) {
-        if(containsProfanity(text)){
+        if (containsProfanity(text)) {
             throw new IllegalArgumentException();
         }
     }

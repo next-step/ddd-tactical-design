@@ -1,6 +1,7 @@
-package kitchenpos.menus.domain.tobe;
+package kitchenpos.menus.domain.tobe.menugroup;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,7 +15,7 @@ public class MenuGroup {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
+    @Embedded
     private MenuGroupName name;
 
     protected MenuGroup() {

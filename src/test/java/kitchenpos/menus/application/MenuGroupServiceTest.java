@@ -5,10 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 import java.util.List;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
-import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.tobe.MenuGroup;
-import kitchenpos.menus.domain.tobe.MenuGroupName;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;

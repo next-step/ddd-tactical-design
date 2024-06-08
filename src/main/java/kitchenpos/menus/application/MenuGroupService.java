@@ -2,8 +2,8 @@ package kitchenpos.menus.application;
 
 import java.util.List;
 import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.tobe.MenuGroup;
-import kitchenpos.menus.domain.tobe.MenuGroupName;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
