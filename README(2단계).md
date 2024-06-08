@@ -53,6 +53,6 @@
 - [x] 도메인 서비스는 어떻게 호출될수 있을까요 ?
 - [X] 메뉴 상태 변경 메소드 하나의 책임으로 분리
 - [x] menuPrice.compare(menuProducts.getTotalPrice()) getter 대신 메시지 활용
-- [ ] MenuProducts <> menu 양방향 관계 이유
+- [X] MenuProducts <> menu 양방향 관계 이유 -> menu에서 접근하도록 변경
 - [x] 도메인 서비스의 네이밍은 모델링에 맞춰서 변경해보기
 
