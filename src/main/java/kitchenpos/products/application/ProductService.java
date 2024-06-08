@@ -26,8 +26,8 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
-        final String name = request.getProductName();
-        final BigDecimal price = request.getProductPrice();
+        final String name = request.getName();
+        final BigDecimal price = request.getPrice();
         final var productName = new ProductName(name, purgomalumClient);
         final var productPrice = new ProductPrice(price);
 
@@ -37,7 +37,7 @@ public class ProductService {
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal newPrice = request.getProductPrice();
+        final BigDecimal newPrice = request.getPrice();
 
         return productDomainService.syncMenuDisplayStatusWithProductPrices(productId, newPrice);
     }

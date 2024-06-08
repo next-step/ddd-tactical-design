@@ -15,10 +15,10 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private ProductName productName;
+    private ProductName name;
 
     @Embedded
-    private ProductPrice productPrice;
+    private ProductPrice price;
 
     protected Product() {
         // 외부에서 기본생성자 사용하지 못하도록 접근제어자 변경
@@ -30,24 +30,24 @@ public class Product {
 
     private Product(UUID id, ProductName productName, ProductPrice productPrice) {
         this.id = id;
-        this.productName = productName;
-        this.productPrice = productPrice;
+        this.name = productName;
+        this.price = productPrice;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getProductName() {
-        return productName.getName();
+    public String getName() {
+        return name.getName();
     }
 
-    public BigDecimal getProductPrice() {
-        return productPrice.getPrice();
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     public void updateProductPrice(BigDecimal newProductPrice) {
-        this.productPrice = new ProductPrice(newProductPrice);
+        this.price = new ProductPrice(newProductPrice);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", productName=" + productName +
-                ", productPrice=" + productPrice +
+                ", productName=" + name +
+                ", productPrice=" + price +
                 '}';
     }
 }
