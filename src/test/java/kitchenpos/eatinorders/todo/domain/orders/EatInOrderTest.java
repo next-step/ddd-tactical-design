@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.todo.domain.orders;
 import kitchenpos.eatinorders.application.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.application.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.infra.OrderTableClientImpl;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.orderTable;
+import static kitchenpos.fixture.EatInOrderFixture.orderTable;
+import static kitchenpos.fixture.MenuFixture.menu;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

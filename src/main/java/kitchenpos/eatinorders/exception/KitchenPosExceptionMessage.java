@@ -10,6 +10,7 @@ public enum KitchenPosExceptionMessage {
     INVALID_ORDER_LINE_ITEM_SIZE("주문아이템 목록을 구성하는 메뉴의 개수는 이미 등록된 메뉴의 개수와 일치하지 않는다. menuSize( %s 개) != orderLineItemSize( %s 개)"),
     INVALID_ORDER_LINE_ITEMS_SIZE("주문아이템 목록은 1개 이상의 주문아이템을 가져야 한다."),
     INVALID_ORDER_STATUS("현재 \"%s\" 주문상태가 아니어서 주문의 다음단계로 진행할 수 없습니다."),
+    INVALID_ORDERLINEITEM_QUANTITY("해당 주문아이템의 수량은 음수일 수 없습니다. quantity : %s 개"),
     ;
 
     private final String message;

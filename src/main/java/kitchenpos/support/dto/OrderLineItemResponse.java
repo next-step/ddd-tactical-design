@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.dto;
+package kitchenpos.support.dto;
 
 import kitchenpos.support.domain.OrderLineItem;
 

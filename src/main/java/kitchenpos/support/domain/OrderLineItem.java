@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -49,6 +49,11 @@ public class OrderLineItem {
         this.menuId = menuId;
         this.price = MenuPrice.from(price);
         this.quantity = quantity;
+    }
+
+
+    public BigDecimal calculateAmount() {
+        return price.priceValue().multiply(BigDecimal.valueOf(quantity));
     }
 
     public Long getSeq() {

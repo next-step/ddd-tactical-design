@@ -6,6 +6,7 @@ import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderRepository;
 import kitchenpos.eatinorders.todo.domain.orders.OrderTableClient;
+import kitchenpos.support.application.OrderLineItemsFactory;
 import kitchenpos.support.domain.MenuClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

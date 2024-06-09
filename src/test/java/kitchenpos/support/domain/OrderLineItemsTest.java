@@ -1,6 +1,6 @@
 package kitchenpos.support.domain;
 
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
+import static kitchenpos.fixture.MenuFixture.menu;
+import static kitchenpos.fixture.MenuFixture.menuProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
