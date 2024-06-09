@@ -20,7 +20,7 @@ PUT {{host}}/api/menus/0b8d208e-ca3a-4df5-afc9-acc35ec9323e/price
 Content-Type: application/json
 
 {
-  "price": 100
+  "price": 2000
 }
 
 ###

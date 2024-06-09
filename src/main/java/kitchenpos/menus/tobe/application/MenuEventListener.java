@@ -20,6 +20,5 @@ public class MenuEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleProductPriceChanged(ProductPriceChanged event) {
         hideMenuWithInvalidPriceByProductId.execute(event.getProductId());
-        System.out.println("good working");
     }
 }
