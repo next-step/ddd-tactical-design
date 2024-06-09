@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.products.tobe.domain.Price;
+import kitchenpos.shared.domain.Price;
 import kitchenpos.shared.domain.Profanities;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class TobeMenu {
         this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
         this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
-        if (price > this.menuProducts.getTotalPrice()) {
+        if (this.price.isGreaterThan(this.menuProducts.getTotalPrice())) {
             throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
         this.menuGroupId = menuGroupId;

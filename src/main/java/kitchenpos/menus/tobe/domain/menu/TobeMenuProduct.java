@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.shared.domain.Price;
 
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class TobeMenuProduct {
 
     public TobeMenuProduct(int quantity, int price, UUID productId) {
         this.quantity = new Quantity(quantity);
-        this.price = new Price(price);
+        this.price = Price.of(price);
         this.productId = productId;
     }
 

@@ -1,10 +1,10 @@
 package kitchenpos.products.tobe.application
 
-import kitchenpos.products.tobe.domain.Price
 import kitchenpos.products.tobe.domain.TobeProduct
 import kitchenpos.products.tobe.domain.TobeProductRepository
 import kitchenpos.products.tobe.infra.InMemoryTobeProductRepository
 import kitchenpos.share.domain.FakeProfanities
+import kitchenpos.shared.domain.Price
 import kitchenpos.shared.domain.Profanities
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
