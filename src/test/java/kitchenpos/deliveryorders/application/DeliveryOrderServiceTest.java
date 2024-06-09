@@ -3,9 +3,13 @@ package kitchenpos.deliveryorders.application;
 import kitchenpos.deliveryorders.domain.DeliveryOrder;
 import kitchenpos.deliveryorders.domain.DeliveryOrderRepository;
 import kitchenpos.deliveryorders.domain.DeliveryOrderStatus;
+import kitchenpos.deliveryorders.dto.DeliveryOrderCreateRequest;
+import kitchenpos.deliveryorders.dto.DeliveryOrderResponse;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.support.domain.OrderLineItem;
+import kitchenpos.support.domain.MenuClient;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +24,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static kitchenpos.fixture.DeliveryOrderFixture.deliveryOrder;
@@ -42,31 +45,32 @@ class DeliveryOrderServiceTest {
         orderRepository = new InMemoryDeliveryOrderRepository();
         menuRepository = new InMemoryMenuRepository();
         kitchenridersClient = new FakeKitchenridersClient();
-        orderService = new DeliveryOrderService(orderRepository, menuRepository, kitchenridersClient);
+        MenuClient menuClient = new MenuClientImpl(menuRepository);
+        orderService = new DeliveryOrderService(orderRepository, menuClient, kitchenridersClient);
     }
 
     @DisplayName("1개 이상의 등록된 메뉴로 배달 주문을 등록할 수 있다.")
     @Test
     void createDeliveryOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final DeliveryOrder expected = createOrderRequest("서울시 송파구 위례성대로 2", createOrderLineItemRequest(menuId, 19_000L, 3L)
+        final DeliveryOrderCreateRequest expected = createOrderRequest("서울시 송파구 위례성대로 2", createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
-        final DeliveryOrder actual = orderService.create(expected);
+        final DeliveryOrderResponse actual = orderService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.WAITING),
-            () -> assertThat(actual.getOrderDateTime()).isNotNull(),
-            () -> assertThat(actual.getOrderLineItems()).hasSize(1),
-            () -> assertThat(actual.getDeliveryAddress()).isEqualTo(expected.getDeliveryAddress())
+            () -> assertThat(actual.id()).isNotNull(),
+            () -> assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.WAITING),
+            () -> assertThat(actual.orderDateTime()).isNotNull(),
+            () -> assertThat(actual.orderLineItems()).hasSize(1),
+            () -> assertThat(actual.deliveryAddress()).isEqualTo(expected.deliveryAddress())
         );
     }
 
     @DisplayName("메뉴가 없으면 등록할 수 없다.")
     @MethodSource("orderLineItems")
     @ParameterizedTest
-    void create(final List<OrderLineItem> orderLineItems) {
-        final DeliveryOrder expected = createOrderRequest(orderLineItems);
+    void create(final List<OrderLineItemCreateRequest> orderLineItems) {
+        final DeliveryOrderCreateRequest expected = createOrderRequest(orderLineItems);
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -75,7 +79,7 @@ class DeliveryOrderServiceTest {
         return Arrays.asList(
             null,
             Arguments.of(Collections.emptyList()),
-            Arguments.of(Arrays.asList(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
+            Arguments.of(List.of(createOrderLineItemRequest(INVALID_ID, 19_000L, 3L)))
         );
     }
 
@@ -84,7 +88,8 @@ class DeliveryOrderServiceTest {
     @ParameterizedTest
     void createWithoutEatInOrder(final long quantity) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final DeliveryOrder expected = createOrderRequest(createOrderLineItemRequest(menuId, 19_000L, quantity)
+        final DeliveryOrderCreateRequest expected = createOrderRequest(
+                createOrderLineItemRequest(menuId, 19_000L, quantity)
         );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -95,7 +100,8 @@ class DeliveryOrderServiceTest {
     @ParameterizedTest
     void create(final String deliveryAddress) {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final DeliveryOrder expected = createOrderRequest(deliveryAddress, createOrderLineItemRequest(menuId, 19_000L, 3L)
+        final DeliveryOrderCreateRequest expected = createOrderRequest(
+                deliveryAddress, createOrderLineItemRequest(menuId, 19_000L, 3L)
         );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -105,7 +111,9 @@ class DeliveryOrderServiceTest {
     @Test
     void createNotDisplayedMenuOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct())).getId();
-        final DeliveryOrder expected = createOrderRequest(createOrderLineItemRequest(menuId, 19_000L, 3L));
+        final DeliveryOrderCreateRequest expected = createOrderRequest(
+                createOrderLineItemRequest(menuId, 19_000L, 3L)
+        );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -114,7 +122,9 @@ class DeliveryOrderServiceTest {
     @Test
     void createNotMatchedMenuPriceOrder() {
         final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct())).getId();
-        final DeliveryOrder expected = createOrderRequest(createOrderLineItemRequest(menuId, 16_000L, 3L));
+        final DeliveryOrderCreateRequest expected = createOrderRequest(
+                createOrderLineItemRequest(menuId, 16_000L, 3L)
+        );
         assertThatThrownBy(() -> orderService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -123,8 +133,8 @@ class DeliveryOrderServiceTest {
     @Test
     void accept() {
         final UUID orderId = orderRepository.save(deliveryOrder(DeliveryOrderStatus.WAITING)).getId();
-        final DeliveryOrder actual = orderService.accept(orderId);
-        assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.ACCEPTED);
+        final DeliveryOrderResponse actual = orderService.accept(orderId);
+        assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.ACCEPTED);
     }
 
     @DisplayName("접수 대기 중인 주문만 접수할 수 있다.")
@@ -140,9 +150,9 @@ class DeliveryOrderServiceTest {
     @Test
     void acceptDeliveryOrder() {
         final UUID orderId = orderRepository.save(deliveryOrder(DeliveryOrderStatus.WAITING, "서울시 송파구 위례성대로 2")).getId();
-        final DeliveryOrder actual = orderService.accept(orderId);
+        final DeliveryOrderResponse actual = orderService.accept(orderId);
         assertAll(
-            () -> assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.ACCEPTED),
+            () -> assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.ACCEPTED),
             () -> assertThat(kitchenridersClient.getOrderId()).isEqualTo(orderId),
             () -> assertThat(kitchenridersClient.getDeliveryAddress()).isEqualTo("서울시 송파구 위례성대로 2")
         );
@@ -152,8 +162,8 @@ class DeliveryOrderServiceTest {
     @Test
     void serve() {
         final UUID orderId = orderRepository.save(deliveryOrder(DeliveryOrderStatus.ACCEPTED)).getId();
-        final DeliveryOrder actual = orderService.serve(orderId);
-        assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.SERVED);
+        final DeliveryOrderResponse actual = orderService.serve(orderId);
+        assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.SERVED);
     }
 
     @DisplayName("접수된 주문만 서빙할 수 있다.")
@@ -169,8 +179,8 @@ class DeliveryOrderServiceTest {
     @Test
     void startDelivery() {
         final UUID orderId = orderRepository.save(deliveryOrder(DeliveryOrderStatus.SERVED, "서울시 송파구 위례성대로 2")).getId();
-        final DeliveryOrder actual = orderService.startDelivery(orderId);
-        assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.DELIVERING);
+        final DeliveryOrderResponse actual = orderService.startDelivery(orderId);
+        assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.DELIVERING);
     }
 
     @DisplayName("서빙된 주문만 배달할 수 있다.")
@@ -186,8 +196,8 @@ class DeliveryOrderServiceTest {
     @Test
     void completeDelivery() {
         final UUID orderId = orderRepository.save(deliveryOrder(DeliveryOrderStatus.DELIVERING, "서울시 송파구 위례성대로 2")).getId();
-        final DeliveryOrder actual = orderService.completeDelivery(orderId);
-        assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.DELIVERED);
+        final DeliveryOrderResponse actual = orderService.completeDelivery(orderId);
+        assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.DELIVERED);
     }
 
     @DisplayName("배달 중인 주문만 배달 완료할 수 있다.")
@@ -203,8 +213,8 @@ class DeliveryOrderServiceTest {
     @Test
     void complete() {
         final DeliveryOrder expected = orderRepository.save(deliveryOrder(DeliveryOrderStatus.DELIVERED, "서울시 송파구 위례성대로 2"));
-        final DeliveryOrder actual = orderService.complete(expected.getId());
-        assertThat(actual.getStatus()).isEqualTo(DeliveryOrderStatus.COMPLETED);
+        final DeliveryOrderResponse actual = orderService.complete(expected.getId());
+        assertThat(actual.status()).isEqualTo(DeliveryOrderStatus.COMPLETED);
     }
 
     @DisplayName("배달 주문의 경우 배달 완료된 주문만 완료할 수 있다.")
@@ -221,31 +231,26 @@ class DeliveryOrderServiceTest {
     void findAll() {
         orderRepository.save(deliveryOrder(DeliveryOrderStatus.SERVED, "서울시 송파구 위례성대로 1"));
         orderRepository.save(deliveryOrder(DeliveryOrderStatus.DELIVERED, "서울시 송파구 위례성대로 2"));
-        final List<DeliveryOrder> actual = orderService.findAll();
+        final List<DeliveryOrderResponse> actual = orderService.findAll();
         assertThat(actual).hasSize(2);
     }
 
-    private DeliveryOrder createOrderRequest(
+    private DeliveryOrderCreateRequest createOrderRequest(
         final String deliveryAddress,
-        final OrderLineItem... orderLineItems
+        final OrderLineItemCreateRequest... orderLineItems
     ) {
-        final DeliveryOrder order = new DeliveryOrder();
-        order.setDeliveryAddress(deliveryAddress);
-        order.setOrderLineItems(Arrays.asList(orderLineItems));
-        return order;
+        return new DeliveryOrderCreateRequest(Arrays.asList(orderLineItems), deliveryAddress);
     }
 
-    private DeliveryOrder createOrderRequest(final OrderLineItem... orderLineItems) {
+    private DeliveryOrderCreateRequest createOrderRequest(final OrderLineItemCreateRequest... orderLineItems) {
         return createOrderRequest(Arrays.asList(orderLineItems));
     }
 
-    private DeliveryOrder createOrderRequest(final List<OrderLineItem> orderLineItems) {
-        final DeliveryOrder order = new DeliveryOrder();
-        order.setOrderLineItems(orderLineItems);
-        return order;
+    private DeliveryOrderCreateRequest createOrderRequest(final List<OrderLineItemCreateRequest> orderLineItems) {
+        return new DeliveryOrderCreateRequest(orderLineItems, "서울시 송파구 위례성대로 2");
     }
 
-    private static OrderLineItem createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
-        return new OrderLineItem(new Random().nextLong(), menuId, BigDecimal.valueOf(price), quantity);
+    private static OrderLineItemCreateRequest createOrderLineItemRequest(final UUID menuId, final long price, final long quantity) {
+        return new OrderLineItemCreateRequest(menuId, BigDecimal.valueOf(price), quantity);
     }
 }

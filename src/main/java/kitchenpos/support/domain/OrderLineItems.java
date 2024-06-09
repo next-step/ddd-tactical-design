@@ -6,6 +6,7 @@ import jakarta.persistence.OneToMany;
 import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 import kitchenpos.support.dto.OrderLineItemCreateRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +34,13 @@ public class OrderLineItems {
         if (values.stream().anyMatch(item -> item.getQuantity() < 0)) {
             throw new KitchenPosIllegalArgumentException(INVALID_ORDERLINEITEM_QUANTITY);
         }
+    }
+
+    public BigDecimal sumAmounts() {
+        return values.stream()
+                .map(OrderLineItem::calculateAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
     }
 
     public List<OrderLineItem> getValues() {

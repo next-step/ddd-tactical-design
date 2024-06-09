@@ -2,30 +2,18 @@ package kitchenpos.fixture;
 
 import kitchenpos.deliveryorders.domain.DeliveryOrder;
 import kitchenpos.deliveryorders.domain.DeliveryOrderStatus;
+import kitchenpos.support.domain.OrderLineItems;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
-import static kitchenpos.fixture.Fixtures.orderLineItem;
+import static kitchenpos.fixture.Fixtures.orderLineItemRequest;
 
 public class DeliveryOrderFixture {
     public static DeliveryOrder deliveryOrder(final DeliveryOrderStatus status) {
-        final DeliveryOrder order = new DeliveryOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        return order;
+        return deliveryOrder(status, "서울시 송파구 위례성대로 2");
     }
 
     public static DeliveryOrder deliveryOrder(final DeliveryOrderStatus status, final String deliveryAddress) {
-        final DeliveryOrder order = new DeliveryOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(status);
-        order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        order.setOrderLineItems(List.of(orderLineItem()));
-        order.setDeliveryAddress(deliveryAddress);
-        return order;
+        return DeliveryOrder.create(OrderLineItems.from(List.of(orderLineItemRequest())), deliveryAddress, status);
     }
 }
