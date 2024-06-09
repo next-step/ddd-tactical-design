@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TobeMenuProductsTest {
 
-    @DisplayName("")
+    @DisplayName("메뉴에 속한 상품 금액의 합 테스트")
     @Test
     void case_1() {
         // given
