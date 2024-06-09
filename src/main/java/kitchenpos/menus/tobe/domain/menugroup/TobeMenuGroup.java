@@ -15,7 +15,7 @@ public class TobeMenuGroup {
     @Embedded
     private MenuGroupName name;
 
-    private TobeMenuGroup() {
+    protected TobeMenuGroup() {
     }
 
     public TobeMenuGroup(UUID id, String name) {

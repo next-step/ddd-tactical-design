@@ -12,7 +12,7 @@ public class MenuGroupName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    private MenuGroupName() {
+    protected MenuGroupName() {
     }
 
     private MenuGroupName(String name) {
