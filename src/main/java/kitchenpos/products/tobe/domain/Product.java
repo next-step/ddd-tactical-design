@@ -26,7 +26,11 @@ public class Product {
     }
 
     public Product(ProductName name, ProductPrice price) {
-        this.id = UUID.randomUUID();
+        this(UUID.randomUUID(), name, price);
+    }
+
+    public Product(UUID productId, ProductName name, ProductPrice price) {
+        this.id = productId;
         this.name = name;
         this.price = price;
     }
