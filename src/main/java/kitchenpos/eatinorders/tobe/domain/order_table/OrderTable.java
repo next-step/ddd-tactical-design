@@ -47,12 +47,15 @@ public class OrderTable {
     this.occupied = true;
   }
 
-  public void clear() {
-    if(existsIncompleteOrder()) {
+  public void clear(boolean throwOnFailure) {
+    if(!existsIncompleteOrder()) {
+      this.numberOfGuests = OrderTableNumberOfGuests.ABSENT;
+      this.occupied = false;
+      return;
+    }
+    if(throwOnFailure) {
       throw new IllegalStateException();
     }
-    this.numberOfGuests = OrderTableNumberOfGuests.ABSENT;
-    this.occupied = false;
   }
 
   public void changeNumberOfGuests(OrderTableNumberOfGuests numberOfGuests) {

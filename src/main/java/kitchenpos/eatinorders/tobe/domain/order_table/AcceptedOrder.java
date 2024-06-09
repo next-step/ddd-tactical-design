@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
 
 @Table(name = "order")
 @Entity
@@ -19,7 +19,7 @@ public class AcceptedOrder {
 
   @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
   @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  private EatInOrderStatus status;
 
   protected AcceptedOrder() {
   }
@@ -28,7 +28,7 @@ public class AcceptedOrder {
     return id;
   }
 
-  public OrderStatus getStatus() {
+  public EatInOrderStatus getStatus() {
     return status;
   }
 

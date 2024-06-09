@@ -2,7 +2,7 @@ package kitchenpos.eatinorders.tobe.domain.order_table;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.OrderStatus;
+import kitchenpos.eatinorders.tobe.domain.order.EatInOrderStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class OrderTableFixture {
@@ -10,6 +10,7 @@ public class OrderTableFixture {
   public static OrderTableName normalOrderTableName() {
     return new OrderTableName("주문테이블명");
   }
+
   public static OrderTableName createOrderTableName(String name) {
     return new OrderTableName(name);
   }
@@ -28,14 +29,15 @@ public class OrderTableFixture {
     return acceptedOrders;
   }
 
-  public static AcceptedOrder createAcceptedOrder(OrderStatus orderStatus) {
+  public static AcceptedOrder createAcceptedOrder(EatInOrderStatus orderStatus) {
     AcceptedOrder acceptedOrder = new AcceptedOrder();
     ReflectionTestUtils.setField(acceptedOrder, "id", UUID.randomUUID());
     ReflectionTestUtils.setField(acceptedOrder, "status", orderStatus);
     return acceptedOrder;
   }
 
-  public static OrderTable create(OrderTableName name, OrderTableNumberOfGuests numberOfGuests, boolean occupied, AcceptedOrders orders) {
+  public static OrderTable create(OrderTableName name, OrderTableNumberOfGuests numberOfGuests,
+      boolean occupied, AcceptedOrders orders) {
     OrderTable orderTable = new OrderTable();
     ReflectionTestUtils.setField(orderTable, "id", UUID.randomUUID());
     ReflectionTestUtils.setField(orderTable, "name", name);
