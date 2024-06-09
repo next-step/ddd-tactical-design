@@ -13,7 +13,7 @@ public class DisplayedName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    private DisplayedName() {
+    protected DisplayedName() {
     }
 
     private DisplayedName(String name, Profanities profanities) {

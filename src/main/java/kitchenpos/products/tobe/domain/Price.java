@@ -11,7 +11,7 @@ public class Price {
     @Column(name = "price", nullable = false)
     private int price;
 
-    private Price() {
+    protected Price() {
     }
 
     private Price(int price) {

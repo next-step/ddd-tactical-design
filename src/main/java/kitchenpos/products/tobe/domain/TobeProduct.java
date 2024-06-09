@@ -18,7 +18,7 @@ public class TobeProduct {
     @Embedded
     private Price price;
 
-    private TobeProduct() {
+    protected TobeProduct() {
     }
 
     public TobeProduct(UUID id, String name, int price, Profanities profanities) {
