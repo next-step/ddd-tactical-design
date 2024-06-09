@@ -24,7 +24,7 @@ object EatInOrderFixtures {
 
     fun acceptedEatInOrder(
         orderTableId: UUID = UUID.randomUUID(),
-        eatInOrderLineItems: EatInOrderLineItems
+        eatInOrderLineItems: EatInOrderLineItems = EatInOrderLineItems(listOf(eatInOrderLineItem()))
     ): EatInOrder {
         val eatInOrder = waitingEatInOrder(orderTableId = orderTableId, eatInOrderLineItems = eatInOrderLineItems)
 
@@ -33,7 +33,10 @@ object EatInOrderFixtures {
         return eatInOrder
     }
 
-    fun servedEatInOrder(orderTableId: UUID = UUID.randomUUID(), eatInOrderLineItems: EatInOrderLineItems): EatInOrder {
+    fun servedEatInOrder(
+        orderTableId: UUID = UUID.randomUUID(),
+        eatInOrderLineItems: EatInOrderLineItems = EatInOrderLineItems(listOf(eatInOrderLineItem()))
+    ): EatInOrder {
         val eatInOrder = acceptedEatInOrder(orderTableId = orderTableId, eatInOrderLineItems = eatInOrderLineItems)
 
         eatInOrder.serve()
@@ -43,7 +46,7 @@ object EatInOrderFixtures {
 
     fun completedEatInOrder(
         orderTableId: UUID = UUID.randomUUID(),
-        eatInOrderLineItems: EatInOrderLineItems
+        eatInOrderLineItems: EatInOrderLineItems = EatInOrderLineItems(listOf(eatInOrderLineItem()))
     ): EatInOrder {
         val eatInOrder = servedEatInOrder(orderTableId = orderTableId, eatInOrderLineItems = eatInOrderLineItems)
 
