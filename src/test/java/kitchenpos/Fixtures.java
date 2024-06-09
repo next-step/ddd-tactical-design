@@ -52,15 +52,11 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct(product(), 2L);
-        menuProduct.setSeq(new Random().nextLong());
-        return menuProduct;
+        return new MenuProduct(product(), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct(product, quantity);
-        menuProduct.setSeq(new Random().nextLong());
-        return menuProduct;
+        return new MenuProduct(product, quantity);
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {

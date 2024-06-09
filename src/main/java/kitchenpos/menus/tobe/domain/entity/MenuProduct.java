@@ -55,23 +55,11 @@ public class MenuProduct {
         return product;
     }
 
-    public void setProduct(final Product product) {
-        this.product = product;
-    }
-
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }
