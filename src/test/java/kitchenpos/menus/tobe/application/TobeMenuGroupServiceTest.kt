@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.application
 
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup
+import kitchenpos.menus.tobe.application.dto.CreateMenuGroupRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -27,7 +27,7 @@ class TobeMenuGroupServiceTest(
         // given
         val id = UUID.randomUUID()
         val name = "후라이드 세트"
-        val request = TobeMenuGroup(id, name)
+        val request = CreateMenuGroupRequest(id, name)
 
         // when
         val savedMenuGroup = sut.create(request)
@@ -42,7 +42,7 @@ class TobeMenuGroupServiceTest(
         // given
         val id = UUID.randomUUID()
         val name = "후라이드 세트"
-        sut.create(TobeMenuGroup(id, name))
+        sut.create(CreateMenuGroupRequest(id, name))
 
         // when
         val menuGroups = sut.findAll()

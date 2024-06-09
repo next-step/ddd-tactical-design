@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.domain.menugroup;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.application.dto.MenuGroupResponse;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -29,5 +31,10 @@ public class TobeMenuGroup {
 
     public UUID getId() {
         return id;
+    }
+
+    @NotNull
+    public MenuGroupResponse toDto() {
+        return new MenuGroupResponse(this.id, this.name.getName());
     }
 }

@@ -1,13 +1,10 @@
 package kitchenpos.menus.tobe.application
 
-import kitchenpos.menus.tobe.application.dto.ChangePriceRequest
-import kitchenpos.menus.tobe.application.dto.CreateMenuRequest
-import kitchenpos.menus.tobe.application.dto.MenuProductRequest
+import kitchenpos.menus.tobe.application.dto.*
 import kitchenpos.menus.tobe.domain.TobeMenuRepository
 import kitchenpos.menus.tobe.domain.menu.TobeMenu
 import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct
 import kitchenpos.menus.tobe.domain.menu.TobeProductClient
-import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup
 import kitchenpos.share.domain.FakeProfanities
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -33,12 +30,12 @@ class TobeMenuServiceTest(
     private val tobeMenuRepository: TobeMenuRepository,
 ) {
     companion object {
-        private lateinit var menuGroup: TobeMenuGroup
+        private lateinit var menuGroup: MenuGroupResponse
     }
 
     @BeforeEach
     fun setUp() {
-        menuGroup = tobeMenuGroupService.create(TobeMenuGroup(UUID.randomUUID(), "후라이드"))
+        menuGroup = tobeMenuGroupService.create(CreateMenuGroupRequest(UUID.randomUUID(), "후라이드"))
     }
 
     @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다. (등록된 상품 o)")
