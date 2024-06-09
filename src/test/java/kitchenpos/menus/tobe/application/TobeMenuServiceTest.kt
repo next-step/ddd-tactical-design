@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.application
 
+import kitchenpos.menus.tobe.application.dto.ChangePriceRequest
 import kitchenpos.menus.tobe.application.dto.CreateMenuRequest
 import kitchenpos.menus.tobe.application.dto.MenuProductRequest
 import kitchenpos.menus.tobe.domain.TobeMenuRepository
@@ -220,9 +221,10 @@ class TobeMenuServiceTest(
         val savedMenu = tobeMenuRepository.save(menu)
         val menuId = savedMenu.id
         val newPrice = 14_000
+        val request = ChangePriceRequest(menuId, newPrice)
 
         // when
-        val priceChangedMenu = sut.changePrice(menuId, newPrice)
+        val priceChangedMenu = sut.changePrice(request)
 
         // then
         assertThat(priceChangedMenu.price).isEqualTo(newPrice)
@@ -235,10 +237,12 @@ class TobeMenuServiceTest(
         val menu = createMenu(displayed = false)
         val savedMenu = tobeMenuRepository.save(menu)
         val menuId = savedMenu.id
+        val newPrice = 14_000
+        val request = ChangePriceRequest(menuId, newPrice)
 
         // when
         // then
-        assertThatIllegalStateException().isThrownBy { sut.changePrice(menuId, 14_000) }
+        assertThatIllegalStateException().isThrownBy { sut.changePrice(request) }
     }
 
     private fun createMenu(

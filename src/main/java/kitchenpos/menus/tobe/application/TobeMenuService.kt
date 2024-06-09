@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe.application
 
+import kitchenpos.menus.tobe.application.dto.ChangePriceRequest
 import kitchenpos.menus.tobe.application.dto.CreateMenuRequest
 import kitchenpos.menus.tobe.domain.TobeMenuRepository
 import kitchenpos.menus.tobe.domain.menu.TobeMenu
@@ -21,14 +22,11 @@ class TobeMenuService(
     }
 
     @Transactional
-    fun changePrice(
-        menuId: UUID,
-        price: Int,
-    ): TobeMenu {
+    fun changePrice(request: ChangePriceRequest): TobeMenu {
         val menu =
-            tobeMenuRepository.findById(menuId)
+            tobeMenuRepository.findById(request.menuId)
                 .orElseThrow { NoSuchElementException() }
-        menu.changePrice(price)
+        menu.changePrice(request.price)
         return menu
     }
 
