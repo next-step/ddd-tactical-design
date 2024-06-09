@@ -32,7 +32,7 @@ class TobeProductService(
     }
 
     @Transactional(readOnly = true)
-    fun findAll(): MutableList<TobeProduct> {
+    fun findAll(): List<TobeProduct> {
         return tobeProductRepository.findAll()
     }
 }
