@@ -15,14 +15,15 @@ public class Product {
     @Embedded
     private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     public Product() {
     }
 
-    public Product(String name) {
+    public Product(String name, BigDecimal price) {
         this.name = new ProductName(name);
+        this.price = new ProductPrice(price);
     }
 
     public UUID getId() {
@@ -37,11 +38,7 @@ public class Product {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
