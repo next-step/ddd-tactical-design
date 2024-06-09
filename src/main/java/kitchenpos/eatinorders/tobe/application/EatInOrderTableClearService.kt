@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.tobe.application
 
 import kitchenpos.eatinorders.tobe.domain.*
+import kitchenpos.eatinorders.tobe.event.EatInOrderCompleted
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional

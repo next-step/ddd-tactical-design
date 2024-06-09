@@ -1,4 +1,4 @@
-package kitchenpos.products.domain
+package kitchenpos.products.tobe.event
 
 import kitchenpos.common.Price
 import java.util.*

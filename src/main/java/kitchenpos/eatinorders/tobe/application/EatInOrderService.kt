@@ -4,6 +4,7 @@ import kitchenpos.eatinorders.tobe.domain.*
 import kitchenpos.eatinorders.tobe.dto.`in`.EatInOrderCreateRequest
 import kitchenpos.eatinorders.tobe.dto.out.EatInOrderResponse
 import kitchenpos.eatinorders.tobe.dto.out.fromEatInOrder
+import kitchenpos.eatinorders.tobe.event.EatInOrderCompleted
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

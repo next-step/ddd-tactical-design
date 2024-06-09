@@ -5,13 +5,9 @@ import kitchenpos.menus.tobe.domain.*
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.out.MenuResponse
 import kitchenpos.menus.tobe.dto.out.fromMenu
-import kitchenpos.products.domain.ProductPriceChanged
 import kitchenpos.products.tobe.domain.ProductRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.transaction.event.TransactionPhase
-import org.springframework.transaction.event.TransactionalEventListener
 import java.util.*
 import kotlin.NoSuchElementException
 

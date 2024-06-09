@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.application
 
 import kitchenpos.menus.tobe.domain.MenuRepository
-import kitchenpos.products.domain.ProductPriceChanged
+import kitchenpos.products.tobe.event.ProductPriceChanged
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
