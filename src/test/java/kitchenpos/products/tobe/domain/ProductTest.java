@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class TobeProductTest {
+class ProductTest {
 
     @Test
     @DisplayName("후라이드 상품을 생성한다")
     void success() {
-        TobeProduct product = new TobeProduct("후라이드", BigDecimal.valueOf(10_000L));
+        Product product = new Product("후라이드", BigDecimal.valueOf(10_000L));
         assertThat(product.getName()).isEqualTo(new ProductName("후라이드"));
         assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(10_000L)));
     }
@@ -21,21 +21,21 @@ class TobeProductTest {
     @Test
     @DisplayName("상품의 이름이 null이면 IllegalArgumentException이 발생한다")
     void fail() {
-        assertThatThrownBy(() -> new TobeProduct(null, BigDecimal.valueOf(10_000L)))
+        assertThatThrownBy(() -> new Product(null, BigDecimal.valueOf(10_000L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("상품의 가격이 0보다 작으면 IllegalArgumentException이 발생한다")
     void fail2() {
-        assertThatThrownBy(() -> new TobeProduct("후라이드", BigDecimal.valueOf(-10_000L)))
+        assertThatThrownBy(() -> new Product("후라이드", BigDecimal.valueOf(-10_000L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("상품의 가격이 null이면 IllegalArgumentException이 발생한다")
     void fail3() {
-        assertThatThrownBy(() -> new TobeProduct("후라이드", null))
+        assertThatThrownBy(() -> new Product("후라이드", null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
