@@ -33,10 +33,11 @@ public class TobeMenu {
     protected TobeMenu() {
     }
 
-    public TobeMenu(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {
+    public TobeMenu(String name, int price, boolean displayed, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts, Profanities profanities) {
         this.id = UUID.randomUUID();
         this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
+        this.displayed = displayed;
         this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
         if (this.price.isGreaterThan(this.menuProducts.getTotalPrice())) {
             throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");

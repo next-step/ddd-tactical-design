@@ -52,12 +52,13 @@ class JpaTobeMenuRepositoryTest {
         // given
         var name = "후라이드";
         var price = 10_000;
+        var displayed = true;
         var profanities = new DefaultProfanities();
         var menuGroupId = menuGroup.getId();
         var menuProducts = List.of(new TobeMenuProduct(1, 10_000, UUID.randomUUID()));
 
         // when
-        var menu = new TobeMenu(name, price, profanities, menuGroupId, menuProducts);
+        var menu = new TobeMenu(name, price, displayed, menuGroupId, menuProducts, profanities);
         var savedMenu = sut.save(menu);
 
         // then

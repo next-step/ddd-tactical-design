@@ -17,7 +17,6 @@ class TobeMenuService(
     /**
      * TODO :
      * 1. menuProducts validation (w/ domain service -> product 접근)
-     * 2. displayed constructor 에 추가
      */
     @Transactional
     fun create(request: CreateMenuRequest): TobeMenu {
@@ -37,7 +36,7 @@ class TobeMenuService(
             }
         val displayed = request.displayed
         val profanities = DefaultProfanities()
-        val menu = TobeMenu(name, price, profanities, groupId, menuProducts)
+        val menu = TobeMenu(name, price, displayed, groupId, menuProducts, profanities)
         return tobeMenuRepository.save(menu)
     }
 }
