@@ -29,7 +29,7 @@ class ChangePriceTest {
     public void setup() {
         this.productRepository = new InMemoryProductRepository();
         this.menuRepository = new InMemoryMenuRepository();
-        this.changePrice = new DefaultChangePrice(productRepository);
+        this.changePrice = new DefaultChangePrice(productRepository, (event) -> {});
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
