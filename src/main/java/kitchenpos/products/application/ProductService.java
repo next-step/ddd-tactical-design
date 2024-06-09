@@ -5,7 +5,7 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.ProductMenus;
+import kitchenpos.products.domain.ProductMenus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +34,7 @@ public class ProductService {
         if (purgomalumClient.containsProfanity(request.getName())) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product(request);
+        final Product product = new Product(request.getName(), request.getPrice());
         return productRepository.save(product);
     }
 

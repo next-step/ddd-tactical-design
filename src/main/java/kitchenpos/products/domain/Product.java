@@ -24,16 +24,16 @@ public class Product {
 
     public Product() {
     }
-    public Product(Product product) {
-        if (Objects.isNull(product.getPrice()) || product.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+    public Product(String name, BigDecimal price) {
+        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        if (Objects.isNull(product.getName())) {
+        if (Objects.isNull(name)) {
             throw new IllegalArgumentException();
         }
         this.id = UUID.randomUUID();
-        this.name = product.getName();
-        this.price = product.getPrice();
+        this.name = name;
+        this.price = price;
     }
 
     public UUID getId() {
