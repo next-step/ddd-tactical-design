@@ -11,6 +11,7 @@ class EatInOrder private constructor(orderTableId: UUID, eatInOrderLineItems: Ea
     @Id
     val id: UUID = UUID.randomUUID()
 
+    @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
     var status: EatInOrderStatus = EatInOrderStatus.WAITING
         private set

@@ -9,8 +9,8 @@ CREATE TABLE eat_in_orders
 CREATE TABLE eat_in_order_line_items
 (
     seq             bigint auto_increment primary key,
-    eat_in_order_id bigint         not null,
+    eat_in_order_id binary(16)     not null,
     quantity        bigint         not null,
-    menuId          binary(16)     not null,
+    menu_id         binary(16)     not null,
     price           decimal(19, 2) not null
 )
