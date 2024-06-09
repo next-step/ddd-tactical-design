@@ -7,11 +7,10 @@ import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuName;
 import kitchenpos.menus.domain.tobe.menu.MenuPrice;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProduct;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProducts;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuQuantity;
+import kitchenpos.menus.domain.tobe.menu.MenuProduct;
+import kitchenpos.menus.domain.tobe.menu.MenuProducts;
+import kitchenpos.menus.domain.tobe.menu.MenuQuantity;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
-import kitchenpos.menus.ui.dto.MenuProductCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
 

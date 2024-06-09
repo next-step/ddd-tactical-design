@@ -1,8 +1,8 @@
 package kitchenpos.menus.ui.dto;
 
 import java.util.UUID;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProduct;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuQuantity;
+import kitchenpos.menus.domain.tobe.menu.MenuProduct;
+import kitchenpos.menus.domain.tobe.menu.MenuQuantity;
 import kitchenpos.products.domain.tobe.Product;
 
 public class MenuProductCreateRequest {

@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain.tobe.menuproduct;
+package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
@@ -8,7 +8,6 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import kitchenpos.menus.domain.tobe.menu.MenuPrice;
 
 @Embeddable
 public class MenuProducts {

@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProduct;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProducts;
 
 @Table(name = "menu")
 @Entity

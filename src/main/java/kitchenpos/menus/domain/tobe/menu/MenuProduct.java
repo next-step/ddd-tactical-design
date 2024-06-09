@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain.tobe.menuproduct;
+package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

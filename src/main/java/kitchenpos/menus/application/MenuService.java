@@ -8,7 +8,7 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuPrice;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.menuproduct.MenuProducts;
+import kitchenpos.menus.domain.tobe.menu.MenuProducts;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.stereotype.Service;
