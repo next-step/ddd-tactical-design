@@ -24,7 +24,7 @@ class DefaultCreateProduct implements CreateProduct {
     }
 
     @Override
-    public Product execute(ProductCreateDto request) {
+    public final Product execute(ProductCreateDto request) {
         final Product product = Product.createProduct(UUID.randomUUID(), request.getName(), request.getPrice(), purgomalumClient);
         return productRepository.save(product);
     }

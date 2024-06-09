@@ -25,7 +25,7 @@ class DefaultChangePrice implements ChangePrice {
     }
 
     @Override
-    public Product execute(UUID productId, ProductPriceChangeDto request) {
+    public final Product execute(UUID productId, ProductPriceChangeDto request) {
         final ProductPrice price = ProductPrice.of(request.getPrice());
         final Product product = productRepository.findById(productId)
                                                  .orElseThrow(NoSuchElementException::new);

@@ -6,7 +6,6 @@ import java.util.UUID;
 import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +30,11 @@ public class MenuQueryHandler {
                  left join kitchenpos.product p on mp.product_id = p.id
         """;
 
-    private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final JdbcTemplate jdbcTemplate;
 
-    public MenuQueryHandler(MenuRepository menuRepository, MenuGroupRepository menuGroupRepository,
+    public MenuQueryHandler(MenuGroupRepository menuGroupRepository,
                             JdbcTemplate jdbcTemplate) {
-        this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
