@@ -1,6 +1,5 @@
 package kitchenpos.menus.tobe.domain.menu;
 
-import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
 import kitchenpos.share.domain.FakeProfanities;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

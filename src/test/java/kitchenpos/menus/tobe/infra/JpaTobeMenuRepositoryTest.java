@@ -4,7 +4,7 @@ import kitchenpos.menus.tobe.domain.TobeMenuGroupRepository;
 import kitchenpos.menus.tobe.domain.TobeMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.TobeMenu;
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup;
-import kitchenpos.menus.tobe.domain.menuproduct.TobeMenuProduct;
+import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct;
 import kitchenpos.shared.domain.DefaultProfanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
