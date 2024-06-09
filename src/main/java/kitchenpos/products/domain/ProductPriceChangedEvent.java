@@ -1,14 +1,14 @@
-package kitchenpos.products.infra;
+package kitchenpos.products.domain;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.springframework.context.ApplicationEvent;
 
-public class ProductPriceChangesEvent extends ApplicationEvent {
+public class ProductPriceChangedEvent extends ApplicationEvent {
   private final UUID productId;
   private final BigDecimal productPrice;
 
-  public ProductPriceChangesEvent(
+  public ProductPriceChangedEvent(
       final Object source, final UUID productId, final BigDecimal productPrice) {
     super(source);
     this.productId = productId;
