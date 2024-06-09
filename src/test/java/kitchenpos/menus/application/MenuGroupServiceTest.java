@@ -1,7 +1,9 @@
 package kitchenpos.menus.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.application.dto.MenuGroupRequest;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
+import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,12 +31,12 @@ class MenuGroupServiceTest {
     @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
     void create() {
-        final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
+        final MenuGroupRequest expected = createMenuGroupRequest("두마리메뉴");
         final MenuGroup actual = menuGroupService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
+            () -> assertThat(actual.getMenuGroupName()).isEqualTo(expected.getName())
         );
     }
 
@@ -41,7 +44,7 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @ParameterizedTest
     void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
+        final MenuGroupRequest expected = createMenuGroupRequest(name);
         assertThatThrownBy(() -> menuGroupService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -54,9 +57,10 @@ class MenuGroupServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+    private MenuGroupRequest createMenuGroupRequest(final String name) {
+        final MenuGroupRequest menuGroupRequest = new MenuGroupRequest();
+        menuGroupRequest.setName(name);
+        menuGroupRequest.setId(UUID.randomUUID());
+        return menuGroupRequest;
     }
 }

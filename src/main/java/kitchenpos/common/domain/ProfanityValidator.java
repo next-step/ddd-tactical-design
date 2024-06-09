@@ -1,4 +1,4 @@
-package kitchenpos.products.domain.tobe;
+package kitchenpos.common.domain;
 
 public interface ProfanityValidator {
     boolean containsProfanity(String text);

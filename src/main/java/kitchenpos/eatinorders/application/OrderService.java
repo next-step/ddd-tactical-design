@@ -8,8 +8,8 @@ import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
 import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +71,7 @@ public class OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (menu.getMenuPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
@@ -114,7 +114,7 @@ public class OrderService {
             BigDecimal sum = BigDecimal.ZERO;
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
                 sum = orderLineItem.getMenu()
-                    .getPrice()
+                    .getMenuPrice()
                     .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
             }
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());

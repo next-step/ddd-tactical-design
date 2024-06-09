@@ -1,6 +1,6 @@
 package kitchenpos.products.infra;
 
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 
 import java.util.Arrays;
 import java.util.List;

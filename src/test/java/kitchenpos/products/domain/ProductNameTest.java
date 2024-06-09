@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import kitchenpos.products.infra.FakeProfanityValidator;
 import kitchenpos.products.domain.tobe.ProductName;
-import kitchenpos.products.domain.tobe.ProfanityValidator;
+import kitchenpos.common.domain.ProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
