@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "eat_in_order")
@@ -80,7 +81,24 @@ public class EatInOrder {
         return orderTable;
     }
 
-    public void setOrderTable(OrderTable orderTable) {
-        this.orderTable = orderTable;
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof EatInOrder eatInOrder)) {
+            return false;
+        }
+
+        return this.getId() != null && Objects.equals(this.getId(), eatInOrder.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

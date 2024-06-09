@@ -3,6 +3,7 @@ package kitchenpos.order.tobe.eatinorder.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "order_line_item")
@@ -40,5 +41,26 @@ public class OrderLineItem {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public Long getSeq() {
+        return seq;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderLineItem orderLineItem)) {
+            return false;
+        }
+
+        return this.getSeq() != null && Objects.equals(this.getSeq(), orderLineItem.getSeq());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSeq());
     }
 }
