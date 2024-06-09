@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.application.dto.TobeMenuProductResponse;
 
 import java.util.List;
 
@@ -34,5 +35,11 @@ public class TobeMenuProducts {
         return menuProducts.stream()
                 .mapToInt(TobeMenuProduct::getTotalPrice)
                 .sum();
+    }
+
+    public List<TobeMenuProductResponse> toDto() {
+        return this.menuProducts.stream()
+                .map(TobeMenuProduct::toDto)
+                .toList();
     }
 }

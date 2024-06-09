@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.application.dto.TobeMenuProductResponse;
 import kitchenpos.shared.domain.Price;
 
 import java.util.UUID;
@@ -38,5 +39,9 @@ public class TobeMenuProduct {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public TobeMenuProductResponse toDto() {
+        return new TobeMenuProductResponse(seq, quantity.getQuantity(), price.getPrice(), productId);
     }
 }

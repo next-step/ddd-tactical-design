@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
+import kitchenpos.menus.tobe.application.dto.TobeMenuResponse;
 import kitchenpos.shared.domain.Price;
 import kitchenpos.shared.domain.Profanities;
 
@@ -74,5 +75,16 @@ public class TobeMenu {
 
     public int getPrice() {
         return price.getPrice();
+    }
+
+    public TobeMenuResponse toResponseDto() {
+        return new TobeMenuResponse(
+                this.id,
+                this.name.getName(),
+                this.price.getPrice(),
+                this.displayed,
+                this.menuProducts.toDto(),
+                menuGroupId
+        );
     }
 }
