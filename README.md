@@ -97,11 +97,15 @@ docker compose -p kitchenpos up -d
 ## 용어 사전
 
 ### 상품
-
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명      | 영문명                  | 설명                                        |예시                   |
+|----------|----------------------|-------------------------------------------|----------------------------------------
+| 상품       | Product              | 키친포스에서 등록할 수 있는 상품은 가격, 이름으로 구성되는 단일 품목이다 | 후라이드, 콜라
+| 상품 가격    | Product Price        | 상품의 가격이며 음수가 될 수 없다.                      |
+| 상품 이름    | Product Name         | 상품의 이름이며 상품의 이름은 비속어를 포함 할 수 없다.          |
+| 비속어      | Profanity         | 비속어                                       |
+| 상품 등록    | Create Product       | 상품을 키친포스에 등록한다.                           |
+| 상품 가격 변경 | Change Product Price | 상품의 가격을 변경한다                              |
+| 상품 목록 조회 | Products             | 키친포스에 등록되어 있는 상품 목록을 확인한다                 |
 
 ### 메뉴
 
@@ -158,10 +162,18 @@ docker compose -p kitchenpos up -d
 
 ## 모델링
 
-### 상품
+### 상품(Product)
+#### 속성
+- `Product`는 식별자를 갖는다.
+- `Product`는 `Product Price`를 갖는다.
+  - `Product Price`는 음수가 될 수 없다.
+- `Product`는 `Product Name`을 갖는다.
+  - `Product Name`는 `Profanity`를 포함 할 수 없다.
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+#### 행위
+- `Product`를 등록한다.
+- `Product Price`를 변경한다.
+- `Product` 목록을 조회한다.
 
 ### 메뉴
 
