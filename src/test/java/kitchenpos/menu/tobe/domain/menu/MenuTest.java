@@ -33,7 +33,7 @@ class MenuTest {
         MenuGroup menuGroup = Mockito.mock(MenuGroup.class);
 
         MenuProduct product1 = new MenuProduct(UUID.randomUUID(), 2L, new BigDecimal(500L));
-        menuProducts = new MenuProducts(List.of(product1), menuPrice.getPrice(), productValidator);
+        menuProducts = new MenuProducts(List.of(product1), menuPrice, productValidator);
 
         menu = new Menu(menuId, menuName, menuPrice, menuGroup, true, menuProducts);
     }
@@ -51,20 +51,20 @@ class MenuTest {
     @DisplayName("메뉴 내 상품 가격을 변경할 수 있다.")
     void test2() {
         UUID productId = menuProducts.getMenuProducts().get(0).getProductId();
-        BigDecimal newPrice = BigDecimal.valueOf(500L);
+        ProductPrice newPrice = new ProductPrice(BigDecimal.valueOf(500L));
 
         menu.changeMenuProductPrice(productId, newPrice);
 
-        Assertions.assertThat(newPrice).isEqualTo(menuProducts.getMenuProducts().get(0).getPrice());
+        Assertions.assertThat(newPrice.getPrice()).isEqualTo(menuProducts.getMenuProducts().get(0).getPrice());
     }
 
     @Test
     @DisplayName("메뉴 가격이 속해있는 상품들의 총 합계 가격보다 높을 경우, 자동으로 메뉴를 숨김 상태로 설정한다.")
     void test3() {
-        UUID productId = UUID.randomUUID();
-        BigDecimal newProductPrice = BigDecimal.valueOf(3000L);
+        UUID productId = menuProducts.getMenuProducts().get(0).getProductId();
+        ProductPrice newPrice = new ProductPrice(BigDecimal.valueOf(100L));
 
-        menu.changeMenuProductPrice(productId, newProductPrice);
+        menu.changeMenuProductPrice(productId, newPrice);
 
         Assertions.assertThat(menu.isDisplayed()).isFalse();
     }

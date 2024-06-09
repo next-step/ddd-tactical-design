@@ -43,7 +43,7 @@ public class MenuService {
         List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
         MenuName menuName = new MenuName(request.name(), profanityValidator);
 
-        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice.getPrice(), productValidator));
+        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice, productValidator));
         return menuRepository.save(menu);
     }
 

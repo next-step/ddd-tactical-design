@@ -5,6 +5,7 @@ import kitchenpos.menu.tobe.domain.menu.validate.ProductValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts, BigDecimal menuPrice, ProductValidator productValidator) {
+    public MenuProducts(List<MenuProduct> menuProducts, MenuPrice menuPrice, ProductValidator productValidator) {
         validateMenuProductsNotEmpty(menuProducts);
         productValidator.validateProductExistence(menuProducts);
         validateMenuPricePolicy(menuPrice, menuProducts);
@@ -36,29 +37,36 @@ public class MenuProducts {
         }
     }
 
-    public void validateMenuPricePolicy(BigDecimal menuPrice, List<MenuProduct> menuProducts) {
+    public void validateMenuPricePolicy(MenuPrice menuPrice, List<MenuProduct> menuProducts) {
         BigDecimal totalPrice = menuProducts.stream()
                 .map(menuProduct -> menuProduct.getPrice().multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        if (menuPrice.compareTo(totalPrice) > 0) {
+        if (menuPrice.getPrice().compareTo(totalPrice) > 0) {
             throw new IllegalArgumentException("메뉴의 가격은 메뉴에 속한 상품의 가격보다 클 수 없습니다.");
         }
     }
 
-    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+    public void changeMenuProductPrice(UUID productId, MenuPrice menuPrice, ProductPrice productPrice) {
         MenuProduct menuProduct = findMenuProductById(productId);
-        if (menuProduct != null) {
-            menuProduct.changePrice(price);
-            validateMenuPricePolicy(price, menuProducts);
+
+        BigDecimal beforePrice = menuProduct.getPrice();
+        menuProduct.changePrice(productPrice.getPrice());
+
+        try {
+            validateMenuPricePolicy(menuPrice, menuProducts);
+        } catch (IllegalArgumentException e) {
+            menuProduct.changePrice(beforePrice);
+            throw new IllegalArgumentException(e.getMessage());
         }
+
     }
 
     private MenuProduct findMenuProductById(UUID productId) {
         return menuProducts.stream()
                 .filter(menuProduct -> menuProduct.isSameProductId(productId))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("메뉴에 속한 상품이 존재하지 않습니다."));
     }
 
     public List<MenuProduct> getMenuProducts() {

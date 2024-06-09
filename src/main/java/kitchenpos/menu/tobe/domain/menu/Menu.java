@@ -48,20 +48,20 @@ public class Menu {
 
     public void changePrice(BigDecimal price) {
         MenuPrice newMenuPrice = new MenuPrice(price);
-        this.menuProducts.validateMenuPricePolicy(newMenuPrice.getPrice(), this.menuProducts.getMenuProducts());
+        this.menuProducts.validateMenuPricePolicy(newMenuPrice, this.menuProducts.getMenuProducts());
         this.menuPrice = newMenuPrice;
     }
 
-    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+    public void changeMenuProductPrice(UUID productId, ProductPrice menuProductPrice) {
         try {
-            this.menuProducts.changeMenuProductPrice(productId, price);
+            this.menuProducts.changeMenuProductPrice(productId, menuPrice, menuProductPrice);
         } catch (IllegalArgumentException e) {
             this.hide();
         }
     }
 
     public void display() {
-        this.menuProducts.validateMenuPricePolicy(this.menuPrice.getPrice(), this.menuProducts.getMenuProducts());
+        this.menuProducts.validateMenuPricePolicy(this.menuPrice, this.menuProducts.getMenuProducts());
         this.displayed = true;
     }
 
