@@ -5,7 +5,6 @@ import kitchenpos.eatinorders.tobe.domain.EatInOrderLineItem;
 import kitchenpos.eatinorders.tobe.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.tobe.domain.OrderLineItems;
 import kitchenpos.eatinorders.tobe.dto.request.EatInOrderCreateRequest;
-import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,19 +14,16 @@ import java.util.UUID;
 @Service
 public class TobeOrderService {
     private final EatInOrderRepository orderRepository;
-    private final MenuRepository menuRepository;
     private final TobeOrderTableService tobeOrderTableService;
 
     private final MenuDomainService menuDomainService;
 
     public TobeOrderService(
             final EatInOrderRepository orderRepository,
-            final MenuRepository menuRepository,
             final TobeOrderTableService tobeOrderTableService,
             final MenuDomainService menuDomainService
     ) {
         this.orderRepository = orderRepository;
-        this.menuRepository = menuRepository;
         this.tobeOrderTableService = tobeOrderTableService;
         this.menuDomainService = menuDomainService;
     }
@@ -37,7 +33,8 @@ public class TobeOrderService {
         final List<EatInOrderCreateRequest.OrderLineItemRequest> orderLineItemRequests = request.orderLineItemRequests();
         UUID orderTableId = request.orderTableId();
 
-        List<EatInOrderLineItem> eatInOrderLineItems = orderLineItemRequests.stream()
+        List<EatInOrderLineItem> eatInOrderLineItems = orderLineItemRequests
+                .parallelStream()
                 .map(item -> menuDomainService.fetchOrderLineItem(item.menuId(), item.quantity()))
                 .toList();
 
