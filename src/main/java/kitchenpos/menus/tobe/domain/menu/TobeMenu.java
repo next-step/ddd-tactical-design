@@ -39,17 +39,17 @@ public class TobeMenu {
         this.price = Price.of(price);
         this.displayed = displayed;
         this.menuProducts = TobeMenuProducts.of(tobeMenuProducts);
-        if (this.price.isGreaterThan(this.menuProducts.getTotalPrice())) {
-            throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
-        }
         this.menuGroupId = menuGroupId;
+        validatePrice();
     }
 
     public void changePrice(int price) {
         this.price = Price.of(price);
+        validatePrice();
     }
 
     public void display() {
+        validatePrice();
         this.displayed = true;
     }
 
@@ -57,7 +57,22 @@ public class TobeMenu {
         this.displayed = false;
     }
 
+    private void validatePrice() {
+        int menuProductsTotalPrice = menuProducts.getTotalPrice();
+        if (price.isGreaterThan(menuProductsTotalPrice)) {
+            throw new IllegalStateException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
+        }
+    }
+
     public UUID getId() {
         return id;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public int getPrice() {
+        return price.getPrice();
     }
 }

@@ -6,6 +6,8 @@ import kitchenpos.menus.tobe.domain.menu.TobeMenu
 import kitchenpos.menus.tobe.domain.menu.TobeMenuFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
+import kotlin.NoSuchElementException
 
 @Service
 class TobeMenuService(
@@ -16,6 +18,36 @@ class TobeMenuService(
     fun create(request: CreateMenuRequest): TobeMenu {
         val menu = tobeMenuFactory.createMenu(request)
         return tobeMenuRepository.save(menu)
+    }
+
+    @Transactional
+    fun changePrice(
+        menuId: UUID,
+        price: Int,
+    ): TobeMenu {
+        val menu =
+            tobeMenuRepository.findById(menuId)
+                .orElseThrow { NoSuchElementException() }
+        menu.changePrice(price)
+        return menu
+    }
+
+    @Transactional
+    fun display(menuId: UUID): TobeMenu {
+        val menu =
+            tobeMenuRepository.findById(menuId)
+                .orElseThrow { NoSuchElementException() }
+        menu.display()
+        return menu
+    }
+
+    @Transactional
+    fun hide(menuId: UUID): TobeMenu {
+        val menu =
+            tobeMenuRepository.findById(menuId)
+                .orElseThrow { NoSuchElementException() }
+        menu.hide()
+        return menu
     }
 
     @Transactional(readOnly = true)

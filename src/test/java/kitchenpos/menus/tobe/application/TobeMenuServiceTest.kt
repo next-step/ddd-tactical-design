@@ -8,8 +8,7 @@ import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct
 import kitchenpos.menus.tobe.domain.menu.TobeProductClient
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup
 import kitchenpos.share.domain.FakeProfanities
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -168,12 +167,88 @@ class TobeMenuServiceTest(
         assertThat(allMenus.size).isEqualTo(1)
     }
 
-    private fun createMenu(): TobeMenu {
+    @DisplayName("메뉴를 숨길 수 있다.")
+    @Test
+    fun case_7() {
+        // given
+        val menu = createMenu()
+        val savedMenu = tobeMenuRepository.save(menu)
+        val menuId = savedMenu.id
+
+        // when
+        val hiddenMenu = sut.hide(menuId)
+
+        // then
+        assertThat(hiddenMenu.isDisplayed).isFalse()
+    }
+
+    @DisplayName("메뉴를 노출할 수 있다. (메뉴의 가격 <= 메뉴에 속한 상품 금액의 합)")
+    @Test
+    fun case_8() {
+        // given
+        val menu = createMenu(displayed = false)
+        val savedMenu = tobeMenuRepository.save(menu)
+        val menuId = savedMenu.id
+
+        // when
+        val displayedMenu = sut.display(menuId)
+
+        // then
+        assertThat(displayedMenu.isDisplayed).isTrue()
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
+    @Test
+    fun case_9() {
+        // given
+        val menu = createMenu(menuPrice = 14_000, menuProductPrice = 15_000, displayed = false)
+        val savedMenu = tobeMenuRepository.save(menu)
+        val menuId = savedMenu.id
+
+        // when
+        val changeDisplayedMenu = sut.display(menuId)
+
+        // then
+        assertThat(changeDisplayedMenu.isDisplayed).isTrue()
+    }
+
+    @DisplayName("메뉴의 가격을 변경할 수 있다. (메뉴의 가격 <= 메뉴에 속한 상품 금액의 합)")
+    @Test
+    fun case_10() {
+        // given
+        val menu = createMenu(menuProductPrice = 14_000, displayed = false)
+        val savedMenu = tobeMenuRepository.save(menu)
+        val menuId = savedMenu.id
+        val newPrice = 14_000
+
+        // when
+        val priceChangedMenu = sut.changePrice(menuId, newPrice)
+
+        // then
+        assertThat(priceChangedMenu.price).isEqualTo(newPrice)
+    }
+
+    @DisplayName("메뉴의 가격을 변경할 수 없다. (메뉴의 가격 > 메뉴에 속한 상품 금액의 합)")
+    @Test
+    fun case_11() {
+        // given
+        val menu = createMenu(displayed = false)
+        val savedMenu = tobeMenuRepository.save(menu)
+        val menuId = savedMenu.id
+
+        // when
+        // then
+        assertThatIllegalStateException().isThrownBy { sut.changePrice(menuId, 14_000) }
+    }
+
+    private fun createMenu(
+        menuPrice: Int = 10_000,
+        menuProductPrice: Int = 10_000,
+        displayed: Boolean = true,
+    ): TobeMenu {
         val name = "후라이드"
-        val price = 10_000
-        val displayed = true
-        val menuProducts = listOf(TobeMenuProduct(1, price, UUID.randomUUID()))
-        val menu = TobeMenu(name, price, displayed, UUID.randomUUID(), menuProducts, FakeProfanities())
+        val menuProducts = listOf(TobeMenuProduct(1, menuProductPrice, UUID.randomUUID()))
+        val menu = TobeMenu(name, menuPrice, displayed, menuGroup.id, menuProducts, FakeProfanities())
         return menu
     }
 }
