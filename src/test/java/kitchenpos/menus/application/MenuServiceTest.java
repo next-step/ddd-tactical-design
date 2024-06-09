@@ -20,9 +20,11 @@ import kitchenpos.Fixtures;
 import kitchenpos.menus.application.dto.MenuRequest;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuFactory;
+import kitchenpos.menus.domain.tobe.menu.ProductClient;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroupRepository;
 import kitchenpos.menus.application.dto.MenuProductRequest;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
+import kitchenpos.menus.infra.DefaultProductClient;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.products.domain.tobe.Product;
@@ -45,6 +47,7 @@ class MenuServiceTest {
   private MenuGroupRepository menuGroupRepository;
   private ProductRepository productRepository;
   private ProfanityValidator profanityValidator;
+  private ProductClient productClient;
   private MenuService menuService;
   private MenuFactory menuFactory;
   private UUID menuGroupId;
@@ -70,10 +73,11 @@ class MenuServiceTest {
   void setUp() {
     menuRepository = new InMemoryMenuRepository();
     menuGroupRepository = new InMemoryMenuGroupRepository();
-    productRepository = new InMemoryProductRepository();
     profanityValidator = new FakeProfanityValidator();
-    menuFactory = new MenuFactory(menuGroupRepository, profanityValidator);
-    menuService = new MenuService(menuRepository, productRepository, menuFactory);
+    productRepository = new InMemoryProductRepository();
+    productClient = new DefaultProductClient(productRepository);
+    menuFactory = new MenuFactory(menuGroupRepository, profanityValidator, productClient);
+    menuService = new MenuService(menuRepository, menuFactory);
     menuGroupId = menuGroupRepository.save(menuGroup()).getId();
     product = productRepository.save(product("후라이드", 16_000L));
   }

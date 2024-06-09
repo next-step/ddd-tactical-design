@@ -4,10 +4,18 @@ import kitchenpos.eatinorders.domain.*;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
+import kitchenpos.menus.domain.tobe.menu.ProductClient;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menus.infra.DefaultProductClient;
+import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.common.domain.ProfanityValidator;
+import kitchenpos.products.domain.tobe.ProductRepository;
+import kitchenpos.products.infra.FakeProductClient;
 import kitchenpos.products.infra.FakeProfanityValidator;
+import kitchenpos.products.infra.InMemoryProductRepository;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

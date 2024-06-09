@@ -4,9 +4,14 @@ import kitchenpos.Fixtures;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
+import kitchenpos.menus.domain.tobe.menu.ProductClient;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.common.domain.ProfanityValidator;
+import kitchenpos.menus.infra.DefaultProductClient;
+import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductRepository;
 import kitchenpos.products.infra.FakeProfanityValidator;
+import kitchenpos.products.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,13 +26,18 @@ public class MenuTest {
 
   private ProfanityValidator profanityValidator;
   private MenuProducts menuProducts;
-  private Menu menu;
 
+  public static ProductRepository productRepository;
+  public static ProductClient productClient;
   @BeforeEach
   void setUp() {
     profanityValidator = new FakeProfanityValidator();
-    menu = Fixtures.menu();
-    menuProducts = MenuProducts.of(Fixtures.menuProduct());
+    productRepository = new InMemoryProductRepository();
+    productClient = new DefaultProductClient(productRepository);
+    Product product = Fixtures.product();
+    productRepository.save(product);
+    menuProducts = MenuProducts.of(productClient, Fixtures.menuProduct(product, 2));
+
   }
 
   @DisplayName("1 개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
@@ -38,7 +48,7 @@ public class MenuTest {
     assertThat(actual.getMenuPrice()).isEqualTo(BigDecimal.valueOf(20_000L));
 
     assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> Menu.of("후라이드+후라이드", 20_000L, menuGroup().getId(), true, MenuProducts.of(), profanityValidator))
+            .isThrownBy(() -> Menu.of("후라이드+후라이드", 20_000L, menuGroup().getId(), true, MenuProducts.of(productClient), profanityValidator))
             .withMessageContaining("`메뉴상품`들이 한개 이상 있어야한다.");
 
   }
