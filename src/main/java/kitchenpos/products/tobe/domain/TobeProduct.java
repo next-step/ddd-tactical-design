@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table(name = "product")
 @Entity
-public class Product {
+public class TobeProduct {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -18,12 +18,17 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product() {
+    public TobeProduct() {
     }
 
-    public Product(String name, BigDecimal price) {
-        this.name = new ProductName(name);
-        this.price = new ProductPrice(price);
+    public TobeProduct(String name, BigDecimal price) {
+        this(new ProductName(name), new ProductPrice(price));
+    }
+
+    public TobeProduct(ProductName name, ProductPrice price) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+        this.price = price;
     }
 
     public UUID getId() {
