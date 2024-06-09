@@ -3,8 +3,7 @@ package kitchenpos.menus.tobe.domain.menu;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
-import kitchenpos.products.domain.Product;
+import java.util.UUID;
 
 @Table(name = "menu_product")
 @Entity
@@ -14,52 +13,44 @@ public class MenuProduct {
   @Id
   private Long seq;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(
-      name = "product_id",
-      columnDefinition = "binary(16)",
-      foreignKey = @ForeignKey(name = "fk_menu_product_to_product"))
-  private Product product;
-
   @Embedded private MenuProductQuantity quantity;
+
+  @Column(name = "product_id")
+  private UUID productId;
+
+  @Transient private BigDecimal productPrice;
 
   protected MenuProduct() {}
 
-  protected MenuProduct(final Product product, final long quantity) {
-    if (Objects.isNull(product)) {
-      throw new IllegalArgumentException("상품이 존재하지 않습니다.");
+  protected MenuProduct(final UUID productId, final long quantity, final BigDecimal productPrice) {
+    if (Objects.isNull(productPrice) || productPrice.compareTo(BigDecimal.ZERO) < 0) {
+      throw new IllegalArgumentException("금액을 입력하지 않았거나 음수를 입력할 수 없습니다.");
     }
 
-    this.product = product;
+    this.productId = productId;
+    this.productPrice = productPrice;
     this.quantity = new MenuProductQuantity(quantity);
   }
 
-  public static MenuProduct of(final Optional<Product> optProduct, final long quantity) {
-    if (optProduct.isEmpty()) {
-      throw new IllegalArgumentException("상품이 존재하지 않습니다.");
-    }
-
-    return new MenuProduct(optProduct.get(), quantity);
-  }
-
-  public String getMenuProductName() {
-    return product.getName();
+  public static MenuProduct of(
+      final UUID productId, final long quantity, final BigDecimal productPrice) {
+    return new MenuProduct(productId, quantity, productPrice);
   }
 
   public BigDecimal getProductPrice() {
-    return product.getPrice();
+    return this.productPrice;
   }
 
   public BigDecimal multiplyByProductPriceAndQuantity() {
     final BigDecimal quantity = BigDecimal.valueOf(this.quantity.getQuantity());
-    return this.product.getPrice().multiply(quantity);
+    return this.productPrice.multiply(quantity);
   }
 
   public Long getQuantity() {
     return quantity.getQuantity();
   }
 
-  public Product getProduct() {
-    return product;
+  public UUID getProductId() {
+    return productId;
   }
 }
