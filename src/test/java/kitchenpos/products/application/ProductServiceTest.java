@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import static kitchenpos.Fixtures.*;
@@ -76,22 +77,21 @@ class ProductServiceTest {
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
-//    @DisplayName("상품의 목록을 조회할 수 있다.")
-//    @Test
-//    void findAll() {
-//        productRepository.save(product("후라이드", 16_000L));
-//        productRepository.save(product("양념치킨", 16_000L));
-//        final List<Product> actual = productService.findAll();
-//        assertThat(actual).hasSize(2);
-//    }
+    @DisplayName("상품의 목록을 조회할 수 있다.")
+    @Test
+    void findAll() {
+        productRepository.save(product("후라이드", 16_000L));
+        productRepository.save(product("양념치킨", 16_000L));
+        final List<Product> actual = productService.findAll();
+        assertThat(actual).hasSize(2);
+    }
 
     private ProductCreateRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
     }
 
     private ProductCreateRequest createProductRequest(final String name, final BigDecimal price) {
-        ProductCreateRequest product = new ProductCreateRequest(name, price);
-        return product;
+        return new ProductCreateRequest(name, price);
     }
 
     private ProductModifyRequest changePriceRequest(final long price) {
