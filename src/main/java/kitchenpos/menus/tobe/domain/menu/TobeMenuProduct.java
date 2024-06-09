@@ -35,4 +35,8 @@ public class TobeMenuProduct {
     public int getTotalPrice() {
         return price.multiply(quantity);
     }
+
+    public UUID getProductId() {
+        return productId;
+    }
 }
