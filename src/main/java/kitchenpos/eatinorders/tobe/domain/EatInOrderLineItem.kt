@@ -28,6 +28,11 @@ class EatInOrderLineItem(
     @ManyToOne
     @JoinColumn(name = "eat_in_order_id", nullable = false, columnDefinition = "binary(16)")
     var eatInOrder: EatInOrder? = null
+        private set
+
+    fun apply(eatInOrder: EatInOrder) {
+        this.eatInOrder = eatInOrder
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

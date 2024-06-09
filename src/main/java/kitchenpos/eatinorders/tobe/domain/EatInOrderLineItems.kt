@@ -22,6 +22,6 @@ class EatInOrderLineItems(
 
     //연관관계 편의 메소드
     fun apply(eatInOrder: EatInOrder) {
-        items.forEach { it.eatInOrder = eatInOrder }
+        items.forEach { it.apply(eatInOrder) }
     }
 }

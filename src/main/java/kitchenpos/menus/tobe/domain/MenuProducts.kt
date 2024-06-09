@@ -23,7 +23,7 @@ class MenuProducts(
 
     //연관관계 편의 메소드
     fun apply(menu: Menu) {
-        items.forEach { it.menu = menu }
+        items.forEach { it.apply(menu) }
     }
 
     fun changeMenuProduct(productId: UUID, productPrice: Price) {

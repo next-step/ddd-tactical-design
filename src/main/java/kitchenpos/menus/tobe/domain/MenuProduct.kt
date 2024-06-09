@@ -19,6 +19,7 @@ class MenuProduct(
         foreignKey = ForeignKey(name = "fk_menu_product_to_menu")
     )
     var menu: Menu? = null
+        private set
 
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,10 @@ class MenuProduct(
     @Column(name = "price", nullable = false)
     var price: Price = price
         private set
+
+    fun apply(menu: Menu) {
+        this.menu = menu
+    }
 
     fun changePrice(price: Price) {
         this.price = price
