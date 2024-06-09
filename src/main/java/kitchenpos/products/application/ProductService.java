@@ -1,40 +1,34 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.common.external.infra.ProfanityChecker;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityChecker productProfanityChecker;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final ProfanityChecker productProfanityChecker
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.productProfanityChecker = productProfanityChecker;
     }
 
     @Transactional
     public Product create(final Product request) {
         String name = request.getName().getName();
-        if (purgomalumClient.containsProfanity(name)) {
+        if (productProfanityChecker.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         Product product = new Product(request.getName(), request.getPrice());

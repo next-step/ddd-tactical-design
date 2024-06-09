@@ -1,25 +1,18 @@
 package kitchenpos.products.application;
 
+import kitchenpos.common.external.infra.ProfanityChecker;
 import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private ProfanityChecker purgomalumClient;
     private ProductService productService;
 
     @BeforeEach
