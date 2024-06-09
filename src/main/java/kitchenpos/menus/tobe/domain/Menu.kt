@@ -42,22 +42,6 @@ class Menu private constructor(
     private val isMenuPriceValid: Boolean
         get() = price <= menuProducts.totalPrice
 
-    companion object {
-        fun of(
-            menuGroup: MenuGroup,
-            name: MenuName,
-            price: Price,
-            displayStatus: Boolean,
-            menuProducts: MenuProducts,
-        ): Menu = Menu(
-            menuGroup = menuGroup,
-            name = name,
-            price = price,
-            displayStatus = displayStatus,
-            menuProducts = menuProducts
-        )
-    }
-
     init {
         validateMenuPrice()
 
@@ -107,4 +91,19 @@ class Menu private constructor(
         return id.hashCode()
     }
 
+    companion object {
+        fun of(
+            menuGroup: MenuGroup,
+            name: MenuName,
+            price: Price,
+            displayStatus: Boolean,
+            menuProducts: MenuProducts,
+        ): Menu = Menu(
+            menuGroup = menuGroup,
+            name = name,
+            price = price,
+            displayStatus = displayStatus,
+            menuProducts = menuProducts
+        )
+    }
 }

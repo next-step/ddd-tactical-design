@@ -25,12 +25,6 @@ class OrderTable private constructor(name: OrderTableName) {
     var occupied: Boolean = false
         private set
 
-    companion object {
-        fun of(name: OrderTableName): OrderTable {
-            return OrderTable(name)
-        }
-    }
-
     fun sit() {
         occupied = true
     }
@@ -63,4 +57,9 @@ class OrderTable private constructor(name: OrderTableName) {
         return id.hashCode()
     }
 
+    companion object {
+        fun of(name: OrderTableName): OrderTable {
+            return OrderTable(name)
+        }
+    }
 }

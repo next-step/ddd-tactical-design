@@ -25,18 +25,6 @@ class EatInOrder private constructor(orderTableId: UUID, eatInOrderLineItems: Ea
     @Embedded
     val eatInOrderLineItems: EatInOrderLineItems = eatInOrderLineItems
 
-    companion object {
-        fun of(
-            orderTableId: UUID,
-            eatInOrderLineItems: EatInOrderLineItems,
-            eatInOrderCreateValidator: EatInOrderCreateValidator
-        ): EatInOrder {
-            eatInOrderCreateValidator.validate(orderTableId, eatInOrderLineItems)
-
-            return EatInOrder(orderTableId, eatInOrderLineItems)
-        }
-    }
-
     init {
         eatInOrderLineItems.apply(this)
     }
@@ -78,4 +66,15 @@ class EatInOrder private constructor(orderTableId: UUID, eatInOrderLineItems: Ea
         return id.hashCode()
     }
 
+    companion object {
+        fun of(
+            orderTableId: UUID,
+            eatInOrderLineItems: EatInOrderLineItems,
+            eatInOrderCreateValidator: EatInOrderCreateValidator
+        ): EatInOrder {
+            eatInOrderCreateValidator.validate(orderTableId, eatInOrderLineItems)
+
+            return EatInOrder(orderTableId, eatInOrderLineItems)
+        }
+    }
 }
