@@ -26,10 +26,10 @@ public class Product {
     }
     public Product(String name, BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("product price must not be negative");
         }
         if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("product name must not be null");
         }
         this.id = UUID.randomUUID();
         this.name = name;

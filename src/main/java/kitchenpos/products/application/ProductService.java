@@ -32,7 +32,7 @@ public class ProductService {
     @Transactional
     public Product create(final Product request) {
         if (purgomalumClient.containsProfanity(request.getName())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("product name contains profanity.");
         }
         final Product product = new Product(request.getName(), request.getPrice());
         return productRepository.save(product);
