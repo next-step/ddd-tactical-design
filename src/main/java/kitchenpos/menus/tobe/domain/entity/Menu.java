@@ -9,13 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.menus.tobe.domain.vo.MenuName;
-import kitchenpos.menus.tobe.domain.vo.MenuPrice;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 
 @Table(name = "menu")
 @Entity
@@ -50,9 +48,6 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     protected Menu() {
     }
 
@@ -69,16 +64,8 @@ public class Menu {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(final MenuName name) {
-        this.name = name.getValue();
     }
 
     public BigDecimal getPrice() {
@@ -93,31 +80,19 @@ public class Menu {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
+    public void displayOn() {
+        this.displayed = true;
+    }
+
+    public void hide() {
+        this.displayed = false;
     }
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 }

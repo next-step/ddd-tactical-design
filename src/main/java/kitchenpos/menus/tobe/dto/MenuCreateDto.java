@@ -8,15 +8,15 @@ import java.util.UUID;
 public class MenuCreateDto {
     private String name;
     private BigDecimal price;
-    private boolean isDisplayed;
+    private boolean displayed;
     private UUID menuGroupId;
     private List<MenuProductCreateDto> menuProducts;
 
     @JsonCreator
-    public MenuCreateDto(String name, BigDecimal price, boolean isDisplayed, UUID menuGroupId, List<MenuProductCreateDto> menuProducts) {
+    public MenuCreateDto(String name, BigDecimal price, boolean displayed, UUID menuGroupId, List<MenuProductCreateDto> menuProducts) {
         this.name = name;
         this.price = price;
-        this.isDisplayed = isDisplayed;
+        this.displayed = displayed;
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
     }
@@ -30,7 +30,7 @@ public class MenuCreateDto {
     }
 
     public boolean isDisplayed() {
-        return isDisplayed;
+        return displayed;
     }
 
     public UUID getMenuGroupId() {

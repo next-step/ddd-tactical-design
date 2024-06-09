@@ -29,7 +29,6 @@ public class MenuQueryHandler {
                  left join menu_group mg on m.menu_group_id = mg.id
                  left join kitchenpos.menu_product mp on m.id = mp.menu_id
                  left join kitchenpos.product p on mp.product_id = p.id
-        order by m.id
         """;
 
     private final MenuRepository menuRepository;

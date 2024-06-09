@@ -35,7 +35,7 @@ class DefaultHideMenuWithInvalidPriceByProductId implements HideMenuWithInvalidP
                 );
             }
             if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
+               menu.hide();
             }
         }
     }

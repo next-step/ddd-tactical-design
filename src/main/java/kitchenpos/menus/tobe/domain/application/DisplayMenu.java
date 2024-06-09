@@ -37,7 +37,7 @@ class DefaultDisplayMenu implements DisplayMenu {
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
-        menu.setDisplayed(true);
+        menu.displayOn();
         return menu;
     }
 }

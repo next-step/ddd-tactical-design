@@ -77,11 +77,11 @@ class DefaultCreateMenu implements CreateMenu {
             throw new IllegalArgumentException();
         }
 
-        final MenuName name = MenuName.of(menucreateDto.getName(), purgomalumClient);
+        final MenuName menuName = MenuName.of(menucreateDto.getName(), purgomalumClient);
 
         final Menu menu = new Menu(
             UUID.randomUUID(),
-            name,
+            menuName,
             menuPrice,
             menuGroup,
             menucreateDto.isDisplayed(),

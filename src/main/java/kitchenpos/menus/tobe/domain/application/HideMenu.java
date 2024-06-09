@@ -24,7 +24,8 @@ class DefaultHideMenu implements HideMenu {
     public final Menu execute(UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                                         .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.hide();
+        menuRepository.save(menu);
         return menu;
     }
 }

@@ -3,14 +3,22 @@ POST {{host}}/api/menus
 Content-Type: application/json
 
 {
-  "name": "후라이드2222",
-  "price": 13000,
+  "name": "wwwwwwwww",
+  "price": 1111,
   "menuGroupId": "f1860abc-2ea1-411b-bd4a-baa44f0d5580",
   "displayed": true,
   "menuProducts": [
     {
-      "productId": "3b528244-34f7-406b-bb7e-690912f66b10",
-      "quantity": 2
+      "productId": "be4a53ad-7033-42e3-9e40-cd7d57643bfa",
+      "quantity": 11
+    },
+    {
+      "productId": "eac2cf52-23a2-4b05-a741-dfdf15d69666",
+      "quantity": 12
+    },
+    {
+      "productId": "c5ee925c-3dbb-4941-b825-021446f24446",
+      "quantity": 13
     }
   ]
 }
