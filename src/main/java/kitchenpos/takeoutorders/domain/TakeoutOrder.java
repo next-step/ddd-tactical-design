@@ -1,20 +1,23 @@
 package kitchenpos.takeoutorders.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import kitchenpos.support.domain.OrderLineItem;
+import kitchenpos.support.domain.OrderLineItems;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.INVALID_ORDER_STATUS;
 
 @Table(name = "takeout_orders")
 @Entity
@@ -30,47 +33,70 @@ public class TakeoutOrder {
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Embedded
     @JoinColumn(
             name = "takeout_order_id",
             nullable = false,
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_takeout_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private OrderLineItems orderLineItems;
 
-    public TakeoutOrder() {
+    protected TakeoutOrder() {
+    }
+
+    protected TakeoutOrder(UUID id, TakeoutOrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems) {
+        orderLineItems.checkNegativeQuantity();
+        this.id = id;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+    }
+
+    public static TakeoutOrder create(OrderLineItems orderLineItems) {
+        return new TakeoutOrder(UUID.randomUUID(), TakeoutOrderStatus.WAITING, LocalDateTime.now(), orderLineItems);
+    }
+
+
+    public static TakeoutOrder create(OrderLineItems orderLineItems, TakeoutOrderStatus status) {
+        return new TakeoutOrder(UUID.randomUUID(), status, LocalDateTime.now(), orderLineItems);
+    }
+
+    public TakeoutOrder accept() {
+        changeStatus(TakeoutOrderStatus.WAITING);
+        return this;
+    }
+
+    public TakeoutOrder serve() {
+        changeStatus(TakeoutOrderStatus.ACCEPTED);
+        return this;
+    }
+
+    public TakeoutOrder complete() {
+        changeStatus(TakeoutOrderStatus.SERVED);
+        return this;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public TakeoutOrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(final TakeoutOrderStatus status) {
-        this.status = status;
     }
 
     public LocalDateTime getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
+        return orderLineItems.getValues();
     }
 
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
+    private void changeStatus(TakeoutOrderStatus status) {
+        if (this.status != status) {
+            throw new KitchenPosIllegalStateException(INVALID_ORDER_STATUS, status);
+        }
+        this.status = status.next();
     }
 }

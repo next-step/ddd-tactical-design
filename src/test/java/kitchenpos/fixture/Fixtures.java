@@ -1,6 +1,7 @@
 package kitchenpos.fixture;
 
 import kitchenpos.support.domain.OrderLineItem;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 
 import java.util.Random;
 import java.util.UUID;
@@ -12,5 +13,9 @@ public class Fixtures {
 
     public static OrderLineItem orderLineItem() {
         return new OrderLineItem(new Random().nextLong(), menu().getId(), menu().getPrice(), 0);
+    }
+
+    public static OrderLineItemCreateRequest orderLineItemRequest() {
+        return new OrderLineItemCreateRequest(menu().getId(), menu().getPrice(), 0);
     }
 }

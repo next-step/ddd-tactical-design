@@ -2,7 +2,6 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
 import kitchenpos.eatinorders.dto.EatInOrderResponse;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.infra.OrderTableClientImpl;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderPolicy;
@@ -15,6 +14,7 @@ import kitchenpos.fixture.EatInOrderFixture;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.support.domain.MenuClient;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.support.infra.MenuClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

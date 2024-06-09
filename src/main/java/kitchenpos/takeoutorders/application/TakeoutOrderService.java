@@ -1,109 +1,67 @@
 package kitchenpos.takeoutorders.application;
 
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
-import kitchenpos.support.domain.OrderLineItem;
+import kitchenpos.support.application.OrderLineItemsFactory;
+import kitchenpos.support.domain.MenuClient;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.takeoutorders.domain.TakeoutOrder;
 import kitchenpos.takeoutorders.domain.TakeoutOrderRepository;
-import kitchenpos.takeoutorders.domain.TakeoutOrderStatus;
+import kitchenpos.takeoutorders.dto.TakeoutOrderCreateRequest;
+import kitchenpos.takeoutorders.dto.TakeoutOrderResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class TakeoutOrderService {
     private final TakeoutOrderRepository orderRepository;
-    private final MenuRepository menuRepository;
+    private final MenuClient menuClient;
 
     public TakeoutOrderService(
-        final TakeoutOrderRepository orderRepository,
-        final MenuRepository menuRepository
+            final TakeoutOrderRepository orderRepository,
+            final MenuClient menuClient
     ) {
         this.orderRepository = orderRepository;
-        this.menuRepository = menuRepository;
+        this.menuClient = menuClient;
     }
 
     @Transactional
-    public TakeoutOrder create(final TakeoutOrder request) {
-        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(OrderLineItem::getMenuId)
-                .toList()
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final OrderLineItem orderLineItem = new OrderLineItem(menu.getId(), menu.getPrice(), quantity);
-            orderLineItems.add(orderLineItem);
-        }
-        TakeoutOrder order = new TakeoutOrder();
-        order.setId(UUID.randomUUID());
-        order.setStatus(TakeoutOrderStatus.WAITING);
-        order.setOrderDateTime(LocalDateTime.now());
-        order.setOrderLineItems(orderLineItems);
-        return orderRepository.save(order);
+    public TakeoutOrderResponse create(final TakeoutOrderCreateRequest request) {
+        List<OrderLineItemCreateRequest> orderLineItemsRequest = request.orderLineItems();
+        TakeoutOrder order = TakeoutOrder.create(new OrderLineItemsFactory(menuClient).create(orderLineItemsRequest));
+        TakeoutOrder result = orderRepository.save(order);
+        return TakeoutOrderResponse.from(result);
     }
 
     @Transactional
-    public TakeoutOrder accept(final UUID orderId) {
-        final TakeoutOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != TakeoutOrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(TakeoutOrderStatus.ACCEPTED);
-        return order;
+    public TakeoutOrderResponse accept(final UUID orderId) {
+        final TakeoutOrder order = getOrder(orderId);
+        return TakeoutOrderResponse.from(order.accept());
     }
 
     @Transactional
-    public TakeoutOrder serve(final UUID orderId) {
-        final TakeoutOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        if (order.getStatus() != TakeoutOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        order.setStatus(TakeoutOrderStatus.SERVED);
-        return order;
+    public TakeoutOrderResponse serve(final UUID orderId) {
+        final TakeoutOrder order = getOrder(orderId);
+        return TakeoutOrderResponse.from(order.serve());
     }
 
     @Transactional
-    public TakeoutOrder complete(final UUID orderId) {
-        final TakeoutOrder order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
-        final TakeoutOrderStatus status = order.getStatus();
-            if (status != TakeoutOrderStatus.SERVED) {
-                throw new IllegalStateException();
-            }
-        order.setStatus(TakeoutOrderStatus.COMPLETED);
-        return order;
+    public TakeoutOrderResponse complete(final UUID orderId) {
+        final TakeoutOrder order = getOrder(orderId);
+        return TakeoutOrderResponse.from(order.complete());
     }
 
     @Transactional(readOnly = true)
-    public List<TakeoutOrder> findAll() {
-        return orderRepository.findAll();
+    public List<TakeoutOrderResponse> findAll() {
+        return orderRepository.findAll().stream()
+                .map(TakeoutOrderResponse::from)
+                .toList();
+    }
+
+    private TakeoutOrder getOrder(UUID orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }

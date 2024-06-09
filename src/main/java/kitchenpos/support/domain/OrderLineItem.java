@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 
 import java.math.BigDecimal;
 import java.util.Objects;

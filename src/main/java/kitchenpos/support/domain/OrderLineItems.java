@@ -3,10 +3,13 @@ package kitchenpos.support.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 
 import java.util.List;
 import java.util.Objects;
+
+import static kitchenpos.eatinorders.exception.KitchenPosExceptionMessage.INVALID_ORDERLINEITEM_QUANTITY;
 
 @Embeddable
 public class OrderLineItems {
@@ -24,6 +27,12 @@ public class OrderLineItems {
     public static OrderLineItems from(List<OrderLineItemCreateRequest> requests) {
         List<OrderLineItem> orderLineItems = toOrderLineItems(requests);
         return new OrderLineItems(orderLineItems);
+    }
+
+    public void checkNegativeQuantity() {
+        if (values.stream().anyMatch(item -> item.getQuantity() < 0)) {
+            throw new KitchenPosIllegalArgumentException(INVALID_ORDERLINEITEM_QUANTITY);
+        }
     }
 
     public List<OrderLineItem> getValues() {

@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.support.application;
 
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.exception.KitchenPosIllegalArgumentException;
 import kitchenpos.eatinorders.exception.KitchenPosIllegalStateException;
 import kitchenpos.menus.tobe.domain.menu.Menu;

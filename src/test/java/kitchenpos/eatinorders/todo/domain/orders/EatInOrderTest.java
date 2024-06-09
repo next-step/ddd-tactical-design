@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.todo.domain.orders;
 import kitchenpos.eatinorders.application.InMemoryEatInOrderRepository;
 import kitchenpos.eatinorders.application.InMemoryOrderTableRepository;
 import kitchenpos.eatinorders.dto.EatInOrderCreateRequest;
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.eatinorders.infra.OrderTableClientImpl;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTable;
 import kitchenpos.eatinorders.todo.domain.ordertables.OrderTableRepository;

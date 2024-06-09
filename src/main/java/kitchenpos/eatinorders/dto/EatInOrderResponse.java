@@ -2,6 +2,7 @@ package kitchenpos.eatinorders.dto;
 
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrder;
 import kitchenpos.eatinorders.todo.domain.orders.EatInOrderStatus;
+import kitchenpos.support.dto.OrderLineItemResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;

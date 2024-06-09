@@ -1,6 +1,6 @@
 package kitchenpos.support.domain;
 
-import kitchenpos.eatinorders.dto.OrderLineItemCreateRequest;
+import kitchenpos.support.dto.OrderLineItemCreateRequest;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;
