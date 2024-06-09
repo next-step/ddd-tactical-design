@@ -5,7 +5,9 @@ import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 
 public class DisplayMenuTestFixture extends DefaultDisplayMenu{
 
-    public DisplayMenuTestFixture(MenuRepository menuRepository) {
-        super(menuRepository);
+
+    public DisplayMenuTestFixture(MenuRepository menuRepository,
+                                  CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity) {
+        super(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity);
     }
 }

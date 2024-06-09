@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.domain.application;
 
 import java.util.UUID;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupName;
 import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ public interface CreateMenuGroup {
 
 @Service
 class DefaultCreateMenuGroup implements CreateMenuGroup {
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuRepository menuRepository;
 
-    public DefaultCreateMenuGroup(MenuGroupRepository menuGroupRepository) {
-        this.menuGroupRepository = menuGroupRepository;
+    public DefaultCreateMenuGroup(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -27,6 +27,6 @@ class DefaultCreateMenuGroup implements CreateMenuGroup {
             UUID.randomUUID(),
             menuGroupName
         );
-        return menuGroupRepository.save(menuGroup);
+        return menuRepository.saveMenuGroup(menuGroup);
     }
 }

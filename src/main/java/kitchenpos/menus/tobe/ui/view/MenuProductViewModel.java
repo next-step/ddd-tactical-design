@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.ui.view;
 
 import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
-import kitchenpos.products.tobe.domain.entity.Product;
 
 public class MenuProductViewModel {
     private final String productId;
@@ -21,11 +20,10 @@ public class MenuProductViewModel {
         if (menuProduct == null) {
             return null;
         }
-        Product product = menuProduct.getProduct();
         return new MenuProductViewModel(
-            product.getId().toString(),
-            product.getName(),
-            product.getPrice().longValue(),
+            menuProduct.getProductId().toString(),
+            null,
+            -1,
             menuProduct.getQuantity()
         );
     }

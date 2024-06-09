@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import kitchenpos.menus.tobe.domain.repository.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +18,7 @@ class CreateMenuGroupTest {
 
     @BeforeEach
     public void setup() {
-        createMenuGroup = new CreateMenuGroupTestFixture(new InMemoryMenuGroupRepository());
+        createMenuGroup = new CreateMenuGroupTestFixture(new InMemoryMenuRepository());
     }
 
     @DisplayName("메뉴 그룹을 등록할 수 있다.")

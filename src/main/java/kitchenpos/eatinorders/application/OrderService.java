@@ -50,7 +50,7 @@ public class OrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
+        final List<Menu> menus = menuRepository.findMenusByIdIn(
             orderLineItemRequests.stream()
                                  .map(OrderLineItem::getMenuId)
                                  .toList()
@@ -66,7 +66,7 @@ public class OrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+            final Menu menu = menuRepository.findMenuById(orderLineItemRequest.getMenuId())
                                             .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();

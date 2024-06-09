@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "event",
-  "price": 16000,
+  "price": 200,
   "menuGroupId": "f1860abc-2ea1-411b-bd4a-baa44f0d5580",
   "displayed": true,
   "menuProducts": [

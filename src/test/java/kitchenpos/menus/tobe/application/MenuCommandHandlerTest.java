@@ -17,15 +17,15 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.purgomalum.FakePurgomalumClient;
 import kitchenpos.common.purgomalum.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.application.CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
+import kitchenpos.menus.tobe.domain.application.CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture;
 import kitchenpos.menus.tobe.domain.application.ChangeMenuPriceTestFixture;
 import kitchenpos.menus.tobe.domain.application.CreateMenuGroupTestFixture;
 import kitchenpos.menus.tobe.domain.application.CreateMenuTestFixture;
 import kitchenpos.menus.tobe.domain.application.DisplayMenuTestFixture;
 import kitchenpos.menus.tobe.domain.application.HideMenuTextFixture;
 import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.repository.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.dto.MenuChangePriceDto;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
@@ -44,27 +44,27 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MenuCommandHandlerTest {
     private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
     private ProductRepository productRepository;
     private PurgomalumClient purgomalumClient;
     private MenuCommandHandler menuCommandHandler;
     private UUID menuGroupId;
     private Product product;
+    private CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
+        calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = new CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture(productRepository);
         menuCommandHandler = new MenuCommandHandler(menuRepository,
-                                                    new CreateMenuTestFixture(menuRepository, productRepository, menuGroupRepository, purgomalumClient),
-                                                    new ChangeMenuPriceTestFixture(menuRepository),
-                                                    new DisplayMenuTestFixture(menuRepository),
+                                                    new CreateMenuTestFixture(menuRepository, productRepository, purgomalumClient),
+                                                    new ChangeMenuPriceTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity),
+                                                    new DisplayMenuTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity),
                                                     new HideMenuTextFixture(menuRepository),
-                                                    new CreateMenuGroupTestFixture(menuGroupRepository)
+                                                    new CreateMenuGroupTestFixture(menuRepository)
         );
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
+        menuGroupId = menuRepository.saveMenuGroup(menuGroup()).getId();
         product = productRepository.save(product("후라이드", 16_000L));
     }
 
@@ -161,7 +161,7 @@ class MenuCommandHandlerTest {
     @DisplayName("메뉴의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceDto expected = changePriceRequest(16_000L);
         final Menu actual = menuCommandHandler.changePrice(menuId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -172,7 +172,7 @@ class MenuCommandHandlerTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceDto expected = changePriceRequest(price);
         assertThatThrownBy(() -> menuCommandHandler.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -181,7 +181,7 @@ class MenuCommandHandlerTest {
     @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
     @Test
     void changePriceToExpensive() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(19_000L, menuProduct(product, 2L))).getId();
         final MenuChangePriceDto expected = changePriceRequest(33_000L);
         assertThatThrownBy(() -> menuCommandHandler.changePrice(menuId, expected))
             .isInstanceOf(IllegalArgumentException.class);
@@ -190,7 +190,7 @@ class MenuCommandHandlerTest {
     @DisplayName("메뉴를 노출할 수 있다.")
     @Test
     void display() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(19_000L, false, menuProduct(product, 2L))).getId();
         final Menu actual = menuCommandHandler.display(menuId);
         assertThat(actual.isDisplayed()).isTrue();
     }
@@ -198,7 +198,7 @@ class MenuCommandHandlerTest {
     @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
     @Test
     void displayExpensiveMenu() {
-        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(33_000L, false, menuProduct(product, 2L))).getId();
         assertThatThrownBy(() -> menuCommandHandler.display(menuId))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -206,7 +206,7 @@ class MenuCommandHandlerTest {
     @DisplayName("메뉴를 숨길 수 있다.")
     @Test
     void hide() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
+        final UUID menuId = menuRepository.saveMenu(menu(19_000L, true, menuProduct(product, 2L))).getId();
         final Menu actual = menuCommandHandler.hide(menuId);
         assertThat(actual.isDisplayed()).isFalse();
     }

@@ -9,39 +9,59 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 
 public class InMemoryMenuRepository implements MenuRepository {
     private final Map<UUID, Menu> menus = new HashMap<>();
+    private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();
 
     @Override
-    public Menu save(final Menu menu) {
+    public Menu saveMenu(final Menu menu) {
         menus.put(menu.getId(), menu);
         return menu;
     }
 
     @Override
-    public Optional<Menu> findById(final UUID id) {
+    public Optional<Menu> findMenuById(final UUID id) {
         return Optional.ofNullable(menus.get(id));
     }
 
     @Override
-    public List<Menu> findAll() {
+    public List<Menu> findAllMenus() {
         return new ArrayList<>(menus.values());
     }
 
     @Override
-    public List<Menu> findAllByIdIn(final List<UUID> ids) {
+    public List<Menu> findMenusByIdIn(final List<UUID> ids) {
         return menus.values()
-            .stream()
-            .filter(menu -> ids.contains(menu.getId()))
-            .toList();
+                    .stream()
+                    .filter(menu -> ids.contains(menu.getId()))
+                    .toList();
     }
 
     @Override
-    public List<Menu> findAllByProductId(final UUID productId) {
+    public List<Menu> findMenusByProductId(final UUID productId) {
         return menus.values()
-            .stream()
-            .filter(menu -> menu.getMenuProducts().stream().anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
-            .toList();
+                    .stream()
+                    .filter(menu -> menu.getMenuProducts().stream()
+                                        .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
+                    .toList();
+    }
+
+    @Override
+    public MenuGroup saveMenuGroup(final MenuGroup menuGroup) {
+        menuGroups.put(menuGroup.getId(), menuGroup);
+        return menuGroup;
+    }
+
+    @Override
+    public Optional<MenuGroup> findMenuGroupById(final UUID id) {
+        return Optional.ofNullable(menuGroups.get(id));
+    }
+
+
+    @Override
+    public List<MenuGroup> findAllMenuGroups() {
+        return new ArrayList<>(menuGroups.values());
     }
 }

@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
-import kitchenpos.menus.tobe.domain.repository.InMemoryMenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
 import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
@@ -30,20 +28,21 @@ class HideMenuWithInvalidPriceByProductIdTest {
     private HideMenuWithInvalidPriceByProductId hideMenuWithInvalidPriceByProductId;
     private MenuRepository menuRepository = new InMemoryMenuRepository();
     private ProductRepository productRepository = new InMemoryProductRepository();
-    private MenuGroupRepository menuGroupRepository = new InMemoryMenuGroupRepository();
     private CreateMenu createMenu;
     private CreateMenuGroup createMenuGroup;
     private CreateProduct createProduct;
     private ChangePrice changePrice;
+    private CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
 
     @BeforeEach
     void setUp() {
-        this.createMenu = new CreateMenuTestFixture(menuRepository, productRepository, menuGroupRepository,
+        this.createMenu = new CreateMenuTestFixture(menuRepository, productRepository,
             (text -> false));
-        this.createMenuGroup = new CreateMenuGroupTestFixture(menuGroupRepository);
+        this.createMenuGroup = new CreateMenuGroupTestFixture(menuRepository);
         this.createProduct = new CreateProductTestFixture((text -> false), productRepository);
         this.changePrice = new ChangePriceTestFixture(productRepository, (event) -> {});
-        this.hideMenuWithInvalidPriceByProductId = new HideMenuWithInvalidPriceByProductIdTestFixture(menuRepository);
+        this.calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = new CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture(productRepository);
+        this.hideMenuWithInvalidPriceByProductId = new HideMenuWithInvalidPriceByProductIdTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity);
     }
 
     @DisplayName("메뉴에 속한 제품의 가격 * 수량의 합이 메뉴 가격보다 크다면 메뉴는 숨겨진다")

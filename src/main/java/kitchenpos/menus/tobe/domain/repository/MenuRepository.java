@@ -5,16 +5,23 @@ import kitchenpos.menus.tobe.domain.entity.Menu;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 
 public interface MenuRepository {
-    Menu save(Menu menu);
+    Menu saveMenu(Menu menu);
 
-    Optional<Menu> findById(UUID id);
+    Optional<Menu> findMenuById(UUID id);
 
-    List<Menu> findAll();
+    List<Menu> findAllMenus();
 
-    List<Menu> findAllByIdIn(List<UUID> ids);
+    List<Menu> findMenusByIdIn(List<UUID> ids);
 
-    List<Menu> findAllByProductId(UUID productId);
+    List<Menu> findMenusByProductId(UUID productId);
+
+    MenuGroup saveMenuGroup(MenuGroup menuGroup);
+
+    Optional<MenuGroup> findMenuGroupById(UUID id);
+
+    List<MenuGroup> findAllMenuGroups();
 }
 

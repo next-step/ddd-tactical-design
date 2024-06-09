@@ -4,7 +4,9 @@ import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 
 public class ChangeMenuPriceTestFixture extends DefaultChangeMenuPrice {
 
-    public ChangeMenuPriceTestFixture(MenuRepository menuRepository) {
-        super(menuRepository);
+
+    public ChangeMenuPriceTestFixture(MenuRepository menuRepository,
+                                      CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity) {
+        super(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity);
     }
 }

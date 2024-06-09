@@ -1,11 +1,11 @@
 package kitchenpos.menus.tobe.domain.application;
 
 
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 
 public class CreateMenuGroupTestFixture extends  DefaultCreateMenuGroup {
 
-    public CreateMenuGroupTestFixture(MenuGroupRepository menuGroupRepository) {
-        super(menuGroupRepository);
+    public CreateMenuGroupTestFixture(MenuRepository menuRepository) {
+        super(menuRepository);
     }
 }

@@ -22,10 +22,10 @@ class DefaultHideMenu implements HideMenu {
 
     @Override
     public final Menu execute(UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = menuRepository.findMenuById(menuId)
                                         .orElseThrow(NoSuchElementException::new);
         menu.hide();
-        menuRepository.save(menu);
+        menuRepository.saveMenu(menu);
         return menu;
     }
 }

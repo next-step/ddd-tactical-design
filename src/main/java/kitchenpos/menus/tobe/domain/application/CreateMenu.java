@@ -1,25 +1,23 @@
 package kitchenpos.menus.tobe.domain.application;
 
-import kitchenpos.common.purgomalum.PurgomalumClient;
-import kitchenpos.menus.tobe.domain.entity.Menu;
-import kitchenpos.menus.tobe.domain.entity.MenuGroup;
-import kitchenpos.menus.tobe.domain.entity.MenuProduct;
-import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
-import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.menus.tobe.domain.vo.MenuPrice;
-import kitchenpos.menus.tobe.domain.vo.MenuName;
-import kitchenpos.menus.tobe.dto.MenuCreateDto;
-import kitchenpos.menus.tobe.dto.MenuProductCreateDto;
-import kitchenpos.products.tobe.domain.entity.Product;
-import kitchenpos.products.tobe.domain.repository.ProductRepository;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.common.purgomalum.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.entity.Menu;
+import kitchenpos.menus.tobe.domain.entity.MenuGroup;
+import kitchenpos.menus.tobe.domain.entity.MenuProduct;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.menus.tobe.domain.vo.MenuName;
+import kitchenpos.menus.tobe.domain.vo.MenuPrice;
+import kitchenpos.menus.tobe.dto.MenuCreateDto;
+import kitchenpos.menus.tobe.dto.MenuProductCreateDto;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
+import org.springframework.stereotype.Service;
 
 @FunctionalInterface
 public interface CreateMenu {
@@ -30,20 +28,18 @@ public interface CreateMenu {
 class DefaultCreateMenu implements CreateMenu {
     private final MenuRepository menuRepository;
     private final ProductRepository productRepository;
-    private final MenuGroupRepository menuGroupRepository;
     private final PurgomalumClient purgomalumClient;
 
-    public DefaultCreateMenu(MenuRepository menuRepository, ProductRepository productRepository, MenuGroupRepository menuGroupRepository, PurgomalumClient purgomalumClient) {
+    public DefaultCreateMenu(MenuRepository menuRepository, ProductRepository productRepository, PurgomalumClient purgomalumClient) {
         this.menuRepository = menuRepository;
         this.productRepository = productRepository;
-        this.menuGroupRepository = menuGroupRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Override
     public final Menu execute(MenuCreateDto menucreateDto) {
         final MenuPrice menuPrice = MenuPrice.of(menucreateDto.getPrice());
-        final MenuGroup menuGroup = menuGroupRepository.findById(menucreateDto.getMenuGroupId())
+        final MenuGroup menuGroup = menuRepository.findMenuGroupById(menucreateDto.getMenuGroupId())
                                                        .orElseThrow(NoSuchElementException::new);
         final List<MenuProductCreateDto> menuProductRequests = menucreateDto.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
@@ -70,11 +66,11 @@ class DefaultCreateMenu implements CreateMenu {
                     product.getPrice()
                            .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct(product, quantity);
+            final MenuProduct menuProduct = new MenuProduct(product.getId(), quantity);
             menuProducts.add(menuProduct);
         }
         if (menuPrice.getValue().compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("메뉴의 가격이 너무 큽니다");
         }
 
         final MenuName menuName = MenuName.of(menucreateDto.getName(), purgomalumClient);
@@ -87,6 +83,6 @@ class DefaultCreateMenu implements CreateMenu {
             menucreateDto.isDisplayed(),
             menuProducts
         );
-        return menuRepository.save(menu);
+        return menuRepository.saveMenu(menu);
     }
 }
