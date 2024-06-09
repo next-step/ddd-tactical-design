@@ -12,10 +12,8 @@ import kitchenpos.menus.tobe.domain.TobeMenuProduct;
 import kitchenpos.menus.tobe.domain.TobeMenuRepository;
 import kitchenpos.menus.tobe.dto.request.MenuCreateRequest;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.application.TobeInMemoryProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,17 +33,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class TobeMenuServiceTest {
     private TobeMenuRepository menuRepository;
     private TobeMenuGroupRepository menuGroupRepository;
-    private ProductRepository productRepository;
+    private ProductDomainService productDomainServiceI;
     private PurgomalumClient purgomalumClient;
     private TobeMenuService tobeMenuService;
+    private Product product;
 
     @BeforeEach
     void setUp() {
+        purgomalumClient = new FakePurgomalumClient();
+        product = TobeMenuServiceFixture.createProduct(10000L, purgomalumClient);
+
         menuRepository = new TobeInMemoryMenuRepository();
         menuGroupRepository = new TobeInMemoryMenuGroupRepository();
-        productRepository = new TobeInMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        tobeMenuService = new TobeMenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        productDomainServiceI = new FackProductDomainService(product);
+
+
+        tobeMenuService = new TobeMenuService(menuRepository, menuGroupRepository, productDomainServiceI, purgomalumClient);
     }
 
     @Nested
@@ -56,11 +59,9 @@ class TobeMenuServiceTest {
         void create() {
             // given
             TobeMenuGroup menuGroup = TobeMenuServiceFixture.createMenuGroup();
-            Product product = TobeMenuServiceFixture.createProduct(10000L, purgomalumClient);
             List<MenuCreateRequest.MenuProductRequest> menuProductRequests = List.of(TobeMenuServiceFixture.createMenuProductRequest(product, 2L));
 
             menuGroupRepository.save(menuGroup);
-            productRepository.save(product);
 
             MenuCreateRequest request = new MenuCreateRequest("상품명", BigDecimal.valueOf(20000), true, menuGroup.getId(), menuProductRequests);
 
@@ -102,7 +103,6 @@ class TobeMenuServiceTest {
         @DisplayName("등록되지 않은 메뉴그룹을 참조하면 예외가 발생한다.")
         void createWithNotRegisteredMenuGroup() {
             // given
-            Product product = TobeMenuServiceFixture.createProduct(10000L, purgomalumClient);
             List<MenuCreateRequest.MenuProductRequest> menuProductRequests = List.of(TobeMenuServiceFixture.createMenuProductRequest(product, 2L));
 
             MenuCreateRequest request = new MenuCreateRequest("상품명", BigDecimal.valueOf(20000), true, null, menuProductRequests);
@@ -117,8 +117,8 @@ class TobeMenuServiceTest {
         void createWithNotRegisteredProduct() {
             // given
             TobeMenuGroup menuGroup = TobeMenuServiceFixture.createMenuGroup();
-            Product product = TobeMenuServiceFixture.createProduct(10000L, purgomalumClient);
-            List<MenuCreateRequest.MenuProductRequest> menuProductRequests = List.of(TobeMenuServiceFixture.createMenuProductRequest(product, 2L));
+            Product nonSavedProduct = TobeMenuServiceFixture.createProduct(purgomalumClient);
+            List<MenuCreateRequest.MenuProductRequest> menuProductRequests = List.of(TobeMenuServiceFixture.createMenuProductRequest(nonSavedProduct, 2L));
 
             menuGroupRepository.save(menuGroup);
 
@@ -134,11 +134,9 @@ class TobeMenuServiceTest {
         void createWithProductPriceHigherThanMenuPrice() {
             // given
             TobeMenuGroup menuGroup = TobeMenuServiceFixture.createMenuGroup();
-            Product product = TobeMenuServiceFixture.createProduct(20000L, purgomalumClient);
             List<MenuCreateRequest.MenuProductRequest> menuProductRequests = List.of(TobeMenuServiceFixture.createMenuProductRequest(product, 2L));
 
             menuGroupRepository.save(menuGroup);
-            productRepository.save(product);
 
             MenuCreateRequest request = new MenuCreateRequest("상품명", BigDecimal.valueOf(100000), true, menuGroup.getId(), menuProductRequests);
 
