@@ -2,7 +2,7 @@ package kitchenpos.shared.domain
 
 class DefaultProfanities : Profanities {
     private val profanities =
-        setOf<String>(
+        setOf(
             "비속어",
         )
 
