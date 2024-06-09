@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.application
 
+import kitchenpos.products.tobe.application.dto.ChangePriceRequest
+import kitchenpos.products.tobe.application.dto.CreateProductRequest
 import kitchenpos.products.tobe.domain.TobeProduct
 import kitchenpos.products.tobe.domain.TobeProductRepository
 import kitchenpos.products.tobe.infra.InMemoryTobeProductRepository
 import kitchenpos.share.domain.FakeProfanities
-import kitchenpos.shared.domain.Price
 import kitchenpos.shared.domain.Profanities
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -26,7 +27,7 @@ class TobeProductServiceTest {
     @Test
     fun case_1() {
         // given
-        val request = createProduct()
+        val request = createProductRequest()
 
         // when
         val savedProduct = sut.create(request)
@@ -42,15 +43,15 @@ class TobeProductServiceTest {
         val savedProduct = tobeProductRepository.save(createProduct())
         val price = 15_000
         val productId = savedProduct.id
-        val changePriceRequest = createProduct(price = price)
+        val changePriceRequest = createChangePriceRequest(productId, price)
 
         // when
-        val changedProduct = sut.changePrice(productId, changePriceRequest)
+        val changedProduct = sut.changePrice(changePriceRequest)
 
         // then
         assertThat(changedProduct).isNotNull()
         assertThat(changedProduct.id).isEqualTo(productId)
-        assertThat(changedProduct.price).isEqualTo(Price.of(price))
+        assertThat(changedProduct.price).isEqualTo(price)
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
@@ -75,5 +76,21 @@ class TobeProductServiceTest {
         profanities: Profanities = FakeProfanities("비속어"),
     ): TobeProduct {
         return TobeProduct(id, name, price, profanities)
+    }
+
+    private fun createProductRequest(
+        id: UUID = UUID.randomUUID(),
+        name: String = "후라이드",
+        price: Int = 10_000,
+        profanities: Profanities = FakeProfanities("비속어"),
+    ): CreateProductRequest {
+        return CreateProductRequest(id, name, price)
+    }
+
+    private fun createChangePriceRequest(
+        id: UUID = UUID.randomUUID(),
+        price: Int = 10_000,
+    ): ChangePriceRequest {
+        return ChangePriceRequest(id, price)
     }
 }

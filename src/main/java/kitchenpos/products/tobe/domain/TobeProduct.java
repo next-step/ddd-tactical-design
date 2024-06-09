@@ -1,8 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.products.tobe.application.dto.ProductResponse;
 import kitchenpos.shared.domain.Price;
 import kitchenpos.shared.domain.Profanities;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -55,5 +57,14 @@ public class TobeProduct {
                 ", name=" + name +
                 ", price=" + price +
                 '}';
+    }
+
+    @NotNull
+    public ProductResponse toDto() {
+        return new ProductResponse(
+                this.id,
+                this.name.getName(),
+                this.price.getPrice()
+        );
     }
 }
