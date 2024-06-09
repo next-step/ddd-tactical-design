@@ -38,4 +38,12 @@ class ProductTest {
         assertThatThrownBy(() -> new Product("후라이드", null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("상품의 가격을 변경한다")
+    void changePriceSuccess() {
+        Product product = new Product("후라이드", BigDecimal.valueOf(10_000L));
+        product.changePrice(new ProductPrice(BigDecimal.valueOf(12_000L)));
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(12_000L)));
+    }
 }
