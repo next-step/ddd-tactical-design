@@ -1,6 +1,7 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.external.infra.ProfanityChecker;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
@@ -9,7 +10,10 @@ import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -34,33 +38,29 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-//    @Transactional
-//    public Product changePrice(final UUID productId, final Product request) {
-//        Product product1 = new Product(productId, request.getName(), request.getPrice());
-//
-//        final BigDecimal price = request.getPrice();
-//        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-//            throw new IllegalArgumentException();
-//        }
-//        final Product product = productRepository.findById(productId)
-//            .orElseThrow(NoSuchElementException::new);
-//        product.setPrice(price);
-//        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-//        for (final Menu menu : menus) {
-//            BigDecimal sum = BigDecimal.ZERO;
-//            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//                sum = sum.add(
-//                    menuProduct.getProduct()
-//                        .getPrice()
-//                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//                );
-//            }
-//            if (menu.getPrice().compareTo(sum) > 0) {
-//                menu.setDisplayed(false);
-//            }
-//        }
-//        return product;
-//    }
+    @Transactional
+    public Product changePrice(final UUID productId, final Product request) {
+        final Product product = productRepository.findById(productId)
+            .orElseThrow(NoSuchElementException::new);
+        product.changePrice(request.getPrice());
+
+        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        for (final Menu menu : menus) {
+            BigDecimal sum = BigDecimal.ZERO;
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                sum = sum.add(
+                    menuProduct.getProduct()
+                        .getPrice()
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                );
+            }
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
+        }
+        return product;
+    }
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {
