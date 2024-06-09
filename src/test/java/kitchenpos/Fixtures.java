@@ -32,13 +32,14 @@ public class Fixtures {
     }
 
     public static Menu menu(final long price, final boolean displayed, final MenuProduct... menuProducts) {
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(MenuName.of("후라이드+후라이드", (text)-> false));
-        menu.changePrice(MenuPrice.of(BigDecimal.valueOf(price)));
-        menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
-        menu.setMenuProducts(Arrays.asList(menuProducts));
+        final Menu menu = new Menu(
+            UUID.randomUUID(),
+            MenuName.of("후라이드+후라이드", (text)-> false),
+            MenuPrice.of(BigDecimal.valueOf(price)),
+            menuGroup(),
+            displayed,
+            Arrays.asList(menuProducts)
+        );
         return menu;
     }
 
@@ -51,18 +52,14 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        final MenuProduct menuProduct = new MenuProduct();
+        final MenuProduct menuProduct = new MenuProduct(product(), 2L);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
-        menuProduct.setQuantity(2L);
         return menuProduct;
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
+        final MenuProduct menuProduct = new MenuProduct(product, quantity);
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product);
-        menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 

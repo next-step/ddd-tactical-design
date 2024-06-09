@@ -1,8 +1,6 @@
 package kitchenpos.menus.tobe.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import kitchenpos.menus.tobe.domain.entity.MenuProduct;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -12,10 +10,10 @@ public class MenuCreateDto {
     private BigDecimal price;
     private boolean isDisplayed;
     private UUID menuGroupId;
-    private List<MenuProduct> menuProducts;
+    private List<MenuProductCreateDto> menuProducts;
 
     @JsonCreator
-    public MenuCreateDto(String name, BigDecimal price, boolean isDisplayed, UUID menuGroupId, List<MenuProduct> menuProducts) {
+    public MenuCreateDto(String name, BigDecimal price, boolean isDisplayed, UUID menuGroupId, List<MenuProductCreateDto> menuProducts) {
         this.name = name;
         this.price = price;
         this.isDisplayed = isDisplayed;
@@ -39,7 +37,7 @@ public class MenuCreateDto {
         return menuGroupId;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public List<MenuProductCreateDto> getMenuProducts() {
         return menuProducts;
     }
 }

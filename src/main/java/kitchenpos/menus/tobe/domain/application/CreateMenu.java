@@ -9,6 +9,7 @@ import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
 import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.dto.MenuCreateDto;
+import kitchenpos.menus.tobe.dto.MenuProductCreateDto;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -44,13 +45,13 @@ class DefaultCreateMenu implements CreateMenu {
         final MenuPrice menuPrice = MenuPrice.of(menucreateDto.getPrice());
         final MenuGroup menuGroup = menuGroupRepository.findById(menucreateDto.getMenuGroupId())
                                                        .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = menucreateDto.getMenuProducts();
+        final List<MenuProductCreateDto> menuProductRequests = menucreateDto.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
         final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.stream()
-                                   .map(MenuProduct::getProductId)
+                                   .map(MenuProductCreateDto::getProductId)
                                    .toList()
         );
         if (products.size() != menuProductRequests.size()) {
@@ -58,7 +59,7 @@ class DefaultCreateMenu implements CreateMenu {
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
         BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
+        for (final MenuProductCreateDto menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
