@@ -2,10 +2,9 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.menus.domain.MenuProducts;
+import kitchenpos.products.domain.*;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.domain.ProductMenus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +41,9 @@ public class ProductService {
     public Product changePrice(final UUID productId, final Product request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.changePrice(request.getPrice());
+        product.changePrice(new ProductPrice(request.getPrice()));
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        ProductMenus productMenus = new ProductMenus(menus);
+        menus.forEach(Menu::validate);
         return product;
     }
 

@@ -1,9 +1,6 @@
 package kitchenpos.products.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -12,27 +9,42 @@ import java.util.UUID;
 @Table(name = "product")
 @Entity
 public class Product {
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
-    public Product() {
+    protected Product() {
     }
+
+    public Product(BigDecimal price) {
+        this.price = new ProductPrice(price);
+    }
+
     public Product(String name, BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("product price must not be negative");
-        }
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException("product name must not be null");
-        }
-        this.id = UUID.randomUUID();
+        this(new ProductName(name), new ProductPrice(price));
+    }
+
+    public Product(ProductName name, ProductPrice price) {
+        this(UUID.randomUUID(), name, price);
+    }
+
+    public Product(UUID id, ProductName name, ProductPrice price) {
+        this.id = id;
         this.name = name;
+        this.price = price;
+    }
+
+    public void changePrice(ProductPrice price) {
+        if (Objects.isNull(price)) {
+            throw new IllegalArgumentException();
+        }
         this.price = price;
     }
 
@@ -40,30 +52,29 @@ public class Product {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public BigDecimal getPrice() {
+        return price.getPrice();
     }
 
     public String getName() {
-        return name;
+        return name.getName();
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public void changePrice(final BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        this.price = price;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(name, product.name)
+                && Objects.equals(price, product.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price);
     }
 }

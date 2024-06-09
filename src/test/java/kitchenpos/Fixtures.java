@@ -9,6 +9,8 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductName;
+import kitchenpos.products.domain.ProductPrice;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,7 +35,7 @@ public class Fixtures {
         menu.setName("후라이드+후라이드");
         menu.setPrice(BigDecimal.valueOf(price));
         menu.setMenuGroup(menuGroup());
-        menu.setDisplayed(displayed);
+        menu.changeDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
         return menu;
     }
@@ -122,10 +124,6 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return new Product(UUID.randomUUID(), new ProductName(name), new ProductPrice(new BigDecimal(price)));
     }
 }

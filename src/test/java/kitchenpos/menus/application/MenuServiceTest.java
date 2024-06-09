@@ -246,7 +246,7 @@ class MenuServiceTest {
         menu.setName(name);
         menu.setPrice(price);
         menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
+        menu.changeDisplayed(displayed);
         menu.setMenuProducts(menuProducts);
         return menu;
     }
