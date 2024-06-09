@@ -98,4 +98,8 @@ public class TobeMenu {
     public MenuProducts menuProducts() {
         return menuProducts;
     }
+
+    public MenuPrice menuPrice() {
+        return menuPrice;
+    }
 }
