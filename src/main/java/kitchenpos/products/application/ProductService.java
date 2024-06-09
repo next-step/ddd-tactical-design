@@ -7,6 +7,7 @@ import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.ui.request.ProductCreateRequest;
+import kitchenpos.products.ui.request.ProductModifyRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public Product changePrice(final UUID productId, final ProductModifyRequest request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.getPrice());

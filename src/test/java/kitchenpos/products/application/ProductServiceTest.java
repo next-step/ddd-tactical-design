@@ -7,6 +7,7 @@ import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.ui.request.ProductCreateRequest;
+import kitchenpos.products.ui.request.ProductModifyRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest("후라이드", 15_000L);
+        final ProductModifyRequest expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
@@ -71,7 +72,7 @@ class ProductServiceTest {
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest("후라이드", 8_000L));
+        productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -93,7 +94,7 @@ class ProductServiceTest {
         return product;
     }
 
-    private Product changePriceRequest(String name, final long price) {
-        return new Product(name, BigDecimal.valueOf(price));
+    private ProductModifyRequest changePriceRequest(final long price) {
+        return new ProductModifyRequest(price);
     }
 }
