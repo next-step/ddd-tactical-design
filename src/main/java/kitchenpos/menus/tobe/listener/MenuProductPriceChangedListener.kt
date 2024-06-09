@@ -14,7 +14,7 @@ class MenuProductPriceChangedListener(
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun syncMenusDisplayStatus(productPriceChanged: ProductPriceChanged) {
+    fun handle(productPriceChanged: ProductPriceChanged) {
         val menus = menuRepository.findAllByProductId(productPriceChanged.productId)
 
         menus.forEach { it.changeMenuProduct(productPriceChanged.productId, productPriceChanged.price) }

@@ -16,7 +16,7 @@ class EatInOrderTableCompletedListener(
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun clearOrderTable(eatInOrderCompleted: EatInOrderCompleted) {
+    fun handle(eatInOrderCompleted: EatInOrderCompleted) {
         val eatInOrder = eatInOrderRepository.findByIdOrNull(eatInOrderCompleted.eatInOrderId)
             ?: throw NoSuchElementException("can not find order: ${eatInOrderCompleted.eatInOrderId}")
 
