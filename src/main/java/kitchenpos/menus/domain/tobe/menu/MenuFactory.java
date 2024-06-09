@@ -14,10 +14,13 @@ import java.util.UUID;
 public class MenuFactory {
   private final MenuGroupRepository menuGroupRepository;
   private final ProfanityValidator profanityValidator;
+  private final ProductClient productClient;
 
-  public MenuFactory(MenuGroupRepository menuGroupRepository, ProfanityValidator profanityValidator) {
+
+  public MenuFactory(MenuGroupRepository menuGroupRepository, ProfanityValidator profanityValidator, ProductClient productClient) {
     this.menuGroupRepository = menuGroupRepository;
     this.profanityValidator = profanityValidator;
+    this.productClient = productClient;
   }
 
   public Menu createMenu(UUID menuGroupId, List<MenuProduct> menuProducts, boolean displayed, String name, BigDecimal price){
@@ -44,8 +47,6 @@ public class MenuFactory {
 
   private MenuProducts createMenuProducts(List<MenuProduct> menuProductsList){
 
-    final MenuProducts menuProducts = MenuProducts.of(menuProductsList);
-
-    return menuProducts;
+    return MenuProducts.of(productClient, menuProductsList);
   }
 }

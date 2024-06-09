@@ -7,8 +7,6 @@ import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuFactory;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
-import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.domain.tobe.ProductRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,30 +22,18 @@ import java.util.UUID;
 @Service
 public class MenuService {
     private final MenuRepository menuRepository;
-    private final ProductRepository productRepository;
     private final MenuFactory menuFactory;
 
     public MenuService(
-            final MenuRepository menuRepository,
-            ProductRepository productRepository, MenuFactory menuFactory) {
+            final MenuRepository menuRepository, final MenuFactory menuFactory) {
         this.menuRepository = menuRepository;
-        this.productRepository = productRepository;
         this.menuFactory = menuFactory;
     }
 
     @Transactional
     public Menu create(final MenuRequest request) {
-        if(Objects.isNull(request.getMenuProducts())){
-            throw new IllegalArgumentException();
-        }
-
-        final List<Product> products = productRepository.findAllByIdIn(
-                request.getMenuProducts().stream()
-                        .map(MenuProductRequest::getProductId)
-                        .toList()
-        );
-        if (products.size() != request.sizeOfMenuProducts()) {
-            throw new IllegalArgumentException();
+        if (Objects.isNull(request.getMenuProducts())) {
+            throw new IllegalArgumentException("메뉴는 1개이상의 메뉴상품으로 구성되어야 합니다.");
         }
 
         List<MenuProduct> menuProducts = request.getMenuProducts()

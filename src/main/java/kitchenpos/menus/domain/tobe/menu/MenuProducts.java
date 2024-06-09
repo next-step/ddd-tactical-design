@@ -6,7 +6,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class MenuProducts {
@@ -15,18 +18,35 @@ public class MenuProducts {
 
   protected MenuProducts() {
   }
-
+  @Deprecated
   private MenuProducts(List<MenuProduct> menuProducts) {
     products.addAll(menuProducts);
   }
+  private MenuProducts(List<MenuProduct> menuProducts, ProductClient productClient) {
+    validate(menuProducts, productClient);
+    products.addAll(menuProducts);
+  }
+  private void validate(List<MenuProduct> menuProducts, ProductClient productClient) {
+    if (Objects.isNull(menuProducts)) {
+      throw new IllegalArgumentException("메뉴는 1개이상의 메뉴상품으로 구성되어야 합니다.");
+    }
 
+    if (productClient.countProductIds(getMenuProductIds(menuProducts)) != menuProducts.size()) {
+      throw new IllegalArgumentException("메뉴상품들 중에 상품군에 존재하지 않는 상품이 있습니다.");
+    }
+  }
+
+  public static MenuProducts of(ProductClient productClient, MenuProduct... menuProducts) {
+    return new MenuProducts(List.of(menuProducts), productClient);
+  }
+  @Deprecated
   public static MenuProducts of(MenuProduct... menuProducts) {
     return new MenuProducts(List.of(menuProducts));
   }
-
-  public static MenuProducts of(List<MenuProduct> menuProducts) {
-    return new MenuProducts(menuProducts);
+  public static MenuProducts of(ProductClient productClient, List<MenuProduct> menuProducts) {
+    return new MenuProducts(menuProducts, productClient);
   }
+
   protected BigDecimal sum() {
     return products
             .stream()
@@ -41,16 +61,22 @@ public class MenuProducts {
             .forEach(menuProduct -> menuProduct.changePrice(price));
   }
 
-  protected void addMenuProduct(MenuProduct menuProduct){
+  protected void addMenuProduct(MenuProduct menuProduct) {
     this.products.add(menuProduct);
   }
 
-  protected boolean containsZeroProducts(){
+  protected boolean containsZeroProducts() {
     return this.products.isEmpty();
   }
 
-  public List<MenuProduct> getProducts() {
+  protected List<MenuProduct> getProducts() {
     return products;
+  }
+
+  protected List<UUID> getMenuProductIds(List<MenuProduct> menuProducts) {
+    return menuProducts.stream()
+            .map(MenuProduct::getId)
+            .toList();
   }
 
   @Override

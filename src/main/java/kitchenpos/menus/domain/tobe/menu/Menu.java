@@ -3,10 +3,10 @@ package kitchenpos.menus.domain.tobe.menu;
 
 import jakarta.persistence.*;
 import kitchenpos.common.domain.Price;
-import kitchenpos.common.domain.ProductPriceChangeEvent;
 import kitchenpos.common.domain.ProfanityValidator;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -104,8 +104,8 @@ public class Menu {
     return id;
   }
 
-  public MenuProducts getMenuProducts() {
-    return menuProducts;
+  public List<MenuProduct> getMenuProducts() {
+    return menuProducts.getProducts();
   }
 
   public boolean isDisplayed() {
