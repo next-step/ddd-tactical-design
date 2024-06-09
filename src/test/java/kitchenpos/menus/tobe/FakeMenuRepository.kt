@@ -1,4 +1,4 @@
-package kitchenpos.menus.application.tobe
+package kitchenpos.menus.tobe
 
 import kitchenpos.menus.tobe.domain.Menu
 import kitchenpos.menus.tobe.domain.MenuRepository

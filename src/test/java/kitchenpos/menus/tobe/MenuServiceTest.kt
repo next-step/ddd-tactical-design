@@ -1,4 +1,4 @@
-package kitchenpos.menus.application.tobe
+package kitchenpos.menus.tobe
 
 import kitchenpos.common.price
 import kitchenpos.fixture.MenuFixtures
@@ -7,7 +7,7 @@ import kitchenpos.fixture.ProductFixtures
 import kitchenpos.menus.tobe.application.MenuService
 import kitchenpos.menus.tobe.domain.*
 import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest
-import kitchenpos.products.application.tobe.FakeProductRepository
+import kitchenpos.products.tobe.FakeProductRepository
 import kitchenpos.products.tobe.domain.ProductRepository
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package kitchenpos.products.application.tobe
+package kitchenpos.products.tobe
 
 import kitchenpos.common.price
 import kitchenpos.menus.tobe.application.MenuService

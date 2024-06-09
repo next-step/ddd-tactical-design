@@ -7,7 +7,7 @@ import kitchenpos.eatinorders.tobe.domain.OrderTableGuestNumber
 import kitchenpos.fixture.EatInOrderFixtures.eatInOrderLineItem
 import kitchenpos.fixture.EatInOrderFixtures.orderTable
 import kitchenpos.fixture.MenuFixtures.menu
-import kitchenpos.menus.application.tobe.FakeMenuRepository
+import kitchenpos.menus.tobe.FakeMenuRepository
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

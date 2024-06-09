@@ -60,6 +60,7 @@ class Menu private constructor(
 
     init {
         validateMenuPrice()
+
         this.menuProducts.apply(this)
     }
 
