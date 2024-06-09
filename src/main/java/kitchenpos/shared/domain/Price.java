@@ -2,6 +2,7 @@ package kitchenpos.shared.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.menu.Quantity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -50,5 +51,9 @@ public class Price implements Comparable<Price> {
 
     public boolean isGreaterThan(int price) {
         return this.price - price > 0;
+    }
+
+    public int multiply(Quantity quantity) {
+        return this.price * quantity.getQuantity();
     }
 }

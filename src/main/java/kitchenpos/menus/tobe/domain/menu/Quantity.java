@@ -22,7 +22,7 @@ public class Quantity {
         this.quantity = quantity;
     }
 
-    int getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 

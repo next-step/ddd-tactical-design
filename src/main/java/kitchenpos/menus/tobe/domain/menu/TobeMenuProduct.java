@@ -33,6 +33,6 @@ public class TobeMenuProduct {
     }
 
     public int getTotalPrice() {
-        return price.getPrice() * quantity.getQuantity();
+        return price.multiply(quantity);
     }
 }
