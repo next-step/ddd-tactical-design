@@ -11,6 +11,7 @@ import java.util.UUID;
 import kitchenpos.menus.tobe.MenuFixtures;
 import kitchenpos.menus.tobe.application.InMemoryMenuRepository;
 import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.application.ProductRequest;
 import kitchenpos.products.application.ProductResponse;
@@ -26,9 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -37,16 +36,17 @@ class ProductServiceTest {
   private MenuRepository menuRepository;
   private PurgomalumClient purgomalumClient;
   private ProductService productService;
-  @Mock private ApplicationEventPublisher applicationEventPublisher;
+  private FakeApplicationEventPublisher fakeApplicationEventPublisher;
 
   @BeforeEach
   void setUp() {
     productRepository = new InMemoryProductRepository();
     menuRepository = new InMemoryMenuRepository();
     purgomalumClient = new FakePurgomalumClient();
+    fakeApplicationEventPublisher = new FakeApplicationEventPublisher(menuRepository);
     productService =
         new ProductService(
-            productRepository, menuRepository, purgomalumClient, applicationEventPublisher);
+            productRepository, menuRepository, purgomalumClient, fakeApplicationEventPublisher);
   }
 
   @DisplayName("상품을 등록할 수 있다.")
@@ -106,8 +106,13 @@ class ProductServiceTest {
   @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
   @Test
   void changePriceInMenu() {
-    final Product product = productRepository.save(ProductFixtures.product());
-    final Menu menu = menuRepository.save(MenuFixtures.menu());
+    final Product product = ProductFixtures.product();
+    productRepository.save(product);
+
+    final MenuProduct menuProduct = MenuFixtures.menuProduct(product, 1L);
+    final Menu menu = MenuFixtures.menu(16_000L, menuProduct);
+    menuRepository.save(menu);
+
     final ProductRequest expected = new ProductRequest("", BigDecimal.valueOf(8_000L));
     productService.changePrice(product.getId(), expected);
     assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();

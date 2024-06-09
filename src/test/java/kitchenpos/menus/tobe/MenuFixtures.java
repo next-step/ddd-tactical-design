@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Optional;
 import kitchenpos.menus.tobe.application.FakeMenuPurgomalumClient;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
@@ -42,10 +41,12 @@ public class MenuFixtures {
   }
 
   public static MenuProduct menuProduct() {
-    return MenuProduct.of(Optional.of(ProductFixtures.product()), 2L);
+    final Product product = ProductFixtures.product();
+
+    return MenuProduct.of(product.getId(), 2L, product.getPrice());
   }
 
   public static MenuProduct menuProduct(final Product product, final long quantity) {
-    return MenuProduct.of(Optional.of(product), quantity);
+    return MenuProduct.of(product.getId(), quantity, product.getPrice());
   }
 }
