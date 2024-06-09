@@ -5,8 +5,8 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.common.external.infra.ProfanityChecker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +68,7 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
+                        .getPrice()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
