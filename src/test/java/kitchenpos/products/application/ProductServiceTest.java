@@ -3,8 +3,10 @@ package kitchenpos.products.application;
 import kitchenpos.common.external.infra.ProfanityChecker;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,21 +22,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProfanityChecker purgomalumClient;
+    private ProductProfanity productProfanityChecker;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productProfanityChecker = new FakeProductProfanityChecker();
+        productService = new ProductService(productRepository, menuRepository, productProfanityChecker);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
+        ProductCreateRequest expected = createProductRequest("후라이드", 16_000L);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -48,7 +50,7 @@ class ProductServiceTest {
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
+        ProductCreateRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -91,12 +93,12 @@ class ProductServiceTest {
 //        assertThat(actual).hasSize(2);
 //    }
 
-    private Product createProductRequest(final String name, final long price) {
+    private ProductCreateRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
     }
 
-    private Product createProductRequest(final String name, final BigDecimal price) {
-        Product product = new Product(name, price);
+    private ProductCreateRequest createProductRequest(final String name, final BigDecimal price) {
+        ProductCreateRequest product = new ProductCreateRequest(name, price);
         return product;
     }
 

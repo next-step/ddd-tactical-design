@@ -2,8 +2,10 @@ package kitchenpos.products.application;
 
 import kitchenpos.common.external.infra.ProfanityChecker;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.ui.request.ProductCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +15,12 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityChecker productProfanityChecker;
+    private final ProductProfanity productProfanityChecker;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final ProfanityChecker productProfanityChecker
+        final ProductProfanity productProfanityChecker
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
@@ -26,12 +28,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        String name = request.getName().getName();
-        if (productProfanityChecker.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        Product product = new Product(request.getName(), request.getPrice());
+    public Product create(final ProductCreateRequest request) {
+        request.checkProfanityName(productProfanityChecker);
+        Product product = request.toEntity();
         return productRepository.save(product);
     }
 
