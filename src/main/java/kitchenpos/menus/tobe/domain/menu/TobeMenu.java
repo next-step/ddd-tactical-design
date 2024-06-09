@@ -30,7 +30,7 @@ public class TobeMenu {
     @Transient
     private UUID menuGroupId;
 
-    private TobeMenu() {
+    protected TobeMenu() {
     }
 
     public TobeMenu(String name, int price, Profanities profanities, UUID menuGroupId, List<TobeMenuProduct> tobeMenuProducts) {

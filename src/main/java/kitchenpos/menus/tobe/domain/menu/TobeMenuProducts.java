@@ -16,7 +16,7 @@ public class TobeMenuProducts {
     )
     private List<TobeMenuProduct> menuProducts;
 
-    private TobeMenuProducts() {
+    protected TobeMenuProducts() {
     }
 
     private TobeMenuProducts(List<TobeMenuProduct> menuProducts) {

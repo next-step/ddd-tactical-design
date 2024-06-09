@@ -22,7 +22,7 @@ public class TobeMenuProduct {
     @Transient
     private UUID productId;
 
-    private TobeMenuProduct() {
+    protected TobeMenuProduct() {
     }
 
     public TobeMenuProduct(int quantity, int price, UUID productId) {
