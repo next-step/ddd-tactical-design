@@ -53,7 +53,16 @@ public class Menu {
     @Transient
     private UUID menuGroupId;
 
-    public Menu() {
+    protected Menu() {
+    }
+
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+        this.id = id;
+        this.name = name.getValue();
+        this.price = price.getValue();
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
     public UUID getId() {

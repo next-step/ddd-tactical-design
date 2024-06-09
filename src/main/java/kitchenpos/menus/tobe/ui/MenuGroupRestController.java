@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.List;
 import kitchenpos.menus.tobe.application.MenuCommandHandler;
 import kitchenpos.menus.tobe.application.query.MenuQueryHandler;
-import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
+import kitchenpos.menus.tobe.ui.view.MenuGroupViewModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,14 +25,18 @@ public class MenuGroupRestController {
     }
 
     @PostMapping
-    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroupCreateDto request) {
-        final MenuGroup response = menuCommandHandler.createMenuGroup(request);
+    public ResponseEntity<MenuGroupViewModel> create(@RequestBody final MenuGroupCreateDto request) {
+        final MenuGroupViewModel response = MenuGroupViewModel.from(menuCommandHandler.createMenuGroup(request));
         return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
                              .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuGroup>> findAll() {
-        return ResponseEntity.ok(menuQueryHandler.findAllMenuGroup());
+    public ResponseEntity<List<MenuGroupViewModel>> findAll() {
+        List<MenuGroupViewModel> result = menuQueryHandler.findAllMenuGroup()
+                                                          .stream()
+                                                          .map(MenuGroupViewModel::from)
+                                                          .toList();
+        return ResponseEntity.ok(result);
     }
 }

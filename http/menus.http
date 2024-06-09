@@ -3,8 +3,8 @@ POST {{host}}/api/menus
 Content-Type: application/json
 
 {
-  "name": "후라이드+후라이드",
-  "price": 12000,
+  "name": "후라이드2222",
+  "price": 13000,
   "menuGroupId": "f1860abc-2ea1-411b-bd4a-baa44f0d5580",
   "displayed": true,
   "menuProducts": [

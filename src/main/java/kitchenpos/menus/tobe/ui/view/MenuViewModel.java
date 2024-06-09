@@ -1,6 +1,8 @@
 package kitchenpos.menus.tobe.ui.view;
 
+import java.util.ArrayList;
 import java.util.List;
+import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 
 public class MenuViewModel {
@@ -26,10 +28,51 @@ public class MenuViewModel {
         return new MenuViewModel(
             menu.getId().toString(),
             menu.getName(),
-            String.valueOf(menu.getPrice().longValue()) + "원",
-            null,
+            menu.getPrice().longValue() + "원",
+            MenuGroupViewModel.from(menu.getMenuGroup()),
             menu.isDisplayed(),
-            null
+            menu.getMenuProducts().stream().map(MenuProductViewModel::from).toList()
         );
+    }
+
+    public static MenuViewModel from(MenuQueryResult result) {
+        List<MenuProductViewModel> menuProductViewModels = new ArrayList<>();
+        menuProductViewModels.add(MenuProductViewModel.from(result));
+        return new MenuViewModel(
+            result.getMenuId(),
+           result.getMenuName(),
+            result.getMenuPrice().longValue() + "원",
+            MenuGroupViewModel.from(result),
+            result.isMenuDisplayed(),
+            menuProductViewModels
+        );
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public MenuGroupViewModel getMenuGroupViewModel() {
+        return menuGroupViewModel;
+    }
+
+    public boolean isDisplayed() {
+        return isDisplayed;
+    }
+
+    public List<MenuProductViewModel> getMenuProductViewModels() {
+        return menuProductViewModels;
+    }
+
+    public void addMenuProductViewModel(MenuProductViewModel menuProductViewModel) {
+        this.menuProductViewModels.add(menuProductViewModel);
     }
 }

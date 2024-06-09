@@ -1,17 +1,12 @@
 package kitchenpos.menus.tobe.application.query;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuGroupRepository;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
-import kitchenpos.menus.tobe.dto.MenuDto;
-import kitchenpos.menus.tobe.dto.MenuProductDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +44,8 @@ public class MenuQueryHandler {
     }
 
     @Transactional(readOnly = true)
-    public List<MenuDto> findAllMenu() {
-        List<MenuQueryResult> result = jdbcTemplate.query(
+    public List<MenuQueryResult> findAllMenu() {
+        return jdbcTemplate.query(
             ALL_MENU_SQL, (rs, rowNum) -> {
                 return new MenuQueryResult(
                     toUUID(rs.getString("m_id")).toString(),
@@ -66,18 +61,6 @@ public class MenuQueryHandler {
                 );
             }
         );
-        Map<String, MenuDto> menuDtoMap = new HashMap<>();
-        for (MenuQueryResult r : result) {
-            if (menuDtoMap.containsKey(r.getMenuId())) {
-                MenuDto dto = menuDtoMap.get(r.getMenuId());
-                dto.addMenuProduct(MenuProductDto.from(r));
-                menuDtoMap.put(r.getMenuId(), dto);
-            } else {
-                MenuDto dto = MenuDto.from(r);
-                menuDtoMap.put(r.getMenuId(), dto);
-            }
-        }
-        return new ArrayList<>(menuDtoMap.values());
     }
 
     @Transactional(readOnly = true)

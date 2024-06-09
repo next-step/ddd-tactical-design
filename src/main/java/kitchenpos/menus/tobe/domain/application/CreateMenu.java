@@ -69,9 +69,7 @@ class DefaultCreateMenu implements CreateMenu {
                     product.getPrice()
                            .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct(product, quantity);
             menuProducts.add(menuProduct);
         }
         if (menuPrice.getValue().compareTo(sum) > 0) {
@@ -80,13 +78,14 @@ class DefaultCreateMenu implements CreateMenu {
 
         final MenuName name = MenuName.of(menucreateDto.getName(), purgomalumClient);
 
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.changePrice(menuPrice);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(menucreateDto.isDisplayed());
-        menu.setMenuProducts(menuProducts);
+        final Menu menu = new Menu(
+            UUID.randomUUID(),
+            name,
+            menuPrice,
+            menuGroup,
+            menucreateDto.isDisplayed(),
+            menuProducts
+        );
         return menuRepository.save(menu);
     }
 }
