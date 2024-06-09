@@ -1,19 +1,18 @@
 package kitchenpos.menus.tobe.application.dto;
 
+import java.util.UUID;
 import kitchenpos.menus.tobe.domain.menu.MenuProduct;
 
 public class MenuProductCreateResponseDto {
-  private final String menuProductName;
+  private final UUID productId;
   private final long menuProductQuantity;
 
-  public MenuProductCreateResponseDto(
-      final String menuProductName, final long menuProductQuantity) {
-    this.menuProductName = menuProductName;
+  public MenuProductCreateResponseDto(final UUID productId, final long menuProductQuantity) {
+    this.productId = productId;
     this.menuProductQuantity = menuProductQuantity;
   }
 
   public static MenuProductCreateResponseDto of(final MenuProduct menuProduct) {
-    return new MenuProductCreateResponseDto(
-        menuProduct.getMenuProductName(), menuProduct.getQuantity());
+    return new MenuProductCreateResponseDto(menuProduct.getProductId(), menuProduct.getQuantity());
   }
 }

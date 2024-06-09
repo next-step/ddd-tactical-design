@@ -6,9 +6,9 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPriceChangedEvent;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.PurgomalumClient;
-import kitchenpos.products.infra.ProductPriceChangesEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +57,6 @@ public class ProductService {
   }
 
   private void menusProductPriceChanges(UUID productId, BigDecimal price) {
-    applicationEventPublisher.publishEvent(new ProductPriceChangesEvent(this, productId, price));
+    applicationEventPublisher.publishEvent(new ProductPriceChangedEvent(this, productId, price));
   }
 }

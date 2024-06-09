@@ -5,11 +5,11 @@ import kitchenpos.menus.tobe.application.dto.MenuChangePriceRequestDto;
 import kitchenpos.menus.tobe.application.dto.MenuCreateRequestDto;
 import kitchenpos.menus.tobe.application.dto.MenuCreateResponse;
 import kitchenpos.menus.tobe.application.dto.MenuProductCreateRequestDto;
+import kitchenpos.menus.tobe.application.dto.ProductConsumerDto;
 import kitchenpos.menus.tobe.domain.menu.*;
 import kitchenpos.menus.tobe.domain.menu.MenuPurgomalumClient;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
-import kitchenpos.menus.tobe.infra.dto.ProductConsumerDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

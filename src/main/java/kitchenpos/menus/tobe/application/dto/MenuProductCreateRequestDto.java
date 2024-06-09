@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.application.dto;
 
 import java.util.UUID;
-import kitchenpos.menus.tobe.infra.dto.ProductConsumerDto;
 
 public class MenuProductCreateRequestDto {
   private final UUID productId;

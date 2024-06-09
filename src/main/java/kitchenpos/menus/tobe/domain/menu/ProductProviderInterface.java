@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import java.util.List;
-import kitchenpos.menus.tobe.infra.dto.ProductConsumerDto;
+import kitchenpos.menus.tobe.application.dto.ProductConsumerDto;
 
 public interface ProductProviderInterface {
   MenuProduct findById(ProductConsumerDto productConsumerDto);
