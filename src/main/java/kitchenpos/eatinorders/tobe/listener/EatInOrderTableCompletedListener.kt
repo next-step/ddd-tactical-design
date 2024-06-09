@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.application
+package kitchenpos.eatinorders.tobe.listener
 
 import kitchenpos.eatinorders.tobe.domain.*
 import kitchenpos.eatinorders.tobe.event.EatInOrderCompleted
@@ -9,7 +9,7 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Service
-class EatInOrderTableClearService(
+class EatInOrderTableCompletedListener(
     private val orderTableClearValidator: OrderTableClearValidator,
     private val orderTableRepository: OrderTableRepository,
     private val eatInOrderRepository: EatInOrderRepository

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.application
+package kitchenpos.menus.tobe.listener
 
 import kitchenpos.menus.tobe.domain.MenuRepository
 import kitchenpos.products.tobe.event.ProductPriceChanged
@@ -9,7 +9,7 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 
 @Service
-class MenuProductSyncService(
+class MenuProductPriceChangedListener(
     private val menuRepository: MenuRepository,
 ) {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
