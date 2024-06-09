@@ -1,18 +1,16 @@
 package kitchenpos.menus.tobe.application
 
 import kitchenpos.menus.tobe.application.dto.CreateMenuRequest
-import kitchenpos.menus.tobe.domain.TobeMenuGroupRepository
 import kitchenpos.menus.tobe.domain.TobeMenuRepository
 import kitchenpos.menus.tobe.domain.menu.TobeMenu
-import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct
-import kitchenpos.shared.domain.DefaultProfanities
+import kitchenpos.menus.tobe.domain.menu.TobeMenuFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TobeMenuService(
     private val tobeMenuRepository: TobeMenuRepository,
-    private val tobeMenuGroupRepository: TobeMenuGroupRepository,
+    private val tobeMenuFactory: TobeMenuFactory,
 ) {
     /**
      * TODO :
@@ -20,23 +18,7 @@ class TobeMenuService(
      */
     @Transactional
     fun create(request: CreateMenuRequest): TobeMenu {
-        val groupId = request.groupId
-        if (!tobeMenuGroupRepository.existsById(request.groupId)) {
-            throw NoSuchElementException()
-        }
-        val name = request.name
-        val price = request.price
-        val menuProducts =
-            request.menuProducts.map {
-                TobeMenuProduct(
-                    it.quantity,
-                    it.price,
-                    it.productId,
-                )
-            }
-        val displayed = request.displayed
-        val profanities = DefaultProfanities()
-        val menu = TobeMenu(name, price, displayed, groupId, menuProducts, profanities)
+        val menu = tobeMenuFactory.createMenu(request)
         return tobeMenuRepository.save(menu)
     }
 }
