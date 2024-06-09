@@ -2,8 +2,12 @@ package kitchenpos.menus.tobe.application
 
 import kitchenpos.menus.tobe.application.dto.CreateMenuRequest
 import kitchenpos.menus.tobe.application.dto.MenuProductRequest
+import kitchenpos.menus.tobe.domain.TobeMenuRepository
+import kitchenpos.menus.tobe.domain.menu.TobeMenu
+import kitchenpos.menus.tobe.domain.menu.TobeMenuProduct
 import kitchenpos.menus.tobe.domain.menu.TobeProductClient
 import kitchenpos.menus.tobe.domain.menugroup.TobeMenuGroup
+import kitchenpos.share.domain.FakeProfanities
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.BeforeEach
@@ -26,6 +30,7 @@ class TobeMenuServiceTest(
     private val tobeMenuGroupService: TobeMenuGroupService,
     @MockBean
     private val tobeProductClient: TobeProductClient,
+    private val tobeMenuRepository: TobeMenuRepository,
 ) {
     companion object {
         private lateinit var menuGroup: TobeMenuGroup
@@ -147,5 +152,28 @@ class TobeMenuServiceTest(
         // when
         // then
         assertThrows<NoSuchElementException> { sut.create(createMenuRequest) }
+    }
+
+    @DisplayName("메뉴의 목록을 조회할 수 있다.")
+    @Test
+    fun case_6() {
+        // given
+        val menu = createMenu()
+        tobeMenuRepository.save(menu)
+
+        // when
+        val allMenus = sut.findAll()
+
+        // then
+        assertThat(allMenus.size).isEqualTo(1)
+    }
+
+    private fun createMenu(): TobeMenu {
+        val name = "후라이드"
+        val price = 10_000
+        val displayed = true
+        val menuProducts = listOf(TobeMenuProduct(1, price, UUID.randomUUID()))
+        val menu = TobeMenu(name, price, displayed, UUID.randomUUID(), menuProducts, FakeProfanities())
+        return menu
     }
 }

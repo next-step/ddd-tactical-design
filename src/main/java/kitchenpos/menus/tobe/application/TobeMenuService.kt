@@ -12,13 +12,14 @@ class TobeMenuService(
     private val tobeMenuRepository: TobeMenuRepository,
     private val tobeMenuFactory: TobeMenuFactory,
 ) {
-    /**
-     * TODO :
-     * 1. menuProducts validation (w/ domain service -> product 접근)
-     */
     @Transactional
     fun create(request: CreateMenuRequest): TobeMenu {
         val menu = tobeMenuFactory.createMenu(request)
         return tobeMenuRepository.save(menu)
+    }
+
+    @Transactional(readOnly = true)
+    fun findAll(): List<TobeMenu> {
+        return tobeMenuRepository.findAll()
     }
 }
