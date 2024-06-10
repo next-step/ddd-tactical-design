@@ -45,8 +45,7 @@ class ProductServiceTest {
     purgomalumClient = new FakePurgomalumClient();
     fakeApplicationEventPublisher = new FakeApplicationEventPublisher(menuRepository);
     productService =
-        new ProductService(
-            productRepository, menuRepository, purgomalumClient, fakeApplicationEventPublisher);
+        new ProductService(productRepository, purgomalumClient, fakeApplicationEventPublisher);
   }
 
   @DisplayName("상품을 등록할 수 있다.")

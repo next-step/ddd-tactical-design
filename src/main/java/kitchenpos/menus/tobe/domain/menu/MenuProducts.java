@@ -39,6 +39,12 @@ public class MenuProducts {
     return sum;
   }
 
+  public void changeProductPrice(final BigDecimal changePrice) {
+    for (MenuProduct menuProduct : menuProducts) {
+      menuProduct.setProductPrice(changePrice);
+    }
+  }
+
   public List<MenuProduct> getMenuProducts() {
     return menuProducts;
   }

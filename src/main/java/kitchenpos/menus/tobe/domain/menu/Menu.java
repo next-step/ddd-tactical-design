@@ -86,9 +86,10 @@ public class Menu {
   }
 
   public void productPriceChanges(final BigDecimal productPrice) {
+    this.menuProducts.changeProductPrice(productPrice);
     final BigDecimal sum = this.menuProducts.getTotalPrice();
 
-    if (productPrice.compareTo(sum) > 0) {
+    if (this.price.getPrice().compareTo(sum) > 0) {
       this.displayed = new MenuDisplayed(false);
     }
   }

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductPriceChangedEvent;
 import kitchenpos.products.domain.ProductRepository;
@@ -16,17 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
   private final ProductRepository productRepository;
-  private final MenuRepository menuRepository;
   private final PurgomalumClient purgomalumClient;
   private final ApplicationEventPublisher applicationEventPublisher;
 
   public ProductService(
       final ProductRepository productRepository,
-      final MenuRepository menuRepository,
       final PurgomalumClient purgomalumClient,
       final ApplicationEventPublisher applicationEventPublisher) {
     this.productRepository = productRepository;
-    this.menuRepository = menuRepository;
     this.purgomalumClient = purgomalumClient;
     this.applicationEventPublisher = applicationEventPublisher;
   }
@@ -43,9 +39,8 @@ public class ProductService {
   public ProductResponse changePrice(final UUID productId, final ProductRequest productRequest) {
     final Product product =
         productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
-    this.menusProductPriceChanges(productId, productRequest.getPrice());
-
     product.changePrice(productRequest.getPrice());
+    this.menusProductPriceChanges(productId, productRequest.getPrice());
 
     return ProductResponse.of(product);
   }
