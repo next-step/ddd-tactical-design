@@ -17,6 +17,9 @@ public class DefaultPurgomalumClient implements PurgomalumClient {
 
     @Override
     public boolean containsProfanity(final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException();
+        }
         final URI url = UriComponentsBuilder.fromUriString("https://www.purgomalum.com/service/containsprofanity")
             .queryParam("text", text)
             .build()

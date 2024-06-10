@@ -1,15 +1,6 @@
 package kitchenpos.menus.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,14 +30,16 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
+
+    public void validate() {
+        BigDecimal sum = menuProducts.getTotalPrice();
+        changeDisplayed(true);
+        if (price.compareTo(sum) > 0) {
+            changeDisplayed(false);
+        }
+    }
 
     @Transient
     private UUID menuGroupId;
@@ -90,16 +83,16 @@ public class Menu {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
+    public void changeDisplayed(final boolean displayed) {
         this.displayed = displayed;
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.getMenuProducts();
     }
 
     public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
     }
 
     public UUID getMenuGroupId() {

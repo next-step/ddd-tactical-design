@@ -87,7 +87,7 @@ public class MenuService {
         menu.setName(name);
         menu.setPrice(price);
         menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
+        menu.changeDisplayed(request.isDisplayed());
         menu.setMenuProducts(menuProducts);
         return menuRepository.save(menu);
     }
@@ -130,7 +130,7 @@ public class MenuService {
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
-        menu.setDisplayed(true);
+        menu.changeDisplayed(true);
         return menu;
     }
 
@@ -138,7 +138,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.changeDisplayed(false);
         return menu;
     }
 
