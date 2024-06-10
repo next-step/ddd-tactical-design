@@ -1,7 +1,9 @@
 package kitchenpos.eatinorders.tobe.domain.order;
 
+import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class EatInOrderLineItemQuantity {
 
   private long quantity;
