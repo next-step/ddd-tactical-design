@@ -5,6 +5,7 @@ import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.ui.request.ProductCreateRequest;
 import kitchenpos.products.ui.request.ProductModifyRequest;
 import kitchenpos.products.ui.response.ProductCreateResponse;
+import kitchenpos.products.ui.response.ProductModifyResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,10 @@ public class ProductRestController {
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final ProductModifyRequest request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+    public ResponseEntity<ProductModifyResponse> changePrice(@PathVariable final UUID productId, @RequestBody final ProductModifyRequest request) {
+        Product product = productService.changePrice(productId, request);
+        ProductModifyResponse response = new ProductModifyResponse(product.getId(), product.getName(), product.getPrice());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
