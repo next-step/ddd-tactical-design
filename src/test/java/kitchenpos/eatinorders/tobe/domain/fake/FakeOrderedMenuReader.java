@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.eatinorders.tobe.domain.order.create_support.OrderedMenu;
-import kitchenpos.eatinorders.tobe.domain.order.create_support.OrderedMenuReader;
+import kitchenpos.eatinorders.tobe.domain.order.createsupporter.OrderedMenu;
+import kitchenpos.eatinorders.tobe.domain.order.createsupporter.OrderedMenuReader;
 
 public class FakeOrderedMenuReader implements OrderedMenuReader {
   private final Map<UUID, OrderedMenu> menuMap = new HashMap<>();

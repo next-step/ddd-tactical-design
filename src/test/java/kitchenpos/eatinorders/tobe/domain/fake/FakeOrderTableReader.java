@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.eatinorders.tobe.domain.order.create_support.OrderTable;
-import kitchenpos.eatinorders.tobe.domain.order.create_support.OrderTableReader;
+import kitchenpos.eatinorders.tobe.domain.order.createsupporter.OrderTable;
+import kitchenpos.eatinorders.tobe.domain.order.createsupporter.OrderTableReader;
 
 public class FakeOrderTableReader implements OrderTableReader {
 

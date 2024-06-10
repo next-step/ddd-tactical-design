@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.order.create_support;
+package kitchenpos.eatinorders.tobe.domain.order.createsupporter;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -1,6 +1,5 @@
-package kitchenpos.eatinorders.tobe.domain.order_table;
+package kitchenpos.eatinorders.tobe.domain.ordertable;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;

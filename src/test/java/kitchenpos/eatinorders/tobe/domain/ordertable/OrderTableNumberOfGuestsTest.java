@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.tobe.domain.order_table;
+package kitchenpos.eatinorders.tobe.domain.ordertable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
