@@ -1,6 +1,5 @@
 package kitchenpos.product.tobe.domain;
 
-import kitchenpos.MoneyConstants;
 import kitchenpos.exception.IllegalPriceException;
 import kitchenpos.fixture.tobe.ProductFixture;
 import kitchenpos.infra.FakePurgomalumClient;
@@ -8,7 +7,6 @@ import kitchenpos.infra.PurgomalumClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
@@ -34,7 +32,7 @@ class ProductTest {
         final var product = ProductFixture.createProduct("상품이름", 만원);
         product.updateProductPrice(BigDecimal.valueOf(오천원));
 
-        assertThat(product.getProductPrice()).isEqualTo(BigDecimal.valueOf(오천원));
+        assertThat(product.getPrice()).isEqualTo(BigDecimal.valueOf(오천원));
     }
 
     @ParameterizedTest

@@ -1,5 +1,8 @@
 package kitchenpos.product.domain;
 
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
+
 import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository {

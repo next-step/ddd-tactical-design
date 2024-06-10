@@ -2,9 +2,9 @@ package kitchenpos.fixture.tobe;
 
 import jakarta.validation.constraints.NotNull;
 import kitchenpos.infra.FakePurgomalumClient;
-import kitchenpos.product.tobe.domain.Product;
-import kitchenpos.product.tobe.domain.ProductName;
-import kitchenpos.product.tobe.domain.ProductPrice;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductPrice;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,6 @@
 package kitchenpos.fixture;
 
-import kitchenpos.menu.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuGroup;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
