@@ -41,7 +41,7 @@ public class MenuProducts {
 
   public void changeProductPrice(final BigDecimal changePrice) {
     for (MenuProduct menuProduct : menuProducts) {
-      menuProduct.setProductPrice(changePrice);
+      menuProduct.changeProductPrice(changePrice);
     }
   }
 

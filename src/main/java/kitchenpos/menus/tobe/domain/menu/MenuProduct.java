@@ -18,7 +18,7 @@ public class MenuProduct {
   @Column(name = "product_id")
   private UUID productId;
 
-  @Transient private BigDecimal productPrice;
+  @Transient private MenuProductPrice productPrice;
 
   protected MenuProduct() {}
 
@@ -28,7 +28,7 @@ public class MenuProduct {
     }
 
     this.productId = productId;
-    this.productPrice = productPrice;
+    this.productPrice = new MenuProductPrice(productPrice);
     this.quantity = new MenuProductQuantity(quantity);
   }
 
@@ -38,16 +38,16 @@ public class MenuProduct {
   }
 
   public BigDecimal getProductPrice() {
-    return this.productPrice;
+    return this.productPrice.getProductPrice();
   }
 
-  public void setProductPrice(BigDecimal price) {
-    this.productPrice = price;
+  public void changeProductPrice(final BigDecimal price) {
+    this.productPrice = new MenuProductPrice(price);
   }
 
   public BigDecimal multiplyByProductPriceAndQuantity() {
     final BigDecimal quantity = BigDecimal.valueOf(this.quantity.getQuantity());
-    return this.productPrice.multiply(quantity);
+    return this.productPrice.getProductPrice().multiply(quantity);
   }
 
   public Long getQuantity() {
