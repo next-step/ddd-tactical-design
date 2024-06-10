@@ -1,9 +1,8 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
+import kitchenpos.eatinorders.domain.eatinorder.Order;
+import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
+import kitchenpos.common.domain.orders.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 
 public class InMemoryOrderRepository implements OrderRepository {
     private final Map<UUID, Order> orders = new HashMap<>();
@@ -18,7 +18,7 @@ public class InMemoryOrderRepository implements OrderRepository {
     @Override
     public Order save(final Order order) {
         orders.put(order.getId(), order);
-        return order;
+        return orderRequest;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 
     @Override
-    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTable, final OrderStatus status) {
+    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTableRequest, final OrderStatus status) {
         return orders.values()
             .stream()
-            .anyMatch(order -> order.getOrderTable().equals(orderTable) && order.getStatus() != status);
+            .anyMatch(order -> order.getOrderTable().equals(orderTableRequest) && order.getStatus() != status);
     }
 }
