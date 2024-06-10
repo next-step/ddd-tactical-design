@@ -7,8 +7,8 @@ import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuPrice;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuPrice request) {
         final Menu menu = findMenu(menuId);
+        menuProductsService.validateMenuPrice(menu.getMenuProducts(), request);
         menu.changePrice(request);
         return menu;
     }
@@ -53,6 +54,7 @@ public class MenuService {
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = findMenu(menuId);
+        menuProductsService.validateMenuPrice(menu.getMenuProducts(), menu.getMenuPrice());
         menu.display();
         return menu;
     }

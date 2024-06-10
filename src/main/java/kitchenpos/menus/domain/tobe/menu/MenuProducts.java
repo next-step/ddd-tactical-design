@@ -5,7 +5,6 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,34 +23,15 @@ public class MenuProducts {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts, MenuPrice price) {
+    public MenuProducts(List<MenuProduct> menuProducts) {
         validateMenuProducts(menuProducts);
         this.menuProducts = menuProducts;
-        validatePrice(price);
     }
 
     private void validateMenuProducts(List<MenuProduct> menuProducts) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
-    }
-
-    public void validatePrice(MenuPrice price) {
-        if (isOverThanProductSumPrice(price)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public boolean isOverThanProductSumPrice(MenuPrice price) {
-        return price.isOver(calculateProductSumPrice(menuProducts));
-    }
-
-    private BigDecimal calculateProductSumPrice(List<MenuProduct> menuProducts) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(menuProduct.calculateSum());
-        }
-        return sum;
     }
 
     public List<MenuProduct> getMenuProducts() {

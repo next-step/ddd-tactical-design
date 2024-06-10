@@ -13,6 +13,7 @@ import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
+import kitchenpos.menus.application.MenuProductsService;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.menu.Menu;
@@ -46,7 +47,9 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, menuRepository, profanityValidator);
+        MenuProductsService menuProductService = new MenuProductsService(productRepository);
+        productService = new ProductService(productRepository, menuRepository, menuProductService,
+                profanityValidator);
     }
 
     @Test

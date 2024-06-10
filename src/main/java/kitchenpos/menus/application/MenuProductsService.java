@@ -1,5 +1,6 @@
 package kitchenpos.menus.application;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -26,11 +27,9 @@ public class MenuProductsService {
         List<Product> products = findProducts(requests.getProductIds());
         requests.validateMenuProducts(products);
 
-        return new MenuProducts(createMenuProducts(requests), price);
-    }
-
-    private List<Product> findProducts(List<UUID> productIds) {
-        return productRepository.findAllByIdIn(productIds);
+        List<MenuProduct> menuProducts = createMenuProducts(requests);
+        validateMenuPrice(menuProducts, price);
+        return new MenuProducts(menuProducts);
     }
 
     private List<MenuProduct> createMenuProducts(MenuProductCreateRequests requests) {
@@ -41,6 +40,29 @@ public class MenuProductsService {
                     return request.to(product);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public void validateMenuPrice(List<MenuProduct> menuProducts, MenuPrice price) {
+        if (price.isOver(calculateProductSumPrice(menuProducts))) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public boolean isOverThanProductSumPrice(List<MenuProduct> menuProducts, MenuPrice price) {
+        return price.isOver(calculateProductSumPrice(menuProducts));
+    }
+
+    private BigDecimal calculateProductSumPrice(List<MenuProduct> menuProducts) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (MenuProduct menuProduct : menuProducts) {
+            Product product = findProduct(menuProduct.getProductId());
+            sum = sum.add(menuProduct.calculateSum(product));
+        }
+        return sum;
+    }
+
+    private List<Product> findProducts(List<UUID> productIds) {
+        return productRepository.findAllByIdIn(productIds);
     }
 
     private Product findProduct(UUID productId) {

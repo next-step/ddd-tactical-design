@@ -51,10 +51,6 @@ public class Product {
         return this.price.equals(price);
     }
 
-    public BigDecimal calculateSum(BigDecimal quantity) {
-        return price.getPrice().multiply(quantity);
-    }
-
     public UUID getId() {
         return id;
     }

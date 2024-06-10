@@ -3,6 +3,7 @@ package kitchenpos.products.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import kitchenpos.menus.application.MenuProductsService;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.products.domain.ProductRepository;
@@ -18,15 +19,19 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
+
+    private final MenuProductsService menuProductsService;
     private final ProfanityValidator profanityValidator;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
+            final MenuProductsService menuProductsService,
             final ProfanityValidator profanityValidator
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
+        this.menuProductsService = menuProductsService;
         this.profanityValidator = profanityValidator;
     }
 
@@ -43,7 +48,12 @@ public class ProductService {
         product.changePrice(request);
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(Menu::changeProductPrice);
+        menus.forEach(menu -> {
+            if (menuProductsService.isOverThanProductSumPrice(menu.getMenuProducts(),
+                    menu.getMenuPrice())) {
+                menu.hide();
+            }
+        });
         return product;
     }
 

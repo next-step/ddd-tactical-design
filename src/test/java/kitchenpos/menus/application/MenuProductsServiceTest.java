@@ -52,8 +52,9 @@ class MenuProductsServiceTest {
 
     @Test
     void 메뉴상품들_생성시_메뉴상품들이_비어있을_경우_예외를_던진다() {
-        assertThatThrownBy(() -> menuProductsService.create(new MenuProductCreateRequests(List.of()),
-                new MenuPrice(BigDecimal.valueOf(30_000L))))
+        assertThatThrownBy(
+                () -> menuProductsService.create(new MenuProductCreateRequests(List.of()),
+                        new MenuPrice(BigDecimal.valueOf(30_000L))))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
