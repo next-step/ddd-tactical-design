@@ -34,11 +34,11 @@ public class EatInOrderCreator {
   }
 
   private List<EatInOrderLineItem> createOrderLineItems(OrderCreateCommand command) {
-    List<OrderLineItemCreateCommand> orderLineItemList = command.getOrderLineItems();
-    validateOrderLineItemSize(orderLineItemList);
-    Map<UUID, OrderedMenu> orderedMenus = getOrderedMenus(orderLineItemList);
+    List<OrderLineItemCreateCommand> orderLineItemCreateCommands = command.getOrderLineItems();
+    validateOrderLineItemSize(orderLineItemCreateCommands);
+    Map<UUID, OrderedMenu> orderedMenus = getOrderedMenus(orderLineItemCreateCommands);
     List<EatInOrderLineItem> orderLineItems = new ArrayList<>();
-    for (OrderLineItemCreateCommand orderLineItem : orderLineItemList) {
+    for (OrderLineItemCreateCommand orderLineItem : orderLineItemCreateCommands) {
       if (!orderedMenus.containsKey(orderLineItem.getMenuId())) {
         throw new NoSuchElementException();
       }
@@ -61,20 +61,20 @@ public class EatInOrderCreator {
   }
 
   private Map<UUID, OrderedMenu> getOrderedMenus(
-      List<OrderLineItemCreateCommand> orderLineItemList) {
-    List<UUID> menuIds = orderLineItemList.stream()
+      List<OrderLineItemCreateCommand> orderLineItemCreateCommands) {
+    List<UUID> menuIds = orderLineItemCreateCommands.stream()
         .map(OrderLineItemCreateCommand::getMenuId)
         .toList();
     Map<UUID, OrderedMenu> orderedMenuMap = orderedMenuReader.findAllByIdIn(menuIds)
         .stream()
         .collect(Collectors.toMap(OrderedMenu::getMenuId, menu -> menu));
-    validateExistsMenu(orderLineItemList, orderedMenuMap);
+    validateExistsMenu(orderLineItemCreateCommands, orderedMenuMap);
     return orderedMenuMap;
   }
 
-  private void validateExistsMenu(List<OrderLineItemCreateCommand> orderLineItemList,
+  private void validateExistsMenu(List<OrderLineItemCreateCommand> orderLineItemCreateCommands,
       Map<UUID, OrderedMenu> orderedMenuMap) {
-    if (orderLineItemList.size() != orderedMenuMap.values().size()) {
+    if (orderLineItemCreateCommands.size() != orderedMenuMap.values().size()) {
       throw new IllegalArgumentException();
     }
   }
