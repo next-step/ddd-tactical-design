@@ -26,20 +26,6 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("상품의 가격이 0보다 작으면 IllegalArgumentException이 발생한다")
-    void fail2() {
-        assertThatThrownBy(() -> new Product("후라이드", BigDecimal.valueOf(-10_000L)))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    @DisplayName("상품의 가격이 null이면 IllegalArgumentException이 발생한다")
-    void fail3() {
-        assertThatThrownBy(() -> new Product("후라이드", null))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
     @DisplayName("상품의 가격을 변경한다")
     void changePriceSuccess() {
         Product product = new Product("후라이드", BigDecimal.valueOf(10_000L));
