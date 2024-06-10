@@ -1,7 +1,10 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
-import org.apache.commons.lang3.StringUtils;
+import kitchenpos.products.tobe.application.dto.ProductResponse;
+import kitchenpos.shared.domain.Price;
+import kitchenpos.shared.domain.Profanities;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -10,20 +13,20 @@ import java.util.UUID;
 public class TobeProduct {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
-    private final UUID id;
+    private UUID id;
 
     @Embedded
-    private final DisplayedName name;
+    private DisplayedName name;
 
     @Embedded
     private Price price;
 
+    protected TobeProduct() {
+    }
+
     public TobeProduct(UUID id, String name, int price, Profanities profanities) {
-        if (StringUtils.isBlank(name) || profanities.contains(name)) {
-            throw new IllegalArgumentException();
-        }
         this.id = id;
-        this.name = DisplayedName.of(name);
+        this.name = DisplayedName.of(name, profanities);
         this.price = Price.of(price);
     }
 
@@ -31,12 +34,20 @@ public class TobeProduct {
         this.price = Price.of(price);
     }
 
+    public void changePrice(Price price) {
+        this.price = price;
+    }
+
     public String getName() {
         return name.getName();
     }
 
-    public int getPrice() {
-        return price.getPrice();
+    public Price getPrice() {
+        return price;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     @Override
@@ -46,5 +57,14 @@ public class TobeProduct {
                 ", name=" + name +
                 ", price=" + price +
                 '}';
+    }
+
+    @NotNull
+    public ProductResponse toDto() {
+        return new ProductResponse(
+                this.id,
+                this.name.getName(),
+                this.price.getPrice()
+        );
     }
 }

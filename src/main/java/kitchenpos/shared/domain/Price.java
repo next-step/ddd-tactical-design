@@ -1,15 +1,20 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.shared.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.menus.tobe.domain.menu.Quantity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class Price implements Comparable<Price> {
 
     @Column(name = "price", nullable = false)
-    private final int price;
+    private int price;
+
+    protected Price() {
+    }
 
     private Price(int price) {
         this.price = price;
@@ -37,5 +42,18 @@ public class Price {
     @Override
     public int hashCode() {
         return Objects.hashCode(price);
+    }
+
+    @Override
+    public int compareTo(@NotNull Price other) {
+        return this.price - other.price;
+    }
+
+    public boolean isGreaterThan(int price) {
+        return this.price - price > 0;
+    }
+
+    public int multiply(Quantity quantity) {
+        return this.price * quantity.getQuantity();
     }
 }

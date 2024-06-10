@@ -1,9 +1,14 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.share.domain.FakeProfanities;
+import kitchenpos.shared.domain.Price;
+import kitchenpos.shared.domain.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 import java.util.UUID;
 
@@ -45,14 +50,15 @@ class TobeProductTest {
         void case_3() {
             // given
             var product = createProduct(10_000);
-            var targetPrice = 6_000;
+            var newPrice = 6_000;
 
             // when
-            product.changePrice(targetPrice);
+            product.changePrice(newPrice);
 
             // then
-            var price = product.getPrice();
-            assertThat(price).isEqualTo(targetPrice);
+            var changedPrice = product.getPrice();
+            var expectedPrice = Price.of(newPrice);
+            assertThat(changedPrice).isEqualTo(expectedPrice);
         }
 
         @DisplayName("상품의 가격이 0원 미만이면 가격을 변경할 수 있다.")
@@ -80,15 +86,12 @@ class TobeProductTest {
         }
 
         @DisplayName("상품의 이름이 존재해야 한다.")
-        @Test
-        void case_1() {
-            // given
-            var name = "";
-
+        @NullAndEmptySource
+        @ParameterizedTest
+        void case_1(String name) {
             // when
             // then
             assertThatIllegalArgumentException().isThrownBy(() -> createProduct(name, profanities));
-            assertThatIllegalArgumentException().isThrownBy(() -> createProduct(null, profanities));
         }
 
         @DisplayName("상품의 이름에 비속어가 포함될 수 없다.")
@@ -114,12 +117,6 @@ class TobeProductTest {
             // then
             assertThat(product.getName()).isEqualTo(name);
         }
-    }
-
-    private static TobeProduct createProduct() {
-        var name = "후라이드";
-        var price = 10_000;
-        return createProduct(name, price);
     }
 
     private static TobeProduct createProduct(int price) {
