@@ -1,6 +1,7 @@
 package kitchenpos.products.ui.request;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import kitchenpos.products.infra.ProductProfanity;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductName;
@@ -14,6 +15,7 @@ public class ProductCreateRequest {
 
     private final ProductPrice price;
 
+    @JsonCreator
     public ProductCreateRequest(final String name, final BigDecimal price) {
         this(new ProductName(name), new ProductPrice(price));
     }
