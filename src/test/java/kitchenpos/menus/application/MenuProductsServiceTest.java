@@ -68,6 +68,20 @@ class MenuProductsServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void 메뉴상품들_생성시_메뉴가격이_메뉴상품들의_가격합보다_큰지_여부를_확인한다() {
+        MenuProductCreateRequests createRequests = MenuProductFixture.createRequests(
+                createFriedProduct(), 2);
+        MenuProducts menuProducts = menuProductsService.create(createRequests,
+                new MenuPrice(BigDecimal.valueOf(40_000L)));
+
+        boolean actual = menuProductsService.isOverThanProductSumPrice(
+                menuProducts.getMenuProducts(),
+                new MenuPrice(BigDecimal.valueOf(50_000L)));
+
+        assertThat(actual).isTrue();
+    }
+
     private Product createFriedProduct() {
         return productRepository.save(ProductFixture.createFired());
     }

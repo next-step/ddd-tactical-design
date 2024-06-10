@@ -43,7 +43,7 @@ public class MenuProductsService {
     }
 
     public void validateMenuPrice(List<MenuProduct> menuProducts, MenuPrice price) {
-        if (price.isOver(calculateProductSumPrice(menuProducts))) {
+        if (isOverThanProductSumPrice(menuProducts, price)) {
             throw new IllegalArgumentException();
         }
     }
