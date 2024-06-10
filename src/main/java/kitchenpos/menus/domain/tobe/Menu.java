@@ -28,13 +28,7 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    private UUID menuGroupId;
 
     @Embedded
     private DisplayedMenu displayed;
@@ -42,26 +36,22 @@ public class Menu {
     @Embedded
     private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     protected Menu() {
     }
 
     public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, DisplayedMenu displayed,
             MenuProducts menuProducts) {
-        this(UUID.randomUUID(), name, price, menuGroup, displayed, menuProducts, menuGroup.getId());
+        this(UUID.randomUUID(), name, price, menuGroup.getId(), displayed, menuProducts);
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup,
-            DisplayedMenu displayed, MenuProducts menuProducts, UUID menuGroupId) {
+    public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId,
+            DisplayedMenu displayed, MenuProducts menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroupId = menuGroupId;
     }
 
     public void changePrice(MenuPrice price) {
