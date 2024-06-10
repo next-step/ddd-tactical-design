@@ -65,18 +65,10 @@ public class Menu {
     }
 
     public void changePrice(MenuPrice price) {
-        menuProducts.validatePrice(price);
         this.price = price;
     }
 
-    public void changeProductPrice() {
-        if (menuProducts.isOverThanProductSumPrice(this.price)) {
-            hide();
-        }
-    }
-
     public void display() {
-        menuProducts.validatePrice(this.price);
         this.displayed = new DisplayedMenu(true);
     }
 
@@ -90,6 +82,10 @@ public class Menu {
 
     public UUID getId() {
         return id;
+    }
+
+    public MenuPrice getMenuPrice() {
+        return price;
     }
 
     public BigDecimal getPrice() {

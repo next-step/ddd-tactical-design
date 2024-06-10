@@ -1,12 +1,12 @@
 package kitchenpos.menus.ui.dto;
 
 import java.util.UUID;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menu.DisplayedMenu;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuName;
 import kitchenpos.menus.domain.tobe.menu.MenuPrice;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.products.domain.ProfanityValidator;
 
 public class MenuCreateRequest {

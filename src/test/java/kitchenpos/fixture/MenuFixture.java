@@ -6,10 +6,10 @@ import kitchenpos.menus.domain.tobe.menu.DisplayedMenu;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuName;
 import kitchenpos.menus.domain.tobe.menu.MenuPrice;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.menu.MenuQuantity;
+import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
@@ -32,7 +32,8 @@ public class MenuFixture {
         MenuName menuName = new MenuName(name);
         MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(price));
         DisplayedMenu displayedMenu = new DisplayedMenu(displayed);
-        MenuProductCreateRequests menuProducts = MenuProductFixture.createRequests(product, quantity);
+        MenuProductCreateRequests menuProducts = MenuProductFixture.createRequests(product,
+                quantity);
 
         if (menuGroup != null) {
             return new MenuCreateRequest(menuName, menuPrice, menuGroup.getId(), displayedMenu,
@@ -51,7 +52,7 @@ public class MenuFixture {
         MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(30_000L));
         DisplayedMenu displayedMenu = new DisplayedMenu(true);
         MenuProducts menuProducts = new MenuProducts(
-                List.of(new MenuProduct(product, new MenuQuantity(2))), menuPrice);
+                List.of(new MenuProduct(product, new MenuQuantity(2))));
 
         return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
     }
