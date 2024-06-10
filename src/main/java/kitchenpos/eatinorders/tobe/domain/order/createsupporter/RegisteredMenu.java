@@ -4,13 +4,13 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.supports.domain.tobe.Price;
 
-public class OrderedMenu {
+public class RegisteredMenu {
 
   private final UUID menuId;
   private final boolean displayed;
   private final Price price;
 
-  public OrderedMenu(UUID menuId, boolean displayed, Price price) {
+  public RegisteredMenu(UUID menuId, boolean displayed, Price price) {
     this.menuId = Objects.requireNonNull(menuId);
     this.displayed = displayed;
     this.price = Objects.requireNonNull(price);

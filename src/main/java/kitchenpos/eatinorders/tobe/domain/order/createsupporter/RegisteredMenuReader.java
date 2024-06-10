@@ -3,7 +3,7 @@ package kitchenpos.eatinorders.tobe.domain.order.createsupporter;
 import java.util.List;
 import java.util.UUID;
 
-public interface OrderedMenuReader {
+public interface RegisteredMenuReader {
 
-  List<OrderedMenu> findAllByIdIn(List<UUID> menuIds);
+  List<RegisteredMenu> findAllByIdIn(List<UUID> menuIds);
 }

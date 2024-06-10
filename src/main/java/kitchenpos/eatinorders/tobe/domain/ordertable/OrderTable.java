@@ -104,7 +104,7 @@ public class OrderTable {
 
   @Override
   public String toString() {
-    return "OrderTable{" +
+    return "RegisteredOrderTable{" +
         "id=" + id +
         ", name=" + name +
         ", numberOfGuests=" + numberOfGuests +

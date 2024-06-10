@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class OrderTableTest {
+class RegisteredOrderTableTest {
 
   @DisplayName("주문테이블을 등록할 수 있다.")
   @Test

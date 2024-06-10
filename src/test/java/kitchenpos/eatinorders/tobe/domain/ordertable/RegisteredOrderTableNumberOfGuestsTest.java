@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class OrderTableNumberOfGuestsTest {
+class RegisteredOrderTableNumberOfGuestsTest {
 
   @DisplayName("주문테이블의 인원을 생성할 수 있다.")
   @Test
