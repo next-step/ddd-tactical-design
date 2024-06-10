@@ -131,7 +131,7 @@ docker compose -p kitchenpos up -d
     - 주문 종료               | COMPLETED   | 판매자가 주문을 종료시킨 상태
 ---
 - 주문 테이블                    | OrderTable           | 매장 주문 요청 고객이 상품을 소비하는 좌석
-- 비어있는 주문 테이블              | AvailableOrderTable | 주문완료가 되지 않은 주문이 존재하지 않아 사용이 가능한 좌석
+- 비어있는 주문 테이블              | NotOccupiedOrderTable | 주문완료가 되지 않은 주문이 존재하지 않아 사용이 가능한 좌석
 ---
 - 판매자                         | Seller   | 가게 운영하는 사용자
 - 고객                          | Customer | 손님
@@ -141,12 +141,36 @@ docker compose -p kitchenpos up -d
 
 ## 모델링
 - MenuGroup은 name을 가지고있다
+
+
 - Product은 name과 price를 가지고있다
 - Menu는 반드시 하나의 MenuGroup에 속해야한다
 - Menu의 price와 name과 displayStatus를 가진다
 - MenuProduct은 지정한 상품의 quantity와 price와 productId를 가진다
   - quantity는 0보다 크거나 같아야한다
   - Menu의 price는 MenuProduct Price의 합보다 작거나 같아야한다
-- OrderLineItem은 menuPrice, quantity를 가진다
-- OrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
+
+
+- OrderTable은 name, numberOfGuests, occupied를 가진다
+- EatInOrder가 Completed될 경우 Not Occupied table은 clear
+
+
+- EatInOrder는 status, orderDateTime, eatOrderLineItems, orderTableId를 가진다
+  - status는 WAITING, ACCEPTED, SERVED, COMPLETED 중 하나
+- EatInOrderLineItem은 menuPrice, quantity를 가진다
+- EatInOrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
+
+
+- DeliveryOrder는 status, orderDate, deliveryOrderLineItems, deliveryAddress를 가진다
+  - status는 WAITING, ACCEPTED, SERVED, DELIVERING, DELIVERED, COMPLETED 중 하나
+- DeliveryOrderLineItem은 menPrice, quantity를 가진다
+- DeliveryOrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
+- DeliveryOrder이 accept되면 deliveryClient에 requestDelivery
+
+
+- TakeoutOrder는 status, orderDate, takeoutOrderLineItems를 가진다
+  - status는 WAITING, ACCEPTED, SERVED, COMPLETED 중 하나
+- TakeoutOrderLineItem은 menPrice, quantity를 가진다
+- TakeoutOrderLineItem의 menuPrice와 menu의 Price가 다를 경우 주문이 불가능하다
+
 <img width="1503" alt="Screenshot 2024-05-22 at 9 11 40 PM" src="https://github.com/next-step/ddd-strategic-design/assets/124428341/1bb3da02-bdab-4101-a33d-e7bcc4278a26">

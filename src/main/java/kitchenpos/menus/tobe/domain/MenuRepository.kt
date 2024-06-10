@@ -10,4 +10,6 @@ interface MenuRepository {
     fun findAllByProductId(productId: UUID): List<Menu>
 
     fun findById(menuId: UUID): Optional<Menu>
+
+    fun findByIdIn(menuIds: List<UUID>): List<Menu>
 }

@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.application
 
 import kitchenpos.common.Price
-import kitchenpos.products.domain.ProductPriceChanged
+import kitchenpos.products.tobe.event.ProductPriceChanged
 import kitchenpos.products.tobe.domain.*
 import kitchenpos.products.tobe.dto.int.ProductCreateRequest
 import kitchenpos.products.tobe.dto.out.ProductResponse

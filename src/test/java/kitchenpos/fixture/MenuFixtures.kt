@@ -2,7 +2,7 @@ package kitchenpos.fixture
 
 import kitchenpos.common.Price
 import kitchenpos.common.price
-import kitchenpos.menus.application.tobe.FakeMenuNameValidator
+import kitchenpos.menus.tobe.FakeMenuNameValidator
 import kitchenpos.menus.tobe.domain.*
 import kitchenpos.menus.tobe.dto.`in`.MenuCreateRequest
 import kitchenpos.menus.tobe.dto.`in`.MenuProductCreateRequest

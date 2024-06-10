@@ -1,4 +1,4 @@
-package kitchenpos.menus.application.tobe
+package kitchenpos.menus.tobe
 
 import kitchenpos.common.price
 import kitchenpos.fixture.MenuFixtures

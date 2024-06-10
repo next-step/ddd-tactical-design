@@ -14,7 +14,8 @@ class MenuProducts(
     val items: List<MenuProduct>
 ) {
     val totalPrice: Price
-        get() = items.map { it.price }.foldRight(ZERO) { acc, price -> acc + price }
+        get() = items.map { it.price * it.quantity.value }
+            .foldRight(ZERO) { acc, price -> acc + price }
 
     init {
         require(items.isNotEmpty()) { "적어도 1개 이상의 상품을 등록해야합니다" }
@@ -22,7 +23,7 @@ class MenuProducts(
 
     //연관관계 편의 메소드
     fun apply(menu: Menu) {
-        items.forEach { it.menu = menu }
+        items.forEach { it.apply(menu) }
     }
 
     fun changeMenuProduct(productId: UUID, productPrice: Price) {
