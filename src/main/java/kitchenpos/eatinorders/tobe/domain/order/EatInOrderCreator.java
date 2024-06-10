@@ -35,23 +35,25 @@ public class EatInOrderCreator {
 
   private List<EatInOrderLineItem> createOrderLineItems(OrderCreateCommand command) {
     List<OrderLineItemCreateCommand> orderLineItemCreateCommands = command.getOrderLineItems();
-    validateOrderLineItemSize(orderLineItemCreateCommands);
     Map<UUID, OrderedMenu> orderedMenus = getOrderedMenus(orderLineItemCreateCommands);
     List<EatInOrderLineItem> orderLineItems = new ArrayList<>();
     for (OrderLineItemCreateCommand orderLineItem : orderLineItemCreateCommands) {
-      if (!orderedMenus.containsKey(orderLineItem.getMenuId())) {
-        throw new NoSuchElementException();
-      }
       OrderedMenu orderedMenu = orderedMenus.get(orderLineItem.getMenuId());
-      validatePurchasable(orderedMenu, orderLineItem.getPrice());
-      EatInOrderLineItem eatInOrderLineItem = new EatInOrderLineItem(orderLineItem.getQuantity(),
-          orderedMenu.getMenuId(), orderLineItem.getPrice());
+      EatInOrderLineItem eatInOrderLineItem = createEatInOrderLineItem(orderedMenu, orderLineItem);
       orderLineItems.add(eatInOrderLineItem);
     }
     return orderLineItems;
   }
 
+  private EatInOrderLineItem createEatInOrderLineItem(OrderedMenu orderedMenu, OrderLineItemCreateCommand command) {
+    validatePurchasable(orderedMenu, command.getPrice());
+    return new EatInOrderLineItem(command.getQuantity(), orderedMenu.getMenuId(), command.getPrice());
+  }
+
   private void validatePurchasable(OrderedMenu orderedMenu, Price price) {
+    if(Objects.isNull(orderedMenu)) {
+      throw new NoSuchElementException();
+    }
     if (!orderedMenu.isDisplayed()) {
       throw new IllegalStateException();
     }
@@ -62,6 +64,7 @@ public class EatInOrderCreator {
 
   private Map<UUID, OrderedMenu> getOrderedMenus(
       List<OrderLineItemCreateCommand> orderLineItemCreateCommands) {
+    validateOrderLineItemSize(orderLineItemCreateCommands);
     List<UUID> menuIds = orderLineItemCreateCommands.stream()
         .map(OrderLineItemCreateCommand::getMenuId)
         .toList();
