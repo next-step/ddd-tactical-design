@@ -1,81 +1,57 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductPriceChangedEvent;
+import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.domain.PurgomalumClient;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+  private final ProductRepository productRepository;
+  private final PurgomalumClient purgomalumClient;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
-    ) {
-        this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
-    }
+  public ProductService(
+      final ProductRepository productRepository,
+      final PurgomalumClient purgomalumClient,
+      final ApplicationEventPublisher applicationEventPublisher) {
+    this.productRepository = productRepository;
+    this.purgomalumClient = purgomalumClient;
+    this.applicationEventPublisher = applicationEventPublisher;
+  }
 
-    @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
-    }
+  @Transactional
+  public ProductResponse create(final ProductRequest productRequest) {
+    final Product product =
+        productRepository.save(
+            Product.create(productRequest.getName(), productRequest.getPrice(), purgomalumClient));
+    return ProductResponse.of(product);
+  }
 
-    @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-        return product;
-    }
+  @Transactional
+  public ProductResponse changePrice(final UUID productId, final ProductRequest productRequest) {
+    final Product product =
+        productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
+    product.changePrice(productRequest.getPrice());
+    this.menusProductPriceChanges(productId, productRequest.getPrice());
 
-    @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
+    return ProductResponse.of(product);
+  }
+
+  @Transactional(readOnly = true)
+  public List<ProductResponse> findAll() {
+    List<Product> products = productRepository.findAll();
+    return products.stream().map(ProductResponse::of).toList();
+  }
+
+  private void menusProductPriceChanges(UUID productId, BigDecimal price) {
+    applicationEventPublisher.publishEvent(new ProductPriceChangedEvent(this, productId, price));
+  }
 }

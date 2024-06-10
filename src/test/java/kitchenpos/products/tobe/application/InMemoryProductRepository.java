@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
