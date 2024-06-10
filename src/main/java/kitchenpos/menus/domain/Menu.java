@@ -12,7 +12,7 @@ import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 
 @Table(name = "menu")
 //@Entity

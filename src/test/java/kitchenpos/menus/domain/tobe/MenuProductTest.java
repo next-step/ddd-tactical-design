@@ -1,9 +1,11 @@
-package kitchenpos.menus.domain.tobe.menu;
+package kitchenpos.menus.domain.tobe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import kitchenpos.fixture.ProductFixture;
+import kitchenpos.menus.domain.tobe.MenuProduct;
+import kitchenpos.menus.domain.tobe.MenuQuantity;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;

@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.Menu;
 
 @Table(name = "order_line_item")
 @Entity

@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menus.application.MenuProductsService;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.tobe.menu.Menu;
+import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;

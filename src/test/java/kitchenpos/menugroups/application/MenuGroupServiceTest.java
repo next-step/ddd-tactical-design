@@ -1,13 +1,14 @@
-package kitchenpos.menus.application;
+package kitchenpos.menugroups.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import java.util.List;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
-import kitchenpos.menus.domain.MenuGroupRepository;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.domain.tobe.menugroup.MenuGroupName;
+import kitchenpos.menugroups.application.MenuGroupService;
+import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
+import kitchenpos.menugroups.domain.tobe.MenuGroupName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;

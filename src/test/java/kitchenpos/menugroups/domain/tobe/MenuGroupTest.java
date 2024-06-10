@@ -1,8 +1,9 @@
-package kitchenpos.menus.domain.tobe.menugroup;
+package kitchenpos.menugroups.domain.tobe;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

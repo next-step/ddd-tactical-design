@@ -1,4 +1,4 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menugroups.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
