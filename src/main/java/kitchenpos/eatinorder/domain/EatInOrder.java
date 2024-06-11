@@ -1,4 +1,4 @@
-package kitchenpos.order.domain;
+package kitchenpos.eatinorder.domain;
 
 import jakarta.persistence.*;
 
@@ -8,14 +8,10 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class Order {
+public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
-
-    @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
@@ -26,28 +22,25 @@ public class Order {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+            name = "order_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
     private List<OrderLineItem> orderLineItems;
 
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
     @ManyToOne
     @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+            name = "order_table_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
     )
     private OrderTable orderTable;
 
     @Transient
     private UUID orderTableId;
 
-    public Order() {
+    public EatInOrder() {
     }
 
     public UUID getId() {
@@ -56,14 +49,6 @@ public class Order {
 
     public void setId(final UUID id) {
         this.id = id;
-    }
-
-    public OrderType getType() {
-        return type;
-    }
-
-    public void setType(final OrderType type) {
-        this.type = type;
     }
 
     public OrderStatus getStatus() {
@@ -88,14 +73,6 @@ public class Order {
 
     public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(final String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
     }
 
     public OrderTable getOrderTable() {
