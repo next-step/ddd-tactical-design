@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menus.tobe.domain.menu.Menu;
 
 import java.math.BigDecimal;
 import java.util.UUID;

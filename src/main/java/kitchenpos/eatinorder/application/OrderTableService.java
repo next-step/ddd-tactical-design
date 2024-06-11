@@ -1,9 +1,10 @@
 package kitchenpos.eatinorder.application;
 
-import kitchenpos.eatinorder.domain.OrderRepository;
-import kitchenpos.eatinorder.domain.OrderStatus;
-import kitchenpos.eatinorder.domain.OrderTable;
-import kitchenpos.eatinorder.domain.OrderTableRepository;
+import kitchenpos.eatinorder.tobe.domain.OrderRepository;
+import kitchenpos.eatinorder.tobe.domain.OrderStatus;
+import kitchenpos.eatinorder.tobe.domain.OrderTable;
+import kitchenpos.eatinorder.tobe.domain.OrderTableRepository;
+import kitchenpos.eatinorder.tobe.domain.OrderTableName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +26,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable create(final OrderTable request) {
         final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName(name);
-        orderTable.setNumberOfGuests(0);
-        orderTable.setOccupied(false);
+        OrderTable.of(OrderTableName.of(name));
         return orderTableRepository.save(orderTable);
     }
 

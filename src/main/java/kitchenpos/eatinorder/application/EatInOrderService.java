@@ -1,8 +1,8 @@
 package kitchenpos.eatinorder.application;
 
 import kitchenpos.eatinorder.domain.*;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
+import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +45,10 @@ public class EatInOrderService {
 
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
+            if (!menu.isMenuDisplayStatus()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (menu.getMenuPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
