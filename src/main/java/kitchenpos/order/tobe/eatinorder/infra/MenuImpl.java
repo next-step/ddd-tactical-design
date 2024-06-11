@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class MenuProductImpl implements MenuClient {
+public class MenuImpl implements MenuClient {
     private final MenuRepository menuRepository;
 
-    public MenuProductImpl(MenuRepository menuRepository) {
+    public MenuImpl(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
