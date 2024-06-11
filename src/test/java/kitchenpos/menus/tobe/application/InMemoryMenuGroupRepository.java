@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.domain.menugroup.MenuGroup;
+import kitchenpos.menus.domain.menugroup.MenuGroupRepository;
 
 public class InMemoryMenuGroupRepository implements MenuGroupRepository {
   private final Map<UUID, MenuGroup> menuGroups = new HashMap<>();

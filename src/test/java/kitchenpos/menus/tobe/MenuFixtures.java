@@ -3,9 +3,9 @@ package kitchenpos.menus.tobe;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import kitchenpos.menus.tobe.application.FakeMenuPurgomalumClient;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.menugroup.MenuGroup;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.tobe.ProductFixtures;
 
