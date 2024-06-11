@@ -15,8 +15,8 @@ public class OrderTable {
     @Embedded
     private OrderTableName name;
 
-    @Column(name = "number_of_guests", nullable = false)
-    private int numberOfGuests;
+    @Embedded
+    private NumberOfGuests numberOfGuests;
 
     @Column(name = "occupied", nullable = false)
     private boolean occupied;
@@ -28,7 +28,7 @@ public class OrderTable {
         return new OrderTable(UUID.randomUUID(), name, 0, false);
     }
 
-    private OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
+    private OrderTable(UUID id, OrderTableName name, NumberOfGuests numberOfGuests, boolean occupied) {
         this.id = id;
         this.name = name;
         this.numberOfGuests = numberOfGuests;
@@ -44,7 +44,7 @@ public class OrderTable {
     }
 
     public int getNumberOfGuests() {
-        return numberOfGuests;
+        return numberOfGuests.getNum();
     }
 
     public boolean isOccupied() {
