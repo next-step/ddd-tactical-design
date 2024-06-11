@@ -17,10 +17,10 @@ import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.OrderFixture;
 import kitchenpos.fixture.OrderTableFixture;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
 import kitchenpos.orders.common.domain.OrderRepository;
@@ -76,7 +76,7 @@ class OrderServiceTest {
     @Test
     void 노출되지_않은_메뉴를_주문하면_예외를_던진다() {
         Menu friedMenu = createFriedMenu();
-        friedMenu.setDisplayed(false);
+        friedMenu.hide();
         Order createRequest = OrderFixture.createTakeOutRequest(
                 createOrderLineItem(friedMenu));
 

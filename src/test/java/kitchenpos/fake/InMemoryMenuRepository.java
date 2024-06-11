@@ -8,9 +8,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.menus.domain.tobe.MenuProduct;
 
 public class InMemoryMenuRepository implements MenuRepository {
 

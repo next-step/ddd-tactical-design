@@ -2,9 +2,9 @@ package kitchenpos.products.ui.dto;
 
 import java.math.BigDecimal;
 import kitchenpos.products.domain.ProfanityValidator;
+import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductName;
 import kitchenpos.products.domain.tobe.ProductPrice;
-import kitchenpos.products.domain.tobe.Product;
 
 public class ProductCreateRequest {
 

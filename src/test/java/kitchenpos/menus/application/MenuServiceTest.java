@@ -14,10 +14,12 @@ import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.menus.domain.tobe.MenuPrice;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
+import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
@@ -40,13 +42,15 @@ class MenuServiceTest {
 
     @BeforeEach
     void setUp() {
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository,
-                profanityValidator);
+        MenuProductsService menuProductService = new MenuProductsService(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, profanityValidator,
+                menuProductService);
     }
 
     @Test
     void 상품들을_조합하여_메뉴를_생성한다() {
-        Menu createRequest = MenuFixture.createRequest(30_000L, createChickenMenuGroup(),
+        MenuCreateRequest createRequest = MenuFixture.createRequest(30_000L,
+                createChickenMenuGroup(),
                 createFriedProduct(), 2);
 
         Menu actual = menuService.create(createRequest);
@@ -56,7 +60,8 @@ class MenuServiceTest {
 
     @Test
     void 메뉴에_상품이_1개_이상_존재하지_않으면_예외를_던진다() {
-        Menu createRequest = MenuFixture.createRequest(30_000L, createChickenMenuGroup(),
+        MenuCreateRequest createRequest = MenuFixture.createRequest(30_000L,
+                createChickenMenuGroup(),
                 createFriedProduct(), 0);
 
         assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(createRequest));
@@ -65,7 +70,8 @@ class MenuServiceTest {
 
     @Test
     void 메뉴이름에_욕설이나_부적절한_언어를_사용하면_예외를_던진다() {
-        Menu createRequest = MenuFixture.createRequest("욕설", 30_000L, createChickenMenuGroup(),
+        MenuCreateRequest createRequest = MenuFixture.createRequest("욕설", 30_000L,
+                createChickenMenuGroup(),
                 createFriedProduct(), 2);
 
         assertThatIllegalArgumentException().isThrownBy(() -> menuService.create(createRequest));
@@ -73,7 +79,8 @@ class MenuServiceTest {
 
     @Test
     void 메뉴는_메뉴그룹에_속하지않으면_예외를_던진다() {
-        Menu createRequest = MenuFixture.createRequest(30_000L, null, createFriedProduct(), 2);
+        MenuCreateRequest createRequest = MenuFixture.createRequest(30_000L, null,
+                createFriedProduct(), 2);
 
         assertThatThrownBy(() -> menuService.create(createRequest)).isInstanceOf(
                 NoSuchElementException.class);
@@ -81,16 +88,16 @@ class MenuServiceTest {
 
     @Test
     void 메뉴가격은_0보다_작으면_예외를_던진다() {
-        Menu createRequest = MenuFixture.createRequest(-20_000L, createChickenMenuGroup(),
-                createFriedProduct(), 2);
-
-        assertThatThrownBy(() -> menuService.create(createRequest)).isInstanceOf(
+        assertThatThrownBy(() -> menuService.create(
+                MenuFixture.createRequest(-20_000L, createChickenMenuGroup(),
+                        createFriedProduct(), 2))).isInstanceOf(
                 IllegalArgumentException.class);
     }
 
     @Test
     void 메뉴가격은_상품가격x상품갯수의_총합을_넘으면_예외를_던진다() {
-        Menu createRequest = MenuFixture.createRequest(50_000L, createChickenMenuGroup(),
+        MenuCreateRequest createRequest = MenuFixture.createRequest(50_000L,
+                createChickenMenuGroup(),
                 createFriedProduct(), 2);
 
         assertThatThrownBy(() -> menuService.create(createRequest)).isInstanceOf(
@@ -104,7 +111,7 @@ class MenuServiceTest {
                         2));
 
         Menu actual = menuService.changePrice(saved.getId(),
-                MenuFixture.changePriceRequest(40_000L));
+                new MenuPrice(BigDecimal.valueOf(40_000L)));
 
         assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(40_000L));
     }
@@ -116,7 +123,7 @@ class MenuServiceTest {
                         2));
 
         assertThatThrownBy(() -> menuService.changePrice(saved.getId(),
-                MenuFixture.changePriceRequest(-40_000L))).isInstanceOf(
+                new MenuPrice(BigDecimal.valueOf(-40_000L)))).isInstanceOf(
                 IllegalArgumentException.class);
     }
 

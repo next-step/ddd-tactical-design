@@ -21,4 +21,8 @@ public class ProductFixture {
     public static Product createFired() {
         return new Product("후라이드", BigDecimal.valueOf(20_000L));
     }
+
+    public static Product createSeasoned() {
+        return new Product("양념", BigDecimal.valueOf(22_000L));
+    }
 }

@@ -1,8 +1,9 @@
-package kitchenpos.menus.domain;
+package kitchenpos.menugroups.domain;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 
 public interface MenuGroupRepository {
 
