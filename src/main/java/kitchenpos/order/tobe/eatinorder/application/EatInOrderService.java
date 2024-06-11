@@ -62,7 +62,7 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder complete(final UUID orderId) {
         EatInOrder order = findOrderById(orderId);
-        boolean allOrdersCompletedForTable = !eatInOrderRepository.existsByOrderTableAndStatusNot(order.getOrderTable(), OrderStatus.COMPLETED);
+        boolean allOrdersCompletedForTable = !eatInOrderRepository.existsByOrderTableAndStatusNot(order.getOrderTable(), EatInOrderStatus.COMPLETED);
 
         order.complete(allOrdersCompletedForTable);
 

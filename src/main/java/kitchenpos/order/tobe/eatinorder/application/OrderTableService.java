@@ -4,7 +4,7 @@ package kitchenpos.order.tobe.eatinorder.application;
 import kitchenpos.order.tobe.eatinorder.application.dto.request.OrderTableChangeNumberRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.request.OrderTableCreateRequest;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.tobe.eatinorder.domain.OrderStatus;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = findOrderTableById(orderTableId);
 
-        if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
 

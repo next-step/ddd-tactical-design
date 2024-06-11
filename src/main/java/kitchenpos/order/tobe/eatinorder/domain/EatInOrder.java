@@ -16,7 +16,7 @@ public class EatInOrder {
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
@@ -35,10 +35,9 @@ public class EatInOrder {
     protected EatInOrder() {
     }
 
-    public EatInOrder(UUID id, OrderType type, OrderLineItems orderLineItems, OrderTable orderTable) {
+    public EatInOrder(UUID id, OrderLineItems orderLineItems, OrderTable orderTable) {
         this.id = id;
-        this.type = type;
-        this.status = OrderStatus.WAITING;
+        this.status = EatInOrderStatus.WAITING;
         this.orderDateTime = LocalDateTime.now();
         this.orderLineItems = orderLineItems;
         if (!orderTable.isOccupied()) {
@@ -48,25 +47,25 @@ public class EatInOrder {
     }
 
     public void accept() {
-        if (this.status != OrderStatus.WAITING) {
+        if (this.status != EatInOrderStatus.WAITING) {
             throw new IllegalStateException("주문 접수중인 주문만 주문 수락 할 수 있습니다.");
         }
-        status = OrderStatus.ACCEPTED;
+        status = EatInOrderStatus.ACCEPTED;
     }
 
     public void serve() {
-        if (this.status != OrderStatus.ACCEPTED) {
+        if (this.status != EatInOrderStatus.ACCEPTED) {
             throw new IllegalStateException("주문 수락된 주문만 준비완료로 변경할 수 있습니다.");
         }
-        status = OrderStatus.SERVED;
+        status = EatInOrderStatus.SERVED;
     }
 
     public void complete(boolean isLastOrderInTable) {
-        if (this.status != OrderStatus.SERVED) {
+        if (this.status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException("준비 완료된 주문만 주문 완료할 수 있습니다.");
         }
 
-        status = OrderStatus.COMPLETED;
+        status = EatInOrderStatus.COMPLETED;
 
         if (isLastOrderInTable) {
             orderTable.clear();
