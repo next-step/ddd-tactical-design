@@ -30,7 +30,6 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrderCreateRequest request) {
-        final OrderType type = OrderType.of(request.orderType());
         final List<OrderLineItem> orderLineItems = request.orderLineItems().stream()
                 .map(dto -> new OrderLineItem(dto.menuId(), dto.quantity(), dto.price()))
                 .toList();
@@ -38,7 +37,7 @@ public class EatInOrderService {
         OrderLineItems validatedOrderLineItems = new OrderLineItems(orderLineItems, menuValidator);
         OrderTable orderTable = findOrderTableById(request.orderTableId());
 
-        EatInOrder order = new EatInOrder(UUID.randomUUID(), type, validatedOrderLineItems, orderTable);
+        EatInOrder order = new EatInOrder(UUID.randomUUID(), validatedOrderLineItems, orderTable);
         return eatInOrderRepository.save(order);
     }
 

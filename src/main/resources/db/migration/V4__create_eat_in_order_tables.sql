@@ -1,7 +1,6 @@
 create table eat_in_order
 (
     id               binary(16) not null,
-    type             varchar(255) not null,
     status           varchar(255) not null,
     order_date_time  datetime(6) not null,
     order_table_id   binary(16),
