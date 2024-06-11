@@ -1,7 +1,5 @@
 package kitchenpos.products.infra;
 
-import kitchenpos.common.external.infra.ProfanityChecker;
-import kitchenpos.products.tobe.domain.ProductName;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
