@@ -84,7 +84,10 @@ public class Menu {
         return displayed;
     }
 
-    public void displayOn() {
+    public void displayOn(BigDecimal threshHoldPrice) {
+        if (this.price.compareTo(threshHoldPrice) > 0) {
+            throw new IllegalStateException();
+        }
         this.displayed = true;
     }
 

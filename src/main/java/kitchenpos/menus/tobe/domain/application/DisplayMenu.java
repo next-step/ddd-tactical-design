@@ -28,11 +28,7 @@ class DefaultDisplayMenu implements DisplayMenu {
         final Menu menu = menuRepository.findMenuById(menuId)
                                         .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity.execute(menu);
-
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.displayOn();
+        menu.displayOn(sum);
         return menu;
     }
 }
