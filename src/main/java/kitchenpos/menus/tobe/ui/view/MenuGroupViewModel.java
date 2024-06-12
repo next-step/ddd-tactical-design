@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.ui.view;
 
 import java.util.UUID;
-import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
+import kitchenpos.menus.tobe.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 
 public class MenuGroupViewModel {

@@ -1,4 +1,4 @@
-package kitchenpos.menus.tobe.application.query.result;
+package kitchenpos.menus.tobe.query.result;
 
 import java.math.BigDecimal;
 

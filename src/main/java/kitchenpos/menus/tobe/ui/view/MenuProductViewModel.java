@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.ui.view;
 
-import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
+import kitchenpos.menus.tobe.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuProduct;
 
 public class MenuProductViewModel {

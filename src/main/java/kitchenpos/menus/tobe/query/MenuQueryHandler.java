@@ -1,9 +1,9 @@
-package kitchenpos.menus.tobe.application.query;
+package kitchenpos.menus.tobe.query;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
+import kitchenpos.menus.tobe.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.domain.entity.MenuGroup;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,10 +1,10 @@
-package kitchenpos.menus.tobe.application.query;
+package kitchenpos.menus.tobe.query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import kitchenpos.menus.tobe.application.query.result.MenuQueryResult;
+import kitchenpos.menus.tobe.query.result.MenuQueryResult;
 import kitchenpos.menus.tobe.ui.view.MenuProductViewModel;
 import kitchenpos.menus.tobe.ui.view.MenuViewModel;
 import org.springframework.stereotype.Component;

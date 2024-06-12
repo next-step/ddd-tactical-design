@@ -3,7 +3,7 @@ package kitchenpos.menus.tobe.ui;
 import java.net.URI;
 import java.util.List;
 import kitchenpos.menus.tobe.application.MenuCommandHandler;
-import kitchenpos.menus.tobe.application.query.MenuQueryHandler;
+import kitchenpos.menus.tobe.query.MenuQueryHandler;
 import kitchenpos.menus.tobe.dto.MenuGroupCreateDto;
 import kitchenpos.menus.tobe.ui.view.MenuGroupViewModel;
 import org.springframework.http.ResponseEntity;
