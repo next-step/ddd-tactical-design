@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.eatinorders.infra;
 
 import kitchenpos.eatinorders.domain.eatinorder.Order;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
@@ -31,10 +31,4 @@ public class InMemoryOrderRepository implements OrderRepository {
         return new ArrayList<>(orders.values());
     }
 
-    @Override
-    public boolean existsByOrderTableAndStatusNot(final OrderTable orderTableRequest, final OrderStatus status) {
-        return orders.values()
-            .stream()
-            .anyMatch(order -> order.getOrderTable().equals(orderTableRequest) && order.getStatus() != status);
-    }
 }
