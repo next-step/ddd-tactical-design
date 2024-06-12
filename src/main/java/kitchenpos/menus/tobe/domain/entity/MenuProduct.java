@@ -51,4 +51,12 @@ public class MenuProduct {
     public UUID getProductId() {
         return productId;
     }
+
+    public BigDecimal getProductPrice() {
+        return productPrice;
+    }
+
+    public void updateProductPrice(BigDecimal productPrice) {
+        this.productPrice = productPrice;
+    }
 }

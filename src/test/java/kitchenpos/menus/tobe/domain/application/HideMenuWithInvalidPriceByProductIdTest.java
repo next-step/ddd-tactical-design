@@ -25,7 +25,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class HideMenuWithInvalidPriceByProductIdTest {
-    private HideMenuWithInvalidPriceByProductId hideMenuWithInvalidPriceByProductId;
+    private ProductPriceChangedEventHandler productPriceChangedEventHandler;
     private MenuRepository menuRepository = new InMemoryMenuRepository();
     private ProductRepository productRepository = new InMemoryProductRepository();
     private CreateMenu createMenu;
@@ -40,7 +40,7 @@ class HideMenuWithInvalidPriceByProductIdTest {
         this.createMenuGroup = new CreateMenuGroupTestFixture(menuRepository);
         this.createProduct = new CreateProductTestFixture((text -> false), productRepository);
         this.changePrice = new ChangePriceTestFixture(productRepository, (event) -> {});
-        this.hideMenuWithInvalidPriceByProductId = new HideMenuWithInvalidPriceByProductIdTestFixture(menuRepository, productRepository);
+        this.productPriceChangedEventHandler = new DefaultProductPriceChangedEventHandlerTestFixture(menuRepository, productRepository);
     }
 
     @DisplayName("메뉴에 속한 제품의 가격 * 수량의 합이 메뉴 가격보다 크다면 메뉴는 숨겨진다")
@@ -59,7 +59,7 @@ class HideMenuWithInvalidPriceByProductIdTest {
         assertThat(menu.isDisplayed()).isEqualTo(true);
 
         // when
-        hideMenuWithInvalidPriceByProductId.execute(product.getId());
+        productPriceChangedEventHandler.changeMenuProductPriceAndHide(product.getId());
 
         // then
         assertThat(menu.isDisplayed()).isEqualTo(false);

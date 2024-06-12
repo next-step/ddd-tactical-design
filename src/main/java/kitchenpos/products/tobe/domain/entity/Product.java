@@ -9,6 +9,7 @@ import java.util.UUID;
 import kitchenpos.common.domainevent.DomainEventPublisher;
 import kitchenpos.common.domainevent.event.ProductPriceChanged;
 import kitchenpos.common.purgomalum.PurgomalumClient;
+import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.products.tobe.domain.vo.ProductName;
 import kitchenpos.products.tobe.domain.vo.ProductPrice;
 
@@ -53,5 +54,15 @@ public class Product {
     public void changePrice(final ProductPrice price, DomainEventPublisher domainEventPublisher) {
         this.price = price.getValue();
         domainEventPublisher.publishEvent(new ProductPriceChanged(this.id));
+    }
+
+    public void updateMenuProductPrice(Menu menu) {
+        menu.getMenuProducts().forEach(
+            menuProduct -> {
+                if (menuProduct.getProductId().equals(this.id)) {
+                    menuProduct.updateProductPrice(this.price);
+                }
+            }
+        );
     }
 }
