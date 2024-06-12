@@ -32,7 +32,6 @@ public class OrderTableName {
     if (name.isEmpty()){
       throw new IllegalArgumentException("주문 테이블의 이름은 비워 둘 수 없다.");
     }
-
   }
 
 

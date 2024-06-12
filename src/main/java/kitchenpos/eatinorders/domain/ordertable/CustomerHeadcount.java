@@ -6,26 +6,26 @@ import java.util.Objects;
 
 @Embeddable
 public class CustomerHeadcount {
-  private static final long ZERO = 0L;
-  private Long headCounts;
+  private static final int ZERO = 0;
+  private Integer headCounts;
 
   protected CustomerHeadcount() {
   }
 
-  private CustomerHeadcount(Long headCounts) {
+  private CustomerHeadcount(Integer headCounts) {
     validate(headCounts);
 
     this.headCounts = headCounts;
   }
 
-  public static CustomerHeadcount of(Long headCounts) {
+  public static CustomerHeadcount of(Integer headCounts) {
     return new CustomerHeadcount(headCounts);
   }
 
   public static CustomerHeadcount zero() {
     return new CustomerHeadcount(ZERO);
   }
-  private void validate(Long headCounts) {
+  private void validate(Integer headCounts) {
     if (Objects.isNull(headCounts)) {
       throw new IllegalArgumentException("방문한 손님 수가 올바르지 않으면 변경할 수 없다.");
     }
@@ -33,6 +33,10 @@ public class CustomerHeadcount {
     if (headCounts.compareTo(ZERO) <= 0) {
       throw new IllegalArgumentException("방문한 손님 수는 0 이상이어야 한다.");
     }
+  }
+
+  public Integer getHeadCounts() {
+    return headCounts;
   }
 
   @Override

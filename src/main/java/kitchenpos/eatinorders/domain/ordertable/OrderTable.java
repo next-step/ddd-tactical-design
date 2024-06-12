@@ -28,18 +28,18 @@ public class OrderTable {
   protected OrderTable() {
   }
 
-  private OrderTable(OrderTableName orderTableName, CustomerHeadcount customerHeadCount, OrderTableStatus orderTableStatus) {
+  private OrderTable(OrderTableName orderTableName, CustomerHeadcount customerHeadCount) {
     this.id = UUID.randomUUID();
     this.name = orderTableName;
     this.customerHeadcount = customerHeadCount;
     this.occupied = OrderTableStatus.UNOCCUPIED;
   }
 
-  public static OrderTable of(String orderTableName, Long customerHeadCount, OrderTableStatus orderTableStatus){
-      return new OrderTable(OrderTableName.of(orderTableName), CustomerHeadcount.of(customerHeadCount), orderTableStatus);
+  public static OrderTable of(String orderTableName, Integer customerHeadCount){
+      return new OrderTable(OrderTableName.of(orderTableName), CustomerHeadcount.of(customerHeadCount));
   }
 
-  protected void clear(){
+  public void clear(){
     validateUnoccupied();
 
     unoccupy();
@@ -49,12 +49,11 @@ public class OrderTable {
     this.customerHeadcount = CustomerHeadcount.zero();
   }
 
-  protected void occupy(Long headCounts) {
+  public void occupy() {
     this.occupied = OrderTableStatus.OCCUPIED;
-    changeCustomerHeadCounts(headCounts);
   }
 
-  protected void changeCustomerHeadCounts(Long headCounts) {
+  public void changeCustomerHeadCounts(Integer headCounts) {
     validateOccupied();
 
     this.customerHeadcount = CustomerHeadcount.of(headCounts);
@@ -62,7 +61,7 @@ public class OrderTable {
 
   private void validateOccupied(){
     if (this.occupied.equals(OrderTableStatus.UNOCCUPIED)){
-      throw new IllegalStateException("빈 테이블은 방문한 손님 수를 변경할 수 없다.");
+      throw new IllegalStateException("빈 테이블은 방문한 고객 인원을 변경할 수 없다.");
     }
   }
 
@@ -71,6 +70,19 @@ public class OrderTable {
       throw new IllegalStateException("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.");
     }
   }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public Integer getCustomerHeadcount() {
+    return customerHeadcount.getHeadCounts();
+  }
+
+  public OrderTableStatus getOccupied() {
+    return occupied;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
