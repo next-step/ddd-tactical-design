@@ -52,11 +52,11 @@ public class Fixtures {
     }
 
     public static MenuProduct menuProduct() {
-        return new MenuProduct(product().getId(), 2L);
+        return new MenuProduct(product(), 2L);
     }
 
     public static MenuProduct menuProduct(final Product product, final long quantity) {
-        return new MenuProduct(product.getId(), quantity);
+        return new MenuProduct(product, quantity);
     }
 
     public static Order order(final OrderStatus status, final String deliveryAddress) {

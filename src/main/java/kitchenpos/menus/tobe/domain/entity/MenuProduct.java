@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.products.tobe.domain.entity.Product;
 
 @Table(name = "menu_product")
 @Entity
@@ -22,12 +24,15 @@ public class MenuProduct {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
+    @Column(name = "product_price", nullable = false)
+    private BigDecimal productPrice;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(UUID productId, long quantity) {
-        this.productId = productId;
+    public MenuProduct(Product product, long quantity) {
+        this.productId = product.getId();
+        this.productPrice = product.getPrice();
         this.quantity = quantity;
     }
 

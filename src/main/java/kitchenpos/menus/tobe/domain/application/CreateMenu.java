@@ -66,7 +66,7 @@ class DefaultCreateMenu implements CreateMenu {
                     product.getPrice()
                            .multiply(BigDecimal.valueOf(quantity))
             );
-            final MenuProduct menuProduct = new MenuProduct(product.getId(), quantity);
+            final MenuProduct menuProduct = new MenuProduct(product, quantity);
             menuProducts.add(menuProduct);
         }
         if (menuPrice.getValue().compareTo(sum) > 0) {
