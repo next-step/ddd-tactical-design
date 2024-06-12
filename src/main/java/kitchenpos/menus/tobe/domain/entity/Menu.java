@@ -56,7 +56,8 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
+                List<MenuProduct> menuProducts) {
         this.id = id;
         this.name = name.getValue();
         this.price = price.getValue();

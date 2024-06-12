@@ -32,7 +32,6 @@ class HideMenuWithInvalidPriceByProductIdTest {
     private CreateMenuGroup createMenuGroup;
     private CreateProduct createProduct;
     private ChangePrice changePrice;
-    private CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
 
     @BeforeEach
     void setUp() {
@@ -41,8 +40,7 @@ class HideMenuWithInvalidPriceByProductIdTest {
         this.createMenuGroup = new CreateMenuGroupTestFixture(menuRepository);
         this.createProduct = new CreateProductTestFixture((text -> false), productRepository);
         this.changePrice = new ChangePriceTestFixture(productRepository, (event) -> {});
-        this.calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = new CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture(productRepository);
-        this.hideMenuWithInvalidPriceByProductId = new HideMenuWithInvalidPriceByProductIdTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity);
+        this.hideMenuWithInvalidPriceByProductId = new HideMenuWithInvalidPriceByProductIdTestFixture(menuRepository, productRepository);
     }
 
     @DisplayName("메뉴에 속한 제품의 가격 * 수량의 합이 메뉴 가격보다 크다면 메뉴는 숨겨진다")

@@ -17,8 +17,6 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.common.purgomalum.FakePurgomalumClient;
 import kitchenpos.common.purgomalum.PurgomalumClient;
-import kitchenpos.menus.tobe.domain.application.CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
-import kitchenpos.menus.tobe.domain.application.CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture;
 import kitchenpos.menus.tobe.domain.application.ChangeMenuPriceTestFixture;
 import kitchenpos.menus.tobe.domain.application.CreateMenuGroupTestFixture;
 import kitchenpos.menus.tobe.domain.application.CreateMenuTestFixture;
@@ -49,19 +47,17 @@ class MenuCommandHandlerTest {
     private MenuCommandHandler menuCommandHandler;
     private UUID menuGroupId;
     private Product product;
-    private CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
         purgomalumClient = new FakePurgomalumClient();
-        calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = new CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture(productRepository);
         menuCommandHandler = new MenuCommandHandler(menuRepository,
                                                     new CreateMenuTestFixture(menuRepository, productRepository, purgomalumClient),
                                                     new ChangeMenuPriceTestFixture(menuRepository, productRepository),
                                                     new DisplayMenuTestFixture(menuRepository, productRepository),
-                                                    new HideMenuTextFixture(menuRepository),
+                                                    new HideMenuTextFixture(menuRepository, productRepository),
                                                     new CreateMenuGroupTestFixture(menuRepository)
         );
         menuGroupId = menuRepository.saveMenuGroup(menuGroup()).getId();

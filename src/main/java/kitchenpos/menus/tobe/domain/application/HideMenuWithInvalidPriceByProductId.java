@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.tobe.domain.entity.Menu;
 import kitchenpos.menus.tobe.domain.repository.MenuRepository;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 @FunctionalInterface
@@ -15,20 +16,20 @@ public interface HideMenuWithInvalidPriceByProductId {
 @Service
 class DefaultHideMenuWithInvalidPriceByProductId implements HideMenuWithInvalidPriceByProductId {
     private final MenuRepository menuRepository;
-    private final CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
+    private final ProductRepository productRepository;
 
     public DefaultHideMenuWithInvalidPriceByProductId(MenuRepository menuRepository,
-                                                      CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity) {
+                                                      ProductRepository productRepository) {
         this.menuRepository = menuRepository;
-        this.calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity;
+        this.productRepository = productRepository;
     }
 
     @Override
     public final void execute(UUID productId) {
         final List<Menu> menus = menuRepository.findMenusByProductId(productId);
         for (final Menu menu : menus) {
-            BigDecimal sum = calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity.execute(menu);
-            if (menu.getPrice().compareTo(sum) > 0) {
+            BigDecimal threshHoldPrice = menu.getSumOfProductPriceAndQuantity(productRepository);
+            if (menu.getPrice().compareTo(threshHoldPrice) > 0) {
                 menu.hide();
             }
         }
