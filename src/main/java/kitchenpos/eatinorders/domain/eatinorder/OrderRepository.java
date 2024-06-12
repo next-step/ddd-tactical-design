@@ -12,7 +12,5 @@ public interface OrderRepository {
     Optional<Order> findById(UUID id);
 
     List<Order> findAll();
-
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
 }
 
