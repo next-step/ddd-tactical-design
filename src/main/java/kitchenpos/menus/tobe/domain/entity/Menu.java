@@ -11,9 +11,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import kitchenpos.menus.tobe.domain.vo.MenuName;
 import kitchenpos.menus.tobe.domain.vo.MenuPrice;
+import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
 
 @Table(name = "menu")
 @Entity
@@ -72,8 +77,12 @@ public class Menu {
         return price;
     }
 
-    public void changePrice(final MenuPrice price) {
-        this.price = price.getValue();
+    public void changePrice(final MenuPrice menuPrice, ProductRepository productRepository) {
+        BigDecimal threshHoldPrice = this.getSumOfProductPriceAndQuantity(productRepository);
+        if (menuPrice.getValue().compareTo(threshHoldPrice) > 0) {
+            throw new IllegalArgumentException("New Price cannot be greater than threshHoldPrice");
+        }
+        this.price = menuPrice.getValue();
     }
 
     public MenuGroup getMenuGroup() {
@@ -84,7 +93,8 @@ public class Menu {
         return displayed;
     }
 
-    public void displayOn(BigDecimal threshHoldPrice) {
+    public void displayOn(ProductRepository productRepository) {
+        BigDecimal threshHoldPrice = getSumOfProductPriceAndQuantity(productRepository);
         if (this.price.compareTo(threshHoldPrice) > 0) {
             throw new IllegalStateException();
         }
@@ -97,5 +107,27 @@ public class Menu {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
+    }
+
+    public BigDecimal getSumOfProductPriceAndQuantity(ProductRepository productRepository) {
+        BigDecimal sum = BigDecimal.ZERO;
+        List<UUID> productIds = this.menuProducts.stream().map(MenuProduct::getProductId).toList();
+
+        Map<UUID, BigDecimal> productIdPriceMap = productRepository.findAllByIdIn(productIds).stream().collect(
+            Collectors.toMap(
+                Product::getId,
+                Product::getPrice
+            ));
+
+        for (final MenuProduct menuProduct : this.menuProducts) {
+            if (!productIdPriceMap.containsKey(menuProduct.getProductId())) {
+                throw new NoSuchElementException("MenuProduct 에 올바르지 않은 ProductId 가 있습니다");
+            }
+            sum = sum.add(
+                productIdPriceMap.get(menuProduct.getProductId())
+                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            );
+        }
+        return sum;
     }
 }

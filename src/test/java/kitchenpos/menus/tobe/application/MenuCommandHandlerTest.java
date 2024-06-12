@@ -59,8 +59,8 @@ class MenuCommandHandlerTest {
         calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity = new CalculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantityTestFixture(productRepository);
         menuCommandHandler = new MenuCommandHandler(menuRepository,
                                                     new CreateMenuTestFixture(menuRepository, productRepository, purgomalumClient),
-                                                    new ChangeMenuPriceTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity),
-                                                    new DisplayMenuTestFixture(menuRepository, calculateSumOfMultiplyingMenuProductPriceAndMenuProductQuantity),
+                                                    new ChangeMenuPriceTestFixture(menuRepository, productRepository),
+                                                    new DisplayMenuTestFixture(menuRepository, productRepository),
                                                     new HideMenuTextFixture(menuRepository),
                                                     new CreateMenuGroupTestFixture(menuRepository)
         );
