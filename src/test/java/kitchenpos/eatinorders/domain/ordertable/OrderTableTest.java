@@ -50,7 +50,7 @@ public class OrderTableTest {
 
   @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
   @Test
-  void failToClearOccupied(String name) {
+  void failToClearOccupied() {
     OrderTable actual = OrderTable.of("udon", 3);
 
     actual.occupy();

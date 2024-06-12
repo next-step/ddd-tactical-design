@@ -1,9 +1,13 @@
 package kitchenpos.eatinorders.application;
 
+import kitchenpos.common.domain.orders.OrderTableStatus;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
 import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.infra.InMemoryOrderRepository;
+import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,26 +27,26 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class OrderRequestTableServiceTest {
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
+
     private OrderTableService orderTableService;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        orderTableService = new OrderTableService(orderTableRepository);
     }
 
     @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
     void create() {
         final OrderTableRequest expected = createOrderTableRequest("1번");
-        final OrderTableRequest actual = orderTableService.create(expected);
+        final OrderTable actual = orderTableService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.UNOCCUPIED),
+            () -> assertThat(actual.getCustomerHeadcount()).isZero()
         );
     }
 
@@ -55,31 +59,32 @@ class OrderRequestTableServiceTest {
             .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("빈 테이블을 해지할 수 있다.")
+    @DisplayName("빈 테이블을 점유할 수 있다.")
     @Test
     void sit() {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTableRequest actual = orderTableService.sit(orderTableId);
-        assertThat(actual.isOccupied()).isTrue();
+        final OrderTable actual = orderTableService.sit(orderTableId);
+        assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.OCCUPIED);
     }
 
     @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
     void clear() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTableRequest actual = orderTableService.clear(orderTableId);
+        final OrderTable actual = orderTableService.clear(orderTableId);
         assertAll(
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+            () -> assertThat(actual.getCustomerHeadcount()).isZero(),
+            () -> assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.UNOCCUPIED)
         );
     }
 
     @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
     @Test
     void clearWithUncompletedOrders() {
-        final OrderTableRequest orderTableRequest = orderTableRepository.save(orderTable(true, 4));
+        final OrderTable orderTableRequest = orderTableRepository.save(orderTable(true, 4));
         final UUID orderTableId = orderTableRequest.getId();
-        orderRepository.save(order(OrderStatus.ACCEPTED, orderTableRequest));
+        final OrderTable actual = orderTableService.sit(orderTableId);
+
         assertThatThrownBy(() -> orderTableService.clear(orderTableId))
             .isInstanceOf(IllegalStateException.class);
     }
@@ -89,8 +94,8 @@ class OrderRequestTableServiceTest {
     void changeNumberOfGuests() {
         final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
         final OrderTableRequest expected = changeNumberOfGuestsRequest(4);
-        final OrderTableRequest actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
-        assertThat(actual.getNumberOfGuests()).isEqualTo(4);
+        final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
+        assertThat(actual.getCustomerHeadcount()).isEqualTo(4);
     }
 
     @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
@@ -116,7 +121,7 @@ class OrderRequestTableServiceTest {
     @Test
     void findAll() {
         orderTableRepository.save(orderTable());
-        final List<OrderTableRequest> actual = orderTableService.findAll();
+        final List<OrderTable> actual = orderTableService.findAll();
         assertThat(actual).hasSize(1);
     }
 

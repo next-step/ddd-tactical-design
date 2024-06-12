@@ -1,21 +1,18 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.common.domain.ProfanityValidator;
+import kitchenpos.common.domain.orders.OrderStatus;
+import kitchenpos.common.domain.ordertables.OrderType;
+import kitchenpos.eatinorders.application.dto.OrderLineItemRequest;
+import kitchenpos.eatinorders.application.dto.OrderRequest;
+import kitchenpos.eatinorders.domain.eatinorder.Order;
+import kitchenpos.eatinorders.domain.ordertable.OrderTable;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
-import kitchenpos.menus.domain.tobe.menu.ProductClient;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.infra.DefaultProductClient;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.products.infra.FakeProductClient;
 import kitchenpos.products.infra.FakeProfanityValidator;
-import kitchenpos.products.infra.InMemoryProductRepository;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -92,8 +89,8 @@ public class Fixtures {
     return orderRequest;
   }
 
-  public static OrderRequest order(final OrderStatus status, final OrderTableRequest orderTableRequest) {
-    final OrderRequest orderRequest = new OrderRequest();
+  public static OrderRequest order(final OrderStatus status, final OrderTable orderTableRequest) {
+    final Order orderRequest = new Order();
     orderRequest.setId(UUID.randomUUID());
     orderRequest.setType(OrderType.EAT_IN);
     orderRequest.setStatus(status);
@@ -110,17 +107,12 @@ public class Fixtures {
     return orderLineItemRequest;
   }
 
-  public static OrderTableRequest orderTable() {
+  public static OrderTable orderTable() {
     return orderTable(false, 0);
   }
 
-  public static OrderTableRequest orderTable(final boolean occupied, final int numberOfGuests) {
-    final OrderTableRequest orderTableRequest = new OrderTableRequest();
-    orderTableRequest.setId(UUID.randomUUID());
-    orderTableRequest.setName("1번");
-    orderTableRequest.setNumberOfGuests(numberOfGuests);
-    orderTableRequest.setOccupied(occupied);
-    return orderTableRequest;
+  public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+    return OrderTable.of("1번", numberOfGuests);
   }
 
   public static Product product() {
