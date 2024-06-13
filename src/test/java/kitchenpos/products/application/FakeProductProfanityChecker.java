@@ -1,11 +1,11 @@
 package kitchenpos.products.application;
 
-import kitchenpos.shared.external.infra.ProfanityChecker;
+import kitchenpos.products.infra.ProductProfanity;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FakePurgomalumClient implements ProfanityChecker {
+public class FakeProductProfanityChecker implements ProductProfanity {
     private static final List<String> profanities;
 
     static {
@@ -16,5 +16,12 @@ public class FakePurgomalumClient implements ProfanityChecker {
     public boolean containsProfanity(final String text) {
         return profanities.stream()
             .anyMatch(profanity -> text.contains(profanity));
+    }
+
+    @Override
+    public void profanityCheck(String text) {
+        if (containsProfanity(text)) {
+            throw new IllegalArgumentException();
+        }
     }
 }

@@ -1,19 +1,19 @@
 package kitchenpos.products.ui;
 
 import kitchenpos.products.application.ProductService;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.ui.request.ProductCreateRequest;
+import kitchenpos.products.ui.request.ProductModifyRequest;
+import kitchenpos.products.ui.response.ProductCreateResponse;
+import kitchenpos.products.ui.response.ProductDto;
+import kitchenpos.products.ui.response.ProductModifyResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/products")
 @RestController
@@ -25,19 +25,26 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
-        final Product response = productService.create(request);
-        return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
+    public ResponseEntity<ProductCreateResponse> create(@RequestBody final ProductCreateRequest request) {
+        final Product product = productService.create(request);
+        ProductCreateResponse response = new ProductCreateResponse(product.getId(), product.getName(), product.getPrice());
+        return ResponseEntity.created(URI.create("/api/products/" + product.getId()))
             .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+    public ResponseEntity<ProductModifyResponse> changePrice(@PathVariable final UUID productId, @RequestBody final ProductModifyRequest request) {
+        Product product = productService.changePrice(productId, request);
+        ProductModifyResponse response = new ProductModifyResponse(product.getId(), product.getName(), product.getPrice());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductDto>> findAll() {
+        List<Product> products = productService.findAll();
+        List<ProductDto> response = products.stream()
+                .map(product -> new ProductDto(product.getId(), product.getName(), product.getPrice()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,0 +1,27 @@
+package kitchenpos.products.tobe.domain;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ProductTest {
+
+    @Test
+    @DisplayName("후라이드 상품을 생성한다")
+    void success() {
+        Product product = new Product("후라이드", BigDecimal.valueOf(10_000L));
+        assertThat(product.getName()).isEqualTo(new ProductName("후라이드"));
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(10_000L)));
+    }
+
+    @Test
+    @DisplayName("상품의 가격을 변경한다")
+    void changePriceSuccess() {
+        Product product = new Product("후라이드", BigDecimal.valueOf(10_000L));
+        product.changePrice(new ProductPrice(BigDecimal.valueOf(12_000L)));
+        assertThat(product.getPrice()).isEqualTo(new ProductPrice(BigDecimal.valueOf(12_000L)));
+    }
+}

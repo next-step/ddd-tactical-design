@@ -5,9 +5,9 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.shared.external.infra.ProfanityChecker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,18 +23,18 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProfanityChecker defaultProfanityChecker;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+        final ProfanityChecker defaultProfanityChecker
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.defaultProfanityChecker = defaultProfanityChecker;
     }
 
     @Transactional
@@ -68,10 +68,11 @@ public class MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
+                        .getPrice()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
+            // menuProduct.setProduct(product);
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
         }
@@ -79,7 +80,7 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || defaultProfanityChecker.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu();
@@ -105,6 +106,7 @@ public class MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
+                    .getPrice()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
@@ -123,6 +125,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
+                    .getPrice()
                     .getPrice()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );

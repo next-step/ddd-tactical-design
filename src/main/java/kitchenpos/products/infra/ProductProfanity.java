@@ -1,5 +1,6 @@
 package kitchenpos.products.infra;
 
-public interface PurgomalumClient {
+public interface ProductProfanity{
     boolean containsProfanity(String text);
+    void profanityCheck(String text);
 }
