@@ -7,10 +7,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.Fixtures;
-import kitchenpos.menus.application.InMemoryMenuRepository;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.menus.tobe.domain.repository.InMemoryMenuRepository;
+import kitchenpos.menus.tobe.domain.repository.MenuRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
+import kitchenpos.products.tobe.domain.repository.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductPriceChangeDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class ChangePriceTest {
     public void setup() {
         this.productRepository = new InMemoryProductRepository();
         this.menuRepository = new InMemoryMenuRepository();
-        this.changePrice = new DefaultChangePrice(productRepository);
+        this.changePrice = new DefaultChangePrice(productRepository, (event) -> {});
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")

@@ -4,7 +4,7 @@ import static kitchenpos.Fixtures.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.products.tobe.domain.repository.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;

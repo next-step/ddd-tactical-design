@@ -8,11 +8,11 @@ Content-Type: application/json
 }
 
 ###
-PUT {{host}}/api/products/b5882c67-c743-460a-839e-2838121f2266/price
+PUT {{host}}/api/products/c5ee925c-3dbb-4941-b825-021446f24446/price
 Content-Type: application/json
 
 {
-  "price": 500
+  "price": 700
 }
 
 ###

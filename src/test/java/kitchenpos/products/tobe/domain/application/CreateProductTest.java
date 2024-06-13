@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import kitchenpos.common.purgomalum.PurgomalumClient;
-import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.application.InMemoryProductRepository;
+import kitchenpos.common.purgomalum.FakePurgomalumClient;
+import kitchenpos.products.tobe.domain.repository.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.entity.Product;
 import kitchenpos.products.tobe.domain.repository.ProductRepository;
 import kitchenpos.products.tobe.dto.ProductCreateDto;
