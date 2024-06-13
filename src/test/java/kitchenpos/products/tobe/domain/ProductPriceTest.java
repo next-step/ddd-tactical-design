@@ -2,7 +2,6 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.exception.NegativeProductPriceException;
 import kitchenpos.products.tobe.exception.ProductPriceNullPointException;
-import kitchenpos.products.tobe.domain.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -29,5 +28,7 @@ public class ProductPriceTest {
         assertThatThrownBy(() -> ProductPrice.of(price))
                 .isInstanceOf(ProductPriceNullPointException.class);
     }
+
+
 
 }

@@ -5,9 +5,6 @@ import kitchenpos.products.tobe.infra.DefaultProfanityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 
@@ -37,6 +34,21 @@ public class ProductTest {
                 () -> assertThat(actual.getDisplayedName()).isEqualTo(displayedName),
                 () -> assertThat(actual.getProductPrice()).isEqualTo(productPrice)
         );
+    }
+
+    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @Test
+    void changePrice() {
+        final var displayedName = displayedName("후라이드");
+        final var productPrice = productPrice(16_000L);
+        final var product = product(displayedName, productPrice);
+
+        final var expected = productPrice(15_000L);
+
+        product.changePrice(expected);
+        final var actual = product.getProductPrice();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     private DisplayedName displayedName(String name) {
