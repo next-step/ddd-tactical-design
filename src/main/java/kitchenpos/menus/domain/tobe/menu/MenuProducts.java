@@ -18,14 +18,17 @@ public class MenuProducts {
 
   protected MenuProducts() {
   }
+
   @Deprecated
   private MenuProducts(List<MenuProduct> menuProducts) {
     products.addAll(menuProducts);
   }
+
   private MenuProducts(List<MenuProduct> menuProducts, ProductClient productClient) {
     validate(menuProducts, productClient);
     products.addAll(menuProducts);
   }
+
   private void validate(List<MenuProduct> menuProducts, ProductClient productClient) {
     if (Objects.isNull(menuProducts)) {
       throw new IllegalArgumentException("메뉴는 1개이상의 메뉴상품으로 구성되어야 합니다.");
@@ -39,6 +42,7 @@ public class MenuProducts {
   public static MenuProducts of(ProductClient productClient, MenuProduct... menuProducts) {
     return new MenuProducts(List.of(menuProducts), productClient);
   }
+
   @Deprecated
   public static MenuProducts of(MenuProduct... menuProducts) {
     return new MenuProducts(List.of(menuProducts));
