@@ -11,6 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.common.domain.Price;
 
@@ -41,5 +44,26 @@ public class OrderLineItem {
   private Order order;
 
   protected OrderLineItem() {
+  }
+
+  protected UUID getMenuId() {
+    return menuId;
+  }
+
+  protected BigDecimal getPrice() {
+    return price.getPrice();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    OrderLineItem that = (OrderLineItem) o;
+    return Objects.equals(seq, that.seq);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(seq);
   }
 }
