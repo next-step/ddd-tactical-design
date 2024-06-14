@@ -1,14 +1,12 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuProduct;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.infra.PurgomalumClient;
-import kitchenpos.products.tobe.domain.DisplayName;
-import kitchenpos.products.tobe.domain.Price;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.ProductRepository;
+import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.dto.ProductDto;
+import kitchenpos.products.tobe.infra.Profanities;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,29 +14,27 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@Service("tobeProductService")
 public class ProductService {
-
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
     private final MenuRepository menuRepository;
+    private final DisplayNamePolicy displayNamePolicy;
 
-
-    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, PurgomalumClient purgomalumClient) {
+    public ProductService(ProductRepository productRepository, MenuRepository menuRepository, DisplayNamePolicy displayNamePolicy) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.displayNamePolicy = displayNamePolicy;
     }
 
     public ProductDto create(final ProductDto request) {
-        final Product product = new Product(new DisplayName(validatePurgomalumnName(request.getName())), new Price(request.getPrice()));
+        final Product product = new Product(request.getName(), new Price(request.getPrice()), displayNamePolicy);
         final Product save = productRepository.save(product);
         return ProductDto.from(save);
     }
 
     @Transactional
     public ProductDto changePrice(final UUID productDtoId, final ProductDto request) {
-        final Product toProduct = new Product(new DisplayName(request.getName()), new Price(request.getPrice()));
+        final Product toProduct = new Product(request.getName(),new Price(request.getPrice()), displayNamePolicy);
 
         final Product findedProduct = productRepository.findById(productDtoId)
                 .orElseThrow(IllegalArgumentException::new);
@@ -53,21 +49,13 @@ public class ProductService {
         return ProductDto.ofList(productRepository.findAll());
     }
 
-
-    private String validatePurgomalumnName(final String name) {
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
-        }
-        return name;
-    }
-
     private void menuPriceGraterThanMenuProductPrice(List<Menu> menus){
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                         menuProduct.getProduct()
-                                .getPrice().getPrice()
+                                .getPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }

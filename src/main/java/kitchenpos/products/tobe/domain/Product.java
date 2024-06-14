@@ -1,10 +1,11 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.*;
+
 import java.util.UUID;
 
 @Table(name = "product")
-@Entity
+@Entity(name = "tobeProduct")
 public class Product {
 
     @Column(name = "id", columnDefinition = "binary(16)")
@@ -16,16 +17,6 @@ public class Product {
 
     @Embedded
     private Price price;
-
-    public Product(DisplayName displayName, Price price) {
-        this.displayName = displayName;
-        this.price = price;
-        this.id = UUID.randomUUID();
-    }
-
-    public Product() {
-
-    }
 
     public DisplayName getDisplayName() {
         return displayName;
@@ -42,6 +33,15 @@ public class Product {
     public Product changePrice(final Price price) {
         this.price = price;
         return this;
+    }
+
+    public Product(String displayName, Price price, DisplayNamePolicy displayNamePolicy) {
+        this.displayName = new DisplayName(displayName, displayNamePolicy);
+        this.price = price;
+        this.id = UUID.randomUUID();
+    }
+
+    protected Product() {
     }
 
 }

@@ -1,13 +1,13 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menus.application.tobo.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.MenuRepository;
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.products.application.FakePurgomalumClient;
+import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.tobe.domain.DisplayNamePolicy;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.dto.ProductDto;
+import kitchenpos.products.tobe.infra.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,9 +17,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.product;
-import static kitchenpos.menus.application.tobo.application.MenuFixture.createMenuRequest;
-import static kitchenpos.menus.application.tobo.application.MenuProductFixture.createMenuProductRequest;
+
+import kitchenpos.menus.domain.MenuRepository;
+
+import static kitchenpos.products.tobe.application.MenuFixture.createMenuRequest;
+import static kitchenpos.products.tobe.application.MenuProductFixture.createMenuProductRequest;
 import static kitchenpos.products.tobe.application.ProductFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,15 +30,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private PurgomalumClient purgomalumClient;
+    private Profanities profanities;
     private ProductService productService;
+    private DisplayNamePolicy displayNamePolicy;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        profanities = new FakePurgomalumClient();
+        displayNamePolicy = new DisplayNamePolicy(profanities);
+        productService = new ProductService(productRepository, menuRepository, displayNamePolicy);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
@@ -61,9 +65,9 @@ class ProductServiceTest {
     @Test
     void changePrice() {
         //given
-        final Product originProduct = createProductRequest("후라이드", 16_000L);
+        final Product originProduct = createProductRequest("후라이드", 16_000L, displayNamePolicy);
         final UUID originProductId = productRepository.save(originProduct).getId();
-        final ProductDto expected = changePriceDtoRequest(15_000L);
+        final ProductDto expected = changePriceDtoRequest(15_000L, displayNamePolicy);
 
         // when
         final ProductDto actual = productService.changePrice(originProductId, expected);
@@ -77,11 +81,11 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final long price) {
         // given
-        final Product originProduct = createProductRequest("후라이드", 16_000L);
+        final Product originProduct = createProductRequest("후라이드", 16_000L, displayNamePolicy);
         final UUID originProductId = productRepository.save(originProduct).getId();
 
         // when, then
-        assertThatThrownBy(() -> productService.changePrice(originProductId, changePriceDtoRequest(price)))
+        assertThatThrownBy(() -> productService.changePrice(originProductId, changePriceDtoRequest(price, displayNamePolicy)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -89,24 +93,26 @@ class ProductServiceTest {
     @Test
     void changePriceInMenu() {
         // given
-        final Product originProduct = createProductRequest("후라이드", 16_000L);
+        final Product originProduct = createProductRequest("후라이드", 16_000L, displayNamePolicy);
         final Product savedProduct = productRepository.save(originProduct);
-        final Menu menu = menuRepository.save(createMenuRequest(19_000L, true, createMenuProductRequest(savedProduct, 2L)));
-        productService.changePrice(savedProduct.getId(), changePriceDtoRequest(8_000L));
-        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
-    }
 
+        final MenuProduct menuProductRequest = createMenuProductRequest(savedProduct, 2L);
+        final Menu requestMenu = createMenuRequest(16_000L, true, menuProductRequest);
+
+        final Menu menu = menuRepository.save(requestMenu);
+
+        productService.changePrice(savedProduct.getId(), changePriceDtoRequest(8_000L, displayNamePolicy));
+
+        assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isTrue();
+    }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(createProductRequest("후라이드", 16_000L));
-        productRepository.save(createProductRequest("양념치킨", 16_000L));
+        productRepository.save(createProductRequest("후라이드", 16_000L, displayNamePolicy));
+        productRepository.save(createProductRequest("양념치킨", 16_000L, displayNamePolicy));
         final List<ProductDto> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
-
-
-
 
 }

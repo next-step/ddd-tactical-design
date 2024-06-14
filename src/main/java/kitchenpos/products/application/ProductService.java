@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
-//@Service
+@Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;

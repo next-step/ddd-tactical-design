@@ -34,7 +34,7 @@ class ProductServiceTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        purgomalumClient = new FakePurgomalumClient();
+        purgomalumClient = new DefaultFakePurgomalumClient();
         productService = new ProductService(productRepository, menuRepository, purgomalumClient);
     }
 
