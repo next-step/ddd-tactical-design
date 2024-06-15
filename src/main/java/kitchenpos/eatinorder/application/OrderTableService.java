@@ -41,7 +41,7 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final var orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
 
@@ -56,10 +56,8 @@ public class OrderTableService {
 
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-//        orderTable.setNumberOfGuests(numberOfGuests);
+
+        orderTable.changeNumOfGuests(numberOfGuests);
         return orderTable;
     }
 

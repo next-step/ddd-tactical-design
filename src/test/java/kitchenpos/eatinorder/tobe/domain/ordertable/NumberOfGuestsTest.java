@@ -1,6 +1,5 @@
-package kitchenpos.eatinorder.tobe.domain;
+package kitchenpos.eatinorder.tobe.domain.ordertable;
 
-import kitchenpos.eatinorder.tobe.domain.ordertable.NumberOfGuests;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

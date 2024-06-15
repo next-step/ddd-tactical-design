@@ -3,11 +3,17 @@ package kitchenpos.eatinorder.application;
 import kitchenpos.eatinorder.tobe.domain.*;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
+import kitchenpos.menus.tobe.domain.menu.Menu;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class EatInOrderService {
@@ -28,46 +34,41 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder create(final EatInOrder request) {
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
+
+        final List<Menu> menus = menuRepository.findAllByIdIn(
+                orderLineItemRequests.stream()
+                        .map(OrderLineItem::getMenuId)
+                        .toList()
+        );
+        if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
         }
-//        final List<Menu> menus = menuRepository.findAllByIdIn(
-//                orderLineItemRequests.stream()
-//                        .map(OrderLineItem::getMenuId)
-//                        .toList()
-//        );
-//        if (menus.size() != orderLineItemRequests.size()) {
-//            throw new IllegalArgumentException();
-//        }
+
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
-//            final long quantity = orderLineItemRequest.getQuantity();
+            final long quantity = orderLineItemRequest.getQuantity();
 
-////            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-//                    .orElseThrow(NoSuchElementException::new);
-//            if (!menu.isMenuDisplayStatus()) {
-//                throw new IllegalStateException();
-//            }
-//            if (menu.getMenuPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-//                throw new IllegalArgumentException();
-//            }
-            final OrderLineItem orderLineItem = new OrderLineItem();
-//            orderLineItem.setMenu(menu);
-//            orderLineItem.setQuantity(quantity);
+            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+                    .orElseThrow(NoSuchElementException::new);
+            if (!menu.isMenuDisplayStatus()) {
+                throw new IllegalStateException();
+            }
+            if (menu.getMenuPrice().compareTo(orderLineItemRequest.getPrice().longValue()) != 0) {
+                throw new IllegalArgumentException();
+            }
+
+            final var orderLineItem = OrderLineItem.of(quantity, menu.getId(), BigDecimal.valueOf(menu.getMenuPrice()));
             orderLineItems.add(orderLineItem);
         }
-        EatInOrder order = new EatInOrder();
-//        order.setId(UUID.randomUUID());
-//        order.setStatus(OrderStatus.WAITING);
-//        order.setOrderDateTime(LocalDateTime.now());
-//        order.setOrderLineItems(orderLineItems);
+        final var items = new OrderLineItems(orderLineItems);
 
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();
         }
-//        order.setOrderTable(orderTable);
+
+        EatInOrder order = EatInOrder.of(LocalDateTime.now(), items, orderTable.getId());
 
         return orderRepository.save(order);
     }

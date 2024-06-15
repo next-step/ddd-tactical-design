@@ -1,7 +1,4 @@
-package kitchenpos.eatinorder.tobe.domain;
-
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
+package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import java.util.*;
 

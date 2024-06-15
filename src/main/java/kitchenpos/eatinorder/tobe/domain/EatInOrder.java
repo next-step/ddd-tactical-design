@@ -1,14 +1,13 @@
 package kitchenpos.eatinorder.tobe.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Table
-@Entity(name = "eat-in-orders")
+@Entity(name = "eat_in_orders")
 public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
@@ -16,39 +15,38 @@ public class EatInOrder {
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private EatInOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "order_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
-    )
-    private List<OrderLineItem> orderLineItems;
+    @Embedded
+    private OrderLineItems orderLineItems;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
-
-    @Transient
+    @Column(name = "tableId", nullable = false)
     private UUID orderTableId;
 
-    public EatInOrder() {
+
+    public static EatInOrder of(LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
+        return new EatInOrder(UUID.randomUUID(), EatInOrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
+    }
+
+    private EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
+        this.id = id;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.orderTableId = orderTableId;
+    }
+
+    protected EatInOrder() {
     }
 
     public UUID getId() {
         return id;
     }
 
-    public OrderStatus getStatus() {
+    public EatInOrderStatus getStatus() {
         return status;
     }
 
@@ -57,14 +55,11 @@ public class EatInOrder {
     }
 
     public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
+        return orderLineItems.getOrderLineItems();
     }
 
     public UUID getOrderTableId() {
         return orderTableId;
     }
+
 }

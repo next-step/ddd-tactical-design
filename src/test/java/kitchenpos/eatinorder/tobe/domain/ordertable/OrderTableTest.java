@@ -1,8 +1,5 @@
-package kitchenpos.eatinorder.tobe.domain;
+package kitchenpos.eatinorder.tobe.domain.ordertable;
 
-import kitchenpos.eatinorder.tobe.domain.ordertable.NumberOfGuests;
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
 import kitchenpos.exception.CanNotChange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

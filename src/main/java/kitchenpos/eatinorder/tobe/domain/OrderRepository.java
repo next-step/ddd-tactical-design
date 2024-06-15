@@ -13,6 +13,6 @@ public interface OrderRepository {
 
     List<EatInOrder> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus status);
+    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, EatInOrderStatus status);
 }
 
