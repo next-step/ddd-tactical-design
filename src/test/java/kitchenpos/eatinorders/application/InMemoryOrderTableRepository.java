@@ -1,31 +1,30 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.eatinorders.domain.EatInOrderTable;
+import kitchenpos.eatinorders.domain.EatInOrderTableRepository;
 
-public class InMemoryOrderTableRepository implements OrderTableRepository {
-    private final Map<UUID, OrderTable> orderTables = new HashMap<>();
+public class InMemoryOrderTableRepository implements EatInOrderTableRepository {
+  private final Map<UUID, EatInOrderTable> orderTables = new HashMap<>();
 
-    @Override
-    public OrderTable save(final OrderTable orderTable) {
-        orderTables.put(orderTable.getId(), orderTable);
-        return orderTable;
-    }
+  @Override
+  public EatInOrderTable save(final EatInOrderTable orderTable) {
+    orderTables.put(orderTable.getId(), orderTable);
+    return orderTable;
+  }
 
-    @Override
-    public Optional<OrderTable> findById(final UUID id) {
-        return Optional.ofNullable(orderTables.get(id));
-    }
+  @Override
+  public Optional<EatInOrderTable> findById(final UUID id) {
+    return Optional.ofNullable(orderTables.get(id));
+  }
 
-    @Override
-    public List<OrderTable> findAll() {
-        return new ArrayList<>(orderTables.values());
-    }
+  @Override
+  public List<EatInOrderTable> findAll() {
+    return new ArrayList<>(orderTables.values());
+  }
 }

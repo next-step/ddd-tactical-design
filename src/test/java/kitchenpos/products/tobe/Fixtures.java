@@ -4,19 +4,16 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
 
 public class Fixtures {
   public static final UUID INVALID_ID = new UUID(0L, 0L);
 
-  public static Order order(final OrderStatus status, final String deliveryAddress) {
-    final Order order = new Order();
+  public static EatInOrder order(final EatInOrderStatus status, final String deliveryAddress) {
+    final EatInOrder order = new EatInOrder();
     order.setId(UUID.randomUUID());
-    order.setType(OrderType.DELIVERY);
+    order.setType(EatInOrderType.DELIVERY);
     order.setStatus(status);
     order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
     order.setOrderLineItems(Arrays.asList(orderLineItem()));
@@ -24,20 +21,20 @@ public class Fixtures {
     return order;
   }
 
-  public static Order order(final OrderStatus status) {
-    final Order order = new Order();
+  public static EatInOrder order(final EatInOrderStatus status) {
+    final EatInOrder order = new EatInOrder();
     order.setId(UUID.randomUUID());
-    order.setType(OrderType.TAKEOUT);
+    order.setType(EatInOrderType.TAKEOUT);
     order.setStatus(status);
     order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
     order.setOrderLineItems(Arrays.asList(orderLineItem()));
     return order;
   }
 
-  public static Order order(final OrderStatus status, final OrderTable orderTable) {
-    final Order order = new Order();
+  public static EatInOrder order(final EatInOrderStatus status, final EatInOrderTable orderTable) {
+    final EatInOrder order = new EatInOrder();
     order.setId(UUID.randomUUID());
-    order.setType(OrderType.EAT_IN);
+    order.setType(EatInOrderType.EAT_IN);
     order.setStatus(status);
     order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
     order.setOrderLineItems(Arrays.asList(orderLineItem()));
@@ -45,19 +42,19 @@ public class Fixtures {
     return order;
   }
 
-  public static OrderLineItem orderLineItem() {
-    final OrderLineItem orderLineItem = new OrderLineItem();
+  public static EatInOrderLineItem orderLineItem() {
+    final EatInOrderLineItem orderLineItem = new EatInOrderLineItem();
     orderLineItem.setSeq(new Random().nextLong());
     // orderLineItem.setMenu(menu());
     return orderLineItem;
   }
 
-  public static OrderTable orderTable() {
+  public static EatInOrderTable orderTable() {
     return orderTable(false, 0);
   }
 
-  public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-    final OrderTable orderTable = new OrderTable();
+  public static EatInOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+    final EatInOrderTable orderTable = new EatInOrderTable();
     orderTable.setId(UUID.randomUUID());
     orderTable.setName("1번");
     orderTable.setNumberOfGuests(numberOfGuests);
