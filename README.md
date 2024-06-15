@@ -374,15 +374,6 @@ docker compose -p kitchenpos up -d
 - `MenuProduct(메뉴 상품)` 는 `Product(상품)`, `Quantity(수량)` 을 가진다.
 - `MenuProduct(메뉴 상품)` 에서 `Product(상품)` 의 총 `Price(가격)` 을 계산한다.
 
-### 주문 테이블
-
-- `OrderTable(주문 테이블)` 은 식별자, `OrderTableName(주문 테이블 이름)`, `NumberOfGuests(손님 수)`, `Occupied(착석여부)` 를 항상가진다.
-- `OrderTable(주문 테이블)` 에서 `Occupied(착석여부)`를 `OccupyingTable(착석 테이블)` 또는 `ClearedTable(빈 테이블)` 로 변경한다.
-- `ClearedTable(빈 테이블)` 로 변경할 때 `Order(주문)` 의 상태가 `COMPLETED` 여야 한다.
-- `ClearedTable(빈 테이블)` 은 `NumberOfGuests(손님 수)` 가 0이고, `Occupied(착석여부)` 가 아닌 상태이다.
-- `OrderTable(주문 테이블)` 에서 `NumberOfGuests(손님 수)` 를 변경한다.
-- `NumberOfGuests(손님 수)` 는 0명 이상이다.
-- `NumberOfGuests(손님 수)` 는 `OccupyingTable(착석 테이블)` 일 때만 가능하다.
 
 ### 배달 주문
 
@@ -445,3 +436,13 @@ docker compose -p kitchenpos up -d
     D --> E(Served\n서빙 완료)
     E --> F[Completed\n주문 완료]
   ```
+
+##### 주문 테이블
+
+- `OrderTable(주문 테이블)` 은 식별자, `OrderTableName(주문 테이블 이름)`, `NumberOfGuests(손님 수)`, `Occupied(착석여부)` 를 항상가진다.
+- `OrderTable(주문 테이블)` 에서 `Occupied(착석여부)`를 `OccupyingTable(착석 테이블)` 또는 `ClearedTable(빈 테이블)` 로 변경한다.
+- `ClearedTable(빈 테이블)` 로 변경할 때 `Order(주문)` 의 상태가 `COMPLETED` 여야 한다.
+- `ClearedTable(빈 테이블)` 은 `NumberOfGuests(손님 수)` 가 0이고, `Occupied(착석여부)` 가 아닌 상태이다.
+- `OrderTable(주문 테이블)` 에서 `NumberOfGuests(손님 수)` 를 변경한다.
+- `NumberOfGuests(손님 수)` 는 0명 이상이다.
+- `NumberOfGuests(손님 수)` 는 `OccupyingTable(착석 테이블)` 일 때만 가능하다.

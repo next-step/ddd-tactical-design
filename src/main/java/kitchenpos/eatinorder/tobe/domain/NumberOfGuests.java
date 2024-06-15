@@ -7,6 +7,8 @@ import java.util.Objects;
 
 @Embeddable
 public class NumberOfGuests {
+    private static final int DEFAULT = 0;
+
     @Column(name = "number_of_guests", nullable = false)
     private int num;
 
@@ -23,7 +25,7 @@ public class NumberOfGuests {
     }
 
     private static void validate(int num) {
-        if (num < 0) {
+        if (num < DEFAULT) {
             throw new IllegalArgumentException();
         }
     }

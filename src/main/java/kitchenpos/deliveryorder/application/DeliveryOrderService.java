@@ -5,8 +5,8 @@ import kitchenpos.deliveryorder.domain.OrderLineItem;
 import kitchenpos.deliveryorder.domain.OrderRepository;
 import kitchenpos.deliveryorder.domain.OrderStatus;
 import kitchenpos.infra.KitchenridersClient;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
