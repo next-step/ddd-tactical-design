@@ -6,7 +6,6 @@ import kitchenpos.menu.tobe.domain.menu.validate.ProductValidator;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -71,23 +70,5 @@ public class MenuProducts {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof MenuProducts that)) {
-            return false;
-        }
-
-        return Objects.equals(menuProducts, that.menuProducts);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(menuProducts);
     }
 }
