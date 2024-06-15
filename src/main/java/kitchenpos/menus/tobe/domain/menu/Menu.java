@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.exception.CanNotChangeDisplay;
+import kitchenpos.exception.CanNotChange;
 import kitchenpos.exception.IllegalPriceException;
 import kitchenpos.menus.tobe.domain.menuproduct.MenuProduct;
 import kitchenpos.menus.tobe.domain.menuproduct.MenuProducts;
@@ -76,7 +76,7 @@ public class Menu {
 
     public void setDisplayed() {
         if (menuProducts.getTotalPrice() > this.menuPrice.getPrice()) {
-            throw new CanNotChangeDisplay("메뉴 가격이 메뉴상품 가격을 초과해 노출시킬 수 없습니다.");
+            throw new CanNotChange("메뉴 가격이 메뉴상품 가격을 초과해 노출시킬 수 없습니다.");
         }
         this.menuDisplayStatus = true;
     }

@@ -1,7 +1,9 @@
 package kitchenpos.eatinorder.tobe.domain;
 
+import kitchenpos.eatinorder.tobe.domain.ordertable.NumberOfGuests;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
+import kitchenpos.exception.CanNotChange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTableTest {
 
@@ -59,19 +61,33 @@ class OrderTableTest {
     @DisplayName("방문한 손님 수를 변경할 수 있다.")
     @Test
     void changeNumberOfGuests() {
+        final var orderTable = OrderTable.of(tableName);
+        assertThat(orderTable.getNumberOfGuests()).isZero();
 
+        orderTable.sitted();
+        orderTable.changeNumOfGuests(3);
+
+        assertThat(orderTable.getNumberOfGuests()).isEqualTo(3);
     }
 
-    @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
+    @DisplayName("방문한 손님 수가 0명 미만이면 변경할 수 없다.")
     @ValueSource(ints = -1)
     @ParameterizedTest
-    void changeNumberOfGuests(final int numberOfGuests) {
+    void changeNumberOfGuests(final int input) {
+        final var orderTable = OrderTable.of(tableName);
+        assertThat(orderTable.getNumberOfGuests()).isZero();
 
+        orderTable.sitted();
+        assertThrowsExactly(IllegalArgumentException.class, () -> orderTable.changeNumOfGuests(input));
     }
 
     @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
     @Test
     void changeNumberOfGuestsInEmptyTable() {
+        final var orderTable = OrderTable.of(tableName);
+
+        assertThat(orderTable.isOccupied()).isFalse();
+        assertThrowsExactly(CanNotChange.class, () -> orderTable.changeNumOfGuests(1));
 
     }
 

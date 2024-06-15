@@ -1,4 +1,4 @@
-package kitchenpos.eatinorder.tobe.domain;
+package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -26,7 +26,7 @@ public class NumberOfGuests {
 
     private static void validate(int num) {
         if (num < DEFAULT) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("손님 수는 0명보다 적을 수 없습니다.");
         }
     }
 

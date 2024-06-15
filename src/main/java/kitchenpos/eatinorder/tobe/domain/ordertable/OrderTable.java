@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import jakarta.persistence.*;
-import kitchenpos.eatinorder.tobe.domain.NumberOfGuests;
+import kitchenpos.exception.CanNotChange;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -59,6 +59,17 @@ public class OrderTable {
     public void cleared() {
         this.occupied = false;
         this.numberOfGuests = numberOfGuests.cleared();
+    }
+
+    public void changeNumOfGuests(int num) {
+        validateOccupied();
+        this.numberOfGuests = NumberOfGuests.of(num);
+    }
+
+    private void validateOccupied() {
+        if (!this.occupied) {
+            throw new CanNotChange("테이블이 빈 상태로 손님 수를 변경할 수 없습니다.");
+        }
     }
 
     @Override

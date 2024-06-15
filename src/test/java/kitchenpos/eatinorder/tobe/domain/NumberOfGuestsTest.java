@@ -1,10 +1,8 @@
 package kitchenpos.eatinorder.tobe.domain;
 
-import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
-import kitchenpos.exception.IllegalNameException;
+import kitchenpos.eatinorder.tobe.domain.ordertable.NumberOfGuests;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
