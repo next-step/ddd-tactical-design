@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTable;
+import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTableRepository;
 
 public class InMemoryOrderTableRepository implements OrderTableRepository {
     private final Map<UUID, OrderTable> orderTables = new HashMap<>();
