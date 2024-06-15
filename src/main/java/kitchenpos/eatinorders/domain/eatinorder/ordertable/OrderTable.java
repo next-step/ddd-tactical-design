@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain.ordertable;
+package kitchenpos.eatinorders.domain.eatinorder.ordertable;
 
 import jakarta.persistence.*;
 import kitchenpos.common.domain.orders.OrderTableStatus;

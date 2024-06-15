@@ -2,10 +2,9 @@ package kitchenpos.eatinorders.application;
 
 import kitchenpos.common.domain.orders.OrderTableStatus;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
-import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
-import kitchenpos.eatinorders.domain.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTable;
+import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTableRepository;
 import kitchenpos.eatinorders.infra.InMemoryOrderRepository;
 import kitchenpos.eatinorders.infra.InMemoryOrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class OrderRequestTableServiceTest {
+class OrderTableServiceTest {
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
 

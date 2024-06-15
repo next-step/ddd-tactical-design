@@ -1,8 +1,7 @@
-package kitchenpos.eatinorders.domain.ordertable;
+package kitchenpos.eatinorders.domain.eatinorder.ordertable;
 
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
-import kitchenpos.common.domain.ProfanityValidator;
 
 @Embeddable
 public class OrderTableName {
