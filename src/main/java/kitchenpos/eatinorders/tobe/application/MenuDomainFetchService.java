@@ -19,9 +19,6 @@ public class MenuDomainFetchService implements MenuDomainService {
 
     @Override
     public EatInOrderLineItem fetchOrderLineItem(UUID menuId, long quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
-        }
         TobeMenu menu = tobeMenuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 

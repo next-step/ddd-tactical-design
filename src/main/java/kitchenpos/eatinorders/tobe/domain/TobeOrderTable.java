@@ -47,7 +47,7 @@ public class TobeOrderTable {
         return occupied;
     }
 
-    public void isAvailableTable() {
+    public void validAvailableTable() {
         if (occupied == OccupiedStatus.OCCUPIED_TABLE) {
             throw new NoSuchElementException("이미 사용중인 테이블입니다.");
         }

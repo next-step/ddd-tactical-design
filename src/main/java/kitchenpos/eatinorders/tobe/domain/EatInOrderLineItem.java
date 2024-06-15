@@ -20,7 +20,7 @@ public class EatInOrderLineItem {
     private Long seq;
 
     @Column(name = "menu_id", nullable = false, columnDefinition = "binary(16)")
-    private UUID MenuName;
+    private UUID menuId;
 
     @Column(name = "price", nullable = false)
     private MenuPrice menuPrice;
@@ -32,12 +32,15 @@ public class EatInOrderLineItem {
     }
 
     private EatInOrderLineItem(UUID menuId, MenuPrice menuPrice, long quantity) {
-        this.MenuName = menuId;
+        this.menuId = menuId;
         this.menuPrice = menuPrice;
         this.quantity = quantity;
     }
 
     public static EatInOrderLineItem create(UUID menuId, MenuPrice menuPrice, long quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
+        }
         return new EatInOrderLineItem(menuId, menuPrice, quantity);
     }
 }
