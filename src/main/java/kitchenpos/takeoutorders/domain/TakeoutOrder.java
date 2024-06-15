@@ -33,4 +33,52 @@ public class TakeoutOrder {
     this.orderDateTime = new OrderDateTime(LocalDateTime.now());
     this.orderLineItems = new TakeoutOrderLineItems(orderLineItems);
   }
+
+  public static TakeoutOrder createOrder(final List<TakeoutOrderLineItem> orderLineItems) {
+    return new TakeoutOrder(UUID.randomUUID(), orderLineItems);
+  }
+
+  public void accepted() {
+    if (this.status != TakeoutOrderStatus.WAITING) {
+      throw new IllegalStateException();
+    }
+
+    this.status = TakeoutOrderStatus.ACCEPTED;
+  }
+
+  public void serve() {
+    if (this.status != TakeoutOrderStatus.ACCEPTED) {
+      throw new IllegalStateException();
+    }
+
+    this.status = TakeoutOrderStatus.SERVED;
+  }
+
+  public void completed() {
+    if (this.status != TakeoutOrderStatus.SERVED) {
+      throw new IllegalStateException();
+    }
+
+    this.status = TakeoutOrderStatus.COMPLETED;
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public TakeoutOrderType getType() {
+    return type;
+  }
+
+  public TakeoutOrderStatus getStatus() {
+    return status;
+  }
+
+  public LocalDateTime getOrderDateTime() {
+    return orderDateTime.getOrderDateTime();
+  }
+
+  public List<TakeoutOrderLineItem> getOrderLineItems() {
+    return orderLineItems.getOrderLineItems();
+  }
 }

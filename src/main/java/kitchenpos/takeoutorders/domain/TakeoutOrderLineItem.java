@@ -2,7 +2,6 @@ package kitchenpos.takeoutorders.domain;
 
 import jakarta.persistence.*;
 import java.util.UUID;
-import kitchenpos.menus.domain.menu.Menu;
 
 @Table(name = "order_line_item")
 @Entity
@@ -12,18 +11,30 @@ public class TakeoutOrderLineItem {
   @Id
   private Long seq;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(
-      name = "menu_id",
-      columnDefinition = "binary(16)",
-      foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu"))
-  private Menu menu;
-
   @Embedded private Quantity quantity;
-
   @Transient private UUID menuId;
 
-  @Embedded private Price price;
+  protected TakeoutOrderLineItem() {}
 
-  public TakeoutOrderLineItem() {}
+  protected TakeoutOrderLineItem(Long seq, long quantity, UUID menuId) {
+    this.seq = seq;
+    this.quantity = new Quantity(quantity);
+    this.menuId = menuId;
+  }
+
+  public static TakeoutOrderLineItem createItem(long quantity, UUID menuId) {
+    return new TakeoutOrderLineItem(null, quantity, menuId);
+  }
+
+  public Long getSeq() {
+    return seq;
+  }
+
+  public long getQuantity() {
+    return quantity.getQuantity();
+  }
+
+  public UUID getMenuId() {
+    return menuId;
+  }
 }
