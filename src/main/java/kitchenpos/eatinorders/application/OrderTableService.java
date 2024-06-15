@@ -1,8 +1,8 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
-import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTable;
-import kitchenpos.eatinorders.domain.eatinorder.ordertable.OrderTableRepository;
+import kitchenpos.eatinorders.domain.eatinorder.OrderTable;
+import kitchenpos.eatinorders.domain.eatinorder.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

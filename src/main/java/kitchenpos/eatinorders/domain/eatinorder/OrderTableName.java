@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.domain.eatinorder.ordertable;
+package kitchenpos.eatinorders.domain.eatinorder;
 
 import jakarta.persistence.Embeddable;
 import java.util.Objects;

@@ -1,6 +1,7 @@
-package kitchenpos.eatinorders.domain.eatinorder.ordertable;
+package kitchenpos.eatinorders.domain.eatinorder;
 
 import kitchenpos.common.domain.orders.OrderTableStatus;
+import kitchenpos.eatinorders.domain.eatinorder.OrderTable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
