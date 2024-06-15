@@ -3,28 +3,21 @@ package kitchenpos.deliveryorders.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
+import kitchenpos.deliveryorders.domain.DeliveryOrderRepository;
+import kitchenpos.deliveryorders.domain.KitchenridersClient;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.domain.EatInOrder;
-import kitchenpos.menus.domain.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class OrderService {
-  private final EatInOrderRepository orderRepository;
-  private final MenuRepository menuRepository;
-  private final EatInOrderTableRepository orderTableRepository;
+public class DeliveryOrderService {
+  private final DeliveryOrderRepository orderRepository;
   private final KitchenridersClient kitchenridersClient;
 
-  public OrderService(
-      final EatInOrderRepository orderRepository,
-      final MenuRepository menuRepository,
-      final EatInOrderTableRepository orderTableRepository,
-      final KitchenridersClient kitchenridersClient) {
+  public DeliveryOrderService(
+      final DeliveryOrderRepository orderRepository, final KitchenridersClient kitchenridersClient) {
     this.orderRepository = orderRepository;
-    this.menuRepository = menuRepository;
-    this.orderTableRepository = orderTableRepository;
     this.kitchenridersClient = kitchenridersClient;
   }
 
@@ -70,7 +63,7 @@ public class OrderService {
     EatInOrder order = new EatInOrder();
     order.setId(UUID.randomUUID());
     order.setType(type);
-    order.setStatus(OrderStatus.WAITING);
+    order.setStatus(DeliveryOrderStatus.WAITING);
     order.setOrderDateTime(LocalDateTime.now());
     order.setOrderLineItems(orderLineItems);
     if (type == OrderType.DELIVERY) {
@@ -96,7 +89,7 @@ public class OrderService {
   public EatInOrder accept(final UUID orderId) {
     /*final EatInOrder order = orderRepository.findById(orderId)
         .orElseThrow(NoSuchElementException::new);
-    if (order.getStatus() != OrderStatus.WAITING) {
+    if (order.getStatus() != DeliveryOrderStatus.WAITING) {
         throw new IllegalStateException();
     }
     if (order.getType() == OrderType.DELIVERY) {
@@ -108,7 +101,7 @@ public class OrderService {
         }
         kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
     }
-    order.setStatus(OrderStatus.ACCEPTED);
+    order.setStatus(DeliveryOrderStatus.ACCEPTED);
     return order;*/
     return null;
   }

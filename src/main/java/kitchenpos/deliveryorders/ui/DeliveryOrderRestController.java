@@ -3,7 +3,7 @@ package kitchenpos.deliveryorders.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.application.EatInOrderService;
+import kitchenpos.deliveryorders.application.DeliveryOrderService;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/orders")
 @RestController
-public class OrderRestController {
-  private final EatInOrderService orderService;
+public class DeliveryOrderRestController {
+  private final DeliveryOrderService orderService;
 
-  public OrderRestController(final EatInOrderService orderService) {
+  public DeliveryOrderRestController(final DeliveryOrderService orderService) {
     this.orderService = orderService;
   }
 
