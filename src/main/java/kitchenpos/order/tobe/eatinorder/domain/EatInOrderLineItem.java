@@ -17,19 +17,19 @@ public class EatInOrderLineItem {
     @Column(name = "menu_id", columnDefinition = "binary(16)")
     private UUID menuId;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private EatInOrderLineItemQuantity quantity;
 
     @Embedded
-    private EatInOrderPrice price;
+    private EatInOrderLineItemPrice price;
 
     protected EatInOrderLineItem() {
     }
 
     public EatInOrderLineItem(UUID menuId, long quantity, BigDecimal price) {
         this.menuId = menuId;
-        this.quantity = quantity;
-        this.price = new EatInOrderPrice(price);
+        this.quantity = new EatInOrderLineItemQuantity(quantity);
+        this.price = new EatInOrderLineItemPrice(price);
     }
 
     public UUID getMenuId() {
@@ -37,7 +37,7 @@ public class EatInOrderLineItem {
     }
 
     public long getQuantity() {
-        return quantity;
+        return quantity.getQuantity();
     }
 
     public BigDecimal getPrice() {

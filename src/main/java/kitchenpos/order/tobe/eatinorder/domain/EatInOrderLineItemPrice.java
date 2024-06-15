@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class EatInOrderPrice {
+public class EatInOrderLineItemPrice {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    protected EatInOrderPrice() {
+    protected EatInOrderLineItemPrice() {
     }
 
-    public EatInOrderPrice(BigDecimal price) {
+    public EatInOrderLineItemPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -26,7 +26,7 @@ public class EatInOrderPrice {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EatInOrderPrice that = (EatInOrderPrice) o;
+        EatInOrderLineItemPrice that = (EatInOrderLineItemPrice) o;
         return Objects.equals(price, that.price);
     }
 
