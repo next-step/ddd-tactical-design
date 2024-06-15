@@ -69,8 +69,8 @@ public class EatInOrderService {
   }
 
   @Transactional(readOnly = true)
-  public List<EatInOrder> findAll() {
-    return orderRepository.findAll();
+  public List<EatInOrderResponseDto> findAll() {
+    return orderRepository.findAll().stream().map(EatInOrderResponseDto::create).toList();
   }
 
   private List<EatInOrderLineItem> createTakeoutOrderLineItems(
