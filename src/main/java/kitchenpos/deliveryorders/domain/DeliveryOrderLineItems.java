@@ -1,6 +1,7 @@
 package kitchenpos.deliveryorders.domain;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,5 +31,15 @@ public class DeliveryOrderLineItems {
 
   public void add(final DeliveryOrderLineItem orderLineItem) {
     this.orderLineItems.add(orderLineItem);
+  }
+
+  public BigDecimal totalPrice() {
+    BigDecimal sum = BigDecimal.ZERO;
+    for (DeliveryOrderLineItem orderLineItem : this.orderLineItems) {
+      final BigDecimal price = orderLineItem.getPrice();
+      final long quantity = orderLineItem.getQuantity();
+      sum = price.multiply(BigDecimal.valueOf(quantity));
+    }
+    return sum;
   }
 }

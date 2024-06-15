@@ -1,6 +1,7 @@
 package kitchenpos.deliveryorders.domain;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "order_line_item")
@@ -14,28 +15,34 @@ public class DeliveryOrderLineItem {
   @Embedded private Quantity quantity;
 
   @Transient private UUID menuId;
+  @Transient private Price price;
 
   protected DeliveryOrderLineItem() {}
 
-  protected DeliveryOrderLineItem(Long seq, long quantity, UUID menuId) {
+  protected DeliveryOrderLineItem(Long seq, long quantity, UUID menuId, BigDecimal price) {
     this.seq = seq;
     this.quantity = new Quantity(quantity);
     this.menuId = menuId;
+    this.price = new Price(price);
   }
 
-  public static DeliveryOrderLineItem createItem(long quantity, UUID menuId) {
-    return new DeliveryOrderLineItem(null, quantity, menuId);
+  public static DeliveryOrderLineItem createItem(long quantity, UUID menuId, BigDecimal price) {
+    return new DeliveryOrderLineItem(null, quantity, menuId, price);
   }
 
   public Long getSeq() {
     return seq;
   }
 
-  public Quantity getQuantity() {
-    return quantity;
+  public long getQuantity() {
+    return quantity.getQuantity();
   }
 
   public UUID getMenuId() {
     return menuId;
+  }
+
+  public BigDecimal getPrice() {
+    return price.getPrice();
   }
 }
