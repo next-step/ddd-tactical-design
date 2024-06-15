@@ -28,4 +28,7 @@ public class OrderLineItems {
         this.orderLineItems = orderLineItems;
     }
 
+    public List<EatInOrderLineItem> getOrderLineItems() {
+        return orderLineItems;
+    }
 }

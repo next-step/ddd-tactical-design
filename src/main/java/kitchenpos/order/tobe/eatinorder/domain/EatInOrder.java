@@ -69,11 +69,23 @@ public class EatInOrder {
     }
 
     public OrderTable getOrderTable() {
-        return orderTable;
+        return this.orderTable;
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return this.orderLineItems;
+    }
+
+    public EatInOrderStatus getStatus() {
+        return this.status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return this.orderDateTime;
     }
 
     @Override
