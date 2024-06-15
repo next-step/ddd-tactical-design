@@ -10,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EatInOrderService {
@@ -77,23 +74,16 @@ public class EatInOrderService {
     public EatInOrder accept(final UUID orderId) {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.WAITING) {
-//            throw new IllegalStateException();
-//        }
 
-//        order.setStatus(OrderStatus.ACCEPTED);
-        return order;
+        return order.accept();
     }
 
     @Transactional
     public EatInOrder serve(final UUID orderId) {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-//        if (order.getStatus() != OrderStatus.ACCEPTED) {
-//            throw new IllegalStateException();
-//        }
-//        order.setStatus(OrderStatus.SERVED);
-        return order;
+
+        return order.serve();
     }
 
 
@@ -101,19 +91,14 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-//        final OrderStatus status = order.getStatus();
-//
-//        if (status != OrderStatus.SERVED) {
-//            throw new IllegalStateException();
-//        }
+        order.complete();
 
-//        order.setStatus(OrderStatus.COMPLETED);
-
-//        final OrderTable orderTable = order.getOrderTable();
-//        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
+        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, order.getStatus())) {
 //            orderTable.setNumberOfGuests(0);
 //            orderTable.setOccupied(false);
-//        }
+            // todo table의 제어를 eat in order가 해야할 것으로 보이는데, 그치만 order table service에서 처리해야할 기능을 order에서 하는 것도 이상하다.
+        }
         return order;
     }
 

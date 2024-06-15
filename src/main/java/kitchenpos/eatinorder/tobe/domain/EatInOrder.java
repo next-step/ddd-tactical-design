@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static kitchenpos.eatinorder.tobe.domain.EatInOrderStatus.*;
+
 @Table
 @Entity(name = "eat_in_orders")
 public class EatInOrder {
@@ -28,7 +30,7 @@ public class EatInOrder {
 
 
     public static EatInOrder of(LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
-        return new EatInOrder(UUID.randomUUID(), EatInOrderStatus.WAITING, orderDateTime, orderLineItems, orderTableId);
+        return new EatInOrder(UUID.randomUUID(), WAITING, orderDateTime, orderLineItems, orderTableId);
     }
 
     private EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
@@ -62,4 +64,28 @@ public class EatInOrder {
         return orderTableId;
     }
 
+    public EatInOrder accept() {
+        if (this.status != WAITING) {
+            throw new IllegalStateException("주문 수락 가능한 상태가 아닙니다.");
+        }
+        this.status = ACCEPTED;
+        return this;
+    }
+
+    public EatInOrder serve() {
+        if (this.status != ACCEPTED) {
+            throw new IllegalStateException("주문 서빙할 수 없는 상태입니다.");
+        }
+        this.status = SERVED;
+        return this;
+    }
+
+
+    public EatInOrder complete() {
+        if (this.status != SERVED) {
+            throw new IllegalStateException("주문을 완료할 수 없는 상태입니다.");
+        }
+        this.status = COMPLETED;
+        return this;
+    }
 }
