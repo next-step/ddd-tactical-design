@@ -1,6 +1,6 @@
-package kitchenpos.eatinorders.application;
+package kitchenpos.deliveryorders.application;
 
-class OrderServiceTest {
+class DeliveryOrderServiceTest {
   /*private OrderRepository orderRepository;
   private MenuRepository menuRepository;
   private OrderTableRepository orderTableRepository;

@@ -9,7 +9,7 @@ import java.util.UUID;
 import kitchenpos.eatinorders.domain.EatInOrderTable;
 import kitchenpos.eatinorders.domain.EatInOrderTableRepository;
 
-public class InMemoryOrderTableRepository implements EatInOrderTableRepository {
+public class InMemoryEatInOrderTableRepository implements EatInOrderTableRepository {
   private final Map<UUID, EatInOrderTable> orderTables = new HashMap<>();
 
   @Override

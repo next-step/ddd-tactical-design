@@ -1,9 +1,8 @@
-package kitchenpos.eatinorders.application;
-
-import kitchenpos.deliveryorders.domain.KitchenridersClient;
+package kitchenpos.deliveryorders.application;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.deliveryorders.domain.KitchenridersClient;
 
 public class FakeKitchenridersClient implements KitchenridersClient {
   private UUID orderId;

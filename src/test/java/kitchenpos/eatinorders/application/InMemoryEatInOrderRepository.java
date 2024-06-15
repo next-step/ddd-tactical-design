@@ -11,7 +11,7 @@ import kitchenpos.eatinorders.domain.EatInOrderRepository;
 import kitchenpos.eatinorders.domain.EatInOrderStatus;
 import kitchenpos.eatinorders.domain.EatInOrderTable;
 
-public class InMemoryOrderRepository implements EatInOrderRepository {
+public class InMemoryEatInOrderRepository implements EatInOrderRepository {
   private final Map<UUID, EatInOrder> orders = new HashMap<>();
 
   @Override

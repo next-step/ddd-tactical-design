@@ -26,8 +26,8 @@ class OrderTableServiceTest {
 
   @BeforeEach
   void setUp() {
-    orderTableRepository = new InMemoryOrderTableRepository();
-    orderRepository = new InMemoryOrderRepository();
+    orderTableRepository = new InMemoryEatInOrderTableRepository();
+    orderRepository = new InMemoryEatInOrderRepository();
     orderTableService = new EatInOrderTableService(orderTableRepository, orderRepository);
   }
 
