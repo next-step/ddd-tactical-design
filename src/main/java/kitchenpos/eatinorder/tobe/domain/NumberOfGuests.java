@@ -34,6 +34,10 @@ public class NumberOfGuests {
         return num;
     }
 
+    public NumberOfGuests cleared() {
+        return NumberOfGuests.of(DEFAULT);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

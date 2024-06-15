@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.application;
 
 import kitchenpos.eatinorder.tobe.domain.*;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable create(final OrderTable request) {
         final String name = request.getName();
-        final var orderTable = OrderTable.of(name);
+        final var orderTable = OrderTable.of(OrderTableName.of(name));
         return orderTableRepository.save(orderTable);
     }
 
@@ -43,8 +44,9 @@ public class OrderTableService {
         if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
-//        orderTable.setNumberOfGuests(0);
-//        orderTable.setOccupied(false);
+
+        orderTable.cleared();
+
         return orderTable;
     }
 
