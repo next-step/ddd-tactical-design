@@ -73,12 +73,24 @@ public class Menu {
         return id;
     }
 
-    public BigDecimal getPrice() {
-        return menuPrice.getPrice();
-    }
-
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public MenuProducts getMenuProducts() {
+        return this.menuProducts;
+    }
+
+    public String getName() {
+        return this.menuName.getName();
+    }
+
+    public BigDecimal getPrice() {
+        return this.menuPrice.getPrice();
+    }
+
+    public MenuGroup getMenuGroup() {
+        return this.menuGroup;
     }
 
     @Override

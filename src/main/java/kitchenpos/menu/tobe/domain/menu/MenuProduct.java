@@ -32,6 +32,10 @@ public class MenuProduct {
         this.productPrice = new ProductPrice(price);
     }
 
+    public Long getSeq() {
+        return seq;
+    }
+
     public BigDecimal getPrice() {
         return productPrice.getPrice();
     }
