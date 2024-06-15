@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "order_line_item")
-@Entity(name = "newOrderLineItem")
-public class OrderLineItem {
+@Table(name = "eat_in_order_line_item")
+@Entity
+public class EatInOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -22,10 +22,10 @@ public class OrderLineItem {
 
     private BigDecimal price;
 
-    protected OrderLineItem() {
+    protected EatInOrderLineItem() {
     }
 
-    public OrderLineItem(UUID menuId, long quantity, BigDecimal price) {
+    public EatInOrderLineItem(UUID menuId, long quantity, BigDecimal price) {
         this.menuId = menuId;
         this.quantity = quantity;
         this.price = price;
@@ -52,11 +52,11 @@ public class OrderLineItem {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof OrderLineItem orderLineItem)) {
+        if (!(o instanceof EatInOrderLineItem orderLineItems)) {
             return false;
         }
 
-        return this.getSeq() != null && Objects.equals(this.getSeq(), orderLineItem.getSeq());
+        return this.getSeq() != null && Objects.equals(this.getSeq(), orderLineItems.getSeq());
     }
 
     @Override

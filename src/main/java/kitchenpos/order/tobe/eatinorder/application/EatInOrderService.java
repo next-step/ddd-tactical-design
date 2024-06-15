@@ -3,8 +3,8 @@ package kitchenpos.order.tobe.eatinorder.application;
 import kitchenpos.common.event.publisher.OrderTableClearEvent;
 import kitchenpos.order.tobe.eatinorder.application.dto.request.EatInOrderCreateRequest;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderLineItem;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
-import kitchenpos.order.tobe.eatinorder.domain.OrderLineItem;
 import kitchenpos.order.tobe.eatinorder.domain.OrderLineItems;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableRepository;
@@ -38,8 +38,8 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrderCreateRequest request) {
-        final List<OrderLineItem> orderLineItems = request.orderLineItems().stream()
-                .map(dto -> new OrderLineItem(dto.menuId(), dto.quantity(), dto.price()))
+        final List<EatInOrderLineItem> orderLineItems = request.orderLineItems().stream()
+                .map(dto -> new EatInOrderLineItem(dto.menuId(), dto.quantity(), dto.price()))
                 .toList();
 
         OrderLineItems validatedOrderLineItems = new OrderLineItems(orderLineItems, menuValidator);

@@ -13,14 +13,14 @@ public class OrderLineItems {
             name = "order_id",
             nullable = false,
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+            foreignKey = @ForeignKey(name = "fk_eat_in_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<EatInOrderLineItem> orderLineItems;
 
     protected OrderLineItems() {
     }
 
-    public OrderLineItems(List<OrderLineItem> orderLineItems, MenuValidator menuValidator) {
+    public OrderLineItems(List<EatInOrderLineItem> orderLineItems, MenuValidator menuValidator) {
         if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException("주문 항목이 비어 있습니다.");
         }
