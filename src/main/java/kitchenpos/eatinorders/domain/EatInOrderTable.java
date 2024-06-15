@@ -18,7 +18,8 @@ public class EatInOrderTable {
 
   protected EatInOrderTable() {}
 
-  protected EatInOrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+  protected EatInOrderTable(
+      final UUID id, final String name, final int numberOfGuests, final boolean occupied) {
     this.id = id;
     this.name = new Name(name);
     this.numberOfGuests = new NumberOfGuests(numberOfGuests);
@@ -26,8 +27,46 @@ public class EatInOrderTable {
   }
 
   public static EatInOrderTable createOrderTable(
-      String name, int numberOfGuests, boolean occupied) {
+      final String name, final int numberOfGuests, final boolean occupied) {
     return new EatInOrderTable(UUID.randomUUID(), name, numberOfGuests, occupied);
+  }
+
+  public void sit(int numberOfGuests) {
+    if (this.occupied.isOccupied()) {
+      throw new IllegalStateException();
+    }
+
+    if (numberOfGuests < 0) {
+      throw new IllegalArgumentException();
+    }
+
+    this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+    this.occupied = new Occupied(true);
+  }
+
+  public void changeNumberOfGuests(final int numberOfGuests) {
+    if (!this.occupied.isOccupied()) {
+      throw new IllegalStateException();
+    }
+
+    if (numberOfGuests < 0) {
+      throw new IllegalArgumentException();
+    }
+
+    this.numberOfGuests = new NumberOfGuests(numberOfGuests);
+  }
+
+  public void clear() {
+    if (!this.occupied.isOccupied()) {
+      throw new IllegalStateException();
+    }
+
+    if (this.numberOfGuests.getNumberOfGuests() < 0) {
+      throw new IllegalArgumentException();
+    }
+
+    this.numberOfGuests = new NumberOfGuests(0);
+    this.occupied = new Occupied(false);
   }
 
   public UUID getId() {
