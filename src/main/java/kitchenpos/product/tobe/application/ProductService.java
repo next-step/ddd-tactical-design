@@ -1,9 +1,10 @@
 package kitchenpos.product.tobe.application;
 
-import kitchenpos.common.infra.PurgomalumClient;
-import kitchenpos.product.tobe.application.dto.ChangePriceRequest;
-import kitchenpos.product.tobe.application.dto.CreateProductRequest;
 import kitchenpos.common.event.publisher.ProductPriceChangedEvent;
+import kitchenpos.common.infra.PurgomalumClient;
+import kitchenpos.product.tobe.application.dto.request.ChangePriceRequest;
+import kitchenpos.product.tobe.application.dto.request.CreateProductRequest;
+import kitchenpos.product.tobe.application.dto.response.ProductResponse;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 import kitchenpos.product.tobe.domain.validate.ProfanityValidator;
@@ -33,24 +34,34 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final CreateProductRequest request) {
+    public ProductResponse create(final CreateProductRequest request) {
         final Product product = new Product(UUID.randomUUID(), request.name(), request.price(), new ProfanityValidator(purgomalumClient));
-        return productRepository.save(product);
+        return toProductResponse(productRepository.save(product));
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final ChangePriceRequest request) {
+    public ProductResponse changePrice(final UUID productId, final ChangePriceRequest request) {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(request.price());
 
         eventPublisher.publishEvent(new ProductPriceChangedEvent(productId, request.price()));
 
-        return product;
+        return toProductResponse(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<ProductResponse> findAll() {
+        return productRepository.findAll().stream()
+                .map(this::toProductResponse)
+                .toList();
+    }
+
+    private ProductResponse toProductResponse(Product product) {
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice()
+        );
     }
 }
