@@ -12,6 +12,7 @@ import kitchenpos.menus.domain.tobe.menu.ProductClient;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class OrderLineItems {
@@ -32,7 +33,16 @@ public class OrderLineItems {
     return new OrderLineItems(menuClient, orderLineItems);
   }
 
+  protected void setOrder(final Order order){
+    orderLineItems
+            .forEach(item -> item.setOrder(order));
+  }
+
   private void validate(MenuClient menuClient, List<OrderLineItem> orderLineItems){
+    if (orderLineItems.size() <= 0){
+      throw new IllegalArgumentException("주문 메뉴들이 비어있습니다.");
+    }
+
     final List<UUID> menuIds = orderLineItems.stream()
             .map(OrderLineItem::getMenuId)
                     .toList();
@@ -43,14 +53,12 @@ public class OrderLineItems {
       throw new IllegalArgumentException("`메뉴` 내의 `주문상품`들이 삭제된 `상품`이면 안된다.");
     }
 
-    orderLineItems.stream()
-            .filter(
-                    orderLineItem -> matchIsDisplayed(orderMenus.getOrDefault(orderLineItem.getMenuId(), null))
-            ).findAny()
-            .ifPresent(menu -> {
-              throw new IllegalArgumentException("숨겨진 메뉴는 주문할 수 없다.");
-            });
+    validateHiddenMenu(orderLineItems, orderMenus);
+    validateMenuPrice(orderLineItems, orderMenus);
 
+  }
+
+  private void validateMenuPrice(List<OrderLineItem> orderLineItems, Map<UUID, OrderMenu> orderMenus) {
     orderLineItems.stream()
             .filter(
                     orderLineItem -> matchPrice(orderMenus.getOrDefault(orderLineItem.getMenuId(), null), orderLineItem.getPrice())
@@ -59,7 +67,16 @@ public class OrderLineItems {
             .ifPresent(menu -> {
               throw new IllegalArgumentException("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.");
             });
+  }
 
+  private void validateHiddenMenu(List<OrderLineItem> orderLineItems, Map<UUID, OrderMenu> orderMenus) {
+    orderLineItems.stream()
+            .filter(
+                    orderLineItem -> matchIsDisplayed(orderMenus.getOrDefault(orderLineItem.getMenuId(), null))
+            ).findAny()
+            .ifPresent(menu -> {
+              throw new IllegalArgumentException("숨겨진 메뉴는 주문할 수 없다.");
+            });
   }
 
   private boolean matchIsDisplayed(OrderMenu menu){
@@ -76,5 +93,9 @@ public class OrderLineItems {
     OrderMenu matched = orderMenu.orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
     return !orderLineItemPrice.equals(matched.price());
+  }
+
+  protected int getSize() {
+    return orderLineItems.size();
   }
 }

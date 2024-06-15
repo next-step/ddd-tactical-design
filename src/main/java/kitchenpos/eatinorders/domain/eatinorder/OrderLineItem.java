@@ -1,21 +1,11 @@
 package kitchenpos.eatinorders.domain.eatinorder;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import kitchenpos.common.domain.Price;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.common.domain.Price;
 
 @Table(name = "order_line_item")
 @Entity
@@ -29,7 +19,7 @@ public class OrderLineItem {
   @Column(name = "quantity", nullable = false)
   private long quantity;
 
-  @Column(name= "menu_id", nullable = false)
+  @Column(name = "menu_id", nullable = false)
   private UUID menuId;
 
   @Embedded
@@ -37,13 +27,35 @@ public class OrderLineItem {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(
-      name = "order_id",
-      columnDefinition = "binary(16)",
-      foreignKey = @ForeignKey(name = "fk_order_line_items_to_orders")
+          name = "order_id",
+          columnDefinition = "binary(16)",
+          foreignKey = @ForeignKey(name = "fk_order_line_items_to_orders")
   )
   private Order order;
 
   protected OrderLineItem() {
+  }
+
+  private OrderLineItem(final UUID menuId, final Price price, final Long quantity) {
+    validate(menuId, quantity);
+
+    this.quantity = quantity;
+    this.price = price;
+
+  }
+
+  public static OrderLineItem of(final UUID menuId, final Long price, final Long quantity) {
+    return new OrderLineItem(menuId, Price.from(price), quantity);
+  }
+
+  protected void setOrder(final Order order){
+    this.order = order;
+
+  }
+  private void validate(final UUID uuid, final Long quantity) {
+    if (Objects.isNull(uuid) || Objects.isNull(quantity)) {
+      throw new RuntimeException("메뉴 혹은 상품 수량이 비정상이라면 등록할 수 없다.");
+    }
   }
 
   protected UUID getMenuId() {
@@ -52,6 +64,10 @@ public class OrderLineItem {
 
   protected BigDecimal getPrice() {
     return price.getPrice();
+  }
+
+  protected Long getQuantity() {
+    return quantity;
   }
 
   @Override
