@@ -1,4 +1,4 @@
-package kitchenpos.eatinorders.ui;
+package kitchenpos.deliveryorders.ui;
 
 import java.net.URI;
 import java.util.List;

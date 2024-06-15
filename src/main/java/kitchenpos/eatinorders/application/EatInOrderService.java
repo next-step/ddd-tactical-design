@@ -4,27 +4,23 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.deliveryorders.infra.KitchenridersClient;
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderTableRepository;
-import kitchenpos.eatinorders.domain.OrderType;
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.menus.domain.menu.MenuRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class OrderService {
-  private final OrderRepository orderRepository;
+public class EatInOrderService {
+  private final EatInOrderRepository orderRepository;
   private final MenuRepository menuRepository;
-  private final OrderTableRepository orderTableRepository;
+  private final EatInOrderTableRepository orderTableRepository;
   private final KitchenridersClient kitchenridersClient;
 
-  public OrderService(
-      final OrderRepository orderRepository,
+  public EatInOrderService(
+      final EatInOrderRepository orderRepository,
       final MenuRepository menuRepository,
-      final OrderTableRepository orderTableRepository,
+      final EatInOrderTableRepository orderTableRepository,
       final KitchenridersClient kitchenridersClient) {
     this.orderRepository = orderRepository;
     this.menuRepository = menuRepository;
@@ -33,7 +29,7 @@ public class OrderService {
   }
 
   @Transactional
-  public Order create(final Order request) {
+  public EatInOrder create(final EatInOrder request) {
     /*final OrderType type = request.getType();
     if (Objects.isNull(type)) {
         throw new IllegalArgumentException();
@@ -71,7 +67,7 @@ public class OrderService {
         orderLineItem.setQuantity(quantity);
         orderLineItems.add(orderLineItem);
     }
-    Order order = new Order();
+    EatInOrder order = new EatInOrder();
     order.setId(UUID.randomUUID());
     order.setType(type);
     order.setStatus(OrderStatus.WAITING);
@@ -97,8 +93,8 @@ public class OrderService {
   }
 
   @Transactional
-  public Order accept(final UUID orderId) {
-    /*final Order order = orderRepository.findById(orderId)
+  public EatInOrder accept(final UUID orderId) {
+    /*final EatInOrder order = orderRepository.findById(orderId)
         .orElseThrow(NoSuchElementException::new);
     if (order.getStatus() != OrderStatus.WAITING) {
         throw new IllegalStateException();
@@ -118,57 +114,61 @@ public class OrderService {
   }
 
   @Transactional
-  public Order serve(final UUID orderId) {
-    final Order order = orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
-    if (order.getStatus() != OrderStatus.ACCEPTED) {
+  public EatInOrder serve(final UUID orderId) {
+    final EatInOrder order =
+        orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    if (order.getStatus() != EatInOrderStatus.ACCEPTED) {
       throw new IllegalStateException();
     }
-    order.setStatus(OrderStatus.SERVED);
+    order.setStatus(EatInOrderStatus.SERVED);
     return order;
   }
 
   @Transactional
-  public Order startDelivery(final UUID orderId) {
-    final Order order = orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
-    if (order.getType() != OrderType.DELIVERY) {
+  public EatInOrder startDelivery(final UUID orderId) {
+    final EatInOrder order =
+        orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    if (order.getType() != EatInOrderType.DELIVERY) {
       throw new IllegalStateException();
     }
-    if (order.getStatus() != OrderStatus.SERVED) {
+    if (order.getStatus() != EatInOrderStatus.SERVED) {
       throw new IllegalStateException();
     }
-    order.setStatus(OrderStatus.DELIVERING);
+    order.setStatus(EatInOrderStatus.DELIVERING);
     return order;
   }
 
   @Transactional
-  public Order completeDelivery(final UUID orderId) {
-    final Order order = orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
-    if (order.getStatus() != OrderStatus.DELIVERING) {
+  public EatInOrder completeDelivery(final UUID orderId) {
+    final EatInOrder order =
+        orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    if (order.getStatus() != EatInOrderStatus.DELIVERING) {
       throw new IllegalStateException();
     }
-    order.setStatus(OrderStatus.DELIVERED);
+    order.setStatus(EatInOrderStatus.DELIVERED);
     return order;
   }
 
   @Transactional
-  public Order complete(final UUID orderId) {
-    final Order order = orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
-    final OrderType type = order.getType();
-    final OrderStatus status = order.getStatus();
-    if (type == OrderType.DELIVERY) {
-      if (status != OrderStatus.DELIVERED) {
+  public EatInOrder complete(final UUID orderId) {
+    final EatInOrder order =
+        orderRepository.findById(orderId).orElseThrow(NoSuchElementException::new);
+    final EatInOrderType type = order.getType();
+    final EatInOrderStatus status = order.getStatus();
+    if (type == EatInOrderType.DELIVERY) {
+      if (status != EatInOrderStatus.DELIVERED) {
         throw new IllegalStateException();
       }
     }
-    if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
-      if (status != OrderStatus.SERVED) {
+    if (type == EatInOrderType.TAKEOUT || type == EatInOrderType.EAT_IN) {
+      if (status != EatInOrderStatus.SERVED) {
         throw new IllegalStateException();
       }
     }
-    order.setStatus(OrderStatus.COMPLETED);
-    if (type == OrderType.EAT_IN) {
-      final OrderTable orderTable = order.getOrderTable();
-      if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+    order.setStatus(EatInOrderStatus.COMPLETED);
+    if (type == EatInOrderType.EAT_IN) {
+      final EatInOrderTable orderTable = order.getOrderTable();
+      if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
         orderTable.setNumberOfGuests(0);
         orderTable.setOccupied(false);
       }
@@ -177,7 +177,7 @@ public class OrderService {
   }
 
   @Transactional(readOnly = true)
-  public List<Order> findAll() {
+  public List<EatInOrder> findAll() {
     return orderRepository.findAll();
   }
 }
