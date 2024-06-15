@@ -25,8 +25,8 @@ public class OrderTable {
     protected OrderTable() {
     }
 
-    public static OrderTable of(String name) {
-        return new OrderTable(UUID.randomUUID(), OrderTableName.of(name), NumberOfGuests.of(0), false);
+    public static OrderTable of(OrderTableName name) {
+        return new OrderTable(UUID.randomUUID(), name, NumberOfGuests.of(0), false);
     }
 
     private OrderTable(UUID id, OrderTableName name, NumberOfGuests numberOfGuests, boolean occupied) {
@@ -52,11 +52,11 @@ public class OrderTable {
         return occupied;
     }
 
-    public void setSitted() {
+    public void sitted() {
         this.occupied = true;
     }
 
-    public void setCleared() {
+    public void cleared() {
         this.occupied = false;
     }
 

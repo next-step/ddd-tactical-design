@@ -32,7 +32,7 @@ public class OrderTableService {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
 
-        orderTable.setSitted();
+        orderTable.sitted();
         return orderTable;
     }
 
