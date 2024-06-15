@@ -18,6 +18,10 @@ public class NumberOfGuests {
         this.numberOfGuests = numberOfGuests;
     }
 
+    public int getNumberOfGuests() {
+        return numberOfGuests;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

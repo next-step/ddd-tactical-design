@@ -55,6 +55,14 @@ public class OrderTable {
         return this.id;
     }
 
+    public String getName() {
+        return this.name.getName();
+    }
+
+    public int getNumberOfGuests() {
+        return this.numberOfGuests.getNumberOfGuests();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

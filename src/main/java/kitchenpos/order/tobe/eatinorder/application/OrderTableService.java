@@ -3,6 +3,7 @@ package kitchenpos.order.tobe.eatinorder.application;
 
 import kitchenpos.order.tobe.eatinorder.application.dto.request.OrderTableChangeNumberRequest;
 import kitchenpos.order.tobe.eatinorder.application.dto.request.OrderTableCreateRequest;
+import kitchenpos.order.tobe.eatinorder.application.dto.response.OrderTableResponse;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
 import kitchenpos.order.tobe.eatinorder.domain.EatInOrderStatus;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable;
@@ -25,23 +26,23 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable create(final OrderTableCreateRequest request) {
+    public OrderTableResponse create(final OrderTableCreateRequest request) {
         final OrderTable orderTable = new OrderTable(UUID.randomUUID(), request.name());
 
-        return orderTableRepository.save(orderTable);
+        return toOrderTableResponse(orderTableRepository.save(orderTable));
     }
 
     @Transactional
-    public OrderTable sit(final UUID orderTableId) {
+    public OrderTableResponse sit(final UUID orderTableId) {
         final OrderTable orderTable = findOrderTableById(orderTableId);
 
         orderTable.sit();
 
-        return orderTable;
+        return toOrderTableResponse(orderTable);
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
+    public OrderTableResponse clear(final UUID orderTableId) {
         final OrderTable orderTable = findOrderTableById(orderTableId);
 
         if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
@@ -50,26 +51,37 @@ public class OrderTableService {
 
         orderTable.clear();
 
-        return orderTable;
+        return toOrderTableResponse(orderTable);
     }
 
     @Transactional
-    public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableChangeNumberRequest request) {
+    public OrderTableResponse changeNumberOfGuests(final UUID orderTableId, final OrderTableChangeNumberRequest request) {
         final int numberOfGuests = request.numberOfGuest();
         final OrderTable orderTable = findOrderTableById(orderTableId);
 
         orderTable.changeNumberOfGuests(numberOfGuests);
 
-        return orderTable;
+        return toOrderTableResponse(orderTable);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderTable> findAll() {
-        return orderTableRepository.findAll();
+    public List<OrderTableResponse> findAll() {
+        return orderTableRepository.findAll().stream()
+                .map(this::toOrderTableResponse)
+                .toList();
     }
 
     private OrderTable findOrderTableById(final UUID orderTableId) {
         return orderTableRepository.findById(orderTableId)
                 .orElseThrow(() -> new NoSuchElementException("주문 테이블을 찾을 수 없습니다."));
+    }
+
+    private OrderTableResponse toOrderTableResponse(OrderTable orderTable) {
+        return new OrderTableResponse(
+                orderTable.getId(),
+                orderTable.getName(),
+                orderTable.getNumberOfGuests(),
+                orderTable.isOccupied()
+        );
     }
 }
