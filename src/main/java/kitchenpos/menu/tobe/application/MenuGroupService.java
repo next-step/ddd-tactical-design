@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.application;
 
-import kitchenpos.menu.tobe.application.dto.CreateMenuGroupRequest;
-import kitchenpos.menu.tobe.application.dto.MenuGroupResponse;
+import kitchenpos.menu.tobe.application.dto.request.CreateMenuGroupRequest;
+import kitchenpos.menu.tobe.application.dto.response.MenuGroupResponse;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Service;
