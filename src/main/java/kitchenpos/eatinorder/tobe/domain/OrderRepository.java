@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.tobe.domain;
 
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

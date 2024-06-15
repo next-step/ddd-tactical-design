@@ -1,6 +1,7 @@
 package kitchenpos.eatinorder.tobe.domain;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 
 import java.time.LocalDateTime;
 import java.util.List;

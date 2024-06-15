@@ -1,6 +1,8 @@
 package kitchenpos.eatinorder.tobe.domain;
 
 import kitchenpos.eatinorder.application.EatInOrderService;
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
 import kitchenpos.infra.KitchenridersClient;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,5 +1,8 @@
 package kitchenpos.eatinorder.tobe.domain;
 
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
+
 import java.util.*;
 
 public class InMemoryOrderTableRepository implements OrderTableRepository {

@@ -1,6 +1,7 @@
-package kitchenpos.eatinorder.tobe.domain;
+package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorder.tobe.domain.NumberOfGuests;
 
 import java.util.Objects;
 import java.util.UUID;

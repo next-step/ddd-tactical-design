@@ -1,5 +1,6 @@
 package kitchenpos.eatinorder.tobe.domain;
 
+import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
 import kitchenpos.exception.IllegalNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
