@@ -60,16 +60,12 @@ public class EatInOrder {
         status = EatInOrderStatus.SERVED;
     }
 
-    public void complete(boolean isLastOrderInTable) {
+    public void complete() {
         if (this.status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException("준비 완료된 주문만 주문 완료할 수 있습니다.");
         }
 
         status = EatInOrderStatus.COMPLETED;
-
-        if (isLastOrderInTable) {
-            orderTable.clear();
-        }
     }
 
     public OrderTable getOrderTable() {

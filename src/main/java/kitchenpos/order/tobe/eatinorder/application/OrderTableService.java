@@ -45,7 +45,7 @@ public class OrderTableService {
         final OrderTable orderTable = findOrderTableById(orderTableId);
 
         if (eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("주문이 완료되지 않은 테이블은 초기화할 수 없습니다.");
         }
 
         orderTable.clear();
@@ -70,6 +70,6 @@ public class OrderTableService {
 
     private OrderTable findOrderTableById(final UUID orderTableId) {
         return orderTableRepository.findById(orderTableId)
-                .orElseThrow(() -> new NoSuchElementException("Order table not found"));
+                .orElseThrow(() -> new NoSuchElementException("주문 테이블을 찾을 수 없습니다."));
     }
 }

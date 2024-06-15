@@ -1,10 +1,15 @@
 package kitchenpos.order.tobe.eatinorder.application;
 
+import kitchenpos.common.event.publisher.OrderTableClearEvent;
 import kitchenpos.order.tobe.eatinorder.application.dto.request.EatInOrderCreateRequest;
-import kitchenpos.order.tobe.eatinorder.domain.*;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrder;
+import kitchenpos.order.tobe.eatinorder.domain.EatInOrderRepository;
+import kitchenpos.order.tobe.eatinorder.domain.OrderLineItem;
+import kitchenpos.order.tobe.eatinorder.domain.OrderLineItems;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTable;
 import kitchenpos.order.tobe.eatinorder.domain.ordertable.OrderTableRepository;
 import kitchenpos.order.tobe.eatinorder.domain.validate.MenuValidator;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +22,18 @@ public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final OrderTableRepository orderTableRepository;
     private final MenuValidator menuValidator;
+    private final ApplicationEventPublisher eventPublisher;
 
     public EatInOrderService(
             final EatInOrderRepository eatInOrderRepository,
             final OrderTableRepository orderTableRepository,
-            final MenuValidator menuValidator
+            final MenuValidator menuValidator,
+            final ApplicationEventPublisher eventPublisher
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.orderTableRepository = orderTableRepository;
         this.menuValidator = menuValidator;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -62,9 +70,10 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder complete(final UUID orderId) {
         EatInOrder order = findOrderById(orderId);
-        boolean allOrdersCompletedForTable = !eatInOrderRepository.existsByOrderTableAndStatusNot(order.getOrderTable(), EatInOrderStatus.COMPLETED);
 
-        order.complete(allOrdersCompletedForTable);
+        order.complete();
+
+        eventPublisher.publishEvent(new OrderTableClearEvent(order.getOrderTable().getId()));
 
         return order;
     }
