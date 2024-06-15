@@ -1,8 +1,7 @@
 package kitchenpos.eatinorders.application;
 
-import kitchenpos.eatinorders.domain.EatInOrderTable;
-
 import java.util.UUID;
+import kitchenpos.eatinorders.domain.EatInOrderTable;
 
 public class EatInOrderTableResponse {
   private UUID id;
@@ -25,5 +24,21 @@ public class EatInOrderTableResponse {
         eatInOrderTable.getName(),
         eatInOrderTable.getNumberOfGuests(),
         eatInOrderTable.getOccupied());
+  }
+
+  public UUID getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getNumberOfGuests() {
+    return numberOfGuests;
+  }
+
+  public boolean isOccupied() {
+    return occupied;
   }
 }

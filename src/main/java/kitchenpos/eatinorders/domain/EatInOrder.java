@@ -36,21 +36,43 @@ public class EatInOrder {
   protected EatInOrder(
       final UUID id,
       final List<EatInOrderLineItem> orderLineItems,
-      final LocalDateTime orderDateTime,
       final EatInOrderTable orderTable) {
     this.id = id;
     this.type = EatInOrderType.EAT_IN;
     this.status = EatInOrderStatus.WAITING;
     this.orderLineItems = new EatInOrderLineItems(orderLineItems);
-    this.orderDateTime = new OrderDateTime(orderDateTime);
+    this.orderDateTime = new OrderDateTime(LocalDateTime.now());
     this.orderTable = orderTable;
   }
 
   public static EatInOrder createOrder(
-      final List<EatInOrderLineItem> orderLineItems,
-      final LocalDateTime orderDateTime,
-      final EatInOrderTable orderTable) {
-    return new EatInOrder(UUID.randomUUID(), orderLineItems, orderDateTime, orderTable);
+      final List<EatInOrderLineItem> orderLineItems, final EatInOrderTable orderTable) {
+    return new EatInOrder(UUID.randomUUID(), orderLineItems, orderTable);
+  }
+
+  public void accepted() {
+    if (this.status != EatInOrderStatus.WAITING) {
+      throw new IllegalStateException();
+    }
+
+    this.status = EatInOrderStatus.ACCEPTED;
+  }
+
+  public void serve() {
+    if (this.status != EatInOrderStatus.ACCEPTED) {
+      throw new IllegalStateException();
+    }
+
+    this.status = EatInOrderStatus.SERVED;
+  }
+
+  public void completed() {
+    if (this.status != EatInOrderStatus.SERVED) {
+      throw new IllegalStateException();
+    }
+
+    this.status = EatInOrderStatus.COMPLETED;
+    this.orderTable.clear();
   }
 
   public UUID getId() {

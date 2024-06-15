@@ -7,10 +7,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MenuPriceFoundListener implements ApplicationListener<MenuPriceFoundEvent> {
+public class TakeoutOrderMenuPriceFoundListener implements ApplicationListener<MenuPriceFoundEvent> {
   private final MenuRepository menuRepository;
 
-  public MenuPriceFoundListener(MenuRepository menuRepository) {
+  public TakeoutOrderMenuPriceFoundListener(MenuRepository menuRepository) {
     this.menuRepository = menuRepository;
   }
 

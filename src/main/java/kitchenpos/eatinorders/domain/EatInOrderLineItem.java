@@ -29,4 +29,20 @@ public class EatInOrderLineItem {
     this.quantity = quantity;
     this.menuId = menuId;
   }
+
+  public static EatInOrderLineItem createItem(long quantity, UUID menuId) {
+    return new EatInOrderLineItem(null, quantity, menuId);
+  }
+
+  public Long getSeq() {
+    return seq;
+  }
+
+  public long getQuantity() {
+    return quantity;
+  }
+
+  public UUID getMenuId() {
+    return menuId;
+  }
 }
