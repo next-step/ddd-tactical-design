@@ -20,7 +20,8 @@ public class EatInOrderLineItem {
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    private BigDecimal price;
+    @Embedded
+    private EatInOrderPrice price;
 
     protected EatInOrderLineItem() {
     }
@@ -28,7 +29,7 @@ public class EatInOrderLineItem {
     public EatInOrderLineItem(UUID menuId, long quantity, BigDecimal price) {
         this.menuId = menuId;
         this.quantity = quantity;
-        this.price = price;
+        this.price = new EatInOrderPrice(price);
     }
 
     public UUID getMenuId() {
@@ -40,7 +41,7 @@ public class EatInOrderLineItem {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.getPrice();
     }
 
     public Long getSeq() {
