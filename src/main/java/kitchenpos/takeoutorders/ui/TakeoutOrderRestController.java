@@ -3,59 +3,46 @@ package kitchenpos.takeoutorders.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.eatinorders.application.OrderService;
-import kitchenpos.eatinorders.domain.Order;
+import kitchenpos.takeoutorders.application.TakeoutOrderRequestDto;
+import kitchenpos.takeoutorders.application.TakeoutOrderResponseDto;
+import kitchenpos.takeoutorders.application.TakeoutOrderService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/orders")
+@RequestMapping("/api/orders/takeout")
 @RestController
 public class TakeoutOrderRestController {
-  private final OrderService orderService;
+  private final TakeoutOrderService orderService;
 
-  public TakeoutOrderRestController(final OrderService orderService) {
+  public TakeoutOrderRestController(final TakeoutOrderService orderService) {
     this.orderService = orderService;
   }
 
   @PostMapping
-  public ResponseEntity<Order> create(@RequestBody final Order request) {
-    final Order response = orderService.create(request);
-    return ResponseEntity.created(URI.create("/api/orders/" + response.getId())).body(response);
+  public ResponseEntity<TakeoutOrderResponseDto> create(
+      @RequestBody final TakeoutOrderRequestDto request) {
+    final TakeoutOrderResponseDto response = orderService.create(request);
+    return ResponseEntity.created(URI.create("/api/orders/" + response.getOrderId()))
+        .body(response);
   }
 
   @PutMapping("/{orderId}/accept")
-  public ResponseEntity<Order> accept(@PathVariable final UUID orderId) {
+  public ResponseEntity<TakeoutOrderResponseDto> accept(@PathVariable final UUID orderId) {
     return ResponseEntity.ok(orderService.accept(orderId));
   }
 
   @PutMapping("/{orderId}/serve")
-  public ResponseEntity<Order> serve(@PathVariable final UUID orderId) {
+  public ResponseEntity<TakeoutOrderResponseDto> serve(@PathVariable final UUID orderId) {
     return ResponseEntity.ok(orderService.serve(orderId));
   }
 
-  @PutMapping("/{orderId}/start-delivery")
-  public ResponseEntity<Order> startDelivery(@PathVariable final UUID orderId) {
-    return ResponseEntity.ok(orderService.startDelivery(orderId));
-  }
-
-  @PutMapping("/{orderId}/complete-delivery")
-  public ResponseEntity<Order> completeDelivery(@PathVariable final UUID orderId) {
-    return ResponseEntity.ok(orderService.completeDelivery(orderId));
-  }
-
   @PutMapping("/{orderId}/complete")
-  public ResponseEntity<Order> complete(@PathVariable final UUID orderId) {
+  public ResponseEntity<TakeoutOrderResponseDto> complete(@PathVariable final UUID orderId) {
     return ResponseEntity.ok(orderService.complete(orderId));
   }
 
   @GetMapping
-  public ResponseEntity<List<Order>> findAll() {
+  public ResponseEntity<List<TakeoutOrderResponseDto>> findAll() {
     return ResponseEntity.ok(orderService.findAll());
   }
 }

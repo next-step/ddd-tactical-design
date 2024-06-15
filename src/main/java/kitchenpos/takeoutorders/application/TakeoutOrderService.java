@@ -63,6 +63,12 @@ public class TakeoutOrderService {
     return TakeoutOrderResponseDto.create(takeoutOrder);
   }
 
+  @Transactional(readOnly = true)
+  public List<TakeoutOrderResponseDto> findAll() {
+    final List<TakeoutOrder> takeoutOrders = orderRepository.findAll();
+    return takeoutOrders.stream().map(TakeoutOrderResponseDto::create).toList();
+  }
+
   private List<TakeoutOrderLineItem> createTakeoutOrderLineItems(
       final List<TakeoutOrderLineItemRequestDto> takeoutOrderLineItemRequestDtos) {
 
@@ -76,7 +82,6 @@ public class TakeoutOrderService {
       applicationEventPublisher.publishEvent(new MenuPriceFoundEvent(this, menuId, price));
       takeoutOrderLineItems.add(TakeoutOrderLineItem.createItem(quantity, menuId));
     }
-
     return takeoutOrderLineItems;
   }
 }

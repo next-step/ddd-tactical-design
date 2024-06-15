@@ -37,6 +37,26 @@ public class TakeoutOrderResponseDto {
         OrderLineItemResponseDto.create(takeoutOrder.getOrderLineItems()));
   }
 
+  public UUID getOrderId() {
+    return orderId;
+  }
+
+  public TakeoutOrderType getType() {
+    return type;
+  }
+
+  public TakeoutOrderStatus getStatus() {
+    return status;
+  }
+
+  public LocalDateTime getOrderDateTime() {
+    return orderDateTime;
+  }
+
+  public List<OrderLineItemResponseDto> getOrderLineItemResponseDtos() {
+    return orderLineItemResponseDtos;
+  }
+
   static class OrderLineItemResponseDto {
     private long quantity;
     private UUID menuId;
