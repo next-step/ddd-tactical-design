@@ -8,10 +8,11 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class ProductDomainServiceImpl implements ProductDomainService {
+public class ProductDomainFetchService implements ProductDomainService {
+
     private final ProductRepository productRepository;
 
-    public ProductDomainServiceImpl(ProductRepository productRepository) {
+    public ProductDomainFetchService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 

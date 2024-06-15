@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class MenuDomainServiceImpl implements MenuDomainService {
+public class MenuDomainFetchService implements MenuDomainService {
     private final TobeMenuRepository tobeMenuRepository;
 
-    public MenuDomainServiceImpl(TobeMenuRepository tobeMenuRepository) {
+    public MenuDomainFetchService(TobeMenuRepository tobeMenuRepository) {
         this.tobeMenuRepository = tobeMenuRepository;
     }
 
@@ -22,7 +22,8 @@ public class MenuDomainServiceImpl implements MenuDomainService {
         if (quantity <= 0) {
             throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
         }
-        TobeMenu menu = tobeMenuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+        TobeMenu menu = tobeMenuRepository.findById(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
         if (menu.displayed() == Displayed.HIDDEN) {
             throw new IllegalStateException("주문할 수 없는 메뉴입니다.");
