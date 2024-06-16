@@ -1,24 +1,19 @@
 package kitchenpos.eatinorders.domain.eatinorder;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import jakarta.persistence.*;
 import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.common.domain.ordertables.OrderType;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
+
 @Table(name = "orders")
 @Entity
-public class Order {
+@Inheritance
+@DiscriminatorColumn(name = "order_type")
+public abstract class Order {
 
   @Column(name = "id", columnDefinition = "binary(16)")
   @Id
@@ -26,11 +21,11 @@ public class Order {
 
   @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
   @Enumerated(EnumType.STRING)
-  private OrderType type;
+  protected OrderType type;
 
   @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
   @Enumerated(EnumType.STRING)
-  private OrderStatus status;
+  protected OrderStatus status;
 
   @Column(name = "order_date_time", nullable = false)
   private LocalDateTime orderDateTime;
@@ -38,21 +33,19 @@ public class Order {
   @Embedded
   private OrderLineItems orderLineItems;
 
-  @Column(name = "delivery_address")
-  private String deliveryAddress;
-
   @ManyToOne
   @JoinColumn(
-      name = "order_table_id",
-      columnDefinition = "binary(16)",
-      foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+          name = "order_table_id",
+          columnDefinition = "binary(16)",
+          foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
   )
   private OrderTable orderTable;
 
   protected Order() {
   }
 
-  private Order(final OrderType type, final OrderStatus status, final OrderLineItems orderLineItems, final OrderTable orderTable){
+  protected Order(final OrderType type, final OrderStatus status, final OrderLineItems orderLineItems, final OrderTable orderTable) {
+    validate(type, status);
     this.id = UUID.randomUUID();
     this.type = type;
     this.status = status;
@@ -61,53 +54,71 @@ public class Order {
     this.orderTable = orderTable;
   }
 
-  private Order(final OrderType type, final OrderStatus status, final OrderLineItems orderLineItems){
+  protected Order(final OrderType type, final OrderStatus status, final OrderLineItems orderLineItems) {
     this(type, status, orderLineItems, null);
   }
-  private Order(final OrderType type, final OrderLineItems orderLineItems){
+
+  protected Order(final OrderType type, final OrderLineItems orderLineItems) {
     this(type, OrderStatus.WAITING, orderLineItems, null);
   }
-  private Order(final OrderType type, final OrderLineItems orderLineItems, final OrderTable orderTable){
+
+  protected Order(final OrderType type, final OrderLineItems orderLineItems, final OrderTable orderTable) {
     this(type, OrderStatus.WAITING, orderLineItems, orderTable);
   }
-  public static Order of(final OrderType type, final OrderStatus status, final OrderLineItems orderLineItems, final OrderTable orderTable){
-    Order order = new Order(type, status, orderLineItems, orderTable);
-    order.mapOrder();
-    return order;
+
+  private void validate(final OrderType type, final OrderStatus status) {
+    if (Objects.isNull(type)) {
+      throw new IllegalArgumentException("주문 타입이 올바르지 않습니다.");
+    }
+
+    if (Objects.isNull(status)) {
+      throw new IllegalArgumentException("주문 타입이 올바르지 않습니다.");
+    }
   }
-  public static Order of(final OrderType type, final OrderLineItems orderLineItems, final OrderTable orderTable){
-    Order order = new Order(type, orderLineItems, orderTable);
-    order.mapOrder();
-    return order;
-  }
-  public void accept(){
-    if (status != OrderStatus.WAITING){
-      throw new RuntimeException(" `주문 상태`가 `대기중(WAITING)`이 아닌 주문은 수락할 수 없습니다.");
+
+  public void accept() {
+    if (status != OrderStatus.WAITING) {
+      throw new IllegalStateException(" `주문 상태`가 `대기중(WAITING)`이 아닌 주문은 수락할 수 없습니다.");
     }
     status = OrderStatus.SERVED;
   }
 
-  public void serve(){
-    if (status != OrderStatus.ACCEPTED){
-      throw new RuntimeException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 전달할 수 없습니다.");
+  public abstract void accept(KitchenridersClient kitchenridersClient);
+  public abstract void delivering();
+  public abstract void delivered();
+
+  public void serve() {
+    if (status != OrderStatus.ACCEPTED) {
+      throw new IllegalStateException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 전달할 수 없습니다.");
     }
     status = OrderStatus.SERVED;
   }
 
-  public void complete(){
-    if (status != OrderStatus.SERVED){
-      throw new RuntimeException(" `주문 상태`가 `전달(SERVED)`이 아닌 주문은 완료할 수 없습니다.");
-    }
-    status = OrderStatus.COMPLETED;
-  }
-  private void mapOrder(){
+  public abstract void complete();
+
+  protected void mapOrder() {
     orderLineItems.setOrder(this);
+  }
+
+  protected BigDecimal getOrderLineItemsSum() {
+    return orderLineItems.getSum();
   }
 
   public UUID getId() {
     return id;
   }
 
+  protected OrderType getType() {
+    return type;
+  }
+
+  protected OrderStatus getStatus() {
+    return status;
+  }
+
+  public boolean containsNegativeMenuCounts() {
+    return orderLineItems.containsNegativeMenuQuantity();
+  }
   @Override
   public boolean equals(Object o) {
     if (this == o) {

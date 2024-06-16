@@ -38,6 +38,14 @@ public class OrderLineItems {
             .forEach(item -> item.setOrder(order));
   }
 
+  protected int getSize() {
+    return orderLineItems.size();
+  }
+
+  protected BigDecimal getSum(){
+    return orderLineItems.stream().map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+            .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+  }
   private void validate(MenuClient menuClient, List<OrderLineItem> orderLineItems){
     if (orderLineItems.size() <= 0){
       throw new IllegalArgumentException("주문 메뉴들이 비어있습니다.");
@@ -95,7 +103,7 @@ public class OrderLineItems {
     return !orderLineItemPrice.equals(matched.price());
   }
 
-  protected int getSize() {
-    return orderLineItems.size();
+  protected boolean containsNegativeMenuQuantity(){
+    return orderLineItems.stream().anyMatch(item -> item.getQuantity() < 0);
   }
 }

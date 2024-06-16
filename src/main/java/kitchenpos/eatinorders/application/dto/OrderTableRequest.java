@@ -1,11 +1,12 @@
 package kitchenpos.eatinorders.application.dto;
 
+import kitchenpos.eatinorders.domain.eatinorder.OrderTable;
+
 import java.util.UUID;
 
 public class OrderTableRequest {
 
     private UUID id;
-
 
     private String name;
 
@@ -46,5 +47,9 @@ public class OrderTableRequest {
 
     public void setOccupied(final boolean occupied) {
         this.occupied = occupied;
+    }
+
+    public OrderTable to(){
+        return OrderTable.of(name, numberOfGuests);
     }
 }

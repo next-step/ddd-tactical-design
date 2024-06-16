@@ -1,10 +1,11 @@
 package kitchenpos.eatinorders.application.dto;
 
+import kitchenpos.common.domain.orders.OrderStatus;
+import kitchenpos.common.domain.ordertables.OrderType;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.common.domain.orders.OrderStatus;
-import kitchenpos.common.domain.ordertables.OrderType;
 
 
 public class OrderRequest {
