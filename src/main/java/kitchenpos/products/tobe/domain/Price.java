@@ -11,11 +11,6 @@ public class Price {
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
     public Price() {}
 
     public Price(long price) {
@@ -26,6 +21,10 @@ public class Price {
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("가격은 0 이상이어야 합니다.");
         }
+        return price;
+    }
+
+    public BigDecimal getPrice() {
         return price;
     }
 
