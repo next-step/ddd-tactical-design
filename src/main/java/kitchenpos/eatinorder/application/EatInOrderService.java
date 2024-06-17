@@ -75,7 +75,8 @@ public class EatInOrderService {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        return order.accept();
+        order.accept();
+        return order;
     }
 
     @Transactional
@@ -83,7 +84,8 @@ public class EatInOrderService {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
 
-        return order.serve();
+        order.serve();
+        return order;
     }
 
 
@@ -91,6 +93,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder order = orderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
+
         order.complete();
 
         OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();

@@ -64,28 +64,25 @@ public class EatInOrder {
         return orderTableId;
     }
 
-    public EatInOrder accept() {
+    public void accept() {
         if (this.status != WAITING) {
             throw new IllegalStateException("주문 수락 가능한 상태가 아닙니다.");
         }
         this.status = ACCEPTED;
-        return this;
     }
 
-    public EatInOrder serve() {
+    public void serve() {
         if (this.status != ACCEPTED) {
             throw new IllegalStateException("주문 서빙할 수 없는 상태입니다.");
         }
         this.status = SERVED;
-        return this;
     }
 
 
-    public EatInOrder complete() {
+    public void complete() {
         if (this.status != SERVED) {
             throw new IllegalStateException("주문을 완료할 수 없는 상태입니다.");
         }
         this.status = COMPLETED;
-        return this;
     }
 }
