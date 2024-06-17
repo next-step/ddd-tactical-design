@@ -5,7 +5,7 @@ import kitchenpos.menu.domain.MenuGroupRepository;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderTableRepository;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.products.domain.ProductRepository;
 
 public class TestContainers {
 

@@ -1,6 +1,6 @@
 package fixtures;
 
-import kitchenpos.product.domain.Product;
+import kitchenpos.products.domain.Product;
 import java.math.BigDecimal;
 import java.util.UUID;
 

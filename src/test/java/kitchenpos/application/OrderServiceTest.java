@@ -8,7 +8,7 @@ import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.order.application.OrderService;
 import kitchenpos.order.domain.*;
 import kitchenpos.order.infra.KitchenridersClient;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.products.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

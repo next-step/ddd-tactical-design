@@ -6,8 +6,8 @@ import fixtures.MenuProductBuilder;
 import fixtures.ProductBuilder;
 
 import kitchenpos.menu.domain.*;
-import kitchenpos.product.application.ProductService;
-import kitchenpos.product.domain.Product;
+import kitchenpos.products.application.ProductService;
+import kitchenpos.products.domain.Product;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

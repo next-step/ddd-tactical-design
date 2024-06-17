@@ -2,7 +2,7 @@ package fixtures;
 
 
 import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.product.domain.Product;
+import kitchenpos.products.domain.Product;
 
 import java.util.UUID;
 
