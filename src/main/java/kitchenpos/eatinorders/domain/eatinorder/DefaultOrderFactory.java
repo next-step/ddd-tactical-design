@@ -1,17 +1,11 @@
 package kitchenpos.eatinorders.domain.eatinorder;
 
+import kitchenpos.common.annotation.FactoryService;
 import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.common.domain.ordertables.OrderType;
-import org.springframework.stereotype.Component;
 
-@Component
+@FactoryService
 public class DefaultOrderFactory implements OrderFactory {
-
-  private final KitchenridersClient kitchenridersClient;
-
-  public DefaultOrderFactory(KitchenridersClient kitchenridersClient) {
-    this.kitchenridersClient = kitchenridersClient;
-  }
 
   public Order of(final OrderType orderType, final OrderStatus orderStatus, final OrderLineItems orderLineItems, final OrderTable orderTable, final String orderDelivery) {
     if (orderType.equals(OrderType.TAKEOUT)) {
