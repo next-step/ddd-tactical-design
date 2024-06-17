@@ -14,6 +14,6 @@ public interface OrderRepository {
 
     List<Order> findAll();
 
-    boolean existsByOrderTableAndStatusNot(OrderTableRequest orderTableRequest, OrderStatus orderStatus);
+    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, OrderStatus orderStatus);
 }
 
