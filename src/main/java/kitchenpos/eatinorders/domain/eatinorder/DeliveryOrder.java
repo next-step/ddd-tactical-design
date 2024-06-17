@@ -32,6 +32,7 @@ public class DeliveryOrder extends Order {
     this.deliveryAddress = deliveryAddress;
     validate();
   }
+
   private void validate() {
     if (containsNegativeMenuCounts()) {
       throw new IllegalArgumentException("주문을 생성할 때, 주문상품들의 갯수를 감소시킬 수 없다.");
@@ -39,21 +40,16 @@ public class DeliveryOrder extends Order {
   }
 
   @Override
-  public void accept() {
-    throw new IllegalStateException("해당 주문 타입은 라이더에게 전달되어야 합니다.");
-  }
-
-  @Override
-  public void accept(KitchenridersClient kitchenridersClient) {
+  public void accept(PassToRiderService passToRiderService) {
     if (status != OrderStatus.WAITING) {
       throw new IllegalStateException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 전달할 수 없습니다.");
     }
     status = OrderStatus.ACCEPTED;
 
-    kitchenridersClient.requestDelivery(getId(), getOrderLineItemsSum(), deliveryAddress);
+    passToRiderService.acceptOrder(this);
   }
 
-  public void delivering(){
+  public void delivering() {
     if (status != OrderStatus.ACCEPTED) {
       throw new IllegalStateException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 배달할 수 없습니다.");
     }
@@ -61,19 +57,23 @@ public class DeliveryOrder extends Order {
 
   }
 
-  public void delivered(){
+  public void delivered() {
     if (status != OrderStatus.DELIVERING) {
       throw new IllegalStateException(" `주문 상태`가 `배달중(DELIVERING)`이 아닌 주문은 배달완료할 수 없습니다.");
     }
     status = OrderStatus.DELIVERED;
 
   }
+
   @Override
-  public void complete() {
+  public void complete(ClearOrderTableService clearOrderTableService) {
     if (status != OrderStatus.DELIVERED) {
       throw new IllegalStateException(" `주문 상태`가 `배달완료(DELIVERED)`이 아닌 주문은 완료할 수 없습니다.");
     }
     status = OrderStatus.COMPLETED;
   }
 
+  public String getDeliveryAddress() {
+    return deliveryAddress;
+  }
 }

@@ -76,15 +76,11 @@ public abstract class Order {
     }
   }
 
-  public void accept() {
-    if (status != OrderStatus.WAITING) {
-      throw new IllegalStateException(" `주문 상태`가 `대기중(WAITING)`이 아닌 주문은 수락할 수 없습니다.");
-    }
-    status = OrderStatus.SERVED;
-  }
 
-  public abstract void accept(KitchenridersClient kitchenridersClient);
+  public abstract void accept(PassToRiderService acceptOrderService);
+
   public abstract void delivering();
+
   public abstract void delivered();
 
   public void serve() {
@@ -94,7 +90,7 @@ public abstract class Order {
     status = OrderStatus.SERVED;
   }
 
-  public abstract void complete();
+  public abstract void complete(ClearOrderTableService clearOrderTableService);
 
   protected void mapOrder() {
     orderLineItems.setOrder(this);
@@ -103,7 +99,17 @@ public abstract class Order {
   protected BigDecimal getOrderLineItemsSum() {
     return orderLineItems.getSum();
   }
+  protected void clearOrderTable(){
+    orderTable.clear();
+  }
 
+  public boolean isDelivery() {
+    return getType().equals(OrderType.DELIVERY);
+  }
+
+  public boolean isNotEatIn() {
+    return !getType().equals(OrderType.EAT_IN);
+  }
   public UUID getId() {
     return id;
   }
@@ -116,9 +122,14 @@ public abstract class Order {
     return status;
   }
 
+  public UUID getOrderTableId() {
+    return orderTable.getId();
+  }
+
   public boolean containsNegativeMenuCounts() {
     return orderLineItems.containsNegativeMenuQuantity();
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,4 +146,7 @@ public abstract class Order {
   public int hashCode() {
     return Objects.hash(id);
   }
+
+
+
 }
