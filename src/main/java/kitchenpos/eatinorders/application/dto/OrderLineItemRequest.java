@@ -1,5 +1,6 @@
 package kitchenpos.eatinorders.application.dto;
 
+import kitchenpos.eatinorders.domain.eatinorder.OrderLineItem;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 
 import java.math.BigDecimal;
@@ -58,5 +59,9 @@ public class OrderLineItemRequest {
 
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    public OrderLineItem to(){
+        return OrderLineItem.of(menuId, price.longValue(), quantity);
     }
 }

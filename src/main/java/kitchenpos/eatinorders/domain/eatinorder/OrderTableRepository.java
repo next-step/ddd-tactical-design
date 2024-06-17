@@ -1,5 +1,7 @@
 package kitchenpos.eatinorders.domain.eatinorder;
 
+import kitchenpos.common.domain.orders.OrderStatus;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,5 +12,7 @@ public interface OrderTableRepository {
     Optional<OrderTable> findById(UUID id);
 
     List<OrderTable> findAll();
+
+    boolean existsByOrderTableAndStatausNot(UUID id, OrderStatus completed);
 }
 

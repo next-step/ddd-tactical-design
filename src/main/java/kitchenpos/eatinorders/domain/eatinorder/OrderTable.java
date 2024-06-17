@@ -40,7 +40,6 @@ public class OrderTable {
   }
 
   public void clear(){
-    validateUnoccupied();
 
     unoccupy();
   }
@@ -61,7 +60,6 @@ public class OrderTable {
 
   private void validateOccupied(){
     if (this.occupied.equals(OrderTableStatus.UNOCCUPIED)){
-      throw new IllegalStateException("빈 테이블은 방문한 고객 인원을 변경할 수 없다.");
     }
   }
 
