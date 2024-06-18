@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +16,38 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("to-be 상품 도메인 테스트")
 class ProductTest {
 
+    private ProductValidator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = new ProductValidator() {
+            @Override
+            public void delegate(String name, BigDecimal price) {
+                validateName(name);
+                validatePrice(price);
+            }
+
+            @Override
+            public void validateName(String name) {
+                if (name == null) {
+                    throw new IllegalArgumentException("상품명은 null일 수 없습니다");
+                }
+                if ("비속어".equals(name)) {
+                    throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
+                }
+            }
+
+            @Override
+            public void validatePrice(BigDecimal price) {
+                if (price == null) {
+                    throw new IllegalArgumentException("가격은 null일 수 없습니다.");
+                }
+                if (price.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
+                }
+            }
+        };
+    }
 
     @DisplayName("상품은 이름, 가격을 갖는다")
     @Test
@@ -51,10 +84,6 @@ class ProductTest {
     void productNameWithBlankTest() {
 
         // given
-        ProductValidator validator = (name, price) -> {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-        };
-
         // when
         // then
         assertThatThrownBy(() -> {
@@ -70,14 +99,10 @@ class ProductTest {
     void productPriceIsZeroOrPositiveTest() {
 
         // given
-        ProductValidator validator = (name, price) -> {
-            throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
-        };
-
         // when
         // then
         assertThatThrownBy(() -> {
-            new Product(UUID.randomUUID(), "상품 이름", BigDecimal.ZERO, validator);
+            new Product(UUID.randomUUID(), "상품 이름", BigDecimal.valueOf(-1), validator);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 

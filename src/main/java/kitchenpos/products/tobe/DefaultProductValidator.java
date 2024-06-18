@@ -4,7 +4,7 @@ import kitchenpos.infra.PurgomalumClient;
 
 import java.math.BigDecimal;
 
-public class ProductValidatorImpl implements ProductValidator {
+public class DefaultProductValidator implements ProductValidator {
 
     private PurgomalumClient purgomalumClient;
 
@@ -15,7 +15,7 @@ public class ProductValidatorImpl implements ProductValidator {
         validatePrice(price);
     }
 
-    private void validateName(String name) {
+    public void validateName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("상품명은 null일 수 없습니다");
         }
@@ -24,7 +24,7 @@ public class ProductValidatorImpl implements ProductValidator {
         }
     }
 
-    private void validatePrice(BigDecimal price) {
+    public void validatePrice(BigDecimal price) {
         if (price == null) {
             throw new IllegalArgumentException("가격은 null일 수 없습니다.");
         }

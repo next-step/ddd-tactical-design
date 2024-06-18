@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe.application;
 
-import kitchenpos.menu.domain.*;
-import kitchenpos.products.tobe.Product;
-import kitchenpos.products.tobe.ProductValidator;
+import kitchenpos.products.tobe.*;
 import kitchenpos.products.tobe.fixtures.FakeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,39 +12,46 @@ import org.junit.jupiter.params.provider.EmptySource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProductServiceTest {
 
+    private final ProductRepository productRepository = new FakeProductRepository();
     private ProductService productService;
-    private MenuGroupRepository menuGroupRepository;
-    private MenuRepository menuRepository;
+    private ProductValidator validator;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(
-                new FakeProductRepository(),
-                menuRepository,
-                new ProductValidator() {
-                    @Override
-                    public void delegate(String name, BigDecimal price) {
-                        if (name == null) {
-                            throw new IllegalArgumentException("상품명은 null일 수 없습니다");
-                        }
-                        if (price == null) {
-                            throw new IllegalArgumentException("가격은 null일 수 없습니다.");
-                        }
-                        if ("욕설".equals(name)) {
-                            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-                        }
-                        if (price.compareTo(BigDecimal.ZERO) < 0) {
-                            throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
-                        }
-                    }
+        validator = new ProductValidator() {
+            @Override
+            public void delegate(String name, BigDecimal price) {
+                validateName(name);
+                validatePrice(price);
+            }
+
+            @Override
+            public void validateName(String name) {
+                if (name == null) {
+                    throw new IllegalArgumentException("상품명은 null일 수 없습니다");
                 }
-        );
+                if ("욕설".equals(name)) {
+                    throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
+                }
+            }
+
+            @Override
+            public void validatePrice(BigDecimal price) {
+                if (price == null) {
+                    throw new IllegalArgumentException("가격은 null일 수 없습니다.");
+                }
+                if (price.compareTo(BigDecimal.ZERO) < 0) {
+                    throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
+                }
+            }
+        };
+        productService = new ProductService(productRepository, null, validator);
     }
 
     @Nested
@@ -91,15 +96,30 @@ class ProductServiceTest {
         void productPriceIsZeroOrPositiveTest() {
 
             // given
-            UUID id = UUID.randomUUID();
-            Product product = new Product(id, "치킨", BigDecimal.valueOf(-1));
+            CreateCommand create = new CreateCommand("상품 이름", BigDecimal.valueOf(-1));
+
 
             // when
             // then
-            assertThatThrownBy(() -> productService.create(product))
+            assertThatThrownBy(() -> productService.create(create))
                     .isInstanceOf(IllegalArgumentException.class);
         }
 
+    }
+
+    @DisplayName("상품의 가격을 변경한다")
+    @Test
+    void changePriceTest() {
+
+        // given
+        Product chicken = new Product(UUID.randomUUID(), "치킨", BigDecimal.valueOf(10_000));
+        productRepository.save(chicken);
+
+        // when
+        Product sut = productService.changePrice(chicken.id(), new UpdateCommand(BigDecimal.valueOf(20_000)));
+
+        // then
+        assertThat(sut.price()).isEqualTo(BigDecimal.valueOf(20_000));
     }
 
 }

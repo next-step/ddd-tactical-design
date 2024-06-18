@@ -51,6 +51,11 @@ public class Product {
         return price;
     }
 
+    public void changePrice(BigDecimal price, ProductValidator validator) {
+        validator.validatePrice(price);
+        this.price = price;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -62,9 +67,5 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public void setPrice(BigDecimal price) {
-
     }
 }

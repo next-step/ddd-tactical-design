@@ -1,18 +1,13 @@
 package kitchenpos.products.tobe.application;
 
 
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuProduct;
 import kitchenpos.menu.domain.MenuRepository;
-import kitchenpos.products.tobe.ProductRepository;
-import kitchenpos.products.tobe.Product;
-import kitchenpos.products.tobe.ProductValidator;
+import kitchenpos.products.tobe.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ProductService {
@@ -38,14 +33,15 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.price();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Product changePrice(final UUID productId, final UpdateCommand updateCommand) {
+
+        final BigDecimal price = updateCommand.price();
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price, productValidator);
+
+        // TODO: 메뉴 BC 리팩토링때 반영
+        /*
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -60,6 +56,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
+        */
         return product;
     }
 

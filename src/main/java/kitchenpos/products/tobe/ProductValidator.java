@@ -8,4 +8,6 @@ import java.math.BigDecimal;
 public interface ProductValidator {
 
     void delegate(String name, BigDecimal price);
+    void validateName(String name);
+    void validatePrice(BigDecimal price);
 }
