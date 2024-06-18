@@ -36,15 +36,6 @@ public class OrderTableService {
     }
 
     @Transactional
-    public OrderTable clear(final UUID orderTableId) {
-        final OrderTable orderTableRequest = orderTableRepository.findById(orderTableId)
-            .orElseThrow(NoSuchElementException::new);
-        orderTableRequest.clear();
-
-        return orderTableRequest;
-    }
-
-    @Transactional
     public OrderTable changeNumberOfGuests(final UUID orderTableId, final OrderTableRequest request) {
 
         final OrderTable orderTableRequest = orderTableRepository.findById(orderTableId)

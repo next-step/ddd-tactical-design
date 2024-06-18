@@ -3,6 +3,7 @@ package kitchenpos.eatinorders.domain.eatinorder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +17,7 @@ public class OrderLineItemTest {
 
     assertAll(
             () -> assertThat(actual.getMenuId()).isNotNull(),
-            () -> assertThat(actual.getPrice()).isEqualTo(10_000L),
+            () -> assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(10_000L)),
             () -> assertThat(actual.getQuantity()).isEqualTo(2L)
     );
   }

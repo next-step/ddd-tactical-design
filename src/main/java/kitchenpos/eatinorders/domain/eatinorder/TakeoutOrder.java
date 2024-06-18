@@ -29,7 +29,7 @@ public class TakeoutOrder extends Order {
     if (status != OrderStatus.WAITING) {
       throw new IllegalStateException(" `주문 상태`가 `대기중(WAITING)`이 아닌 주문은 수락할 수 없습니다.");
     }
-    status = OrderStatus.SERVED;
+    status = OrderStatus.ACCEPTED;
   }
 
   @Override

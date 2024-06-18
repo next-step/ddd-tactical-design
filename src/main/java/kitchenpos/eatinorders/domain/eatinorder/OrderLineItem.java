@@ -38,10 +38,9 @@ public class OrderLineItem {
 
   private OrderLineItem(final UUID menuId, final Price price, final Long quantity) {
     validate(menuId, quantity);
-
+    this.menuId = menuId;
     this.quantity = quantity;
     this.price = price;
-
   }
 
   public static OrderLineItem of(final UUID menuId, final Long price, final Long quantity) {

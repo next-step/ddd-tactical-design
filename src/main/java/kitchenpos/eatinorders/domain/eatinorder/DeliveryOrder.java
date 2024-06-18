@@ -50,7 +50,7 @@ public class DeliveryOrder extends Order {
   }
 
   public void delivering() {
-    if (status != OrderStatus.ACCEPTED) {
+    if (status != OrderStatus.SERVED) {
       throw new IllegalStateException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 배달할 수 없습니다.");
     }
     status = OrderStatus.DELIVERING;

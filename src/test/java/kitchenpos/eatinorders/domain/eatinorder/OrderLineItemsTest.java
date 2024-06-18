@@ -4,6 +4,7 @@ import kitchenpos.Fixtures;
 import kitchenpos.common.domain.ProfanityValidator;
 import kitchenpos.eatinorders.domain.menu.MenuClient;
 import kitchenpos.eatinorders.infra.DefaultMenuClient;
+import kitchenpos.eatinorders.infra.FakeMenuClient;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
 import kitchenpos.menus.domain.tobe.menu.MenuRepository;
@@ -18,9 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import static kitchenpos.Fixtures.menuGroup;
+import static kitchenpos.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -31,14 +33,14 @@ public class OrderLineItemsTest {
 
   public static ProductRepository productRepository;
   public static ProductClient productClient;
-  public static MenuClient menuClient;
+  public static FakeMenuClient menuClient;
   public static MenuRepository menuRepository;
   public static Product product;
   public static Menu menu;
   @BeforeEach
   void setUp() {
     menuRepository = new InMemoryMenuRepository();
-    menuClient = new DefaultMenuClient(menuRepository);
+    menuClient = new FakeMenuClient();
     profanityValidator = new FakeProfanityValidator();
     productRepository = new InMemoryProductRepository();
     productClient = new DefaultProductClient(productRepository);
@@ -55,7 +57,7 @@ public class OrderLineItemsTest {
   void creatOrderLineItems() {
     OrderLineItem item1 = OrderLineItem.of(menu.getId(), 20_000L, 2L);
 
-    OrderLineItems actual = OrderLineItems.of(menuClient, List.of(item1));
+    OrderLineItems actual = OrderLineItems.of(menuClient, List.of(orderLineItem(menuClient)));
 
     assertAll(
             () -> assertThat(actual).isNotNull(),
@@ -67,10 +69,8 @@ public class OrderLineItemsTest {
   @DisplayName("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.")
   @Test
   void validateMenuPrice() {
-    OrderLineItem item1 = OrderLineItem.of(menu.getId(), 10_000_000L, 2L);
-
     assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> OrderLineItems.of(menuClient, List.of(item1)))
+            .isThrownBy(() -> OrderLineItems.of(menuClient, List.of(orderLineItem(menuClient, BigDecimal.valueOf(10_000_000L)))))
             .withMessageContaining("주문한 메뉴의 가격은 실제 메뉴 가격과 일치해야 한다.");
   }
 
@@ -81,8 +81,8 @@ public class OrderLineItemsTest {
     menu.hide();
     OrderLineItem item1 = OrderLineItem.of(menu.getId(), 10_000L, 2L);
 
-    assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> OrderLineItems.of(menuClient, List.of(item1)))
+    assertThatExceptionOfType(IllegalStateException.class)
+            .isThrownBy(() -> OrderLineItems.of(menuClient, List.of(orderLineItem(menuClient, false))))
             .withMessageContaining("숨겨진 메뉴는 주문할 수 없다.");
   }
 }

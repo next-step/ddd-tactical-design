@@ -37,11 +37,6 @@ public class OrderTableRestController {
         return ResponseEntity.ok(orderTableService.sit(orderTableId));
     }
 
-    @PutMapping("/{orderTableId}/clear")
-    public ResponseEntity<OrderTable> clear(@PathVariable final UUID orderTableId) {
-        return ResponseEntity.ok(orderTableService.clear(orderTableId));
-    }
-
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
         @PathVariable final UUID orderTableId,

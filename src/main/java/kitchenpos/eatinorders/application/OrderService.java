@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -31,6 +32,10 @@ public class OrderService {
 
   @Transactional
   public Order create(final OrderRequest request) {
+    if (Objects.isNull(request.getOrderLineItems())) {
+      throw new IllegalArgumentException("주문 상품들의 상태가 비정상입니다.");
+    }
+
     final List<OrderLineItem> orderLineItemList = request.getOrderLineItems()
             .stream()
             .map(OrderLineItemRequest::to)
@@ -39,7 +44,7 @@ public class OrderService {
     OrderLineItems orderLineItems = OrderLineItems.of(menuClient, orderLineItemList);
 
     Order order = orderFactory.of(request.getType(), request.getStatus(), orderLineItems,
-            request.getOrderTable().to(), request.getDeliveryAddress());
+            request.getOrderTable().orElse(null), request.getDeliveryAddress());
 
     return orderRepository.save(order);
   }
@@ -49,7 +54,6 @@ public class OrderService {
     final Order orderRequest = orderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
 
-    passToRiderService.acceptOrder(orderRequest);
     orderRequest.accept(passToRiderService);
     return orderRequest;
   }

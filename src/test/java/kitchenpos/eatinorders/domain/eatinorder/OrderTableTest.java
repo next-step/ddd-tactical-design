@@ -49,19 +49,6 @@ public class OrderTableTest {
     assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.UNOCCUPIED);
   }
 
-  @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
-  @Test
-  void failToClearOccupied() {
-    OrderTable actual = OrderTable.of("udon", 3);
-
-    actual.occupy();
-
-    assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.OCCUPIED);
-
-    assertThatExceptionOfType(IllegalStateException.class)
-            .isThrownBy(() -> actual.clear())
-            .withMessageContaining("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.");
-  }
   @DisplayName("고객 인원를 변경할 수 있다.")
   @ParameterizedTest
   @ValueSource(ints = {1,2,3,4})
@@ -83,5 +70,19 @@ public class OrderTableTest {
 
     assertThatExceptionOfType(IllegalStateException.class)
             .isThrownBy(() -> actual.changeCustomerHeadCounts(3));
+  }
+
+  @DisplayName("고객 인원은 0명 이상이어야 한다.")
+  @ParameterizedTest
+  @ValueSource(ints = {-10_000, -1})
+  void changeCustomerHeadCountWithNegativePrice(int headCounts) {
+
+    OrderTable actual = OrderTable.of("udon", 3);
+
+    actual.occupy();
+
+    assertThatExceptionOfType(IllegalArgumentException.class)
+            .isThrownBy(() ->     actual.changeCustomerHeadCounts(headCounts))
+            .withMessageContaining("방문한 손님 수는 0 이상이어야 한다.");
   }
 }

@@ -18,7 +18,8 @@ public class EatInOrder extends Order {
     if (status != OrderStatus.WAITING) {
       throw new IllegalStateException(" `주문 상태`가 `대기중(WAITING)`이 아닌 주문은 수락할 수 없습니다.");
     }
-    status = OrderStatus.SERVED;  }
+    status = OrderStatus.ACCEPTED;
+  }
 
   @Override
   public void delivering() {
@@ -33,15 +34,20 @@ public class EatInOrder extends Order {
 
   protected EatInOrder(OrderStatus orderStatus, OrderLineItems orderLineItems, OrderTable orderTable) {
     super(OrderType.EAT_IN, orderStatus, orderLineItems, orderTable);
+    validate();
   }
 
   @Override
   public void complete(ClearOrderTableService clearOrderTableService) {
     if (status != OrderStatus.SERVED) {
-      throw new IllegalStateException(" `주문 상태`가 `접수(ACCEPTED)`이 아닌 주문은 전달할 수 없습니다.");
+      throw new IllegalStateException(" `주문 상태`가 `전달(SERVED)`이 아닌 주문은 전달할 수 없습니다.");
     }
-    clearOrderTableService.clear(this);
     status = OrderStatus.COMPLETED;
+
+    clearOrderTableService.clear(this);
   }
 
+  private void validate(){
+    isNotOccupied();
+  }
 }

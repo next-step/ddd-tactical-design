@@ -72,7 +72,7 @@ public abstract class Order {
     }
 
     if (Objects.isNull(status)) {
-      throw new IllegalArgumentException("주문 타입이 올바르지 않습니다.");
+      throw new IllegalArgumentException("주문 상태가 올바르지 않습니다.");
     }
   }
 
@@ -96,7 +96,7 @@ public abstract class Order {
     orderLineItems.setOrder(this);
   }
 
-  protected BigDecimal getOrderLineItemsSum() {
+  public BigDecimal getOrderLineItemsSum() {
     return orderLineItems.getSum();
   }
   protected void clearOrderTable(){
@@ -118,10 +118,16 @@ public abstract class Order {
     return type;
   }
 
-  protected OrderStatus getStatus() {
-    return status;
+  public boolean hasStatus(OrderStatus status) {
+    return this.status.equals(status);
   }
 
+  public OrderTable getOrderTable() {
+    return orderTable;
+  }
+  public void isNotOccupied() {
+    orderTable.validateOccupied();
+  }
   public UUID getOrderTableId() {
     return orderTable.getId();
   }

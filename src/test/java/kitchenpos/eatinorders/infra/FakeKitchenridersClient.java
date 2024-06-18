@@ -1,6 +1,6 @@
 package kitchenpos.eatinorders.infra;
 
-import kitchenpos.deliveryorders.infra.KitchenridersClient;
+import kitchenpos.eatinorders.domain.eatinorder.KitchenridersClient;
 
 import java.math.BigDecimal;
 import java.util.UUID;

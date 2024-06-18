@@ -30,9 +30,6 @@ public class CustomerHeadcount {
       throw new IllegalArgumentException("방문한 손님 수가 올바르지 않으면 변경할 수 없다.");
     }
 
-    if (headCounts.compareTo(ZERO) <= 0) {
-      throw new IllegalArgumentException("방문한 손님 수는 0 이상이어야 한다.");
-    }
   }
 
   public Integer getHeadCounts() {

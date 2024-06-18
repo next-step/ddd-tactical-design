@@ -47,7 +47,7 @@ public class OrderLineItems {
             .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
   }
   private void validate(MenuClient menuClient, List<OrderLineItem> orderLineItems){
-    if (orderLineItems.size() <= 0){
+    if (orderLineItems.isEmpty()){
       throw new IllegalArgumentException("주문 메뉴들이 비어있습니다.");
     }
 
@@ -83,7 +83,7 @@ public class OrderLineItems {
                     orderLineItem -> matchIsDisplayed(orderMenus.getOrDefault(orderLineItem.getMenuId(), null))
             ).findAny()
             .ifPresent(menu -> {
-              throw new IllegalArgumentException("숨겨진 메뉴는 주문할 수 없다.");
+              throw new IllegalStateException("숨겨진 메뉴는 주문할 수 없다.");
             });
   }
 

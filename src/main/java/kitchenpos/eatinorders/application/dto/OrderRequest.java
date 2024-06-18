@@ -2,9 +2,12 @@ package kitchenpos.eatinorders.application.dto;
 
 import kitchenpos.common.domain.orders.OrderStatus;
 import kitchenpos.common.domain.ordertables.OrderType;
+import kitchenpos.eatinorders.domain.eatinorder.OrderTable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -22,9 +25,7 @@ public class OrderRequest {
 
     private String deliveryAddress;
 
-    private OrderTableRequest orderTableRequest;
-
-    private UUID orderTableId;
+    private OrderTable orderTable;
 
     public OrderRequest() {
     }
@@ -77,19 +78,15 @@ public class OrderRequest {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public OrderTableRequest getOrderTable() {
-        return orderTableRequest;
+    public Optional<OrderTable> getOrderTable() {
+        if(Objects.isNull(orderTable)){
+            return Optional.ofNullable(null);
+        }
+
+        return Optional.of(orderTable);
     }
 
-    public void setOrderTable(final OrderTableRequest orderTableRequest) {
-        this.orderTableRequest = orderTableRequest;
-    }
-
-    public UUID getOrderTableId() {
-        return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
+    public void setOrderTable(final OrderTable orderTable) {
+        this.orderTable = orderTable;
     }
 }

@@ -1,6 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.common.domain.orders.OrderTableStatus;
+import kitchenpos.eatinorders.domain.eatinorder.ClearOrderTableService;
 import kitchenpos.eatinorders.domain.eatinorder.OrderRepository;
 import kitchenpos.eatinorders.application.dto.OrderTableRequest;
 import kitchenpos.eatinorders.domain.eatinorder.OrderTable;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class OrderTableServiceTest {
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
+    private ClearOrderTableService clearOrderTableService;
 
     private OrderTableService orderTableService;
 
@@ -33,6 +35,7 @@ class OrderTableServiceTest {
     void setUp() {
         orderTableRepository = new InMemoryOrderTableRepository();
         orderRepository = new InMemoryOrderRepository();
+        clearOrderTableService = new ClearOrderTableService(orderRepository, orderTableRepository);
         orderTableService = new OrderTableService(orderTableRepository);
     }
 
@@ -64,28 +67,6 @@ class OrderTableServiceTest {
         final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
         final OrderTable actual = orderTableService.sit(orderTableId);
         assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.OCCUPIED);
-    }
-
-    @DisplayName("빈 테이블로 설정할 수 있다.")
-    @Test
-    void clear() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
-        assertAll(
-            () -> assertThat(actual.getCustomerHeadcount()).isZero(),
-            () -> assertThat(actual.getOccupied()).isEqualTo(OrderTableStatus.UNOCCUPIED)
-        );
-    }
-
-    @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
-    @Test
-    void clearWithUncompletedOrders() {
-        final OrderTable orderTableRequest = orderTableRepository.save(orderTable(true, 4));
-        final UUID orderTableId = orderTableRequest.getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
-
-        assertThatThrownBy(() -> orderTableService.clear(orderTableId))
-            .isInstanceOf(IllegalStateException.class);
     }
 
     @DisplayName("방문한 손님 수를 변경할 수 있다.")

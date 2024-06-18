@@ -8,15 +8,15 @@ import kitchenpos.common.domain.ordertables.OrderType;
 public class DefaultOrderFactory implements OrderFactory {
 
   public Order of(final OrderType orderType, final OrderStatus orderStatus, final OrderLineItems orderLineItems, final OrderTable orderTable, final String orderDelivery) {
-    if (orderType.equals(OrderType.TAKEOUT)) {
+    if (OrderType.TAKEOUT.equals(orderType)) {
       return createTakeoutOrder(orderStatus, orderLineItems);
-    } else if (orderType.equals(OrderType.EAT_IN)) {
+    } else if (OrderType.EAT_IN.equals(orderType)) {
       return createEatInOrder(orderStatus, orderLineItems, orderTable);
-    } else if (orderType.equals(OrderType.DELIVERY)) {
+    } else if (OrderType.DELIVERY.equals(orderType)) {
       return createDeliveryOrder(orderStatus, orderLineItems, orderDelivery);
     }
 
-    throw new IllegalStateException("지원하지 않는 주문타입입니다.");
+    throw new IllegalArgumentException("지원하지 않는 주문타입입니다.");
   }
 
   public Order createEatInOrder(final OrderStatus status, final OrderLineItems orderLineItems, final OrderTable orderTable) {
@@ -25,7 +25,7 @@ public class DefaultOrderFactory implements OrderFactory {
     return order;
   }
 
-  public Order createDeliveryOrder(final OrderStatus status, final OrderLineItems orderLineItems, String deliveryAddress) {
+  public Order createDeliveryOrder(final OrderStatus status, final OrderLineItems orderLineItems, final String deliveryAddress) {
     Order order = new DeliveryOrder(status, orderLineItems, deliveryAddress);
     order.mapOrder();
     return order;

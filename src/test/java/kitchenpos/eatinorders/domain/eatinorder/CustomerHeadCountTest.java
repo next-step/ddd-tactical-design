@@ -22,15 +22,6 @@ public class CustomerHeadCountTest {
     );
   }
 
-  @DisplayName("고객 인원은 0명 이상이어야 한다.")
-  @ParameterizedTest
-  @ValueSource(ints = {-10_000, -1})
-  void changeCustomerHeadCountWithNegativePrice(int headCounts) {
-    assertThatExceptionOfType(IllegalArgumentException.class)
-            .isThrownBy(() -> CustomerHeadcount.of(headCounts))
-            .withMessageContaining("방문한 손님 수는 0 이상이어야 한다.");
-  }
-
   @DisplayName("고객 인원이 올바르지 않으면 변경할 수 없다.")
   @ParameterizedTest
   @NullSource
