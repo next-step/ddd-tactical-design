@@ -43,7 +43,7 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public static EatInOrder create(
+    public static EatInOrder startWaiting(
             UUID orderTableId,
             OrderLineItems orderLineItems
     ) {

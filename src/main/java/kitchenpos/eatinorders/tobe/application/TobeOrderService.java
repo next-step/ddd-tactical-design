@@ -31,7 +31,7 @@ public class TobeOrderService {
     @Transactional
     public EatInOrder create(final EatInOrderCreateRequest request) {
         final List<EatInOrderCreateRequest.OrderLineItemRequest> orderLineItemRequests = request.orderLineItemRequests();
-        UUID orderTableId = request.orderTableId();
+        final UUID orderTableId = request.orderTableId();
 
         List<EatInOrderLineItem> eatInOrderLineItems = orderLineItemRequests
                 .parallelStream()
@@ -42,7 +42,7 @@ public class TobeOrderService {
 
         tobeOrderTableService.isAvailableTable(orderTableId);
 
-        EatInOrder eatInOrder = EatInOrder.create(orderTableId, orderLineItems);
+        EatInOrder eatInOrder = EatInOrder.startWaiting(orderTableId, orderLineItems);
 
         return orderRepository.save(eatInOrder);
     }
