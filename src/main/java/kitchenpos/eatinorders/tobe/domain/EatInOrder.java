@@ -47,7 +47,6 @@ public class EatInOrder {
             UUID orderTableId,
             OrderLineItems orderLineItems
     ) {
-
         return new EatInOrder(
                 UUID.randomUUID(),
                 EatInOrderStatus.WAITING,
@@ -55,6 +54,31 @@ public class EatInOrder {
                 orderLineItems,
                 orderTableId
         );
+    }
 
+    public void accept() {
+        if (status != EatInOrderStatus.WAITING)
+            throw new IllegalArgumentException("대기중 상태의 주문만 접수할 수 있습니다.");
+        status = EatInOrderStatus.ACCEPTED;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public EatInOrderStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
+    }
+
+    public OrderLineItems getOrderLineItems() {
+        return orderLineItems;
+    }
+
+    public UUID getOrderTableId() {
+        return orderTableId;
     }
 }

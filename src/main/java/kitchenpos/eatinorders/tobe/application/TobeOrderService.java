@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -47,4 +48,12 @@ public class TobeOrderService {
         return orderRepository.save(eatInOrder);
     }
 
+
+    @Transactional
+    public EatInOrder accept(final UUID orderId) {
+        final EatInOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NoSuchElementException("주문이 존재하지 않습니다."));
+        order.accept();
+        return order;
+    }
 }

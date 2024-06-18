@@ -30,4 +30,8 @@ public class OrderLineItems {
     public static OrderLineItems of(List<EatInOrderLineItem> orderLineItems) {
         return new OrderLineItems(orderLineItems);
     }
+
+    public Integer size() {
+        return orderLineItems.size();
+    }
 }
