@@ -16,16 +16,16 @@ public class TobeOrderService {
     private final EatInOrderRepository orderRepository;
     private final TobeOrderTableService tobeOrderTableService;
 
-    private final MenuDomainService menuDomainService;
+    private final MenuDomainSupport menuDomainSupport;
 
     public TobeOrderService(
             final EatInOrderRepository orderRepository,
             final TobeOrderTableService tobeOrderTableService,
-            final MenuDomainService menuDomainService
+            final MenuDomainSupport menuDomainSupport
     ) {
         this.orderRepository = orderRepository;
         this.tobeOrderTableService = tobeOrderTableService;
-        this.menuDomainService = menuDomainService;
+        this.menuDomainSupport = menuDomainSupport;
     }
 
     @Transactional
@@ -35,7 +35,7 @@ public class TobeOrderService {
 
         List<EatInOrderLineItem> eatInOrderLineItems = orderLineItemRequests
                 .parallelStream()
-                .map(item -> menuDomainService.fetchOrderLineItem(item.menuId(), item.quantity()))
+                .map(item -> menuDomainSupport.requestOrderLineItem(item.menuId(), item.quantity()))
                 .toList();
 
         OrderLineItems orderLineItems = OrderLineItems.of(eatInOrderLineItems);

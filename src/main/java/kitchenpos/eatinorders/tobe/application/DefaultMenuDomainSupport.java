@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class MenuDomainFetchService implements MenuDomainService {
+public class DefaultMenuDomainSupport implements MenuDomainSupport {
     private final TobeMenuRepository tobeMenuRepository;
 
-    public MenuDomainFetchService(TobeMenuRepository tobeMenuRepository) {
+    public DefaultMenuDomainSupport(TobeMenuRepository tobeMenuRepository) {
         this.tobeMenuRepository = tobeMenuRepository;
     }
 
 
     @Override
-    public EatInOrderLineItem fetchOrderLineItem(UUID menuId, long quantity) {
+    public EatInOrderLineItem requestOrderLineItem(UUID menuId, long quantity) {
         TobeMenu menu = tobeMenuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
 
