@@ -1,24 +1,24 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.*;
+import kitchenpos.common.domain.ProfanityValidator;
+import kitchenpos.common.domain.orders.OrderStatus;
+import kitchenpos.common.domain.ordertables.OrderType;
+import kitchenpos.eatinorders.application.dto.OrderLineItemRequest;
+import kitchenpos.eatinorders.application.dto.OrderRequest;
+import kitchenpos.eatinorders.domain.eatinorder.*;
+import kitchenpos.eatinorders.infra.FakeMenuClient;
 import kitchenpos.menus.domain.tobe.menu.Menu;
 import kitchenpos.menus.domain.tobe.menu.MenuProduct;
 import kitchenpos.menus.domain.tobe.menu.MenuProducts;
-import kitchenpos.menus.domain.tobe.menu.ProductClient;
 import kitchenpos.menus.domain.tobe.menugroup.MenuGroup;
-import kitchenpos.menus.infra.DefaultProductClient;
-import kitchenpos.menus.infra.InMemoryMenuRepository;
-import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.common.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.products.infra.FakeProductClient;
 import kitchenpos.products.infra.FakeProfanityValidator;
-import kitchenpos.products.infra.InMemoryProductRepository;
-import org.junit.jupiter.api.BeforeEach;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -26,7 +26,8 @@ public class Fixtures {
   public static final UUID INVALID_ID = new UUID(0L, 0L);
   public static ProfanityValidator profanityValidator = new FakeProfanityValidator();
   public static Product product = createProduct();
-
+  public static DefaultOrderFactory defaultOrderFactory = new DefaultOrderFactory();
+  public static FakeMenuClient fakeMenuClient = new FakeMenuClient();
   public static Menu menu() {
     return menu(19_000L, true, menuProduct());
   }
@@ -72,55 +73,50 @@ public class Fixtures {
   }
 
   public static Order order(final OrderStatus status, final String deliveryAddress) {
-    final Order order = new Order();
-    order.setId(UUID.randomUUID());
-    order.setType(OrderType.DELIVERY);
-    order.setStatus(status);
-    order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-    order.setOrderLineItems(Arrays.asList(orderLineItem()));
-    order.setDeliveryAddress(deliveryAddress);
-    return order;
+    return defaultOrderFactory.of(OrderType.DELIVERY, status, OrderLineItems.of(fakeMenuClient, List.of(orderLineItem())),
+            null,deliveryAddress);
   }
 
   public static Order order(final OrderStatus status) {
-    final Order order = new Order();
-    order.setId(UUID.randomUUID());
-    order.setType(OrderType.TAKEOUT);
-    order.setStatus(status);
-    order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-    order.setOrderLineItems(Arrays.asList(orderLineItem()));
-    return order;
+
+    return defaultOrderFactory.of(OrderType.TAKEOUT, status, OrderLineItems.of(fakeMenuClient, List.of(orderLineItem())),
+            null,"");
   }
 
-  public static Order order(final OrderStatus status, final OrderTable orderTable) {
-    final Order order = new Order();
-    order.setId(UUID.randomUUID());
-    order.setType(OrderType.EAT_IN);
-    order.setStatus(status);
-    order.setOrderDateTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-    order.setOrderLineItems(Arrays.asList(orderLineItem()));
-    order.setOrderTable(orderTable);
-    return order;
+  public static Order order(final OrderStatus status, final OrderTable orderTableRequest) {
+
+    return defaultOrderFactory.of(OrderType.EAT_IN, status, OrderLineItems.of(fakeMenuClient, List.of(orderLineItem())),
+            orderTableRequest, "");
   }
 
   public static OrderLineItem orderLineItem() {
-    final OrderLineItem orderLineItem = new OrderLineItem();
-    orderLineItem.setSeq(new Random().nextLong());
-    orderLineItem.setMenu(menu());
-    return orderLineItem;
+    Menu menu = menu();
+    fakeMenuClient.add(menu.getId(), menu.getMenuPrice(), menu.isDisplayed());
+    return OrderLineItem.of(menu.getId(), menu.getMenuPrice().longValue(), 1L);
+  }
+  public static OrderLineItem orderLineItem(FakeMenuClient fakeMenuClient) {
+    Menu menu = menu();
+    fakeMenuClient.add(menu.getId(), menu.getMenuPrice(), menu.isDisplayed());
+    return OrderLineItem.of(menu.getId(), menu.getMenuPrice().longValue(), 1L);
   }
 
+  public static OrderLineItem orderLineItem(FakeMenuClient fakeMenuClient, boolean isDisplayed) {
+    Menu menu = menu();
+    fakeMenuClient.add(menu.getId(), menu.getMenuPrice(), isDisplayed);
+    return OrderLineItem.of(menu.getId(), menu.getMenuPrice().longValue(), 1L);
+  }
+
+  public static OrderLineItem orderLineItem(FakeMenuClient fakeMenuClient, BigDecimal price) {
+    Menu menu = menu();
+    fakeMenuClient.add(menu.getId(), price, menu.isDisplayed());
+    return OrderLineItem.of(menu.getId(), menu.getMenuPrice().longValue(), 1L);
+  }
   public static OrderTable orderTable() {
     return orderTable(false, 0);
   }
 
   public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-    final OrderTable orderTable = new OrderTable();
-    orderTable.setId(UUID.randomUUID());
-    orderTable.setName("1번");
-    orderTable.setNumberOfGuests(numberOfGuests);
-    orderTable.setOccupied(occupied);
-    return orderTable;
+    return OrderTable.of(occupied,"1번", numberOfGuests);
   }
 
   public static Product product() {

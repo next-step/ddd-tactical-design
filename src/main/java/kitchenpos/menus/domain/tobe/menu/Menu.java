@@ -45,15 +45,23 @@ public class Menu {
     this.menuGroupId = menuGroupId;
     this.displayed = displayed;
     this.menuProducts = menuProducts;
+
+
   }
 
   public static Menu of(final String name, final Long price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
+    Menu menu = new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
 
-    return new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
+    menu.mapMenu();
+
+    return menu;
   }
   public static Menu of(final String name, final BigDecimal price, final UUID menuGroupId, final boolean displayed, final MenuProducts menuProducts, final ProfanityValidator profanityValidator) {
+    Menu menu = new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
 
-    return new Menu(MenuName.of(name, profanityValidator), Price.from(price), menuGroupId, displayed, menuProducts);
+    menu.mapMenu();
+
+    return menu;
   }
   private void validate(final Price menuPrice, final BigDecimal price, final MenuProducts menuProducts, final UUID menuGroupId) {
     if (Objects.isNull(menuGroupId)){
@@ -78,6 +86,9 @@ public class Menu {
     validate(menuPrice, menuProducts.sum(), menuProducts, menuGroupId);
     this.displayed = true;
   }
+  protected void mapMenu() {
+    menuProducts.mapping(this);
+  }
 
   public void changePrice(BigDecimal price) {
     Price menuPriceRequest = Price.from(price);
@@ -91,10 +102,6 @@ public class Menu {
     if (menuPrice.isBigger(menuProducts.sum())) {
       this.hide();
     }
-  }
-
-  public void addMenuProduct(MenuProduct menuProduct){
-    menuProducts.addMenuProduct(menuProduct);
   }
 
   public BigDecimal sumMenuProducts(){

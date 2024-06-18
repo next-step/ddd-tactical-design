@@ -56,7 +56,6 @@ public class MenuService {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Async
     public void changeMenuProdutPrice(final ProductPriceChangeEvent productPriceChangeEvent) {
         final List<Menu> menus = menuRepository.findAllByProductId(productPriceChangeEvent.getProductId());
 

@@ -1,12 +1,10 @@
 package kitchenpos.products.application;
 
-import kitchenpos.common.domain.Price;
-import kitchenpos.common.domain.ProductPriceChangeEvent;
-import kitchenpos.menus.domain.tobe.menu.MenuRepository;
+import kitchenpos.common.domain.ProfanityValidator;
+import kitchenpos.common.domain.products.ProductPriceChangeEvent;
 import kitchenpos.products.application.dto.ProductRequest;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductRepository;
-import kitchenpos.common.domain.ProfanityValidator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,17 +16,14 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final ProfanityValidator profanityValidator;
     private final ApplicationEventPublisher publisher;
 
     public ProductService(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
         final ProfanityValidator profanityValidator,
-        ApplicationEventPublisher publisher) {
+        final ApplicationEventPublisher publisher) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.profanityValidator = profanityValidator;
         this.publisher = publisher;
     }
