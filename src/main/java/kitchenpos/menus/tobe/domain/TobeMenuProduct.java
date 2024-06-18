@@ -40,7 +40,12 @@ public class TobeMenuProduct {
         return new TobeMenuProduct(productId, price, quantity);
     }
 
-    public Long seq() {return seq;
+    public static TobeMenuProduct create(ProductInfo productInfo, long quantity) {
+        return create(productInfo.productId(), productInfo.price(), quantity);
+    }
+
+    public Long seq() {
+        return seq;
     }
 
     public UUID productId() {

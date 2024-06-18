@@ -1,36 +1,28 @@
 package kitchenpos.menus.tobe.application;
 
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.tobe.domain.TobeMenuGroup;
+import kitchenpos.menus.tobe.domain.TobeMenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class TobeMenuGroupService {
-    private final MenuGroupRepository menuGroupRepository;
+    private final TobeMenuGroupRepository menuGroupRepository;
 
-    public TobeMenuGroupService(final MenuGroupRepository menuGroupRepository) {
+    public TobeMenuGroupService(final TobeMenuGroupRepository menuGroupRepository) {
         this.menuGroupRepository = menuGroupRepository;
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+    public TobeMenuGroup create(final String name) {
+        TobeMenuGroup menuGroup = TobeMenuGroup.create(name);
         return menuGroupRepository.save(menuGroup);
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
+    public List<TobeMenuGroup> findAll() {
         return menuGroupRepository.findAll();
     }
 }
