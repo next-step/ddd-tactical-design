@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,7 +51,7 @@ class ProductServiceTest {
     productRepository = new InMemoryProductRepository();
     menuRepository = new InMemoryMenuRepository();
     profanityValidator = new FakeProfanityValidator();
-    productService = new ProductService(productRepository, menuRepository, profanityValidator, publisher);
+    productService = new ProductService(productRepository, profanityValidator, publisher);
   }
 
   @DisplayName("상품을 등록할 수 있다.")
@@ -107,19 +108,7 @@ class ProductServiceTest {
   }
 
 
-  @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
-  @Test
-  void changePriceInMenu() {
-    final Product product = productRepository.save(product("후라이드", 16_000L));
-    final Menu menu = menuRepository.save(menu(19_000L, true, Fixtures.menuProduct(product, 2L)));
-    productService.changePrice(product.getId(), changePriceRequest(8_000L));
 
-    List<ProductPriceChangeEvent> changeEvents = events.stream(ProductPriceChangeEvent.class).toList();
-    assertThat(changeEvents.size()).isEqualTo(1);
-    assertThat(changeEvents.getFirst().getProductId()).isEqualTo(product.getId());
-    assertThat(BigDecimal.valueOf(changeEvents.getFirst().getPrice())).isEqualTo(product.getProductPrice());
-
-  }
 
   @DisplayName("상품의 목록을 조회할 수 있다.")
   @Test

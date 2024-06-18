@@ -82,7 +82,10 @@ public class MenuProducts {
             .map(MenuProduct::getId)
             .toList();
   }
-
+  protected void mapping(final Menu menu){
+    products
+            .forEach(product -> product.mapping(menu));
+  }
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

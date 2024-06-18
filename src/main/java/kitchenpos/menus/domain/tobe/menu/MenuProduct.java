@@ -13,7 +13,7 @@ public class MenuProduct {
 
   private static final int ZERO = 0;
   @Column(name = "seq")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Id
   private Long seq;
   @Column(name = "productId", nullable = false)
@@ -53,6 +53,9 @@ public class MenuProduct {
     return price.multiply(BigDecimal.valueOf(quantity));
   }
 
+  protected void mapping(final Menu menu){
+    this.menu = menu;
+  }
   public UUID getId(){
     return productId;
   }
