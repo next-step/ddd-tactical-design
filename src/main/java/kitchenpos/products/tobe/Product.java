@@ -39,8 +39,16 @@ public class Product {
         this.price = price;
     }
 
+    public UUID id() {
+        return id;
+    }
+
     public String name() {
         return name;
+    }
+
+    public BigDecimal price() {
+        return price;
     }
 
     @Override
@@ -54,5 +62,9 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void setPrice(BigDecimal price) {
+
     }
 }
