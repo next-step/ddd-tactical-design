@@ -26,9 +26,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.price();
-        final String name = request.name();
+    public Product create(final CreateCommand createCommand) {
+        final BigDecimal price = createCommand.price();
+        final String name = createCommand.name();
         return productRepository.save(new Product(UUID.randomUUID(), name, price, productValidator));
     }
 

@@ -55,7 +55,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("상품이 생성될 때")
+    @DisplayName("상품이 등록될 때")
     class ProductCreateTest {
 
         @DisplayName("상품은 이름, 가격을 갖는다")
@@ -63,14 +63,14 @@ class ProductServiceTest {
         void createProductTest() {
 
             // given
-            Product product = new Product(UUID.randomUUID(), "치킨", BigDecimal.valueOf(16_000));
+            CreateCommand create = new CreateCommand("상품 이름", BigDecimal.valueOf(1000));
 
             // when
-            Product savedProduct = productService.create(product);
+            Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(product.name(), savedProduct.name());
-            assertEquals(product.price(), savedProduct.price());
+            assertEquals(create.name(), savedProduct.name());
+            assertEquals(create.price(), savedProduct.price());
         }
 
         @DisplayName("이름은 공백을 허용한다")
@@ -79,16 +79,14 @@ class ProductServiceTest {
         void productNameWithBlankTest(String name) {
 
             // given
-            UUID id = UUID.randomUUID();
-            Product product = new Product(id, name, BigDecimal.valueOf(16_000));
+            CreateCommand create = new CreateCommand(name, BigDecimal.valueOf(1000));
 
             // when
-            Product savedProduct = productService.create(product);
+            Product savedProduct = productService.create(create);
 
             // then
-            assertNotNull(id);
-            assertEquals(product.name(), savedProduct.name());
-            assertEquals(product.price(), savedProduct.price());
+            assertEquals(create.name(), savedProduct.name());
+            assertEquals(create.price(), savedProduct.price());
         }
 
         @DisplayName("가격이 음수면 생성이 불가능하다")
