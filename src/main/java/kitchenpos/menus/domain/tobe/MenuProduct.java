@@ -18,28 +18,28 @@ public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long seq;
+    private final Long seq;
 
-    private UUID productId;
+    private final UUID productId;
+
+    private final BigDecimal price;
 
     @Embedded
-    private MenuQuantity quantity;
-
-    protected MenuProduct() {
-    }
+    private final MenuQuantity quantity;
 
     public MenuProduct(Product product, MenuQuantity quantity) {
-        this(null, product.getId(), quantity);
+        this(null, product.getId(), product.getPrice(), quantity);
     }
 
-    public MenuProduct(Long seq, UUID productId, MenuQuantity quantity) {
+    public MenuProduct(Long seq, UUID productId, BigDecimal price, MenuQuantity quantity) {
         this.seq = seq;
         this.productId = productId;
+        this.price = price;
         this.quantity = quantity;
     }
 
-    public BigDecimal calculateSum(Product product) {
-        return product.getPrice().multiply(quantity.getQuantity());
+    public BigDecimal calculateSum() {
+        return price.multiply(quantity.getQuantity());
     }
 
     public UUID getProductId() {

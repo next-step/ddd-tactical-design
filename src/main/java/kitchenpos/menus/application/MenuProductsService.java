@@ -55,8 +55,7 @@ public class MenuProductsService {
     private BigDecimal calculateProductSumPrice(List<MenuProduct> menuProducts) {
         BigDecimal sum = BigDecimal.ZERO;
         for (MenuProduct menuProduct : menuProducts) {
-            Product product = findProduct(menuProduct.getProductId());
-            sum = sum.add(menuProduct.calculateSum(product));
+            sum = sum.add(menuProduct.calculateSum());
         }
         return sum;
     }
