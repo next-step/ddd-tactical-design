@@ -56,4 +56,24 @@ public class TobeOrderService {
         order.accept();
         return order;
     }
+
+    @Transactional
+    public EatInOrder serve(final UUID orderId) {
+        final EatInOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NoSuchElementException("주문이 존재하지 않습니다."));
+
+        order.serve();
+
+        return order;
+    }
+
+    @Transactional
+    public EatInOrder complete(final UUID orderId) {
+        final EatInOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NoSuchElementException("주문이 존재하지 않습니다."));
+
+        order.complete();
+        return order;
+    }
+
 }

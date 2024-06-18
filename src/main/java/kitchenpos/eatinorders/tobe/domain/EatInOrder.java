@@ -8,13 +8,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.eatinorders.tobe.domain.constant.EatInOrderStatus;
+import kitchenpos.eatinorders.tobe.dto.event.EatInOrderCompletedEvent;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -62,6 +64,19 @@ public class EatInOrder {
         status = EatInOrderStatus.ACCEPTED;
     }
 
+    public void serve() {
+        if (status != EatInOrderStatus.ACCEPTED)
+            throw new IllegalArgumentException("접수된 상태의 주문만 제공할 수 있습니다.");
+        status = EatInOrderStatus.SERVED;
+    }
+
+    public void complete() {
+        if (status != EatInOrderStatus.SERVED)
+            throw new IllegalArgumentException("접수된 상태의 주문만 제공할 수 있습니다.");
+        status = EatInOrderStatus.COMPLETED;
+        this.registerEvent(new EatInOrderCompletedEvent(this.id, this.orderTableId, this.status));
+    }
+
     public UUID getId() {
         return id;
     }
@@ -81,4 +96,5 @@ public class EatInOrder {
     public UUID getOrderTableId() {
         return orderTableId;
     }
+
 }

@@ -52,4 +52,9 @@ public class TobeOrderTable {
             throw new NoSuchElementException("이미 사용중인 테이블입니다.");
         }
     }
+
+    public void clear() {
+        this.numberOfGuests = 0;
+        this.occupied = OccupiedStatus.EMPTY_TABLE;
+    }
 }
