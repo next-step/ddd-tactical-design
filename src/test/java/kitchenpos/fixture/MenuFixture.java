@@ -56,7 +56,7 @@ public class MenuFixture {
         MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(price));
         DisplayedMenu displayedMenu = new DisplayedMenu(true);
         MenuProducts menuProducts = new MenuProducts(
-                List.of(new MenuProduct(product, new MenuQuantity(2))), menuPrice);
+                List.of(new MenuProduct(product, new MenuQuantity(2))));
 
         return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
     }

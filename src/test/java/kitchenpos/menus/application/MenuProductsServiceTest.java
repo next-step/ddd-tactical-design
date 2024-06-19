@@ -3,13 +3,14 @@ package kitchenpos.menus.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuProductFixture;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProducts;
+import kitchenpos.menus.domain.tobe.MenuQuantity;
+import kitchenpos.menus.ui.dto.MenuProductCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
@@ -37,49 +38,32 @@ class MenuProductsServiceTest {
         MenuProductCreateRequests createRequests = MenuProductFixture.createRequests(
                 createFriedProduct(), 2);
 
-        MenuProducts actual = menuProductsService.create(createRequests,
-                new MenuPrice(BigDecimal.valueOf(30_000L)));
+        MenuProducts actual = menuProductsService.create(createRequests);
 
-        assertThat(actual.getMenuProducts()).isNotEmpty();
+        assertThat(actual).isNotEmpty();
     }
 
     @Test
     void 메뉴상품들_생성시_메뉴상품들이_null일_경우_예외를_던진다() {
-        assertThatThrownBy(() -> menuProductsService.create(new MenuProductCreateRequests(null),
-                new MenuPrice(BigDecimal.valueOf(30_000L))))
+        assertThatThrownBy(() -> menuProductsService.create(new MenuProductCreateRequests(null)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 메뉴상품들_생성시_메뉴상품들이_비어있을_경우_예외를_던진다() {
         assertThatThrownBy(
-                () -> menuProductsService.create(new MenuProductCreateRequests(List.of()),
-                        new MenuPrice(BigDecimal.valueOf(30_000L))))
+                () -> menuProductsService.create(new MenuProductCreateRequests(List.of())))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void 메뉴상품들_생성시_메뉴가격이_메뉴상품들의_가격합보다_클_경우_예외를_던진다() {
-        MenuProductCreateRequests createRequests = MenuProductFixture.createRequests(
-                createFriedProduct(), 2);
+    void 메뉴상품들_생성시_없는_상품으로_생성하려_할_경우_예외를_던진다() {
+        MenuProductCreateRequests createRequests = new MenuProductCreateRequests(
+                List.of(new MenuProductCreateRequest(UUID.randomUUID(), new MenuQuantity(1))));
 
-        assertThatThrownBy(() -> menuProductsService.create(createRequests,
-                new MenuPrice(BigDecimal.valueOf(50_000L))))
+        assertThatThrownBy(
+                () -> menuProductsService.create(createRequests))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void 메뉴상품들_생성시_메뉴가격이_메뉴상품들의_가격합보다_큰지_여부를_확인한다() {
-        MenuProductCreateRequests createRequests = MenuProductFixture.createRequests(
-                createFriedProduct(), 2);
-        MenuProducts menuProducts = menuProductsService.create(createRequests,
-                new MenuPrice(BigDecimal.valueOf(40_000L)));
-
-        boolean actual = menuProductsService.isOverThanProductSumPrice(
-                menuProducts.getMenuProducts(),
-                new MenuPrice(BigDecimal.valueOf(50_000L)));
-
-        assertThat(actual).isTrue();
     }
 
     private Product createFriedProduct() {

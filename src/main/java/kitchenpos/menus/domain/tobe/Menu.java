@@ -3,14 +3,9 @@ package kitchenpos.menus.domain.tobe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import kitchenpos.menugroups.domain.tobe.MenuGroup;
 
@@ -44,8 +39,9 @@ public class Menu {
         this(UUID.randomUUID(), name, price, menuGroup.getId(), displayed, menuProducts);
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId,
-            DisplayedMenu displayed, MenuProducts menuProducts) {
+    public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, DisplayedMenu displayed,
+            MenuProducts menuProducts) {
+        validateMenuPrice(price, menuProducts);
         this.id = id;
         this.name = name;
         this.price = price;
@@ -54,22 +50,32 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
+    private static void validateMenuPrice(MenuPrice price, MenuProducts menuProducts) {
+        if (price.isOver(menuProducts.calculateSumPrice())) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void changePrice(MenuPrice price) {
-        menuProducts.validateSumPrice(price);
+        if (isOverThanProductSumPrice()) {
+            throw new IllegalArgumentException();
+        }
         this.price = price;
     }
 
     public void display() {
-        menuProducts.validateSumPrice(this.price);
+        if (isOverThanProductSumPrice()) {
+            throw new IllegalArgumentException();
+        }
         this.displayed = new DisplayedMenu(true);
+    }
+
+    public boolean isOverThanProductSumPrice() {
+        return this.price.isOver(menuProducts.calculateSumPrice());
     }
 
     public void hide() {
         this.displayed = new DisplayedMenu(false);
-    }
-
-    public boolean isOverThanProductSumPrice() {
-        return menuProducts.isOverThanSumPrice(this.price);
     }
 
     public boolean isDisplayed() {

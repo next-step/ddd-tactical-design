@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProducts;
-import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.stereotype.Service;
@@ -38,15 +38,13 @@ public class MenuService {
     public Menu create(final MenuCreateRequest request) {
         request.validateName(profanityValidator);
         final MenuGroup menuGroup = findMenuGroup(request.getMenuGroupId());
-        final MenuProducts menuProducts = menuProductsService.create(request.getMenuProducts(),
-                request.getPrice());
+        final MenuProducts menuProducts = menuProductsService.create(request.getMenuProducts());
         return menuRepository.save(request.to(menuGroup, menuProducts));
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuPrice request) {
         final Menu menu = findMenu(menuId);
-        menuProductsService.validateMenuPrice(menu.getMenuProducts(), request);
         menu.changePrice(request);
         return menu;
     }
@@ -54,7 +52,6 @@ public class MenuService {
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = findMenu(menuId);
-        menuProductsService.validateMenuPrice(menu.getMenuProducts(), menu.getMenuPrice());
         menu.display();
         return menu;
     }

@@ -1,11 +1,9 @@
 package kitchenpos.menus.application;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.MenuProducts;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
@@ -22,14 +20,11 @@ public class MenuProductsService {
         this.productRepository = productRepository;
     }
 
-    public MenuProducts create(final MenuProductCreateRequests requests,
-            MenuPrice price) {
+    public MenuProducts create(final MenuProductCreateRequests requests) {
         List<Product> products = findProducts(requests.getProductIds());
         requests.validateMenuProducts(products);
 
-        List<MenuProduct> menuProducts = createMenuProducts(requests);
-        validateMenuPrice(menuProducts, price);
-        return new MenuProducts(menuProducts);
+        return new MenuProducts(createMenuProducts(requests));
     }
 
     private List<MenuProduct> createMenuProducts(MenuProductCreateRequests requests) {
@@ -40,24 +35,6 @@ public class MenuProductsService {
                     return request.to(product);
                 })
                 .collect(Collectors.toList());
-    }
-
-    public void validateMenuPrice(List<MenuProduct> menuProducts, MenuPrice price) {
-        if (isOverThanProductSumPrice(menuProducts, price)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public boolean isOverThanProductSumPrice(List<MenuProduct> menuProducts, MenuPrice price) {
-        return price.isOver(calculateProductSumPrice(menuProducts));
-    }
-
-    private BigDecimal calculateProductSumPrice(List<MenuProduct> menuProducts) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(menuProduct.calculateSum());
-        }
-        return sum;
     }
 
     private List<Product> findProducts(List<UUID> productIds) {
