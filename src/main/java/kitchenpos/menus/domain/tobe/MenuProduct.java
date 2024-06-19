@@ -18,14 +18,17 @@ public class MenuProduct {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private final Long seq;
+    private Long seq;
 
-    private final UUID productId;
+    private UUID productId;
 
-    private final BigDecimal price;
+    private BigDecimal price;
 
     @Embedded
-    private final MenuQuantity quantity;
+    private MenuQuantity quantity;
+
+    protected MenuProduct() {
+    }
 
     public MenuProduct(Product product, MenuQuantity quantity) {
         this(null, product.getId(), product.getPrice(), quantity);
