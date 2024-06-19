@@ -1,4 +1,7 @@
-package kitchenpos.products.tobe.domain;
+package kitchenpos.products.tobe.fakes;
+
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductRepository;
 
 import java.util.*;
 

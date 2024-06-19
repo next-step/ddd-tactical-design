@@ -3,6 +3,8 @@ package kitchenpos.products.tobe.application;
 import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.tobe.dto.ChangePriceRequest;
 import kitchenpos.products.tobe.dto.CreateProductRequest;
+import kitchenpos.products.tobe.fakes.FakeProductRepository;
+import kitchenpos.products.tobe.fakes.FakePurgomalums;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
