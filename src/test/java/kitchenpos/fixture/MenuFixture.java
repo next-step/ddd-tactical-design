@@ -2,6 +2,7 @@ package kitchenpos.fixture;
 
 import java.math.BigDecimal;
 import java.util.List;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.tobe.DisplayedMenu;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuName;
@@ -9,7 +10,6 @@ import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.MenuProducts;
 import kitchenpos.menus.domain.tobe.MenuQuantity;
-import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
@@ -48,11 +48,15 @@ public class MenuFixture {
     }
 
     public static Menu createFriedOnePlusOne(MenuGroup menuGroup, Product product) {
+        return createFriedOnePlusOne(menuGroup, product, 30_000L);
+    }
+
+    public static Menu createFriedOnePlusOne(MenuGroup menuGroup, Product product, Long price) {
         MenuName menuName = new MenuName("후라이드1+1");
-        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(30_000L));
+        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(price));
         DisplayedMenu displayedMenu = new DisplayedMenu(true);
         MenuProducts menuProducts = new MenuProducts(
-                List.of(new MenuProduct(product, new MenuQuantity(2))));
+                List.of(new MenuProduct(product, new MenuQuantity(2))), menuPrice);
 
         return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
     }

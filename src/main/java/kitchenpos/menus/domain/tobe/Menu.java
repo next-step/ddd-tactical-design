@@ -55,15 +55,21 @@ public class Menu {
     }
 
     public void changePrice(MenuPrice price) {
+        menuProducts.validateSumPrice(price);
         this.price = price;
     }
 
     public void display() {
+        menuProducts.validateSumPrice(this.price);
         this.displayed = new DisplayedMenu(true);
     }
 
     public void hide() {
         this.displayed = new DisplayedMenu(false);
+    }
+
+    public boolean isOverThanProductSumPrice() {
+        return menuProducts.isOverThanSumPrice(this.price);
     }
 
     public boolean isDisplayed() {
@@ -74,15 +80,11 @@ public class Menu {
         return id;
     }
 
-    public MenuPrice getMenuPrice() {
-        return price;
-    }
-
     public BigDecimal getPrice() {
         return price.getPrice();
     }
 
-    public List<MenuProduct> getMenuProducts() {
-        return menuProducts.getMenuProducts();
+    public MenuProducts getMenuProducts() {
+        return menuProducts;
     }
 }
