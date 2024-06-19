@@ -30,6 +30,10 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
+    public MenuProduct(Product product, int quantity) {
+        this(null, product.getId(), product.getPrice(), new MenuQuantity(quantity));
+    }
+
     public MenuProduct(Product product, MenuQuantity quantity) {
         this(null, product.getId(), product.getPrice(), quantity);
     }
