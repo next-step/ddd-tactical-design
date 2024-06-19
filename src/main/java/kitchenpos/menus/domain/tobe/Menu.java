@@ -57,7 +57,7 @@ public class Menu {
     }
 
     public void changePrice(MenuPrice price) {
-        if (isOverThanProductSumPrice()) {
+        if (price.isOver(menuProducts.calculateSumPrice())) {
             throw new IllegalArgumentException();
         }
         this.price = price;
@@ -71,7 +71,7 @@ public class Menu {
     }
 
     public boolean isOverThanProductSumPrice() {
-        return this.price.isOver(menuProducts.calculateSumPrice());
+        return price.isOver(menuProducts.calculateSumPrice());
     }
 
     public void hide() {
