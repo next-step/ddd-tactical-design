@@ -48,11 +48,7 @@ public class ProductService {
         product.changePrice(request);
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        menus.forEach(menu -> {
-            if (menu.isOverThanProductSumPrice()) {
-                menu.hide();
-            }
-        });
+        menus.forEach(menu -> menu.changeMenuProductPrice(productId, request));
         return product;
     }
 

@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
+import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -58,8 +61,19 @@ class MenuTest {
         assertThat(actual.isOverThanProductSumPrice()).isFalse();
     }
 
+    @Test
+    void 메뉴상품의_가격_수정_시_상품가격x상품갯수의_총합이_넘으면_메뉴를_숨김처리한다() {
+        UUID productId = UUID.randomUUID();
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                new Product(productId, "후라이드", BigDecimal.valueOf(20_000L)), 30_000L);
+
+        menu.changeMenuProductPrice(productId, new ProductPrice(BigDecimal.valueOf(10_000L)));
+
+        assertThat(menu.isDisplayed()).isFalse();
+    }
+
     private Menu createFriedMenu() {
         return MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired(20000L), 30000L);
+                ProductFixture.createFired(20_000L), 30_000L);
     }
 }

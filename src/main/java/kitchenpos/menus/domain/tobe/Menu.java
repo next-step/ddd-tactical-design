@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.menugroups.domain.tobe.MenuGroup;
+import kitchenpos.products.domain.tobe.ProductPrice;
 
 @Table(name = "menu")
 @Entity
@@ -76,6 +77,16 @@ public class Menu {
 
     public void hide() {
         this.displayed = new DisplayedMenu(false);
+    }
+
+    public void changeMenuProductPrice(UUID productId, ProductPrice price) {
+        menuProducts.stream()
+                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
+                .forEach(menuProduct -> menuProduct.changePrice(price));
+
+        if (isOverThanProductSumPrice()) {
+            hide();
+        }
     }
 
     public boolean isDisplayed() {

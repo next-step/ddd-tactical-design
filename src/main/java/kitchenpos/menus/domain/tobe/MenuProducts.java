@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 @Embeddable
@@ -49,5 +50,9 @@ public class MenuProducts implements Iterable<MenuProduct> {
     @Override
     public Iterator<MenuProduct> iterator() {
         return menuProducts.iterator();
+    }
+
+    public Stream<MenuProduct> stream() {
+        return menuProducts.stream();
     }
 }

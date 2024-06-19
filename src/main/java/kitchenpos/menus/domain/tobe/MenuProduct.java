@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductPrice;
 
 @Table(name = "menu_product")
 @Entity
@@ -51,5 +52,9 @@ public class MenuProduct {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public void changePrice(ProductPrice price) {
+        this.price = price.getPrice();
     }
 }

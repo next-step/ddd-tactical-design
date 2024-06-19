@@ -30,6 +30,10 @@ public class Product {
         this(new ProductName(name), new ProductPrice(price));
     }
 
+    public Product(UUID uuid, String name, BigDecimal price) {
+        this(uuid, new ProductName(name), new ProductPrice(price));
+    }
+
     public Product(ProductName name, ProductPrice price) {
         this(UUID.randomUUID(), name, price);
     }
