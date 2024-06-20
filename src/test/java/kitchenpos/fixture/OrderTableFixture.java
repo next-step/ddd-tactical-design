@@ -1,7 +1,7 @@
 package kitchenpos.fixture;
 
 import java.util.UUID;
-import kitchenpos.orders.eatin.domain.OrderTable;
+import kitchenpos.orders.store.domain.OrderTable;
 
 public class OrderTableFixture {
 

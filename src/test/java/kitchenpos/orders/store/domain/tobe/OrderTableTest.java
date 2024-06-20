@@ -1,4 +1,4 @@
-package kitchenpos.orders.eatin.domain.tobe;
+package kitchenpos.orders.store.domain.tobe;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;

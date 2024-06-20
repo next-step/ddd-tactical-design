@@ -7,7 +7,7 @@ import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
 import kitchenpos.orders.common.domain.OrderStatus;
 import kitchenpos.orders.common.domain.OrderType;
-import kitchenpos.orders.eatin.domain.OrderTable;
+import kitchenpos.orders.store.domain.OrderTable;
 
 public class OrderFixture {
 

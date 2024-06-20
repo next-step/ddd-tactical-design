@@ -1,4 +1,4 @@
-package kitchenpos.orders.eatin.application;
+package kitchenpos.orders.store.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -24,8 +24,8 @@ import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderRepository;
 import kitchenpos.orders.common.domain.OrderStatus;
-import kitchenpos.orders.eatin.domain.OrderTable;
-import kitchenpos.orders.eatin.domain.OrderTableRepository;
+import kitchenpos.orders.store.domain.OrderTable;
+import kitchenpos.orders.store.domain.OrderTableRepository;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;

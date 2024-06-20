@@ -15,7 +15,7 @@ import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.orders.eatin.domain.OrderTable;
+import kitchenpos.orders.store.domain.OrderTable;
 
 @Table(name = "orders")
 @Entity

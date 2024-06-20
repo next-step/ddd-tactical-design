@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.orders.eatin.domain.OrderTable;
-import kitchenpos.orders.eatin.domain.OrderTableRepository;
+import kitchenpos.orders.store.domain.OrderTable;
+import kitchenpos.orders.store.domain.OrderTableRepository;
 
 public class InMemoryOrderTableRepository implements OrderTableRepository {
 
