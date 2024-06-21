@@ -2,6 +2,7 @@ package kitchenpos.orders.store.application;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.store.application.dto.StoreOrderCreateRequest;
@@ -35,5 +36,40 @@ public class StoreOrderService {
                 .orElseThrow(NoSuchElementException::new);
         return storeOrderRepository.save(
                 new StoreOrder(request.toOrderLineItems(menus), orderTable));
+    }
+
+    @Transactional
+    public StoreOrder accept(final UUID orderId) {
+        final StoreOrder storeOrder = storeOrderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+
+        storeOrder.accept();
+
+        return storeOrder;
+    }
+
+    @Transactional
+    public StoreOrder serve(final UUID orderId) {
+        final StoreOrder storeOrder = storeOrderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+
+        storeOrder.serve();
+
+        return storeOrder;
+    }
+
+    @Transactional
+    public StoreOrder complete(final UUID orderId) {
+        final StoreOrder storeOrder = storeOrderRepository.findById(orderId)
+                .orElseThrow(NoSuchElementException::new);
+
+        storeOrder.complete();
+
+        return storeOrder;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoreOrder> findAll() {
+        return storeOrderRepository.findAll();
     }
 }

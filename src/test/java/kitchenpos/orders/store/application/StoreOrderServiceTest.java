@@ -2,10 +2,10 @@ package kitchenpos.orders.store.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
 import kitchenpos.fake.InMemoryOrderTableRepository;
@@ -61,12 +61,11 @@ class StoreOrderServiceTest {
     @Test
     void 매장주문_생성시_테이블을_빠뜨리면_예외를_던진다() {
         MenuGroup menuGroup = createMenuGroup();
-        StoreOrderCreateRequest createRequest = new StoreOrderCreateRequest(
-                createOrderLineItemRequests(createFriedMenu(menuGroup)),
-                null);
 
-        assertThatThrownBy(() -> storeOrderService.create(createRequest))
-                .isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> storeOrderService.create(new StoreOrderCreateRequest(
+                createOrderLineItemRequests(createFriedMenu(menuGroup)),
+                null)))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -97,6 +96,74 @@ class StoreOrderServiceTest {
         StoreOrder actual = storeOrderService.create(createRequest);
 
         assertThat(actual.getStatus()).isEqualTo(OrderStatus.WAITING);
+    }
+
+    @Test
+    void WAITING_상태의_매장주문을_승인한다() {
+        StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
+        StoreOrder saved = storeOrderService.create(createRequest);
+
+        storeOrderService.accept(saved.getId());
+
+        assertThat(saved.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
+    }
+
+    @Test
+    void WAITING_상태가_아닌_매장주문을_승인하면_예외를_던진다() {
+        StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
+        StoreOrder saved = storeOrderService.create(createRequest);
+
+        storeOrderService.accept(saved.getId());
+
+        assertThatThrownBy(() -> storeOrderService.accept(saved.getId())).isInstanceOf(
+                IllegalStateException.class);
+    }
+
+    @Test
+    void ACCEPTED_상태의_매장주문을_SERVED_상태로_변경한다() {
+        StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
+        StoreOrder saved = storeOrderService.create(createRequest);
+        storeOrderService.accept(saved.getId());
+
+        storeOrderService.serve(saved.getId());
+
+        assertThat(saved.getStatus()).isEqualTo(OrderStatus.SERVED);
+    }
+
+    @Test
+    void ACCEPTED_상태가_아닌_매장주문을_SERVED_상태로_변경하면_예외를_던진다() {
+        StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
+        StoreOrder saved = storeOrderService.create(createRequest);
+
+        assertThatThrownBy(() -> storeOrderService.serve(saved.getId()))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void SERVED된_매장주문을_완료상태로_변경하면_테이블은_초기값으로_세팅된다() {
+        MenuGroup menuGroup = createMenuGroup();
+        OrderTable orderTable = createOrderTableAndSit();
+        StoreOrderCreateRequest createRequest = new StoreOrderCreateRequest(
+                createOrderLineItemRequests(createFriedMenu(menuGroup)),
+                orderTable.getId());
+        StoreOrder saved = storeOrderService.create(createRequest);
+        storeOrderService.accept(saved.getId());
+        storeOrderService.serve(saved.getId());
+
+        storeOrderService.complete(saved.getId());
+
+        assertAll(() -> assertThat(saved.getStatus()).isEqualTo(OrderStatus.COMPLETED),
+                () -> assertThat(orderTable.isOccupied()).isFalse(),
+                () -> assertThat(orderTable.getNumberOfGuests()).isZero());
+    }
+
+    @Test
+    void SERVED_상태가_아닌_포장주문을_완료상태로_변경하면_예외를_던진다() {
+        StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
+        StoreOrder saved = storeOrderService.create(createRequest);
+
+        assertThatThrownBy(() -> storeOrderService.complete(saved.getId())).isInstanceOf(
+                IllegalStateException.class);
     }
 
     private StoreOrderCreateRequest createStoreOrderCreateRequest() {
