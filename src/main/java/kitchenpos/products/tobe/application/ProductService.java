@@ -1,6 +1,7 @@
 package kitchenpos.products.tobe.application;
 
 
+import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.products.tobe.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,23 +14,23 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProductValidator productValidator;
+    private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final ProductValidator productValidator
+            final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.productValidator = productValidator;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public Product create(final CreateCommand createCommand) {
         final var price = new Money(createCommand.price());
-        final var name = createCommand.name();
-        return productRepository.save(new Product(UUID.randomUUID(), name, price, productValidator));
+        final var name = new Name(createCommand.name(), purgomalumClient.containsProfanity(createCommand.name()));
+        return productRepository.save(new Product(UUID.randomUUID(), name, price));
     }
 
     @Transactional

@@ -20,27 +20,10 @@ class ProductServiceTest {
 
     private final ProductRepository productRepository = new FakeProductRepository();
     private ProductService productService;
-    private ProductValidator validator;
 
     @BeforeEach
     void setUp() {
-        validator = new ProductValidator() {
-            @Override
-            public void delegate(String name, BigDecimal price) {
-                validateName(name);
-            }
-
-            @Override
-            public void validateName(String name) {
-                if (name == null) {
-                    throw new IllegalArgumentException("상품명은 null일 수 없습니다");
-                }
-                if ("욕설".equals(name)) {
-                    throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-                }
-            }
-        };
-        productService = new ProductService(productRepository, null, validator);
+        productService = new ProductService(productRepository, null, "비속어"::equals);
     }
 
     @Nested
@@ -58,7 +41,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(create.name(), savedProduct.name());
+            assertEquals(new Name(create.name(), false), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -74,7 +57,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(create.name(), savedProduct.name());
+            assertEquals(new Name(create.name(), false), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -99,7 +82,7 @@ class ProductServiceTest {
     void changePriceTest() {
 
         // given
-        Product chicken = new Product(UUID.randomUUID(), "치킨", new Money(BigDecimal.valueOf(10_000)));
+        Product chicken = new Product(UUID.randomUUID(), new Name("치킨", false), new Money(BigDecimal.valueOf(10_000)));
         productRepository.save(chicken);
 
         // when

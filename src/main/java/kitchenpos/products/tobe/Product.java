@@ -2,7 +2,6 @@ package kitchenpos.products.tobe;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,29 +13,27 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "price", nullable = false)
     @Embedded
+    @Column(name = "name", nullable = false)
+    private Name name;
+
+    @Embedded
+    @Column(name = "price", nullable = false)
     private Money price;
 
 
     protected   Product() {
     }
 
-    public Product(UUID id, String name, Money price) {
+    public Product(UUID id, Name name, Money price) {
+        if (name.containProfanity()) {
+            throw new IllegalArgumentException("비속어가 포함된 상품명은 등록할 수 없습니다.");
+        }
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public Product(UUID uuid, String name, Money price, ProductValidator validator) {
-        validator.delegate(name, BigDecimal.valueOf(100));
-        this.id = uuid;
-        this.name = name;
-        this.price = price;
-    }
 
     public void changePrice(Money price) {
         this.price = price;
@@ -46,7 +43,7 @@ public class Product {
         return id;
     }
 
-    public String name() {
+    public Name name() {
         return name;
     }
 
