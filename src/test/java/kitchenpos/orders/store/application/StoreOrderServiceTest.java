@@ -90,7 +90,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void 매장주문이_생성되면_주문은_승인을_WAITING하는_상태가_된다() {
+    void 매장주문이_생성되면_주문은_승인을_대기하는_상태가_된다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
 
         StoreOrder actual = storeOrderService.create(createRequest);
@@ -99,7 +99,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void WAITING_상태의_매장주문을_승인한다() {
+    void 대기상태의_매장주문을_접수한다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
 
@@ -109,7 +109,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void WAITING_상태가_아닌_매장주문을_승인하면_예외를_던진다() {
+    void 대기상태가_아닌_매장주문을_접수하면_예외를_던진다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
 
@@ -120,7 +120,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void ACCEPTED_상태의_매장주문을_SERVED_상태로_변경한다() {
+    void 접수상태의_매장주문을_전달상태로_변경한다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
         storeOrderService.accept(saved.getId());
@@ -131,7 +131,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void ACCEPTED_상태가_아닌_매장주문을_SERVED_상태로_변경하면_예외를_던진다() {
+    void 접수상태가_아닌_매장주문을_전달상태로_변경하면_예외를_던진다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
 
@@ -140,7 +140,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void SERVED된_매장주문을_완료상태로_변경하면_테이블은_초기값으로_세팅된다() {
+    void 전달된_매장주문을_완료상태로_변경하면_테이블은_초기값으로_세팅된다() {
         MenuGroup menuGroup = createMenuGroup();
         OrderTable orderTable = createOrderTableAndSit();
         StoreOrderCreateRequest createRequest = new StoreOrderCreateRequest(
@@ -158,7 +158,7 @@ class StoreOrderServiceTest {
     }
 
     @Test
-    void SERVED_상태가_아닌_포장주문을_완료상태로_변경하면_예외를_던진다() {
+    void 전달상태가_아닌_포장주문을_완료상태로_변경하면_예외를_던진다() {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
 
