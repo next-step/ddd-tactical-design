@@ -111,7 +111,7 @@ class OrderTableServiceTest {
         Product friedProduct = productRepository.save(ProductFixture.createFired());
         Menu friedMenu = menuRepository.save(
                 MenuFixture.createFriedOnePlusOne(chickenMenuGroup, friedProduct));
-        return storeOrderRepository.save(StoreOrderFixture.createStoreOrder(friedMenu, orderTable));
+        return storeOrderRepository.save(StoreOrderFixture.createStoreOrder(orderTable, friedMenu));
     }
 
     @Test

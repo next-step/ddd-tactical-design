@@ -10,6 +10,7 @@ import kitchenpos.orders.store.domain.StoreOrderRepository;
 import kitchenpos.orders.store.domain.tobe.OrderTable;
 import kitchenpos.orders.store.domain.tobe.StoreOrder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StoreOrderService {
@@ -25,6 +26,7 @@ public class StoreOrderService {
         this.orderTableRepository = orderTableRepository;
     }
 
+    @Transactional
     public StoreOrder create(final StoreOrderCreateRequest request) {
         final List<Menu> menus = menuRepository.findAllByIdIn(request.getMenuIds());
         request.validate(menus);

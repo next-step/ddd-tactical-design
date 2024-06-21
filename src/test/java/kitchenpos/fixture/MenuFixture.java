@@ -60,4 +60,14 @@ public class MenuFixture {
 
         return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
     }
+
+    public static Menu SeasonedOnePlusOne(MenuGroup menuGroup, Product product) {
+        MenuName menuName = new MenuName("양념1+1");
+        MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(35_000L));
+        DisplayedMenu displayedMenu = new DisplayedMenu(true);
+        MenuProducts menuProducts = new MenuProducts(
+                List.of(new MenuProduct(product, new ProductQuantity(2))));
+
+        return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
+    }
 }
