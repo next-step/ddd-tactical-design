@@ -1,10 +1,15 @@
 package kitchenpos.orders.common.domain.tobe;
 
-import jakarta.persistence.*;
-import kitchenpos.menus.domain.tobe.Menu;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.menus.domain.tobe.Menu;
 
 @Table(name = "order_line_item")
 @Entity

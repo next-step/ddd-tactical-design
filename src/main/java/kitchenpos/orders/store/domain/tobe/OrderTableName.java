@@ -2,7 +2,6 @@ package kitchenpos.orders.store.domain.tobe;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
 
 @Embeddable
@@ -24,8 +23,12 @@ public class OrderTableName {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         OrderTableName that = (OrderTableName) o;
         return Objects.equals(name, that.name);
     }

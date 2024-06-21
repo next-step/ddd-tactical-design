@@ -1,7 +1,10 @@
 package kitchenpos.orders.store.domain.tobe;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Table(name = "order_table")
@@ -25,10 +28,10 @@ public class OrderTable {
     }
 
     public OrderTable(String name) {
-       this(new OrderTableName(name));
+        this(new OrderTableName(name));
     }
 
-    public OrderTable(OrderTableName name){
+    public OrderTable(OrderTableName name) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.numberOfGuests = new NumberOfGuests(0);

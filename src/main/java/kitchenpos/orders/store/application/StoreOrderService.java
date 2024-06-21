@@ -1,5 +1,7 @@
 package kitchenpos.orders.store.application;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.store.application.dto.StoreOrderCreateRequest;
@@ -9,9 +11,6 @@ import kitchenpos.orders.store.domain.tobe.OrderTable;
 import kitchenpos.orders.store.domain.tobe.StoreOrder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 @Service
 public class StoreOrderService {
 
@@ -19,7 +18,8 @@ public class StoreOrderService {
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
 
-    public StoreOrderService(StoreOrderRepository storeOrderRepository, MenuRepository menuRepository, OrderTableRepository orderTableRepository) {
+    public StoreOrderService(StoreOrderRepository storeOrderRepository,
+            MenuRepository menuRepository, OrderTableRepository orderTableRepository) {
         this.storeOrderRepository = storeOrderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
@@ -31,6 +31,7 @@ public class StoreOrderService {
 
         OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
-        return storeOrderRepository.save(new StoreOrder(request.toOrderLineItems(menus), orderTable));
+        return storeOrderRepository.save(
+                new StoreOrder(request.toOrderLineItems(menus), orderTable));
     }
 }

@@ -5,28 +5,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.orders.common.domain.Order;
-import kitchenpos.orders.common.domain.OrderRepository;
 import kitchenpos.orders.common.domain.OrderStatus;
+import kitchenpos.orders.store.domain.StoreOrderRepository;
 import kitchenpos.orders.store.domain.tobe.OrderTable;
+import kitchenpos.orders.store.domain.tobe.StoreOrder;
 
-public class InMemoryOrderRepository implements OrderRepository {
+public class InMemoryStoreOrderRepository implements StoreOrderRepository {
 
-    private final HashMap<UUID, Order> orders = new HashMap<>();
+    private final HashMap<UUID, StoreOrder> orders = new HashMap<>();
 
     @Override
-    public Order save(Order entity) {
+    public StoreOrder save(StoreOrder entity) {
         orders.put(entity.getId(), entity);
         return entity;
     }
 
     @Override
-    public Optional<Order> findById(UUID id) {
+    public Optional<StoreOrder> findById(UUID id) {
         return Optional.ofNullable(orders.get(id));
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<StoreOrder> findAll() {
         return new ArrayList<>(orders.values());
     }
 
@@ -37,11 +37,11 @@ public class InMemoryOrderRepository implements OrderRepository {
                         && !isStatus(order, status));
     }
 
-    private boolean isEqualOrderTable(Order order, OrderTable orderTable) {
+    private boolean isEqualOrderTable(StoreOrder order, OrderTable orderTable) {
         return order.getOrderTable().getId().equals(orderTable.getId());
     }
 
-    private boolean isStatus(Order order, OrderStatus status) {
+    private boolean isStatus(StoreOrder order, OrderStatus status) {
         return order.getStatus().equals(status);
     }
 }

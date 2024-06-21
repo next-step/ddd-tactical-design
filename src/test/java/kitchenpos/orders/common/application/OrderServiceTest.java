@@ -18,16 +18,16 @@ import kitchenpos.fixture.OrderFixture;
 import kitchenpos.fixture.OrderTableFixture;
 import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
-import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
 import kitchenpos.orders.common.domain.OrderRepository;
 import kitchenpos.orders.common.domain.OrderStatus;
 import kitchenpos.orders.delivery.domain.KitchenridersClient;
-import kitchenpos.orders.store.domain.OrderTable;
 import kitchenpos.orders.store.domain.OrderTableRepository;
+import kitchenpos.orders.store.domain.tobe.OrderTable;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -465,7 +465,7 @@ class OrderServiceTest {
 
     private OrderTable createOccupiedTable() {
         OrderTable orderTable = createTable();
-        orderTable.setOccupied(true);
+        orderTable.sit();
         return orderTable;
     }
 

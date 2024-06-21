@@ -1,12 +1,20 @@
 package kitchenpos.orders.common.domain.tobe;
 
-import jakarta.persistence.*;
-import kitchenpos.orders.common.domain.OrderStatus;
-import kitchenpos.orders.common.domain.OrderType;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.orders.common.domain.OrderStatus;
+import kitchenpos.orders.common.domain.OrderType;
 
 @Table(name = "orders")
 @Entity
@@ -62,5 +70,13 @@ public abstract class Order {
             throw new IllegalStateException();
         }
         status = OrderStatus.COMPLETED;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 }

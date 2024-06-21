@@ -4,11 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
 import kitchenpos.orders.common.domain.OrderType;
 import kitchenpos.orders.common.domain.tobe.Order;
 import kitchenpos.orders.common.domain.tobe.OrderLineItem;
-
-import java.util.List;
 
 @Entity
 public class StoreOrder extends Order {
@@ -37,5 +36,9 @@ public class StoreOrder extends Order {
     public void complete() {
         super.complete();
         orderTable.clear();
+    }
+
+    public OrderTable getOrderTable() {
+        return orderTable;
     }
 }

@@ -3,7 +3,7 @@ package kitchenpos.orders.common.domain;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.orders.store.domain.OrderTable;
+import kitchenpos.orders.store.domain.tobe.OrderTable;
 
 public interface OrderRepository {
 

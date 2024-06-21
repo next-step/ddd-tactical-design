@@ -1,12 +1,11 @@
 package kitchenpos.orders.store.application.dto;
 
+import java.util.List;
+import java.util.UUID;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.common.application.dto.OrderLineItemRequests;
 import kitchenpos.orders.common.domain.OrderType;
 import kitchenpos.orders.common.domain.tobe.OrderLineItem;
-
-import java.util.List;
-import java.util.UUID;
 
 public class StoreOrderCreateRequest {
 

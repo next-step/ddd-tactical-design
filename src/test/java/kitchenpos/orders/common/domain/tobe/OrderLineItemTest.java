@@ -1,5 +1,8 @@
 package kitchenpos.orders.common.domain.tobe;
 
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
@@ -10,16 +13,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 @DisplayName("OrderLineItem")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class OrderLineItemTest {
 
     @Test
     void 노출되어있지않은_메뉴로_주문라인아이템을_생성하면_예외를_던진다() {
-        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(), ProductFixture.createFired());
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
         menu.hide();
 
         assertThatThrownBy(() -> createOrderLineItem(menu))
@@ -28,7 +29,8 @@ class OrderLineItemTest {
 
     @Test
     void 주문라인아이템을_생성한다() {
-        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(), ProductFixture.createFired());
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
 
         assertThatNoException().isThrownBy(() -> createOrderLineItem(menu));
     }

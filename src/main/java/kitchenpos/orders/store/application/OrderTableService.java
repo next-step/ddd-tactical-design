@@ -1,5 +1,8 @@
 package kitchenpos.orders.store.application;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.orders.common.domain.OrderStatus;
 import kitchenpos.orders.store.domain.OrderTableRepository;
 import kitchenpos.orders.store.domain.StoreOrderRepository;
@@ -9,10 +12,6 @@ import kitchenpos.orders.store.domain.tobe.OrderTableName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
 @Service
 public class OrderTableService {
 
@@ -20,7 +19,7 @@ public class OrderTableService {
     private final StoreOrderRepository storeOrderRepository;
 
     public OrderTableService(final OrderTableRepository orderTableRepository,
-                             final StoreOrderRepository storeOrderRepository) {
+            final StoreOrderRepository storeOrderRepository) {
         this.orderTableRepository = orderTableRepository;
         this.storeOrderRepository = storeOrderRepository;
     }
@@ -42,7 +41,8 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (storeOrderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
+        if (storeOrderRepository.existsByOrderTableAndStatusNot(orderTable,
+                OrderStatus.COMPLETED)) {
             throw new IllegalStateException();
         }
         orderTable.clear();

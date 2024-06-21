@@ -11,7 +11,8 @@ public class MenuProductFixture {
 
     public static MenuProductCreateRequests createRequests(Product product, Integer quantity) {
         return new MenuProductCreateRequests(
-                List.of(new MenuProductCreateRequest(product.getId(), new ProductQuantity(quantity))));
+                List.of(new MenuProductCreateRequest(product.getId(),
+                        new ProductQuantity(quantity))));
     }
 
     public static MenuProduct createFired(long quantity) {
