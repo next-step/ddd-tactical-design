@@ -1,16 +1,11 @@
 package kitchenpos.orders.common.domain.tobe;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import java.util.Iterator;
+import jakarta.persistence.*;
+
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 
 @Embeddable
-public class OrderLineItems implements Iterable<OrderLineItem> {
+public class OrderLineItems {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
@@ -26,11 +21,5 @@ public class OrderLineItems implements Iterable<OrderLineItem> {
 
     public OrderLineItems(List<OrderLineItem> orderLineItems) {
         this.orderLineItems = orderLineItems;
-    }
-
-    @NotNull
-    @Override
-    public Iterator<OrderLineItem> iterator() {
-        return orderLineItems.iterator();
     }
 }

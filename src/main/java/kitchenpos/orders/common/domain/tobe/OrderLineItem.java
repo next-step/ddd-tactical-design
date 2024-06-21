@@ -1,11 +1,8 @@
 package kitchenpos.orders.common.domain.tobe;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import kitchenpos.menus.domain.tobe.Menu;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -22,8 +19,18 @@ public class OrderLineItem {
 
     private BigDecimal price;
 
-    private long quantity;
+    @Embedded
+    private MenuQuantity quantity;
 
     protected OrderLineItem() {
+    }
+
+    public OrderLineItem(Menu menu, MenuQuantity quantity) {
+        if (!menu.isDisplayed()) {
+            throw new IllegalStateException();
+        }
+        this.menuId = menu.getId();
+        this.price = menu.getPrice();
+        this.quantity = quantity;
     }
 }
