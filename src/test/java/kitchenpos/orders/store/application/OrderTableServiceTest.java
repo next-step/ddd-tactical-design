@@ -1,30 +1,32 @@
 package kitchenpos.orders.store.application;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
-import kitchenpos.fake.InMemoryOrderRepository;
 import kitchenpos.fake.InMemoryOrderTableRepository;
 import kitchenpos.fake.InMemoryProductRepository;
+import kitchenpos.fake.InMemoryStoreOrderRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
-import kitchenpos.fixture.OrderFixture;
-import kitchenpos.fixture.OrderTableFixture;
 import kitchenpos.fixture.ProductFixture;
+import kitchenpos.fixture.StoreOrderFixture;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
-import kitchenpos.menugroups.domain.tobe.MenuGroup;
-import kitchenpos.orders.common.domain.Order;
-import kitchenpos.orders.common.domain.OrderRepository;
-import kitchenpos.orders.common.domain.OrderStatus;
+import kitchenpos.orders.store.domain.OrderTableRepository;
+import kitchenpos.orders.store.domain.StoreOrderRepository;
 import kitchenpos.orders.store.domain.tobe.NumberOfGuests;
 import kitchenpos.orders.store.domain.tobe.OrderTable;
-import kitchenpos.orders.store.domain.OrderTableRepository;
 import kitchenpos.orders.store.domain.tobe.OrderTableName;
+import kitchenpos.orders.store.domain.tobe.StoreOrder;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +39,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class OrderTableServiceTest {
 
-    private OrderRepository orderRepository = new InMemoryOrderRepository();
+    private StoreOrderRepository storeOrderRepository = new InMemoryStoreOrderRepository();
 
     private MenuRepository menuRepository = new InMemoryMenuRepository();
 
@@ -51,12 +53,13 @@ class OrderTableServiceTest {
 
     @BeforeEach
     void setUp() {
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        orderTableService = new OrderTableService(orderTableRepository, storeOrderRepository);
     }
 
     @Test
     void 테이블을_생성한다() {
-        assertThatNoException().isThrownBy(() -> orderTableService.create(new OrderTableName("1번테이블")));
+        assertThatNoException().isThrownBy(
+                () -> orderTableService.create(new OrderTableName("1번테이블")));
     }
 
     @Test
@@ -90,23 +93,25 @@ class OrderTableServiceTest {
     void 주문이_완료되지_않은_테이블을_치우면_예외를던진다() {
         OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
-        createOrder(saved);
+        createStoreOrder(saved);
 
         assertThatThrownBy(() -> orderTableService.clear(saved.getId()))
                 .isInstanceOf(IllegalStateException.class);
     }
 
     private void createCompleteOrder(OrderTable orderTable) {
-        Order order = createOrder(orderTable);
-        order.setStatus(OrderStatus.COMPLETED);
+        StoreOrder storeOrder = createStoreOrder(orderTable);
+        storeOrder.accept();
+        storeOrder.serve();
+        storeOrder.complete();
     }
 
-    private Order createOrder(OrderTable orderTable) {
+    private StoreOrder createStoreOrder(OrderTable orderTable) {
         MenuGroup chickenMenuGroup = menuGroupRepository.save(MenuGroupFixture.createChicken());
         Product friedProduct = productRepository.save(ProductFixture.createFired());
         Menu friedMenu = menuRepository.save(
                 MenuFixture.createFriedOnePlusOne(chickenMenuGroup, friedProduct));
-        return orderRepository.save(OrderFixture.createEatIn(orderTable, friedMenu));
+        return storeOrderRepository.save(StoreOrderFixture.createStoreOrder(friedMenu, orderTable));
     }
 
     @Test
@@ -114,7 +119,8 @@ class OrderTableServiceTest {
         OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
 
-        OrderTable actual = orderTableService.changeNumberOfGuests(saved.getId(), new NumberOfGuests(4));
+        OrderTable actual = orderTableService.changeNumberOfGuests(saved.getId(),
+                new NumberOfGuests(4));
 
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
@@ -133,7 +139,8 @@ class OrderTableServiceTest {
         orderTableService.sit(saved.getId());
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> orderTableService.changeNumberOfGuests(saved.getId(), new NumberOfGuests(-10)));
+                () -> orderTableService.changeNumberOfGuests(saved.getId(),
+                        new NumberOfGuests(-10)));
     }
 
     @Test

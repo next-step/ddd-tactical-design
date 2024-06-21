@@ -45,7 +45,7 @@ public class OrderTable {
     }
 
     public void changeNumberOfGuests(NumberOfGuests numberOfGuests) {
-        if (isOccupied()) {
+        if (!isOccupied()) {
             throw new IllegalStateException();
         }
         this.numberOfGuests = numberOfGuests;
@@ -61,5 +61,9 @@ public class OrderTable {
 
     public UUID getId() {
         return id;
+    }
+
+    public int getNumberOfGuests() {
+        return numberOfGuests.getNumberOfGuests();
     }
 }
