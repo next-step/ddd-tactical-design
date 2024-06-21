@@ -24,7 +24,6 @@ class ProductTest {
             @Override
             public void delegate(String name, BigDecimal price) {
                 validateName(name);
-                validatePrice(price);
             }
 
             @Override
@@ -34,16 +33,6 @@ class ProductTest {
                 }
                 if ("비속어".equals(name)) {
                     throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-                }
-            }
-
-            @Override
-            public void validatePrice(BigDecimal price) {
-                if (price == null) {
-                    throw new IllegalArgumentException("가격은 null일 수 없습니다.");
-                }
-                if (price.compareTo(BigDecimal.ZERO) < 0) {
-                    throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
                 }
             }
         };
@@ -58,7 +47,7 @@ class ProductTest {
 
         // then
         assertDoesNotThrow(() -> {
-            new Product(uuid, "상품 이름", BigDecimal.valueOf(1000));
+            new Product(uuid, "상품 이름", new Money(BigDecimal.valueOf(1000)));
         });
     }
 
@@ -73,7 +62,7 @@ class ProductTest {
         // when
         // then
         assertDoesNotThrow(() -> {
-            var product = new Product(uuid, emptyString, BigDecimal.valueOf(1000));
+            var product = new Product(uuid, emptyString, new Money(BigDecimal.valueOf(1000)));
         });
 
     }
@@ -87,7 +76,7 @@ class ProductTest {
         // when
         // then
         assertThatThrownBy(() -> {
-            new Product(UUID.randomUUID(), "비속어", BigDecimal.valueOf(1000), validator);
+            new Product(UUID.randomUUID(), "비속어", new Money(BigDecimal.valueOf(1000)), validator);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -102,7 +91,7 @@ class ProductTest {
         // when
         // then
         assertThatThrownBy(() -> {
-            new Product(UUID.randomUUID(), "상품 이름", BigDecimal.valueOf(-1), validator);
+            new Product(UUID.randomUUID(), "상품 이름", new Money(BigDecimal.valueOf(-1)), validator);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 

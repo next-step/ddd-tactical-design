@@ -28,7 +28,6 @@ class ProductServiceTest {
             @Override
             public void delegate(String name, BigDecimal price) {
                 validateName(name);
-                validatePrice(price);
             }
 
             @Override
@@ -38,16 +37,6 @@ class ProductServiceTest {
                 }
                 if ("욕설".equals(name)) {
                     throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-                }
-            }
-
-            @Override
-            public void validatePrice(BigDecimal price) {
-                if (price == null) {
-                    throw new IllegalArgumentException("가격은 null일 수 없습니다.");
-                }
-                if (price.compareTo(BigDecimal.ZERO) < 0) {
-                    throw new IllegalArgumentException("가격은 0보다 작을 수 없습니다.");
                 }
             }
         };
@@ -70,7 +59,7 @@ class ProductServiceTest {
 
             // then
             assertEquals(create.name(), savedProduct.name());
-            assertEquals(create.price(), savedProduct.price());
+            assertEquals(new Money(create.price()), savedProduct.price());
         }
 
         @DisplayName("이름은 공백을 허용한다")
@@ -86,7 +75,7 @@ class ProductServiceTest {
 
             // then
             assertEquals(create.name(), savedProduct.name());
-            assertEquals(create.price(), savedProduct.price());
+            assertEquals(new Money(create.price()), savedProduct.price());
         }
 
         @DisplayName("가격이 음수면 생성이 불가능하다")
@@ -110,14 +99,14 @@ class ProductServiceTest {
     void changePriceTest() {
 
         // given
-        Product chicken = new Product(UUID.randomUUID(), "치킨", BigDecimal.valueOf(10_000));
+        Product chicken = new Product(UUID.randomUUID(), "치킨", new Money(BigDecimal.valueOf(10_000)));
         productRepository.save(chicken);
 
         // when
         Product sut = productService.changePrice(chicken.id(), new UpdateCommand(BigDecimal.valueOf(20_000)));
 
         // then
-        assertThat(sut.price()).isEqualTo(BigDecimal.valueOf(20_000));
+        assertThat(sut.price()).isEqualTo(Money.from(20_000L));
     }
 
 }

@@ -27,8 +27,8 @@ public class ProductService {
 
     @Transactional
     public Product create(final CreateCommand createCommand) {
-        final BigDecimal price = createCommand.price();
-        final String name = createCommand.name();
+        final var price = new Money(createCommand.price());
+        final var name = createCommand.name();
         return productRepository.save(new Product(UUID.randomUUID(), name, price, productValidator));
     }
 
@@ -38,7 +38,7 @@ public class ProductService {
         final BigDecimal price = updateCommand.price();
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.changePrice(price, productValidator);
+        product.changePrice(new Money(price));
 
         // TODO: 메뉴 BC 리팩토링때 반영
         /*

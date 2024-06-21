@@ -1,9 +1,6 @@
 package kitchenpos.products.tobe;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -21,21 +18,27 @@ public class Product {
     private String name;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Money price;
+
 
     protected   Product() {
     }
 
-    public Product(UUID id, String name, BigDecimal price) {
+    public Product(UUID id, String name, Money price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public Product(UUID uuid, String name, BigDecimal price, ProductValidator validator) {
-        validator.delegate(name, price);
+    public Product(UUID uuid, String name, Money price, ProductValidator validator) {
+        validator.delegate(name, BigDecimal.valueOf(100));
         this.id = uuid;
         this.name = name;
+        this.price = price;
+    }
+
+    public void changePrice(Money price) {
         this.price = price;
     }
 
@@ -47,13 +50,8 @@ public class Product {
         return name;
     }
 
-    public BigDecimal price() {
+    public Money price() {
         return price;
-    }
-
-    public void changePrice(BigDecimal price, ProductValidator validator) {
-        validator.validatePrice(price);
-        this.price = price;
     }
 
     @Override
