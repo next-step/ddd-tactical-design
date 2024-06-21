@@ -9,7 +9,7 @@ import kitchenpos.menus.domain.tobe.MenuName;
 import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.MenuProducts;
-import kitchenpos.menus.domain.tobe.MenuQuantity;
+import kitchenpos.menus.domain.tobe.ProductQuantity;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
@@ -56,7 +56,7 @@ public class MenuFixture {
         MenuPrice menuPrice = new MenuPrice(BigDecimal.valueOf(price));
         DisplayedMenu displayedMenu = new DisplayedMenu(true);
         MenuProducts menuProducts = new MenuProducts(
-                List.of(new MenuProduct(product, new MenuQuantity(2))));
+                List.of(new MenuProduct(product, new ProductQuantity(2))));
 
         return new Menu(menuName, menuPrice, menuGroup, displayedMenu, menuProducts);
     }

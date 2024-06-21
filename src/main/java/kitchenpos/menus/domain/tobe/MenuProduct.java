@@ -26,20 +26,20 @@ public class MenuProduct {
     private BigDecimal price;
 
     @Embedded
-    private MenuQuantity quantity;
+    private ProductQuantity quantity;
 
     protected MenuProduct() {
     }
 
     public MenuProduct(Product product, int quantity) {
-        this(null, product.getId(), product.getPrice(), new MenuQuantity(quantity));
+        this(null, product.getId(), product.getPrice(), new ProductQuantity(quantity));
     }
 
-    public MenuProduct(Product product, MenuQuantity quantity) {
+    public MenuProduct(Product product, ProductQuantity quantity) {
         this(null, product.getId(), product.getPrice(), quantity);
     }
 
-    public MenuProduct(Long seq, UUID productId, BigDecimal price, MenuQuantity quantity) {
+    public MenuProduct(Long seq, UUID productId, BigDecimal price, ProductQuantity quantity) {
         this.seq = seq;
         this.productId = productId;
         this.price = price;

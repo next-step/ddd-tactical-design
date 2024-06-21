@@ -2,16 +2,16 @@ package kitchenpos.menus.ui.dto;
 
 import java.util.UUID;
 import kitchenpos.menus.domain.tobe.MenuProduct;
-import kitchenpos.menus.domain.tobe.MenuQuantity;
+import kitchenpos.menus.domain.tobe.ProductQuantity;
 import kitchenpos.products.domain.tobe.Product;
 
 public class MenuProductCreateRequest {
 
     private UUID productId;
 
-    private MenuQuantity quantity;
+    private ProductQuantity quantity;
 
-    public MenuProductCreateRequest(UUID productId, MenuQuantity quantity) {
+    public MenuProductCreateRequest(UUID productId, ProductQuantity quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
@@ -24,7 +24,7 @@ public class MenuProductCreateRequest {
         return productId;
     }
 
-    public MenuQuantity getQuantity() {
+    public ProductQuantity getQuantity() {
         return quantity;
     }
 }

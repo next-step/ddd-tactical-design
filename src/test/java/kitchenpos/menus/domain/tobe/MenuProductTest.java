@@ -15,7 +15,7 @@ class MenuProductTest {
 
     @Test
     void 메뉴상품의_가격과_수량을_곱하여_합을_구할_수_있다() {
-        MenuProduct actual = new MenuProduct(ProductFixture.createFired(), new MenuQuantity(2));
+        MenuProduct actual = new MenuProduct(ProductFixture.createFired(), new ProductQuantity(2));
 
         assertThat(actual.calculateSum()).isEqualTo(BigDecimal.valueOf(40_000L));
     }

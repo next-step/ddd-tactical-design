@@ -9,7 +9,7 @@ import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuProductFixture;
 import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menus.domain.tobe.MenuProducts;
-import kitchenpos.menus.domain.tobe.MenuQuantity;
+import kitchenpos.menus.domain.tobe.ProductQuantity;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequest;
 import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.ProductRepository;
@@ -59,7 +59,7 @@ class MenuProductsServiceTest {
     @Test
     void 메뉴상품들_생성시_없는_상품으로_생성하려_할_경우_예외를_던진다() {
         MenuProductCreateRequests createRequests = new MenuProductCreateRequests(
-                List.of(new MenuProductCreateRequest(UUID.randomUUID(), new MenuQuantity(1))));
+                List.of(new MenuProductCreateRequest(UUID.randomUUID(), new ProductQuantity(1))));
 
         assertThatThrownBy(
                 () -> menuProductsService.create(createRequests))

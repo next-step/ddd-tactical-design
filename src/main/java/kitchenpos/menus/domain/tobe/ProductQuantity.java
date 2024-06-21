@@ -6,15 +6,15 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class MenuQuantity {
+public class ProductQuantity {
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    protected MenuQuantity() {
+    protected ProductQuantity() {
     }
 
-    public MenuQuantity(long quantity) {
+    public ProductQuantity(long quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException();
         }
@@ -34,7 +34,7 @@ public class MenuQuantity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MenuQuantity that = (MenuQuantity) o;
+        ProductQuantity that = (ProductQuantity) o;
         return quantity == that.quantity;
     }
 
