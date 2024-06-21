@@ -1,9 +1,6 @@
 package kitchenpos.orders.store.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
@@ -24,8 +21,10 @@ import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderRepository;
 import kitchenpos.orders.common.domain.OrderStatus;
-import kitchenpos.orders.store.domain.OrderTable;
+import kitchenpos.orders.store.domain.tobe.NumberOfGuests;
+import kitchenpos.orders.store.domain.tobe.OrderTable;
 import kitchenpos.orders.store.domain.OrderTableRepository;
+import kitchenpos.orders.store.domain.tobe.OrderTableName;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,27 +56,18 @@ class OrderTableServiceTest {
 
     @Test
     void 테이블을_생성한다() {
-        OrderTable request = OrderTableFixture.createRequest("1번테이블");
-
-        OrderTable actual = orderTableService.create(request);
-
-        assertAll(() -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getNumberOfGuests()).isZero(),
-                () -> assertThat(actual.isOccupied()).isFalse());
+        assertThatNoException().isThrownBy(() -> orderTableService.create(new OrderTableName("1번테이블")));
     }
 
     @Test
     void 테이블이름이_비어있으면_예외를던진다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("");
-
         assertThatIllegalArgumentException().isThrownBy(
-                () -> orderTableService.create(createRequest));
+                () -> orderTableService.create(new OrderTableName("")));
     }
 
     @Test
     void 먹고가는_손님이_오면_테이블점유를_체크한다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequest);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
 
         OrderTable actual = orderTableService.sit(saved.getId());
 
@@ -86,8 +76,7 @@ class OrderTableServiceTest {
 
     @Test
     void 주문이_완료된_테이블을_치울_수_있다() {
-        OrderTable createRequset = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequset);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
         createCompleteOrder(saved);
 
@@ -99,8 +88,7 @@ class OrderTableServiceTest {
 
     @Test
     void 주문이_완료되지_않은_테이블을_치우면_예외를던진다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequest);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
         createOrder(saved);
 
@@ -123,41 +111,35 @@ class OrderTableServiceTest {
 
     @Test
     void 점유되어있는_테이블의_손님수를_변경할_수_있다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequest);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
-        OrderTable changeRequest = OrderTableFixture.changeNumberOfGuestsRequest(4);
 
-        OrderTable actual = orderTableService.changeNumberOfGuests(saved.getId(), changeRequest);
+        OrderTable actual = orderTableService.changeNumberOfGuests(saved.getId(), new NumberOfGuests(4));
 
         assertThat(actual.getNumberOfGuests()).isEqualTo(4);
     }
 
     @Test
     void 점유되어있지_않은_테이블의_손님수를_변경하면_예외를던진다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequest);
-        OrderTable changeRequest = OrderTableFixture.changeNumberOfGuestsRequest(4);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
 
         assertThatIllegalStateException().isThrownBy(
-                () -> orderTableService.changeNumberOfGuests(saved.getId(), changeRequest));
+                () -> orderTableService.changeNumberOfGuests(saved.getId(), new NumberOfGuests(4)));
     }
 
     @Test
     void 테이블의_손님수를_마이너스로_변경하면_예외를던진다() {
-        OrderTable createRequest = OrderTableFixture.createRequest("1번테이블");
-        OrderTable saved = orderTableService.create(createRequest);
+        OrderTable saved = orderTableService.create(new OrderTableName("1번테이블"));
         orderTableService.sit(saved.getId());
-        OrderTable changeRequest = OrderTableFixture.changeNumberOfGuestsRequest(-10);
 
         assertThatIllegalArgumentException().isThrownBy(
-                () -> orderTableService.changeNumberOfGuests(saved.getId(), changeRequest));
+                () -> orderTableService.changeNumberOfGuests(saved.getId(), new NumberOfGuests(-10)));
     }
 
     @Test
     void 모든_테이블_목록을_볼_수_있다() {
-        orderTableService.create(OrderTableFixture.createRequest("1번테이블"));
-        orderTableService.create(OrderTableFixture.createRequest("2번테이블"));
+        orderTableService.create(new OrderTableName("1번테이블"));
+        orderTableService.create(new OrderTableName("2번테이블"));
 
         List<OrderTable> actual = orderTableService.findAll();
 

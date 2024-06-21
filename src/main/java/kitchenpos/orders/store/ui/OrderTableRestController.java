@@ -4,7 +4,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.orders.store.application.OrderTableService;
-import kitchenpos.orders.store.domain.OrderTable;
+import kitchenpos.orders.store.domain.tobe.NumberOfGuests;
+import kitchenpos.orders.store.domain.tobe.OrderTable;
+import kitchenpos.orders.store.domain.tobe.OrderTableName;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +27,7 @@ public class OrderTableRestController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderTable> create(@RequestBody final OrderTable request) {
+    public ResponseEntity<OrderTable> create(@RequestBody final OrderTableName request) {
         final OrderTable response = orderTableService.create(request);
         return ResponseEntity.created(URI.create("/api/order-tables/" + response.getId()))
                 .body(response);
@@ -44,7 +46,7 @@ public class OrderTableRestController {
     @PutMapping("/{orderTableId}/number-of-guests")
     public ResponseEntity<OrderTable> changeNumberOfGuests(
             @PathVariable final UUID orderTableId,
-            @RequestBody final OrderTable request
+            @RequestBody final NumberOfGuests request
     ) {
         return ResponseEntity.ok(orderTableService.changeNumberOfGuests(orderTableId, request));
     }

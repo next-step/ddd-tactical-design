@@ -12,7 +12,6 @@ public class NumberOfGuests {
     private int numberOfGuests;
 
     protected NumberOfGuests(){
-
     }
 
     public NumberOfGuests(int numberOfGuests) {

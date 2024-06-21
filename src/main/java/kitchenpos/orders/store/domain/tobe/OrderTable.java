@@ -25,8 +25,12 @@ public class OrderTable {
     }
 
     public OrderTable(String name) {
+       this(new OrderTableName(name));
+    }
+
+    public OrderTable(OrderTableName name){
         this.id = UUID.randomUUID();
-        this.name = new OrderTableName(name);
+        this.name = name;
         this.numberOfGuests = new NumberOfGuests(0);
         this.occupied = false;
     }
@@ -41,6 +45,9 @@ public class OrderTable {
     }
 
     public void changeNumberOfGuests(NumberOfGuests numberOfGuests) {
+        if (isOccupied()) {
+            throw new IllegalStateException();
+        }
         this.numberOfGuests = numberOfGuests;
     }
 
@@ -50,5 +57,9 @@ public class OrderTable {
 
     public boolean hasGuest() {
         return numberOfGuests.getNumberOfGuests() > 0;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }
