@@ -51,4 +51,22 @@ class OrderTableTest {
                 () -> assertThat(target.hasGuest()).isFalse()
         );
     }
+
+    @Test
+    void 점유되지않은_테이블의_손님수를_변경하면_예외를_던진다(){
+        OrderTable target = new OrderTable("1번테이블");
+
+        assertThatThrownBy(() -> target.changeNumberOfGuests(new NumberOfGuests(5)))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void 점유된_테이블의_손님수를_변경할_수_있다(){
+        OrderTable target = new OrderTable("1번테이블");
+        target.sit();
+
+        target.changeNumberOfGuests(new NumberOfGuests(5));
+
+        assertThat(target.hasGuest()).isTrue();
+    }
 }
