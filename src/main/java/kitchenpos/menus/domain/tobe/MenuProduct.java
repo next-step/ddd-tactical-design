@@ -32,17 +32,12 @@ public class MenuProduct {
     }
 
     public MenuProduct(Product product, int quantity) {
-        this(null, product.getId(), product.getPrice(), new ProductQuantity(quantity));
+        this(product, new ProductQuantity(quantity));
     }
 
     public MenuProduct(Product product, ProductQuantity quantity) {
-        this(null, product.getId(), product.getPrice(), quantity);
-    }
-
-    public MenuProduct(Long seq, UUID productId, BigDecimal price, ProductQuantity quantity) {
-        this.seq = seq;
-        this.productId = productId;
-        this.price = price;
+        this.productId = product.getId();
+        this.price = product.getPrice();
         this.quantity = quantity;
     }
 

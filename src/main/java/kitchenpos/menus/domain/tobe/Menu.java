@@ -37,16 +37,11 @@ public class Menu {
 
     public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, DisplayedMenu displayed,
             MenuProducts menuProducts) {
-        this(UUID.randomUUID(), name, price, menuGroup.getId(), displayed, menuProducts);
-    }
-
-    public Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, DisplayedMenu displayed,
-            MenuProducts menuProducts) {
         validateMenuPrice(price, menuProducts);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
-        this.menuGroupId = menuGroupId;
+        this.menuGroupId = menuGroup.getId();
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
