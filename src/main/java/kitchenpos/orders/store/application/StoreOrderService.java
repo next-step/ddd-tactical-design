@@ -30,12 +30,10 @@ public class StoreOrderService {
     @Transactional
     public StoreOrder create(final StoreOrderCreateRequest request) {
         final List<Menu> menus = menuRepository.findAllByIdIn(request.getMenuIds());
-        request.validate(menus);
-
-        OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
+        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
         return storeOrderRepository.save(
-                new StoreOrder(request.toOrderLineItems(menus), orderTable));
+                new StoreOrder(request.toOrderLineItems(menus), menus, orderTable));
     }
 
     @Transactional

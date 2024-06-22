@@ -13,19 +13,16 @@ public class StoreOrderCreateRequest {
     private final UUID orderTableId;
 
     public StoreOrderCreateRequest(OrderLineItemRequests orderLineItemRequests, UUID orderTableId) {
+        if (orderTableId == null) {
+            throw new IllegalArgumentException();
+        }
+
         this.orderLineItemRequests = orderLineItemRequests;
         this.orderTableId = orderTableId;
     }
 
     public List<UUID> getMenuIds() {
         return orderLineItemRequests.getMenuIds();
-    }
-
-    public void validate(List<Menu> menus) {
-        orderLineItemRequests.validate(menus);
-        if (orderTableId == null) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public UUID getOrderTableId() {

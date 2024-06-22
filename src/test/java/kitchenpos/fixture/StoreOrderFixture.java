@@ -14,11 +14,14 @@ public class StoreOrderFixture {
     public static StoreOrder createStoreOrder() {
         OrderTable orderTable = OrderTableFixture.createNumber1();
         orderTable.sit();
-        return new StoreOrder(createOrderLineItems(), orderTable);
+
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
+        return new StoreOrder(createOrderLineItems(menu), List.of(menu), orderTable);
     }
 
     public static StoreOrder createStoreOrder(OrderTable orderTable, Menu... menu) {
-        return new StoreOrder(createOrderLineItems(menu), orderTable);
+        return new StoreOrder(createOrderLineItems(menu), List.of(menu), orderTable);
     }
 
     public static List<OrderLineItem> createOrderLineItems() {
@@ -27,7 +30,7 @@ public class StoreOrderFixture {
         return List.of(new OrderLineItem(menu, new MenuQuantity(OrderType.EAT_IN, 2)));
     }
 
-    private static List<OrderLineItem> createOrderLineItems(Menu... menu) {
+    public static List<OrderLineItem> createOrderLineItems(Menu... menu) {
         return Arrays.stream(menu).map(StoreOrderFixture::createOrderLineItem).toList();
     }
 

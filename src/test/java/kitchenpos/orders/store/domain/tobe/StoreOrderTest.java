@@ -4,8 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+import kitchenpos.fixture.MenuFixture;
+import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.OrderTableFixture;
+import kitchenpos.fixture.ProductFixture;
 import kitchenpos.fixture.StoreOrderFixture;
+import kitchenpos.menus.domain.tobe.Menu;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -17,7 +22,28 @@ class StoreOrderTest {
 
     @Test
     void 매장주문을_생성_시_테이블이_점유되어있지않으면_예외를_던진다() {
-        assertThatThrownBy(() -> new StoreOrder(StoreOrderFixture.createOrderLineItems(),
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
+
+        assertThatThrownBy(() -> new StoreOrder(
+                StoreOrderFixture.createOrderLineItems(menu),
+                List.of(menu),
+                OrderTableFixture.createNumber1()))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void 매장주문을_생성_시_메뉴가_겹치면_예외를_던진다() {
+        OrderTable orderTable = OrderTableFixture.createNumber1();
+        orderTable.sit();
+        Menu menu1 = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
+        Menu menu2 = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
+
+        assertThatThrownBy(() -> new StoreOrder(
+                StoreOrderFixture.createOrderLineItems(menu1, menu2),
+                List.of(menu1, menu2),
                 OrderTableFixture.createNumber1()))
                 .isInstanceOf(IllegalStateException.class);
     }
@@ -26,9 +52,14 @@ class StoreOrderTest {
     void 매장주문을_생성한다() {
         OrderTable orderTable = OrderTableFixture.createNumber1();
         orderTable.sit();
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
 
         assertThatNoException().isThrownBy(
-                () -> new StoreOrder(StoreOrderFixture.createOrderLineItems(), orderTable));
+                () -> new StoreOrder(
+                        StoreOrderFixture.createOrderLineItems(menu),
+                        List.of(menu),
+                        orderTable));
     }
 
     @Test
@@ -76,7 +107,11 @@ class StoreOrderTest {
     void 매장주문을_완료하면_테이블은_청소된다() {
         OrderTable targetTable = OrderTableFixture.createNumber1();
         targetTable.sit();
-        StoreOrder storeOrder = new StoreOrder(StoreOrderFixture.createOrderLineItems(),
+        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
+                ProductFixture.createFired());
+        StoreOrder storeOrder = new StoreOrder(
+                StoreOrderFixture.createOrderLineItems(menu),
+                List.of(menu),
                 targetTable);
         storeOrder.accept();
         storeOrder.serve();

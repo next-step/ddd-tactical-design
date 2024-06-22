@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.common.domain.OrderStatus;
 import kitchenpos.orders.common.domain.OrderType;
 
@@ -43,7 +44,11 @@ public abstract class Order {
     protected Order() {
     }
 
-    public Order(OrderType type, List<OrderLineItem> orderLineItems) {
+    public Order(OrderType type, List<OrderLineItem> orderLineItems, List<Menu> menus) {
+        if (menus.size() != orderLineItems.size()) {
+            throw new IllegalArgumentException();
+        }
+
         this.id = UUID.randomUUID();
         this.type = type;
         this.status = OrderStatus.WAITING;

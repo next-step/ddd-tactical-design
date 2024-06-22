@@ -20,12 +20,6 @@ public class OrderLineItemRequests {
         this.orderLineItems = orderLineItems;
     }
 
-    public void validate(List<Menu> menus) {
-        if (menus.size() != orderLineItems.size()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
     public List<UUID> getMenuIds() {
         return orderLineItems.stream().map(OrderLineItemRequest::getMenuId).toList();
     }
