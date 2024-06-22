@@ -8,8 +8,8 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
+import kitchenpos.products.domain.tobe.Product;
 import org.jetbrains.annotations.NotNull;
 
 @Embeddable
@@ -27,13 +27,21 @@ public class MenuProducts implements Iterable<MenuProduct> {
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts) {
-        validateMenuProducts(menuProducts);
+    public MenuProducts(List<MenuProduct> menuProducts, List<Product> products) {
+        validateMenuProducts(menuProducts, products);
         this.menuProducts = menuProducts;
     }
 
-    private void validateMenuProducts(List<MenuProduct> menuProducts) {
-        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+    private void validateMenuProducts(List<MenuProduct> menuProducts, List<Product> products) {
+        if (menuProducts == null || products == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (products.size() != menuProducts.size()) {
+            throw new IllegalArgumentException();
+        }
+
+        if (menuProducts.isEmpty()) {
             throw new IllegalArgumentException();
         }
     }
