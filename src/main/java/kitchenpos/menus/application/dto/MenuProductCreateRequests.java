@@ -36,8 +36,4 @@ public class MenuProductCreateRequests {
                 .filter(product -> product.getId().equals(menuProduct.getProductId()))
                 .findFirst().orElseThrow((NoSuchElementException::new));
     }
-
-    public List<MenuProductCreateRequest> getMenuProducts() {
-        return menuProducts;
-    }
 }
