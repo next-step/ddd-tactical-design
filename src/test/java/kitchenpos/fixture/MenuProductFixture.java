@@ -3,8 +3,8 @@ package kitchenpos.fixture;
 import java.util.List;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.ProductQuantity;
-import kitchenpos.menus.ui.dto.MenuProductCreateRequest;
-import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
+import kitchenpos.menus.application.dto.MenuProductCreateRequest;
+import kitchenpos.menus.application.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
 
 public class MenuProductFixture {

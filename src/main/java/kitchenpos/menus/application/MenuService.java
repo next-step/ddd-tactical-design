@@ -9,7 +9,7 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProducts;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProfanityValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.MenuProducts;
-import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
+import kitchenpos.menus.application.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.tobe.Product;
 import org.springframework.stereotype.Service;

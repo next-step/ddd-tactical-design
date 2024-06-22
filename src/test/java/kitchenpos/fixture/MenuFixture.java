@@ -10,8 +10,8 @@ import kitchenpos.menus.domain.tobe.MenuPrice;
 import kitchenpos.menus.domain.tobe.MenuProduct;
 import kitchenpos.menus.domain.tobe.MenuProducts;
 import kitchenpos.menus.domain.tobe.ProductQuantity;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
-import kitchenpos.menus.ui.dto.MenuProductCreateRequests;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuProductCreateRequests;
 import kitchenpos.products.domain.tobe.Product;
 
 public class MenuFixture {

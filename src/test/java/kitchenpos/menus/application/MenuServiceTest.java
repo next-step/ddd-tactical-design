@@ -19,7 +19,7 @@ import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;

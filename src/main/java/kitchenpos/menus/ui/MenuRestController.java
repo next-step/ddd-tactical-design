@@ -6,7 +6,7 @@ import java.util.UUID;
 import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
