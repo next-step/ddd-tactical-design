@@ -6,7 +6,7 @@ import java.util.UUID;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductPrice;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
+import kitchenpos.products.application.dto.ProductCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

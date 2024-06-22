@@ -1,4 +1,4 @@
-package kitchenpos.products.ui.dto;
+package kitchenpos.products.application.dto;
 
 import java.math.BigDecimal;
 import kitchenpos.products.domain.ProfanityValidator;
