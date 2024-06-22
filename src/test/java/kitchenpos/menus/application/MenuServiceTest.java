@@ -16,10 +16,10 @@ import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menugroups.domain.tobe.MenuGroup;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
@@ -42,9 +42,8 @@ class MenuServiceTest {
 
     @BeforeEach
     void setUp() {
-        MenuProductsService menuProductService = new MenuProductsService(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, profanityValidator,
-                menuProductService);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository,
+                profanityValidator);
     }
 
     @Test

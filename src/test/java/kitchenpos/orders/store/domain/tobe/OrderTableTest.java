@@ -53,7 +53,7 @@ class OrderTableTest {
     }
 
     @Test
-    void 점유되지않은_테이블의_손님수를_변경하면_예외를_던진다(){
+    void 점유되지않은_테이블의_손님수를_변경하면_예외를_던진다() {
         OrderTable target = new OrderTable("1번테이블");
 
         assertThatThrownBy(() -> target.changeNumberOfGuests(new NumberOfGuests(5)))
@@ -61,7 +61,7 @@ class OrderTableTest {
     }
 
     @Test
-    void 점유된_테이블의_손님수를_변경할_수_있다(){
+    void 점유된_테이블의_손님수를_변경할_수_있다() {
         OrderTable target = new OrderTable("1번테이블");
         target.sit();
 

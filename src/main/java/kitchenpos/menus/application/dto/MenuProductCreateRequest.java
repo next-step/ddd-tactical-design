@@ -7,9 +7,9 @@ import kitchenpos.products.domain.tobe.Product;
 
 public class MenuProductCreateRequest {
 
-    private UUID productId;
+    private final UUID productId;
 
-    private ProductQuantity quantity;
+    private final ProductQuantity quantity;
 
     public MenuProductCreateRequest(UUID productId, ProductQuantity quantity) {
         this.productId = productId;

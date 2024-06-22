@@ -1,8 +1,8 @@
 package kitchenpos.fixture;
 
 import java.math.BigDecimal;
-import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.application.dto.ProductCreateRequest;
+import kitchenpos.products.domain.tobe.Product;
 
 public class ProductFixture {
 
