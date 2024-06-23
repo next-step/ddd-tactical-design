@@ -25,6 +25,10 @@ public class EatInOrderLineItem {
   protected EatInOrderLineItem() {}
 
   protected EatInOrderLineItem(final Long seq, final long quantity, final UUID menuId) {
+    if (menuId == null) {
+      throw new IllegalArgumentException();
+    }
+
     this.seq = seq;
     this.quantity = quantity;
     this.menuId = menuId;

@@ -1,10 +1,7 @@
 package kitchenpos.eatinorders.application;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import kitchenpos.eatinorders.domain.*;
 import kitchenpos.eatinorders.domain.EatInOrder;
 import kitchenpos.takeoutorders.domain.MenuPriceFoundEvent;
@@ -75,6 +72,10 @@ public class EatInOrderService {
 
   private List<EatInOrderLineItem> createTakeoutOrderLineItems(
       final List<EatInOrderLineItemRequestDto> eatInOrderLineItemRequestDtos) {
+
+    if (Objects.isNull(eatInOrderLineItemRequestDtos)) {
+      throw new IllegalArgumentException();
+    }
 
     final List<EatInOrderLineItem> eatInOrderLineItems = new ArrayList<>();
     for (EatInOrderLineItemRequestDto eatInOrderLineItemRequestDto :

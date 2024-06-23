@@ -14,18 +14,21 @@ public class EatInOrderResponseDto {
   private EatInOrderStatus status;
   private LocalDateTime orderDateTime;
   private List<OrderLineItemResponseDto> orderLineItemResponseDtos;
+  private UUID orderTableId;
 
   public EatInOrderResponseDto(
       UUID orderId,
       EatInOrderType type,
       EatInOrderStatus status,
       LocalDateTime orderDateTime,
-      List<OrderLineItemResponseDto> orderLineItemResponseDtos) {
+      List<OrderLineItemResponseDto> orderLineItemResponseDtos,
+      UUID orderTableId) {
     this.orderId = orderId;
     this.type = type;
     this.status = status;
     this.orderDateTime = orderDateTime;
     this.orderLineItemResponseDtos = orderLineItemResponseDtos;
+    this.orderTableId = orderTableId;
   }
 
   public static EatInOrderResponseDto create(final EatInOrder eatInOrder) {
@@ -34,7 +37,8 @@ public class EatInOrderResponseDto {
         eatInOrder.getType(),
         eatInOrder.getStatus(),
         eatInOrder.getOrderDateTime(),
-        OrderLineItemResponseDto.create(eatInOrder.getOrderLineItems()));
+        OrderLineItemResponseDto.create(eatInOrder.getOrderLineItems()),
+        eatInOrder.getOrderTable().getId());
   }
 
   public UUID getOrderId() {
@@ -55,6 +59,10 @@ public class EatInOrderResponseDto {
 
   public List<OrderLineItemResponseDto> getOrderLineItemResponseDtos() {
     return orderLineItemResponseDtos;
+  }
+
+  public UUID getOrderTableId() {
+    return orderTableId;
   }
 
   static class OrderLineItemResponseDto {
