@@ -25,7 +25,7 @@ class ProductTest {
 
         // then
         assertDoesNotThrow(() -> {
-            new Product(uuid, new Name("상품 이름", false), new Money(BigDecimal.valueOf(1000)));
+            new Product(uuid, new Name("상품 이름"), new Money(BigDecimal.valueOf(1000)));
         });
     }
 
@@ -40,7 +40,7 @@ class ProductTest {
         // when
         // then
         assertDoesNotThrow(() -> {
-            var product = new Product(uuid, new Name(emptyString, false), new Money(BigDecimal.valueOf(1000)));
+            var product = new Product(uuid, new Name(emptyString), new Money(BigDecimal.valueOf(1000)));
         });
 
     }
@@ -54,7 +54,7 @@ class ProductTest {
         // when
         // then
         assertThatThrownBy(() -> {
-            new Product(UUID.randomUUID(), new Name("비속어", true), new Money(BigDecimal.valueOf(1000)));
+            new Product(UUID.randomUUID(), new Name("비속어"), new Money(BigDecimal.valueOf(1000)));
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -69,7 +69,7 @@ class ProductTest {
         // when
         // then
         assertThatThrownBy(() -> {
-            new Product(UUID.randomUUID(), new Name("상품 이름", false), new Money(BigDecimal.valueOf(-1)));
+            new Product(UUID.randomUUID(), new Name("상품 이름"), new Money(BigDecimal.valueOf(-1)));
         }).isInstanceOf(IllegalArgumentException.class);
     }
 

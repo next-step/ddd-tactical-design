@@ -41,7 +41,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(new Name(create.name(), false), savedProduct.name());
+            assertEquals(new Name(create.name()), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -57,7 +57,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(new Name(create.name(), false), savedProduct.name());
+            assertEquals(new Name(create.name()), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -82,7 +82,7 @@ class ProductServiceTest {
     void changePriceTest() {
 
         // given
-        Product chicken = new Product(UUID.randomUUID(), new Name("치킨", false), new Money(BigDecimal.valueOf(10_000)));
+        Product chicken = new Product(UUID.randomUUID(), new Name("치킨"), new Money(BigDecimal.valueOf(10_000)));
         productRepository.save(chicken);
 
         // when

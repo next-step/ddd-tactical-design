@@ -29,7 +29,7 @@ public class ProductService {
     @Transactional
     public Product create(final CreateCommand createCommand) {
         final var price = new Money(createCommand.price());
-        final var name = new Name(createCommand.name(), purgomalumClient.containsProfanity(createCommand.name()));
+        final var name = new Name(createCommand.name(), purgomalumClient);
         return productRepository.save(new Product(UUID.randomUUID(), name, price));
     }
 
