@@ -1,6 +1,6 @@
 package fixtures;
 
-import kitchenpos.menu.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuGroup;
 
 import java.util.UUID;
 

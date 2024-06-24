@@ -5,7 +5,7 @@ import fixtures.MenuGroupBuilder;
 import fixtures.MenuProductBuilder;
 import fixtures.ProductBuilder;
 
-import kitchenpos.menu.domain.*;
+import kitchenpos.menus.domain.*;
 import kitchenpos.products.application.ProductService;
 import kitchenpos.products.domain.Product;
 

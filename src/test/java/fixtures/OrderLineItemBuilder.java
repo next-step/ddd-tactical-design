@@ -1,7 +1,7 @@
 package fixtures;
 
 
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menus.domain.Menu;
 import kitchenpos.order.domain.OrderLineItem;
 
 import java.math.BigDecimal;

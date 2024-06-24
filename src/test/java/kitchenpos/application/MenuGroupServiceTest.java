@@ -1,8 +1,8 @@
 package kitchenpos.application;
 
 import fixtures.MenuGroupBuilder;
-import kitchenpos.menu.application.MenuGroupService;
-import kitchenpos.menu.domain.MenuGroup;
+import kitchenpos.menus.application.MenuGroupService;
+import kitchenpos.menus.domain.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

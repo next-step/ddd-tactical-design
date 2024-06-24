@@ -9,7 +9,7 @@ import kitchenpos.order.domain.OrderType;
 import kitchenpos.order.domain.OrderLineItem;
 import kitchenpos.order.domain.OrderTable;
 import kitchenpos.order.domain.OrderStatus;
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menus.domain.Menu;
 
 import java.math.BigDecimal;
 import java.util.List;
