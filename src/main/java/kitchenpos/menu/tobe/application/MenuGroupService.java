@@ -1,6 +1,7 @@
 package kitchenpos.menu.tobe.application;
 
-import kitchenpos.menu.tobe.application.dto.CreateMenuGroupRequest;
+import kitchenpos.menu.tobe.application.dto.request.CreateMenuGroupRequest;
+import kitchenpos.menu.tobe.application.dto.response.MenuGroupResponse;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
 import kitchenpos.menu.tobe.domain.menugroup.MenuGroupRepository;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,19 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final CreateMenuGroupRequest request) {
+    public MenuGroupResponse create(final CreateMenuGroupRequest request) {
         MenuGroup menuGroup = new MenuGroup(UUID.randomUUID(), request.name());
 
-        return menuGroupRepository.save(menuGroup);
+        MenuGroup savedMenuGroup = menuGroupRepository.save(menuGroup);
+
+        return new MenuGroupResponse(savedMenuGroup.getId(), savedMenuGroup.getName());
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    public List<MenuGroupResponse> findAll() {
+        return menuGroupRepository.findAll().stream()
+                .map(menuGroup -> new MenuGroupResponse(menuGroup.getId(), menuGroup.getName()))
+                .toList();
     }
+
 }

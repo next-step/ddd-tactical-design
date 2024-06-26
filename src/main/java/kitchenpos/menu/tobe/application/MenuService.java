@@ -1,8 +1,10 @@
 package kitchenpos.menu.tobe.application;
 
-import kitchenpos.menu.tobe.application.dto.ChangeMenuPrice;
-import kitchenpos.menu.tobe.application.dto.CreateMenuProductRequest;
-import kitchenpos.menu.tobe.application.dto.CreateMenuRequest;
+import kitchenpos.menu.tobe.application.dto.*;
+import kitchenpos.menu.tobe.application.dto.request.CreateMenuProductRequest;
+import kitchenpos.menu.tobe.application.dto.request.CreateMenuRequest;
+import kitchenpos.menu.tobe.application.dto.response.MenuProductResponse;
+import kitchenpos.menu.tobe.application.dto.response.MenuResponse;
 import kitchenpos.menu.tobe.domain.menu.*;
 import kitchenpos.menu.tobe.domain.menu.validate.ProductValidator;
 import kitchenpos.menu.tobe.domain.menu.validate.ProfanityValidator;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service("newMenuService")
 public class MenuService {
@@ -36,15 +39,17 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final CreateMenuRequest request) {
+    public MenuResponse create(final CreateMenuRequest request) {
         MenuPrice menuPrice = new MenuPrice(request.price());
         MenuGroup menuGroup = getMenuGroup(request.menuGroupId());
 
         List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
         MenuName menuName = new MenuName(request.name(), profanityValidator);
 
-        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice.getPrice(), productValidator));
-        return menuRepository.save(menu);
+        Menu menu = new Menu(UUID.randomUUID(), menuName, menuPrice, menuGroup, request.display(), new MenuProducts(menuProducts, menuPrice, productValidator));
+        Menu savedMenu = menuRepository.save(menu);
+
+        return toMenuResponse(savedMenu);
     }
 
     private MenuGroup getMenuGroup(UUID menuGroupId) {
@@ -59,14 +64,14 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final ChangeMenuPrice request) {
+    public MenuResponse changePrice(final UUID menuId, final ChangeMenuPrice request) {
         final BigDecimal price = request.price();
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
 
         menu.changePrice(price);
 
-        return menu;
+        return toMenuResponse(menu);
     }
 
     private Menu findMenuById(UUID menuId) {
@@ -75,21 +80,46 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu display(final UUID menuId) {
+    public MenuResponse display(final UUID menuId) {
         final Menu menu = findMenuById(menuId);
+
         menu.display();
-        return menu;
+
+        return toMenuResponse(menu);
     }
 
     @Transactional
-    public Menu hide(final UUID menuId) {
+    public MenuResponse hide(final UUID menuId) {
         final Menu menu = findMenuById(menuId);
+
         menu.hide();
-        return menu;
+
+        return toMenuResponse(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuResponse> findAll() {
+        return menuRepository.findAll().stream()
+                .map(this::toMenuResponse)
+                .toList();
+    }
+
+    private MenuResponse toMenuResponse(Menu menu) {
+        List<MenuProductResponse> menuProductResponses = menu.getMenuProducts().getMenuProducts().stream()
+                .map(menuProduct -> new MenuProductResponse(
+                        menuProduct.getSeq(),
+                        menuProduct.getProductId(),
+                        menuProduct.getQuantity(),
+                        menuProduct.getPrice()
+                ))
+                .collect(Collectors.toList());
+
+        return new MenuResponse(
+                menu.getId(),
+                menu.getName(),
+                menu.getPrice(),
+                menu.getMenuGroup().getId(),
+                menuProductResponses
+        );
     }
 }
