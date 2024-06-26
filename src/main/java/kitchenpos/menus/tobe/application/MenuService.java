@@ -51,6 +51,23 @@ public class MenuService {
 
 
     @Transactional
+    public Menu changePrice(final UUID menuId, final Menu request) {
+
+        final Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(NoSuchElementException::new);
+
+        ProductPrices productPrices = productPriceService.getProductPrices(
+                menu.getMenuProducts().stream()
+                        .map(MenuProduct::getProductId)
+                        .toList());
+
+        menu.changePrice(new Money(request.getPrice()), productPrices);
+
+        return menu;
+    }
+
+
+    @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);

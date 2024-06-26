@@ -71,8 +71,15 @@ public class Menu {
         }
     }
 
+
     public void hide() {
         this.displayed = false;
+    }
+
+
+    public void changePrice(Money toPrice, ProductPrices productPrices) {
+        MenuProducts.of(menuProducts, toPrice, productPrices);
+        this.price = toPrice.value();
     }
 
     public UUID getId() {

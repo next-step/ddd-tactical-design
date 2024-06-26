@@ -4,7 +4,6 @@ import kitchenpos.products.tobe.Money;
 import kitchenpos.products.tobe.Name;
 import kitchenpos.products.tobe.ProductPrice;
 import kitchenpos.products.tobe.ProductPrices;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -97,5 +96,50 @@ class MenuTest {
 
         // then
         assertFalse(menu.isDisplayed());
+    }
+
+    @DisplayName("메뉴 가격 변경")
+    @Test
+    void changeMenuPriceSuccessTest() {
+
+        // given
+        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
+        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
+        final var productPrices = new ProductPrices(List.of(p1, p2));
+
+        final var menuProducts = List.of(
+                new MenuProduct(p1.getProductId(), 1),
+                new MenuProduct(p2.getProductId(), 1)
+        );
+
+
+        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+
+        // when
+        menu.changePrice(Money.from(2000L), productPrices);
+
+        // then
+        assertThat(menu.getPrice()).isEqualTo(BigDecimal.valueOf(2000));
+    }
+
+    @DisplayName("변경하려는 메뉴가격이 메뉴 상품 가격보다 높으면 변경할 수 없다")
+    @Test
+    void changeMenuPriceFailTest() {
+
+        // given
+        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
+        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
+        final var productPrices = new ProductPrices(List.of(p1, p2));
+
+        final var menuProducts = List.of(
+                new MenuProduct(p1.getProductId(), 1),
+                new MenuProduct(p2.getProductId(), 1)
+        );
+
+        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+
+        assertThatThrownBy(() -> {
+            menu.changePrice(Money.from(Long.MAX_VALUE), productPrices);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 }

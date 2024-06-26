@@ -210,17 +210,16 @@ class MenuServiceTest {
     @Test
     void changePriceTest() {
 
-
         // given
-//        MenuGroup menuGroup = menuProductSteps.메뉴그룹_생성한다();
-//        Product product = menuProductSteps.상품을_생성한다(new ProductBuilder().with("치킨", BigDecimal.valueOf(100)).build());
-//        MenuProduct menuProduct1 = menuProductSteps.메뉴상품을_생성한다(product);
+        final var product = productStep.상품_생성(Money.from(1000L));
+        final var menuProduct = new MenuProduct(product.id(), 1);
 
-//        Menu menu = menuProductSteps.메뉴를_생성한다("치킨", 10_000, menuGroup, true, List.of(menuProduct1));
+        Menu menu = menuStep.메뉴_생성(menuProduct, Money.from(10_000L));
 
         // when
         // then
-//        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), menu)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), menu))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }
