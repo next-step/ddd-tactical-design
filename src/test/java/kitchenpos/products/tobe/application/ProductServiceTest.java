@@ -21,9 +21,16 @@ class ProductServiceTest {
     private final ProductRepository productRepository = new FakeProductRepository();
     private ProductService productService;
 
+
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, null, "비속어"::equals);
+        MenuDisplayService menuDisplayService = new MenuDisplayService() {
+            @Override
+            public void display(UUID productId, ProductPrices productPrices) {
+
+            }
+        };
+        productService = new ProductService(productRepository, menuDisplayService, "비속어"::equals);
     }
 
     @Nested
@@ -92,4 +99,10 @@ class ProductServiceTest {
         assertThat(sut.price()).isEqualTo(Money.from(20_000L));
     }
 
+
+    @DisplayName("상품의 가격을 변경할 때 메뉴 가격이 메뉴 상품보다 높으면 메뉴가 숨기기 처리된다")
+    @Test
+    void changePriceAndHideMenuTest() {
+
+    }
 }
