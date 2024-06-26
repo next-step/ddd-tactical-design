@@ -86,10 +86,6 @@ public class Menu {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public Name getName() {
         return name;
     }
@@ -98,22 +94,9 @@ public class Menu {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
-
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;

@@ -33,18 +33,9 @@ public class MenuProduct {
         return productId;
     }
 
-    public void setProduct(final UUID productId) {
-        this.productId = productId;
-    }
-
     public long getQuantity() {
         return quantity;
     }
-
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
-    }
-
 
     public void setProductId(final UUID productId) {
         this.productId = productId;
