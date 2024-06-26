@@ -1,7 +1,6 @@
 package kitchenpos.menus.tobe.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.infra.PurgomalumClient;
 import kitchenpos.menus.tobe.application.MenuProducts;
 import kitchenpos.products.tobe.Money;
 import kitchenpos.products.tobe.Name;
@@ -63,6 +62,15 @@ public class Menu {
     }
 
 
+    public void display(ProductPrices productPrices) {
+        try{
+            MenuProducts.of(menuProducts, new Money(price), productPrices);
+            this.displayed = true;
+        } catch (IllegalArgumentException e){
+            throw new IllegalStateException("메뉴의 가격은 메뉴 상품의 가격보다 높을 수 없습니다.");
+        }
+    }
+
     public UUID getId() {
         return id;
     }
@@ -99,6 +107,5 @@ public class Menu {
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
-
 
 }

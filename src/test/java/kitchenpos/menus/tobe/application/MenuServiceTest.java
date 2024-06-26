@@ -178,30 +178,31 @@ class MenuServiceTest {
     void menuDisplayTest() {
 
         // given
-//        Menu menu = menuProductSteps.감추기된_메뉴를_생성한다();
+        final var product = productStep.상품_생성();
+        final var menuProduct = new MenuProduct(product.id(), 1);
+        Menu menu = menuStep.메뉴_생성(menuProduct);
 
         // when
-//        Menu displayed = menuService.display(menu.getId());
+        Menu displayed = menuService.display(menu.getId());
 
         // then
-//        assertTrue(displayed.isDisplayed());
+        assertTrue(displayed.isDisplayed());
     }
 
 
-    @DisplayName("메뉴의 가격이 메뉴상품의 가격보다 높으면 보이기 처리가 불가능하다")
+    @DisplayName("메뉴의 가격이 메뉴 상품의 가격보다 높으면 보이기 처리가 불가능하다")
     @Test
     void menuDisplayFailTest() {
 
-//        MenuGroup menuGroup = menuProductSteps.메뉴그룹_생성한다();
-
         // given
-//        Product product = menuProductSteps.상품을_생성한다(new ProductBuilder().with("치킨", BigDecimal.valueOf(100)).build());
-//        MenuProduct menuProduct1 = menuProductSteps.메뉴상품을_생성한다(product);
-//        Menu menu = menuProductSteps.메뉴를_생성한다("치킨", 10_000, menuGroup, true, List.of(menuProduct1));
+        final var product = productStep.상품_생성(Money.from(1000L));
+        final var menuProduct = new MenuProduct(product.id(), 1);
+        Menu menu = menuStep.메뉴_생성(menuProduct, Money.from(10_000L));
 
         // when
         // then
-//        assertThatThrownBy(() -> menuService.display(menu.getId())).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> menuService.display(menu.getId())).isInstanceOf(IllegalStateException.class)
+                .hasMessage("메뉴의 가격은 메뉴 상품의 가격보다 높을 수 없습니다.");
     }
 
     @DisplayName("메뉴의 가격을 변경할 때 메뉴상품의 가격보다 크면 변경이 불가능하다")

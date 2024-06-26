@@ -28,6 +28,10 @@ public class ProductStep {
         return 상품_생성(productId, name, new Money(BigDecimal.valueOf(1000L)));
     }
 
+    public Product 상품_생성(Money price) {
+        return 상품_생성(UUID.randomUUID(), new Name("상품"), price);
+    }
+
     public Product 상품_생성(UUID productId, Name name, Money price) {
         final var product = new Product(productId, name, price);
         return productRepository.save(product);

@@ -50,24 +50,19 @@ public class MenuService {
     }
 
 
-//    @Transactional
-//    public Menu display(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//            sum = sum.add(
-//                menuProduct.getProduct()
-//                    .getPrice()
-//                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//            );
-//        }
-//        if (menu.getPrice().compareTo(sum) > 0) {
-//            throw new IllegalStateException();
-//        }
-//        menu.setDisplayed(true);
-//        return menu;
-//    }
+    @Transactional
+    public Menu display(final UUID menuId) {
+        final Menu menu = menuRepository.findById(menuId)
+            .orElseThrow(NoSuchElementException::new);
+
+        ProductPrices productPrices = productPriceService.getProductPrices(
+                menu.getMenuProducts().stream()
+                        .map(MenuProduct::getProductId)
+                        .toList());
+
+        menu.display(productPrices);
+        return menu;
+    }
 //
 //    @Transactional
 //    public Menu hide(final UUID menuId) {
