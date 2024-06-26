@@ -26,7 +26,7 @@ public class MenuProducts {
         return new MenuProducts(menuProductRequests);
     }
 
-    public List<MenuProduct> value() {
+    public List<MenuProduct> values() {
         return Collections.unmodifiableList(menuProducts);
     }
 
