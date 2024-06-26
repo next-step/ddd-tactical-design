@@ -71,6 +71,10 @@ public class Menu {
         }
     }
 
+    public void hide() {
+        this.displayed = false;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -107,5 +111,4 @@ public class Menu {
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }
-
 }

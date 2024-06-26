@@ -63,14 +63,15 @@ public class MenuService {
         menu.display(productPrices);
         return menu;
     }
-//
-//    @Transactional
-//    public Menu hide(final UUID menuId) {
-//        final Menu menu = menuRepository.findById(menuId)
-//            .orElseThrow(NoSuchElementException::new);
-//        menu.setDisplayed(false);
-//        return menu;
-//    }
+
+
+    @Transactional
+    public Menu hide(final UUID menuId) {
+        final Menu menu = menuRepository.findById(menuId)
+            .orElseThrow(NoSuchElementException::new);
+        menu.hide();
+        return menu;
+    }
 
     @Transactional(readOnly = true)
     public List<Menu> findAll() {

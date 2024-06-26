@@ -74,4 +74,28 @@ class MenuTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("메뉴에 포함된 상품의 가격이 상품의 가격보다 높습니다.");
     }
+
+    @DisplayName("메뉴 숨기기")
+    @Test
+    void hideSuccessTest() {
+
+        // given
+        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
+        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
+        final var productPrices = new ProductPrices(List.of(p1, p2));
+
+        final var menuProducts = List.of(
+                new MenuProduct(p1.getProductId(), 1),
+                new MenuProduct(p2.getProductId(), 1)
+        );
+
+
+        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+
+        // when
+        menu.hide();
+
+        // then
+        assertFalse(menu.isDisplayed());
+    }
 }

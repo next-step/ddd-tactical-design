@@ -27,8 +27,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class MenuServiceTest {
@@ -164,13 +163,15 @@ class MenuServiceTest {
     void menuHideTest() {
 
         // given
-//        Menu menu = menuProductSteps.노출된_메뉴를_생성한다();
+        final var product = productStep.상품_생성();
+        final var menuProduct = new MenuProduct(product.id(), 1);
+        Menu menu = menuStep.메뉴_생성(menuProduct);
 
         // when
-//        Menu hiddenMenu = menuService.hide(menu.getId());
+        Menu displayed = menuService.hide(menu.getId());
 
         // then
-//        assertFalse(hiddenMenu.isDisplayed());
+        assertFalse(displayed.isDisplayed());
     }
 
     @DisplayName("메뉴는 보이기 처리가 가능하다")
