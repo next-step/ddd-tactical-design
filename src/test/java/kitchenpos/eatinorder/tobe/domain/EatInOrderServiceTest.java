@@ -1,9 +1,10 @@
 package kitchenpos.eatinorder.tobe.domain;
 
 import kitchenpos.eatinorder.application.EatInOrderService;
+import kitchenpos.eatinorder.tobe.domain.order.ClearedTable;
 import kitchenpos.eatinorder.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorder.tobe.domain.order.EatInOrderStatus;
-import kitchenpos.eatinorder.tobe.domain.order.OrderRepository;
+import kitchenpos.eatinorder.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
 import kitchenpos.menus.tobe.domain.menu.MenuRepository;
@@ -25,17 +26,19 @@ import java.util.stream.Stream;
 @ExtendWith(MockitoExtension.class)
 public class EatInOrderServiceTest {
     @Mock
-    private OrderRepository orderRepository;
+    private EatInOrderRepository orderRepository;
     @Mock
     private MenuRepository menuRepository;
     @Mock
     private OrderTableRepository orderTableRepository;
 
+    private ClearedTable clearedTable;
+
     private EatInOrderService eatInOrderService;
 
     @BeforeEach
     void setUp() {
-        eatInOrderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository);
+        eatInOrderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository, clearedTable);
     }
 
     @Nested
@@ -45,7 +48,6 @@ public class EatInOrderServiceTest {
         @Test
         @DisplayName("주문이 접수완료된 경우 주문상태가 대기중(WAITING)이 된다.")
         void success1() {
-            new EatInOrder();
 
         }
 

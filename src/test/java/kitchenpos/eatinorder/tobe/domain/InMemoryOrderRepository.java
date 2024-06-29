@@ -2,11 +2,11 @@ package kitchenpos.eatinorder.tobe.domain;
 
 import kitchenpos.eatinorder.tobe.domain.order.EatInOrder;
 import kitchenpos.eatinorder.tobe.domain.order.EatInOrderStatus;
-import kitchenpos.eatinorder.tobe.domain.order.OrderRepository;
+import kitchenpos.eatinorder.tobe.domain.order.EatInOrderRepository;
 
 import java.util.*;
 
-public class InMemoryOrderRepository implements OrderRepository {
+public class InMemoryOrderRepository implements EatInOrderRepository {
     private final Map<UUID, EatInOrder> orders = new HashMap<>();
 
     @Override

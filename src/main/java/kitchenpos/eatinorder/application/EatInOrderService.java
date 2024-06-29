@@ -17,13 +17,13 @@ import java.util.UUID;
 
 @Service
 public class EatInOrderService {
-    private final OrderRepository orderRepository;
+    private final EatInOrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final ClearedTable clearedTable;
 
     public EatInOrderService(
-            final OrderRepository orderRepository,
+            final EatInOrderRepository orderRepository,
             final MenuRepository menuRepository,
             final OrderTableRepository orderTableRepository,
             final ClearedTable clearedTable

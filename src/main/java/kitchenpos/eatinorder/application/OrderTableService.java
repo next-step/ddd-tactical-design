@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.application;
 
 import kitchenpos.eatinorder.tobe.domain.order.ClearedTable;
-import kitchenpos.eatinorder.tobe.domain.order.OrderRepository;
+import kitchenpos.eatinorder.tobe.domain.order.EatInOrderRepository;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableName;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTableRepository;
@@ -15,10 +15,10 @@ import java.util.UUID;
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final EatInOrderRepository orderRepository;
     private final ClearedTable clearedTable;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository, ClearedTable clearedTable) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final EatInOrderRepository orderRepository, ClearedTable clearedTable) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
         this.clearedTable = clearedTable;

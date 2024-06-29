@@ -6,9 +6,9 @@ import java.util.UUID;
 
 @DomainService
 public class LastEatInrderClearedTable implements ClearedTable {
-    OrderRepository orderRepository;
+    EatInOrderRepository orderRepository;
 
-    public LastEatInrderClearedTable(OrderRepository orderRepository) {
+    public LastEatInrderClearedTable(EatInOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
