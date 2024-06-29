@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @DomainService
 public class EatInOrderFactory {
@@ -24,7 +23,7 @@ public class EatInOrderFactory {
         this.orderTableRepository = orderTableRepository;
     }
 
-    public EatInOrder create(UUID orderTableId, List<OrderLineItem> orderLineItemRequests,) {
+    public EatInOrder create(UUID orderTableId, List<OrderLineItem> orderLineItemRequests) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
         if (!orderTable.isOccupied()) {
