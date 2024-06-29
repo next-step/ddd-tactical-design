@@ -1,7 +1,7 @@
 package kitchenpos.fixture;
 
 import kitchenpos.menus.domain.Menu;
-import kitchenpos.order.domain.OrderLineItem;
+import kitchenpos.eatinorder.domain.OrderLineItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ public class OrderLineItemFixture {
         final var orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(1L);
         orderLineItem.setMenuId(menu.getId());
-        orderLineItem.setMenu(menu);
+//        orderLineItem.setMenu(menu);
         orderLineItem.setQuantity(1L);
         orderLineItem.setPrice(menu.getPrice().multiply(BigDecimal.valueOf(orderLineItem.getQuantity())));
         return orderLineItem;
@@ -22,7 +22,7 @@ public class OrderLineItemFixture {
         final var orderLineItem = new OrderLineItem();
         orderLineItem.setSeq(1L);
         orderLineItem.setMenuId(menu.getId());
-        orderLineItem.setMenu(menu);
+//        orderLineItem.setMenu(menu);
         orderLineItem.setQuantity(quantity);
         orderLineItem.setPrice(menu.getPrice().multiply(BigDecimal.valueOf(orderLineItem.getQuantity())));
         return orderLineItem;
