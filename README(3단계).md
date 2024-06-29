@@ -12,3 +12,34 @@
     - [Accessing Relational Data using JDBC with Spring](https://spring.io/guides/gs/relational-data-access)
 - 데이터베이스 스키마 변경 및 마이그레이션이 필요하다면 아래 문서를 적극 활용한다.
     - [DB도 형상관리를 해보자!](https://meetup.toast.com/posts/173)
+
+
+## [모델링]
+### 매장 주문
+
+- `Order(주문)` 는 식별자, `OrderStatus(주문 상턔)`, 주문 일시, 여러 개의 `OrderLineItem(주문 항목)`, `OrderTable(주문 테이블)`을 가진다.
+- `Order(주문)` 에서 여러 개의 `OrderLineItem(주문 항목)` 를 생성한다.
+- `OrderLineItem` 은 `DisplayedMenu(노출된 메뉴)` , `Quantity(수량)`, 총 `Price(가격)` 을 가진다.
+- `Order(주문)` 에서 `OrderStatus(주문 상턔)` 를 변경한다.
+- `OrderStatus(주문 상턔)` 는 `Waiting` → `Accepted` → `Served` →  `Completed` 를 가진다.
+- 주문 등록 정책 : `Menu(메뉴)`가 `DisplayedMenu(노출된 메뉴)`이고. `OrderTable(주문 테이블)`이 있어야 등록이 가능하다.
+
+  ```mermaid
+  ---
+  title: EatIn OrderStatus
+  ---
+  flowchart LR
+    A[Waiting\n접수] --> D(Accepted\n수락)
+    D --> E(Served\n서빙 완료)
+    E --> F[Completed\n주문 완료]
+  ```
+
+##### 주문 테이블
+
+- `OrderTable(주문 테이블)` 은 식별자, `OrderTableName(주문 테이블 이름)`, `NumberOfGuests(손님 수)`, `Occupied(착석여부)` 를 항상가진다.
+- `OrderTable(주문 테이블)` 에서 `Occupied(착석여부)`를 `OccupyingTable(착석 테이블)` 또는 `ClearedTable(빈 테이블)` 로 변경한다.
+- `ClearedTable(빈 테이블)` 로 변경할 때 `Order(주문)` 의 상태가 `COMPLETED` 여야 한다.
+- `ClearedTable(빈 테이블)` 은 `NumberOfGuests(손님 수)` 가 0이고, `Occupied(착석여부)` 가 아닌 상태이다.
+- `OrderTable(주문 테이블)` 에서 `NumberOfGuests(손님 수)` 를 변경한다.
+- `NumberOfGuests(손님 수)` 는 0명 이상이다.
+- `NumberOfGuests(손님 수)` 는 `OccupyingTable(착석 테이블)` 일 때만 가능하다.

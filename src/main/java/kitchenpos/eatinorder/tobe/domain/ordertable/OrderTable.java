@@ -1,6 +1,7 @@
 package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import jakarta.persistence.*;
+import kitchenpos.eatinorder.tobe.domain.ClearedTable;
 import kitchenpos.exception.CanNotChange;
 
 import java.util.Objects;
@@ -56,10 +57,13 @@ public class OrderTable {
         this.occupied = true;
     }
 
-    public void cleared() {
-        this.occupied = false;
-        this.numberOfGuests = numberOfGuests.cleared();
+    public void cleared(ClearedTable clearedTable) {
+        if (clearedTable.isLastOrder(id)) {
+            this.occupied = false;
+            this.numberOfGuests = numberOfGuests.cleared();
+        }
     }
+
 
     public void changeNumOfGuests(int num) {
         validateOccupied();

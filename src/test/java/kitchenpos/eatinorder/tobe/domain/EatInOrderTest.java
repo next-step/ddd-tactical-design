@@ -31,7 +31,7 @@ class EatInOrderTest {
     @Test
     @DisplayName("매장주문을 접수할 수 있다.")
     void success1() {
-        final var eatInOrder = EatInOrder.of(LocalDateTime.now(), orderLineItems, table.getId());
+        final var eatInOrder = EatInOrder.create(LocalDateTime.now(), orderLineItems, table.getId());
 
         assertAll(
                 () -> assertThat(eatInOrder).isNotNull(),

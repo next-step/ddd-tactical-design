@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static kitchenpos.eatinorder.tobe.domain.EatInOrderStatus.*;
@@ -29,7 +30,7 @@ public class EatInOrder {
     private UUID orderTableId;
 
 
-    public static EatInOrder of(LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
+    public static EatInOrder create(LocalDateTime orderDateTime, OrderLineItems orderLineItems, UUID orderTableId) {
         return new EatInOrder(UUID.randomUUID(), WAITING, orderDateTime, orderLineItems, orderTableId);
     }
 
@@ -78,11 +79,23 @@ public class EatInOrder {
         this.status = SERVED;
     }
 
-
     public void complete() {
         if (this.status != SERVED) {
             throw new IllegalStateException("주문을 완료할 수 없는 상태입니다.");
         }
         this.status = COMPLETED;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrder that = (EatInOrder) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

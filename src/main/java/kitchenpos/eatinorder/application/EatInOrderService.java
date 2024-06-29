@@ -10,22 +10,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class EatInOrderService {
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
+    private final ClearedTable clearedTable;
 
     public EatInOrderService(
             final OrderRepository orderRepository,
             final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository
+            final OrderTableRepository orderTableRepository,
+            final ClearedTable clearedTable
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
+        this.clearedTable = clearedTable;
     }
 
     @Transactional
@@ -65,7 +71,7 @@ public class EatInOrderService {
             throw new IllegalStateException();
         }
 
-        EatInOrder order = EatInOrder.of(LocalDateTime.now(), items, orderTable.getId());
+        EatInOrder order = EatInOrder.create(LocalDateTime.now(), items, orderTable.getId());
 
         return orderRepository.save(order);
     }
@@ -95,13 +101,11 @@ public class EatInOrderService {
                 .orElseThrow(NoSuchElementException::new);
 
         order.complete();
+        OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId())
+                .orElseThrow(NoSuchElementException::new);
 
-        OrderTable orderTable = orderTableRepository.findById(order.getOrderTableId()).orElseThrow();
-        if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, order.getStatus())) {
-//            orderTable.setNumberOfGuests(0);
-//            orderTable.setOccupied(false);
-            // todo table의 제어를 eat in order가 해야할 것으로 보이는데, 그치만 order table service에서 처리해야할 기능을 order에서 하는 것도 이상하다.
-        }
+        orderTable.cleared(clearedTable);
+
         return order;
     }
 

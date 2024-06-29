@@ -47,7 +47,7 @@ class OrderTableTest {
     @Test
     void clear() {
         final var orderTable = OrderTable.of(tableName);
-        orderTable.cleared();
+        orderTable.cleared(clearedTable);
 
         assertAll(
                 () -> assertThat(orderTable.getNumberOfGuests()).isZero(),

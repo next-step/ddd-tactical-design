@@ -15,10 +15,12 @@ import java.util.UUID;
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
     private final OrderRepository orderRepository;
+    private final ClearedTable clearedTable;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository, ClearedTable clearedTable) {
         this.orderTableRepository = orderTableRepository;
         this.orderRepository = orderRepository;
+        this.clearedTable = clearedTable;
     }
 
     @Transactional
@@ -41,11 +43,8 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final var orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
 
-        orderTable.cleared();
+        orderTable.cleared(clearedTable);
 
         return orderTable;
     }
