@@ -1,4 +1,4 @@
-package kitchenpos.eatinorder.tobe.domain;
+package kitchenpos.eatinorder.tobe.domain.order;
 
 import jakarta.persistence.*;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static kitchenpos.eatinorder.tobe.domain.EatInOrderStatus.*;
+import static kitchenpos.eatinorder.tobe.domain.order.EatInOrderStatus.*;
 
 @Table
 @Entity(name = "eat_in_orders")

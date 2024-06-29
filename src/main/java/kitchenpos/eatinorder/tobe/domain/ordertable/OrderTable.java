@@ -1,7 +1,7 @@
 package kitchenpos.eatinorder.tobe.domain.ordertable;
 
 import jakarta.persistence.*;
-import kitchenpos.eatinorder.tobe.domain.ClearedTable;
+import kitchenpos.eatinorder.tobe.domain.order.ClearedTable;
 import kitchenpos.exception.CanNotChange;
 
 import java.util.Objects;

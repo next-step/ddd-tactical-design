@@ -1,6 +1,10 @@
 package kitchenpos.eatinorder.tobe.domain;
 
 import kitchenpos.eatinorder.tobe.domain.fixture.Fixture;
+import kitchenpos.eatinorder.tobe.domain.order.EatInOrder;
+import kitchenpos.eatinorder.tobe.domain.order.EatInOrderStatus;
+import kitchenpos.eatinorder.tobe.domain.order.OrderLineItem;
+import kitchenpos.eatinorder.tobe.domain.order.OrderLineItems;
 import kitchenpos.eatinorder.tobe.domain.ordertable.OrderTable;
 import kitchenpos.menus.tobe.domain.menu.Menu;
 import org.junit.jupiter.api.BeforeEach;
