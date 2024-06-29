@@ -22,6 +22,7 @@
 - `OrderLineItem` 은 `DisplayedMenu(노출된 메뉴)` , `Quantity(수량)`, 총 `Price(가격)` 을 가진다.
 - `Order(주문)` 에서 `OrderStatus(주문 상턔)` 를 변경한다.
 - `OrderStatus(주문 상턔)` 는 `Waiting` → `Accepted` → `Served` →  `Completed` 를 가진다.
+  - 주문된적 없는 주문인 경우 처리가 불가능하다.
 - 주문 등록 정책 : `Menu(메뉴)`가 `DisplayedMenu(노출된 메뉴)`이고. `OrderTable(주문 테이블)`이 있어야 등록이 가능하다.
 
   ```mermaid
