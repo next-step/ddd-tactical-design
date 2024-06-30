@@ -12,6 +12,6 @@ public class TakeoutOrderFixtures {
   }
 
   public static TakeoutOrderLineItem orderLineItem() {
-    return TakeoutOrderLineItem.createItem(new Random().nextLong(), UUID.randomUUID());
+    return TakeoutOrderLineItem.createItem(new Random().nextLong(10), UUID.randomUUID());
   }
 }
