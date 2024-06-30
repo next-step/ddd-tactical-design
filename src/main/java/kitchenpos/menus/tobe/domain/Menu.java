@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import kitchenpos.menus.tobe.application.MenuProducts;
 import kitchenpos.products.tobe.Money;
 import kitchenpos.products.tobe.Name;
-import kitchenpos.products.tobe.ProductPrices;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -62,13 +61,13 @@ public class Menu {
     }
 
 
-    public void display(ProductPrices productPrices) {
-        try{
-            MenuProducts.of(menuProducts, new Money(price), productPrices);
-            this.displayed = true;
-        } catch (IllegalArgumentException e){
-            throw new IllegalStateException("메뉴의 가격은 메뉴 상품의 가격보다 높을 수 없습니다.");
+    public void display() {
+        var menuProducts = new MenuProducts(this.menuProducts);
+        if (price.compareTo(menuProducts.totalAmount().value()) > 0) {
+            throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다");
         }
+
+        this.displayed = true;
     }
 
 
@@ -77,9 +76,21 @@ public class Menu {
     }
 
 
-    public void changePrice(Money toPrice, ProductPrices productPrices) {
-        MenuProducts.of(menuProducts, toPrice, productPrices);
+    public void changePrice(Money toPrice) {
+        var menuProducts = new MenuProducts(this.menuProducts);
+        if (toPrice.compareTo(menuProducts.totalAmount()) > 0) {
+            throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
+        }
         this.price = toPrice.value();
+    }
+
+    public void changeProductPrice(UUID productId, Money productPrice) {
+        var menuProducts = new MenuProducts(this.menuProducts);
+        menuProducts.changePrice(productId, productPrice);
+
+        if (price.compareTo(menuProducts.totalAmount().value()) > 0) {
+           hide();
+        }
     }
 
     public UUID getId() {

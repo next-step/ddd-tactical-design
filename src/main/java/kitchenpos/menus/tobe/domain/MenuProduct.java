@@ -35,6 +35,10 @@ public class MenuProduct {
     }
 
 
+    public void changePrice(Money productPrice) {
+        this.productPrice = productPrice;
+    }
+
     public Money amount() {
         return productPrice.multiply(quantity);
     }
@@ -42,5 +46,4 @@ public class MenuProduct {
     public UUID getProductId() {
         return productId;
     }
-
 }

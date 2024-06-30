@@ -2,10 +2,10 @@ package kitchenpos.menus.tobe.application;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
 import kitchenpos.products.tobe.Money;
-import kitchenpos.products.tobe.ProductPrices;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class MenuProducts {
 
@@ -38,4 +38,12 @@ public class MenuProducts {
         return Collections.unmodifiableList(menuProducts);
     }
 
+    public void changePrice(UUID productId, Money productPrice) {
+        MenuProduct menuProduct = menuProducts.stream()
+                .filter(it -> it.getProductId().equals(productId))
+                .findAny()
+                .orElseThrow(NullPointerException::new);
+
+        menuProduct.changePrice(productPrice);
+    }
 }

@@ -2,8 +2,6 @@ package kitchenpos.menus.tobe.domain;
 
 import kitchenpos.products.tobe.Money;
 import kitchenpos.products.tobe.Name;
-import kitchenpos.products.tobe.ProductPrice;
-import kitchenpos.products.tobe.ProductPrices;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.UUID.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +40,7 @@ class MenuTest {
     void createMenu_successTest() {
 
         assertDoesNotThrow(() -> {
-            new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, List.of());
+            new Menu(randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, List.of());
         });
     }
 
@@ -50,20 +49,13 @@ class MenuTest {
     void displaySuccessTest() {
 
         // given
-        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
-        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
-        final var productPrices = new ProductPrices(List.of(p1, p2));
-
         final var menuProducts = List.of(
-                new MenuProduct(p1.getProductId(), 1),
-                new MenuProduct(p2.getProductId(), 1)
+                new MenuProduct(randomUUID(), 1, Money.from(1_000))
         );
-
-
-        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+        Menu menu = new Menu(randomUUID(), new Name("메뉴"), Money.from(1_000L), new MenuGroup(), true, menuProducts);
 
         // when
-        menu.display(productPrices);
+        menu.display();
 
         // then
         assertTrue(menu.isDisplayed());
@@ -74,23 +66,17 @@ class MenuTest {
     void displayFailTest() {
 
         // given
-        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
-        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
-        final var productPrices = new ProductPrices(List.of(p1, p2));
-
-        final var menuProducts = List.of(
-                new MenuProduct(p1.getProductId(), 1),
-                new MenuProduct(p2.getProductId(), 1)
+        List<MenuProduct> menuProducts = List.of(
+                new MenuProduct(randomUUID(), 1, Money.from(1_000)),
+                new MenuProduct(randomUUID(), 1, Money.from(2_000))
         );
 
-
-        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(Long.MAX_VALUE), new MenuGroup(), true, menuProducts);
-
         // when
+        Menu menu = new Menu(randomUUID(), new Name("메뉴"), Money.from(Long.MAX_VALUE), new MenuGroup(), true, menuProducts);
+
         // then
-        assertThatThrownBy(() -> menu.display(productPrices))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("메뉴에 포함된 상품의 가격이 상품의 가격보다 높습니다.");
+        assertThatIllegalArgumentException().isThrownBy(menu::display)
+                .withMessage("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다");
     }
 
     @DisplayName("메뉴 숨기기")
@@ -98,17 +84,11 @@ class MenuTest {
     void hideSuccessTest() {
 
         // given
-        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
-        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
-        final var productPrices = new ProductPrices(List.of(p1, p2));
-
         final var menuProducts = List.of(
-                new MenuProduct(p1.getProductId(), 1),
-                new MenuProduct(p2.getProductId(), 1)
+                new MenuProduct(randomUUID(), 1, Money.from(1_000))
         );
 
-
-        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+        Menu menu = new Menu(randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
 
         // when
         menu.hide();
@@ -122,20 +102,14 @@ class MenuTest {
     void changeMenuPriceSuccessTest() {
 
         // given
-        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
-        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
-        final var productPrices = new ProductPrices(List.of(p1, p2));
-
         final var menuProducts = List.of(
-                new MenuProduct(p1.getProductId(), 1),
-                new MenuProduct(p2.getProductId(), 1)
+                new MenuProduct(randomUUID(), 1, Money.from(1_000))
         );
 
-
-        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+        Menu menu = new Menu(randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
 
         // when
-        menu.changePrice(Money.from(2000L), productPrices);
+        menu.changePrice(Money.from(2000L));
 
         // then
         assertThat(menu.getPrice()).isEqualTo(BigDecimal.valueOf(2000));
@@ -146,19 +120,15 @@ class MenuTest {
     void changeMenuPriceFailTest() {
 
         // given
-        final var p1 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(1000));
-        final var p2 = new ProductPrice(UUID.randomUUID(), BigDecimal.valueOf(2000));
-        final var productPrices = new ProductPrices(List.of(p1, p2));
 
         final var menuProducts = List.of(
-                new MenuProduct(p1.getProductId(), 1),
-                new MenuProduct(p2.getProductId(), 1)
+                new MenuProduct(randomUUID(), 1, Money.from(1_000))
         );
 
-        Menu menu = new Menu(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
+        Menu menu = new Menu(randomUUID(), new Name("메뉴"), Money.from(1000L), new MenuGroup(), true, menuProducts);
 
         assertThatThrownBy(() -> {
-            menu.changePrice(Money.from(Long.MAX_VALUE), productPrices);
+            menu.changePrice(Money.from(5000));
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }
