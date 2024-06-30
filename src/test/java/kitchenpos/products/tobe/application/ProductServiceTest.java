@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.menus.tobe.application.MenuDisplayPolicy;
 import kitchenpos.products.tobe.*;
 import kitchenpos.products.tobe.fixtures.FakeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,13 +25,12 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        MenuDisplayService menuDisplayService = new MenuDisplayService() {
+        MenuDisplayPolicy menuDisplayPolicy = new MenuDisplayPolicy() {
             @Override
-            public void display(UUID productId, ProductPrices productPrices) {
-
+            public void display(ProductPrice productId) {
             }
         };
-        productService = new ProductService(productRepository, menuDisplayService, "비속어"::equals);
+        productService = new ProductService(productRepository, menuDisplayPolicy, "비속어"::equals);
     }
 
     @Nested
@@ -99,10 +99,4 @@ class ProductServiceTest {
         assertThat(sut.price()).isEqualTo(Money.from(20_000L));
     }
 
-
-    @DisplayName("상품의 가격을 변경할 때 메뉴 가격이 메뉴 상품보다 높으면 메뉴가 숨기기 처리된다")
-    @Test
-    void changePriceAndHideMenuTest() {
-
-    }
 }

@@ -2,27 +2,27 @@ package kitchenpos.products.tobe.application;
 
 
 import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.menus.tobe.application.MenuDisplayPolicy;
 import kitchenpos.products.tobe.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final MenuDisplayService menuDisplayService;
+    private final MenuDisplayPolicy menuDisplayPolicy;
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuDisplayService menuDisplayService,
+            final MenuDisplayPolicy menuDisplayPolicy,
             final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
-        this.menuDisplayService = menuDisplayService;
+        this.menuDisplayPolicy = menuDisplayPolicy;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -41,7 +41,7 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(new Money(price));
 
-        menuDisplayService.display(productId, new ProductPrices(List.of(new ProductPrice(productId, price))));
+        menuDisplayPolicy.display(new ProductPrice(productId, new Money(price)));
 
         return product;
     }

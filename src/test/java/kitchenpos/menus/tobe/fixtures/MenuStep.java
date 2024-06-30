@@ -31,8 +31,9 @@ public class MenuStep {
     }
 
     public Menu 메뉴_생성() {
-        MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), 1L);
-        return 메뉴_생성(UUID.randomUUID(), new Name("메뉴"), Money.from(1000L), 메뉴_그룹_생성(), true, List.of(menuProduct));
+        Money menuPrice = Money.from(1000L);
+        MenuProduct menuProduct = new MenuProduct(UUID.randomUUID(), 1L, menuPrice);
+        return 메뉴_생성(UUID.randomUUID(), new Name("메뉴"), menuPrice, 메뉴_그룹_생성(), true, List.of(menuProduct));
     }
 
     public Menu 메뉴_생성(MenuProduct menuProduct) {
