@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.application;
 
+import kitchenpos.menus.tobe.application.MenuDisplayPolicy;
 import kitchenpos.products.tobe.*;
 import kitchenpos.products.tobe.fixtures.FakeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +22,15 @@ class ProductServiceTest {
     private final ProductRepository productRepository = new FakeProductRepository();
     private ProductService productService;
 
+
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository, null, "비속어"::equals);
+        MenuDisplayPolicy menuDisplayPolicy = new MenuDisplayPolicy() {
+            @Override
+            public void display(ProductPrice productId) {
+            }
+        };
+        productService = new ProductService(productRepository, menuDisplayPolicy, "비속어"::equals);
     }
 
     @Nested
@@ -41,7 +48,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(new Name(create.name(), false), savedProduct.name());
+            assertEquals(new Name(create.name()), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -57,7 +64,7 @@ class ProductServiceTest {
             Product savedProduct = productService.create(create);
 
             // then
-            assertEquals(new Name(create.name(), false), savedProduct.name());
+            assertEquals(new Name(create.name()), savedProduct.name());
             assertEquals(new Money(create.price()), savedProduct.price());
         }
 
@@ -82,7 +89,7 @@ class ProductServiceTest {
     void changePriceTest() {
 
         // given
-        Product chicken = new Product(UUID.randomUUID(), new Name("치킨", false), new Money(BigDecimal.valueOf(10_000)));
+        Product chicken = new Product(UUID.randomUUID(), new Name("치킨"), new Money(BigDecimal.valueOf(10_000)));
         productRepository.save(chicken);
 
         // when

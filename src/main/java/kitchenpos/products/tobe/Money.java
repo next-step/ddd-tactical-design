@@ -14,7 +14,16 @@ public record Money(
         }
     }
 
-    public static Money from(Long value) {
+    public static Money from(long value) {
         return new Money(BigDecimal.valueOf(value));
     }
+
+    public Money multiply(long quantity) {
+        return new Money(value.multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    public int compareTo(Money other) {
+        return value.compareTo(other.value);
+    }
+
 }

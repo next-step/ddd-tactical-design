@@ -26,9 +26,6 @@ public class Product {
     }
 
     public Product(UUID id, Name name, Money price) {
-        if (name.containProfanity()) {
-            throw new IllegalArgumentException("비속어가 포함된 상품명은 등록할 수 없습니다.");
-        }
         this.id = id;
         this.name = name;
         this.price = price;

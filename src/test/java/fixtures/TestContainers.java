@@ -1,8 +1,8 @@
 package fixtures;
 
 import kitchenpos.domain.*;
-import kitchenpos.menu.domain.MenuGroupRepository;
-import kitchenpos.menu.domain.MenuRepository;
+import kitchenpos.menus.domain.MenuGroupRepository;
+import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderTableRepository;
 import kitchenpos.products.domain.ProductRepository;

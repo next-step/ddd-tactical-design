@@ -2,10 +2,10 @@ package kitchenpos.application;
 
 import fixtures.*;
 import kitchenpos.infra.PurgomalumClient;
-import kitchenpos.menu.application.MenuService;
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

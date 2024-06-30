@@ -1,9 +1,9 @@
 package fixtures;
 
 
-import kitchenpos.menu.domain.MenuGroup;
-import kitchenpos.menu.domain.MenuProduct;
-import kitchenpos.menu.domain.Menu;
+import kitchenpos.menus.domain.MenuGroup;
+import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.menus.domain.Menu;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
