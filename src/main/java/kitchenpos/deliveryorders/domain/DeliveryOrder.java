@@ -59,6 +59,7 @@ public class DeliveryOrder {
     }
     final BigDecimal sum = this.orderLineItems.totalPrice();
     kitchenridersClient.requestDelivery(this.id, sum, this.getDeliveryAddress());
+    this.status = DeliveryOrderStatus.ACCEPTED;
   }
 
   public void serve() {
@@ -70,7 +71,7 @@ public class DeliveryOrder {
   }
 
   public void startDelivery() {
-    if (this.status != DeliveryOrderStatus.ACCEPTED) {
+    if (this.status != DeliveryOrderStatus.SERVED) {
       throw new IllegalStateException();
     }
 

@@ -2,12 +2,7 @@ package kitchenpos.deliveryorders.application;
 
 import java.math.BigDecimal;
 import java.util.*;
-import kitchenpos.deliveryorders.domain.DeliveryOrder;
-import kitchenpos.deliveryorders.domain.DeliveryOrderLineItem;
-import kitchenpos.deliveryorders.domain.DeliveryOrderRepository;
-import kitchenpos.deliveryorders.domain.KitchenridersClient;
-import kitchenpos.eatinorders.domain.*;
-import kitchenpos.takeoutorders.domain.MenuPriceFoundEvent;
+import kitchenpos.deliveryorders.domain.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +86,10 @@ public class DeliveryOrderService {
 
   private List<DeliveryOrderLineItem> createDeliveryOrderLineItems(
       final List<DeliveryOrderLineItemRequestDto> deliveryOrderLineItemRequestDtos) {
+
+    if (Objects.isNull(deliveryOrderLineItemRequestDtos)) {
+      throw new IllegalArgumentException();
+    }
 
     final List<DeliveryOrderLineItem> deliveryOrderLineItems = new ArrayList<>();
     for (DeliveryOrderLineItemRequestDto deliveryOrderLineItemRequestDto :
