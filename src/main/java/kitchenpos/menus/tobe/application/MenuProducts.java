@@ -15,25 +15,27 @@ public class MenuProducts {
         this.menuProducts = menuProducts;
     }
 
-    public static MenuProducts of(List<MenuProduct> menuProductRequests, Money menuPrice, ProductPrices productPrices) {
 
-        Money sumProductPrice = getSumProductPrice(menuProductRequests, productPrices);
+    public static MenuProducts of(List<MenuProduct> menuProductRequests, Money menuPrice) {
 
-        if (menuPrice.compareTo(sumProductPrice) > 0) {
-            throw new IllegalArgumentException("메뉴에 포함된 상품의 가격이 상품의 가격보다 높습니다.");
+        var menuProducts = new MenuProducts(menuProductRequests);
+
+        if (menuProducts.totalAmount().compareTo(menuPrice) < 0) {
+            throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
 
-        return new MenuProducts(menuProductRequests);
+        return menuProducts;
+    }
+
+    public Money totalAmount() {
+        return menuProducts.stream()
+                .map(MenuProduct::amount)
+                .reduce((a, b) -> new Money(a.value().add(b.value())))
+                .orElseThrow(RuntimeException::new);
     }
 
     public List<MenuProduct> values() {
         return Collections.unmodifiableList(menuProducts);
     }
 
-    private static Money getSumProductPrice(List<MenuProduct> menuProductRequests, ProductPrices productPrices) {
-        return menuProductRequests.stream()
-                .map(it -> productPrices.getPrice(it.getProductId(), it.getQuantity()))
-                .reduce((a, b) -> new Money(a.value().add(b.value())))
-                .orElseThrow(IllegalArgumentException::new);
-    }
 }

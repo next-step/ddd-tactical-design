@@ -40,7 +40,7 @@ public class MenuService {
         );
 
         Money price = new Money(request.price());
-        MenuProducts menuProducts = MenuProducts.of(menuProductRequests, price, productPrices);
+        MenuProducts menuProducts = MenuProducts.of(menuProductRequests, price);
 
         final MenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
                 .orElseThrow(NoSuchElementException::new);
