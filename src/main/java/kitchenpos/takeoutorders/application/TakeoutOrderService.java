@@ -1,10 +1,7 @@
 package kitchenpos.takeoutorders.application;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import kitchenpos.takeoutorders.domain.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -71,6 +68,10 @@ public class TakeoutOrderService {
 
   private List<TakeoutOrderLineItem> createTakeoutOrderLineItems(
       final List<TakeoutOrderLineItemRequestDto> takeoutOrderLineItemRequestDtos) {
+
+    if (Objects.isNull(takeoutOrderLineItemRequestDtos)) {
+      throw new IllegalArgumentException();
+    }
 
     final List<TakeoutOrderLineItem> takeoutOrderLineItems = new ArrayList<>();
     for (TakeoutOrderLineItemRequestDto takeoutOrderLineItemRequestDto :
