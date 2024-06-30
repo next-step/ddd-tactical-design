@@ -34,14 +34,8 @@ public class Menu {
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    @Embedded
+    private MenuProducts menuProducts;
 
     @Transient
     private UUID menuGroupId;
@@ -56,13 +50,12 @@ public class Menu {
         this.price = price.value();
         this.menuGroup = menuGroup;
         this.displayed = displayed;
-        this.menuProducts = menuProducts;
+        this.menuProducts = new MenuProducts(menuProducts);
         this.menuGroupId = menuGroup.getId();
     }
 
 
     public void display() {
-        var menuProducts = new MenuProducts(this.menuProducts);
         if (price.compareTo(menuProducts.totalAmount().value()) > 0) {
             throw new IllegalArgumentException("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없습니다");
         }
@@ -77,7 +70,6 @@ public class Menu {
 
 
     public void changePrice(Money toPrice) {
-        var menuProducts = new MenuProducts(this.menuProducts);
         if (toPrice.compareTo(menuProducts.totalAmount()) > 0) {
             throw new IllegalArgumentException("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.");
         }
@@ -85,7 +77,6 @@ public class Menu {
     }
 
     public void changeProductPrice(UUID productId, Money productPrice) {
-        var menuProducts = new MenuProducts(this.menuProducts);
         menuProducts.changePrice(productId, productPrice);
 
         if (price.compareTo(menuProducts.totalAmount().value()) > 0) {
@@ -110,6 +101,6 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.values();
     }
 }
