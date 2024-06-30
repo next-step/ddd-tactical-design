@@ -1,6 +1,5 @@
 package kitchenpos.products.tobe.application;
 
-import static kitchenpos.products.tobe.Fixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -8,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.menu.MenuRepository;
 import kitchenpos.menus.tobe.MenuFixtures;
 import kitchenpos.menus.tobe.application.InMemoryMenuRepository;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
 import kitchenpos.products.application.ProductRequest;
 import kitchenpos.products.application.ProductResponse;
 import kitchenpos.products.application.ProductService;

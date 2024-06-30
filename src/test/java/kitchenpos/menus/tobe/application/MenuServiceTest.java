@@ -10,12 +10,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.util.*;
-import kitchenpos.menus.tobe.application.dto.MenuChangePriceRequestDto;
-import kitchenpos.menus.tobe.application.dto.MenuCreateRequestDto;
-import kitchenpos.menus.tobe.application.dto.MenuCreateResponse;
-import kitchenpos.menus.tobe.application.dto.MenuProductCreateRequestDto;
-import kitchenpos.menus.tobe.domain.menu.*;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+
+import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.dto.MenuChangePriceRequestDto;
+import kitchenpos.menus.application.dto.MenuCreateRequestDto;
+import kitchenpos.menus.application.dto.MenuCreateResponse;
+import kitchenpos.menus.application.dto.MenuProductCreateRequestDto;
+import kitchenpos.menus.domain.menu.MenuPurgomalumClient;
+import kitchenpos.menus.domain.menu.MenuRepository;
+import kitchenpos.menus.domain.menu.ProductProviderInterface;
+import kitchenpos.menus.domain.menugroup.MenuGroupRepository;
 import kitchenpos.products.application.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;

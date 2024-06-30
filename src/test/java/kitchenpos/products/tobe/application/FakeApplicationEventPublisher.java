@@ -1,8 +1,8 @@
 package kitchenpos.products.tobe.application;
 
 import java.util.List;
-import kitchenpos.menus.tobe.domain.menu.Menu;
-import kitchenpos.menus.tobe.domain.menu.MenuRepository;
+import kitchenpos.menus.domain.menu.Menu;
+import kitchenpos.menus.domain.menu.MenuRepository;
 import kitchenpos.products.domain.ProductPriceChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 

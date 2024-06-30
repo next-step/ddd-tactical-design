@@ -2,7 +2,7 @@ package kitchenpos.menus.tobe.application;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.menus.tobe.domain.menu.MenuPurgomalumClient;
+import kitchenpos.menus.domain.menu.MenuPurgomalumClient;
 
 public class FakeMenuPurgomalumClient implements MenuPurgomalumClient {
   private static final List<String> profanities;

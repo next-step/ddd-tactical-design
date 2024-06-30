@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import kitchenpos.menus.application.MenuGroupService;
 import kitchenpos.menus.tobe.MenuFixtures;
-import kitchenpos.menus.tobe.application.dto.MenuGroupCreationResponseDto;
-import kitchenpos.menus.tobe.application.dto.MenuGroupsCreationResponseDto;
-import kitchenpos.menus.tobe.domain.menugroup.MenuGroupRepository;
+import kitchenpos.menus.application.dto.MenuGroupCreationResponseDto;
+import kitchenpos.menus.application.dto.MenuGroupsCreationResponseDto;
+import kitchenpos.menus.domain.menugroup.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

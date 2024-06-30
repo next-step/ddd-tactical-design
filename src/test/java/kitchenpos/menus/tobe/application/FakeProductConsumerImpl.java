@@ -3,9 +3,9 @@ package kitchenpos.menus.tobe.application;
 import java.util.ArrayList;
 import java.util.List;
 import kitchenpos.menus.tobe.MenuFixtures;
-import kitchenpos.menus.tobe.application.dto.ProductConsumerDto;
-import kitchenpos.menus.tobe.domain.menu.MenuProduct;
-import kitchenpos.menus.tobe.domain.menu.ProductProviderInterface;
+import kitchenpos.menus.application.dto.ProductConsumerDto;
+import kitchenpos.menus.domain.menu.MenuProduct;
+import kitchenpos.menus.domain.menu.ProductProviderInterface;
 import kitchenpos.products.tobe.ProductFixtures;
 
 public class FakeProductConsumerImpl implements ProductProviderInterface {
