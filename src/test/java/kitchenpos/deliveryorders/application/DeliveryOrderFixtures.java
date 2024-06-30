@@ -15,6 +15,6 @@ public class DeliveryOrderFixtures {
 
   public static DeliveryOrderLineItem orderLineItem() {
     return DeliveryOrderLineItem.createItem(
-        new Random().nextLong(), UUID.randomUUID(), BigDecimal.valueOf(10_000L));
+        new Random().nextLong(10), UUID.randomUUID(), BigDecimal.valueOf(10_000L));
   }
 }
