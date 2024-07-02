@@ -20,7 +20,7 @@ import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.menus.domain.tobe.MenuProductValidator;
+import kitchenpos.menus.domain.tobe.MenuProductsValidator;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
@@ -44,7 +44,7 @@ class MenuServiceTest {
     @BeforeEach
     void setUp() {
         final MenuProductMapper menuProductMapper = new MenuProductMapper(productRepository,
-            new MenuProductValidator());
+            new MenuProductsValidator());
         menuService = new MenuService(menuRepository, menuGroupRepository, profanityValidator,
             menuProductMapper);
     }

@@ -6,7 +6,7 @@ import java.util.UUID;
 import kitchenpos.menus.application.dto.MenuProductCreateRequest;
 import kitchenpos.menus.application.dto.MenuProductsCreateRequest;
 import kitchenpos.menus.domain.tobe.MenuProduct;
-import kitchenpos.menus.domain.tobe.MenuProductValidator;
+import kitchenpos.menus.domain.tobe.MenuProductsValidator;
 import kitchenpos.menus.domain.tobe.MenuProducts;
 import kitchenpos.menus.domain.tobe.ProductQuantity;
 import kitchenpos.products.domain.ProductRepository;
@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 public class MenuProductMapper {
 
     private final ProductRepository productRepository;
-    private final MenuProductValidator menuProductValidator;
+    private final MenuProductsValidator menuProductsValidator;
 
     public MenuProductMapper(ProductRepository productRepository,
-        MenuProductValidator menuProductValidator) {
+        MenuProductsValidator menuProductValidator) {
         this.productRepository = productRepository;
-        this.menuProductValidator = menuProductValidator;
+        this.menuProductsValidator = menuProductValidator;
     }
 
     public MenuProducts map(MenuProductsCreateRequest request) {
@@ -32,7 +32,7 @@ public class MenuProductMapper {
 
         List<Product> products = productRepository.findAllByIdIn(productIds);
         List<MenuProduct> menuProducts = createMenuProducts(request, products);
-        menuProductValidator.validate(menuProducts, products);
+        menuProductsValidator.validate(menuProducts, products);
         return new MenuProducts(menuProducts);
     }
 

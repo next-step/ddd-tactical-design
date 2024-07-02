@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MenuProductValidatorTest {
 
-    private final MenuProductValidator menuProductValidator = new MenuProductValidator();
+    private final MenuProductsValidator menuProductValidator = new MenuProductsValidator();
 
     @Test
     void 메뉴상품들이_null일_경우_검증을_실패한다() {
