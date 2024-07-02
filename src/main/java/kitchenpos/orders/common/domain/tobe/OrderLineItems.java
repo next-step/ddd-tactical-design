@@ -23,6 +23,10 @@ public class OrderLineItems {
     }
 
     public OrderLineItems(List<OrderLineItem> orderLineItems) {
+        if (orderLineItems == null || orderLineItems.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         this.orderLineItems = orderLineItems;
     }
 }
