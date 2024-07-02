@@ -9,9 +9,8 @@ import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.menus.domain.tobe.MenuProducts;
 import kitchenpos.products.domain.ProfanityValidator;
-import kitchenpos.products.domain.tobe.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,29 +19,33 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-
-    private final ProductRepository productRepository;
     private final ProfanityValidator profanityValidator;
+    private final MenuProductMapper menuProductMapper;
 
-    public MenuService(
-            final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
-            ProductRepository productRepository,
-            final ProfanityValidator profanityValidator
-    ) {
+    public MenuService(MenuRepository menuRepository, MenuGroupRepository menuGroupRepository,
+        ProfanityValidator profanityValidator, MenuProductMapper menuProductMapper) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.profanityValidator = profanityValidator;
+        this.menuProductMapper = menuProductMapper;
     }
 
     @Transactional
     public Menu create(final MenuCreateRequest request) {
-        request.validateName(profanityValidator);
-        final MenuGroup menuGroup = findMenuGroup(request.getMenuGroupId());
-        List<Product> products = findProducts(request.getProductIds());
-        return menuRepository.save(request.to(menuGroup, products));
+        profanityValidator.validate(request.name().getName());
+        final MenuGroup menuGroup = findMenuGroup(request.menuGroupId());
+        final MenuProducts menuProducts = menuProductMapper.map(
+            request.menuProductsCreateRequest());
+
+        final Menu menu = new Menu(
+            request.name(),
+            request.price(),
+            menuGroup,
+            request.displayed(),
+            menuProducts);
+        return menuRepository.save(menu);
     }
+
 
     @Transactional
     public Menu changePrice(final UUID menuId, final MenuPrice request) {
@@ -72,15 +75,11 @@ public class MenuService {
 
     private MenuGroup findMenuGroup(UUID menuGroupId) {
         return menuGroupRepository.findById(menuGroupId)
-                .orElseThrow(NoSuchElementException::new);
-    }
-
-    private List<Product> findProducts(List<UUID> productIds) {
-        return productRepository.findAllByIdIn(productIds);
+            .orElseThrow(NoSuchElementException::new);
     }
 
     private Menu findMenu(UUID menuId) {
         return menuRepository.findById(menuId)
-                .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(NoSuchElementException::new);
     }
 }
