@@ -25,19 +25,13 @@ public class StoreOrderFixture {
         return new StoreOrder(createOrderLineItems(menu), orderTable);
     }
 
-    public static OrderLineItems createOrderLineItems() {
-        Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-            ProductFixture.createFired());
-        return createOrderLineItems(menu);
-    }
-
     public static OrderLineItems createOrderLineItems(Menu... menu) {
         List<OrderLineItem> orderLineItems = Arrays.stream(menu)
             .map(StoreOrderFixture::createOrderLineItem).toList();
         return new OrderLineItems(orderLineItems);
     }
 
-    private static OrderLineItem createOrderLineItem(Menu menu) {
+    public static OrderLineItem createOrderLineItem(Menu menu) {
         return new OrderLineItem(menu, new MenuQuantity(OrderType.EAT_IN, 1));
     }
 }
