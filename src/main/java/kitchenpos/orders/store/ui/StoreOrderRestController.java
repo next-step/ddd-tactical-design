@@ -1,5 +1,6 @@
 package kitchenpos.orders.store.ui;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -26,10 +27,11 @@ public class StoreOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<StoreOrder> create(@RequestBody final StoreOrderCreateRequest request) {
+    public ResponseEntity<StoreOrder> create(
+        @RequestBody @Valid final StoreOrderCreateRequest request) {
         StoreOrder response = storeOrderService.create(request);
         return ResponseEntity.created(URI.create("/api/store-orders/" + response.getId()))
-                .body(response);
+            .body(response);
     }
 
     @PutMapping("/{orderId}/accept")
