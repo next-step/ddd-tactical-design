@@ -1,5 +1,6 @@
 package kitchenpos.menus.ui;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Menu> create(@RequestBody final MenuCreateRequest request) {
+    public ResponseEntity<Menu> create(@RequestBody @Valid final MenuCreateRequest request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
                 .body(response);
