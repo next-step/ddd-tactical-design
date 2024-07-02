@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
-import kitchenpos.products.domain.tobe.Product;
 import org.jetbrains.annotations.NotNull;
 
 @Embeddable
@@ -17,33 +16,22 @@ public class MenuProducts implements Iterable<MenuProduct> {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+        name = "menu_id",
+        nullable = false,
+        columnDefinition = "binary(16)",
+        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 
     protected MenuProducts() {
     }
 
-    public MenuProducts(List<MenuProduct> menuProducts, List<Product> products) {
-        validateMenuProducts(menuProducts, products);
+    public MenuProducts(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         this.menuProducts = menuProducts;
-    }
-
-    private void validateMenuProducts(List<MenuProduct> menuProducts, List<Product> products) {
-        if (menuProducts == null || products == null) {
-            throw new IllegalArgumentException();
-        }
-
-        if (products.size() != menuProducts.size()) {
-            throw new IllegalArgumentException();
-        }
-
-        if (menuProducts.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public BigDecimal calculateSumPrice() {

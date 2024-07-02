@@ -18,24 +18,14 @@ class MenuProductsTest {
     @Test
     void 메뉴상품들이_null일_경우_예외를_던진다() {
         assertThatThrownBy(
-                () -> new MenuProducts(null, null))
+                () -> new MenuProducts(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 메뉴상품들이_비어있을_경우_예외를_던진다() {
         assertThatThrownBy(
-                () -> new MenuProducts(List.of(), List.of()))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void 메뉴상품들에_메뉴가_중복되면_예외를_던진다() {
-        Product product = ProductFixture.createFired(20_000L);
-        MenuProduct menuProduct = new MenuProduct(product, 2);
-
-        assertThatThrownBy(
-                () -> new MenuProducts(List.of(menuProduct, menuProduct), List.of(product)))
+                () -> new MenuProducts(List.of()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -43,7 +33,7 @@ class MenuProductsTest {
     void 메뉴상품들을_생성할_수_있다() {
         Product product = ProductFixture.createFired(20_000L);
         assertThatNoException().isThrownBy(() -> new MenuProducts(
-                List.of(new MenuProduct(product, 2)), List.of(product))
+                List.of(new MenuProduct(product, 2)))
         );
     }
 }
