@@ -6,6 +6,7 @@ import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.common.domain.OrderType;
 import kitchenpos.orders.common.domain.tobe.MenuQuantity;
 import kitchenpos.orders.common.domain.tobe.OrderLineItem;
+import kitchenpos.orders.common.domain.tobe.OrderLineItems;
 import kitchenpos.orders.store.domain.tobe.OrderTable;
 import kitchenpos.orders.store.domain.tobe.StoreOrder;
 
@@ -16,22 +17,24 @@ public class StoreOrderFixture {
         orderTable.sit();
 
         Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
-        return new StoreOrder(createOrderLineItems(menu), List.of(menu), orderTable);
+            ProductFixture.createFired());
+        return new StoreOrder(createOrderLineItems(menu), orderTable);
     }
 
     public static StoreOrder createStoreOrder(OrderTable orderTable, Menu... menu) {
-        return new StoreOrder(createOrderLineItems(menu), List.of(menu), orderTable);
+        return new StoreOrder(createOrderLineItems(menu), orderTable);
     }
 
-    public static List<OrderLineItem> createOrderLineItems() {
+    public static OrderLineItems createOrderLineItems() {
         Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
-        return List.of(new OrderLineItem(menu, new MenuQuantity(OrderType.EAT_IN, 2)));
+            ProductFixture.createFired());
+        return createOrderLineItems(menu);
     }
 
-    public static List<OrderLineItem> createOrderLineItems(Menu... menu) {
-        return Arrays.stream(menu).map(StoreOrderFixture::createOrderLineItem).toList();
+    public static OrderLineItems createOrderLineItems(Menu... menu) {
+        List<OrderLineItem> orderLineItems = Arrays.stream(menu)
+            .map(StoreOrderFixture::createOrderLineItem).toList();
+        return new OrderLineItems(orderLineItems);
     }
 
     private static OrderLineItem createOrderLineItem(Menu menu) {

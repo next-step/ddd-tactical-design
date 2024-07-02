@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.OrderTableFixture;
@@ -23,13 +22,12 @@ class StoreOrderTest {
     @Test
     void 매장주문을_생성_시_테이블이_점유되어있지않으면_예외를_던진다() {
         Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
+            ProductFixture.createFired());
 
         assertThatThrownBy(() -> new StoreOrder(
-                StoreOrderFixture.createOrderLineItems(menu),
-                List.of(menu),
-                OrderTableFixture.createNumber1()))
-                .isInstanceOf(IllegalStateException.class);
+            StoreOrderFixture.createOrderLineItems(menu),
+            OrderTableFixture.createNumber1()))
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -37,15 +35,14 @@ class StoreOrderTest {
         OrderTable orderTable = OrderTableFixture.createNumber1();
         orderTable.sit();
         Menu menu1 = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
+            ProductFixture.createFired());
         Menu menu2 = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
+            ProductFixture.createFired());
 
         assertThatThrownBy(() -> new StoreOrder(
-                StoreOrderFixture.createOrderLineItems(menu1, menu2),
-                List.of(menu1, menu2),
-                OrderTableFixture.createNumber1()))
-                .isInstanceOf(IllegalStateException.class);
+            StoreOrderFixture.createOrderLineItems(menu1, menu2),
+            OrderTableFixture.createNumber1()))
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -53,13 +50,12 @@ class StoreOrderTest {
         OrderTable orderTable = OrderTableFixture.createNumber1();
         orderTable.sit();
         Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
+            ProductFixture.createFired());
 
         assertThatNoException().isThrownBy(
-                () -> new StoreOrder(
-                        StoreOrderFixture.createOrderLineItems(menu),
-                        List.of(menu),
-                        orderTable));
+            () -> new StoreOrder(
+                StoreOrderFixture.createOrderLineItems(menu),
+                orderTable));
     }
 
     @Test
@@ -75,7 +71,7 @@ class StoreOrderTest {
         storeOrder.accept();
 
         assertThatThrownBy(storeOrder::accept)
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -91,7 +87,7 @@ class StoreOrderTest {
         StoreOrder storeOrder = StoreOrderFixture.createStoreOrder();
 
         assertThatThrownBy(storeOrder::serve)
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -108,11 +104,10 @@ class StoreOrderTest {
         OrderTable targetTable = OrderTableFixture.createNumber1();
         targetTable.sit();
         Menu menu = MenuFixture.createFriedOnePlusOne(MenuGroupFixture.createChicken(),
-                ProductFixture.createFired());
+            ProductFixture.createFired());
         StoreOrder storeOrder = new StoreOrder(
-                StoreOrderFixture.createOrderLineItems(menu),
-                List.of(menu),
-                targetTable);
+            StoreOrderFixture.createOrderLineItems(menu),
+            targetTable);
         storeOrder.accept();
         storeOrder.serve();
 
@@ -126,6 +121,6 @@ class StoreOrderTest {
         StoreOrder storeOrder = StoreOrderFixture.createStoreOrder();
 
         assertThatThrownBy(storeOrder::serve)
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 }

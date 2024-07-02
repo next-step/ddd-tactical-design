@@ -9,6 +9,7 @@ import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.common.domain.OrderType;
 import kitchenpos.orders.common.domain.tobe.Order;
 import kitchenpos.orders.common.domain.tobe.OrderLineItem;
+import kitchenpos.orders.common.domain.tobe.OrderLineItems;
 
 @Entity
 public class StoreOrder extends Order {
@@ -24,8 +25,8 @@ public class StoreOrder extends Order {
     protected StoreOrder() {
     }
 
-    public StoreOrder(List<OrderLineItem> orderLineItems, List<Menu> menus, OrderTable orderTable) {
-        super(OrderType.EAT_IN, orderLineItems, menus);
+    public StoreOrder(OrderLineItems orderLineItems, OrderTable orderTable) {
+        super(OrderType.EAT_IN, orderLineItems);
 
         if (!orderTable.isOccupied()) {
             throw new IllegalStateException();

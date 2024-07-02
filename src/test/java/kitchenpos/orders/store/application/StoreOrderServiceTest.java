@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
 import kitchenpos.fake.InMemoryMenuRepository;
 import kitchenpos.fake.InMemoryOrderTableRepository;
@@ -19,9 +20,11 @@ import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.orders.common.application.OrderLineItemMapper;
 import kitchenpos.orders.common.application.dto.OrderLineItemRequest;
-import kitchenpos.orders.common.application.dto.OrderLineItemRequests;
+import kitchenpos.orders.common.application.dto.OrderLineItemsRequest;
 import kitchenpos.orders.common.domain.OrderStatus;
+import kitchenpos.orders.common.domain.tobe.OrderLineItemsValidator;
 import kitchenpos.orders.store.application.dto.StoreOrderCreateRequest;
 import kitchenpos.orders.store.domain.OrderTableRepository;
 import kitchenpos.orders.store.domain.StoreOrderRepository;
@@ -54,8 +57,10 @@ class StoreOrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        storeOrderService = new StoreOrderService(storeOrderRepository, menuRepository,
-                orderTableRepository);
+        final OrderLineItemMapper orderLineItemMapper = new OrderLineItemMapper(menuRepository,
+            new OrderLineItemsValidator());
+        storeOrderService = new StoreOrderService(storeOrderRepository, orderTableRepository,
+            orderLineItemMapper);
     }
 
     @Test
@@ -63,9 +68,8 @@ class StoreOrderServiceTest {
         MenuGroup menuGroup = createMenuGroup();
 
         assertThatThrownBy(() -> storeOrderService.create(new StoreOrderCreateRequest(
-                createOrderLineItemRequests(createFriedMenu(menuGroup)),
-                null)))
-                .isInstanceOf(IllegalArgumentException.class);
+            createOrderLineItemRequests(createFriedMenu(menuGroup)), null)))
+            .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
@@ -73,11 +77,10 @@ class StoreOrderServiceTest {
         MenuGroup menuGroup = createMenuGroup();
         OrderTable orderTable = createOrderTable();
         StoreOrderCreateRequest createRequest = new StoreOrderCreateRequest(
-                createOrderLineItemRequests(createFriedMenu(menuGroup)),
-                orderTable.getId());
+            createOrderLineItemRequests(createFriedMenu(menuGroup)), orderTable.getId());
 
         assertThatThrownBy(() -> storeOrderService.create(createRequest))
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -115,8 +118,8 @@ class StoreOrderServiceTest {
 
         storeOrderService.accept(saved.getId());
 
-        assertThatThrownBy(() -> storeOrderService.accept(saved.getId())).isInstanceOf(
-                IllegalStateException.class);
+        assertThatThrownBy(() -> storeOrderService.accept(saved.getId()))
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -136,7 +139,7 @@ class StoreOrderServiceTest {
         StoreOrder saved = storeOrderService.create(createRequest);
 
         assertThatThrownBy(() -> storeOrderService.serve(saved.getId()))
-                .isInstanceOf(IllegalStateException.class);
+            .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -144,8 +147,8 @@ class StoreOrderServiceTest {
         MenuGroup menuGroup = createMenuGroup();
         OrderTable orderTable = createOrderTableAndSit();
         StoreOrderCreateRequest createRequest = new StoreOrderCreateRequest(
-                createOrderLineItemRequests(createFriedMenu(menuGroup)),
-                orderTable.getId());
+            createOrderLineItemRequests(createFriedMenu(menuGroup)),
+            orderTable.getId());
         StoreOrder saved = storeOrderService.create(createRequest);
         storeOrderService.accept(saved.getId());
         storeOrderService.serve(saved.getId());
@@ -153,8 +156,8 @@ class StoreOrderServiceTest {
         storeOrderService.complete(saved.getId());
 
         assertAll(() -> assertThat(saved.getStatus()).isEqualTo(OrderStatus.COMPLETED),
-                () -> assertThat(orderTable.isOccupied()).isFalse(),
-                () -> assertThat(orderTable.getNumberOfGuests()).isZero());
+            () -> assertThat(orderTable.isOccupied()).isFalse(),
+            () -> assertThat(orderTable.getNumberOfGuests()).isZero());
     }
 
     @Test
@@ -162,18 +165,18 @@ class StoreOrderServiceTest {
         StoreOrderCreateRequest createRequest = createStoreOrderCreateRequest();
         StoreOrder saved = storeOrderService.create(createRequest);
 
-        assertThatThrownBy(() -> storeOrderService.complete(saved.getId())).isInstanceOf(
-                IllegalStateException.class);
+        assertThatThrownBy(() -> storeOrderService.complete(saved.getId()))
+            .isInstanceOf(IllegalStateException.class);
     }
 
     private StoreOrderCreateRequest createStoreOrderCreateRequest() {
         MenuGroup menuGroup = createMenuGroup();
         OrderTable orderTable = createOrderTableAndSit();
         return new StoreOrderCreateRequest(
-                createOrderLineItemRequests(
-                        createFriedMenu(menuGroup),
-                        createSeasonedMenu(menuGroup)),
-                orderTable.getId());
+            createOrderLineItemRequests(
+                createFriedMenu(menuGroup),
+                createSeasonedMenu(menuGroup)),
+            orderTable.getId());
     }
 
     private MenuGroup createMenuGroup() {
@@ -201,10 +204,10 @@ class StoreOrderServiceTest {
         return menuRepository.save(MenuFixture.SeasonedOnePlusOne(menuGroup, product));
     }
 
-    private OrderLineItemRequests createOrderLineItemRequests(Menu... menu) {
+    private OrderLineItemsRequest createOrderLineItemRequests(Menu... menu) {
         List<OrderLineItemRequest> orderLineItemRequests = Arrays.stream(menu)
-                .map(this::createOrderLineItemRequest).toList();
-        return new OrderLineItemRequests(orderLineItemRequests);
+            .map(this::createOrderLineItemRequest).toList();
+        return new OrderLineItemsRequest(orderLineItemRequests);
     }
 
     private OrderLineItemRequest createOrderLineItemRequest(Menu menu) {

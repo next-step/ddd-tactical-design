@@ -3,8 +3,9 @@ package kitchenpos.orders.store.application;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.menus.domain.tobe.Menu;
+import kitchenpos.orders.common.application.OrderLineItemMapper;
+import kitchenpos.orders.common.domain.OrderType;
+import kitchenpos.orders.common.domain.tobe.OrderLineItems;
 import kitchenpos.orders.store.application.dto.StoreOrderCreateRequest;
 import kitchenpos.orders.store.domain.OrderTableRepository;
 import kitchenpos.orders.store.domain.StoreOrderRepository;
@@ -17,23 +18,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreOrderService {
 
     private final StoreOrderRepository storeOrderRepository;
-    private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
+    private final OrderLineItemMapper orderLineItemMapper;
 
     public StoreOrderService(StoreOrderRepository storeOrderRepository,
-            MenuRepository menuRepository, OrderTableRepository orderTableRepository) {
+        OrderTableRepository orderTableRepository, OrderLineItemMapper orderLineItemMapper) {
         this.storeOrderRepository = storeOrderRepository;
-        this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
+        this.orderLineItemMapper = orderLineItemMapper;
     }
 
     @Transactional
     public StoreOrder create(final StoreOrderCreateRequest request) {
-        final List<Menu> menus = menuRepository.findAllByIdIn(request.getMenuIds());
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
+        final OrderLineItems orderLineItems = orderLineItemMapper.map(OrderType.EAT_IN,
+            request.orderLineItemRequests());
+        final OrderTable orderTable = orderTableRepository.findById(request.orderTableId())
                 .orElseThrow(NoSuchElementException::new);
-        return storeOrderRepository.save(
-                new StoreOrder(request.toOrderLineItems(menus), menus, orderTable));
+
+        final StoreOrder storeOrder = new StoreOrder(orderLineItems, orderTable);
+        return storeOrderRepository.save(storeOrder);
     }
 
     @Transactional
