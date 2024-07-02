@@ -36,7 +36,7 @@ public class Menu {
     }
 
     public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, DisplayedMenu displayed,
-            MenuProducts menuProducts) {
+        MenuProducts menuProducts) {
         validateMenuPrice(price, menuProducts);
         this.id = UUID.randomUUID();
         this.name = name;
@@ -75,9 +75,11 @@ public class Menu {
     }
 
     public void changeMenuProductPrice(UUID productId, ProductPrice price) {
-        menuProducts.stream()
-                .filter(menuProduct -> menuProduct.getProductId().equals(productId))
-                .forEach(menuProduct -> menuProduct.changePrice(price));
+        for (MenuProduct menuProduct : menuProducts) {
+            if (menuProduct.getProductId().equals(productId)) {
+                menuProduct.changePrice(price);
+            }
+        }
 
         if (isOverThanProductSumPrice()) {
             hide();
