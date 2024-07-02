@@ -1,12 +1,13 @@
 package kitchenpos.menus.ui;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.application.dto.MenuCreateRequest;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.menus.domain.tobe.MenuPrice;
-import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ public class MenuRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Menu> create(@RequestBody final MenuCreateRequest request) {
+    public ResponseEntity<Menu> create(@RequestBody @Valid final MenuCreateRequest request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
                 .body(response);

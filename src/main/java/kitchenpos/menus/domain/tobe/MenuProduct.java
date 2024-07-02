@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 import kitchenpos.products.domain.tobe.Product;
+import kitchenpos.products.domain.tobe.ProductPrice;
 
 @Table(name = "menu_product")
 @Entity
@@ -22,27 +23,33 @@ public class MenuProduct {
 
     private UUID productId;
 
+    private BigDecimal price;
+
     @Embedded
-    private MenuQuantity quantity;
+    private ProductQuantity quantity;
 
     protected MenuProduct() {
     }
 
-    public MenuProduct(Product product, MenuQuantity quantity) {
-        this(null, product.getId(), quantity);
+    public MenuProduct(Product product, int quantity) {
+        this(product, new ProductQuantity(quantity));
     }
 
-    public MenuProduct(Long seq, UUID productId, MenuQuantity quantity) {
-        this.seq = seq;
-        this.productId = productId;
+    public MenuProduct(Product product, ProductQuantity quantity) {
+        this.productId = product.getId();
+        this.price = product.getPrice();
         this.quantity = quantity;
     }
 
-    public BigDecimal calculateSum(Product product) {
-        return product.getPrice().multiply(quantity.getQuantity());
+    public BigDecimal calculateSum() {
+        return price.multiply(quantity.getQuantity());
     }
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public void changePrice(ProductPrice price) {
+        this.price = price.getPrice();
     }
 }

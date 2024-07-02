@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 
 import java.util.List;
 import kitchenpos.fake.InMemoryMenuGroupRepository;
-import kitchenpos.menugroups.application.MenuGroupService;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
 import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menugroups.domain.tobe.MenuGroupName;

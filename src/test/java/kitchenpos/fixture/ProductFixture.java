@@ -1,8 +1,8 @@
 package kitchenpos.fixture;
 
 import java.math.BigDecimal;
+import kitchenpos.products.application.dto.ProductCreateRequest;
 import kitchenpos.products.domain.tobe.Product;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
 
 public class ProductFixture {
 
@@ -19,7 +19,11 @@ public class ProductFixture {
     }
 
     public static Product createFired() {
-        return new Product("후라이드", BigDecimal.valueOf(20_000L));
+        return createFired(20_000L);
+    }
+
+    public static Product createFired(Long price) {
+        return new Product("후라이드", BigDecimal.valueOf(price));
     }
 
     public static Product createSeasoned() {

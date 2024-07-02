@@ -1,13 +1,11 @@
 package kitchenpos.fixture;
 
 import java.util.List;
-import java.util.UUID;
 import kitchenpos.menus.domain.tobe.Menu;
 import kitchenpos.orders.common.domain.Order;
 import kitchenpos.orders.common.domain.OrderLineItem;
-import kitchenpos.orders.common.domain.OrderStatus;
 import kitchenpos.orders.common.domain.OrderType;
-import kitchenpos.orders.eatin.domain.OrderTable;
+import kitchenpos.orders.store.domain.tobe.OrderTable;
 
 public class OrderFixture {
 
@@ -50,15 +48,5 @@ public class OrderFixture {
         orderLineItem.setMenuId(menu.getId());
         orderLineItem.setPrice(menu.getPrice());
         return orderLineItem;
-    }
-
-    public static Order createEatIn(OrderTable orderTable, Menu menu) {
-        Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setType(OrderType.EAT_IN);
-        order.setOrderTable(orderTable);
-        order.setOrderLineItems(List.of(createOrderLineItem(menu, 2)));
-        order.setStatus(OrderStatus.WAITING);
-        return order;
     }
 }

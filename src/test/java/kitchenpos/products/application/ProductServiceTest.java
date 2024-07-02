@@ -13,16 +13,15 @@ import kitchenpos.fake.InMemoryProductRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.MenuGroupFixture;
 import kitchenpos.fixture.ProductFixture;
-import kitchenpos.menus.application.MenuProductsService;
 import kitchenpos.menugroups.domain.MenuGroupRepository;
+import kitchenpos.menugroups.domain.tobe.MenuGroup;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.menus.domain.tobe.Menu;
-import kitchenpos.menugroups.domain.tobe.MenuGroup;
+import kitchenpos.products.application.dto.ProductCreateRequest;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.domain.ProfanityValidator;
 import kitchenpos.products.domain.tobe.Product;
 import kitchenpos.products.domain.tobe.ProductPrice;
-import kitchenpos.products.ui.dto.ProductCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -47,9 +46,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        MenuProductsService menuProductService = new MenuProductsService(productRepository);
-        productService = new ProductService(productRepository, menuRepository, menuProductService,
-                profanityValidator);
+        productService = new ProductService(productRepository, menuRepository, profanityValidator);
     }
 
     @Test
