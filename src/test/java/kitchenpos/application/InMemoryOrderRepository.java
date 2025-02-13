@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.domain.Order;
-import kitchenpos.domain.OrderRepository;
-import kitchenpos.domain.OrderStatus;
-import kitchenpos.domain.OrderTable;
+import kitchenpos.order.domain.entity.Order;
+import kitchenpos.order.domain.repository.OrderRepository;
+import kitchenpos.order.domain.entity.OrderStatus;
+import kitchenpos.order.domain.entity.OrderTable;
 
 public class InMemoryOrderRepository implements OrderRepository {
 

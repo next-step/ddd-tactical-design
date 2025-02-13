@@ -5,15 +5,15 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
-import kitchenpos.domain.Menu;
-import kitchenpos.domain.MenuGroup;
-import kitchenpos.domain.MenuProduct;
-import kitchenpos.domain.Order;
-import kitchenpos.domain.OrderLineItem;
-import kitchenpos.domain.OrderStatus;
-import kitchenpos.domain.OrderTable;
-import kitchenpos.domain.OrderType;
-import kitchenpos.domain.Product;
+import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.entity.MenuGroup;
+import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.order.domain.entity.Order;
+import kitchenpos.order.domain.entity.OrderLineItem;
+import kitchenpos.order.domain.entity.OrderStatus;
+import kitchenpos.order.domain.entity.OrderTable;
+import kitchenpos.order.domain.entity.OrderType;
+import kitchenpos.menu.domain.entity.Product;
 
 public class Fixtures {
 

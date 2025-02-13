@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.domain.Menu;
-import kitchenpos.domain.MenuRepository;
+import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.repository.MenuRepository;
 
 public class InMemoryMenuRepository implements MenuRepository {
 

@@ -2,7 +2,7 @@ package kitchenpos.application;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.infra.KitchenridersClient;
+import kitchenpos.order.infrastructure.external.KitchenridersClient;
 
 public class FakeKitchenridersClient implements KitchenridersClient {
 

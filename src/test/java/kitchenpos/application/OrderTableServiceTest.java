@@ -8,10 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.domain.OrderRepository;
-import kitchenpos.domain.OrderStatus;
-import kitchenpos.domain.OrderTable;
-import kitchenpos.domain.OrderTableRepository;
+import kitchenpos.order.domain.repository.OrderRepository;
+import kitchenpos.order.domain.entity.OrderStatus;
+import kitchenpos.order.domain.entity.OrderTable;
+import kitchenpos.order.domain.repository.OrderTableRepository;
+import kitchenpos.order.domain.service.OrderTableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

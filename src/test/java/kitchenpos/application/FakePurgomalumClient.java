@@ -2,7 +2,7 @@ package kitchenpos.application;
 
 import java.util.Arrays;
 import java.util.List;
-import kitchenpos.infra.PurgomalumClient;
+import kitchenpos.global.infrastructure.external.PurgomalumClient;
 
 public class FakePurgomalumClient implements PurgomalumClient {
 
