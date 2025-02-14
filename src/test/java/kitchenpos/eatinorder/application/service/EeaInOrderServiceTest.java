@@ -7,7 +7,9 @@ import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.application.port.out.ProductRepository;
+import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
+import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
@@ -29,22 +32,26 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class EeaInOrderServiceTest {
-    @Autowired
-    private EatInOrderService orderService;
-    @Autowired
-    private MenuRepository menuRepository;
-    @Autowired
-    private OrderTableRepository orderTableRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private MenuGroupRepository menuGroupRepository;
+    private final EatInOrderService orderService;
+    private final MenuRepository menuRepository;
+    private final OrderTableRepository orderTableRepository;
+    private final SaveProductPort saveProductPort;
+    private final MenuGroupRepository menuGroupRepository;
+
+    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, MenuRepository menuRepository, OrderTableRepository orderTableRepository, MenuGroupRepository menuGroupRepository) {
+        this.saveProductPort = saveProductPort;
+        this.orderService = orderService;
+        this.menuRepository = menuRepository;
+        this.orderTableRepository = orderTableRepository;
+        this.menuGroupRepository = menuGroupRepository;
+    }
 
     @BeforeEach
     void setup() {
         Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
-        productRepository.save(product);
+        saveProductPort.save(product);
 
         MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
         menuGroupRepository.save(menuGroup);
@@ -609,17 +616,13 @@ public class EeaInOrderServiceTest {
     private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
         MenuProduct menuProduct = new MenuProduct();
         menuProduct.setProductId(productId);
-        menuProduct.setProduct(proudct);
+        menuProduct.setProduct(ProductEntity.of(proudct));
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+        return new Product(id, name, price);
     }
 
     private static MenuGroup createMenuGroup(UUID id, String name) {

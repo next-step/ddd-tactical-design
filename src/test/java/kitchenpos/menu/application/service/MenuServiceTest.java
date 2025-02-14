@@ -6,7 +6,9 @@ import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.application.port.out.ProductRepository;
+import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
+import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.assertj.core.api.ThrowableAssert;
@@ -19,6 +21,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
@@ -34,17 +37,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Import(ClientTestConfiguration.class)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class MenuServiceTest {
-    @Autowired
-    private MenuService menuService;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private MenuGroupRepository menuGroupRepository;
-    @Autowired
-    private MenuRepository menuRepository;
-    @Autowired
-    private PurgomalumClient mockPurgomalumClient;
+    private final MenuService menuService;
+    private final SaveProductPort saveProductPort;
+    private final MenuGroupRepository menuGroupRepository;
+    private final MenuRepository menuRepository;
+    private final PurgomalumClient mockPurgomalumClient;
+
+    public MenuServiceTest(MenuService menuService, SaveProductPort saveProductPort, MenuGroupRepository menuGroupRepository, MenuRepository menuRepository, PurgomalumClient mockPurgomalumClient) {
+        this.menuService = menuService;
+        this.saveProductPort = saveProductPort;
+        this.menuGroupRepository = menuGroupRepository;
+        this.menuRepository = menuRepository;
+        this.mockPurgomalumClient = mockPurgomalumClient;
+    }
 
     @DisplayName("메뉴 등록하기")
     @Nested
@@ -59,7 +66,7 @@ public class MenuServiceTest {
         @BeforeEach
         void setup() {
             Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
-            productRepository.save(product);
+            saveProductPort.save(product);
 
             MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
             menuGroupRepository.save(menuGroup);
@@ -212,7 +219,7 @@ public class MenuServiceTest {
         @BeforeEach
         void setup() {
             Product product = createProduct(PRODUCT_UUID, "양념치킨", new BigDecimal(20000));
-            productRepository.save(product);
+            saveProductPort.save(product);
 
             MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
             menuGroupRepository.save(menuGroup);
@@ -281,7 +288,7 @@ public class MenuServiceTest {
         @BeforeEach
         void setup() {
             Product product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
-            productRepository.save(product);
+            saveProductPort.save(product);
 
             MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
             menuGroupRepository.save(menuGroup);
@@ -374,17 +381,15 @@ public class MenuServiceTest {
     private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
         MenuProduct menuProduct = new MenuProduct();
         menuProduct.setProductId(productId);
-        menuProduct.setProduct(proudct);
+        if (proudct != null) {
+            menuProduct.setProduct(ProductEntity.of(proudct));
+        }
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+        return new Product(id, name, price);
     }
 
     private static MenuGroup createMenuGroup(UUID id, String name) {

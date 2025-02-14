@@ -1,10 +1,11 @@
 package kitchenpos.product.application.service;
 
+import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.product.application.port.out.LoadProductPort;
+import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.application.port.out.ProductRepository;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +18,19 @@ import java.util.UUID;
 
 @Service
 public class ProductService {
-    private final ProductRepository productRepository;
+    private final LoadProductPort loadProductPort;
+    private final SaveProductPort saveProductPort;
     private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final LoadProductPort loadProductPort,
+            final SaveProductPort saveProductPort,
+            final MenuRepository menuRepository,
+            final PurgomalumClient purgomalumClient
     ) {
-        this.productRepository = productRepository;
+        this.loadProductPort = loadProductPort;
+        this.saveProductPort = saveProductPort;
         this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
     }
@@ -41,11 +45,8 @@ public class ProductService {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-        return productRepository.save(product);
+        final Product product = new Product(UUID.randomUUID(), name, price);
+        return saveProductPort.save(product);
     }
 
     @Transactional
@@ -54,9 +55,9 @@ public class ProductService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final Product product = productRepository.findById(productId)
+        final Product product = loadProductPort.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -76,6 +77,6 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return loadProductPort.findAll();
     }
 }

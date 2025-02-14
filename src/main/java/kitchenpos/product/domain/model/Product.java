@@ -1,47 +1,32 @@
 package kitchenpos.product.domain.model;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Table(name = "product")
-@Entity
 public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
-
-    @Embedded
-    private ProductName name;
-
-    @Embedded
+    private final UUID id;
+    private final ProductName name;
     private ProductPrice price;
 
-    public Product() {
+    public Product(final UUID id, final String name, final BigDecimal price) {
+        this.id = id;
+        this.name = ProductName.of(name);
+        this.price = ProductPrice.of(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name.value();
-    }
-
-    public void setName(final String name) {
-        this.name = ProductName.of(name);
     }
 
     public BigDecimal getPrice() {
         return price.value();
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void changePrice(final BigDecimal price) {
         this.price = ProductPrice.of(price);
     }
 }

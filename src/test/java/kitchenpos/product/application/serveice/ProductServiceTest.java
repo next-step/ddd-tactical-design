@@ -6,12 +6,14 @@ import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.application.port.out.ProductRepository;
+import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
+import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.application.port.out.LoadProductPort;
+import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.ProductService;
 import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.assertj.core.api.ThrowableAssert;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +25,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
@@ -36,17 +39,23 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @Import(ClientTestConfiguration.class)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class ProductServiceTest {
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private MenuRepository menuRepository;
-    @Autowired
-    private MenuGroupRepository menuGroupRepository;
-    @Autowired
-    private PurgomalumClient mockPurgomalumClient;
+    private final ProductService productService;
+    private final LoadProductPort loadProductPort;
+    private final SaveProductPort saveProductPort;
+    private final MenuRepository menuRepository;
+    private final MenuGroupRepository menuGroupRepository;
+    private final PurgomalumClient mockPurgomalumClient;
+
+    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, MenuRepository menuRepository, MenuGroupRepository menuGroupRepository, PurgomalumClient mockPurgomalumClient) {
+        this.productService = productService;
+        this.loadProductPort = loadProductPort;
+        this.saveProductPort = saveProductPort;
+        this.menuRepository = menuRepository;
+        this.menuGroupRepository = menuGroupRepository;
+        this.mockPurgomalumClient = mockPurgomalumClient;
+    }
 
     @DisplayName("상품 등록하기")
     @Nested
@@ -129,7 +138,7 @@ public class ProductServiceTest {
         @BeforeEach
         void setup() {
             Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
-            product = productRepository.save(product);
+            product = saveProductPort.save(product);
 
             MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
             menuGroupRepository.save(menuGroup);
@@ -144,10 +153,10 @@ public class ProductServiceTest {
         @Test
         void it_can_change_price() {
             // given
-            Product product = productRepository.findById(후라이드치킨_PRODUCT_UUID)
+            Product product = loadProductPort.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(21000);
-            product.setPrice(newPrice);
+            product.changePrice(newPrice);
 
             // when
             Product changedProduct = productService.changePrice(product.getId(), product);
@@ -161,12 +170,12 @@ public class ProductServiceTest {
         @Test
         void price_must_be_over_0() {
             // given
-            Product product = productRepository.findById(후라이드치킨_PRODUCT_UUID)
+            Product product = loadProductPort.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(-1);
 
             // when
-            final Throwable thrown = catchThrowable(() -> product.setPrice(newPrice));
+            final Throwable thrown = catchThrowable(() -> product.changePrice(newPrice));
 
             // then
             assertThat(thrown).isInstanceOf(ProductPriceValidationException.class);
@@ -177,10 +186,10 @@ public class ProductServiceTest {
         @Test
         void menu_should_not_be_displayed_when_product_prices_are_less_than_menu_price() {
             // given
-            Product product = productRepository.findById(후라이드치킨_PRODUCT_UUID)
+            Product product = loadProductPort.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(15000);
-            product.setPrice(newPrice);
+            product.changePrice(newPrice);
 
             // when
             productService.changePrice(product.getId(), product);
@@ -195,7 +204,7 @@ public class ProductServiceTest {
     @NotNull
     private static MenuProduct createMenuProduct(Product product, int quantity) {
         MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setProduct(product);
+        menuProduct.setProduct(ProductEntity.of(product));
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
@@ -225,11 +234,7 @@ public class ProductServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        Product product = new Product();
-        product.setId(id);
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+        return new Product(id, name, price);
     }
 
     private static MenuGroup createMenuGroup(UUID id, String name) {
