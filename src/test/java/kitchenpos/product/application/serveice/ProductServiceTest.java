@@ -8,6 +8,7 @@ import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.application.port.out.ProductRepository;
 import kitchenpos.product.application.service.ProductService;
+import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductPrice;
@@ -88,21 +89,20 @@ public class ProductServiceTest {
         @Test
         void name_must_be_input() {
             // given
-            Product request = createProduct(null, 16000);
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(createProduct(null, 16000));
 
             // when
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
+            final Throwable thrown = catchThrowable(throwingCallable);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThat(thrown).isInstanceOf(ProductNameEmptyException.class);
         }
 
         @DisplayName("상품의 가격은 0원 이상이어야 한다")
         @Test
         void price_must_be_over_0() {
             // given
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> createProduct("JPA 치킨", -1);
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(createProduct("JPA 치킨", -1));
 
             // when
             final Throwable thrown = catchThrowable(throwingCallable);

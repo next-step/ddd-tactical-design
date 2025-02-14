@@ -18,6 +18,7 @@ public class ProductPrice {
     }
 
     protected ProductPrice() {
+        // 이 메소드를 직접 호출하여 사용하지 말 것
         price = PRICE_ZERO;
     }
 
