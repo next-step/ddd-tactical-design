@@ -26,12 +26,22 @@ class ProductPriceTest {
 
     @DisplayName("`Product Price`는 0원 이상 입력하여야 한다")
     @Test
-    void value() {
+    void createWithNegativePrice() {
         // given
         final BigDecimal price = BigDecimal.valueOf(-1);
 
         // when
         final Throwable thrown = catchThrowable(() -> ProductPrice.of(price));
+
+        // then
+        assertThat(thrown).isInstanceOf(ProductPriceValidationException.class);
+    }
+
+    @DisplayName("`Product Price`는 반드시 입력해야한다")
+    @Test
+    void createWithNullPrice() {
+        // when
+        final Throwable thrown = catchThrowable(() -> ProductPrice.of(null));
 
         // then
         assertThat(thrown).isInstanceOf(ProductPriceValidationException.class);

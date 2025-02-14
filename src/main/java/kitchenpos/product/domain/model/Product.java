@@ -1,9 +1,6 @@
 package kitchenpos.product.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -18,8 +15,8 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     public Product() {
     }
@@ -41,10 +38,10 @@ public class Product {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.value();
     }
 
     public void setPrice(final BigDecimal price) {
-        this.price = price;
+        this.price = ProductPrice.of(price);
     }
 }

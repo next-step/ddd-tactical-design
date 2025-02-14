@@ -8,7 +8,9 @@ import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.application.port.out.ProductRepository;
 import kitchenpos.product.application.service.ProductService;
+import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.assertj.core.api.ThrowableAssert;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +30,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -101,14 +102,13 @@ public class ProductServiceTest {
         @Test
         void price_must_be_over_0() {
             // given
-            Product request = createProduct("JPA 치킨", -1);
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> createProduct("JPA 치킨", -1);
 
             // when
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
+            final Throwable thrown = catchThrowable(throwingCallable);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThat(thrown).isInstanceOf(ProductPriceValidationException.class);
         }
     }
 
@@ -164,14 +164,12 @@ public class ProductServiceTest {
             Product product = productRepository.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(-1);
-            product.setPrice(newPrice);
 
             // when
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.changePrice(product.getId(), product);
+            final Throwable thrown = catchThrowable(() -> product.setPrice(newPrice));
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThat(thrown).isInstanceOf(ProductPriceValidationException.class);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
