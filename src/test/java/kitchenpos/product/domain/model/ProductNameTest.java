@@ -1,5 +1,6 @@
 package kitchenpos.product.domain.model;
 
+import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductNameValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class ProductNameTest {
         final Throwable thrown = catchThrowable(() -> ProductName.of(name));
 
         // then
-        assertThat(thrown).isInstanceOf(ProductNameValidationException.class);
+        assertThat(thrown).isInstanceOf(ProductNameEmptyException.class);
     }
 
     @DisplayName("`Product Name` 추가적인 생성규칙에 맞지 않으면 예외가 발생한다")
