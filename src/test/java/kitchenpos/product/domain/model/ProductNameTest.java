@@ -1,6 +1,6 @@
 package kitchenpos.product.domain.model;
 
-import kitchenpos.product.application.exception.ProductNameValidationException;
+import kitchenpos.product.domain.exception.ProductNameValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
