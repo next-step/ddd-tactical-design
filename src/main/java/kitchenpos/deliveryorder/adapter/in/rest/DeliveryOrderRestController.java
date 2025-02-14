@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/api/orders")
+@RequestMapping("/api/deliveryorders")
 @RestController
 public class DeliveryOrderRestController {
     private final EatInOrderService eatInOrderService;
