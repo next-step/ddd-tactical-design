@@ -1,8 +1,10 @@
 package kitchenpos.product.adapter.in.rest;
 
 import kitchenpos.product.application.port.in.ChangeProductPriceUseCase;
+import kitchenpos.product.application.port.in.CreateProductUseCase;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
+import kitchenpos.product.application.service.model.CreateProductRequest;
 import kitchenpos.product.domain.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,19 +23,22 @@ import java.util.UUID;
 @RestController
 public class ProductRestController {
     private final ProductService productService;
+    private final CreateProductUseCase createProductUseCase;
     private final ChangeProductPriceUseCase changeProductPriceUseCase;
 
     public ProductRestController(
             final ProductService productService,
+            final CreateProductUseCase createProductUseCase,
             final ChangeProductPriceUseCase changeProductPriceUseCase
     ) {
         this.productService = productService;
+        this.createProductUseCase = createProductUseCase;
         this.changeProductPriceUseCase = changeProductPriceUseCase;
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody final Product request) {
-        final Product response = productService.create(request);
+    public ResponseEntity<Product> create(@RequestBody final CreateProductRequest request) {
+        final Product response = createProductUseCase.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
             .body(response);
     }

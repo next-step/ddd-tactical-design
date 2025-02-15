@@ -11,6 +11,7 @@ import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
+import kitchenpos.product.application.service.model.CreateProductRequest;
 import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
@@ -64,7 +65,7 @@ public class ProductServiceTest {
         @Test
         void it_can_input_name_and_price() {
             // given
-            Product request = createProduct("후라이드치킨", 16000);
+            CreateProductRequest request = new CreateProductRequest("후라이드치킨", BigDecimal.valueOf(16000));
 
             // when
             Product product = productService.create(request);
@@ -82,7 +83,7 @@ public class ProductServiceTest {
         void it_cannot_use_inappropriate_words() {
             // given
             String name = "holy shit 맛있는 치킨";
-            Product request = createProduct(name, 16000);
+            CreateProductRequest request = new CreateProductRequest(name, BigDecimal.valueOf(16000));
             Mockito.when(mockPurgomalumClient.containsProfanity(name)).thenReturn(Boolean.TRUE);
 
             // when
@@ -97,7 +98,8 @@ public class ProductServiceTest {
         @Test
         void name_must_be_input() {
             // given
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(createProduct(null, 16000));
+            CreateProductRequest request = new CreateProductRequest(null, BigDecimal.valueOf(16000));
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
 
             // when
             final Throwable thrown = catchThrowable(throwingCallable);
@@ -110,7 +112,8 @@ public class ProductServiceTest {
         @Test
         void price_must_be_over_0() {
             // given
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(createProduct("JPA 치킨", -1));
+            CreateProductRequest request = new CreateProductRequest("JPA 치킨", BigDecimal.valueOf(-1));
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
 
             // when
             final Throwable thrown = catchThrowable(throwingCallable);

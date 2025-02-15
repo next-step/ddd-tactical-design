@@ -2,9 +2,11 @@ package kitchenpos.product.application.service;
 
 import kitchenpos.product.application.exception.ProductNotFoundException;
 import kitchenpos.product.application.port.in.ChangeProductPriceUseCase;
+import kitchenpos.product.application.port.in.CreateProductUseCase;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
+import kitchenpos.product.application.service.model.CreateProductRequest;
 import kitchenpos.product.domain.exception.ProductNameValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ProductService implements ChangeProductPriceUseCase {
+public class ProductService implements CreateProductUseCase, ChangeProductPriceUseCase {
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
     private final PurgomalumClient purgomalumClient;
@@ -37,14 +39,16 @@ public class ProductService implements ChangeProductPriceUseCase {
         this.eventPublisher = eventPublisher;
     }
 
+    @Override
     @Transactional
-    public Product create(final Product request) {
+    public Product create(final CreateProductRequest request) {
         ProductName productName = ProductName.of(request.getName(), getProductNamePurgomalumValidator());
         ProductPrice productPrice = ProductPrice.of(request.getPrice());
         final Product product = new Product(UUID.randomUUID(), productName, productPrice);
         return saveProductPort.save(product);
     }
 
+    @Override
     @Transactional
     public Product changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final Product product = loadProductPort.findById(productId)
