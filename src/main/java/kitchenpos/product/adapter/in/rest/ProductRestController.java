@@ -1,5 +1,6 @@
 package kitchenpos.product.adapter.in.rest;
 
+import kitchenpos.product.application.port.in.ChangeProductPriceUseCase;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
 import kitchenpos.product.domain.model.Product;
@@ -20,9 +21,14 @@ import java.util.UUID;
 @RestController
 public class ProductRestController {
     private final ProductService productService;
+    private final ChangeProductPriceUseCase changeProductPriceUseCase;
 
-    public ProductRestController(final ProductService productService) {
+    public ProductRestController(
+            final ProductService productService,
+            final ChangeProductPriceUseCase changeProductPriceUseCase
+    ) {
         this.productService = productService;
+        this.changeProductPriceUseCase = changeProductPriceUseCase;
     }
 
     @PostMapping
@@ -34,7 +40,7 @@ public class ProductRestController {
 
     @PutMapping("/{productId}/price")
     public ResponseEntity<Product> changePrice(@PathVariable("productId") final UUID productId, @RequestBody final ChangeProductPriceRequest request) {
-        return ResponseEntity.ok(productService.changePrice(productId, request));
+        return ResponseEntity.ok(changeProductPriceUseCase.changePrice(productId, request));
     }
 
     @GetMapping

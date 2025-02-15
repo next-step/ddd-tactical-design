@@ -1,6 +1,7 @@
 package kitchenpos.product.application.service;
 
 import kitchenpos.product.application.exception.ProductNotFoundException;
+import kitchenpos.product.application.port.in.ChangeProductPriceUseCase;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ProductService {
+public class ProductService implements ChangeProductPriceUseCase {
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
     private final PurgomalumClient purgomalumClient;
