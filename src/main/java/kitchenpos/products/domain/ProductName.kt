@@ -1,14 +1,14 @@
 package kitchenpos.products.domain
 
-import kitchenpos.profanity.ProfanityCheckClient
+import kitchenpos.products.infra.checkBadWordClient
 
 class ProductName private constructor(
     val name: String,
 ) {
     companion object Factory {
-        fun create(value: String, profanityCheckClient: ProfanityCheckClient): ProductName {
+        fun create(value: String, checkBadWordClient: checkBadWordClient): ProductName {
             validateNull(value)
-            validateProfanity(value, profanityCheckClient)
+            validateProfanity(value, checkBadWordClient)
             return ProductName(value)
         }
 
@@ -18,7 +18,7 @@ class ProductName private constructor(
             }
         }
 
-        private fun validateProfanity(value: String, profanityCheckClient: ProfanityCheckClient) {
+        private fun validateProfanity(value: String, profanityCheckClient: checkBadWordClient) {
             if (profanityCheckClient.containsProfanity(value)) {
                 throw IllegalArgumentException("Profanity is not allowed: $value")
             }

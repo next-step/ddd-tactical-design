@@ -3,9 +3,9 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.ProductRecord;
+import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.infra.checkBadWordClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,29 +19,29 @@ import java.util.UUID;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final checkBadWordClient checkBadWordClient;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final checkBadWordClient checkBadWordClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.checkBadWordClient = checkBadWordClient;
     }
 
     @Transactional
-    public ProductRecord create(final ProductRecord request) {
+    public Product create(final Product request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
         final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
+        if (Objects.isNull(name) || checkBadWordClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final ProductRecord product = new ProductRecord();
+        final Product product = new Product();
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(price);
@@ -49,12 +49,12 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductRecord changePrice(final UUID productId, final ProductRecord request) {
+    public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final ProductRecord product = productRepository.findById(productId)
+        final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
@@ -75,7 +75,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductRecord> findAll() {
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
 }
