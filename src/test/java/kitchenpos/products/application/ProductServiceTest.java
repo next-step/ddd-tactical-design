@@ -57,7 +57,6 @@ class ProductServiceTest {
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = "-1000")
-    @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
         final CreateProductRequest expected = createProductRequest("후라이드", price);
@@ -67,7 +66,6 @@ class ProductServiceTest {
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
     @ParameterizedTest
     void create(final String name) {
         final CreateProductRequest expected = createProductRequest(name, 16_000L);
@@ -86,7 +84,6 @@ class ProductServiceTest {
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
     @ValueSource(strings = "-1000")
-    @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();

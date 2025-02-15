@@ -16,6 +16,14 @@ data class Product(
         return price.price
     }
 
+    fun changePrice(price: BigDecimal): Product {
+        return Product(
+            id,
+            name,
+            ProductPrice.create(price)
+        )
+    }
+
     companion object {
         fun create(name: String, price: BigDecimal): Product {
             return Product(

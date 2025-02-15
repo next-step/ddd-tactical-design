@@ -1,6 +1,7 @@
 package kitchenpos.products.application;
 
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductName;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -50,38 +52,28 @@ public class ProductService {
 
     @Transactional
     public ProductResponse changePrice(final UUID productId, final ChangePriceRequest request) {
-        final Product oldProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("Product not found"));
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new);
+        final Product updatedProduct = productRepository.save(product.changePrice(request.getPrice()));
 
-        // Create new Product instance with updated price
-        final Product updatedProduct = new Product(
-                oldProduct.getId(),
-                ProductName.Companion.create(oldProduct.getName()),
-                ProductPrice.Companion.create(request.getPrice())
-        );
-
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        // TODO, 우선 Product 도메인만 수정
+        final List<Menu> menus = menuRepository.findAllByProductId(updatedProduct.getId());
         for (final Menu menu : menus) {
-            validateAndUpdateMenuDisplay(menu);
+            BigDecimal sum = BigDecimal.ZERO;
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                sum = sum.add(
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                );
+            }
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
         }
-
-        final Product product = productRepository.save(updatedProduct);
-        return ProductResponse.of(product);
+        return ProductResponse.of(productRepository.save(updatedProduct));
     }
 
-    private void validateAndUpdateMenuDisplay(Menu menu) {
-        BigDecimal sum = calculateMenuTotalPrice(menu);
-        if (menu.getPrice().compareTo(sum) > 0) {
-            menu.setDisplayed(false);
-        }
-    }
-
-    private BigDecimal calculateMenuTotalPrice(Menu menu) {
-        return menu.getMenuProducts().stream()
-                .map(menuProduct -> menuProduct.getProduct().getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
