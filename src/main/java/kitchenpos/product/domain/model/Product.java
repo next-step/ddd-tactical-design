@@ -1,9 +1,11 @@
 package kitchenpos.product.domain.model;
 
+import kitchenpos.shared.event.ProductPriceChangedEvent;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Product {
+public class Product extends AggregateRoot {
     private final UUID id;
     private final ProductName name;
     private ProductPrice price;
@@ -33,6 +35,8 @@ public class Product {
     }
 
     public void changePrice(final BigDecimal price) {
+        final BigDecimal oldPrice = this.price.value();
         this.price = ProductPrice.of(price);
+        registerEvent(new ProductPriceChangedEvent(id, oldPrice, price));
     }
 }

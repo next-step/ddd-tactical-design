@@ -1,5 +1,6 @@
 package kitchenpos.product.adapter.in.rest;
 
+import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
 import kitchenpos.product.domain.model.Product;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class ProductRestController {
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<Product> changePrice(@PathVariable final UUID productId, @RequestBody final Product request) {
+    public ResponseEntity<Product> changePrice(@PathVariable("productId") final UUID productId, @RequestBody final ChangeProductPriceRequest request) {
         return ResponseEntity.ok(productService.changePrice(productId, request));
     }
 

@@ -1,42 +1,39 @@
 package kitchenpos.product.application.service;
 
-import kitchenpos.menu.application.port.out.MenuRepository;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.product.application.exception.ProductNotFoundException;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
+import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.domain.exception.ProductNameValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductNameValidator;
 import kitchenpos.product.domain.model.ProductPrice;
+import kitchenpos.shared.event.DomainEvent;
 import kitchenpos.shared.port.out.PurgomalumClient;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class ProductService {
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
-    private final MenuRepository menuRepository;
     private final PurgomalumClient purgomalumClient;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(
             final LoadProductPort loadProductPort,
             final SaveProductPort saveProductPort,
-            final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient, ApplicationEventPublisher eventPublisher
     ) {
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -48,26 +45,13 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public Product changePrice(final UUID productId, final ChangeProductPriceRequest request) {
         final Product product = loadProductPort.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(ProductNotFoundException::new);
         product.changePrice(request.getPrice());
-        saveProductPort.save(product);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
-        return product;
+        Product savedProduct = saveProductPort.save(product);
+        publishEvent(product);
+        return savedProduct;
     }
 
     @Transactional(readOnly = true)
@@ -81,5 +65,11 @@ public class ProductService {
                 throw new ProductNameValidationException("상품명에 비속어가 포함되어 있습니다.");
             }
         };
+    }
+
+    private void publishEvent(Product product) {
+        List<DomainEvent> domainEvents = product.getDomainEvents();
+        domainEvents.forEach(eventPublisher::publishEvent);
+        product.clearDomainEvents();
     }
 }

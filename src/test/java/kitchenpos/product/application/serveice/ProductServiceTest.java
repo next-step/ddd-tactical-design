@@ -6,10 +6,10 @@ import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
+import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
 import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
@@ -22,7 +22,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
@@ -145,6 +144,7 @@ public class ProductServiceTest {
 
             List<MenuProduct> menuProducts = List.of(createMenuProduct(product, 1));
             Menu menu = createMenu(후라이드치킨_MENU_UUID, 후라이드_치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, menuGroup, menuProducts);
+            menu.setDisplayed(true);
             menuRepository.save(menu);
         }
 
@@ -156,10 +156,9 @@ public class ProductServiceTest {
             Product product = loadProductPort.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(21000);
-            product.changePrice(newPrice);
 
             // when
-            Product changedProduct = productService.changePrice(product.getId(), product);
+            Product changedProduct = productService.changePrice(product.getId(), new ChangeProductPriceRequest(newPrice));
 
             // then
             assertThat(changedProduct.getPrice()).isEqualTo(newPrice);
@@ -189,10 +188,9 @@ public class ProductServiceTest {
             Product product = loadProductPort.findById(후라이드치킨_PRODUCT_UUID)
                     .orElseThrow(NoSuchElementException::new);
             BigDecimal newPrice = new BigDecimal(15000);
-            product.changePrice(newPrice);
 
             // when
-            productService.changePrice(product.getId(), product);
+            productService.changePrice(product.getId(), new ChangeProductPriceRequest(newPrice));
 
             // then
             Menu menu = menuRepository.findById(후라이드치킨_MENU_UUID)
