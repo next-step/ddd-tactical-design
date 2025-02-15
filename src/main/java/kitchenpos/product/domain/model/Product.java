@@ -14,6 +14,12 @@ public class Product {
         this.price = ProductPrice.of(price);
     }
 
+    public Product(final UUID id, final ProductName name, final ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
     public UUID getId() {
         return id;
     }
