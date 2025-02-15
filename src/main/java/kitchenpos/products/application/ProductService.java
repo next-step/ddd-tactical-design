@@ -7,6 +7,7 @@ import kitchenpos.products.domain.ProductName;
 import kitchenpos.products.domain.ProductPrice;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.CheckBadWordClient;
+import kitchenpos.products.ui.request.ChangePriceRequest;
 import kitchenpos.products.ui.request.CreateProductRequest;
 import kitchenpos.products.ui.response.ProductResponse;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -49,12 +49,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal newPrice = request.getPrice();
-        if (Objects.isNull(newPrice) || newPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Price must be greater than or equal to zero");
-        }
-
+    public ProductResponse changePrice(final UUID productId, final ChangePriceRequest request) {
         final Product oldProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product not found"));
 
@@ -62,7 +57,7 @@ public class ProductService {
         final Product updatedProduct = new Product(
                 oldProduct.getId(),
                 ProductName.Companion.create(oldProduct.getName()),
-                ProductPrice.Companion.create(newPrice)
+                ProductPrice.Companion.create(request.getPrice())
         );
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
@@ -70,7 +65,8 @@ public class ProductService {
             validateAndUpdateMenuDisplay(menu);
         }
 
-        return productRepository.save(updatedProduct);
+        final Product product = productRepository.save(updatedProduct);
+        return ProductResponse.of(product);
     }
 
     private void validateAndUpdateMenuDisplay(Menu menu) {

@@ -2,11 +2,13 @@ package kitchenpos.products.application;
 
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.CheckBadWordClient;
+import kitchenpos.products.ui.request.ChangePriceRequest;
 import kitchenpos.products.ui.request.CreateProductRequest;
 import kitchenpos.products.ui.response.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +49,9 @@ class ProductServiceTest {
         final ProductResponse actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
         );
     }
 
@@ -60,7 +62,7 @@ class ProductServiceTest {
     void create(final BigDecimal price) {
         final CreateProductRequest expected = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
@@ -70,15 +72,15 @@ class ProductServiceTest {
     void create(final String name) {
         final CreateProductRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ProductRecord expected = changePriceRequest(15_000L);
-        final ProductRecord actual = productService.changePrice(productId, expected);
+        final ChangePriceRequest expected = changePriceRequest(15_000L);
+        final ProductResponse actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
@@ -88,16 +90,18 @@ class ProductServiceTest {
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
         final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final ProductRecord expected = changePriceRequest(price);
+        final ChangePriceRequest expected = changePriceRequest(price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
+        // TODO, Change to use Product instead of ProductRecord
+        final MenuProduct menuProduct = menuProduct(new ProductRecord(product.getId(), product.getName(), product.getPrice()), 2L);
+        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
@@ -119,13 +123,11 @@ class ProductServiceTest {
         return new CreateProductRequest(name, price);
     }
 
-    private ProductRecord changePriceRequest(final long price) {
+    private ChangePriceRequest changePriceRequest(final long price) {
         return changePriceRequest(BigDecimal.valueOf(price));
     }
 
-    private ProductRecord changePriceRequest(final BigDecimal price) {
-        final ProductRecord product = new ProductRecord();
-        product.setPrice(price);
-        return product;
+    private ChangePriceRequest changePriceRequest(final BigDecimal price) {
+        return new ChangePriceRequest(price);
     }
 }
