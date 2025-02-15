@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRecord;
 
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ public class MenuProduct {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
     )
-    private Product product;
+    private ProductRecord product;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -47,11 +47,11 @@ public class MenuProduct {
         this.seq = seq;
     }
 
-    public Product getProduct() {
+    public ProductRecord getProduct() {
         return product;
     }
 
-    public void setProduct(final Product product) {
+    public void setProduct(final ProductRecord product) {
         this.product = product;
     }
 

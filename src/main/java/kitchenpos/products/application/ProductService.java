@@ -3,7 +3,7 @@ package kitchenpos.products.application;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
+    public ProductRecord create(final ProductRecord request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -41,7 +41,7 @@ public class ProductService {
         if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
-        final Product product = new Product();
+        final ProductRecord product = new ProductRecord();
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(price);
@@ -49,12 +49,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public ProductRecord changePrice(final UUID productId, final ProductRecord request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final Product product = productRepository.findById(productId)
+        final ProductRecord product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
         product.setPrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
@@ -75,7 +75,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
+    public List<ProductRecord> findAll() {
         return productRepository.findAll();
     }
 }

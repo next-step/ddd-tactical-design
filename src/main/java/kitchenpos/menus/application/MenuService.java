@@ -5,7 +5,7 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productRepository.findAllByIdIn(
+        final List<ProductRecord> products = productRepository.findAllByIdIn(
             menuProductRequests.stream()
                 .map(MenuProduct::getProductId)
                 .toList()
@@ -64,7 +64,7 @@ public class MenuService {
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
+            final ProductRecord product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
