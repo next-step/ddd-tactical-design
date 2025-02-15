@@ -9,6 +9,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.domain.Product;
+import kitchenpos.products.domain.ProductRecord;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -52,12 +53,12 @@ public class Fixtures {
     public static MenuProduct menuProduct() {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(product());
+        menuProduct.setProduct(productRecord());
         menuProduct.setQuantity(2L);
         return menuProduct;
     }
 
-    public static MenuProduct menuProduct(final Product product, final long quantity) {
+    public static MenuProduct menuProduct(final ProductRecord product, final long quantity) {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(new Random().nextLong());
         menuProduct.setProduct(product);
@@ -121,11 +122,13 @@ public class Fixtures {
         return product("후라이드", 16_000L);
     }
 
+    public static ProductRecord productRecord() {
+        return new ProductRecord(UUID.randomUUID(), "후라이드", BigDecimal.valueOf(16_000L));
+    }
+
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(BigDecimal.valueOf(price));
-        return product;
+        return Product.Companion.create(
+                name, BigDecimal.valueOf(price)
+        );
     }
 }
