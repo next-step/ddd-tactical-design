@@ -1,9 +1,10 @@
 package kitchenpos.products.application;
 
+import kitchenpos.menus.application.InMemoryMenuGroupRepository;
 import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
@@ -31,15 +31,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
-    private MenuRepository menuRepository;
     private ProductService productService;
+    private InMemoryMenuRepository menuRepository;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
-        menuRepository = new InMemoryMenuRepository();
         CheckBadWordClient checkBadWordClient = new FakeCheckBadWordClient();
-        productService = new ProductService(productRepository, menuRepository, checkBadWordClient);
+        menuRepository = new InMemoryMenuRepository();
+        MenuService menuService = new MenuService(
+                menuRepository,
+                new InMemoryMenuGroupRepository(),
+                productRepository,
+                checkBadWordClient
+        );
+        productService = new ProductService(productRepository, checkBadWordClient, menuService);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

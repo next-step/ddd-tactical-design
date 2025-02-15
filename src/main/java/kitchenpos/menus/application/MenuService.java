@@ -152,4 +152,22 @@ public class MenuService {
     public List<Menu> findAll() {
         return menuRepository.findAll();
     }
+
+    @Transactional
+    public void updateMenuDisplay(Product product) {
+        final List<Menu> menus = menuRepository.findAllByProductId(product.getId());
+        for (final Menu menu : menus) {
+            BigDecimal sum = BigDecimal.ZERO;
+            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
+                sum = sum.add(
+                        menuProduct.getProduct()
+                                .getPrice()
+                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                );
+            }
+            if (menu.getPrice().compareTo(sum) > 0) {
+                menu.setDisplayed(false);
+            }
+        }
+    }
 }

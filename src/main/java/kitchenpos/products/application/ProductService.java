@@ -1,5 +1,6 @@
 package kitchenpos.products.application;
 
+import kitchenpos.menus.application.MenuService;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
@@ -23,17 +24,17 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final CheckBadWordClient checkBadWordClient;
+    private final MenuService menuService;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final CheckBadWordClient checkBadWordClient
+            final CheckBadWordClient checkBadWordClient,
+            final MenuService menuService
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.checkBadWordClient = checkBadWordClient;
+        this.menuService = menuService;
     }
 
     @Transactional
@@ -55,22 +56,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         final Product updatedProduct = productRepository.save(product.changePrice(request.getPrice()));
-
-        // TODO, 우선 Product 도메인만 수정
-        final List<Menu> menus = menuRepository.findAllByProductId(updatedProduct.getId());
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        menuService.updateMenuDisplay(updatedProduct);
         return ProductResponse.of(productRepository.save(updatedProduct));
     }
 
