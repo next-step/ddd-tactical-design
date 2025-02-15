@@ -3,18 +3,22 @@ package kitchenpos.products.tobe.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Id;
+import kitchenpos.products.tobe.persistence.ProductEntity;
+
 import java.util.UUID;
 
 public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    private final UUID id;
 
-    @Embedded
-    private Name name;
+    private final Name name;
 
-    @Embedded
-    private Price price;
+    private final Price price;
+
+    public Product(UUID id, Name name, Price price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
     public UUID getId() {
         return id;

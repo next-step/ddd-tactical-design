@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 @Embeddable
 public class Price {
-
     private final BigDecimal price;
 
     public Price(BigDecimal price) {
