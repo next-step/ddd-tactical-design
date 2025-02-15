@@ -43,6 +43,7 @@ public class ProductRestController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+        List<ProductResponse> products = productService.findAll();
+        return ResponseEntity.ok(products);
     }
 }
