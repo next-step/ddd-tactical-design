@@ -7,7 +7,7 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.checkBadWordClient;
+import kitchenpos.products.infra.CheckBadWordClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +23,13 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final checkBadWordClient checkBadWordClient;
+    private final CheckBadWordClient checkBadWordClient;
 
     public MenuService(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final checkBadWordClient checkBadWordClient
+        final CheckBadWordClient checkBadWordClient
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;

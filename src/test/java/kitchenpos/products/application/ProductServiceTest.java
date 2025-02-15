@@ -3,9 +3,12 @@ package kitchenpos.products.application;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRecord;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.checkBadWordClient;
+import kitchenpos.products.infra.CheckBadWordClient;
+import kitchenpos.products.ui.request.CreateProductRequest;
+import kitchenpos.products.ui.response.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,22 +30,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class ProductServiceTest {
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private checkBadWordClient checkBadWordClient;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        checkBadWordClient = new FakeCheckBadWordClient();
+        CheckBadWordClient checkBadWordClient = new FakeCheckBadWordClient();
         productService = new ProductService(productRepository, menuRepository, checkBadWordClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final ProductRecord expected = createProductRequest("후라이드", 16_000L);
-        final ProductRecord actual = productService.create(expected);
+        final CreateProductRequest expected = createProductRequest("후라이드", 16_000L);
+        final ProductResponse actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -56,7 +58,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final ProductRecord expected = createProductRequest("후라이드", price);
+        final CreateProductRequest expected = createProductRequest("후라이드", price);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -66,7 +68,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final ProductRecord expected = createProductRequest(name, 16_000L);
+        final CreateProductRequest expected = createProductRequest(name, 16_000L);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -94,7 +96,7 @@ class ProductServiceTest {
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
-        final ProductRecord product = productRepository.save(product("후라이드", 16_000L));
+        final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
         productService.changePrice(product.getId(), changePriceRequest(8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
@@ -105,19 +107,16 @@ class ProductServiceTest {
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));
         productRepository.save(product("양념치킨", 16_000L));
-        final List<ProductRecord> actual = productService.findAll();
+        final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 
-    private ProductRecord createProductRequest(final String name, final long price) {
+    private CreateProductRequest createProductRequest(final String name, final long price) {
         return createProductRequest(name, BigDecimal.valueOf(price));
     }
 
-    private ProductRecord createProductRequest(final String name, final BigDecimal price) {
-        final ProductRecord product = new ProductRecord();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
+    private CreateProductRequest createProductRequest(final String name, final BigDecimal price) {
+        return new CreateProductRequest(name, price);
     }
 
     private ProductRecord changePriceRequest(final long price) {

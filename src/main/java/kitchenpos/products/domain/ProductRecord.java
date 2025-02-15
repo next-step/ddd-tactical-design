@@ -24,27 +24,21 @@ public class ProductRecord {
     public ProductRecord() {
     }
 
-    public UUID getId() {
-        return id;
+    public ProductRecord(UUID id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
     public BigDecimal getPrice() {
         return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }

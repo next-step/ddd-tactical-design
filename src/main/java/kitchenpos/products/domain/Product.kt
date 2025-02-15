@@ -1,9 +1,28 @@
 package kitchenpos.products.domain
 
+import java.math.BigDecimal
 import java.util.*
 
 data class Product(
-    private val id: UUID,
+    val id: UUID,
     private val name: ProductName,
     private val price: ProductPrice,
-)
+) {
+    fun getName(): String {
+        return name.name
+    }
+
+    fun getPrice(): BigDecimal {
+        return price.price
+    }
+
+    companion object {
+        fun create(name: String, price: BigDecimal): Product {
+            return Product(
+                UUID.randomUUID(),
+                ProductName.create(name),
+                ProductPrice.create(price)
+            )
+        }
+    }
+}

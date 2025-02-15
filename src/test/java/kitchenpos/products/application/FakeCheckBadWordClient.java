@@ -1,11 +1,11 @@
 package kitchenpos.products.application;
 
-import kitchenpos.products.infra.checkBadWordClient;
+import kitchenpos.products.infra.CheckBadWordClient;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FakeCheckBadWordClient implements checkBadWordClient {
+public class FakeCheckBadWordClient implements CheckBadWordClient {
     private static final List<String> profanities;
 
     static {
@@ -15,6 +15,6 @@ public class FakeCheckBadWordClient implements checkBadWordClient {
     @Override
     public boolean containsProfanity(final String text) {
         return profanities.stream()
-            .anyMatch(profanity -> text.contains(profanity));
+            .anyMatch(text::contains);
     }
 }

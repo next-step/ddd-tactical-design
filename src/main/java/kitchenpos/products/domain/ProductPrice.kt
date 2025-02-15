@@ -5,7 +5,7 @@ import java.math.BigDecimal
 class ProductPrice private constructor(
     val price: BigDecimal
 ) {
-    companion object Factory {
+    companion object {
         fun create(value: BigDecimal): ProductPrice {
             validateNull(value)
             validatePositive(value)

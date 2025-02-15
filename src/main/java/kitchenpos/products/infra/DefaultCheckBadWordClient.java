@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Component
-public class DefaultCheckBadWordClient implements checkBadWordClient {
+public class DefaultCheckBadWordClient implements CheckBadWordClient {
     private final RestTemplate restTemplate;
 
     public DefaultCheckBadWordClient(final RestTemplateBuilder restTemplateBuilder) {

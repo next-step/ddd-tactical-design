@@ -1,5 +1,5 @@
 package kitchenpos.products.infra;
 
-public interface checkBadWordClient {
+public interface CheckBadWordClient {
     boolean containsProfanity(String text);
 }
