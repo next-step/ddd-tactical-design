@@ -1,50 +1,57 @@
 package kitchenpos.product.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import kitchenpos.shared.event.ProductPriceChangedEvent;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "product")
-@Entity
-public class Product {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+public class Product extends AggregateRoot {
+    private final UUID id;
+    private final ProductName name;
+    private ProductPrice price;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    public Product(final UUID id, final ProductName name, final ProductPrice price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    public void changePrice(final BigDecimal price) {
+        final BigDecimal oldPrice = this.price.value();
+        this.price = ProductPrice.of(price);
+        registerEvent(new ProductPriceChangedEvent(id, oldPrice, price));
+    }
 
-    public Product() {
+    public boolean isSameName(String name) {
+        return this.name.isSameName(name);
+    }
+
+    public boolean isSamePrice(BigDecimal price) {
+        return this.price.isSamePrice(price);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.value();
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.value();
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

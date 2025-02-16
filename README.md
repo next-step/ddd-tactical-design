@@ -295,6 +295,7 @@ graph LR
 * `Menu`는 `Display Menu`로 변경할 수 있다
 * `Menu`는 `Hide Menu`로 변경할 수 있다
 * `Menu List`를 조회할 수 있다
+* `Product Price`가 변경되어 `Menu Price`가 `Total Product Price` 보다 크게되면 `Menu`는 `Hide Menu`가 된다.
 
 ### Eet In Order : 매장 식사 주문 관리
 

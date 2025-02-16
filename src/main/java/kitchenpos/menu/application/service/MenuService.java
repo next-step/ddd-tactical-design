@@ -1,39 +1,37 @@
 package kitchenpos.menu.application.service;
 
+import kitchenpos.menu.application.port.out.MenuGroupRepository;
+import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
+import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.application.port.out.ProductRepository;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MenuService {
+    private final LoadProductPort loadProductPort;
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
-        final MenuRepository menuRepository,
-        final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
-        final PurgomalumClient purgomalumClient
+            final LoadProductPort loadProductPort,
+            final MenuRepository menuRepository,
+            final MenuGroupRepository menuGroupRepository,
+            final PurgomalumClient purgomalumClient
     ) {
+        this.loadProductPort = loadProductPort;
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -49,7 +47,7 @@ public class MenuService {
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Product> products = productRepository.findAllByIdIn(
+        final List<Product> products = loadProductPort.findAllByIdIn(
             menuProductRequests.stream()
                 .map(MenuProduct::getProductId)
                 .toList()
@@ -64,14 +62,14 @@ public class MenuService {
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
+            final Product product = loadProductPort.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
+            menuProduct.setProduct(ProductEntity.of(product));
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
         }

@@ -1,264 +1,405 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.shared.adapter.out.client.FakePurgomalumClient;
-import kitchenpos.menu.adpater.out.persistance.InMemoryMenuGroupRepository;
-import kitchenpos.menu.adpater.out.persistance.InMemoryMenuRepository;
-import kitchenpos.product.adapter.out.persistance.InMemoryProductRepository;
+import kitchenpos.ClientTestConfiguration;
 import kitchenpos.menu.application.port.out.MenuGroupRepository;
 import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.application.port.out.ProductRepository;
+import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
+import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.shared.port.out.PurgomalumClient;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.function.Executable;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestConstructor;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
-import static kitchenpos.Fixtures.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MenuServiceTest {
-    private MenuRepository menuRepository;
-    private MenuGroupRepository menuGroupRepository;
-    private ProductRepository productRepository;
-    private PurgomalumClient purgomalumClient;
-    private MenuService menuService;
-    private UUID menuGroupId;
-    private Product product;
+@SpringBootTest
+@Import(ClientTestConfiguration.class)
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+public class MenuServiceTest {
+    private final MenuService menuService;
+    private final SaveProductPort saveProductPort;
+    private final MenuGroupRepository menuGroupRepository;
+    private final MenuRepository menuRepository;
+    private final PurgomalumClient mockPurgomalumClient;
 
-    @BeforeEach
-    void setUp() {
-        menuRepository = new InMemoryMenuRepository();
-        menuGroupRepository = new InMemoryMenuGroupRepository();
-        productRepository = new InMemoryProductRepository();
-        purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
-        menuGroupId = menuGroupRepository.save(menuGroup()).getId();
-        product = productRepository.save(product("후라이드", 16_000L));
+    public MenuServiceTest(MenuService menuService, SaveProductPort saveProductPort, MenuGroupRepository menuGroupRepository, MenuRepository menuRepository, PurgomalumClient mockPurgomalumClient) {
+        this.menuService = menuService;
+        this.saveProductPort = saveProductPort;
+        this.menuGroupRepository = menuGroupRepository;
+        this.menuRepository = menuRepository;
+        this.mockPurgomalumClient = mockPurgomalumClient;
     }
 
-    @DisplayName("1개 이상의 등록된 상품으로 메뉴를 등록할 수 있다.")
-    @Test
-    void create() {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        final Menu actual = menuService.create(expected);
-        assertThat(actual).isNotNull();
-        assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
-            () -> assertThat(actual.getMenuGroup().getId()).isEqualTo(expected.getMenuGroupId()),
-            () -> assertThat(actual.isDisplayed()).isEqualTo(expected.isDisplayed()),
-            () -> assertThat(actual.getMenuProducts()).hasSize(1)
-        );
+    @DisplayName("메뉴 등록하기")
+    @Nested
+    class MenuRegisterTest {
+
+        private static final UUID 후라이드치킨_PRODUCT_UUID = UUID.randomUUID();
+        private static final UUID 치킨류_MENU_GROUP_UUID = UUID.randomUUID();
+        private static final String 후라이드치킨_PRODUCT_NAME = "후라이드치킨";
+        private static final String 치킨류_MENU_GROUP_NAME = "치킨류";
+        private static final BigDecimal 후라이드치킨_DEFAULT_PRICE = new BigDecimal(20000);
+
+        @BeforeEach
+        void setup() {
+            Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
+            saveProductPort.save(product);
+
+            MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+            menuGroupRepository.save(menuGroup);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴를 정상적으로 등록한다")
+        @Test
+        void create_menu_successfully() {
+            // given
+            List<MenuProduct> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, 2));
+            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, menuProducts);
+            request.setDisplayed(true);
+
+            // when
+            Menu menu = menuService.create(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(menu.getId()).isNotNull(),
+                    () -> assertThat(menu.getName()).isEqualTo(request.getName()),
+                    () -> assertThat(menu.getPrice()).isEqualTo(request.getPrice()),
+                    () -> assertThat(menu.isDisplayed()).isEqualTo(request.isDisplayed()),
+                    () -> assertThat(menu.getMenuGroup().getId()).isEqualTo(request.getMenuGroupId()),
+                    () -> assertThat(menu.getMenuProducts()).hasSize(menuProducts.size())
+            );
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("이름에는 비속어와 같이 부적절한 단어는 사용할 수 없다")
+        @Test
+        void registration_menu_with_profanity() {
+            // given
+            String menuName = "holy shit 후라이드치킨";
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 2);
+            Menu request = createMenu(menuName, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            Mockito.when(mockPurgomalumClient.containsProfanity(menuName)).thenReturn(Boolean.TRUE);
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("이름은 반드시 입력해야 합니다")
+        @Test
+        void name_must_be_input() {
+            // given
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 2);
+            Menu request = createMenu(null, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴는 적어도 하나 이상의 상품을 포함해야 한다")
+        @Test
+        void create_menu_without_products() {
+            // given
+            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, Collections.emptyList());
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("상품의 갯수는 0개 이상 입력해야 한다")
+        @Test
+        void product_quantity_must_be_positive() {
+            // given
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, -1);
+            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴 가격은 0 이상이어야 한다")
+        @Test
+        void create_menu_with_invalid_price() {
+            // given
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
+            Menu request = createMenu("후라이드치킨", -100, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴 가격은 상품 가격 총합을 초과할 수 없다")
+        @Test
+        void create_menu_with_price_exceeding_product_total() {
+            // given
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
+            Menu request = createMenu("후라이드치킨", 50000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴는 하나의 메뉴그룹에 속한다")
+        @Test
+        void create_menu_without_menu_group() {
+            // given
+            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
+            Menu request = createMenu("후라이드치킨", 16000, UUID.randomUUID(), List.of(menuProduct));
+
+            // when
+            Executable executable = () -> menuService.create(request);
+
+            // then
+            assertThrows(NoSuchElementException.class, executable);
+        }
     }
 
-    @DisplayName("상품이 없으면 등록할 수 없다.")
-    @MethodSource("menuProducts")
-    @ParameterizedTest
-    void create(final List<MenuProduct> menuProducts) {
-        final Menu expected = createMenuRequest("후라이드+후라이드", 19_000L, menuGroupId, true, menuProducts);
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+    @DisplayName("메뉴 가격 변경하기")
+    @Nested
+    class ChangeMenuPriceTest {
+
+        private static final UUID MENU_UUID = UUID.randomUUID();
+        private static final UUID PRODUCT_UUID = UUID.randomUUID();
+        private static final UUID MENU_GROUP_UUID = UUID.randomUUID();
+
+        @BeforeEach
+        void setup() {
+            Product product = createProduct(PRODUCT_UUID, "양념치킨", new BigDecimal(20000));
+            saveProductPort.save(product);
+
+            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupRepository.save(menuGroup);
+
+            List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
+            Menu menu = createMenu(MENU_UUID, "양념치킨", new BigDecimal(20000), MENU_GROUP_UUID, menuGroup, menuProducts);
+            menuRepository.save(menu);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴 가격을 변경한다")
+        @Test
+        void change_menu_price() {
+            // given
+            Menu request = new Menu();
+            request.setPrice(new BigDecimal(18000));
+
+            // when
+            Menu updatedMenu = menuService.changePrice(MENU_UUID, request);
+
+            // then
+            assertThat(updatedMenu.getPrice()).isEqualTo(request.getPrice());
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("가격은 0원 이상이어야 한다")
+        @Test
+        void price_must_be_positive() {
+            // given
+            Menu request = new Menu();
+            request.setPrice(new BigDecimal(-1000));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴의 가격은 등록된 상품의 총합보다 높을 수 없다")
+        @Test
+        void price_must_be_lower_than_sum_of_products() {
+            // given
+            Menu request = new Menu();
+            request.setPrice(new BigDecimal(30000));
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
+
+            // then
+            assertThatIllegalArgumentException()
+                    .isThrownBy(throwingCallable);
+        }
     }
 
-    private static List<Arguments> menuProducts() {
-        return Arrays.asList(
-            null,
-            Arguments.of(Collections.emptyList()),
-            Arguments.of(Arrays.asList(createMenuProductRequest(INVALID_ID, 2L)))
-        );
+    @DisplayName("메뉴 전시 및 내리기")
+    @Nested
+    class DisplayAndHideMenuTest {
+
+        private static final UUID MENU_UUID = UUID.randomUUID();
+        private static final UUID PRODUCT_UUID = UUID.randomUUID();
+        private static final UUID MENU_GROUP_UUID = UUID.randomUUID();
+
+        @BeforeEach
+        void setup() {
+            Product product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
+            saveProductPort.save(product);
+
+            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupRepository.save(menuGroup);
+
+            List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
+            Menu menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
+            menuRepository.save(menu);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴를 전시한다")
+        @Test
+        void display_menu() {
+            // when
+            Menu displayedMenu = menuService.display(MENU_UUID);
+
+            // then
+            assertThat(displayedMenu.isDisplayed()).isTrue();
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("전시될 메뉴의 가격은 등록된 상품의 총합보다 높을 수 없다")
+        @Test
+        void price_must_be_lower_than_sum_of_products() {
+            // given
+            Menu menu = menuRepository.findById(MENU_UUID)
+                    .orElseThrow(NoSuchElementException::new);
+            menu.setPrice(new BigDecimal(60000));
+            menuRepository.save(menu);
+
+            // when
+            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.display(MENU_UUID);
+
+            // then
+            assertThatIllegalStateException()
+                    .isThrownBy(throwingCallable);
+        }
+
+        @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        @DisplayName("메뉴를 내린다")
+        @Test
+        void hide_menu() {
+            // when
+            Menu hiddenMenu = menuService.hide(MENU_UUID);
+
+            // then
+            assertThat(hiddenMenu.isDisplayed()).isFalse();
+        }
     }
 
-    @DisplayName("메뉴에 속한 상품의 수량은 0개 이상이어야 한다.")
-    @Test
-    void createNegativeQuantity() {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), -1L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+    @DisplayName("메뉴 조회하기")
+    @Nested
+    class FindAllMenusTest {
+        private static final int TOTAL_MENU_COUNT = 6;
+
+        @SqlGroup({
+                @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+                @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        })
+        @DisplayName("모든 메뉴를 조회한다")
+        @Test
+        void find_all_menus() {
+            // when
+            List<Menu> menus = menuService.findAll();
+
+            // then
+            assertThat(menus).hasSize(TOTAL_MENU_COUNT);
+        }
     }
 
-    @DisplayName("메뉴의 가격이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void create(final BigDecimal price) {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", price, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+    private static Menu createMenu(String name, int price, UUID menuGroupId, List<MenuProduct> menuProducts) {
+        return createMenu(null, name, new BigDecimal(price), menuGroupId, null, menuProducts);
     }
 
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-    @Test
-    void createExpensiveMenu() {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 33_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("메뉴는 특정 메뉴 그룹에 속해야 한다.")
-    @NullSource
-    @ParameterizedTest
-    void create(final UUID menuGroupId) {
-        final Menu expected = createMenuRequest(
-            "후라이드+후라이드", 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @DisplayName("메뉴의 이름이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
-    @ParameterizedTest
-    void create(final String name) {
-        final Menu expected = createMenuRequest(
-            name, 19_000L, menuGroupId, true, createMenuProductRequest(product.getId(), 2L)
-        );
-        assertThatThrownBy(() -> menuService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("메뉴의 가격을 변경할 수 있다.")
-    @Test
-    void changePrice() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(16_000L);
-        final Menu actual = menuService.changePrice(menuId, expected);
-        assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
-    }
-
-    @DisplayName("메뉴의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void changePrice(final BigDecimal price) {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(price);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.")
-    @Test
-    void changePriceToExpensive() {
-        final UUID menuId = menuRepository.save(menu(19_000L, menuProduct(product, 2L))).getId();
-        final Menu expected = changePriceRequest(33_000L);
-        assertThatThrownBy(() -> menuService.changePrice(menuId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("메뉴를 노출할 수 있다.")
-    @Test
-    void display() {
-        final UUID menuId = menuRepository.save(menu(19_000L, false, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.display(menuId);
-        assertThat(actual.isDisplayed()).isTrue();
-    }
-
-    @DisplayName("메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.")
-    @Test
-    void displayExpensiveMenu() {
-        final UUID menuId = menuRepository.save(menu(33_000L, false, menuProduct(product, 2L))).getId();
-        assertThatThrownBy(() -> menuService.display(menuId))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
-    @DisplayName("메뉴를 숨길 수 있다.")
-    @Test
-    void hide() {
-        final UUID menuId = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L))).getId();
-        final Menu actual = menuService.hide(menuId);
-        assertThat(actual.isDisplayed()).isFalse();
-    }
-
-    @DisplayName("메뉴의 목록을 조회할 수 있다.")
-    @Test
-    void findAll() {
-        menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        final List<Menu> actual = menuService.findAll();
-        assertThat(actual).hasSize(1);
-    }
-
-    private Menu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final MenuProduct... menuProducts
-    ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
-    }
-
-    private Menu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final MenuProduct... menuProducts
-    ) {
-        return createMenuRequest(name, price, menuGroupId, displayed, Arrays.asList(menuProducts));
-    }
-
-    private Menu createMenuRequest(
-        final String name,
-        final long price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<MenuProduct> menuProducts
-    ) {
-        return createMenuRequest(name, BigDecimal.valueOf(price), menuGroupId, displayed, menuProducts);
-    }
-
-    private Menu createMenuRequest(
-        final String name,
-        final BigDecimal price,
-        final UUID menuGroupId,
-        final boolean displayed,
-        final List<MenuProduct> menuProducts
-    ) {
-        final Menu menu = new Menu();
+    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+        Menu menu = new Menu();
+        menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
         menu.setMenuGroupId(menuGroupId);
-        menu.setDisplayed(displayed);
+        menu.setMenuGroup(menuGroup);
         menu.setMenuProducts(menuProducts);
         return menu;
     }
 
-    private static MenuProduct createMenuProductRequest(final UUID productId, final long quantity) {
-        final MenuProduct menuProduct = new MenuProduct();
+    private static MenuProduct createMenuProduct(UUID productId, int quantity) {
+        return createMenuProduct(productId, null, quantity);
+    }
+
+    private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
+        MenuProduct menuProduct = new MenuProduct();
         menuProduct.setProductId(productId);
+        if (proudct != null) {
+            menuProduct.setProduct(ProductEntity.of(proudct));
+        }
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
-    private Menu changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
+    private static Product createProduct(UUID id, String name, BigDecimal price) {
+        ProductName productName = ProductName.of(name, nm -> {});
+        ProductPrice productPrice = ProductPrice.of(price);
+        return new Product(id, productName, productPrice);
     }
 
-    private Menu changePriceRequest(final BigDecimal price) {
-        final Menu menu = new Menu();
-        menu.setPrice(price);
-        return menu;
+    private static MenuGroup createMenuGroup(UUID id, String name) {
+        MenuGroup menuGroup = new MenuGroup();
+        menuGroup.setId(id);
+        menuGroup.setName(name);
+        return menuGroup;
     }
 }
