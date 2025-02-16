@@ -53,6 +53,20 @@ class OrderServiceTest {
         orderService = new OrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient);
     }
 
+    private Order createOrderRequestWithOccupiedTable(OrderType type, OrderStatus orderStatus, Menu menu,
+                                                      String address) {
+        OrderTable orderTable = createUsingOrderTable();
+        return createOrder(createOrderLineItem(menu), orderTable, type,
+                orderStatus, address);
+    }
+
+    private Order createOrderRequestWithEmptyTable(OrderType type, OrderStatus orderStatus, Menu menu,
+                                                   String address) {
+        OrderTable orderTable = createEmptyOrderTable();
+        return createOrder(createOrderLineItem(menu), orderTable, type,
+                orderStatus, address);
+    }
+
     @Nested
     @DisplayName("공통 주문 관련")
     class CommonOrder {
@@ -314,19 +328,5 @@ class OrderServiceTest {
             // then
             assertThat(result.getStatus()).isEqualTo(OrderStatus.COMPLETED);
         }
-    }
-
-    private Order createOrderRequestWithOccupiedTable(OrderType type, OrderStatus orderStatus, Menu menu,
-                                                      String address) {
-        OrderTable orderTable = createUsingOrderTable();
-        return createOrder(createOrderLineItem(menu), orderTable, type,
-                orderStatus, address);
-    }
-
-    private Order createOrderRequestWithEmptyTable(OrderType type, OrderStatus orderStatus, Menu menu,
-                                                   String address) {
-        OrderTable orderTable = createEmptyOrderTable();
-        return createOrder(createOrderLineItem(menu), orderTable, type,
-                orderStatus, address);
     }
 }
