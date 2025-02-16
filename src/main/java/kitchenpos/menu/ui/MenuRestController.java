@@ -27,11 +27,12 @@ public class MenuRestController {
     public ResponseEntity<Menu> create(@RequestBody final Menu request) {
         final Menu response = menuService.create(request);
         return ResponseEntity.created(URI.create("/api/menus/" + response.getId()))
-            .body(response);
+                .body(response);
     }
 
     @PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable("menuId") final UUID menuId, @RequestBody final Menu request) {
+    public ResponseEntity<Menu> changePrice(@PathVariable("menuId") final UUID menuId,
+                                            @RequestBody final Menu request) {
         return ResponseEntity.ok(menuService.changePrice(menuId, request));
     }
 

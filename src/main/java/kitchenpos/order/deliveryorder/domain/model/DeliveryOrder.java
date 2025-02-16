@@ -1,24 +1,19 @@
 package kitchenpos.order.deliveryorder.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 //@Entity
 public class DeliveryOrder {
 
-//    @Id
+    //    @Id
 //    @GeneratedValue
     private UUID id;
 
-//    @Enumerated
+    //    @Enumerated
     private DeliveryOrderFlow orderFlow;
 
-//    @Column(name = "order_date_time", nullable = false)
+    //    @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
 //    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -30,7 +25,7 @@ public class DeliveryOrder {
 //    )
 //    private List<OrderLineItem> orderLineItems;
 
-//    @Column(name = "delivery_address")
+    //    @Column(name = "delivery_address")
     private String deliveryAddress;
 
     public boolean validateOrderFlowAndFindNextStep(DeliveryOrderStatus orderStatus) {

@@ -63,17 +63,20 @@ public class TestFixtureFactory {
         return new Product(name, BigDecimal.valueOf(price));
     }
 
-    public static Order createOrderWithDeliveryType(OrderLineItem orderLineItem, OrderTable orderTable, OrderStatus status) {
+    public static Order createOrderWithDeliveryType(OrderLineItem orderLineItem, OrderTable orderTable,
+                                                    OrderStatus status) {
         return new Order(OrderType.DELIVERY, status, LocalDateTime.now(), List.of(orderLineItem),
                 "주소", orderTable, orderTable.getId());
     }
 
-    public static Order createOrderWithTakeOutType(OrderLineItem orderLineItem, OrderTable orderTable,OrderStatus status) {
+    public static Order createOrderWithTakeOutType(OrderLineItem orderLineItem, OrderTable orderTable,
+                                                   OrderStatus status) {
         return new Order(OrderType.TAKEOUT, status, LocalDateTime.now(), List.of(orderLineItem),
                 "주소", orderTable, orderTable.getId());
     }
 
-    public static Order createOrderWithEatInType(OrderLineItem orderLineItem, OrderTable orderTable, OrderStatus status) {
+    public static Order createOrderWithEatInType(OrderLineItem orderLineItem, OrderTable orderTable,
+                                                 OrderStatus status) {
         return new Order(OrderType.EAT_IN, status, LocalDateTime.now(), List.of(orderLineItem),
                 "주소", orderTable, orderTable.getId());
     }

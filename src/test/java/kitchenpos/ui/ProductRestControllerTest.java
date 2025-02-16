@@ -63,9 +63,10 @@ class ProductRestControllerTest {
         request.setPrice(BigDecimal.valueOf(6000));
 
         // when
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put("/api/products/{productId}/price", request.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/products/{productId}/price", request.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)));
 
         // then
         result.andExpect(status().isOk())
