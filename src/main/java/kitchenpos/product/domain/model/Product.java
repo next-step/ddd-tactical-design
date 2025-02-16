@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -36,23 +35,14 @@ public class Product {
 
     }
 
-    public Product(String name, BigDecimal price) {
-        validateName(name);
-        validatePrice(price);
+    public Product(String name, BigDecimal price, UUID id) {
         this.name = name;
         this.price = price;
+        this.id = id;
     }
 
-    private void validateName(String name) {
-        if (Objects.isNull(name)) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validatePrice(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+    public Product(String name, BigDecimal price) {
+        this(name, price, UUID.randomUUID());
     }
 
     public UUID getId() {
