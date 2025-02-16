@@ -10,7 +10,6 @@ import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.global.infrastructure.external.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProductPurgomalumClient purgomalumClient;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+        final ProductPurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
