@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import kitchenpos.common.application.PurgomalumClient;
+import kitchenpos.common.domain.NameCreationService;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.application.ProductService;
@@ -26,6 +27,7 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
+    private NameCreationService nameCreationService;
     private PurgomalumClient purgomalumClient;
 
     @BeforeEach
@@ -33,7 +35,8 @@ class ProductServiceTest {
         productRepository = mock(ProductRepository.class);
         menuRepository = mock(MenuRepository.class);
         purgomalumClient = mock(PurgomalumClient.class);
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        nameCreationService = new NameCreationService(purgomalumClient);
+        productService = new ProductService(productRepository, menuRepository, nameCreationService);
     }
 
     @Test
@@ -49,19 +52,17 @@ class ProductServiceTest {
 
         // then
         assertThat(result.getId()).isNotNull();
-        assertThat(result.getName()).isEqualTo("김치");
-        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(5000));
+        assertThat(result.getInnerName()).isEqualTo("김치");
+        assertThat(result.getInnerPrice()).isEqualTo(BigDecimal.valueOf(5000));
     }
 
     @Test
     @DisplayName("상품 가격은 0원 미만이면 예외가 발생한다.")
     void product_price_exception() {
-        // given
-        Product request = createProductRequest("김치", -1000);
-
         // when // then
-        assertThatThrownBy(() -> productService.create(request))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> productService.create(createProductRequest("김치", -1000)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("가격을 채워주세요!");
     }
 
     @Test
@@ -89,7 +90,7 @@ class ProductServiceTest {
         Product result = productService.changePrice(product.getId(), request);
 
         // then
-        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(6000));
+        assertThat(result.getInnerPrice()).isEqualTo(BigDecimal.valueOf(6000));
     }
 
     @Test
@@ -128,6 +129,6 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(String name, long price) {
-        return new Product(name, BigDecimal.valueOf(price));
+        return createProduct(name, price);
     }
 }

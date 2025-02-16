@@ -60,7 +60,7 @@ class ProductRestControllerTest {
     void change_productPrice() throws Exception {
         // given
         Product request = createAndSaveProduct("김치", 5000);
-        request.setPrice(BigDecimal.valueOf(6000));
+        request.changePrice(BigDecimal.valueOf(6000));
 
         // when
         ResultActions result = mockMvc.perform(
@@ -91,7 +91,7 @@ class ProductRestControllerTest {
     }
 
     private Product createProductRequest() {
-        return new Product("김치", BigDecimal.valueOf(5000));
+        return createProduct("김치", 5000);
     }
 
     private Product createAndSaveProduct(String name, int price) {

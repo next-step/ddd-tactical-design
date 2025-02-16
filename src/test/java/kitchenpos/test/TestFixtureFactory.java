@@ -3,6 +3,9 @@ package kitchenpos.test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.NameCreationService;
+import kitchenpos.common.domain.Price;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
@@ -19,8 +22,19 @@ public class TestFixtureFactory {
         return new MenuGroup("한식");
     }
 
-    public static Product createProduct(BigDecimal price) {
-        return new Product("김치", price);
+    public static Product createProduct(BigDecimal value) {
+        Name name = createName("김치");
+        Price price = createPrice(value);
+        return new Product(name, price);
+    }
+
+    private static Name createName(String value) {
+        NameCreationService nameCreationService = new NameCreationService(new FakePurgomalumClient());
+        return nameCreationService.createName(value);
+    }
+
+    private static Price createPrice(BigDecimal price) {
+        return new Price(price);
     }
 
     public static Menu createMenuWithProductAndGroup() {
@@ -60,7 +74,7 @@ public class TestFixtureFactory {
     }
 
     public static Product createProduct(String name, long price) {
-        return new Product(name, BigDecimal.valueOf(price));
+        return new Product(createName(name), createPrice(BigDecimal.valueOf(price)));
     }
 
     public static Order createOrderWithDeliveryType(OrderLineItem orderLineItem, OrderTable orderTable,
