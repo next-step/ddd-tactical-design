@@ -1,11 +1,10 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
@@ -20,18 +19,18 @@ import java.util.*;
 public class MenuService {
     private final LoadProductPort loadProductPort;
     private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
             final LoadProductPort loadProductPort,
             final MenuRepository menuRepository,
-            final MenuGroupRepository menuGroupRepository,
+            final MenuGroupEntityRepository menuGroupEntityRepository,
             final PurgomalumClient purgomalumClient
     ) {
         this.loadProductPort = loadProductPort;
         this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.purgomalumClient = purgomalumClient;
     }
 
@@ -41,7 +40,7 @@ public class MenuService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+        final MenuGroupEntity menuGroup = menuGroupEntityRepository.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {

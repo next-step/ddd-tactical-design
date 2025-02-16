@@ -1,11 +1,11 @@
 package kitchenpos.menu.application.service;
 
 import kitchenpos.ClientTestConfiguration;
+import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
@@ -13,7 +13,6 @@ import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
-import kitchenpos.shared.port.out.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,8 +26,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import(ClientTestConfiguration.class)
@@ -37,20 +35,20 @@ class UpdateMenuDisplayStatusServiceTest {
     private final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase;
     private final SaveProductPort saveProductPort;
     private final ProductEntityRepository productEntityRepository;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final MenuRepository menuRepository;
 
     public UpdateMenuDisplayStatusServiceTest(
             final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase,
             final SaveProductPort saveProductPort,
             final ProductEntityRepository productEntityRepository,
-            final MenuGroupRepository menuGroupRepository,
+            final MenuGroupEntityRepository menuGroupEntityRepository,
             final MenuRepository menuRepository
     ) {
         this.updateMenuDisplayStatusUseCase = updateMenuDisplayStatusUseCase;
         this.saveProductPort = saveProductPort;
         this.productEntityRepository = productEntityRepository;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuRepository = menuRepository;
     }
 
@@ -64,8 +62,8 @@ class UpdateMenuDisplayStatusServiceTest {
         Product product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
         saveProductPort.save(product);
 
-        MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
-        menuGroupRepository.save(menuGroup);
+        MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+        menuGroupEntityRepository.save(menuGroup);
 
         List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
         Menu menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
@@ -92,7 +90,7 @@ class UpdateMenuDisplayStatusServiceTest {
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProduct> menuProducts) {
         Menu menu = new Menu();
         menu.setId(id);
         menu.setName(name);
@@ -119,8 +117,8 @@ class UpdateMenuDisplayStatusServiceTest {
         return new Product(id, productName, productPrice);
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;

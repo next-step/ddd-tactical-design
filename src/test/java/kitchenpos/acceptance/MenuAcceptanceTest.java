@@ -1,7 +1,7 @@
 package kitchenpos.acceptance;
 
 import io.restassured.RestAssured;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

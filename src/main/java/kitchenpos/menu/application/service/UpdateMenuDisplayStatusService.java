@@ -1,7 +1,7 @@
 package kitchenpos.menu.application.service;
 
 import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
 import org.springframework.stereotype.Service;

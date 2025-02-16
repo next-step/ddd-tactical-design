@@ -3,7 +3,7 @@ package kitchenpos.deliveryorder.application.service;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.takeoutorder.application.port.out.KitchenridersClient;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,11 @@
 package kitchenpos.menu.application.service;
 
 import kitchenpos.ClientTestConfiguration;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
@@ -43,14 +41,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class MenuServiceTest {
     private final MenuService menuService;
     private final SaveProductPort saveProductPort;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final MenuRepository menuRepository;
     private final PurgomalumClient mockPurgomalumClient;
 
-    public MenuServiceTest(MenuService menuService, SaveProductPort saveProductPort, MenuGroupRepository menuGroupRepository, MenuRepository menuRepository, PurgomalumClient mockPurgomalumClient) {
+    public MenuServiceTest(MenuService menuService, SaveProductPort saveProductPort, MenuGroupEntityRepository menuGroupEntityRepository, MenuRepository menuRepository, PurgomalumClient mockPurgomalumClient) {
         this.menuService = menuService;
         this.saveProductPort = saveProductPort;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuRepository = menuRepository;
         this.mockPurgomalumClient = mockPurgomalumClient;
     }
@@ -70,8 +68,8 @@ public class MenuServiceTest {
             Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
             saveProductPort.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+            menuGroupEntityRepository.save(menuGroup);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -223,8 +221,8 @@ public class MenuServiceTest {
             Product product = createProduct(PRODUCT_UUID, "양념치킨", new BigDecimal(20000));
             saveProductPort.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupEntityRepository.save(menuGroup);
 
             List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
             Menu menu = createMenu(MENU_UUID, "양념치킨", new BigDecimal(20000), MENU_GROUP_UUID, menuGroup, menuProducts);
@@ -292,8 +290,8 @@ public class MenuServiceTest {
             Product product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
             saveProductPort.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupEntityRepository.save(menuGroup);
 
             List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
             Menu menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
@@ -365,7 +363,7 @@ public class MenuServiceTest {
         return createMenu(null, name, new BigDecimal(price), menuGroupId, null, menuProducts);
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProduct> menuProducts) {
         Menu menu = new Menu();
         menu.setId(id);
         menu.setName(name);
@@ -396,8 +394,8 @@ public class MenuServiceTest {
         return new Product(id, productName, productPrice);
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;

@@ -1,4 +1,4 @@
-package kitchenpos.menu.application.port.out;
+package kitchenpos.menu.adapter.out.persistance;
 
 import kitchenpos.menu.domain.model.Menu;
 

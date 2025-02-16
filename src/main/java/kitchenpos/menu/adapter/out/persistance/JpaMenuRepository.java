@@ -1,7 +1,6 @@
 package kitchenpos.menu.adapter.out.persistance;
 
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.application.port.out.MenuRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

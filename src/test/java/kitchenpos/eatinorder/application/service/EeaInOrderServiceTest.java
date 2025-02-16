@@ -2,12 +2,11 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
@@ -40,14 +38,14 @@ public class EeaInOrderServiceTest {
     private final MenuRepository menuRepository;
     private final OrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
-    private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupEntityRepository menuGroupEntityRepository;
 
-    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, MenuRepository menuRepository, OrderTableRepository orderTableRepository, MenuGroupRepository menuGroupRepository) {
+    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, MenuRepository menuRepository, OrderTableRepository orderTableRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuRepository = menuRepository;
         this.orderTableRepository = orderTableRepository;
-        this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
     }
 
     @BeforeEach
@@ -55,8 +53,8 @@ public class EeaInOrderServiceTest {
         Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
         saveProductPort.save(product);
 
-        MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
-        menuGroupRepository.save(menuGroup);
+        MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+        menuGroupEntityRepository.save(menuGroup);
 
         List<MenuProduct> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
         Menu menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
@@ -629,8 +627,8 @@ public class EeaInOrderServiceTest {
         return new Product(id, productName, productPrice);
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;
@@ -658,7 +656,7 @@ public class EeaInOrderServiceTest {
         return orderLineItem;
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProduct> menuProducts) {
         Menu menu = new Menu();
         menu.setId(id);
         menu.setName(name);

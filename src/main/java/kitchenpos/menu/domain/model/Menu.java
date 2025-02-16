@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Menu {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
-    private MenuGroup menuGroup;
+    private MenuGroupEntity menuGroup;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -78,11 +79,11 @@ public class Menu {
         this.price = price;
     }
 
-    public MenuGroup getMenuGroup() {
+    public MenuGroupEntity getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
+    public void setMenuGroup(final MenuGroupEntity menuGroup) {
         this.menuGroup = menuGroup;
     }
 
