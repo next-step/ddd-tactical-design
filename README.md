@@ -43,7 +43,6 @@ docker compose -p kitchenpos up -d
 - 메뉴의 가격을 변경할 수 있다.
 - 메뉴의 가격이 올바르지 않으면 변경할 수 없다.
   - 메뉴의 가격은 0원 이상이어야 한다.
-- 메뉴에 속한 상품 금액의 합은 메뉴의 가격보다 크거나 같아야 한다.
 - 메뉴를 노출할 수 있다.
 - 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 높을 경우 메뉴를 노출할 수 없다.
 - 메뉴를 숨길 수 있다.
@@ -94,108 +93,363 @@ docker compose -p kitchenpos up -d
 - 완료되지 않은 매장 주문이 있는 주문 테이블은 빈 테이블로 설정하지 않는다.
 - 주문 목록을 조회할 수 있다.
 
+--- 이전 단계에서 만든 요구사항 ---
+
+### 1. 메뉴(menu) 요구 사항
+
+    - [] : 메뉴는 등록할 수 있다.
+    - [] : 메뉴를 등록할 때, 메뉴 그룹에게 메뉴 검증을 요청한다.
+    - [] : 메뉴는 하나 이상의 메뉴 그룹으로 등록할 수 있다.
+    - [] : 메뉴의 가격을 변경할 수 있다.
+    - [] : 전체 메뉴를 볼 수 있다.
+    - [] : 메뉴의 가격은 0원 이상이어야 한다.
+    - [] : 메뉴에는 이름이 존재한다.
+    - [] : 판매 가격은 마진이 남아야 한다.
+    - [] : 메뉴는 게시 여부를 정할 수 있다.
+    - [] : 메뉴는 하나의 카테고리에 속한다.
+    - [] : 메뉴 이름에는 비속어를 넣을 수 없다.
+
+### 1-1. 메뉴 상품(menu-product) 요구 사항
+
+    - [] : 메뉴 상품은 메뉴 검증을 할 수 있다.
+    - [] : 메뉴 상품은 메뉴와 수량으로 이루어져 있다.
+    - [] : 메뉴 상품의 메뉴 수량은 0보다 커야 한다.
+
+### 2. 카테고리(menu-group) 요구 사항
+
+    - [] : 카테고리는 이름을 가지고 있다.
+    - [] : 전체 카테고리를 볼 수 있다.
+    - [] : 카테고리를 등록할 수 있다.
+
+### 3. 상품(product) 요구 사항
+
+    - [] : 상품을 등록할 수 있다.
+    - [] : 상품의 가격을 변경할 수 있다.
+    - [] : 전체 상품을 볼 수 있다.
+    - [] : 상품에는 가격와 이름이 있다.
+    - [] : 상품의 가격은 0원 이상이어야 한다.
+    - [] : 상품 이름에는 비속어를 넣을 수 없다.
+    - [] : 상품 가격이 변하면, 메뉴에 마진이 남는지 물어본다.
+        - [] : 마진이 남지 않는다면, 메뉴 게시를 중단한다.
+
+### 4. 주문(order) 요구 사항
+
+    - [] : 주문은 하나 이상의 주문 내역으로 한다.
+    - [] : 주문이 정상적인지 확인하기 위해 주문 내역에게 주문 검증을 요청한다.
+    - [] : 주문을 할 때는 게시된 메뉴만 주문할 수 있다.
+    - [] : 모든 주문을 볼 수 있다.
+    - [] : 주문은 3가지 종류가 존재한다. (배달, 포장, 매장 식사)
+    - [] : 주문에는 6가지 주문 상태가 존재한다. (주문 대기 중, 주문 접수 완료, 서빙 완료, 배달 중, 배달 완료, 주문 완료)
+
+### 4-1. 배달 주문 요구 사항
+
+    - [] : 배달은 주소로 배달을 요청한다.
+        - [] : 배달 시 주소는 꼭 필요하다.
+
+    - 배달 주문의 전체적인 순서
+        - [] : 1. 주문 대기 중 (waiting) => 주문 대기 중일 때만 주문을 접수할 수 있다.
+        - [] : 2. 주문 접수 완료 (accepted) => 배달부에게 받아야 할 돈, 주소를 알려주고 배달해줄 것을 요청한다.
+        - [] : 3. 배달 중 (delivering)
+        - [] : 4. 배달 완료 (delivered)
+        - [] : 5. 주문 완료 (completed)
+
+### 4-2. 포장 주문 요구 사항
+
+    - [] : 포장은 아무때나 가능하다.
+
+    - 포장 주문의 전체적인 순서
+        - [] : 1. 주문 대기 중 (waiting) => 주문 대기 중일 때만 주문을 접수할 수 있다.
+        - [] : 2. 주문 접수 완료 (accepted)
+        - [] : 3. 서빙 완료 (served)
+        - [] : 4. 주문 완료 (completed)
+
+### 4-3. 매장 식사 주문 요구 사항
+
+    - [] : 자신이 이용하고 있는(앉아있는) 매장 테이블에서만 매장 식사를 할 수 있다.
+        - [] : 매장 이용 시 주문한 테이블에 앉아 있어야 한다.
+
+    - 매장 식사 주문의 전체적인 순서  
+        - [] : 1. 주문 대기 중 (waiting) => 주문 대기 중일 때만 주문을 접수할 수 있다.
+        - [] : 2. 주문 접수 완료 (accepted)
+        - [] : 3. 서빙 완료 (served)
+        - [] : 4. 주문 완료 (completed) => 주문 완료를 하면 테이블에 주문이 남아있는지 확인하고 없으면 테이블을 비운다.
+
+### 5. 주문 내역(order-line) 요구 사항
+
+    - [] : 주문 내역은 주문 검증을 할 수 있다.
+    - [] : 주문 내역에는 메뉴와 수량, 가격으로 이루어져 있다.
+
+### 6. 매장 테이블(order-table) 요구 사항
+
+    - [] : 매장 테이블을 만들 수 있다.
+    - [] : 매장 테이블에는 이름이 존재한다.
+    - [] : 전체 매장 테이블을 볼 수 있다.
+    - [] : 빈 테이블만 이용할(앉을) 수 있다.
+    - [] : 모든 주문이 완료되면, 테이블을 정리할 수 있다.
+    - [] : 테이블에 손님이 있는 경우에만 앉아 있는 손님의 수가 바뀔 수 있다.
+
 ## 용어 사전
 
-### 상품
+### 상품 (Product)
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 상품 | product | 메뉴를 관리하는 기준이 되는 데이터 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명 | 영문명     | 설명                     |
+|-----|---------|------------------------|
+| 상품  | product | `상품`은 `메뉴`를 구성하는 단위이다. |
 
-### 메뉴
+### 메뉴 카테고리 (Menu Group)
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명     | 영문명        | 설명          |
+|---------|------------|-------------|
+| 메뉴 카테고리 | menu-group | 메뉴의 카테고리이다. |
 
-### 매장 주문
+### 메뉴 (Menu)
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 방문한 손님 수 | number of guests | 식기가 필요한 사람 수. 필수 사항은 아니며 주문은 0명으로 등록할 수 있다. |
-| 빈 테이블 | empty table | 주문을 등록할 수 없는 주문 테이블 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 모든 식사를 마치고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 매장에서 식사하는 고객 대상. 손님들이 매장에서 먹을 수 있도록 조리된 음식을 가져다준다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 테이블 | order table | 매장에서 주문이 발생하는 영역 |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명   | 영문명             | 설명                                              |
+|-------|-----------------|-------------------------------------------------|
+| 메뉴    | menu            | `주문`을 구성하는 최소한의 단위이다.                           |
+| 메뉴 게시 | menu display    | `메뉴`를 `주문`할 수 있는지에 대한 여부이다.                     |
+| 마진    | margin          | `메뉴`가격이 `메뉴`를 이루는 `상품`들의 가격의 총합보다 높은 것을 말한다.    |
+| 메뉴 검증 | menu validation | `메뉴`의 `상품`들과 메뉴 상품의 구성이 동일하게 존재하는지 확인하는 것을 말한다. |
+| 메뉴 상품 | menu-product    | 단일 `상품`의 그룹이다.                                  |
 
-### 배달 주문
+### 매장 테이블 (Order Table)
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 배달 | delivering | 배달원이 매장을 방문하여 배달 음식의 픽업을 완료하고 배달을 시작하는 단계 |
-| 배달 대행사 | delivery agency | 준비한 음식을 고객에게 직접 배달하는 서비스 |
-| 배달 완료 | delivered | 배달원이 주문한 음식을 고객에게 배달 완료한 단계 |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 배달 및 결제 완료 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 집이나 직장 등 고객이 선택한 주소로 음식을 배달한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명          | 영문명             | 설명                                  |
+|--------------|-----------------|-------------------------------------|
+| 매장 테이블       | order-table     | `매장 테이블`은 `매장 주문`을 할 수 있는 장소이다.     |
+| 앉기           | sit             | `매장 테이블`을 `손님`이 점유한다.               |
+| 점유 상태 해지     | release table   | `매장 주문 완료`시에 `매장 테이블의 점유 상태`를 해지한다. |
+| 매장 테이블 점유 상태 | table occupancy | `매장 테이블`을 `손님`이 점유한 상태를 말한다.        |
 
-### 포장 주문
+### 주문 (Order)
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 서빙 | served | 조리가 완료되어 음식이 나갈 수 있는 단계 |
-| 완료 | completed | 고객이 음식을 수령하고 결제를 완료한 단계 |
-| 접수 | accepted | 주문을 받고 음식을 조리하는 단계 |
-| 접수 대기 | waiting | 주문이 생성되어 매장으로 전달된 단계 |
-| 주문 | order | 포장하는 고객 대상. 고객이 매장에서 직접 음식을 수령한다. |
-| 주문 상태 | order status | 주문이 생성되면 매장에서 주문을 접수하고 고객이 음식을 받기까지의 단계를 표시한다. |
-| 주문 항목 | order line item | 주문에 속하는 수량이 있는 메뉴 |
+| 한글명      | 영문명              | 설명                                                                  |
+|----------|------------------|---------------------------------------------------------------------|
+| 주문       | order            | `주문`은 `게시`된 `메뉴`를 구매하는 것이다.                                         |
+| 주문 유형    | order type       | `배달 주문`, `포장 주문`, `매장 주문`로 구성된 `주문`의 유형이다.                          |
+| 주문 상태    | order status     | 현재 확인 가능한 `주문`의 상태이다.(주문 대기 중, 주문 접수 완료, 서빙 완료, 배달 중, 배달 완료, 주문 완료) |
+| 주문 검증    | order validation | `주문` 내역에 수량, 가격 구성과 `주문`한 `메뉴`들의 수량, 가격 구성이 동일하게 존재하는지 검증한다.        |
+| 손님       | guest            | `주문`을 목적으로 하는 사람이다.                                                 |
+| 주문 생성 시간 | order time       | `손님`이 주문한 시간이다.                                                     |
+
+### 유저 (User)
+
+| 한글명 | 영문명         | 설명                  |
+|-----|-------------|---------------------|
+| 손님  | guest       | `주문`을 목적으로 하는 사람이다. |
+| 사장님 | store owner | `메뉴`를 만드는 사람이다.     |
+
+### 배달 주문 (Delivery)
+
+| 한글명         | 영문명                       | 설명                                                                                    |
+|-------------|---------------------------|---------------------------------------------------------------------------------------|
+| 배달 주문       | delivery order            | `주문 유형`이 `배달 주문`인 `주문`을 말한다.                                                          |
+| 배달 순서       | delivery order flow       | `배달 주문`의 과정의 흐름을 말한다.(배달 주문 대기 - 배달 주문 접수 완료 - 배달 주문 서빙 완료 - 배달 중 - 배달 완료 - 배달 주문 완료) |
+| 배달 주문 대기    | delivery order waiting    | `손님`이 `배달 주문`을 한 상태이다.                                                                |
+| 배달 주문 접수 완료 | delivery order accepted   | `배달 기사`가 `배달 주문`을 수락한 상태이다.                                                           |
+| 배달 주문 서빙 완료 | delivery order served     | 조리가 완료된 음식을 `배달 기사`에게 제공한 상태이다.                                                       |
+| 배달 중        | delivery order delivering | `배달 기사`가 배달을 진행하고 있는 상태이다.                                                            |
+| 배달 완료       | delivery order delivered  | `배달 기사`가 `손님`의 배달을 완료한 상태이다.                                                          |
+| 배달 주문 완료    | delivery order completed  | `배달 순서`가 종료된 상태이다.                                                                    |
+
+### 포장 주문 (Takeout)
+
+| 한글명         | 영문명                     | 설명                                                                     |
+|-------------|-------------------------|------------------------------------------------------------------------|
+| 포장 주문       | takeout order           | `주문 유형`이 `포장 주문`인 `주문`을 말한다.                                           |
+| 포장 순서       | takeout order flow      | `포장 주문`의 과정의 흐름을 말한다.(포장 주문 대기 → 포장 주문 접수 완료 → 포장 주문 서빙 완료 → 포장 주문 완료) |
+| 포장 주문 대기    | takeout order waiting   | `손님`이 `포장 주문`을 한 상태이다.                                                 |
+| 포장 주문 접수 완료 | takeout order accepted  | `포장 주문`을 수락한 상태이다.                                                     |
+| 포장 주문 서빙 완료 | takeout order served    | `손님`에게 조리가 완료된 음식을 제공한 상태이다.                                           |
+| 포장 주문 완료    | takeout order completed | `포장 순서`가 종료된 상태이다.                                                     |
+
+### 매장 주문 (Eat-in)
+
+| 한글명         | 영문명                    | 설명                                                                     |
+|-------------|------------------------|------------------------------------------------------------------------|
+| 매장 주문       | eat-in order           | `주문 유형`이 `매장 주문`인 `주문`을 말한다.                                           |
+| 매장 주문 순서    | eat-in order flow      | `매장 주문`의 과정의 흐름을 말한다.(매장 주문 대기 - 매장 주문 접수 완료 - 매장 주문 서빙 완료 - 매장 주문 완료) |
+| 매장 주문 대기    | eat-in order waiting   | `매장 테이블`을 `점유`하고 있는 `손님`이 `매장 주문`을 한 상태이다.                             |
+| 매장 주문 접수 완료 | eat-in order accepted  | `매장 주문`을 수락한 상태이다.                                                     |
+| 매장 주문 서빙 완료 | eat-in order served    | `손님`에게 조리가 완료된 음식을 제공한 상태이다.                                           |
+| 매장 주문 완료    | eat-in order completed | `매장 순서`가 종료된 상태로 `매장 테이블`의 `점유 상태를 해지`한다.                              |
+
+### 주문 내역 (Order Line Item)
+
+| 한글명       | 영문명                      | 설명                              |
+|-----------|--------------------------|---------------------------------|
+| 주문 내역     | order line item          | `주문 내역`은 단일`주문`한 `메뉴`에 대한 그룹이다. |
+| 주문 내역의 가격 | order line item price    | 단일`주문` 메뉴의 `수량`에 따른 총 가격이다.     |
+| 주문 내역의 수량 | order line item quantity | 단일`주문` 메뉴의 총 수량이다.              |
+
+### 외부 시스템 (external System)
+
+| 한글명        | 영문명                   | 설명              |
+|------------|-----------------------|-----------------|
+| 비속어 검증 시스템 | purgomalum client     | 단어가 비속어인지 검증한다. |
+| 배달 기사      | kitchen riders client | 배달 서비스를 제공한다.   |
 
 ## 모델링
 
-### 상품
+### 1. 메뉴
 
-- `Product`는 식별자와 `DisplayedName`, 가격을 가진다.
-- `DisplayedName`에는 `Profanity`가 포함될 수 없다.
+- `메뉴`는 여러 `상품` 과 `메뉴 게시`를 가진다.
+- `메뉴`는 상품의 가격과 수량을 토대로 `마진`을 검증한다.
 
-### 메뉴
+### 2. 외부 시스템
 
-- `MenuGroup`은 식별자와 이름을 가진다.
-- `Menu`는 식별자와 `Displayed Name`, 가격, `MenuProducts`를 가진다.
-- `Menu`는 특정 `MenuGroup`에 속한다.
-- `Menu`의 가격은 `MenuProducts`의 금액의 합보다 적거나 같아야 한다.
-- `Menu`의 가격이 `MenuProducts`의 금액의 합보다 크면 `NotDisplayedMenu`가 된다.
-- `MenuProduct`는 가격과 수량을 가진다.
+- `비속어 검증 시스템`은 비속어를 검증한다.
+- `배달 기사`는 배달 정보를 받아 배달을 간다.
 
-### 매장 주문
+### 3. 주문
 
-- `OrderTable`은 식별자와 이름, `NumberOfGuests`를 가진다.
-- `OrderTable`의 추가 `Order`는 `OrderTable`에 계속 쌓이며 모든 `Order`가 완료되면 `EmptyTable`이 된다.
-- `EmptyTable`인 경우 `NumberOfGuests`는 0이며 변경할 수 없다.
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 기존 `Order`를 취소하거나 변경해도 수정되지 않기 때문에 0보다 적을 수 있다.
+- `주문`은 주문 방식을 구별할 수 있는 `주문 유형`을 가진다.
+- `주문`은 여러 `메뉴`를 가진다.
+- `주문`은 손님이 원하는 `주문 유형`에 따라 `주문`을 수행한다.
+- `주문`은 `주문 내역`을 토대로 `주문`을 검증한다.
 
-### 배달 주문
+### 4. 유저
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, 배달 주소, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 배달 ➜ 배달 완료 ➜ 계산 완료 순서로 진행된다.
-- `Order`가 접수되면 `DeliveryAgency`가 호출된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+- `손님`은 `주문`을 한다.
+- `손님`은 `매장 테이블`을 `점유`한다.
+- `사장님`은 `메뉴`를 만든다.
 
-### 포장 주문
+### 5. 배달 주문
 
-- `Order`는 식별자와 `OrderStatus`, 주문 시간, `OrderLineItems`를 가진다.
-- 메뉴가 노출되고 있으며 판매되는 메뉴 가격과 일치하면 `Order`가 생성된다.
-- `Order`는 접수 대기 ➜ 접수 ➜ 서빙 ➜ 계산 완료 순서로 진행된다.
-- `OrderLineItem`는 가격과 수량을 가진다.
-- `OrderLineItem`의 수량은 1보다 커야 한다.
+- `배달 주문`은 `배달 기사`에게 배달을 요청한다.
+- `배달 주문`은 현재 `배달 주문 상태`를 기반으로 `배달 주문 순서`에게 다음 순서의 `배달 주문`을 요청한다.
+- `배달 주문 순서`는 이전 `배달 주문 상태`와 `배달 주문 순서`를 고려해 다음 순서의 `배달 주문`을 수행한다.
+
+### 6. 포장 주문
+
+- `포장 주문`은 `손님`에게 조리된 음식을 포장 해준다.
+- `포장 주문`은 현재 `포장 주문 상태`를 기반으로 `포장 주문 순서`에게 다음 순서의 `포장 주문`을 요청한다.
+- `포장 주문 순서`는 이전 `포장 주문 상태`와 `포장 주문 순서`를 고려해 다음 순서의 `포장 주문`을 수행한다.
+
+### 7. 매장 주문
+
+- `매장 주문`은 `매장 테이블을 점유`한 `손님`에게 조리된 음식을 제공한다.
+- `매장 주문`은 현재 `매장 주문 상태`를 기반으로 `매장 주문 순서`에게 다음 순서의 `매장 주문`을 요청한다.
+- `매장 주문 순서`는 이전 `매장 주문 상태`와 `매장 주문 순서`를 고려해 다음 순서의 `매장 주문`을 수행한다.
+
+### 8. 매장 테이블
+
+- `매장 테이블`은 `매장 주문이 완료`되면 `테이블 점유를 해지`한다.
+
+### Kitchen Pos 모델링
+
+```mermaid
+flowchart TD
+    guest
+    store_owner
+%% 외부 시스템 (ID: externalSystem)	
+    subgraph externalSystem [외부 시스템]
+        KitchenRidersClient
+        PurgomalumClient
+    end
+
+    style externalSystem stroke-dasharray: 5  
+%% 메뉴
+    subgraph 메뉴
+        style 주문 stroke-dasharray: 5
+        menu
+        product
+        menu --> product
+    end
+
+%% 주문
+    subgraph 주문
+        style 주문 stroke-dasharray: 5
+        order
+        deliveryOrder
+        takeOutOrder
+        eatInOrder
+        DeliveryOrderFlow
+        TakeOutOrderFlow
+        EatInOrderFlow
+        OrderTable
+        order -- case:delivery orderType --> deliveryOrder
+        order -- case:takeOut orderType --> takeOutOrder
+        order -- case:eatIn orderType --> eatInOrder
+        deliveryOrder -- 배달 주문 시작 --> DeliveryOrderFlow
+        takeOutOrder -- 포장 주문 시작 --> TakeOutOrderFlow
+        eatInOrder -- 매장 주문 시작 --> EatInOrderFlow
+        EatInOrderFlow -- 매장 테이블 해지 요청 --> OrderTable
+    end
+
+    guest -- <순서 2> : 주문 요청 --> order
+    guest -- 매장 테이블 점유 --> OrderTable
+    guest -- <순서 1> : 메뉴 선택 --> menu
+    store_owner -- 메뉴 생성 --> menu
+    DeliveryOrderFlow -- 배달 요청 --> KitchenRidersClient
+    menu -- 비속어 검증 --> PurgomalumClient
+    product -- 비속어 검증 --> PurgomalumClient
+
+```
+
+### 배달 주문 순서
+
+```mermaid
+sequenceDiagram
+    participant Guest
+    participant Delivery Order
+    participant Delivery Order Flow
+    participant Kitchen Riders Client
+    Guest ->> Delivery Order: 배달 주문 요청
+    Delivery Order ->> Delivery Order Flow: 배달 주문 프로세스 시작
+    Delivery Order Flow ->> Delivery Order: 배달 주문 대기 중
+    Delivery Order ->> Delivery Order Flow: 배달 주문 접수 요청
+    Delivery Order Flow -->> Kitchen Riders Client: 배달 요청
+    Delivery Order Flow ->> Delivery Order: 배달 접수 완료
+    Kitchen Riders Client -->> Delivery Order Flow: 배달 요청 확인
+    Delivery Order ->> Delivery Order Flow: 배달 주문 서빙 요청
+    Delivery Order Flow ->> Delivery Order: 배달 주문 서빙 완료
+    Delivery Order ->> Delivery Order Flow: 배달 중 요청
+    Delivery Order Flow ->> Delivery Order: 배달 중
+    Delivery Order ->> Delivery Order Flow: 배달 완료 요청
+    Delivery Order Flow ->> Delivery Order: 배달 완료
+    Delivery Order ->> Delivery Order Flow: 배달 주문 완료 요청
+    Delivery Order Flow ->> Delivery Order: 배달 주문 완료
+
+```
+
+### 포장 주문 순서
+
+```mermaid
+sequenceDiagram
+    participant Guest
+    participant TakeOut Order
+    participant TakeOut Order Flow
+    Guest ->> TakeOut Order: 포장 주문 요청
+    TakeOut Order ->> TakeOut Order Flow: 포장 주문 프로세스 시작
+    TakeOut Order Flow ->> TakeOut Order: 포장 주문 대기 중
+    TakeOut Order ->> TakeOut Order Flow: 포장 주문 접수 요청
+    TakeOut Order Flow ->> TakeOut Order: 포장 접수 완료
+    TakeOut Order ->> TakeOut Order Flow: 포장 주문 서빙 요청
+    TakeOut Order Flow ->> TakeOut Order: 포장 주문 서빙 완료
+    TakeOut Order ->> TakeOut Order Flow: 포장 주문 완료 요청
+    TakeOut Order Flow ->> TakeOut Order: 포장 주문 완료
+
+```
+
+### 매장 주문 순서
+
+```mermaid
+sequenceDiagram
+    participant Guest
+    participant EatIn Order
+    participant EatIn Order Flow
+    participant OrderTable
+    Guest ->> EatIn Order: 매장 주문 요청
+    EatIn Order ->> EatIn Order Flow: 매장 주문 프로세스 시작
+    EatIn Order Flow ->> EatIn Order: 매장 주문 대기 중
+    EatIn Order ->> EatIn Order Flow: 매장 주문 접수 요청
+    EatIn Order Flow ->> EatIn Order: 매장 접수 완료
+    EatIn Order ->> EatIn Order Flow: 매장 주문 서빙 요청
+    EatIn Order Flow ->> EatIn Order: 매장 주문 서빙 완료
+    EatIn Order ->> EatIn Order Flow: 매장 주문 완료 요청
+    EatIn Order Flow -->> OrderTable: 매장 테이블 점유 해제 요청
+    EatIn Order Flow ->> EatIn Order: 매장 주문 완료
+    OrderTable -->> EatIn Order Flow: 매장 테이블 점유 해제
+
+```
