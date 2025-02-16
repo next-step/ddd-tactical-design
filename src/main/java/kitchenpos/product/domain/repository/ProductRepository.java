@@ -1,9 +1,9 @@
-package kitchenpos.menu.domain.repository;
+package kitchenpos.product.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import kitchenpos.menu.domain.entity.Product;
+import kitchenpos.product.domain.entity.Product;
 
 public interface ProductRepository {
 

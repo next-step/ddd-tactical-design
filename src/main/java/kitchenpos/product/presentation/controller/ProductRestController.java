@@ -1,10 +1,10 @@
-package kitchenpos.menu.presentation.controller;
+package kitchenpos.product.presentation.controller;
 
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menu.domain.service.ProductService;
-import kitchenpos.menu.domain.entity.Product;
+import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.UUID;
+import kitchenpos.product.domain.entity.Product;
 
 @Table(name = "menu_product")
 @Entity

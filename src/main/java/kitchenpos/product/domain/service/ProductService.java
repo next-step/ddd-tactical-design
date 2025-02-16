@@ -1,4 +1,4 @@
-package kitchenpos.menu.domain.service;
+package kitchenpos.product.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.menu.domain.entity.Product;
-import kitchenpos.menu.domain.repository.ProductRepository;
+import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.global.infrastructure.external.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
