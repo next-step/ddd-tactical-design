@@ -1,4 +1,4 @@
-package kitchenpos.product.infra.persistence;
+package kitchenpos.menu.infra.persistence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
