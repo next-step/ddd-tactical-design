@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -33,6 +34,14 @@ public class Product {
 
     protected Product() {
 
+    }
+
+    public Product(String name, BigDecimal price, UUID id) {
+        this(new ProductName(name), new ProductPrice(price), id);
+    }
+
+    public Product(String name, BigDecimal price) {
+        this(name, price, UUID.randomUUID());
     }
 
     public UUID getId() {

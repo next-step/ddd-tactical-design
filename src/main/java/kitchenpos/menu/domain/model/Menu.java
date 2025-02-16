@@ -58,6 +58,13 @@ public class Menu {
     public Menu() {
     }
 
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed) {
+        this.id = id;
+        this.name = new MenuName(name);
+        this.price = new MenuPrice(price);
+        this.displayed = displayed;
+    }
+
     public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
                 List<MenuProduct> menuProducts, UUID menuGroupId) {
         validateMenuGroupExists(menuGroup);

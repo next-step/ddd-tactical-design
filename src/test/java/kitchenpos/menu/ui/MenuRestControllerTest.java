@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createProduct;
@@ -55,6 +56,7 @@ class MenuRestControllerTest {
         MenuGroup menuGroup = createAndSaveMenuGroup();
         Product product = createAndSaveProduct();
         Menu request = createMenuRequest(menuGroup, product);
+//        Menu request = new Menu(UUID.randomUUID(), "김치찌개", BigDecimal.valueOf(8000), true);
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menus")
