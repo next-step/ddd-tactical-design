@@ -1,8 +1,10 @@
 package kitchenpos.common.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class Name {
     private static final String NAME_CREATION_EXCEPTION = "이름을 채워주세요!";
 
@@ -12,6 +14,10 @@ public class Name {
     protected Name(String value) {
         validateName(value);
         this.value = value;
+    }
+
+    protected Name() {
+        this.value = null;
     }
 
     private void validateName(String name) {
