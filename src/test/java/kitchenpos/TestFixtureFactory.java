@@ -1,4 +1,4 @@
-package kitchenpos.test;
+package kitchenpos;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +15,7 @@ import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 
 public class TestFixtureFactory {
 

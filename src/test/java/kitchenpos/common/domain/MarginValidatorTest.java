@@ -1,8 +1,8 @@
 package kitchenpos.common.domain;
 
-import static kitchenpos.test.TestFixtureFactory.createMenu;
-import static kitchenpos.test.TestFixtureFactory.createMenuGroup;
-import static kitchenpos.test.TestFixtureFactory.createProduct;
+import static kitchenpos.TestFixtureFactory.createMenu;
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
@@ -11,9 +11,7 @@ import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.test.FakeMenuRepository;
-import kitchenpos.test.FakeProductRepository;
+import kitchenpos.menu.infra.persistence.FakeMenuRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

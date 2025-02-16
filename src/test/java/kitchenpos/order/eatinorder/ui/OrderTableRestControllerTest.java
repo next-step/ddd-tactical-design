@@ -1,4 +1,4 @@
-package kitchenpos.ui;
+package kitchenpos.order.eatinorder.ui;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

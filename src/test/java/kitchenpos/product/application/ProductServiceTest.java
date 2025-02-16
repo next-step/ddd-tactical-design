@@ -1,6 +1,6 @@
-package kitchenpos.application;
+package kitchenpos.product.application;
 
-import static kitchenpos.test.TestFixtureFactory.createProduct;
+import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,10 +15,9 @@ import kitchenpos.common.domain.MarginValidator;
 import kitchenpos.common.domain.NameCreationService;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.application.ProductService;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.test.TestFixtureFactory;
+import kitchenpos.TestFixtureFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

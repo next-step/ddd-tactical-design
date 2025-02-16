@@ -3,7 +3,7 @@ package kitchenpos.common.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.test.FakePurgomalumClient;
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

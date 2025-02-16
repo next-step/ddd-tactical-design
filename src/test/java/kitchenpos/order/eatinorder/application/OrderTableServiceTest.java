@@ -1,7 +1,7 @@
-package kitchenpos.application;
+package kitchenpos.order.eatinorder.application;
 
-import static kitchenpos.test.TestFixtureFactory.createEmptyOrderTable;
-import static kitchenpos.test.TestFixtureFactory.createUsingOrderTable;
+import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
+import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.repository.OrderRepository;
-import kitchenpos.order.eatinorder.application.OrderTableService;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import org.junit.jupiter.api.BeforeEach;

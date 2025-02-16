@@ -1,7 +1,7 @@
-package kitchenpos.application;
+package kitchenpos.menu.application;
 
-import static kitchenpos.test.TestFixtureFactory.createMenuWithProductAndGroup;
-import static kitchenpos.test.TestFixtureFactory.createProduct;
+import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.menu.application.MenuService;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
@@ -18,10 +17,10 @@ import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.test.FakeMenuGroupRepository;
-import kitchenpos.test.FakeMenuRepository;
-import kitchenpos.test.FakeProductRepository;
-import kitchenpos.test.FakePurgomalumClient;
+import kitchenpos.menu.infra.persistence.FakeMenuGroupRepository;
+import kitchenpos.menu.infra.persistence.FakeMenuRepository;
+import kitchenpos.product.infra.persistence.FakeProductRepository;
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
