@@ -1,6 +1,8 @@
 package kitchenpos.menu.application.service;
 
+import kitchenpos.menu.domain.exception.MenuGroupNameValidationException;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupName;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,8 +14,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -32,7 +33,7 @@ public class MenuGroupServiceTest {
         void create_menu_group_successfully() {
             // given
             MenuGroup request = new MenuGroup();
-            request.setName("한식");
+            request.setName(MenuGroupName.of("한식"));
 
             // when
             MenuGroup createdMenuGroup = menuGroupService.create(request);
@@ -50,14 +51,14 @@ public class MenuGroupServiceTest {
         void name_must_be_input() {
             // given
             MenuGroup request = new MenuGroup();
-            request.setName(null);
+            request.setName(MenuGroupName.of(null));
 
             // when
-            ThrowableAssert.ThrowingCallable throwingCallable = () -> menuGroupService.create(request);
+            final Throwable thrown = catchThrowable(() -> menuGroupService.create(request));
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThat(thrown).isInstanceOf(MenuGroupNameValidationException.class)
+                    .hasMessage("메뉴 그룹 이름을 입력하세요");
         }
     }
 

@@ -1,14 +1,13 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
 import kitchenpos.menu.application.port.out.SaveMenuGroupPort;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupName;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -18,8 +17,7 @@ public class MenuGroupService {
 
     public MenuGroupService(
             final LoadMenuGroupPort loadMenuGroupPort,
-            final SaveMenuGroupPort saveMenuGroupPort,
-            final MenuGroupEntityRepository menuGroupEntityRepository
+            final SaveMenuGroupPort saveMenuGroupPort
     ) {
         this.loadMenuGroupPort = loadMenuGroupPort;
         this.saveMenuGroupPort = saveMenuGroupPort;
@@ -27,13 +25,9 @@ public class MenuGroupService {
 
     @Transactional
     public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
         final MenuGroup menuGroup = new MenuGroup();
         menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
+        menuGroup.setName(MenuGroupName.of(request.getName()));
         return saveMenuGroupPort.save(menuGroup);
     }
 

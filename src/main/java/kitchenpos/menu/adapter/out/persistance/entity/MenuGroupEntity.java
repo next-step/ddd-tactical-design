@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupName;
 
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class MenuGroupEntity {
     public MenuGroup toDomain() {
         MenuGroup menuGroup = new MenuGroup();
         menuGroup.setId(id);
-        menuGroup.setName(name);
+        menuGroup.setName(MenuGroupName.of(name));
         return menuGroup;
     }
 

@@ -4,9 +4,18 @@ import java.util.UUID;
 
 public class MenuGroup {
     private UUID id;
-    private String name;
+    private MenuGroupName name;
 
     public MenuGroup() {
+    }
+
+    private MenuGroup(UUID id, MenuGroupName name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public static MenuGroup create(UUID id, MenuGroupName name) {
+        return new MenuGroup(id, name);
     }
 
     public UUID getId() {
@@ -18,10 +27,10 @@ public class MenuGroup {
     }
 
     public String getName() {
-        return name;
+        return name.value();
     }
 
-    public void setName(final String name) {
+    public void setName(final MenuGroupName name) {
         this.name = name;
     }
 }
