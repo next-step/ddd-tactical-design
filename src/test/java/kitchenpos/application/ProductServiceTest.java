@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import kitchenpos.common.application.PurgomalumClient;
+import kitchenpos.common.domain.MarginValidator;
 import kitchenpos.common.domain.NameCreationService;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -29,6 +30,7 @@ class ProductServiceTest {
     private MenuRepository menuRepository;
     private NameCreationService nameCreationService;
     private PurgomalumClient purgomalumClient;
+    private MarginValidator marginValidator;
 
     @BeforeEach
     void setUp() {
@@ -36,7 +38,8 @@ class ProductServiceTest {
         menuRepository = mock(MenuRepository.class);
         purgomalumClient = mock(PurgomalumClient.class);
         nameCreationService = new NameCreationService(purgomalumClient);
-//        productService = new ProductService(productRepository, menuRepository, nameCreationService);
+        marginValidator = new MarginValidator(menuRepository);
+        productService = new ProductService(productRepository, nameCreationService, marginValidator);
     }
 
     @Test
