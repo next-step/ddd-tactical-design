@@ -11,12 +11,6 @@ public class Product extends AggregateRoot {
     private final ProductName name;
     private ProductPrice price;
 
-    public Product(final UUID id, final String name, final BigDecimal price) {
-        this.id = id;
-        this.name = ProductName.of(name);
-        this.price = ProductPrice.of(price);
-    }
-
     public Product(final UUID id, final ProductName name, final ProductPrice price) {
         this.id = id;
         this.name = name;

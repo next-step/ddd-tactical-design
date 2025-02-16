@@ -11,6 +11,8 @@ import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.shared.port.out.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -112,7 +114,9 @@ class UpdateMenuDisplayStatusServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        return new Product(id, name, price);
+        ProductName productName = ProductName.of(name, nm -> {});
+        ProductPrice productPrice = ProductPrice.of(price);
+        return new Product(id, productName, productPrice);
     }
 
     private static MenuGroup createMenuGroup(UUID id, String name) {

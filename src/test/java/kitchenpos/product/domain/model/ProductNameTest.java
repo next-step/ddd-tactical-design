@@ -20,7 +20,7 @@ class ProductNameTest {
         final String name = "상품";
 
         // when
-        final ProductName productName = ProductName.of(name);
+        final ProductName productName = ProductName.of(name, getProfanityFilteringProductNameValidator());
 
         // then
         assertThat(productName.isSameName(name)).isTrue();
@@ -32,7 +32,7 @@ class ProductNameTest {
     @ValueSource(strings = {"", " "})
     void createProductNameWithEmptyOrNull(final String name) {
         // when
-        final Throwable thrown = catchThrowable(() -> ProductName.of(name));
+        final Throwable thrown = catchThrowable(() -> ProductName.of(name, getProfanityFilteringProductNameValidator()));
 
         // then
         assertThat(thrown).isInstanceOf(ProductNameEmptyException.class);
@@ -48,7 +48,7 @@ class ProductNameTest {
         };
 
         // when
-        final Throwable thrown = catchThrowable(() -> ProductName.of(name, additionalProductNameValidator));
+        final Throwable thrown = catchThrowable(() -> ProductName.of(name, getProfanityFilteringProductNameValidator(), additionalProductNameValidator));
 
         // then
         assertThat(thrown).isInstanceOf(ProductNameValidationException.class);
@@ -59,7 +59,7 @@ class ProductNameTest {
     @CsvSource(value = {"상품, 상품, true", "상품, 상품2, false"})
     void testIsSameName(String actualName, String expectedName, boolean expected) {
         // given
-        final ProductName productName = ProductName.of(actualName);
+        final ProductName productName = ProductName.of(actualName, getProfanityFilteringProductNameValidator());
 
         // when
         final boolean isSameName = productName.isSameName(expectedName);
@@ -72,12 +72,16 @@ class ProductNameTest {
     @Test
     void testIsSameNameWhenNullValue() {
         // given
-        final ProductName productName = ProductName.of("상품");
+        final ProductName productName = ProductName.of("상품", getProfanityFilteringProductNameValidator());
 
         // when
         final boolean isSameName = productName.isSameName(null);
 
         // then
         assertThat(isSameName).isFalse();
+    }
+
+    private static ProfanityFilteringProductNameValidator getProfanityFilteringProductNameValidator() {
+        return nm -> { /* do nothing */};
     }
 }

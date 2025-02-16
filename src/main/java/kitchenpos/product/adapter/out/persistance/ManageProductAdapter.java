@@ -3,6 +3,7 @@ package kitchenpos.product.adapter.out.persistance;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
+import kitchenpos.product.application.service.validator.DefaultProfanityFilteringProductNameValidator;
 import kitchenpos.product.domain.model.Product;
 import org.springframework.stereotype.Component;
 
@@ -13,22 +14,27 @@ import java.util.UUID;
 @Component
 public class ManageProductAdapter implements SaveProductPort, LoadProductPort {
     private final ProductEntityRepository jpaProductRepository;
+    private final DefaultProfanityFilteringProductNameValidator profanityFilteringProductNameValidator;
 
-    public ManageProductAdapter(JpaProductEntityRepository jpaProductRepository) {
+    public ManageProductAdapter(
+            JpaProductEntityRepository jpaProductRepository,
+            DefaultProfanityFilteringProductNameValidator profanityFilteringProductNameValidator
+    ) {
         this.jpaProductRepository = jpaProductRepository;
+        this.profanityFilteringProductNameValidator = profanityFilteringProductNameValidator;
     }
 
     @Override
     public Optional<Product> findById(UUID productId) {
         return jpaProductRepository.findById(productId)
-                .map(ProductEntity::toDomain);
+                .map(productEntity -> productEntity.toDomain(profanityFilteringProductNameValidator));
     }
 
     @Override
     public List<Product> findAll() {
         return jpaProductRepository.findAll()
                 .stream()
-                .map(ProductEntity::toDomain)
+                .map(productEntity -> productEntity.toDomain(profanityFilteringProductNameValidator))
                 .toList();
     }
 
@@ -36,13 +42,13 @@ public class ManageProductAdapter implements SaveProductPort, LoadProductPort {
     public List<Product> findAllByIdIn(List<UUID> productIds) {
         return jpaProductRepository.findAllByIdIn(productIds)
                 .stream()
-                .map(ProductEntity::toDomain)
+                .map(productEntity -> productEntity.toDomain(profanityFilteringProductNameValidator))
                 .toList();
     }
 
     @Override
     public Product save(Product product) {
         return jpaProductRepository.save(ProductEntity.of(product))
-                .toDomain();
+                .toDomain(profanityFilteringProductNameValidator);
     }
 }

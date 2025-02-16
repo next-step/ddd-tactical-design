@@ -11,8 +11,13 @@ public class ProductName {
         this.name = name;
     }
 
-    public static ProductName of(final String name, final ProductNameValidator ... additionalProductNameValidators) {
+    public static ProductName of(
+            final String name,
+            final ProfanityFilteringProductNameValidator profanityFilteringProductNameValidator,
+            final ProductNameValidator ... additionalProductNameValidators
+    ) {
         DEFAULT_PRODUCT_NAME_VALIDATOR.validate(name);
+        profanityFilteringProductNameValidator.validate(name);
         for (ProductNameValidator productNameValidator : additionalProductNameValidators) {
             productNameValidator.validate(name);
         }

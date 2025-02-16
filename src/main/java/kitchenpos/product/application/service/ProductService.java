@@ -8,13 +8,11 @@ import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.model.CreateProductRequest;
-import kitchenpos.product.domain.exception.ProductNameValidationException;
+import kitchenpos.product.application.service.validator.DefaultProfanityFilteringProductNameValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
-import kitchenpos.product.domain.model.ProductNameValidator;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.shared.event.DomainEvent;
-import kitchenpos.shared.port.out.PurgomalumClient;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,24 +24,24 @@ import java.util.UUID;
 public class ProductService implements CreateProductUseCase, ChangeProductPriceUseCase, LoadProductListUseCase {
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
-    private final PurgomalumClient purgomalumClient;
+    private final DefaultProfanityFilteringProductNameValidator profanityFilteringProductNameValidator;
     private final ApplicationEventPublisher eventPublisher;
 
     public ProductService(
             final LoadProductPort loadProductPort,
             final SaveProductPort saveProductPort,
-            final PurgomalumClient purgomalumClient, ApplicationEventPublisher eventPublisher
+            final DefaultProfanityFilteringProductNameValidator profanityFilteringProductNameValidator, ApplicationEventPublisher eventPublisher
     ) {
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;
-        this.purgomalumClient = purgomalumClient;
+        this.profanityFilteringProductNameValidator = profanityFilteringProductNameValidator;
         this.eventPublisher = eventPublisher;
     }
 
     @Override
     @Transactional
     public Product create(final CreateProductRequest request) {
-        ProductName productName = ProductName.of(request.getName(), getProductNamePurgomalumValidator());
+        ProductName productName = ProductName.of(request.getName(), profanityFilteringProductNameValidator);
         ProductPrice productPrice = ProductPrice.of(request.getPrice());
         final Product product = new Product(UUID.randomUUID(), productName, productPrice);
         return saveProductPort.save(product);
@@ -64,14 +62,6 @@ public class ProductService implements CreateProductUseCase, ChangeProductPriceU
     @Transactional(readOnly = true)
     public List<Product> findAll() {
         return loadProductPort.findAll();
-    }
-
-    private ProductNameValidator getProductNamePurgomalumValidator() {
-        return name -> {
-            if (purgomalumClient.containsProfanity(name)) {
-                throw new ProductNameValidationException("상품명에 비속어가 포함되어 있습니다.");
-            }
-        };
     }
 
     private void publishEvent(Product product) {
