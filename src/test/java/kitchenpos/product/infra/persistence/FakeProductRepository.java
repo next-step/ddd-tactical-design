@@ -1,4 +1,4 @@
-package kitchenpos.test;
+package kitchenpos.product.infra.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
