@@ -28,17 +28,15 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private NameCreationService nameCreationService;
     private PurgomalumClient purgomalumClient;
-    private MarginValidator marginValidator;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
         menuRepository = mock(MenuRepository.class);
         purgomalumClient = mock(PurgomalumClient.class);
-        nameCreationService = new NameCreationService(purgomalumClient);
-        marginValidator = new MarginValidator(menuRepository);
+        NameCreationService nameCreationService = new NameCreationService(purgomalumClient);
+        MarginValidator marginValidator = new MarginValidator(menuRepository);
         productService = new ProductService(productRepository, nameCreationService, marginValidator);
     }
 
