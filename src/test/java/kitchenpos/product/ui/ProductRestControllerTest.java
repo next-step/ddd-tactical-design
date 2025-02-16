@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.TestProduct;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class ProductRestControllerTest {
     @DisplayName("상품을 생성한다")
     void create_product() throws Exception {
         // given
-        Product request = createProductRequest();
+        Product request = createAndSaveProduct("김치", 5000);
 
         // when
         ResultActions result = mockMvc.perform(post("/api/products")
@@ -51,8 +52,8 @@ class ProductRestControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value("김치"))
-                .andExpect(jsonPath("$.price").value(5000));
+                .andExpect(jsonPath("$.name.value").value("김치"))
+                .andExpect(jsonPath("$.price.value").value(5000));
     }
 
     @Test
@@ -71,7 +72,7 @@ class ProductRestControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(request.getId().toString()))
-                .andExpect(jsonPath("$.price").value(6000));
+                .andExpect(jsonPath("$.price.value").value(6000));
     }
 
     @Test
