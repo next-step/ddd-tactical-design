@@ -2,6 +2,7 @@ package kitchenpos.menu.application.service;
 
 import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
 import kitchenpos.menu.application.port.out.SaveMenuGroupPort;
+import kitchenpos.menu.application.service.model.CreateMenuGroupRequest;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuGroupName;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class MenuGroupService {
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
+    public MenuGroup create(final CreateMenuGroupRequest request) {
         final MenuGroup menuGroup = new MenuGroup();
         menuGroup.setId(UUID.randomUUID());
         menuGroup.setName(MenuGroupName.of(request.getName()));
