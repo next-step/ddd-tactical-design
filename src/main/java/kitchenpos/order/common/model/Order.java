@@ -61,6 +61,23 @@ public class Order {
     public Order() {
     }
 
+    public Order(UUID id, OrderType type, OrderStatus status, LocalDateTime orderDateTime,
+                 List<OrderLineItem> orderLineItems, String deliveryAddress, OrderTable orderTable, UUID orderTableId) {
+        this.id = id;
+        this.type = type;
+        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.deliveryAddress = deliveryAddress;
+        this.orderTable = orderTable;
+        this.orderTableId = orderTableId;
+    }
+
+    public Order(OrderType type, OrderStatus status, LocalDateTime orderDateTime,
+                 List<OrderLineItem> orderLineItems, String deliveryAddress, OrderTable orderTable, UUID orderTableId) {
+        this(UUID.randomUUID(), type, status, orderDateTime, orderLineItems, deliveryAddress, orderTable, orderTableId);
+    }
+
     public UUID getId() {
         return id;
     }

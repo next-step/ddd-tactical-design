@@ -53,6 +53,23 @@ public class Menu {
     public Menu() {
     }
 
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+                MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
+    }
+
+    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this(UUID.randomUUID(), name, price, displayed, menuProducts, menuGroup, menuGroupId);
+    }
+
     public UUID getId() {
         return id;
     }
