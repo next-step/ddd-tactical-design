@@ -59,6 +59,12 @@ public class TestFixtureFactory {
                 menuGroup.getId());
     }
 
+    public static Menu createMenu(MenuGroup menuGroup, Product product, long quantity) {
+        MenuProduct menuProduct = new MenuProduct(quantity, product, product.getId());
+        return new Menu("김치찌개", BigDecimal.valueOf(8000), true, List.of(menuProduct), menuGroup,
+                menuGroup.getId());
+    }
+
     public static Menu createMenuWithProductAndGroup(String name, long price, Product product) {
         MenuProduct menuProduct = new MenuProduct(1, product, product.getId());
         MenuGroup menuGroup = new MenuGroup("찌개");

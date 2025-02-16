@@ -3,13 +3,11 @@ package kitchenpos.product.application;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.common.domain.MarginValidator;
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.NameCreationService;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
@@ -21,15 +19,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final NameCreationService nameCreationService;
+    private final MarginValidator marginValidator;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final NameCreationService nameCreationService
+            final NameCreationService nameCreationService, MarginValidator marginValidator
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.nameCreationService = nameCreationService;
+        this.marginValidator = marginValidator;
     }
 
     @Transactional
@@ -47,20 +47,7 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                        menuProduct.getProduct()
-                                .getInnerPrice()
-                                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) < 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        marginValidator.checkMargin(product);
         return product;
     }
 

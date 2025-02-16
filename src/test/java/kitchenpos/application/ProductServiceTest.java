@@ -36,7 +36,7 @@ class ProductServiceTest {
         menuRepository = mock(MenuRepository.class);
         purgomalumClient = mock(PurgomalumClient.class);
         nameCreationService = new NameCreationService(purgomalumClient);
-        productService = new ProductService(productRepository, menuRepository, nameCreationService);
+//        productService = new ProductService(productRepository, menuRepository, nameCreationService);
     }
 
     @Test

@@ -110,6 +110,10 @@ public class Menu {
         this.displayed = displayed;
     }
 
+    public void changeDisplay() {
+        this.displayed = !this.displayed;
+    }
+
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
     }

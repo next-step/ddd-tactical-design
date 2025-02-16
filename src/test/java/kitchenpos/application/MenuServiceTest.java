@@ -198,7 +198,7 @@ class MenuServiceTest {
     void hide() {
         // given
         Menu menu = createMenuWithProductAndGroup();
-        menu.setDisplayed(true);
+        menu.changeDisplay();
         menuRepository.save(menu);
 
         // when
