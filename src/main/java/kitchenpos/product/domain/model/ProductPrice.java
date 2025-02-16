@@ -3,6 +3,7 @@ package kitchenpos.product.domain.model;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class ProductPrice {
     private static final String MESSAGE_PRODUCT_PRICE_MUST_BE_POSITIVE = "상품 가격은 0원 이상 입력해야 합니다.";
@@ -22,5 +23,17 @@ public class ProductPrice {
 
     public BigDecimal value() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductPrice that = (ProductPrice) o;
+        return Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(price);
     }
 }

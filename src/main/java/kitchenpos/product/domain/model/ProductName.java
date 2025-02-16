@@ -1,5 +1,7 @@
 package kitchenpos.product.domain.model;
 
+import java.util.Objects;
+
 public class ProductName {
     private final static ProductNameValidator DEFAULT_PRODUCT_NAME_VALIDATOR = new DefaultProductNameValidator();
 
@@ -19,5 +21,17 @@ public class ProductName {
 
     public String value() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductName that = (ProductName) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }

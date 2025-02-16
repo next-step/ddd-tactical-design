@@ -3,6 +3,7 @@ package kitchenpos.product.domain.model;
 import kitchenpos.shared.event.ProductPriceChangedEvent;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Product extends AggregateRoot {
@@ -38,5 +39,17 @@ public class Product extends AggregateRoot {
         final BigDecimal oldPrice = this.price.value();
         this.price = ProductPrice.of(price);
         registerEvent(new ProductPriceChangedEvent(id, oldPrice, price));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
