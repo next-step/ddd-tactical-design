@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class PriceServiceTest {
 
@@ -15,7 +16,8 @@ class PriceServiceTest {
     @ParameterizedTest
     @ValueSource(longs = {0L, 1L, 1000L, 999999L})
     void success(Long price) {
-        new Price(price);
+        assertThatNoException()
+                .isThrownBy(() -> new Price(price));
     }
 
     @DisplayName("가격은 null이 될 수 없다.")

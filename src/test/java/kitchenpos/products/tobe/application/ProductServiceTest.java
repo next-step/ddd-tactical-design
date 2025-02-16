@@ -40,7 +40,7 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
+        final Product expected = createProductRequest("후라이드", 16_000L, purgomalumClient);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -55,7 +55,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        assertThatThrownBy(() -> createProductRequest("후라이드", price))
+        assertThatThrownBy(() -> createProductRequest("후라이드", price, purgomalumClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -64,15 +64,14 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
-        assertThatThrownBy(() -> productService.create(expected))
+        assertThatThrownBy(() -> createProductRequest(name, 16_000L, purgomalumClient))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(createProductRequest("후라이드", 16_000L)).getId();
+        final UUID productId = productRepository.save(createProductRequest("후라이드", 16_000L, purgomalumClient)).getId();
         final Product expected = changePriceRequest(15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
@@ -101,8 +100,8 @@ class ProductServiceTest {
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(createProductRequest("후라이드", 16_000L));
-        productRepository.save(createProductRequest("양념치킨", 16_000L));
+        productRepository.save(createProductRequest("후라이드", 16_000L, purgomalumClient));
+        productRepository.save(createProductRequest("양념치킨", 16_000L, purgomalumClient));
         final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
