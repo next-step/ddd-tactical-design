@@ -16,7 +16,7 @@ public class ProductPriceChangeListener {
 
     @EventListener
     public void handleProductPriceChange(ProductPriceChangedEvent event) {
-        updateMenuDisplayStatusUseCase.execute(event.getProductId());
+        updateMenuDisplayStatusUseCase.execute(event.productId());
     }
 }
 

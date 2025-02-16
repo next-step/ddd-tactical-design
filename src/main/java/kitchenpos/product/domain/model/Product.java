@@ -17,6 +17,20 @@ public class Product extends AggregateRoot {
         this.price = price;
     }
 
+    public void changePrice(final BigDecimal price) {
+        final BigDecimal oldPrice = this.price.value();
+        this.price = ProductPrice.of(price);
+        registerEvent(new ProductPriceChangedEvent(id, oldPrice, price));
+    }
+
+    public boolean isSameName(String name) {
+        return this.name.isSameName(name);
+    }
+
+    public boolean isSamePrice(BigDecimal price) {
+        return this.price.isSamePrice(price);
+    }
+
     public UUID getId() {
         return id;
     }
@@ -27,12 +41,6 @@ public class Product extends AggregateRoot {
 
     public BigDecimal getPrice() {
         return price.value();
-    }
-
-    public void changePrice(final BigDecimal price) {
-        final BigDecimal oldPrice = this.price.value();
-        this.price = ProductPrice.of(price);
-        registerEvent(new ProductPriceChangedEvent(id, oldPrice, price));
     }
 
     @Override
