@@ -1,9 +1,9 @@
-package kitchenpos.order.infrastructure.external;
+package kitchenpos.order.domain.service;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public interface KitchenridersClient {
+public interface DeliveryKitchenridersClient {
 
     void requestDelivery(UUID orderId, BigDecimal amount, String deliveryAddress);
 }
