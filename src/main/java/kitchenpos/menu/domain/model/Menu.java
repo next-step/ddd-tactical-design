@@ -125,8 +125,4 @@ public class Menu {
     public UUID getMenuGroupId() {
         return menuGroupId;
     }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
-    }
 }

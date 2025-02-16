@@ -8,7 +8,6 @@ import kitchenpos.common.domain.MarginValidator;
 import kitchenpos.common.domain.Name;
 import kitchenpos.common.domain.NameCreationService;
 import kitchenpos.common.domain.Price;
-import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;

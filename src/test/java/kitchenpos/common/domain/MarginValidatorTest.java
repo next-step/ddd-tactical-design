@@ -20,15 +20,11 @@ import org.junit.jupiter.api.Test;
 
 class MarginValidatorTest {
 
-    private MarginValidator marginValidator;
     private MenuRepository menuRepository;
-    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
         menuRepository = new FakeMenuRepository(new HashMap<>());
-        productRepository = new FakeProductRepository(new HashMap<>());
-        marginValidator = new MarginValidator(menuRepository);
     }
 
     @Test
