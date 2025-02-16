@@ -11,8 +11,8 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
     @Embedded
     private Price price;
@@ -28,11 +28,11 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
+    public ProductName getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final ProductName name) {
         this.name = name;
     }
 

@@ -4,6 +4,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductName;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.Price;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -34,14 +34,12 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
+        final String name = request.getName().getName();
         final Price price = new Price(request.getPrice().getPrice());
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+        final ProductName productName = new ProductName(name, purgomalumClient);
         final Product product = new Product();
         product.setId(UUID.randomUUID());
-        product.setName(name);
+        product.setName(productName);
         product.setPrice(price);
         return productRepository.save(product);
     }
