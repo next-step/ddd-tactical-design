@@ -6,7 +6,7 @@ public class Name {
     private static final String NAME_CREATION_EXCEPTION = "이름을 채워주세요!";
     private final String name;
 
-    public Name(String name) {
+    protected Name(String name) {
         validateName(name);
         this.name = name;
     }
