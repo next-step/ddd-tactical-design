@@ -10,7 +10,7 @@ class NameTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @DisplayName("이름은 비어있거나, null일 수 없다.")
+    @DisplayName("이름은 비어있거나, null이면 예외가 발생한다.")
     void create_name_exception(String name) {
         // when // then
         assertThatThrownBy(() -> new Name(name))
