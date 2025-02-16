@@ -25,6 +25,13 @@ public class ProductPrice {
         return price;
     }
 
+    public boolean isSamePrice(BigDecimal price) {
+        if (price == null) {
+            return false;
+        }
+        return this.price.compareTo(price) == 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
