@@ -66,7 +66,7 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                     .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
-                    product.getPrice()
+                    product.getInnerPrice()
                             .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -103,7 +103,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                     menuProduct.getProduct()
-                            .getPrice()
+                            .getInnerPrice()
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
@@ -122,7 +122,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                     menuProduct.getProduct()
-                            .getPrice()
+                            .getInnerPrice()
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }

@@ -1,6 +1,7 @@
 package kitchenpos.application;
 
 import static kitchenpos.test.TestFixtureFactory.createMenuWithProductAndGroup;
+import static kitchenpos.test.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -227,10 +228,6 @@ class MenuServiceTest {
 
     private MenuGroup createMenuGroup() {
         return new MenuGroup("한식");
-    }
-
-    private Product createProduct(BigDecimal price) {
-        return new Product("김치", price);
     }
 
     private Menu createMenuRequest(String name, int price, MenuGroup menuGroup, Product product) {

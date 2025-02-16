@@ -1,11 +1,14 @@
 package kitchenpos.product.domain.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.Price;
 
 @Table(name = "product")
 @Entity
@@ -14,23 +17,24 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
-    public Product() {
-    }
-
-    public Product(String name, BigDecimal price, UUID id) {
+    public Product(Name name, Price price, UUID id) {
         this.name = name;
         this.price = price;
         this.id = id;
     }
 
-    public Product(String name, BigDecimal price) {
+    public Product(Name name, Price price) {
         this(name, price, UUID.randomUUID());
+    }
+
+    protected Product() {
+
     }
 
     public UUID getId() {
@@ -41,19 +45,31 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
+    public String getInnerName() {
+        return name.getValue();
+    }
+
+    public Name getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+//    public void setName(final String name) {
+//        this.name = name;
+//    }
+
+    public BigDecimal getInnerPrice() {
+        return price.getValue();
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(BigDecimal price) {
+        this.price = new Price(price);
     }
+
+//    public void setPrice(final BigDecimal price) {
+//        this.price = price;
+//    }
 }

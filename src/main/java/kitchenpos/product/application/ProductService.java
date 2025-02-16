@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.common.application.PurgomalumClient;
+import kitchenpos.common.domain.Name;
+import kitchenpos.common.domain.NameCreationService;
+import kitchenpos.common.domain.Price;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -18,51 +20,43 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final NameCreationService nameCreationService;
 
     public ProductService(
             final ProductRepository productRepository,
             final MenuRepository menuRepository,
-            final PurgomalumClient purgomalumClient
+            final NameCreationService nameCreationService
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.nameCreationService = nameCreationService;
     }
 
     @Transactional
     public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+        final BigDecimal price = request.getInnerPrice();
+        final String name = request.getInnerName();
+        Name validName = nameCreationService.createName(name);
+        final Product product = new Product(validName, new Price(price), UUID.randomUUID());
         return productRepository.save(product);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
+        final BigDecimal price = request.getInnerPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
+        product.changePrice(price);
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
                         menuProduct.getProduct()
-                                .getPrice()
+                                .getInnerPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
