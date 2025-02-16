@@ -17,17 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final NameCreationService nameCreationService;
     private final MarginValidator marginValidator;
 
     public ProductService(
             final ProductRepository productRepository,
-            final MenuRepository menuRepository,
-            final NameCreationService nameCreationService, MarginValidator marginValidator
+            final NameCreationService nameCreationService,
+            final MarginValidator marginValidator
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.nameCreationService = nameCreationService;
         this.marginValidator = marginValidator;
     }
@@ -36,7 +34,7 @@ public class ProductService {
     public Product create(final Product request) {
         final BigDecimal price = request.getInnerPrice();
         final String name = request.getInnerName();
-        Name validName = nameCreationService.createName(name);
+        final Name validName = nameCreationService.createName(name);
         final Product product = new Product(validName, new Price(price), UUID.randomUUID());
         return productRepository.save(product);
     }
