@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
-import kitchenpos.order.domain.entity.OrderLineItem;
+import kitchenpos.order.common.domain.entity.OrderLineItem;
 
 public record OrderLineItemFixture(Menu 메뉴, long 주문수량, BigDecimal 주문가격) {
 

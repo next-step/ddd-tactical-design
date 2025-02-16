@@ -2,7 +2,7 @@ package kitchenpos.global.infrastructure.external;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.order.domain.service.DeliveryKitchenridersClient;
+import kitchenpos.order.delivery.domain.service.DeliveryKitchenridersClient;
 import org.springframework.stereotype.Component;
 
 @Component

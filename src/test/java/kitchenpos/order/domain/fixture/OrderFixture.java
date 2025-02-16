@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.order.domain.entity.Order;
-import kitchenpos.order.domain.entity.OrderLineItem;
-import kitchenpos.order.domain.entity.OrderStatus;
-import kitchenpos.order.domain.entity.OrderTable;
-import kitchenpos.order.domain.entity.OrderType;
+import kitchenpos.order.common.domain.entity.Order;
+import kitchenpos.order.common.domain.entity.OrderLineItem;
+import kitchenpos.order.common.domain.entity.OrderStatus;
+import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.common.domain.entity.OrderType;
 
 public record OrderFixture(UUID id,
                            OrderType 주문유형,
