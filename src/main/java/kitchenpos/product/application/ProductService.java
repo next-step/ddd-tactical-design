@@ -44,9 +44,6 @@ public class ProductService {
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
         final BigDecimal price = request.getInnerPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.changePrice(price);
