@@ -5,6 +5,7 @@ import kitchenpos.product.domain.exception.ProductNameValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -22,7 +23,7 @@ class ProductNameTest {
         final ProductName productName = ProductName.of(name);
 
         // then
-        assertThat(productName.value()).isEqualTo(name);
+        assertThat(productName.isSameName(name)).isTrue();
     }
 
     @DisplayName("`Product Name`에 빈 값이 들어가면 예외가 발생한다")
@@ -51,5 +52,32 @@ class ProductNameTest {
 
         // then
         assertThat(thrown).isInstanceOf(ProductNameValidationException.class);
+    }
+
+    @DisplayName("isSameName 메소드 테스트")
+    @ParameterizedTest
+    @CsvSource(value = {"상품, 상품, true", "상품, 상품2, false"})
+    void testIsSameName(String actualName, String expectedName, boolean expected) {
+        // given
+        final ProductName productName = ProductName.of(actualName);
+
+        // when
+        final boolean isSameName = productName.isSameName(expectedName);
+
+        // then
+        assertThat(isSameName).isEqualTo(expected);
+    }
+
+    @DisplayName("isSameName 메소드에 null 값을 넣으면 false를 반환한다")
+    @Test
+    void testIsSameNameWhenNullValue() {
+        // given
+        final ProductName productName = ProductName.of("상품");
+
+        // when
+        final boolean isSameName = productName.isSameName(null);
+
+        // then
+        assertThat(isSameName).isFalse();
     }
 }

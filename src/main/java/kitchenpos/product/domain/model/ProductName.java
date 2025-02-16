@@ -23,6 +23,13 @@ public class ProductName {
         return name;
     }
 
+    public boolean isSameName(String name) {
+        if (name == null) {
+            return false;
+        }
+        return this.name.equals(name);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
