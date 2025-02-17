@@ -50,11 +50,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @DisplayName("메뉴 그룹 이름이 null이거나 비어있으면 예외가 발생한다")
     void create_MenuGroup_fail(String name) {
-        // given
-        MenuGroup request = new MenuGroup(name);
-
         // when // then
-        assertThatThrownBy(() -> menuGroupService.create(request))
+        assertThatThrownBy(() -> menuGroupService.create(new MenuGroup(name)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
