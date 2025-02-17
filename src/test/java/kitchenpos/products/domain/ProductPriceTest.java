@@ -21,7 +21,8 @@ class ProductPriceTest {
     @DisplayName("상품 가격은 0원 이상이어야 한다.")
     @Test
     void shouldThrowExceptionForNegativePrice() {
+        BigDecimal negativePrice = BigDecimal.valueOf(-1000);
         assertThrows(PriceLessThanZeroException.class,
-            () -> new ProductPrice(BigDecimal.valueOf(-1000)));
+            () -> new ProductPrice(negativePrice));
     }
 }
