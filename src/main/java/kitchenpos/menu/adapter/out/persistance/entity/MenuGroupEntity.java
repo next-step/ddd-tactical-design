@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuGroupName;
+import kitchenpos.menu.domain.model.ProfanityFilteringMenuGroupNameValidator;
 
 import java.util.UUID;
 
@@ -31,11 +31,8 @@ public class MenuGroupEntity {
         return new MenuGroupEntity(menuGroup.getId(), menuGroup.getName());
     }
 
-    public MenuGroup toDomain() {
-        MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(id);
-        menuGroup.setName(MenuGroupName.of(name));
-        return menuGroup;
+    public MenuGroup toDomain(final ProfanityFilteringMenuGroupNameValidator validator) {
+        return MenuGroup.create(id, name, validator);
     }
 
     public UUID getId() {

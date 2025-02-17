@@ -3,34 +3,30 @@ package kitchenpos.menu.domain.model;
 import java.util.UUID;
 
 public class MenuGroup {
-    private UUID id;
-    private MenuGroupName name;
-
-    public MenuGroup() {
-    }
+    private final UUID id;
+    private final MenuGroupName name;
 
     private MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;
         this.name = name;
     }
 
-    public static MenuGroup create(UUID id, MenuGroupName name) {
-        return new MenuGroup(id, name);
+    public static MenuGroup create(
+            final UUID id,
+            final String name,
+            final ProfanityFilteringMenuGroupNameValidator validator) {
+        if (id == null) {
+            throw new IllegalArgumentException("메뉴 그룹 ID가 Null 입니다.");
+        }
+        validator.validate(name);
+        return new MenuGroup(id, MenuGroupName.of(name));
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name.value();
-    }
-
-    public void setName(final MenuGroupName name) {
-        this.name = name;
     }
 }
