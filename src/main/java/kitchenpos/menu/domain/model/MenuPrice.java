@@ -26,4 +26,16 @@ public class MenuPrice {
     public BigDecimal value() {
         return price;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuPrice menuPrice = (MenuPrice) o;
+        return Objects.equals(price, menuPrice.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(price);
+    }
 }

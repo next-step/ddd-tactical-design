@@ -32,4 +32,16 @@ public class MenuName {
     public String value() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuName menuName = (MenuName) o;
+        return Objects.equals(name, menuName.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }

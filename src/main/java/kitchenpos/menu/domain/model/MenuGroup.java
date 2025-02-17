@@ -1,5 +1,6 @@
 package kitchenpos.menu.domain.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class MenuGroup {
@@ -27,5 +28,17 @@ public class MenuGroup {
 
     public String getName() {
         return name.value();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuGroup menuGroup = (MenuGroup) o;
+        return Objects.equals(id, menuGroup.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
