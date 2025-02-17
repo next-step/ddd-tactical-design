@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.product.domain.model;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -8,15 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class NameCreationServiceTest {
+class ProductNameCreationServiceTest {
 
-    private NameCreationService nameCreationService;
+    private ProductNameCreationService productNameCreationService;
     private PurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
-        nameCreationService = new NameCreationService(purgomalumClient);
+        productNameCreationService = new ProductNameCreationService(purgomalumClient);
     }
 
     @Test
@@ -28,7 +28,7 @@ class NameCreationServiceTest {
         fakePurgomalumClient.setProfanity(true);
 
         // when // then
-        assertThatThrownBy(() -> nameCreationService.createName(name))
+        assertThatThrownBy(() -> productNameCreationService.createName(name))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이름에 비속어가 존재합니다. 비속어를 제외해주세요!");
     }
