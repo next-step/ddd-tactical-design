@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductName {
-    private static final String NAME_CREATION_EXCEPTION = "이름을 채워주세요!";
+    private static final String NAME_CREATION_EXCEPTION = "상품 이름을 채워주세요!";
 
     @Column(name = "name", nullable = false)
     private final String value;
