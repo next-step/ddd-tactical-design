@@ -5,6 +5,7 @@ import static kitchenpos.common.exception.ExceptionDetails.DISPLAYED_NAME_INCLUD
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.util.Objects;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameEmptyException;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameIncludeProfanityException;
 import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
@@ -32,5 +33,20 @@ public class DisplayedName {
 
     public String getValue() {
         return this.value;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        DisplayedName that = (DisplayedName) obj;
+        return Objects.equals(value, that.value);
+    }
+
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

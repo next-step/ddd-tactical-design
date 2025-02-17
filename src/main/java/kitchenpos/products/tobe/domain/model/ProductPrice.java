@@ -5,6 +5,7 @@ import static kitchenpos.common.exception.ExceptionDetails.PRICE_LESS_THAN_ZERO_
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import kitchenpos.products.tobe.domain.exception.PriceLessThanZeroException;
 
 @Embeddable
@@ -22,5 +23,20 @@ public class ProductPrice {
 
     public BigDecimal getValue() {
         return this.value;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ProductPrice that = (ProductPrice) obj;
+        return Objects.equals(value, that.value);
+    }
+
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

@@ -14,11 +14,15 @@ import kitchenpos.eatinorders.domain.OrderType;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
+import kitchenpos.products.application.FakeProfanityFilterService;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
+import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
 
 public class Fixtures {
+
+    private static final ProfanityFilterService profanityFilterService = new FakeProfanityFilterService();
 
     public static final UUID INVALID_ID = new UUID(0L, 0L);
 
@@ -126,9 +130,10 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
+
         return new Product(
             UUID.randomUUID(),
-            new DisplayedName(name),
+            new DisplayedName(name, profanityFilterService),
             new ProductPrice(BigDecimal.valueOf(price))
         );
     }
