@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.menu.domain.service;
 
 import static kitchenpos.TestFixtureFactory.createMenu;
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
