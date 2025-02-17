@@ -5,6 +5,8 @@ import kitchenpos.products.tobe.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductService {
 
@@ -26,5 +28,10 @@ public class ProductService {
         );
 
         return productRepository.save(product);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 }
