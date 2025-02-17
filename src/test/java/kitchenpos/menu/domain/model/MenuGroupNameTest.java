@@ -19,7 +19,7 @@ class MenuGroupNameTest {
         final String name = "메뉴 그룹";
 
         // when
-        final MenuGroupName menuGroupName = MenuGroupName.of(name);
+        final MenuGroupName menuGroupName = MenuGroupName.of(name, n -> {});
 
         // then
         assertThat(menuGroupName.isSameName(name)).isTrue();
@@ -31,10 +31,23 @@ class MenuGroupNameTest {
     @ValueSource(strings = {"", " "})
     void createMenuGroupNameWithEmptyOrNull(String name) {
         // when
-        final Throwable thrown = catchThrowable(() -> MenuGroupName.of(name));
+        final Throwable thrown = catchThrowable(() -> MenuGroupName.of(name, n -> {}));
 
         // then
         assertThat(thrown).isInstanceOf(MenuGroupNameValidationException.class)
                 .hasMessage("메뉴 그룹 이름을 입력하세요");
+    }
+
+    @DisplayName("`MenuGroupName` 검증이 실패하면 예외가 발생한다")
+    @Test
+    void createMenuGroupNameWithInvalidValidator() {
+        // when
+        final Throwable thrown = catchThrowable(() -> MenuGroupName.of("메뉴 그룹", n -> {
+            throw new MenuGroupNameValidationException("검증 실패");
+        }));
+
+        // then
+        assertThat(thrown).isInstanceOf(MenuGroupNameValidationException.class)
+                .hasMessage("검증 실패");
     }
 }

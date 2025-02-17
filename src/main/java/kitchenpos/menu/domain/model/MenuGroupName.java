@@ -11,10 +11,14 @@ public class MenuGroupName {
         this.name = name;
     }
 
-    public static MenuGroupName of(final String name) {
+    public static MenuGroupName of(
+            final String name,
+            final ProfanityFilteringMenuGroupNameValidator validator
+    ) {
         if (Objects.isNull(name) || name.isBlank()) {
             throw new MenuGroupNameValidationException("메뉴 그룹 이름을 입력하세요");
         }
+        validator.validate(name);
         return new MenuGroupName(name);
     }
 

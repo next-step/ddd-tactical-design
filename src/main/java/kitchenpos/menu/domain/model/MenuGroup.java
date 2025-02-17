@@ -18,8 +18,7 @@ public class MenuGroup {
         if (id == null) {
             throw new IllegalArgumentException("메뉴 그룹 ID가 Null 입니다.");
         }
-        validator.validate(name);
-        return new MenuGroup(id, MenuGroupName.of(name));
+        return new MenuGroup(id, MenuGroupName.of(name, validator));
     }
 
     public UUID getId() {
