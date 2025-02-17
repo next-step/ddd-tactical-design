@@ -11,10 +11,14 @@ public class MenuName {
         this.name = name;
     }
 
-    public static MenuName of(final String name) {
+    public static MenuName of(
+            final String name,
+            final ProfanityFilteringMenuNameValidator validator
+    ) {
         if (Objects.isNull(name) || name.isBlank()) {
             throw new MenuNameValidationException("메뉴 이름을 입력하세요");
         }
+        validator.validate(name);
         return new MenuName(name);
     }
 

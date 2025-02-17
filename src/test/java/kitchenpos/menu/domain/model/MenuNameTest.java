@@ -15,7 +15,7 @@ class MenuNameTest {
         final String name = "메뉴";
 
         // when
-        final MenuName menuName = MenuName.of(name);
+        final MenuName menuName = MenuName.of(name, n -> {});
 
         // then
         assertThat(menuName.isSameName(name)).isTrue();
@@ -25,10 +25,23 @@ class MenuNameTest {
     @Test
     void createMenuNameWithEmptyOrNull() {
         // when
-        final Throwable thrown = catchThrowable(() -> MenuName.of(null));
+        final Throwable thrown = catchThrowable(() -> MenuName.of(null, n -> {}));
 
         // then
         assertThat(thrown).isInstanceOf(MenuNameValidationException.class)
                 .hasMessage("메뉴 이름을 입력하세요");
+    }
+
+    @DisplayName("MenuName 검증이 실패하면 예외가 발생한다")
+    @Test
+    void createMenuNameWithInvalidValidator() {
+        // when
+        final Throwable thrown = catchThrowable(() -> MenuName.of("메뉴", n -> {
+            throw new MenuNameValidationException("검증 실패");
+        }));
+
+        // then
+        assertThat(thrown).isInstanceOf(MenuNameValidationException.class)
+                .hasMessage("검증 실패");
     }
 }
