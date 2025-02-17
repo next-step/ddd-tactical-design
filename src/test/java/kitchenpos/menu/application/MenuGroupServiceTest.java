@@ -1,14 +1,16 @@
 package kitchenpos.menu.application;
 
-import static kitchenpos.Fixtures.menuGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.List;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
-import kitchenpos.menu.infra.persistence.InMemoryMenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,47 +18,62 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
 class MenuGroupServiceTest {
-    private MenuGroupRepository menuGroupRepository;
+
     private MenuGroupService menuGroupService;
+    private MenuGroupRepository menuGroupRepository;
 
     @BeforeEach
     void setUp() {
-        menuGroupRepository = new InMemoryMenuGroupRepository();
+        menuGroupRepository = mock(MenuGroupRepository.class);
         menuGroupService = new MenuGroupService(menuGroupRepository);
     }
 
-    @DisplayName("메뉴 그룹을 등록할 수 있다.")
     @Test
-    void create() {
-        final MenuGroup expected = createMenuGroupRequest("두마리메뉴");
-        final MenuGroup actual = menuGroupService.create(expected);
-        assertThat(actual).isNotNull();
-        assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName())
-        );
+    @DisplayName("메뉴 그룹을 생성한다")
+    void create_menuGroup() {
+        // given
+        MenuGroup request = new MenuGroup("한식");
+
+        when(menuGroupRepository.save(any(MenuGroup.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // when
+        MenuGroup result = menuGroupService.create(request);
+
+        // then
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getName()).isEqualTo("한식");
+        verify(menuGroupRepository).save(any(MenuGroup.class));
     }
 
-    @DisplayName("메뉴 그룹의 이름이 올바르지 않으면 등록할 수 없다.")
-    @NullAndEmptySource
     @ParameterizedTest
-    void create(final String name) {
-        final MenuGroup expected = createMenuGroupRequest(name);
-        assertThatThrownBy(() -> menuGroupService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+    @NullAndEmptySource
+    @DisplayName("메뉴 그룹 이름이 null이거나 비어있으면 예외가 발생한다")
+    void create_MenuGroup_fail(String name) {
+        // given
+        MenuGroup request = new MenuGroup(name);
+
+        // when // then
+        assertThatThrownBy(() -> menuGroupService.create(request))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("메뉴 그룹의 목록을 조회할 수 있다.")
     @Test
+    @DisplayName("메뉴 그룹 목록을 조회한다")
     void findAll() {
-        menuGroupRepository.save(menuGroup("두마리메뉴"));
-        final List<MenuGroup> actual = menuGroupService.findAll();
-        assertThat(actual).hasSize(1);
-    }
+        // given
+        MenuGroup group1 = new MenuGroup("한식");
+        MenuGroup group2 = new MenuGroup("중식");
+        List<MenuGroup> expected = Arrays.asList(group1, group2);
+        when(menuGroupRepository.findAll()).thenReturn(expected);
 
-    private MenuGroup createMenuGroupRequest(final String name) {
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setName(name);
-        return menuGroup;
+        // when
+        List<MenuGroup> result = menuGroupService.findAll();
+
+        // then
+        assertThat(result).hasSize(2)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
+        verify(menuGroupRepository).findAll();
     }
 }

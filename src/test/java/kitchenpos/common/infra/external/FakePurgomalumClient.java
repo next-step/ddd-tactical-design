@@ -1,19 +1,17 @@
 package kitchenpos.common.infra.external;
 
-import java.util.Arrays;
-import java.util.List;
 import kitchenpos.common.application.PurgomalumClient;
 
 public class FakePurgomalumClient implements PurgomalumClient {
-    private static final List<String> profanities;
 
-    static {
-        profanities = Arrays.asList("비속어", "욕설");
-    }
+    private boolean isProfanity = false;
 
     @Override
-    public boolean containsProfanity(final String text) {
-        return profanities.stream()
-            .anyMatch(profanity -> text.contains(profanity));
+    public boolean containsProfanity(String text) {
+        return isProfanity;
+    }
+
+    public void setProfanity(boolean isProfanity) {
+        this.isProfanity = isProfanity;
     }
 }

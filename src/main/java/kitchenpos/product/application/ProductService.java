@@ -3,12 +3,11 @@ package kitchenpos.product.application;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductNameCreationService;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -17,59 +16,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient purgomalumClient;
+    private final ProductNameCreationService productNameCreationService;
+    private final MarginValidator marginValidator;
 
     public ProductService(
-        final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final PurgomalumClient purgomalumClient
+            final ProductRepository productRepository,
+            final ProductNameCreationService productNameCreationService,
+            final MarginValidator marginValidator
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
-        this.purgomalumClient = purgomalumClient;
+        this.productNameCreationService = productNameCreationService;
+        this.marginValidator = marginValidator;
     }
 
     @Transactional
     public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
+        final BigDecimal price = request.getInnerPrice();
+        final String name = request.getInnerName();
+        final ProductName validProductName = productNameCreationService.createName(name);
+        final Product product = new Product(validProductName, new ProductPrice(price), UUID.randomUUID());
         return productRepository.save(product);
     }
 
     @Transactional
     public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
+        final BigDecimal price = request.getInnerPrice();
         final Product product = productRepository.findById(productId)
-            .orElseThrow(NoSuchElementException::new);
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+                .orElseThrow(NoSuchElementException::new);
+        product.changePrice(price);
+        marginValidator.checkMargin(product);
         return product;
     }
 
