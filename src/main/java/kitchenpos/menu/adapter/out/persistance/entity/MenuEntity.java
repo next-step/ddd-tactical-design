@@ -62,18 +62,17 @@ public class MenuEntity {
     }
 
     public Menu toDomain() {
-        Menu menu = new Menu();
-        menu.setId(getId());
-        menu.setName(getName());
-        menu.setPrice(getPrice());
-        menu.setMenuGroupId(getMenuGroupId());
-        menu.setDisplayed(isDisplayed());
-        menu.setMenuGroup(getMenuGroup().toDomain(nm -> {}));
-        menu.setMenuProducts(getMenuProducts()
-                .stream()
-                .map(MenuProductEntity::toDomain)
-                .toList());
-        return menu;
+        return Menu.create(
+                this.name,
+                this.price,
+                this.displayed,
+                this.menuGroup.toDomain(nm -> {}),
+                this.menuProducts
+                        .stream()
+                        .map(MenuProductEntity::toDomain)
+                        .toList(),
+                nm -> {}
+        );
     }
 
     public UUID getId() {

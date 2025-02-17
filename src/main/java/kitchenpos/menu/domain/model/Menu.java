@@ -1,19 +1,48 @@
 package kitchenpos.menu.domain.model;
 
+import kitchenpos.menu.domain.exception.MenuPriceValidationException;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 public class Menu {
     private UUID id;
-    private String name;
-    private BigDecimal price;
+    private MenuName name;
+    private MenuPrice price;
     private MenuGroup menuGroup;
     private boolean displayed;
-    private List<MenuProduct> menuProducts;
+    private MenuProducts menuProducts;
     private UUID menuGroupId;
 
     public Menu() {
+    }
+
+    public static Menu create(
+            final String name,
+            final BigDecimal price,
+            final boolean isDisplayed,
+            final MenuGroup menuGroup,
+            final List<MenuProduct> menuProductList,
+            final ProfanityFilteringMenuNameValidator profanityFilteringMenuNameValidator
+    ) {
+
+        MenuProducts menuProducts = MenuProducts.of(menuProductList);
+
+        MenuPrice menuPrice = MenuPrice.of(price, p -> {
+            if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
+                throw new MenuPriceValidationException("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
+            }
+        });
+
+        Menu menu = new Menu();
+        menu.setId(UUID.randomUUID());
+        menu.setName(MenuName.of(name, profanityFilteringMenuNameValidator));
+        menu.setPrice(menuPrice);
+        menu.setMenuGroup(menuGroup);
+        menu.setDisplayed(isDisplayed);
+        menu.setMenuProducts(menuProducts);
+        return menu;
     }
 
     public UUID getId() {
@@ -25,18 +54,18 @@ public class Menu {
     }
 
     public String getName() {
-        return name;
+        return name.value();
     }
 
-    public void setName(final String name) {
+    public void setName(final MenuName name) {
         this.name = name;
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.value();
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void setPrice(final MenuPrice price) {
         this.price = price;
     }
 
@@ -57,10 +86,10 @@ public class Menu {
     }
 
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
+        return menuProducts.value();
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
+    public void setMenuProducts(final MenuProducts menuProducts) {
         this.menuProducts = menuProducts;
     }
 

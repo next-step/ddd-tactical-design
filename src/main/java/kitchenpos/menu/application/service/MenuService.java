@@ -3,10 +3,10 @@ package kitchenpos.menu.application.service;
 import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
 import kitchenpos.menu.application.port.out.LoadMenuPort;
 import kitchenpos.menu.application.port.out.SaveMenuPort;
+import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.menu.domain.exception.MenuNameValidationException;
+import kitchenpos.menu.domain.model.*;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.shared.port.out.PurgomalumClient;
@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -40,61 +42,56 @@ public class MenuService {
 
     @Transactional
     public Menu create(final CreateMenuRequest request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final MenuGroup menuGroup = loadMenuGroupPort.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
+
+        // Request 내에서 검증하기
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
+
+        // 메소드 추출
         final List<Product> products = loadProductPort.findAllByIdIn(
             menuProductRequests.stream()
                 .map(MenuProduct::getProductId)
                 .toList()
         );
+
         if (products.size() != menuProductRequests.size()) {
             throw new IllegalArgumentException();
         }
+
+        final Map<UUID, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
         final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProductRequests) {
+            // Request 내에서 검증하기
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
-            final Product product = loadProductPort.findById(menuProductRequest.getProductId())
-                .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
+            final Product product = productMap.get(menuProductRequest.getProductId());
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
         }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
+
+        final Menu menu = Menu.create(
+                request.getName(),
+                request.getPrice(),
+                request.isDisplayed(),
+                menuGroup,
+                menuProducts,
+                getProfanityFilteringMenuNameValidator());
+
         return saveMenuPort.save(menu);
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
+    public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
@@ -112,7 +109,7 @@ public class MenuService {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(price);
+        menu.setPrice(MenuPrice.of(price, p -> {}));
         return menu;
     }
 
@@ -146,5 +143,13 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return loadMenuPort.findAll();
+    }
+
+    private ProfanityFilteringMenuNameValidator getProfanityFilteringMenuNameValidator() {
+        return n -> {
+            if (purgomalumClient.containsProfanity(n)) {
+                throw new MenuNameValidationException("메뉴 이름에 비속어가 포함되어 있습니다. name=" + n);
+            }
+        };
     }
 }

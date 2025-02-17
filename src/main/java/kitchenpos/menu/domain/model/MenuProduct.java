@@ -2,6 +2,7 @@ package kitchenpos.menu.domain.model;
 
 import kitchenpos.product.domain.model.Product;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuProduct {
@@ -11,6 +12,10 @@ public class MenuProduct {
     private UUID productId;
 
     public MenuProduct() {
+    }
+
+    public BigDecimal calculatePrice() {
+        return product.multiplyPrice(quantity);
     }
 
     public Long getSeq() {

@@ -6,9 +6,12 @@ import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
+import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
+import kitchenpos.menu.domain.exception.MenuPriceValidationException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
@@ -236,7 +239,7 @@ public class MenuServiceTest {
         @Test
         void change_menu_price() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(18000));
 
             // when
@@ -251,15 +254,15 @@ public class MenuServiceTest {
         @Test
         void price_must_be_positive() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(-1000));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -267,7 +270,7 @@ public class MenuServiceTest {
         @Test
         void price_must_be_lower_than_sum_of_products() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(30000));
 
             // when
@@ -325,8 +328,9 @@ public class MenuServiceTest {
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.display(MENU_UUID);
 
             // then
-            assertThatIllegalStateException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(MenuPriceValidationException.class)
+                    .hasMessage("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
