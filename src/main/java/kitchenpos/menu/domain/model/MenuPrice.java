@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Embeddable
 public class MenuPrice {
-    private static final String PRICE_CREATION_EXCEPTION = "메뉴 가격을 채워주세요!";
+    private static final String MENU_PRICE_CREATION_EXCEPTION = "메뉴 가격을 채워주세요!";
 
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
@@ -23,7 +23,7 @@ public class MenuPrice {
 
     private void validatePrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(PRICE_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION);
         }
     }
 }
