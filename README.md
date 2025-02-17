@@ -103,6 +103,7 @@ docker compose -p kitchenpos up -d
 | 상품  | product     | 메뉴를 관리하는 기준이 되는 데이터 |
 | 식별자 | ProductId   | 상품의 식별자             |
 | 상품명 | ProductName | 상품의 이름              |
+| 가격  | Price       | 상품의 가격              |
 
 ### 메뉴
 
@@ -161,7 +162,7 @@ docker compose -p kitchenpos up -d
 
 ### 상품
 
-- `Product`는 `ProductId`와 `ProductName`, 가격을 가진다.
+- `Product`는 `ProductId`와 `ProductName`, `Price`를 가진다.
 - `DisplayedName`에는 `Profanity`가 포함될 수 없다.
 
 ### 메뉴
