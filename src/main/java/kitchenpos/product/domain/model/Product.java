@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.Price;
 
 @Table(name = "product")
 @Entity
@@ -18,18 +16,18 @@ public class Product {
     private UUID id;
 
     @Embedded
-    private Name name;
+    private ProductName name;
 
     @Embedded
-    private Price price;
+    private ProductPrice price;
 
-    public Product(Name name, Price price, UUID id) {
+    public Product(ProductName name, ProductPrice price, UUID id) {
         this.name = name;
         this.price = price;
         this.id = id;
     }
 
-    public Product(Name name, Price price) {
+    public Product(ProductName name, ProductPrice price) {
         this(name, price, UUID.randomUUID());
     }
 
@@ -49,7 +47,7 @@ public class Product {
         return name.getValue();
     }
 
-    public Name getName() {
+    public ProductName getName() {
         return name;
     }
 
@@ -61,12 +59,12 @@ public class Product {
         return price.getValue();
     }
 
-    public Price getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 
     public void changePrice(BigDecimal price) {
-        this.price = new Price(price);
+        this.price = new ProductPrice(price);
     }
 
 //    public void setPrice(final BigDecimal price) {

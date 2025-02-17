@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.common.domain.MarginValidator;
-import kitchenpos.common.domain.Name;
-import kitchenpos.common.domain.NameCreationService;
-import kitchenpos.common.domain.Price;
+import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductNameCreationService;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    private final NameCreationService nameCreationService;
+    private final ProductNameCreationService productNameCreationService;
     private final MarginValidator marginValidator;
 
     public ProductService(
             final ProductRepository productRepository,
-            final NameCreationService nameCreationService,
+            final ProductNameCreationService productNameCreationService,
             final MarginValidator marginValidator
     ) {
         this.productRepository = productRepository;
-        this.nameCreationService = nameCreationService;
+        this.productNameCreationService = productNameCreationService;
         this.marginValidator = marginValidator;
     }
 
@@ -33,8 +33,8 @@ public class ProductService {
     public Product create(final Product request) {
         final BigDecimal price = request.getInnerPrice();
         final String name = request.getInnerName();
-        final Name validName = nameCreationService.createName(name);
-        final Product product = new Product(validName, new Price(price), UUID.randomUUID());
+        final ProductName validProductName = productNameCreationService.createName(name);
+        final Product product = new Product(validProductName, new ProductPrice(price), UUID.randomUUID());
         return productRepository.save(product);
     }
 

@@ -1,4 +1,4 @@
-package kitchenpos.common.domain;
+package kitchenpos.product.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -6,18 +6,18 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
-public class Price {
+public class ProductPrice {
     private static final String PRICE_CREATION_EXCEPTION = "가격을 채워주세요!";
 
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
-    public Price(BigDecimal value) {
+    public ProductPrice(BigDecimal value) {
         validatePrice(value);
         this.value = value;
     }
 
-    protected Price() {
+    protected ProductPrice() {
         this.value = null;
     }
 
@@ -39,8 +39,8 @@ public class Price {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Price price = (Price) o;
-        return Objects.equals(value, price.value);
+        ProductPrice productPrice = (ProductPrice) o;
+        return Objects.equals(value, productPrice.value);
     }
 
     @Override

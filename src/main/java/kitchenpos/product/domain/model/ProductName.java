@@ -1,22 +1,22 @@
-package kitchenpos.common.domain;
+package kitchenpos.product.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class Name {
+public class ProductName {
     private static final String NAME_CREATION_EXCEPTION = "이름을 채워주세요!";
 
     @Column(name = "name", nullable = false)
     private final String value;
 
-    protected Name(String value) {
+    protected ProductName(String value) {
         validateName(value);
         this.value = value;
     }
 
-    protected Name() {
+    protected ProductName() {
         this.value = null;
     }
 
@@ -38,8 +38,8 @@ public class Name {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Name name = (Name) o;
-        return Objects.equals(value, name.value);
+        ProductName productName = (ProductName) o;
+        return Objects.equals(value, productName.value);
     }
 
     @Override
