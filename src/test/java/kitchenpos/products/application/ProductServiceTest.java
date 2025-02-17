@@ -1,10 +1,16 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.application.InMemoryMenuRepository;
+import kitchenpos.fixture.MenuFixture;
+import kitchenpos.fixture.MenuProductFixture;
+import kitchenpos.fixture.ProductFixture;
+import kitchenpos.menus.domain.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.domain.InMemoryProductRepository;
 import kitchenpos.products.domain.Product;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.infra.FakePurgomalumClient;
 import kitchenpos.products.infra.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,9 +23,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.menu;
-import static kitchenpos.Fixtures.menuProduct;
-import static kitchenpos.Fixtures.product;
+import static kitchenpos.fixture.MenuFixture.*;
+import static kitchenpos.fixture.MenuGroupFixture.menuGroup;
+import static kitchenpos.fixture.MenuProductFixture.*;
+import static kitchenpos.fixture.ProductFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,7 +48,8 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
+
+        final Product expected = product(FRIED_CHICKEN, FRIED_CHICKEN_PRICE);
         final Product actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
@@ -56,7 +64,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final BigDecimal price) {
-        final Product expected = createProductRequest("후라이드", price);
+        final Product expected = product(FRIED_CHICKEN, price);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -66,7 +74,7 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void create(final String name) {
-        final Product expected = createProductRequest(name, 16_000L);
+        final Product expected = product(name, FRIED_CHICKEN_PRICE);
         assertThatThrownBy(() -> productService.create(expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -74,8 +82,9 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(15_000L);
+        final Product product = productRepository.save(product(FRIED_CHICKEN, FRIED_CHICKEN_PRICE));
+        final UUID productId = product.getId();
+        final Product expected = product(productId, product.getName(), 15_000L);
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
@@ -85,8 +94,9 @@ class ProductServiceTest {
     @NullSource
     @ParameterizedTest
     void changePrice(final BigDecimal price) {
-        final UUID productId = productRepository.save(product("후라이드", 16_000L)).getId();
-        final Product expected = changePriceRequest(price);
+        final Product product = productRepository.save(product(FRIED_CHICKEN, FRIED_CHICKEN_PRICE));
+        final UUID productId = product.getId();
+        final Product expected = product(productId, product.getName(), price);
         assertThatThrownBy(() -> productService.changePrice(productId, expected))
             .isInstanceOf(IllegalArgumentException.class);
     }
@@ -94,39 +104,22 @@ class ProductServiceTest {
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
-        final Product product = productRepository.save(product("후라이드", 16_000L));
-        final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getId(), changePriceRequest(8_000L));
+        final Product product = productRepository.save(product(FRIED_CHICKEN, FRIED_CHICKEN_PRICE));
+        final Menu menu = menuRepository.save(menu(
+                DOUBLE_FRIED_CHICKEN_MENU, DOUBLE_FRIED_CHICKEN_MENU_PRICE, menuGroup(),
+                List.of(menuProduct(2L, product)), true)
+        );
+        final UUID productId = product.getId();
+        productService.changePrice(product.getId(), product(productId, product.getName(), 8_000L));
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
     @DisplayName("상품의 목록을 조회할 수 있다.")
     @Test
     void findAll() {
-        productRepository.save(product("후라이드", 16_000L));
-        productRepository.save(product("양념치킨", 16_000L));
+        productRepository.save(product(FRIED_CHICKEN, FRIED_CHICKEN_PRICE));
+        productRepository.save(product(SEASONED_CHICKEN, SEASONED_CHICKEN_PRICE));
         final List<Product> actual = productService.findAll();
         assertThat(actual).hasSize(2);
-    }
-
-    private Product createProductRequest(final String name, final long price) {
-        return createProductRequest(name, BigDecimal.valueOf(price));
-    }
-
-    private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        return product;
-    }
-
-    private Product changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(price);
-        return product;
     }
 }
