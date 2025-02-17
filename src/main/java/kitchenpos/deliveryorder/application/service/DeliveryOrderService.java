@@ -3,8 +3,8 @@ package kitchenpos.deliveryorder.application.service;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.menu.adapter.out.persistance.MenuRepository;
-import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.takeoutorder.application.port.out.KitchenridersClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,18 +16,18 @@ import java.util.*;
 @Service
 public class DeliveryOrderService {
     private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
+    private final MenuEntityRepository menuEntityRepository;
     private final OrderTableRepository orderTableRepository;
     private final KitchenridersClient kitchenridersClient;
 
     public DeliveryOrderService(
         final OrderRepository orderRepository,
-        final MenuRepository menuRepository,
+        final MenuEntityRepository menuEntityRepository,
         final OrderTableRepository orderTableRepository,
         final KitchenridersClient kitchenridersClient
     ) {
         this.orderRepository = orderRepository;
-        this.menuRepository = menuRepository;
+        this.menuEntityRepository = menuEntityRepository;
         this.orderTableRepository = orderTableRepository;
         this.kitchenridersClient = kitchenridersClient;
     }
@@ -42,7 +42,7 @@ public class DeliveryOrderService {
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        final List<Menu> menus = menuRepository.findAllByIdIn(
+        final List<MenuEntity> menus = menuEntityRepository.findAllByIdIn(
             orderLineItemRequests.stream()
                 .map(OrderLineItem::getMenuId)
                 .toList()
@@ -58,7 +58,7 @@ public class DeliveryOrderService {
                     throw new IllegalArgumentException();
                 }
             }
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+            final MenuEntity menu = menuEntityRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();

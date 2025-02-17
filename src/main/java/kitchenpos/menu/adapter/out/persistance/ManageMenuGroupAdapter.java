@@ -10,6 +10,8 @@ import kitchenpos.shared.port.out.PurgomalumClient;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ManageMenuGroupAdapter implements LoadMenuGroupPort, SaveMenuGroupPort {
@@ -36,6 +38,12 @@ public class ManageMenuGroupAdapter implements LoadMenuGroupPort, SaveMenuGroupP
                 .stream()
                 .map(menuGroupEntity -> menuGroupEntity.toDomain(getProfanityFilteringMenuGroupNameValidator()))
                 .toList();
+    }
+
+    @Override
+    public Optional<MenuGroup> findById(UUID id) {
+        return menuGroupEntityRepository.findById(id)
+                .map(menuGroupEntity -> menuGroupEntity.toDomain(getProfanityFilteringMenuGroupNameValidator()));
     }
 
     private ProfanityFilteringMenuGroupNameValidator getProfanityFilteringMenuGroupNameValidator() {

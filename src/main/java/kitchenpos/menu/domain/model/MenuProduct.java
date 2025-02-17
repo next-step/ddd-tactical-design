@@ -1,30 +1,13 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.*;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.product.domain.model.Product;
 
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
 public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
     private Long seq;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private ProductEntity product;
-
-    @Column(name = "quantity", nullable = false)
+    private Product product;
     private long quantity;
-
-    @Transient
     private UUID productId;
 
     public MenuProduct() {
@@ -38,11 +21,11 @@ public class MenuProduct {
         this.seq = seq;
     }
 
-    public ProductEntity getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(final ProductEntity product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 

@@ -1,8 +1,8 @@
 package kitchenpos.acceptance;
 
 import io.restassured.RestAssured;
-import kitchenpos.menu.adapter.out.persistance.MenuRepository;
-import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class MenuAcceptanceTest {
     }
 
     @Autowired
-    private MenuRepository menuRepository;
+    private MenuEntityRepository menuEntityRepository;
 
     @DisplayName("상품 가격이 변경되어 메뉴의 가격이 메뉴상품의 총합보다 높아지면 메뉴를 숨김 처리한다")
     @Test
@@ -48,7 +48,7 @@ public class MenuAcceptanceTest {
         상품의_가격을_변경한다(productId, price);
 
         // then
-        Menu menu = menuRepository.findById(UUID.fromString(menuId)).orElseThrow(NoSuchElementException::new);
+        MenuEntity menu = menuEntityRepository.findById(UUID.fromString(menuId)).orElseThrow(NoSuchElementException::new);
         assertThat(menu.isDisplayed()).isFalse();
     }
 

@@ -4,12 +4,11 @@ import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderLineItem;
 import kitchenpos.eatinorder.domain.model.OrderTable;
 import kitchenpos.eatinorder.domain.model.OrderType;
+import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
@@ -39,14 +38,14 @@ public class OrderTableServiceTest {
     private final EatInOrderService orderService;
     private final SaveProductPort saveProductPort;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
-    private final MenuRepository menuRepository;
+    private final MenuEntityRepository menuEntityRepository;
 
-    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, MenuGroupEntityRepository menuGroupEntityRepository, MenuRepository menuRepository) {
+    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, MenuGroupEntityRepository menuGroupEntityRepository, MenuEntityRepository menuEntityRepository) {
         this.orderTableService = orderTableService;
         this.orderService = orderService;
         this.saveProductPort = saveProductPort;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
-        this.menuRepository = menuRepository;
+        this.menuEntityRepository = menuEntityRepository;
     }
 
     @DisplayName("주문 테이블 등록하기")
@@ -272,9 +271,9 @@ public class OrderTableServiceTest {
         MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
         menuGroupEntityRepository.save(menuGroup);
 
-        List<MenuProduct> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
-        Menu menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
-        menuRepository.save(menu);
+        List<MenuProductEntity> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
+        MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
+        menuEntityRepository.save(menu);
 
         List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
         Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTable.getId(), orderTable);
@@ -302,8 +301,8 @@ public class OrderTableServiceTest {
         return menuGroup;
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
+    private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
+        MenuEntity menu = new MenuEntity();
         menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
@@ -314,8 +313,8 @@ public class OrderTableServiceTest {
         return menu;
     }
 
-    private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
-        MenuProduct menuProduct = new MenuProduct();
+    private static MenuProductEntity createMenuProduct(UUID productId, Product proudct, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
         menuProduct.setProduct(ProductEntity.of(proudct));
         menuProduct.setQuantity(quantity);

@@ -1,12 +1,12 @@
 package kitchenpos.menu.application.service;
 
 import kitchenpos.ClientTestConfiguration;
+import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
@@ -36,20 +36,20 @@ class UpdateMenuDisplayStatusServiceTest {
     private final SaveProductPort saveProductPort;
     private final ProductEntityRepository productEntityRepository;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
-    private final MenuRepository menuRepository;
+    private final MenuEntityRepository menuEntityRepository;
 
     public UpdateMenuDisplayStatusServiceTest(
             final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase,
             final SaveProductPort saveProductPort,
             final ProductEntityRepository productEntityRepository,
             final MenuGroupEntityRepository menuGroupEntityRepository,
-            final MenuRepository menuRepository
+            final MenuEntityRepository menuEntityRepository
     ) {
         this.updateMenuDisplayStatusUseCase = updateMenuDisplayStatusUseCase;
         this.saveProductPort = saveProductPort;
         this.productEntityRepository = productEntityRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
-        this.menuRepository = menuRepository;
+        this.menuEntityRepository = menuEntityRepository;
     }
 
 
@@ -65,10 +65,10 @@ class UpdateMenuDisplayStatusServiceTest {
         MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
         menuGroupEntityRepository.save(menuGroup);
 
-        List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
-        Menu menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
+        List<MenuProductEntity> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
+        MenuEntity menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
         menu.setDisplayed(true);
-        menuRepository.save(menu);
+        menuEntityRepository.save(menu);
     }
 
     @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -85,13 +85,13 @@ class UpdateMenuDisplayStatusServiceTest {
         updateMenuDisplayStatusUseCase.execute(PRODUCT_UUID);
 
         // then
-        Menu menu = menuRepository.findById(MENU_UUID)
+        MenuEntity menu = menuEntityRepository.findById(MENU_UUID)
                 .orElseThrow(NoSuchElementException::new);
         assertThat(menu.isDisplayed()).isFalse();
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
+    private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
+        MenuEntity menu = new MenuEntity();
         menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
@@ -101,8 +101,8 @@ class UpdateMenuDisplayStatusServiceTest {
         return menu;
     }
 
-    private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
-        MenuProduct menuProduct = new MenuProduct();
+    private static MenuProductEntity createMenuProduct(UUID productId, Product proudct, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
         if (proudct != null) {
             menuProduct.setProduct(ProductEntity.of(proudct));

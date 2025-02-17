@@ -1,11 +1,12 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuRepository;
-import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
+import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
+import kitchenpos.menu.application.port.out.LoadMenuPort;
+import kitchenpos.menu.application.port.out.SaveMenuPort;
+import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.shared.port.out.PurgomalumClient;
@@ -18,29 +19,32 @@ import java.util.*;
 @Service
 public class MenuService {
     private final LoadProductPort loadProductPort;
-    private final MenuRepository menuRepository;
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final LoadMenuPort loadMenuPort;
+    private final LoadMenuGroupPort loadMenuGroupPort;
+    private final SaveMenuPort saveMenuPort;
     private final PurgomalumClient purgomalumClient;
 
     public MenuService(
             final LoadProductPort loadProductPort,
-            final MenuRepository menuRepository,
-            final MenuGroupEntityRepository menuGroupEntityRepository,
+            final LoadMenuPort loadMenuPort,
+            final LoadMenuGroupPort loadMenuGroupPort,
+            final SaveMenuPort saveMenuPort,
             final PurgomalumClient purgomalumClient
     ) {
         this.loadProductPort = loadProductPort;
-        this.menuRepository = menuRepository;
-        this.menuGroupEntityRepository = menuGroupEntityRepository;
+        this.loadMenuPort = loadMenuPort;
+        this.loadMenuGroupPort = loadMenuGroupPort;
+        this.saveMenuPort = saveMenuPort;
         this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
-    public Menu create(final Menu request) {
+    public Menu create(final CreateMenuRequest request) {
         final BigDecimal price = request.getPrice();
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final MenuGroupEntity menuGroup = menuGroupEntityRepository.findById(request.getMenuGroupId())
+        final MenuGroup menuGroup = loadMenuGroupPort.findById(request.getMenuGroupId())
             .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
@@ -68,7 +72,7 @@ public class MenuService {
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(ProductEntity.of(product));
+            menuProduct.setProduct(product);
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
         }
@@ -86,7 +90,7 @@ public class MenuService {
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(request.isDisplayed());
         menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+        return saveMenuPort.save(menu);
     }
 
     @Transactional
@@ -95,7 +99,7 @@ public class MenuService {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -114,7 +118,7 @@ public class MenuService {
 
     @Transactional
     public Menu display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -133,7 +137,7 @@ public class MenuService {
 
     @Transactional
     public Menu hide(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
+        final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         menu.setDisplayed(false);
         return menu;
@@ -141,6 +145,6 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
-        return menuRepository.findAll();
+        return loadMenuPort.findAll();
     }
 }

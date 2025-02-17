@@ -1,10 +1,13 @@
-package kitchenpos.menu.domain.model;
+package kitchenpos.menu.application.service.model;
+
+import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuProduct;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public class Menu {
+public class CreateMenuRequest {
     private UUID id;
     private String name;
     private BigDecimal price;
@@ -13,7 +16,7 @@ public class Menu {
     private List<MenuProduct> menuProducts;
     private UUID menuGroupId;
 
-    public Menu() {
+    public CreateMenuRequest() {
     }
 
     public UUID getId() {
