@@ -34,9 +34,9 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
-        profanityFilterService.validateProfanity(request.getName().getValue());
-        final Product product = new Product(UUID.randomUUID(), new DisplayedName(request.getName().getValue()),
-            new ProductPrice(request.getPrice().getValue()));
+        final DisplayedName displayedName = new DisplayedName(request.getName().getValue(), profanityFilterService);
+        final ProductPrice productPrice = new ProductPrice(request.getPrice().getValue());
+        final Product product = new Product(UUID.randomUUID(), displayedName, productPrice);
         return productRepository.save(product);
     }
 
