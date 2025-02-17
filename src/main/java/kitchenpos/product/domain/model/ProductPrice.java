@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Embeddable
 public class ProductPrice {
-    private static final String PRICE_CREATION_EXCEPTION = "가격을 채워주세요!";
+    private static final String PRICE_CREATION_EXCEPTION = "상품 가격을 채워주세요!";
 
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
