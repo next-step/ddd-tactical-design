@@ -106,7 +106,7 @@ public class Menu {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
+    public void changeDisplay(final boolean displayed) {
         this.displayed = displayed;
     }
 
