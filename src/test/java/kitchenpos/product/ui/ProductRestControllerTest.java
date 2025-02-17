@@ -90,10 +90,6 @@ class ProductRestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    private Product createProductRequest() {
-        return createProduct("김치", 5000);
-    }
-
     private Product createAndSaveProduct(String name, int price) {
         Product product = createProduct(name, price);
         return productRepository.save(product);

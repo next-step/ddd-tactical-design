@@ -25,4 +25,21 @@ public class MenuName {
             throw new IllegalArgumentException(MENU_NAME_CREATION_EXCEPTION);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuName menuName = (MenuName) o;
+        return Objects.equals(value, menuName.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 }

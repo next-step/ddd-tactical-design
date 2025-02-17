@@ -26,4 +26,21 @@ public class MenuPrice {
             throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MenuPrice menuPrice = (MenuPrice) o;
+        return Objects.equals(value, menuPrice.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
 }
