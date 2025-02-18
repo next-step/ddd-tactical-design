@@ -1,5 +1,6 @@
 package kitchenpos.menu.domain.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Objects;
 public class MenuProductQuantity {
     private static final String MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION = "메뉴 상품의 수량은 0보다 커야 합니다!";
 
+    @Column(name = "quantity", nullable = false)
     private final Long value;
 
     public MenuProductQuantity(long value) {
