@@ -122,14 +122,17 @@ class MenuServiceTest {
     void menu_group_exception() {
         // given
         Product product = createProduct(BigDecimal.valueOf(5000));
-        MenuGroup menuGroup = null;
         MenuProduct menuProduct = new MenuProduct(1, product, product.getId());
-        Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, List.of(menuProduct), menuGroup,
-                null);
+        MenuGroup menuGroup = null;
 
         // when // then
-        assertThatThrownBy(() -> menuService.create(request))
-                .isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> {
+            Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, List.of(menuProduct), menuGroup,
+                    null);
+            menuService.create(request);
+        })
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("메뉴 그룹이 존재하지 않습니다!");
     }
 
     @Test

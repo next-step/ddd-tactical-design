@@ -14,6 +14,7 @@ import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,9 +45,6 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
         final List<Product> products = productRepository.findAllByIdIn(
                 menuProductRequests.stream()
                         .map(MenuProduct::getProductId)
@@ -55,6 +53,17 @@ public class MenuService {
         if (products.size() != menuProductRequests.size()) {
             throw new IllegalArgumentException();
         }
+        final List<MenuProduct> menuProducts = createMenuProducts(menuProductRequests);
+        final String name = request.getInnerName();
+        if (purgomalumClient.containsProfanity(name)) {
+            throw new IllegalArgumentException();
+        }
+        final Menu menu = new Menu(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        validateMargin(menu);
+        return menuRepository.save(menu);
+    }
+
+    private List<MenuProduct> createMenuProducts(List<MenuProduct> menuProductRequests) {
         final List<MenuProduct> menuProducts = new ArrayList<>();
         for (final MenuProduct menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getInnerQuantity();
@@ -63,13 +72,7 @@ public class MenuService {
             final MenuProduct menuProduct = new MenuProduct(product, new MenuProductQuantity(quantity), product.getId());
             menuProducts.add(menuProduct);
         }
-        final String name = request.getInnerName();
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
-        validateMargin(menu);
-        return menuRepository.save(menu);
+        return menuProducts;
     }
 
     private void validateMargin(Menu menu) {
