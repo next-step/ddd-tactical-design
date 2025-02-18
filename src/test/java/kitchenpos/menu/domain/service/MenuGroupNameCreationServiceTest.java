@@ -1,22 +1,23 @@
-package kitchenpos.product.domain.model;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+package kitchenpos.menu.domain.service;
 
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
+import kitchenpos.product.domain.model.ProductNameCreationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class ProductNameCreationServiceTest {
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-    private ProductNameCreationService productNameCreationService;
+class MenuGroupNameCreationServiceTest {
+
+    private MenuGroupNameCreationService menuGroupNameCreationService;
     private PurgomalumClient purgomalumClient;
 
     @BeforeEach
     void setUp() {
         purgomalumClient = new FakePurgomalumClient();
-        productNameCreationService = new ProductNameCreationService(purgomalumClient);
+        menuGroupNameCreationService = new MenuGroupNameCreationService(purgomalumClient);
     }
 
     @Test
@@ -28,8 +29,8 @@ class ProductNameCreationServiceTest {
         fakePurgomalumClient.setProfanity(true);
 
         // when // then
-        assertThatThrownBy(() -> productNameCreationService.createName(name))
+        assertThatThrownBy(() -> menuGroupNameCreationService.createName(name))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("상품 이름에 비속어가 존재합니다. 비속어를 제외해주세요!");
+                .hasMessage("메뉴 카테고리 이름에 비속어가 존재합니다. 비속어를 제외해주세요!");
     }
 }
