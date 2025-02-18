@@ -24,31 +24,28 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
-    private final PurgomalumClient purgomalumClient;
     private final MarginValidator marginValidator;
     private final MenuProductValidator menuProductValidator;
+    private final MenuNameCreationService menuNameCreationService;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient, MarginValidator marginValidator, MenuProductValidator menuProductValidator
+            MarginValidator marginValidator,
+            MenuProductValidator menuProductValidator,
+            MenuNameCreationService menuNameCreationService
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
-        this.purgomalumClient = purgomalumClient;
         this.marginValidator = marginValidator;
         this.menuProductValidator = menuProductValidator;
+        this.menuNameCreationService = menuNameCreationService;
     }
 
     @Transactional
     public Menu create(final Menu request) {
-        final String name = request.getInnerName();
-        if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-
         final BigDecimal price = request.getInnerPrice();
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
@@ -57,8 +54,12 @@ public class MenuService {
         menuProductValidator.validateMenuProduct(menuProductRequests);
         final List<MenuProduct> menuProducts = createMenuProductsByRequest(menuProductRequests);
 
-        final Menu menu = new Menu(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        final String name = request.getInnerName();
+        MenuName menuName = menuNameCreationService.createName(name);
+
+        final Menu menu = new Menu(UUID.randomUUID(), menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
         validateMargin(menu);
+
         return menuRepository.save(menu);
     }
 

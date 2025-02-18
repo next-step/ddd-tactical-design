@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuNameCreationService;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -46,7 +47,8 @@ class MenuServiceTest {
         purgomalumClient = new FakePurgomalumClient();
         MarginValidator marginValidator = new MarginValidator(menuRepository);
         MenuProductValidator menuProductValidator = new MenuProductValidator(productRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, marginValidator, menuProductValidator);
+        MenuNameCreationService menuNameCreationService = new MenuNameCreationService(purgomalumClient);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, marginValidator, menuProductValidator, menuNameCreationService);
     }
 
     @Test

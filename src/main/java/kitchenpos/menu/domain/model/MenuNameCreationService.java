@@ -1,7 +1,6 @@
-package kitchenpos.menu.domain.service;
+package kitchenpos.menu.domain.model;
 
 import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.menu.domain.model.MenuName;
 import org.springframework.stereotype.Service;
 
 @Service

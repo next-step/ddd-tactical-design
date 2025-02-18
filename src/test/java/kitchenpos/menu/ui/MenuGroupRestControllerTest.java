@@ -7,9 +7,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.UUID;
+
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuGroupName;
+import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
+import kitchenpos.menu.domain.model.MenuNameCreationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,7 +40,8 @@ class MenuGroupRestControllerTest {
     @DisplayName("메뉴 그룹을 생성한다.")
     void create_success() throws Exception {
         // given
-        MenuGroup request = new MenuGroup(new MenuGroupName("한식"));
+        MenuGroupNameCreationService menuGroupNameCreationService = new MenuGroupNameCreationService(new FakePurgomalumClient());
+        MenuGroup request = new MenuGroup(menuGroupNameCreationService.createName("한식"));
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menu-groups")
