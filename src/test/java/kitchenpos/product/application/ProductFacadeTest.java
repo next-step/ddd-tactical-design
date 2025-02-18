@@ -21,6 +21,7 @@ import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
+import kitchenpos.product.domain.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +36,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ProductFacadeTest {
 
-    @InjectMocks
     private ProductService productService;
 
     private ProductRepository productRepository = new InMemoryProductRepository();
@@ -52,7 +52,7 @@ class ProductFacadeTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        productService = new ProductService(productRepository, menuRepository, purgomalumClient);
+        productService = new ProductServiceImpl(productRepository, menuRepository, purgomalumClient);
 
         chicken = ProductFixture.init().create();
         chickenMenu = MenuFixture.init().create();
