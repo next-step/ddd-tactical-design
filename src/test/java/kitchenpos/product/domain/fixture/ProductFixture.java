@@ -3,8 +3,8 @@ package kitchenpos.product.domain.fixture;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.product.application.dto.ProductRequest;
 import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.model.ProductVo;
 
 public record ProductFixture(UUID id, String 상품명, BigDecimal 상품가격) {
 
@@ -23,12 +23,16 @@ public record ProductFixture(UUID id, String 상품명, BigDecimal 상품가격)
         );
     }
 
-    public ProductVo.Create create() {
-        return new ProductVo.Create(상품명, 상품가격);
+    public Product toEntity() {
+        return new Product(id, 상품명, 상품가격);
     }
 
-    public ProductVo.Update update() {
-        return new ProductVo.Update(id, 상품가격);
+    public ProductRequest.Create create() {
+        return new ProductRequest.Create(상품명, 상품가격);
+    }
+
+    public ProductRequest.UpdatePrice update() {
+        return new ProductRequest.UpdatePrice(id, 상품가격);
     }
 }
 

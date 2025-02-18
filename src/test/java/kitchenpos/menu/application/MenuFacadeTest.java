@@ -63,7 +63,7 @@ class MenuFacadeTest {
     @BeforeEach
     void setUp() {
         chickenMenu = MenuFixture.init().create();
-        chicken = ProductFixture.init().create();
+        chicken = ProductFixture.init().toEntity();
     }
 
     @Nested
@@ -159,7 +159,7 @@ class MenuFacadeTest {
                 null,
                 null,
                 BigDecimal.valueOf(price2)
-            ).create();
+            ).toEntity();
 
             mockFindByMenuGroup();
             mockFindAllByProduct();
@@ -192,7 +192,7 @@ class MenuFacadeTest {
                         null,
                         null,
                         null
-                    ).create(),
+                    ).toEntity(),
                     qty
                 ).create())
             ).create();
@@ -237,7 +237,7 @@ class MenuFacadeTest {
                         null,
                         null,
                         BigDecimal.valueOf(price2)
-                    ).create(),
+                    ).toEntity(),
                     100
                 ).create())
             ).create();
@@ -319,7 +319,7 @@ class MenuFacadeTest {
                         null,
                         null,
                         BigDecimal.valueOf(price2)
-                    ).create(),
+                    ).toEntity(),
                     100
                 ).create())
             ).create();
