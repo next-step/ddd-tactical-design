@@ -1,4 +1,4 @@
-package kitchenpos.products.infra;
+package kitchenpos.common.external;
 
 @FunctionalInterface
 public interface PurgomalumClient {

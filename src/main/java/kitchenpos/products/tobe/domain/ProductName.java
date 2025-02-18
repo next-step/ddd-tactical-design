@@ -1,7 +1,7 @@
 package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.common.external.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.InvalidProductNameException;
 
 import java.util.Objects;
