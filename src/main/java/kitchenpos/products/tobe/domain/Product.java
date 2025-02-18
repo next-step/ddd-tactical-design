@@ -5,8 +5,11 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import kitchenpos.common.vo.Price;
 
+import java.util.Objects;
+
 @Entity
 public class Product {
+
     @EmbeddedId
     private ProductId id;
 
@@ -25,6 +28,14 @@ public class Product {
         this.price = price;
     }
 
+    public void changePrice(Price newPrice) {
+        this.price = newPrice;
+    }
+
+    public void changePrice(long newPrice) {
+        this.price = new Price(newPrice);
+    }
+
     public ProductId getId() {
         return id;
     }
@@ -35,5 +46,18 @@ public class Product {
 
     public Price getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
