@@ -10,7 +10,11 @@ public class ToBeProduct {
     private final ToBePrice price;
 
     public ToBeProduct(final UUID productId, final String displayedName, final BigDecimal price) {
-        this(productId, new ToBeDisplayedName(displayedName), new ToBePrice(price));
+        this(productId, new ToBeDisplayedName(displayedName, new ProfanityName()), new ToBePrice(price));
+    }
+
+    public ToBeProduct(final UUID uuid, final String displayedName, final ProfanityName profanityName, final BigDecimal bigDecimal) {
+        this(uuid, new ToBeDisplayedName(displayedName, profanityName), new ToBePrice(bigDecimal));
     }
 
     public ToBeProduct(final UUID productId, final ToBeDisplayedName displayedName, final ToBePrice price) {
