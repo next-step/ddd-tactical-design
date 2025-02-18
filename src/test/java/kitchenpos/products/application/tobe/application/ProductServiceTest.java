@@ -1,7 +1,7 @@
 package kitchenpos.products.application.tobe.application;
 
 import kitchenpos.common.vo.Price;
-import kitchenpos.products.infra.tobe.infra.InMemoryProductRepository;
+import kitchenpos.products.infra.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

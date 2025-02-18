@@ -1,4 +1,4 @@
-package kitchenpos.products.infra.tobe.infra;
+package kitchenpos.products.infra.tobe;
 
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
