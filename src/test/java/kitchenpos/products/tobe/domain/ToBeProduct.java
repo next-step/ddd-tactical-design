@@ -1,13 +1,19 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.domain.Product;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ToBeProduct {
-    private final UUID productId;
-    private final ToBeDisplayedName displayedName;
-    private final ToBePrice price;
+public class ToBeProduct extends Product {
+    private UUID productId;
+    private ToBeDisplayedName displayedName;
+    private ToBePrice price;
+
+    public ToBeProduct(final UUID productId, final String displayedName, final Long price) {
+        this(productId, displayedName, BigDecimal.valueOf(price));
+    }
 
     public ToBeProduct(final UUID productId, final String displayedName, final BigDecimal price) {
         this(productId, new ToBeDisplayedName(displayedName, new ProfanityName()), new ToBePrice(price));
@@ -23,16 +29,24 @@ public class ToBeProduct {
         this.price = price;
     }
 
-    public UUID getProductId() {
+    @Override
+    public UUID getId() {
         return productId;
     }
 
-    public ToBeDisplayedName getDisplayedName() {
-        return displayedName;
+    @Override
+    public String getName() {
+        return displayedName.getDisplayedName();
     }
 
-    public ToBePrice getPrice() {
-        return price;
+    @Override
+    public BigDecimal getPrice() {
+        return price.getPrice();
+    }
+
+    @Override
+    public void setPrice(final BigDecimal price) {
+        this.price = new ToBePrice(price);
     }
 
     @Override

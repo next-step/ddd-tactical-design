@@ -19,6 +19,10 @@ public class ToBeDisplayedName {
         }
     }
 
+    public String getDisplayedName() {
+        return productName;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

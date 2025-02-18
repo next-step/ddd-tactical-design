@@ -13,6 +13,10 @@ public class ToBePrice {
         this.price = price;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
