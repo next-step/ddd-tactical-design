@@ -12,6 +12,7 @@ import kitchenpos.menu.domain.model.*;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.menu.domain.service.MenuProductValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.jetbrains.annotations.NotNull;
@@ -25,18 +26,20 @@ public class MenuService {
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
     private final MarginValidator marginValidator;
+    private final MenuProductValidator menuProductValidator;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient, MarginValidator marginValidator
+            final PurgomalumClient purgomalumClient, MarginValidator marginValidator, MenuProductValidator menuProductValidator
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
         this.marginValidator = marginValidator;
+        this.menuProductValidator = menuProductValidator;
     }
 
     @Transactional
@@ -45,14 +48,7 @@ public class MenuService {
         final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        final List<Product> products = productRepository.findAllByIdIn(
-                menuProductRequests.stream()
-                        .map(MenuProduct::getProductId)
-                        .toList()
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
+        menuProductValidator.validateMenuProduct(menuProductRequests);
         final List<MenuProduct> menuProducts = createMenuProducts(menuProductRequests);
         final String name = request.getInnerName();
         if (purgomalumClient.containsProfanity(name)) {
