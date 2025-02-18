@@ -9,6 +9,9 @@ import java.util.UUID;
 @Table(name = "menu")
 @Entity
 public class Menu {
+    private static final String MENU_PRODUCTS_EXISTS_EXCEPTION = "메뉴 상품이 존재하지 않습니다!";
+    private static final String MENU_GROUP_EXISTS_EXCEPTION = "메뉴 그룹이 존재하지 않습니다!";
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -46,6 +49,8 @@ public class Menu {
     }
 
     public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
+        validateMenuGroupExists(menuGroup);
+        validateMenuProductsExists(menuProducts);
         this.id = id;
         this.name = name;
         this.price = price;
@@ -53,6 +58,18 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
+    }
+
+    private void validateMenuGroupExists(MenuGroup menuGroup) {
+        if (menuGroup == null) {
+            throw new IllegalArgumentException(MENU_GROUP_EXISTS_EXCEPTION);
+        }
+    }
+
+    private void validateMenuProductsExists(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException(MENU_PRODUCTS_EXISTS_EXCEPTION);
+        }
     }
 
     public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
