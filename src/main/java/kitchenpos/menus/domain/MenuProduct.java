@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import kitchenpos.products.domain.Product;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -53,6 +54,9 @@ public class MenuProduct {
 
     public void setProduct(final Product product) {
         this.product = product;
+        setProductId(Optional.ofNullable(product)
+                .map(Product::getId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다.")));
     }
 
     public long getQuantity() {

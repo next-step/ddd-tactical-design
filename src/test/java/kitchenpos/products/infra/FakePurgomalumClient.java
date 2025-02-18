@@ -1,6 +1,4 @@
-package kitchenpos.products.application;
-
-import kitchenpos.products.infra.PurgomalumClient;
+package kitchenpos.products.infra;
 
 import java.util.Arrays;
 import java.util.List;

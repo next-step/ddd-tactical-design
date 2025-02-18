@@ -1,0 +1,144 @@
+package kitchenpos.fixture;
+
+import kitchenpos.eatinorders.domain.*;
+import kitchenpos.menus.domain.Menu;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
+public class OrderFixture {
+
+    public static final String DELIVERY_ADDRESS = "서울시 송파구 위례성대로 2";
+    public static final long SINGLE_QUANTITY = 1L;
+    private static final AtomicLong ATOMIC_LONG = new AtomicLong(1L);
+
+    private OrderFixture() {
+    }
+
+    public static Order eatInOrder(
+            final UUID id, final LocalDateTime orderDateTime,
+            final OrderTable orderTable, final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(id, orderDateTime, null, orderStatus, OrderType.EAT_IN, orderTable, orderLineItems);
+    }
+
+    public static Order eatInOrder(
+            final OrderTable orderTable, final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(createOrderId(), LocalDateTime.now(), null, orderStatus, OrderType.EAT_IN, orderTable, orderLineItems);
+    }
+
+    public static Order takeoutOrder(
+            final UUID id, final LocalDateTime orderDateTime,
+            final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(id, orderDateTime, null, orderStatus, OrderType.TAKEOUT, null, orderLineItems);
+    }
+
+    public static Order takeoutOrder(
+            final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(createOrderId(), LocalDateTime.now(), null, orderStatus, OrderType.TAKEOUT, null, orderLineItems);
+    }
+
+    public static Order deliveryOrder(
+            final UUID id, final LocalDateTime orderDateTime,
+            final String deliverAddress,
+            final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(id, orderDateTime, deliverAddress, orderStatus, OrderType.DELIVERY, null, orderLineItems);
+    }
+
+    public static Order deliveryOrder(
+            final String deliverAddress,
+            final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(createOrderId(), LocalDateTime.now(), deliverAddress, orderStatus, OrderType.DELIVERY, null, orderLineItems);
+    }
+
+    public static Order deliveryOrder(
+            final OrderStatus orderStatus, final List<OrderLineItem> orderLineItems
+    ) {
+        return order(createOrderId(), LocalDateTime.now(), DELIVERY_ADDRESS, orderStatus, OrderType.DELIVERY, null, orderLineItems);
+    }
+
+    public static Order order(final UUID id, final LocalDateTime orderDateTime, final String deliverAddress,
+                              final OrderStatus orderStatus, final OrderType orderType,
+                              final OrderTable orderTable, final List<OrderLineItem> orderLineItems) {
+        final Order order = new Order();
+        order.setId(id);
+        order.setOrderDateTime(orderDateTime);
+        order.setDeliveryAddress(deliverAddress);
+        order.setStatus(orderStatus);
+        order.setType(orderType);
+        order.setOrderTable(orderTable);
+        order.setOrderLineItems(orderLineItems);
+        return order;
+    }
+
+    public static LocalDateTime createOrderDateTime() {
+        return LocalDateTime.now();
+    }
+
+    public static UUID createOrderId() {
+        return UUID.randomUUID();
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Menu menu
+    ) {
+        return orderLineItem(createOrderLineItemSeq(), menu, SINGLE_QUANTITY);
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Menu menu,
+            final long quantity
+    ) {
+        return orderLineItem(createOrderLineItemSeq(), menu, quantity, menu.getPrice());
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Menu menu,
+            final long quantity,
+            final BigDecimal price
+    ) {
+        return orderLineItem(createOrderLineItemSeq(), menu, quantity, price);
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Long seq,
+            final Menu menu
+    ) {
+        return orderLineItem(seq, menu, SINGLE_QUANTITY);
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Long seq,
+            final Menu menu,
+            final long quantity
+    ) {
+        return orderLineItem(seq, menu, quantity, menu.getPrice());
+    }
+
+    public static OrderLineItem orderLineItem(
+            final Long seq,
+            final Menu menu,
+            final long quantity,
+            final BigDecimal price
+    ) {
+        final OrderLineItem orderLineItem = new OrderLineItem();
+        orderLineItem.setSeq(seq);
+        orderLineItem.setMenu(menu);
+        orderLineItem.setQuantity(quantity);
+        orderLineItem.setPrice(price);
+        return orderLineItem;
+    }
+
+    public static Long createOrderLineItemSeq() {
+        return ATOMIC_LONG.getAndIncrement();
+    }
+
+}
