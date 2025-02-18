@@ -1,5 +1,4 @@
-/*
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.vo;
 
 import kitchenpos.common.exception.NegativePriceException;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PriceTest {
-
     @DisplayName("가격이 0원 미만이면 예외가 발생한다")
     @ValueSource(longs = {-1})
     @ParameterizedTest
@@ -35,4 +33,3 @@ class PriceTest {
         assertThat(price.add(otherPrice3)).isEqualTo(new Price(2000));
     }
 }
-*/

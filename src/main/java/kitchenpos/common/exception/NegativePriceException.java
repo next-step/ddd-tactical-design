@@ -1,4 +1,4 @@
-package kitchenpos.products.tobe.domain.exception;
+package kitchenpos.common.exception;
 
 public class NegativePriceException extends IllegalArgumentException {
     public NegativePriceException() {

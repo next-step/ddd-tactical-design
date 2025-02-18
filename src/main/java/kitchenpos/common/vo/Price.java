@@ -1,8 +1,7 @@
-/*
-package kitchenpos.products.tobe.domain;
+package kitchenpos.common.vo;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.tobe.domain.exception.NegativePriceException;
+import kitchenpos.common.exception.NegativePriceException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -64,4 +63,3 @@ public class Price {
         return Objects.hashCode(value);
     }
 }
-*/

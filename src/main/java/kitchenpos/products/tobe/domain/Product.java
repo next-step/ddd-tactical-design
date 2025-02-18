@@ -3,6 +3,7 @@ package kitchenpos.products.tobe.domain;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import kitchenpos.common.vo.Price;
 
 @Entity
 public class Product {
