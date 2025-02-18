@@ -59,8 +59,8 @@ class MenuServiceTest {
 
         // then
         assertThat(created.getId()).isNotNull();
-        assertThat(created.getName()).isEqualTo("김치찌개");
-        assertThat(created.getPrice()).isEqualTo(BigDecimal.valueOf(8000));
+        assertThat(created.getInnerName()).isEqualTo("김치찌개");
+        assertThat(created.getInnerPrice()).isEqualTo(BigDecimal.valueOf(8000));
         MenuGroup actualMenuGroup = created.getMenuGroup();
         assertThat(actualMenuGroup.getName()).isEqualTo("한식");
         assertThat(menuRepository.findAll().size()).isEqualTo(1);
@@ -72,11 +72,10 @@ class MenuServiceTest {
         // given
         MenuGroup menuGroup = createMenuGroup();
         Product product = createProduct(BigDecimal.valueOf(5000));
-        Menu request = createMenuRequest("김치찌개", -1000, menuGroup,
-                product);
 
         // when // then
-        assertThatThrownBy(() -> menuService.create(request))
+        assertThatThrownBy(() -> menuService.create(createMenuRequest("김치찌개", -1000, menuGroup,
+                product)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -89,11 +88,10 @@ class MenuServiceTest {
         menuGroupRepository.save(menuGroup);
         Product product = createProduct(BigDecimal.valueOf(5000));
         productRepository.save(product);
-        Menu request = createMenuRequest(name, 8000, menuGroup,
-                product);
 
         // when // then
-        assertThatThrownBy(() -> menuService.create(request))
+        assertThatThrownBy(() -> menuService.create(createMenuRequest(name, 8000, menuGroup,
+                product)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -141,7 +139,7 @@ class MenuServiceTest {
         Product product = createProduct(BigDecimal.valueOf(10000));
         productRepository.save(product);
         Menu request = createMenuRequest("김치찌개", 8000, menuGroup, product);
-        request.setPrice(BigDecimal.valueOf(8000));
+        request.changePrice(BigDecimal.valueOf(8000));
 
         // when // then
         assertThatThrownBy(() -> menuService.create(request))
@@ -155,13 +153,13 @@ class MenuServiceTest {
         Menu menu = createMenuWithProductAndGroup();
         menuRepository.save(menu);
         Menu request = new Menu();
-        request.setPrice(BigDecimal.valueOf(12000));
+        request.changePrice(BigDecimal.valueOf(12000));
 
         // when
         Menu updated = menuService.changePrice(menu.getId(), request);
 
         // then
-        assertThat(updated.getPrice()).isEqualTo(BigDecimal.valueOf(12000));
+        assertThat(updated.getInnerPrice()).isEqualTo(BigDecimal.valueOf(12000));
     }
 
     @Test
@@ -171,7 +169,7 @@ class MenuServiceTest {
         Menu menu = createMenuWithProductAndGroup();
         menuRepository.save(menu);
         Menu request = new Menu();
-        request.setPrice(BigDecimal.valueOf(4000));
+        request.changePrice(BigDecimal.valueOf(4000));
 
         // when // then
         assertThatThrownBy(() -> menuService.changePrice(menu.getId(), request))

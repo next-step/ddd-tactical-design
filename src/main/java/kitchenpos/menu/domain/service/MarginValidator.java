@@ -33,7 +33,7 @@ public class MarginValidator {
                             .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
-        if (menu.getPrice().compareTo(sum) < 0) {
+        if (menu.getInnerPrice().compareTo(sum) < 0) {
             menu.changeDisplay();
         }
     }
