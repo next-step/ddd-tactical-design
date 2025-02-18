@@ -11,6 +11,7 @@ import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.*;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MarginValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,19 @@ public class MenuService {
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final PurgomalumClient purgomalumClient;
+    private final MarginValidator marginValidator;
 
     public MenuService(
             final MenuRepository menuRepository,
             final MenuGroupRepository menuGroupRepository,
             final ProductRepository productRepository,
-            final PurgomalumClient purgomalumClient
+            final PurgomalumClient purgomalumClient, MarginValidator marginValidator
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
+        this.marginValidator = marginValidator;
     }
 
     @Transactional
@@ -53,51 +56,38 @@ public class MenuService {
             throw new IllegalArgumentException();
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProductRequest : menuProductRequests) {
             final long quantity = menuProductRequest.getQuantity();
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                    product.getInnerPrice()
-                            .multiply(BigDecimal.valueOf(quantity))
-            );
             final MenuProduct menuProduct = new MenuProduct();
             menuProduct.setProduct(product);
             menuProduct.setQuantity(quantity);
             menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) < 0) {
-            throw new IllegalArgumentException();
         }
         final String name = request.getInnerName();
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
         final Menu menu = new Menu(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        validateMargin(menu);
         return menuRepository.save(menu);
+    }
+
+    private void validateMargin(Menu menu) {
+        boolean hasMargin = marginValidator.checkMargin(menu);
+        if (!hasMargin) {
+            throw new IllegalStateException("마진이 남지 않습니다! 마진을 남기게 만들어주세요!");
+        }
     }
 
     @Transactional
     public Menu changePrice(final UUID menuId, final Menu request) {
         final BigDecimal price = request.getInnerPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                            .getInnerPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (price.compareTo(sum) < 0) {
-            throw new IllegalArgumentException();
-        }
         menu.changePrice(price);
+        validateMargin(menu);
         return menu;
     }
 
@@ -105,18 +95,8 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                    menuProduct.getProduct()
-                            .getInnerPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menu.getInnerPrice().compareTo(sum) < 0) {
-            throw new IllegalStateException();
-        }
         menu.changeDisplay(true);
+        validateMargin(menu);
         return menu;
     }
 
