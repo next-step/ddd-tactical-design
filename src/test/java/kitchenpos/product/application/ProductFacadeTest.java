@@ -17,6 +17,7 @@ import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.model.ProductVo;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
@@ -44,7 +45,7 @@ class ProductFacadeTest {
 
     private ProductPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
 
-    private Product chicken;
+    private ProductVo.Create chicken;
 
     private Menu chickenMenu;
 
@@ -70,8 +71,8 @@ class ProductFacadeTest {
 
             assertAll(
                 () -> assertNotNull(result),
-                () -> assertEquals(result.getName(), chicken.getName()),
-                () -> assertEquals(result.getPrice(), chicken.getPrice()),
+                () -> assertEquals(result.name(), chicken.name()),
+                () -> assertEquals(result.price(), chicken.price()),
                 () -> assertThatCode(() -> {
                     productService.create(chicken);
                 }).doesNotThrowAnyException()
@@ -131,7 +132,7 @@ class ProductFacadeTest {
 
             if (price < 0) {
                 assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> productService.changePrice(chicken.getId(), chicken));
+                    .isThrownBy(() -> productService.changePrice(chicken.id(), chicken));
             }
         }
 
@@ -172,7 +173,7 @@ class ProductFacadeTest {
         @Test
         @DisplayName("성공 : 특정 조건 없이 상품의 모든 목록을 조회할 수 있다.")
         void 상품목록_조회() {
-            List<Product> result = productService.findAll();
+            List<ProductVo.ProductInfo> result = productService.findAll();
 
             assertAll(
                 () -> assertThat(result).isEmpty(),
