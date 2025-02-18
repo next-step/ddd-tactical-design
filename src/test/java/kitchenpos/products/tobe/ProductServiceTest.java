@@ -13,7 +13,7 @@ import kitchenpos.products.tobe.application.ProductService;
 import kitchenpos.products.tobe.application.dto.ProductCreateRequest;
 import kitchenpos.products.tobe.application.dto.ProductPriceUpdateRequest;
 import kitchenpos.products.tobe.application.dto.ProductResponse;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.PurgomalumClient;
 import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
