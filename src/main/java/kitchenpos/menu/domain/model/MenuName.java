@@ -2,6 +2,7 @@ package kitchenpos.menu.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 
 @Embeddable
@@ -11,7 +12,7 @@ public class MenuName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    public MenuName(String value) {
+    protected MenuName(String value) {
         validateName(value);
         this.value = value;
     }

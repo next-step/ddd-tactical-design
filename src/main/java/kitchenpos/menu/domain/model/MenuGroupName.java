@@ -11,7 +11,7 @@ public class MenuGroupName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    public MenuGroupName(String value) {
+    protected MenuGroupName(String value) {
         validateMenuGroupName(value);
         this.value = value;
     }
