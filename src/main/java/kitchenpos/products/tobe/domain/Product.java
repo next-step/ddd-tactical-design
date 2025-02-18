@@ -49,7 +49,7 @@ public class Product {
         return price.getPrice();
     }
 
-    public void updatePrice(BigDecimal price) {
+    public void changePrice(BigDecimal price) {
         this.price = ProductPrice.from(price);
     }
 }

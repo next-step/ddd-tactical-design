@@ -45,7 +45,7 @@ public class ProductService {
 
         Product product = jpaProductRepository.findById(productId)
                                               .orElseThrow(NoSuchElementException::new);
-        product.updatePrice(request.getPrice());
+        product.changePrice(request.getPrice());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
