@@ -3,11 +3,8 @@ package kitchenpos.product.domain.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuProduct;
-import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.model.ProductNameValidator;
 import kitchenpos.product.domain.model.ProductVo;
@@ -20,17 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final MenuRepository menuRepository;
     private final ProductPurgomalumClient purgomalumClient;
+    private final MenuUpdatePolicy menuUpdatePolicy;
 
     public ProductServiceImpl(
         final ProductRepository productRepository,
-        final MenuRepository menuRepository,
-        final ProductPurgomalumClient purgomalumClient
+        final ProductPurgomalumClient purgomalumClient,
+        final MenuUpdatePolicy menuUpdatePolicy
     ) {
         this.productRepository = productRepository;
-        this.menuRepository = menuRepository;
         this.purgomalumClient = purgomalumClient;
+        this.menuUpdatePolicy = menuUpdatePolicy;
     }
 
     @Override
@@ -38,12 +35,9 @@ public class ProductServiceImpl implements ProductService {
         final BigDecimal price = request.price();
         final String name = new ProductNameValidator(request.name(), purgomalumClient).name();
 
-        final Product product = new Product();
-        product.setId(UUID.randomUUID());
-        product.setName(name);
-        product.setPrice(price);
-
-        return ProductVo.ProductInfo.fromEntity(productRepository.save(product));
+        return ProductVo.ProductInfo.fromEntity(
+            productRepository.save(new Product(UUID.randomUUID(), name, price))
+        );
     }
 
     @Override
@@ -52,21 +46,10 @@ public class ProductServiceImpl implements ProductService {
         final Product product = productRepository.findById(request.productId())
             .orElseThrow(NoSuchElementException::new);
 
-        product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(request.productId());
-        for (final Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            if (menu.getPrice().compareTo(sum) > 0) {
-                menu.setDisplayed(false);
-            }
-        }
+        product.update(price);
+
+        menuUpdatePolicy.hideMenu(request.productId());
+
         return ProductVo.ProductInfo.fromEntity(product);
     }
 
