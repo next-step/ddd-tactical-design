@@ -29,16 +29,16 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(
+    public ResponseEntity<ProductResponse.GetProduct> create(
         @RequestBody final ProductRequest.Create request
     ) {
-        final ProductResponse response = productFacade.create(request);
+        final ProductResponse.GetProduct response = productFacade.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.id()))
             .body(response);
     }
 
     @PutMapping("/{productId}/price")
-    public ResponseEntity<ProductResponse> changePrice(
+    public ResponseEntity<ProductResponse.GetProduct> changePrice(
         @PathVariable final UUID productId,
         @RequestBody final ProductRequest.UpdatePrice request
     ) {
@@ -46,7 +46,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductRequest>> findAll() {
+    public ResponseEntity<List<ProductResponse.GetProduct>> findAll() {
         return ResponseEntity.ok(productFacade.findAll());
     }
 }

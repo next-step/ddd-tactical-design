@@ -9,10 +9,13 @@ import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.model.ProductNameValidator;
+import kitchenpos.product.domain.model.ProductVo;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -30,33 +33,27 @@ public class ProductServiceImpl implements ProductService {
         this.purgomalumClient = purgomalumClient;
     }
 
-    @Transactional
-    public Product create(final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
+    @Override
+    public ProductVo.ProductInfo create(final ProductVo.Create request) {
+        final BigDecimal price = request.price();
+        final String name = new ProductNameValidator(request.name(), purgomalumClient).name();
+
         final Product product = new Product();
         product.setId(UUID.randomUUID());
         product.setName(name);
         product.setPrice(price);
-        return productRepository.save(product);
+
+        return ProductVo.ProductInfo.fromEntity(productRepository.save(product));
     }
 
-    @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Product product = productRepository.findById(productId)
+    @Override
+    public ProductVo.ProductInfo changePrice(final ProductVo.Update request) {
+        final BigDecimal price = request.price();
+        final Product product = productRepository.findById(request.productId())
             .orElseThrow(NoSuchElementException::new);
+
         product.setPrice(price);
-        final List<Menu> menus = menuRepository.findAllByProductId(productId);
+        final List<Menu> menus = menuRepository.findAllByProductId(request.productId());
         for (final Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -70,11 +67,15 @@ public class ProductServiceImpl implements ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ProductVo.ProductInfo.fromEntity(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    @Override
+    public List<ProductVo.ProductInfo> findAll() {
+        return productRepository.findAll()
+            .stream()
+            .map(ProductVo.ProductInfo::fromEntity)
+            .toList();
     }
 }

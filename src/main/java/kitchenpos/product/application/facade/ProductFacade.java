@@ -20,15 +20,18 @@ public class ProductFacade {
         this.productService = productService;
     }
 
-    public ProductResponse create(ProductRequest.Create request) {
-        return productService.create(request);
+    public ProductResponse.GetProduct create(ProductRequest.Create request) {
+        return ProductResponse.GetProduct.fromVo(productService.create(request.toVo()));
     }
 
-    public ProductResponse changePrice(ProductRequest.UpdatePrice request) {
-        return productService.changePrice(request);
+    public ProductResponse.GetProduct changePrice(ProductRequest.UpdatePrice request) {
+        return ProductResponse.GetProduct.fromVo(productService.changePrice(request.toVo()));
     }
 
-    public List<ProductRequest> findAll() {
-       return productService.findAll();
+    public List<ProductResponse.GetProduct> findAll() {
+       return productService.findAll()
+           .stream()
+           .map(ProductResponse.GetProduct::fromVo)
+           .toList();
     }
 }
