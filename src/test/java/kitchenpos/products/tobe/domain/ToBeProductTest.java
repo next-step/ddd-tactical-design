@@ -32,4 +32,12 @@ public class ToBeProductTest {
                 new ToBeProduct(UUID.randomUUID(), profanityName, toBeProfanityName, BigDecimal.valueOf(16_000))
         ).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("상품의 이름은 1글자 이상이어야 한다.")
+    @ValueSource(strings = {"", " "})
+    @ParameterizedTest
+    void createWithEmptyName(final String name) {
+        assertThatThrownBy(() -> new ToBeProduct(UUID.randomUUID(), name, BigDecimal.valueOf(16_000)))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
