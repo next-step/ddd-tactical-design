@@ -35,14 +35,6 @@ public class Product {
 
     }
 
-    public Product(String name, BigDecimal price, UUID id) {
-        this(new ProductName(name), new ProductPrice(price), id);
-    }
-
-    public Product(String name, BigDecimal price) {
-        this(name, price, UUID.randomUUID());
-    }
-
     public UUID getId() {
         return id;
     }
