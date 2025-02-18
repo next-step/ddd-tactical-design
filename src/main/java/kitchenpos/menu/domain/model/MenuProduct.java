@@ -1,16 +1,9 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+
 import java.util.UUID;
+
 import kitchenpos.product.domain.model.Product;
 
 @Table(name = "menu_product")
@@ -29,8 +22,8 @@ public class MenuProduct {
     )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
-    private long quantity;
+    @Embedded
+    private MenuProductQuantity quantity;
 
     @Transient
     private UUID productId;
@@ -38,18 +31,14 @@ public class MenuProduct {
     public MenuProduct() {
     }
 
-    public MenuProduct(long quantity, Product product, UUID productId) {
-        this.quantity = quantity;
+    public MenuProduct(Product product, MenuProductQuantity quantity, UUID productId) {
         this.product = product;
+        this.quantity = quantity;
         this.productId = productId;
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
+    public MenuProduct(long quantity, Product product, UUID productId) {
+        this(product, new MenuProductQuantity(quantity), productId);
     }
 
     public Product getProduct() {
@@ -60,19 +49,15 @@ public class MenuProduct {
         this.product = product;
     }
 
-    public long getQuantity() {
-        return quantity;
+    public long getInnerQuantity() {
+        return quantity.getValue();
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+    public void changeQuantity(final long quantity) {
+        this.quantity = new MenuProductQuantity(quantity);
     }
 
     public UUID getProductId() {
         return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
     }
 }

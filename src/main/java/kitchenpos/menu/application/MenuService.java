@@ -57,12 +57,10 @@ public class MenuService {
         }
         final List<MenuProduct> menuProducts = new ArrayList<>();
         for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
+            final long quantity = menuProductRequest.getInnerQuantity();
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                     .orElseThrow(NoSuchElementException::new);
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct(product, new MenuProductQuantity(quantity), product.getId());
             menuProducts.add(menuProduct);
         }
         final String name = request.getInnerName();

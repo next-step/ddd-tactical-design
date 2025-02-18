@@ -31,7 +31,7 @@ public class MarginValidator {
             sum = sum.add(
                     menuProduct.getProduct()
                             .getInnerPrice()
-                            .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+                            .multiply(BigDecimal.valueOf(menuProduct.getInnerQuantity()))
             );
         }
         if (menu.getInnerPrice().compareTo(sum) < 0) {
