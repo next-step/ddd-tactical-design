@@ -12,7 +12,7 @@ import kitchenpos.products.tobe.application.dto.ProductPriceUpdateRequest;
 import kitchenpos.products.tobe.application.dto.ProductResponse;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

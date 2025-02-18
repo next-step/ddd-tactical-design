@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
 
 @Table(name = "product")
 @Entity

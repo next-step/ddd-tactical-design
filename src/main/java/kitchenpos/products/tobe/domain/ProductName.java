@@ -2,7 +2,8 @@ package kitchenpos.products.tobe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.products.tobe.infra.PurgomalumClient;
+import kitchenpos.products.tobe.exception.ProductNameRequiredException;
+import kitchenpos.products.tobe.exception.ProfanityException;
 
 @Embeddable
 public class ProductName {
@@ -19,11 +20,11 @@ public class ProductName {
 
     public static ProductName from(String name, PurgomalumClient purgomalumClient) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("상품명은 필수로 입력해야 합니다.");
+            throw new ProductNameRequiredException();
         }
-        
+
         if (purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
+            throw new ProfanityException();
         }
         return new ProductName(name);
     }
