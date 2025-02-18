@@ -1,7 +1,16 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,7 +58,8 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
+                List<MenuProduct> menuProducts, UUID menuGroupId) {
         validateMenuGroupExists(menuGroup);
         validateMenuProductsExists(menuProducts);
         this.id = id;
@@ -59,6 +69,18 @@ public class Menu {
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
+    }
+
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+                MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
+    }
+
+    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts,
+                menuGroupId);
     }
 
     private void validateMenuGroupExists(MenuGroup menuGroup) {
@@ -71,17 +93,6 @@ public class Menu {
         if (menuProducts == null || menuProducts.isEmpty()) {
             throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION);
         }
-    }
-
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
-                MenuGroup menuGroup,
-                UUID menuGroupId) {
-        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
-    }
-
-    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
-                UUID menuGroupId) {
-        this(UUID.randomUUID(), name, price, displayed, menuProducts, menuGroup, menuGroupId);
     }
 
     public UUID getId() {

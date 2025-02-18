@@ -187,7 +187,7 @@ class OrderRestControllerTest {
         Menu menu = createAndSaveMenu(menuGroup, product);
 
         OrderLineItem orderLineItem = createOrderLineItem(menu);
-        OrderTable orderTable = createAndSaveOrderWithDeliveryTypeTable();
+        OrderTable orderTable = createAndSaveOrderTable();
 
         return createOrderWithDeliveryType(orderLineItem, orderTable, OrderStatus.WAITING);
     }
@@ -198,13 +198,13 @@ class OrderRestControllerTest {
         Menu menu = createAndSaveMenu(menuGroup, product);
 
         OrderLineItem orderLineItem = createOrderLineItem(menu);
-        OrderTable orderTable = createAndSaveOrderWithDeliveryTypeTable();
+        OrderTable orderTable = createAndSaveOrderTable();
 
         Order order = createOrderWithDeliveryType(orderLineItem, orderTable, OrderStatus.WAITING);
         return orderRepository.save(order);
     }
 
-    private OrderTable createAndSaveOrderWithDeliveryTypeTable() {
+    private OrderTable createAndSaveOrderTable() {
         OrderTable orderTable = createEmptyOrderTable();
         orderTableRepository.save(orderTable);
         return orderTable;

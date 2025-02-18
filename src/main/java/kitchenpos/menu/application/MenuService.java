@@ -95,8 +95,8 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(NoSuchElementException::new);
-        menu.changeDisplay(true);
         validateMargin(menu);
+        menu.changeDisplay(true);
         return menu;
     }
 
