@@ -46,6 +46,10 @@ public class ToBeProduct extends Product {
 
     @Override
     public void setPrice(final BigDecimal price) {
+        changePrice(price);
+    }
+
+    public void changePrice(final BigDecimal price) {
         this.price = new ToBePrice(price);
     }
 
