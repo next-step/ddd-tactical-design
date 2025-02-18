@@ -44,16 +44,19 @@ public class MenuService {
 
     @Transactional
     public Menu create(final Menu request) {
-        final BigDecimal price = request.getInnerPrice();
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
-                .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
-        menuProductValidator.validateMenuProduct(menuProductRequests);
-        final List<MenuProduct> menuProducts = createMenuProductsByRequest(menuProductRequests);
         final String name = request.getInnerName();
         if (purgomalumClient.containsProfanity(name)) {
             throw new IllegalArgumentException();
         }
+
+        final BigDecimal price = request.getInnerPrice();
+        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+                .orElseThrow(NoSuchElementException::new);
+
+        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        menuProductValidator.validateMenuProduct(menuProductRequests);
+        final List<MenuProduct> menuProducts = createMenuProductsByRequest(menuProductRequests);
+
         final Menu menu = new Menu(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
         validateMargin(menu);
         return menuRepository.save(menu);
