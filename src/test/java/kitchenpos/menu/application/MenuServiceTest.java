@@ -17,6 +17,7 @@ import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.menu.domain.service.MenuProductValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.menu.infra.persistence.FakeMenuGroupRepository;
@@ -44,7 +45,8 @@ class MenuServiceTest {
         productRepository = new FakeProductRepository(new HashMap<>());
         purgomalumClient = new FakePurgomalumClient();
         MarginValidator marginValidator = new MarginValidator(menuRepository);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, marginValidator);
+        MenuProductValidator menuProductValidator = new MenuProductValidator(productRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, marginValidator, menuProductValidator);
     }
 
     @Test
