@@ -1,15 +1,7 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -21,11 +13,11 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -53,16 +45,20 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
-                MenuGroup menuGroup,
-                UUID menuGroupId) {
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts, UUID menuGroupId) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroup = menuGroup;
         this.menuGroupId = menuGroupId;
+    }
+
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+                MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
     }
 
     public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
@@ -78,28 +74,32 @@ public class Menu {
         this.id = id;
     }
 
-    public String getName() {
+    public String getInnerName() {
+        return name.getValue();
+    }
+
+    public MenuName getName() {
         return name;
     }
 
     public void setName(final String name) {
-        this.name = name;
+        this.name = new MenuName(name);
     }
 
-    public BigDecimal getPrice() {
+    public BigDecimal getInnerPrice() {
+        return price.getValue();
+    }
+
+    public MenuPrice getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(final BigDecimal price) {
+        this.price = new MenuPrice(price);
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
     }
 
     public boolean isDisplayed() {
@@ -116,10 +116,6 @@ public class Menu {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
     }
 
     public UUID getMenuGroupId() {

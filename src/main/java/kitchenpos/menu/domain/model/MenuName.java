@@ -11,7 +11,7 @@ public class MenuName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    protected MenuName(String value) {
+    public MenuName(String value) {
         validateName(value);
         this.value = value;
     }
@@ -24,6 +24,10 @@ public class MenuName {
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException(MENU_NAME_CREATION_EXCEPTION);
         }
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override
