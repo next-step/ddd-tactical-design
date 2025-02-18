@@ -2,6 +2,7 @@ package kitchenpos.menu.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -24,7 +25,7 @@ public class MarginValidator {
         }
     }
 
-    private void checkMargin(Menu menu) {
+    public boolean checkMargin(Menu menu) {
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
@@ -34,7 +35,9 @@ public class MarginValidator {
             );
         }
         if (menu.getInnerPrice().compareTo(sum) < 0) {
-            menu.changeDisplay();
+            menu.changeDisplay(false);
+            return false;
         }
+        return true;
     }
 }

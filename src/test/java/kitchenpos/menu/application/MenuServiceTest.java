@@ -9,12 +9,14 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MarginValidator;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.menu.infra.persistence.FakeMenuGroupRepository;
@@ -41,7 +43,8 @@ class MenuServiceTest {
         menuGroupRepository = new FakeMenuGroupRepository(new HashMap<>());
         productRepository = new FakeProductRepository(new HashMap<>());
         purgomalumClient = new FakePurgomalumClient();
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient);
+        MarginValidator marginValidator = new MarginValidator(menuRepository);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, purgomalumClient, marginValidator);
     }
 
     @Test
@@ -91,8 +94,7 @@ class MenuServiceTest {
 
         // when // then
         assertThatThrownBy(() -> menuService.create(createMenuRequest(name, 8000, menuGroup,
-                product)))
-                .isInstanceOf(IllegalArgumentException.class);
+                product))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -139,11 +141,13 @@ class MenuServiceTest {
         Product product = createProduct(BigDecimal.valueOf(10000));
         productRepository.save(product);
         Menu request = createMenuRequest("김치찌개", 8000, menuGroup, product);
-        request.changePrice(BigDecimal.valueOf(8000));
 
         // when // then
-        assertThatThrownBy(() -> menuService.create(request))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            request.changePrice(BigDecimal.valueOf(8000));
+            menuService.create(request);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessage("마진이 남지 않습니다! 마진을 남기게 만들어주세요!");
     }
 
     @Test
@@ -169,11 +173,13 @@ class MenuServiceTest {
         Menu menu = createMenuWithProductAndGroup();
         menuRepository.save(menu);
         Menu request = new Menu();
-        request.changePrice(BigDecimal.valueOf(4000));
 
         // when // then
-        assertThatThrownBy(() -> menuService.changePrice(menu.getId(), request))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            request.changePrice(BigDecimal.valueOf(4000));
+            menuService.changePrice(menu.getId(), request);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessage("마진이 남지 않습니다! 마진을 남기게 만들어주세요!");
     }
 
     @Test
