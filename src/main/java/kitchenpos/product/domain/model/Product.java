@@ -36,9 +36,7 @@ public class Product {
     }
 
     public Product(String name, BigDecimal price, UUID id) {
-        this.name = name;
-        this.price = price;
-        this.id = id;
+        this(new ProductName(name), new ProductPrice(price), id);
     }
 
     public Product(String name, BigDecimal price) {
