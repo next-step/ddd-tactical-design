@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.common.domain.repository.OrderRepository;
 import kitchenpos.order.common.domain.repository.OrderTableRepository;
 import org.springframework.stereotype.Service;

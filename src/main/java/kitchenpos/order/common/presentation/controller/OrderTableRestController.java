@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.order.eatin.domain.service.OrderTableService;
-import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

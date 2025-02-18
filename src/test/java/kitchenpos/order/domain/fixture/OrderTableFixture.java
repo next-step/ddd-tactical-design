@@ -1,7 +1,7 @@
 package kitchenpos.order.domain.fixture;
 
 import java.util.UUID;
-import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 
 public record OrderTableFixture(UUID id, String 테이블명, int 인원수, boolean 사용여부) {
 

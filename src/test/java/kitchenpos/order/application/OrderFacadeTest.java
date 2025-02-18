@@ -20,7 +20,7 @@ import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.domain.entity.Order;
 import kitchenpos.order.common.domain.entity.OrderLineItem;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.common.domain.entity.OrderType;
 import kitchenpos.order.domain.fixture.OrderFixture;
 import kitchenpos.order.domain.fixture.OrderLineItemFixture;

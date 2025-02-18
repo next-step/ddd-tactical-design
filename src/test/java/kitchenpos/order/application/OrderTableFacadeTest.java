@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 import kitchenpos.order.common.domain.entity.OrderStatus;
-import kitchenpos.order.common.domain.entity.OrderTable;
+import kitchenpos.order.eatin.domain.entity.OrderTable;
 import kitchenpos.order.domain.fixture.OrderTableFixture;
 import kitchenpos.order.common.domain.repository.OrderRepository;
 import kitchenpos.order.common.domain.repository.OrderTableRepository;
