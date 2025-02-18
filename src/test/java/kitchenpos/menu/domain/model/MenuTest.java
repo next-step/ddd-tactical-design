@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -41,7 +42,7 @@ class MenuTest {
                 false,
                 List.of(menuProduct),
                 UUID.randomUUID()
-        )).isInstanceOf(IllegalArgumentException.class)
+        )).isInstanceOf(NoSuchElementException.class)
                 .hasMessage("메뉴 그룹이 존재하지 않습니다!");
     }
 
@@ -61,7 +62,7 @@ class MenuTest {
                 false,
                 menuProducts,
                 menuGroup.getId()
-        )).isInstanceOf(IllegalArgumentException.class)
+        )).isInstanceOf(NoSuchElementException.class)
                 .hasMessage("메뉴 상품이 존재하지 않습니다!");
     }
 

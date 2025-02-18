@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -62,13 +63,13 @@ public class Menu {
 
     private void validateMenuGroupExists(MenuGroup menuGroup) {
         if (menuGroup == null) {
-            throw new IllegalArgumentException(MENU_GROUP_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION);
         }
     }
 
     private void validateMenuProductsExists(List<MenuProduct> menuProducts) {
         if (menuProducts == null || menuProducts.isEmpty()) {
-            throw new IllegalArgumentException(MENU_PRODUCTS_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION);
         }
     }
 

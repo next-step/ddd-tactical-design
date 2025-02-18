@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createProduct;
@@ -75,16 +76,19 @@ class MenuRestControllerTest {
     void create_menuRequest_with_emptyProducts() throws Exception {
         // given
         MenuGroup menuGroup = createAndSaveMenuGroup();
-        Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, null, menuGroup,
-                menuGroup.getId());
+        assertThatThrownBy(() -> {
+            Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, null, menuGroup,
+                    menuGroup.getId());
 
-        // when
-        ResultActions result = mockMvc.perform(post("/api/menus")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+            // when
+            ResultActions result = mockMvc.perform(post("/api/menus")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
 
-        // then
-        result.andExpect(status().isBadRequest());
+            // then
+            result.andExpect(status().isBadRequest());
+        }).isInstanceOf(NoSuchElementException.class)
+                .hasMessage("메뉴 상품이 존재하지 않습니다!");
     }
 
     @Test
