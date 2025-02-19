@@ -13,9 +13,11 @@ import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "menu")
 @Entity
+@DynamicUpdate
 public class Menu {
 
     @Column(name = "id", columnDefinition = "binary(16)")

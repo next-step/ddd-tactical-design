@@ -10,19 +10,31 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
+import kitchenpos.menu.domain.fixture.MenuProductFixture;
+import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 import kitchenpos.product.application.dto.ProductRequest;
+import kitchenpos.product.application.dto.ProductRequest.UpdatePrice;
 import kitchenpos.product.application.dto.ProductResponse;
 import kitchenpos.product.application.facade.ProductFacade;
 import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.repository.InMemoryMenuRepository;
+import kitchenpos.product.domain.repository.InMemoryProductRepository;
+import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.service.FakeMenuUpdatePolicy;
+import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
+import kitchenpos.product.domain.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,8 +45,17 @@ class ProductFacadeTest {
 
     @InjectMocks
     private ProductFacade productFacade;
+
     @Mock
     private ProductService productService;
+
+    private MenuUpdatePolicy menuUpdatePolicy;
+
+    private ProductRepository productRepository = new InMemoryProductRepository();
+
+    private MenuRepository menuRepository = new InMemoryMenuRepository();
+
+    private ProductPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
 
     private ProductRequest.Create chicken;
     private ProductRequest.UpdatePrice updateChicken;
@@ -43,6 +64,12 @@ class ProductFacadeTest {
 
     @BeforeEach
     void setUp() {
+        productRepository = new InMemoryProductRepository();
+        menuRepository = new InMemoryMenuRepository();
+        menuUpdatePolicy = new FakeMenuUpdatePolicy(menuRepository);
+        productService = new ProductServiceImpl(productRepository, purgomalumClient, menuUpdatePolicy);
+        productFacade = new ProductFacade(productService);
+
         chicken = ProductFixture.init().create();
         updateChicken = ProductFixture.init().update();
         chickenMenu = MenuFixture.init().create();
@@ -63,7 +90,7 @@ class ProductFacadeTest {
                 () -> assertEquals(result.name(), chicken.name()),
                 () -> assertEquals(result.price(), chicken.price()),
                 () -> assertThatCode(() -> {
-                    productFacade.create(chicken);
+                    productService.create(chicken.toVo());
                 }).doesNotThrowAnyException()
             );
 
@@ -102,13 +129,13 @@ class ProductFacadeTest {
         @ValueSource(ints = {0, 1000, 10000})
         void 상품수정_성공(final int price) {
 
-            final UUID productId = productFacade.create(chicken).id();
+            final UUID productId = productService.create(chicken.toVo()).productId();
 
             final BigDecimal changePrice = BigDecimal.valueOf(price);
 
             updateChicken = new ProductRequest.UpdatePrice(productId, changePrice);
 
-            var result = productFacade.changePrice(updateChicken);
+            var result = productService.changePrice(updateChicken.toVo());
 
             assertAll(
                 () -> assertEquals(BigDecimal.valueOf(price), result.price())
@@ -128,33 +155,34 @@ class ProductFacadeTest {
             }
         }
 
-//        @DisplayName("메뉴의 가격이 메뉴 구성 상품들의 총 금액보다 크면 해당 메뉴는 숨겨진다.")
-//        @ParameterizedTest
-//        @CsvSource({"100000, 100"})
-//        void 가격비교_숨김처리(final int price1, final int price2) {
-//            chicken.setPrice(BigDecimal.valueOf(price1));
-//            productRepository.save(chicken);
-//
-//            chickenMenu = MenuFixture.test(
-//                null,
-//                null,
-//                null,
-//                true,
-//                List.of(new MenuProductFixture(
-//                    new ProductFixture(
-//                        chicken.getId(),
-//                        null,
-//                        BigDecimal.valueOf(price2)
-//                    ).create(),
-//                    100
-//                ).create())
-//            ).create();
-//            menuRepository.save(chickenMenu);
-//
-//            productService.changePrice(chicken.getId(), chicken);
-//
-//            assertThat(chickenMenu.isDisplayed()).isFalse();
-//        }
+        @DisplayName("메뉴의 가격이 메뉴 구성 상품들의 총 금액보다 크면 해당 메뉴는 숨겨진다.")
+        @ParameterizedTest
+        @CsvSource({"10000, 100"})
+        void 가격비교_숨김처리(final int price1, final int price2) {
+            final UUID productId = productFacade.create(chicken).id();
+
+            updateChicken = new UpdatePrice(productId, BigDecimal.valueOf(price1));
+
+            chickenMenu = MenuFixture.test(
+                null,
+                null,
+                null,
+                true,
+                List.of(new MenuProductFixture(
+                    new ProductFixture(
+                        productId,
+                        null,
+                        BigDecimal.valueOf(price2)
+                    ).toEntity(),
+                    100
+                ).create())
+            ).create();
+            menuRepository.save(chickenMenu);
+
+            productService.changePrice(updateChicken.toVo());
+
+            assertThat(chickenMenu.isDisplayed()).isFalse();
+        }
 
     }
 

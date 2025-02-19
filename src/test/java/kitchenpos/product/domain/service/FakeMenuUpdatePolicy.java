@@ -1,25 +1,24 @@
-package kitchenpos.menu.domain.service;
+package kitchenpos.product.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 
-@Transactional
-@Service
-public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy{
-    private final MenuRepository menuRepository;
+public class FakeMenuUpdatePolicy implements MenuUpdatePolicy {
+    private MenuRepository menuRepository = new InMemoryMenuRepository();
 
-    public DefaultMenuUpdatePolicy(MenuRepository menuRepository) {
+    public FakeMenuUpdatePolicy(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
     @Override
     public void hideMenu(UUID productId) {
         List<Menu> menus = menuRepository.findAllByProductId(productId);
+
         for (Menu menu : menus) {
             BigDecimal sum = BigDecimal.ZERO;
             for (var menuProduct : menu.getMenuProducts()) {
