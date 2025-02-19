@@ -87,7 +87,7 @@ public class EatInOrder {
         }
     }
 
-    public void validateOrderFlow(EatInOrderStatus orderStatus) {
+    public void processOrderFlow(EatInOrderStatus orderStatus) {
         if (!eatInOrderFlow.validateOrderStatus(orderStatus)) {
             throw new IllegalStateException(EAT_IN_ORDER_FLOW_EXCEPTION.getMessage());
         }

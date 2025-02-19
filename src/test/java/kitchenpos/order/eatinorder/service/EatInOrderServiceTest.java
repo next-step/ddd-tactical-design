@@ -1,5 +1,6 @@
 package kitchenpos.order.eatinorder.service;
 
+import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
 import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
 import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
 import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
@@ -133,11 +134,5 @@ class EatInOrderServiceTest {
 
         // then
         assertThat(result.getEatInOrderFlow()).isEqualTo(EatInOrderFlow.COMPLETED);
-    }
-
-    private EatInOrder createEatInOrderRequestWithEmptyTable(Menu menu,
-                                                             EatInOrderFlow eatInOrderFlow) {
-        return new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
-                List.of(new OrderLineItem(menu, 1, menu.getId(), BigDecimal.valueOf(8000))), eatInOrderFlow);
     }
 }

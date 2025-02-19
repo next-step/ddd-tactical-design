@@ -3,6 +3,7 @@ package kitchenpos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
@@ -12,6 +13,8 @@ import kitchenpos.order.common.model.Order;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -115,5 +118,11 @@ public class TestFixtureFactory {
 
     public static OrderLineItem createOrderLineItem(Menu menu) {
         return new OrderLineItem(menu, 2, menu.getId(), BigDecimal.valueOf(8000));
+    }
+
+    public static EatInOrder createEatInOrderRequestWithEmptyTable(Menu menu,
+                                                                   EatInOrderFlow eatInOrderFlow) {
+        return new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+                List.of(new OrderLineItem(menu, 1, menu.getId(), BigDecimal.valueOf(8000))), eatInOrderFlow);
     }
 }

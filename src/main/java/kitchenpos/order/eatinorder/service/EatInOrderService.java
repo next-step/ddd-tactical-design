@@ -76,7 +76,7 @@ public class EatInOrderService {
     public EatInOrder accept(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        eatInOrder.validateOrderFlow(EatInOrderStatus.ACCEPTED);
+        eatInOrder.processOrderFlow(EatInOrderStatus.ACCEPTED);
         return eatInOrder;
     }
 
@@ -84,7 +84,7 @@ public class EatInOrderService {
     public EatInOrder serve(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        eatInOrder.validateOrderFlow(EatInOrderStatus.SERVED);
+        eatInOrder.processOrderFlow(EatInOrderStatus.SERVED);
         return eatInOrder;
     }
 
@@ -92,7 +92,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        eatInOrder.validateOrderFlow(EatInOrderStatus.COMPLETED);
+        eatInOrder.processOrderFlow(EatInOrderStatus.COMPLETED);
 
         final OrderTable orderTable = eatInOrder.getOrderTable();
         if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
