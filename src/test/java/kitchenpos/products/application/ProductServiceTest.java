@@ -16,6 +16,7 @@ import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
+import kitchenpos.products.application.dto.FindProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.Product;
@@ -96,7 +97,7 @@ class ProductServiceTest {
     void findAll() {
         productRepository.save(product("후라이드", 16_000L));
         productRepository.save(product("양념치킨", 16_000L));
-        final List<Product> actual = productService.findAll();
+        final List<FindProductResponseDto> actual = productService.findAll();
         assertThat(actual).hasSize(2);
     }
 

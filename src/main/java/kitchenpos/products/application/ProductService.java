@@ -11,6 +11,7 @@ import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
+import kitchenpos.products.application.dto.FindProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
@@ -69,7 +70,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public List<FindProductResponseDto> findAll() {
+        return productRepository.findAll().stream()
+            .map(FindProductResponseDto::from)
+            .toList();
     }
 }

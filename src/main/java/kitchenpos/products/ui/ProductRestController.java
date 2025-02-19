@@ -8,7 +8,7 @@ import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
-import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.application.dto.FindProductResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +44,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<FindProductResponseDto>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 }
