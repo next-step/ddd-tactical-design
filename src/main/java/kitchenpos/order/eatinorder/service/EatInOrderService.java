@@ -3,7 +3,6 @@ package kitchenpos.order.eatinorder.service;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.OrderLineItem;
-import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
@@ -33,10 +32,6 @@ public class EatInOrderService {
 
     @Transactional
     public EatInOrder create(final EatInOrder request) {
-        final OrderType type = request.getType();
-        if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
-        }
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
             throw new IllegalArgumentException();
@@ -52,11 +47,11 @@ public class EatInOrderService {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
-            if (type != OrderType.EAT_IN) {
-                if (quantity < 0) {
-                    throw new IllegalArgumentException();
-                }
+
+            if (quantity < 0) {
+                throw new IllegalArgumentException();
             }
+
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
@@ -72,18 +67,17 @@ public class EatInOrderService {
         }
         EatInOrder eatInOrder = new EatInOrder();
         eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setType(type);
         eatInOrder.setStatus(EatInOrderStatus.WAITING);
         eatInOrder.setOrderDateTime(LocalDateTime.now());
         eatInOrder.setOrderLineItems(orderLineItems);
-        if (type == OrderType.EAT_IN) {
-            final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                    .orElseThrow(NoSuchElementException::new);
-            if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
-            }
-            eatInOrder.setOrderTable(orderTable);
+
+        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
+                .orElseThrow(NoSuchElementException::new);
+        if (!orderTable.isOccupied()) {
+            throw new IllegalStateException();
         }
+        eatInOrder.setOrderTable(orderTable);
+
         return eatInOrderRepository.save(eatInOrder);
     }
 
@@ -113,7 +107,6 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final OrderType type = eatInOrder.getType();
         final EatInOrderStatus status = eatInOrder.getStatus();
         if (status != EatInOrderStatus.SERVED) {
             throw new IllegalStateException();

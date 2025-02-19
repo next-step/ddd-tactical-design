@@ -3,7 +3,6 @@ package kitchenpos.order.eatinorder.domain.model;
 
 import jakarta.persistence.*;
 import kitchenpos.order.common.model.OrderLineItem;
-import kitchenpos.order.common.model.OrderType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +14,6 @@ public class EatInOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
-
-    @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
@@ -50,10 +45,9 @@ public class EatInOrder {
     public EatInOrder() {
     }
 
-    public EatInOrder(UUID id, OrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
+    public EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime,
                       List<OrderLineItem> orderLineItems, OrderTable orderTable, UUID orderTableId) {
         this.id = id;
-        this.type = type;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
@@ -61,9 +55,9 @@ public class EatInOrder {
         this.orderTableId = orderTableId;
     }
 
-    public EatInOrder(OrderType type, EatInOrderStatus status, LocalDateTime orderDateTime,
+    public EatInOrder(EatInOrderStatus status, LocalDateTime orderDateTime,
                       List<OrderLineItem> orderLineItems, OrderTable orderTable, UUID orderTableId) {
-        this(UUID.randomUUID(), type, status, orderDateTime, orderLineItems, orderTable, orderTableId);
+        this(UUID.randomUUID(), status, orderDateTime, orderLineItems, orderTable, orderTableId);
     }
 
     public UUID getId() {
@@ -72,14 +66,6 @@ public class EatInOrder {
 
     public void setId(final UUID id) {
         this.id = id;
-    }
-
-    public OrderType getType() {
-        return type;
-    }
-
-    public void setType(final OrderType type) {
-        this.type = type;
     }
 
     public EatInOrderStatus getStatus() {
