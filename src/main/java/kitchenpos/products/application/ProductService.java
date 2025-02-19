@@ -7,6 +7,8 @@ import java.util.UUID;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
+import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
@@ -42,10 +44,11 @@ public class ProductService {
     }
 
     @Transactional
-    public Product changePrice(final UUID productId, final Product request) {
+    public ChangeProductPriceResponseDto changePrice(final UUID productId,
+        final ChangeProductPriceRequestDto request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(new ProductPrice(request.getPrice().getValue()));
+        product.changePrice(request.toValueObject());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
@@ -61,7 +64,7 @@ public class ProductService {
                 menu.setDisplayed(false);
             }
         }
-        return product;
+        return ChangeProductPriceResponseDto.from(product);
     }
 
     @Transactional(readOnly = true)

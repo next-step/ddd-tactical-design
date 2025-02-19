@@ -12,6 +12,8 @@ import java.util.UUID;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
+import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
+import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
@@ -60,8 +62,12 @@ class ProductServiceTest {
         void changePrice() {
             final Product product = productRepository.save(product("후라이드", 16_000L));
             final UUID productId = product.getId();
-            final Product expected = changePriceRequest(product, 15_000L);
-            final Product actual = productService.changePrice(productId, expected);
+
+            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(BigDecimal.valueOf(15_000L));
+            final Product changedProduct = changePriceRequest(product, 15_000L);
+
+            final ChangeProductPriceResponseDto expected = ChangeProductPriceResponseDto.from(changedProduct);
+            final ChangeProductPriceResponseDto actual = productService.changePrice(productId, request);
             assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         }
 
@@ -69,9 +75,12 @@ class ProductServiceTest {
         @Test
         void changePriceInMenu() {
             final Product product = productRepository.save(
-                createProduct("후라이드", BigDecimal.valueOf(16_000)));
+                createProduct("후라이드", BigDecimal.valueOf(16_000L)));
             final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-            productService.changePrice(product.getId(), changePriceRequest(product, 8_000L));
+
+            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(BigDecimal.valueOf(8_000L));
+
+            productService.changePrice(product.getId(), request);
             assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
         }
     }
