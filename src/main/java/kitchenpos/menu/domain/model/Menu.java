@@ -14,10 +14,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_EXISTS_EXCEPTION;
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCTS_EXISTS_EXCEPTION;
 
 @Table(name = "menu")
 @Entity

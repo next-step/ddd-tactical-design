@@ -8,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_NAME_CREATION_EXCEPTION;
+
 @Embeddable
 public class MenuName {
     @Column(name = "name", nullable = false)
