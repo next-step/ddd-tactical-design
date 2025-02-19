@@ -17,9 +17,9 @@ import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
-import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,16 +29,16 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
     private MenuRepository menuRepository;
-    private ProfanityFilterService profanityFilterService;
+    private PurgomalumClient purgomalumClient;
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
-        profanityFilterService = new FakeProfanityFilterService();
+        purgomalumClient = new FakePurgomalumClient();
         productService = new ProductService(productRepository, menuRepository,
-            profanityFilterService);
+            purgomalumClient);
     }
 
     @DisplayName("상품을 등록할 수 있다.")

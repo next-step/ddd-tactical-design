@@ -6,9 +6,9 @@ import static kitchenpos.common.exception.ExceptionDetails.DISPLAYED_NAME_INCLUD
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameEmptyException;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameIncludeProfanityException;
-import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
 
 @Embeddable
 public class DisplayedName {
@@ -16,16 +16,16 @@ public class DisplayedName {
     @Column(name = "name", nullable = false)
     private final String value;
 
-    public DisplayedName(final String name, ProfanityFilterService profanityFilterService) {
-        validate(name, profanityFilterService);
+    public DisplayedName(final String name, PurgomalumClient purgomalumClient) {
+        validate(name, purgomalumClient);
         this.value = name;
     }
 
-    private void validate(String name, ProfanityFilterService profanityFilterService) {
+    private void validate(String name, PurgomalumClient purgomalumClient) {
         if (name == null || name.trim().isEmpty()) {
             throw new DisplayedNameEmptyException(DISPLAYED_NAME_EMPTY_EXCEPTION.getMessage());
         }
-        if (profanityFilterService.containsProfanity(name)) {
+        if (purgomalumClient.containsProfanity(name)) {
             throw new DisplayedNameIncludeProfanityException(
                 DISPLAYED_NAME_INCLUDE_PROFANITY_EXCEPTION.getMessage());
         }

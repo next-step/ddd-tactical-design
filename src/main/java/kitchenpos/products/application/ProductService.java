@@ -12,10 +12,10 @@ import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
+import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
-import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,22 +24,21 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
-    private final ProfanityFilterService profanityFilterService;
+    private final PurgomalumClient purgomalumClient;
 
     public ProductService(
         final ProductRepository productRepository,
         final MenuRepository menuRepository,
-        final ProfanityFilterService profanityFilterService
+        final PurgomalumClient purgomalumClient
     ) {
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
-        this.profanityFilterService = profanityFilterService;
+        this.purgomalumClient = purgomalumClient;
     }
 
     @Transactional
     public CreateProductResponseDto create(final CreateProductRequestDto request) {
-        final DisplayedName displayedName = new DisplayedName(request.getName(),
-            profanityFilterService);
+        final DisplayedName displayedName = new DisplayedName(request.getName(), purgomalumClient);
         final ProductPrice productPrice = new ProductPrice(request.getPrice());
         final Product product = new Product(UUID.randomUUID(), displayedName, productPrice);
         return CreateProductResponseDto.from(productRepository.save(product));
