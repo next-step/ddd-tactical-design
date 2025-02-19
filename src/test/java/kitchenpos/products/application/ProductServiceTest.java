@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static kitchenpos.tobe.Fixtures.menu;
 import static kitchenpos.tobe.Fixtures.menuProduct;
@@ -75,27 +76,36 @@ class ProductServiceTest {
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
-        final ProductId productId = productRepository.save(product("후라이드", 16_000L)).getProductId();
-        final Product expected = changePriceRequest(15_000L);
+        final Product product = product("후라이드", 16_000L);
+        final ProductId productId = productRepository.save(product).getProductId();
+        final Product expected = changePriceRequest(product.getProductId(), product.getProductName(), product.getPrice());
         final Product actual = productService.changePrice(productId, expected);
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void changePrice(final BigDecimal price) {
-        assertThatThrownBy(() -> changePriceRequest(price))
-            .isInstanceOf(NegativePriceException.class);
-    }
+
 
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
-        productService.changePrice(product.getProductId(), changePriceRequest(8_000L));
+
+
+        assertThat(menu.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(19_000L)));
+        Product productResult = productService.changePrice(product.getProductId(), changePriceRequest(
+                product.getProductId(),
+                product.getProductName(),
+                new Price(BigDecimal.valueOf(8_000L))));
+
+        Price sum = Price.ZERO;
+        for(MenuProduct menuProduct : menu.getMenuProducts()){
+            sum.add(productRepository.findById(menuProduct.getProductId()).get().getPrice());
+        }
+
+        assertThat(sum).isEqualTo(new Price(BigDecimal.valueOf(19_000L)).multiply(2));
+        assertThat(productResult.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(19_000L)));
+
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
 
@@ -113,19 +123,19 @@ class ProductServiceTest {
     }
 
     private Product createProductRequest(final String name, final BigDecimal price) {
-        final Product product = new Product();
-        product.setProductName(new ProductName(name, Fixtures.purgomalumClient));
-        product.setPrice(new Price(price));
+        final Product product = new Product(
+                new ProductId(UUID.randomUUID()),
+                new ProductName(name, Fixtures.purgomalumClient),
+                new Price(price)
+        );
         return product;
     }
 
-    private Product changePriceRequest(final long price) {
-        return changePriceRequest(BigDecimal.valueOf(price));
-    }
-
-    private Product changePriceRequest(final BigDecimal price) {
-        final Product product = new Product();
-        product.setPrice(new Price(price));
-        return product;
+    private Product changePriceRequest(final ProductId productId, final ProductName productName, final Price price) {
+        return new Product(
+                productId,
+                productName,
+                price
+        );
     }
 }

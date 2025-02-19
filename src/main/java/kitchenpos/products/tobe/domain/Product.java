@@ -15,7 +15,7 @@ public class Product {
     @Embedded
     private Price price;
 
-    public Product() {
+    protected Product() {
     }
 
     public Product(ProductId productid, ProductName productName, Price price) {

@@ -3,15 +3,15 @@ package kitchenpos.products.tobe.domain;
 import jakarta.persistence.Embeddable;
 import kitchenpos.products.tobe.exception.NegativePriceException;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
 public class Price implements Comparable<Price> {
+    public static final Price ZERO = new Price(BigDecimal.ZERO);
     private BigDecimal price;
-    public Price() {
+    protected Price() {
     }
 
     public Price(BigDecimal price) {

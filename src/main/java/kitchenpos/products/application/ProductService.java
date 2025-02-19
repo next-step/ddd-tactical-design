@@ -35,10 +35,9 @@ public class ProductService {
 
     @Transactional
     public Product create(final Product request) {
-        final Product product = new Product();
-        product.setProductId(new ProductId(UUID.randomUUID()));
-        product.setProductName(request.getProductName());
-        product.setPrice(request.getPrice());
+        final Product product = new Product(
+                new ProductId(UUID.randomUUID()), request.getProductName(),request.getPrice()
+        );
         return productRepository.save(product);
     }
 
@@ -52,14 +51,13 @@ public class ProductService {
         for (final Menu menu : menus) {
             Price sum = new Price(BigDecimal.ZERO);
             for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-                menuProduct.setProduct(Product.convertAsisDomain(product));
                 sum = sum.add(
                     menuProduct.getProduct()
                         .getPrice()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
-            if (menu.getPrice().compareTo(sum.getPrice()) > 0) {
+            if (menu.getPrice().compareTo(sum) > 0) {
                 menu.setDisplayed(false);
             }
         }

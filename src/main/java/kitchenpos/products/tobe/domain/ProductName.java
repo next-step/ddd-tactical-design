@@ -11,9 +11,7 @@ public class ProductName {
     private String name;
     private PurgomalumClient purgomalum;
 
-    public ProductName() {
-
-    }
+    protected ProductName() {}
 
     public ProductName(String name, PurgomalumClient purgomalumClient) {
         validate(name, purgomalumClient);

@@ -10,7 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import kitchenpos.products.domain.Product;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
 
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class MenuProduct {
     private long quantity;
 
     @Transient
-    private UUID productId;
+    private ProductId productId;
 
     public MenuProduct() {
     }
@@ -63,11 +64,11 @@ public class MenuProduct {
         this.quantity = quantity;
     }
 
-    public UUID getProductId() {
+    public ProductId getProductId() {
         return productId;
     }
 
-    public void setProductId(final UUID productId) {
+    public void setProductId(final ProductId productId) {
         this.productId = productId;
     }
 }

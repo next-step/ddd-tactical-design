@@ -32,7 +32,7 @@ public class Fixtures {
         final Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
         menu.setName("후라이드+후라이드");
-        menu.setPrice(BigDecimal.valueOf(price));
+        menu.setPrice(new Price(new BigDecimal(price)));
         menu.setMenuGroup(menuGroup());
         menu.setDisplayed(displayed);
         menu.setMenuProducts(Arrays.asList(menuProducts));
@@ -53,7 +53,7 @@ public class Fixtures {
     public static MenuProduct menuProduct() {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(Product.convertAsisDomain(product()));
+        menuProduct.setProduct(product());
         menuProduct.setQuantity(2L);
         return menuProduct;
     }
@@ -61,7 +61,7 @@ public class Fixtures {
     public static MenuProduct menuProduct(final Product product, final long quantity) {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(new Random().nextLong());
-        menuProduct.setProduct(Product.convertAsisDomain(product));
+        menuProduct.setProduct(product);
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
@@ -123,10 +123,9 @@ public class Fixtures {
     }
 
     public static Product product(final String name, final long price) {
-        final Product product = new Product();
-        product.setProductId(new ProductId(UUID.randomUUID()));
-        product.setProductName(new ProductName(name, purgomalumClient));
-        product.setPrice(new Price(BigDecimal.valueOf(price)));
+        final Product product = new Product(
+                new ProductId(UUID.randomUUID()), new ProductName(name, purgomalumClient),new Price(BigDecimal.valueOf(price))
+        );
         return product;
     }
 }

@@ -1,16 +1,8 @@
 package kitchenpos.eatinorders.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import kitchenpos.menus.domain.Menu;
+import kitchenpos.products.tobe.domain.Price;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -38,7 +30,8 @@ public class OrderLineItem {
     private UUID menuId;
 
     @Transient
-    private BigDecimal price;
+    @Embedded
+    private Price price;
 
     public OrderLineItem() {
     }
@@ -75,11 +68,11 @@ public class OrderLineItem {
         this.menuId = menuId;
     }
 
-    public BigDecimal getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void setPrice(Price price) {
         this.price = price;
     }
 }
