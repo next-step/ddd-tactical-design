@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
+
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.repository.OrderRepository;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
@@ -47,7 +48,7 @@ class OrderTableServiceTest {
 
         // then
         assertThat(created.getId()).isNotNull();
-        assertThat(created.getName()).isEqualTo("1번 테이블");
+        assertThat(created.getInnerName()).isEqualTo("1번 테이블");
         assertThat(created.getNumberOfGuests()).isZero();
         assertThat(created.isOccupied()).isFalse();
     }
@@ -56,11 +57,8 @@ class OrderTableServiceTest {
     @NullAndEmptySource
     @DisplayName("매장 테이블 이름이 없으면 예외가 발생한다.")
     void orderTable_name_exception(String name) {
-        // given
-        OrderTable request = new OrderTable(name, 0, false);
-
         // when // then
-        assertThatThrownBy(() -> orderTableService.create(request))
+        assertThatThrownBy(() -> orderTableService.create(new OrderTable(name, 0, false)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -130,7 +128,7 @@ class OrderTableServiceTest {
     void change_numberOfGuests() {
         // given
         OrderTable orderTable = createUsingOrderTable();
-        orderTable.setNumberOfGuests(4);
+        orderTable.changeNumberOfGuests(4);
 
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
@@ -146,13 +144,14 @@ class OrderTableServiceTest {
     void change_numberOfGuests_not_occupied_exception() {
         // given
         OrderTable orderTable = createEmptyOrderTable();
-        orderTable.setNumberOfGuests(4);
-
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
         // when // then
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> {
+            orderTable.changeNumberOfGuests(4);
+            orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문 테이블이 비어있습니다!");
     }
 
     @Test
@@ -160,13 +159,14 @@ class OrderTableServiceTest {
     void change_numberOfGuests_negative_number_exception() {
         // given
         OrderTable orderTable = createUsingOrderTable();
-        orderTable.setNumberOfGuests(-1);
-
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
 
         // when // then
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            orderTable.changeNumberOfGuests(-1);
+            orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable);
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("손님 수가 음수일 수 없습니다!");
     }
 
     private OrderTable createOrderTableRequest() {

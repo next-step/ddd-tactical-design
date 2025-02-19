@@ -1,10 +1,12 @@
 package kitchenpos.order.eatinorder.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage;
+
 import java.util.UUID;
+
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EMPTY_ORDER_TABLE_EXCEPTION;
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.NUMBER_OF_GUESTS_EXCEPTION;
 
 @Table(name = "order_table")
 @Entity
@@ -13,8 +15,8 @@ public class OrderTable {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Enumerated
+    private OrderTableName name;
 
     @Column(name = "number_of_guests", nullable = false)
     private int numberOfGuests;
@@ -25,15 +27,30 @@ public class OrderTable {
     public OrderTable() {
     }
 
-    public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+    public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
+        validateNumberOfGuests(numberOfGuests);
         this.id = id;
         this.name = name;
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
     }
 
+    public OrderTable(UUID id, OrderTableName name) {
+        this(id, name, 0, false);
+    }
+
+    public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
+        this(id, new OrderTableName(name), numberOfGuests, occupied);
+    }
+
     public OrderTable(String name, int numberOfGuests, boolean occupied) {
         this(UUID.randomUUID(), name, numberOfGuests, occupied);
+    }
+
+    private void validateNumberOfGuests(int numberOfGuests) {
+        if (numberOfGuests < 0) {
+            throw new IllegalArgumentException(NUMBER_OF_GUESTS_EXCEPTION.getMessage());
+        }
     }
 
     public UUID getId() {
@@ -44,20 +61,33 @@ public class OrderTable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getInnerName() {
+        return name.getValue();
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+//    public void setName(final String name) {
+//        this.name = name;
+//    }
 
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
 
-    public void setNumberOfGuests(final int numberOfGuests) {
+    public void changeNumberOfGuests(final int numberOfGuests) {
+        validateTableIsEmpty();
+        validateNumberOfGuests(numberOfGuests);
         this.numberOfGuests = numberOfGuests;
+    }
+
+    private void validateTableIsEmpty() {
+        if (!isOccupied()) {
+            throw new IllegalStateException(EMPTY_ORDER_TABLE_EXCEPTION.getMessage());
+        }
+    }
+
+    public void releaseTable() {
+        this.numberOfGuests = 0;
+        this.occupied = false;
     }
 
     public boolean isOccupied() {

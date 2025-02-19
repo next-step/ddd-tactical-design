@@ -1,5 +1,6 @@
 package kitchenpos.order.eatinorder.domain.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage;
 
@@ -10,6 +11,7 @@ import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.O
 @Embeddable
 public class OrderTableName {
 
+    @Column(name = "name", nullable = false)
     private final String value;
 
     protected OrderTableName() {
