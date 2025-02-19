@@ -79,20 +79,18 @@ class ProductServiceTest {
         void success() {
             Product product = ProductFixture.product("후라이드", 16000, profanities);
             productRepository.save(product);
-            Product request = new Product();
-            ReflectionTestUtils.setField(request, "price", BigDecimal.valueOf(18000));
+            Product request = ProductFixture.product("후라이드", 18000, profanities);
 
             Product updated = productService.changePrice(product.getId(), request);
 
-            assertThat(updated.getPrice()).isEqualTo(new ProductPrice(18000L));
+            assertThat(updated.getPrice().equals(new ProductPrice(18000L)));
         }
 
         @Test
         @DisplayName("존재하지 않는 상품 실패")
         void failWithNonExistentProduct() {
             UUID nonExistentId = UUID.randomUUID();
-            Product request = new Product();
-            ReflectionTestUtils.setField(request, "price", BigDecimal.valueOf(1000));
+            Product request = ProductFixture.product("후라이드", 1000, profanities);
 
             assertThatThrownBy(() -> productService.changePrice(nonExistentId, request))
                     .isInstanceOf(NoSuchElementException.class);
@@ -104,10 +102,7 @@ class ProductServiceTest {
             Product product = ProductFixture.product("후라이드", 16000, profanities);
             productRepository.save(product);
 
-            Product request = new Product();
-            ReflectionTestUtils.setField(request, "price", BigDecimal.valueOf(-1000));
-
-            assertThatThrownBy(() -> productService.changePrice(product.getId(), request))
+            assertThatThrownBy(() -> productService.changePrice(product.getId(), ProductFixture.product("후라이드", -1000, profanities)))
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
