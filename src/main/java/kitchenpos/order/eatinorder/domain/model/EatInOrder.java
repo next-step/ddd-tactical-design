@@ -1,12 +1,22 @@
 package kitchenpos.order.eatinorder.domain.model;
 
 
-import jakarta.persistence.*;
-import kitchenpos.order.common.model.OrderLineItem;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.order.common.model.OrderLineItem;
 
 @Table(name = "eat_in_orders")
 @Entity
@@ -24,10 +34,10 @@ public class EatInOrder {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-            name = "order_id",
-            nullable = false,
+            name = "eat_in_order_id",
+//            nullable = false,
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_eat_in_orders")
     )
     private List<OrderLineItem> orderLineItems;
 
@@ -35,7 +45,7 @@ public class EatInOrder {
     @JoinColumn(
             name = "order_table_id",
             columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
+            foreignKey = @ForeignKey(name = "fk_eat_in_orders_to_order_table")
     )
     private OrderTable orderTable;
 
