@@ -1,6 +1,5 @@
 package kitchenpos.fake;
 
-
 import kitchenpos.common.PurgomalumClient;
 
 import java.util.Set;

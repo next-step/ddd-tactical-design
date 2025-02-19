@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.application;
 
+import kitchenpos.common.exception.OrderException;
+import kitchenpos.common.exception.OrderNotFoundException;
 import kitchenpos.deliveryorder.infra.KitchenridersClient;
 import kitchenpos.eatinorder.domain.*;
 import kitchenpos.menu.domain.Menu;
@@ -10,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static kitchenpos.common.exception.ErrorCode.*;
 
 @Service
 public class EatInOrderService {
@@ -34,11 +38,11 @@ public class EatInOrderService {
     public EatInOrder create(final EatInOrder request) {
         final OrderType type = request.getType();
         if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
+            throw new OrderException(ORDER_TYPE_INVALID);
         }
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new OrderException(ORDER_LINE_ITEM_NOT_FOUND);
         }
         final List<Menu> menus = menuRepository.findAllByIdIn(
             orderLineItemRequests.stream()
@@ -46,23 +50,23 @@ public class EatInOrderService {
                 .toList()
         );
         if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
+            throw new OrderException(ORDER_LINE_ITEM_SIZE_NOT_MATCHED);
         }
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
         for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
             final long quantity = orderLineItemRequest.getQuantity();
             if (type != OrderType.EAT_IN) {
                 if (quantity < 0) {
-                    throw new IllegalArgumentException();
+                    throw new OrderException(ORDER_LINE_QUANTITY_NEGATIVE);
                 }
             }
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
                 .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
+                throw new OrderException(MENU_DISPLAY_FALSE);
             }
             if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
+                throw new OrderException(MENU_PRICE_INVALID);
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
             orderLineItem.setMenu(menu);
@@ -78,15 +82,15 @@ public class EatInOrderService {
         if (type == OrderType.DELIVERY) {
             final String deliveryAddress = request.getDeliveryAddress();
             if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
-                throw new IllegalArgumentException();
+                throw new OrderException(DELIVERY_ADDRESS_NOT_FOUND);
             }
             order.setDeliveryAddress(deliveryAddress);
         }
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
+                    .orElseThrow(() -> new OrderException(ORDER_TABLE_NOT_FOUND));
             if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
+                throw new OrderException(ORDER_TABLE_EMPTY);
             }
             order.setOrderTable(orderTable);
         }
@@ -98,7 +102,7 @@ public class EatInOrderService {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.WAITING) {
-            throw new IllegalStateException();
+            throw new OrderException(ORDER_STATUS_INVALID);
         }
         if (order.getType() == OrderType.DELIVERY) {
             BigDecimal sum = BigDecimal.ZERO;
@@ -118,7 +122,7 @@ public class EatInOrderService {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
             .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
+            throw new OrderException(ORDER_STATUS_INVALID);
         }
         order.setStatus(OrderStatus.SERVED);
         return order;
@@ -127,12 +131,12 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder startDelivery(final UUID orderId) {
         final EatInOrder order = eatInOrderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(OrderNotFoundException::new);
         if (order.getType() != OrderType.DELIVERY) {
-            throw new IllegalStateException();
+            throw new OrderException(ORDER_TYPE_INVALID);
         }
         if (order.getStatus() != OrderStatus.SERVED) {
-            throw new IllegalStateException();
+            throw new OrderException(ORDER_STATUS_INVALID);
         }
         order.setStatus(OrderStatus.DELIVERING);
         return order;
@@ -157,12 +161,11 @@ public class EatInOrderService {
         final OrderStatus status = order.getStatus();
         if (type == OrderType.DELIVERY) {
             if (status != OrderStatus.DELIVERED) {
-                throw new IllegalStateException();
-            }
+                throw new OrderException(ORDER_NOT_DELIVERED_YET);            }
         }
         if (type == OrderType.TAKEOUT || type == OrderType.EAT_IN) {
             if (status != OrderStatus.SERVED) {
-                throw new IllegalStateException();
+                throw new OrderException(ORDER_NOT_SERVED_YET);
             }
         }
         order.setStatus(OrderStatus.COMPLETED);

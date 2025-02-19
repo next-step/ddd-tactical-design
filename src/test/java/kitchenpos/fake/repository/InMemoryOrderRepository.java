@@ -1,15 +1,18 @@
 package kitchenpos.fake.repository;
 
 
+import kitchenpos.eatinorder.domain.EatInOrder;
+import kitchenpos.eatinorder.domain.EatInOrderRepository;
+import kitchenpos.eatinorder.domain.OrderStatus;
 import kitchenpos.eatinorder.domain.OrderTable;
 
 import java.util.*;
 
-public class InMemoryOrderRepository implements OrderRepository {
-    private final Map<UUID, Order> store = new HashMap<>();
+public class InMemoryOrderRepository implements EatInOrderRepository {
+    private final Map<UUID, EatInOrder> store = new HashMap<>();
 
     @Override
-    public Order save(Order order) {
+    public EatInOrder save(EatInOrder order) {
         if (order.getId() == null) {
             order.setId(UUID.randomUUID());
         }
@@ -18,7 +21,7 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findById(UUID orderId) {
+    public Optional<EatInOrder> findById(UUID orderId) {
         return Optional.ofNullable(store.get(orderId));
     }
 
@@ -32,7 +35,7 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<EatInOrder> findAll() {
         return new ArrayList<>(store.values());
     }
 }

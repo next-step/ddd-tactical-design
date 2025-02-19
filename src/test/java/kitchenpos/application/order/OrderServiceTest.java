@@ -1,9 +1,12 @@
 package kitchenpos.application.order;
 
 
+import kitchenpos.common.exception.ErrorCode;
+import kitchenpos.common.exception.OrderException;
 import kitchenpos.deliveryorder.infra.KitchenridersClient;
-import kitchenpos.eatinorder.domain.OrderLineItem;
-import kitchenpos.eatinorder.domain.OrderTableRepository;
+import kitchenpos.eatinorder.application.EatInOrderService;
+import kitchenpos.eatinorder.domain.*;
+
 import kitchenpos.fake.FakechenridersClientImpl;
 import kitchenpos.fake.repository.InMemoryMenuRepository;
 import kitchenpos.fake.repository.InMemoryOrderRepository;
@@ -33,8 +36,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderServiceTest {
-    private OrderService orderService;
-    private OrderRepository orderRepository;
+    private EatInOrderService orderService;
+    private EatInOrderRepository orderRepository;
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
 
@@ -44,7 +47,7 @@ class OrderServiceTest {
         menuRepository = new InMemoryMenuRepository();
         orderTableRepository = new InMemoryOrderTableRepository();
         KitchenridersClient kitchenridersClient = new FakechenridersClientImpl();
-        orderService = new OrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient);
+        orderService = new EatInOrderService(orderRepository, menuRepository, orderTableRepository, kitchenridersClient);
     }
 
     @Nested
@@ -62,17 +65,17 @@ class OrderServiceTest {
             menuRepository.save(menu);
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order request = OrderFixture.deliveryOrder("서울시 강남구", List.of(orderLineItem));
+            EatInOrder request = OrderFixture.deliveryOrder("서울시 강남구", List.of(orderLineItem));
 
             // when
-            Order created = orderService.create(request);
+            EatInOrder created = orderService.create(request);
 
             // then
             assertAll(
-                () -> assertThat(created.getId()).isNotNull(),
-                () -> assertThat(created.getType()).isEqualTo(OrderType.DELIVERY),
-                () -> assertThat(created.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(created.getDeliveryAddress()).isEqualTo("서울시 강남구")
+                    () -> assertThat(created.getId()).isNotNull(),
+                    () -> assertThat(created.getType()).isEqualTo(OrderType.DELIVERY),
+                    () -> assertThat(created.getStatus()).isEqualTo(OrderStatus.WAITING),
+                    () -> assertThat(created.getDeliveryAddress()).isEqualTo("서울시 강남구")
             );
         }
 
@@ -92,24 +95,24 @@ class OrderServiceTest {
             menuRepository.save(menu);
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order request = OrderFixture.eatInOrder(orderTable.getId(), List.of(orderLineItem));
+            EatInOrder request = OrderFixture.eatInOrder(orderTable.getId(), List.of(orderLineItem));
 
             // when
-            Order created = orderService.create(request);
+            EatInOrder created = orderService.create(request);
 
             // then
             assertAll(
-                () -> assertThat(created.getId()).isNotNull(),
-                () -> assertThat(created.getType()).isEqualTo(OrderType.EAT_IN),
-                () -> assertThat(created.getStatus()).isEqualTo(OrderStatus.WAITING),
-                () -> assertThat(created.getOrderTable().getId()).isEqualTo(orderTable.getId())
+                    () -> assertThat(created.getId()).isNotNull(),
+                    () -> assertThat(created.getType()).isEqualTo(OrderType.EAT_IN),
+                    () -> assertThat(created.getStatus()).isEqualTo(OrderStatus.WAITING),
+                    () -> assertThat(created.getOrderTable().getId()).isEqualTo(orderTable.getId())
             );
         }
 
         @Test
         @DisplayName("주문 유형이 없으면 실패")
         void failWithoutOrderType() {
-            Order request = new Order();
+            EatInOrder request = new EatInOrder();
 
             ReflectionTestUtils.setField(request, "orderLineItems", List.of(new OrderLineItem()));
 
@@ -122,7 +125,7 @@ class OrderServiceTest {
         @Test
         @DisplayName("주문 상품이 없으면 실패")
         void failWithoutOrderLineItems() {
-            Order request = new Order();
+            EatInOrder request = new EatInOrder();
             ReflectionTestUtils.setField(request, "type", OrderType.TAKEOUT);
 
             assertThatThrownBy(() -> orderService.create(request))
@@ -140,7 +143,7 @@ class OrderServiceTest {
                     BigDecimal.valueOf(10000)
             );
 
-            Order request = new Order();
+            EatInOrder request = new EatInOrder();
             ReflectionTestUtils.setField(request, "type", OrderType.TAKEOUT);
             ReflectionTestUtils.setField(request, "orderLineItems", List.of(orderLineItem));
 
@@ -165,11 +168,11 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.takeoutOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.takeoutOrder(List.of(orderLineItem));
             orderRepository.save(order);
 
             // when
-            Order accepted = orderService.accept(order.getId());
+            EatInOrder accepted = orderService.accept(order.getId());
 
             // then
             assertThat(accepted.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
@@ -185,7 +188,7 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.acceptedTakeoutOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.acceptedTakeoutOrder(List.of(orderLineItem));
             orderRepository.save(order);
 
             assertThatThrownBy(() -> orderService.accept(order.getId()))
@@ -204,11 +207,11 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.acceptedTakeoutOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.acceptedTakeoutOrder(List.of(orderLineItem));
             orderRepository.save(order);
 
             // when
-            Order served = orderService.serve(order.getId());
+            EatInOrder served = orderService.serve(order.getId());
 
             // then
             assertThat(served.getStatus()).isEqualTo(OrderStatus.SERVED);
@@ -224,7 +227,7 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.waitingTakeoutOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.waitingTakeoutOrder(List.of(orderLineItem));
             orderRepository.save(order);
 
             assertThatThrownBy(() -> orderService.serve(order.getId()))
@@ -247,12 +250,12 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.servedDeliveryOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.servedDeliveryOrder(List.of(orderLineItem));
             ReflectionTestUtils.setField(order, "deliveryAddress", "서울시 강남구");
             orderRepository.save(order);
 
             // when
-            Order delivering = orderService.startDelivery(order.getId());
+            EatInOrder delivering = orderService.startDelivery(order.getId());
 
             // then
             assertThat(delivering.getStatus()).isEqualTo(OrderStatus.DELIVERING);
@@ -268,12 +271,12 @@ class OrderServiceTest {
             Menu menu = MenuFixture.menuWithDisplayTrue("돈까스", List.of(menuProduct), 10000, menuGroup.getId());
 
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
-            Order order = OrderFixture.deliveringDeliveryOrder(List.of(orderLineItem));
+            EatInOrder order = OrderFixture.deliveringDeliveryOrder(List.of(orderLineItem));
             ReflectionTestUtils.setField(order, "deliveryAddress", "서울시 강남구");
             orderRepository.save(order);
 
             // when
-            Order delivered = orderService.completeDelivery(order.getId());
+            EatInOrder delivered = orderService.completeDelivery(order.getId());
 
             // then
             assertThat(delivered.getStatus()).isEqualTo(OrderStatus.DELIVERED);
@@ -291,14 +294,14 @@ class OrderServiceTest {
 
         OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
 
-        Order order1 = OrderFixture.takeoutOrder(List.of(orderLineItem));
-        Order order2 = OrderFixture.deliveryOrder("서울시 강남구", List.of(orderLineItem));
+        EatInOrder order1 = OrderFixture.takeoutOrder(List.of(orderLineItem));
+        EatInOrder order2 = OrderFixture.deliveryOrder("서울시 강남구", List.of(orderLineItem));
 
         orderRepository.save(order1);
         orderRepository.save(order2);
 
         // when
-        List<Order> orders = orderService.findAll();
+        List<EatInOrder> orders = orderService.findAll();
 
         // then
         assertThat(orders).hasSize(2);

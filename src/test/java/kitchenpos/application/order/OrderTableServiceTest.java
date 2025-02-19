@@ -1,12 +1,15 @@
 package kitchenpos.application.order;
 
-import kitchenpos.application.OrderTableService;
-import kitchenpos.domain.*;
+
+import kitchenpos.eatinorder.application.OrderTableService;
+import kitchenpos.eatinorder.domain.*;
+
 import kitchenpos.fake.repository.InMemoryOrderRepository;
 import kitchenpos.fake.repository.InMemoryOrderTableRepository;
 import kitchenpos.fixture.MenuFixture;
 import kitchenpos.fixture.OrderFixture;
 import kitchenpos.fixture.OrderTableFixture;
+import kitchenpos.menu.domain.Menu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,13 +19,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableServiceTest {
     private OrderTableService orderTableService;
     private OrderTableRepository orderTableRepository;
-    private OrderRepository orderRepository;
+    private EatInOrderRepository orderRepository;
 
     @BeforeEach
     void setUp() {
@@ -30,7 +34,6 @@ class OrderTableServiceTest {
         this.orderRepository = new InMemoryOrderRepository();
         this.orderTableService = new OrderTableService(orderTableRepository, orderRepository);
     }
-
 
 
     @Nested
@@ -46,10 +49,10 @@ class OrderTableServiceTest {
 
             // then
             assertAll(
-                () -> assertThat(created.getId()).isNotNull(),
-                () -> assertThat(created.getName()).isEqualTo("테이블"),
-                () -> assertThat(created.getNumberOfGuests()).isEqualTo(0),
-                () -> assertThat(created.isOccupied()).isFalse()
+                    () -> assertThat(created.getId()).isNotNull(),
+                    () -> assertThat(created.getName()).isEqualTo("테이블"),
+                    () -> assertThat(created.getNumberOfGuests()).isEqualTo(0),
+                    () -> assertThat(created.isOccupied()).isFalse()
             );
         }
 
@@ -60,7 +63,7 @@ class OrderTableServiceTest {
 
             // when & then
             assertThatThrownBy(() -> orderTableService.create(request))
-                .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
@@ -78,6 +81,7 @@ class OrderTableServiceTest {
             // then
             assertThat(sitOrderTable.isOccupied()).isTrue();
         }
+
         @Test
         void sitFailWithNoSuchElementException() {
             // given
@@ -85,7 +89,7 @@ class OrderTableServiceTest {
 
             // when & then
             assertThatThrownBy(() -> orderTableService.sit(orderTable.getId()))
-                .isInstanceOf(NoSuchElementException.class);
+                    .isInstanceOf(NoSuchElementException.class);
         }
     }
 
@@ -115,7 +119,7 @@ class OrderTableServiceTest {
 
             // when & then
             assertThatThrownBy(() -> orderTableService.clear(orderTable.getId()))
-                .isInstanceOf(NoSuchElementException.class);
+                    .isInstanceOf(NoSuchElementException.class);
         }
 
         @Test
@@ -128,7 +132,7 @@ class OrderTableServiceTest {
             OrderLineItem orderLineItem = OrderFixture.orderLineItem(menu, 2);
             OrderTable orderTable = orderTableRepository.save(OrderTableFixture.orderTable("테이블", 0, true));
 
-            Order order = OrderFixture.order(
+            EatInOrder order = OrderFixture.order(
                     OrderType.EAT_IN,
                     OrderStatus.ACCEPTED,
                     List.of(orderLineItem)
@@ -146,7 +150,7 @@ class OrderTableServiceTest {
     @DisplayName("테이블에 손님을 추가한다")
     class AddClientOrderTable {
         @Test
-        void successAddClient(){
+        void successAddClient() {
             // given
             OrderTable orderTable = orderTableRepository.save(OrderTableFixture.orderTable("테이블", 0, true));
             OrderTable request = OrderTableFixture.orderTable("테이블", 3, true);
@@ -166,7 +170,7 @@ class OrderTableServiceTest {
 
             // when & then
             assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), request))
-                .isInstanceOf(IllegalArgumentException.class);
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -177,7 +181,7 @@ class OrderTableServiceTest {
 
             // when & then
             assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), request))
-                .isInstanceOf(IllegalStateException.class);
+                    .isInstanceOf(IllegalStateException.class);
         }
     }
 }

@@ -1,7 +1,6 @@
 package kitchenpos.fake.repository;
 
 
-
 import kitchenpos.product.domain.Product;
 import kitchenpos.product.domain.ProductRepository;
 

@@ -26,10 +26,10 @@ public class DeliveryOrderService {
     private final OrderTableRepository orderTableRepository;
 
     public DeliveryOrderService(
-        final DeliveryOrderRepository deliveryOrderRepository,
-        final MenuRepository menuRepository,
-        final KitchenridersClient kitchenridersClient,
-        final  OrderTableRepository orderTableRepository
+            final DeliveryOrderRepository deliveryOrderRepository,
+            final MenuRepository menuRepository,
+            final KitchenridersClient kitchenridersClient,
+            final OrderTableRepository orderTableRepository
     ) {
         this.deliveryOrderRepository = deliveryOrderRepository;
         this.menuRepository = menuRepository;
