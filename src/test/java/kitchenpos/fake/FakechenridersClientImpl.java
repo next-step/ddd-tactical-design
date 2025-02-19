@@ -1,6 +1,5 @@
 package kitchenpos.fake;
 
-
 import kitchenpos.deliveryorder.infra.KitchenridersClient;
 
 import java.math.BigDecimal;

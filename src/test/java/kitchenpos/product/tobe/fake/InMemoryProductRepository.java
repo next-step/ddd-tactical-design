@@ -1,8 +1,8 @@
-package kitchenpos.fake.repository;
+package kitchenpos.product.tobe.fake;
 
 
-import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductRepository;
+import kitchenpos.product.tobe.domain.Product;
+import kitchenpos.product.tobe.domain.ProductRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
