@@ -1,12 +1,5 @@
 package kitchenpos.menu.application;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.*;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
@@ -17,10 +10,15 @@ import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
+import static kitchenpos.menu.exception.MenuExceptionMessage.NONE_MARGIN_EXCEPTION;
+
 @Service
 public class MenuService {
-    private static final String NONE_MARGIN_EXCEPTION = "마진이 남지 않습니다! 마진을 남기게 만들어주세요!";
-
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
@@ -77,7 +75,7 @@ public class MenuService {
     private void validateMargin(Menu menu) {
         boolean hasMargin = marginValidator.checkMargin(menu);
         if (!hasMargin) {
-            throw new IllegalStateException(NONE_MARGIN_EXCEPTION);
+            throw new IllegalStateException(NONE_MARGIN_EXCEPTION.getMessage());
         }
     }
 

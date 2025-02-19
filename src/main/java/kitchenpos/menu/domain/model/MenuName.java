@@ -5,10 +5,10 @@ import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_NAME_CREATION_EXCEPTION;
+
 @Embeddable
 public class MenuName {
-    private static final String MENU_NAME_CREATION_EXCEPTION = "메뉴 이름을 채워주세요!";
-
     @Column(name = "name", nullable = false)
     private final String value;
 
@@ -23,7 +23,7 @@ public class MenuName {
 
     private void validateName(String name) {
         if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException(MENU_NAME_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(MENU_NAME_CREATION_EXCEPTION.getMessage());
         }
     }
 

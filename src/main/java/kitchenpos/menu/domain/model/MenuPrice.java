@@ -5,10 +5,10 @@ import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRICE_CREATION_EXCEPTION;
+
 @Embeddable
 public class MenuPrice {
-    private static final String MENU_PRICE_CREATION_EXCEPTION = "메뉴 가격을 채워주세요!";
-
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
@@ -23,7 +23,7 @@ public class MenuPrice {
 
     private void validatePrice(BigDecimal value) {
         if (Objects.isNull(value) || value.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(MENU_PRICE_CREATION_EXCEPTION.getMessage());
         }
     }
 

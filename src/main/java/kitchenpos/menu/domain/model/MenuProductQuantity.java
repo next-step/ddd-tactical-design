@@ -5,10 +5,10 @@ import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION;
+
 @Embeddable
 public class MenuProductQuantity {
-    private static final String MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION = "메뉴 상품의 수량은 0보다 커야 합니다!";
-
     @Column(name = "quantity", nullable = false)
     private final Long value;
 
@@ -19,7 +19,7 @@ public class MenuProductQuantity {
 
     private void validateMenuProductQuantity(long value) {
         if (value <= 0) {
-            throw new IllegalArgumentException(MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION);
+            throw new IllegalArgumentException(MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION.getMessage());
         }
     }
 

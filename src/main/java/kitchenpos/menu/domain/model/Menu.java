@@ -11,17 +11,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_EXISTS_EXCEPTION;
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCTS_EXISTS_EXCEPTION;
+
 @Table(name = "menu")
 @Entity
 public class Menu {
-    private static final String MENU_PRODUCTS_EXISTS_EXCEPTION = "메뉴 상품이 존재하지 않습니다!";
-    private static final String MENU_GROUP_EXISTS_EXCEPTION = "메뉴 그룹이 존재하지 않습니다!";
-
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -92,13 +93,13 @@ public class Menu {
 
     private void validateMenuGroupExists(MenuGroup menuGroup) {
         if (menuGroup == null) {
-            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION.getMessage());
         }
     }
 
     private void validateMenuProductsExists(List<MenuProduct> menuProducts) {
         if (menuProducts == null || menuProducts.isEmpty()) {
-            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION);
+            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION.getMessage());
         }
     }
 
