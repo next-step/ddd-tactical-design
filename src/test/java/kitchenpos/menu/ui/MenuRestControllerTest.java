@@ -1,17 +1,6 @@
 package kitchenpos.menu.ui;
 
-import static kitchenpos.TestFixtureFactory.createMenuGroup;
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.List;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
@@ -28,6 +17,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -66,8 +65,8 @@ class MenuRestControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name").value(request.getName()))
-                .andExpect(jsonPath("$.price").value(request.getPrice().intValue()))
+                .andExpect(jsonPath("$.name.value").value("김치찌개"))
+                .andExpect(jsonPath("$.price.value").value(8000))
                 .andExpect(jsonPath("$.menuGroup").exists())
                 .andExpect(jsonPath("$.menuProducts").isNotEmpty());
     }
@@ -77,16 +76,19 @@ class MenuRestControllerTest {
     void create_menuRequest_with_emptyProducts() throws Exception {
         // given
         MenuGroup menuGroup = createAndSaveMenuGroup();
-        Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, null, menuGroup,
-                menuGroup.getId());
+        assertThatThrownBy(() -> {
+            Menu request = new Menu("김치찌개", BigDecimal.valueOf(8000), true, null, menuGroup,
+                    menuGroup.getId());
 
-        // when
-        ResultActions result = mockMvc.perform(post("/api/menus")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+            // when
+            ResultActions result = mockMvc.perform(post("/api/menus")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
 
-        // then
-        result.andExpect(status().isBadRequest());
+            // then
+            result.andExpect(status().isBadRequest());
+        }).isInstanceOf(NoSuchElementException.class)
+                .hasMessage("메뉴 상품이 존재하지 않습니다!");
     }
 
     @Test
@@ -94,7 +96,7 @@ class MenuRestControllerTest {
     void change_menuPrice() throws Exception {
         // given
         Menu menu = createAndSaveMenu(true);
-        menu.setPrice(BigDecimal.valueOf(8001));
+        menu.changePrice(BigDecimal.valueOf(8001));
 
         // when
         ResultActions result = mockMvc.perform(put("/api/menus/{menuId}/price", menu.getId())
@@ -104,7 +106,7 @@ class MenuRestControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(menu.getId().toString()))
-                .andExpect(jsonPath("$.price").value(8001));
+                .andExpect(jsonPath("$.price.value").value(8001));
     }
 
     @Test
@@ -112,16 +114,20 @@ class MenuRestControllerTest {
     void change_menuPrice_with_negativePrice() throws Exception {
         // given
         Menu savedMenu = createAndSaveMenu(true);
-        Menu request = new Menu();
-        request.setPrice(BigDecimal.valueOf(-1));
+        assertThatThrownBy(() -> {
+            Menu request = new Menu();
+            request.changePrice(BigDecimal.valueOf(-1));
 
-        // when
-        ResultActions result = mockMvc.perform(put("/api/menus/{menuId}/price", savedMenu.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+            // when
+            ResultActions result = mockMvc.perform(put("/api/menus/{menuId}/price", savedMenu.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
 
-        // then
-        result.andExpect(status().isBadRequest());
+            // then
+            result.andExpect(status().isBadRequest());
+        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("메뉴 가격을 채워주세요!");
     }
 
     @Test

@@ -3,11 +3,10 @@ package kitchenpos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import kitchenpos.product.domain.model.ProductName;
-import kitchenpos.product.domain.model.ProductNameCreationService;
-import kitchenpos.product.domain.model.ProductPrice;
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.order.common.model.Order;
 import kitchenpos.order.common.model.OrderLineItem;
@@ -15,12 +14,17 @@ import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.common.infra.external.FakePurgomalumClient;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductNameCreationService;
+import kitchenpos.product.domain.model.ProductPrice;
 
 public class TestFixtureFactory {
 
     public static MenuGroup createMenuGroup() {
-        return new MenuGroup("한식");
+        return new MenuGroup(
+                new MenuGroupNameCreationService(new FakePurgomalumClient())
+                        .createName("한식")
+        );
     }
 
     public static Product createProduct(BigDecimal value) {
@@ -30,7 +34,8 @@ public class TestFixtureFactory {
     }
 
     private static ProductName createName(String value) {
-        ProductNameCreationService productNameCreationService = new ProductNameCreationService(new FakePurgomalumClient());
+        ProductNameCreationService productNameCreationService = new ProductNameCreationService(
+                new FakePurgomalumClient());
         return productNameCreationService.createName(value);
     }
 

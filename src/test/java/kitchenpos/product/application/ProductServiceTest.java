@@ -62,7 +62,7 @@ class ProductServiceTest {
         // when // then
         assertThatThrownBy(() -> productService.create(createProductRequest("김치", -1000)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("가격을 채워주세요!");
+                .hasMessage("상품 가격을 채워주세요!");
     }
 
     @Test

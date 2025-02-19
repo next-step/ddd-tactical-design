@@ -1,12 +1,20 @@
 package kitchenpos.menu.ui;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.UUID;
+
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupName;
+import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
+import kitchenpos.menu.domain.model.MenuNameCreationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,7 +40,8 @@ class MenuGroupRestControllerTest {
     @DisplayName("메뉴 그룹을 생성한다.")
     void create_success() throws Exception {
         // given
-        MenuGroup request = new MenuGroup("한식");
+        MenuGroupNameCreationService menuGroupNameCreationService = new MenuGroupNameCreationService(new FakePurgomalumClient());
+        MenuGroup request = new MenuGroup(menuGroupNameCreationService.createName("한식"));
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menu-groups")
@@ -49,16 +58,17 @@ class MenuGroupRestControllerTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("메뉴 그룹 이름이 비어있으면 400 상태코드를 반환한다")
-    void create_fail(String name) throws Exception {
+    void create_fail(String name) {
         // given
-        MenuGroup request = new MenuGroup(name);
+        assertThatThrownBy(() -> {
+            MenuGroup request = new MenuGroup(name);
+            // when
+            ResultActions result = mockMvc.perform(post("/api/menu-groups")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
 
-        // when
-        ResultActions result = mockMvc.perform(post("/api/menu-groups")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
-
-        // then
-        result.andExpect(status().isBadRequest());
+            // then
+            result.andExpect(status().isBadRequest());
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 }

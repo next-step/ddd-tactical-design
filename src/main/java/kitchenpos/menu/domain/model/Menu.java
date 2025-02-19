@@ -2,6 +2,7 @@ package kitchenpos.menu.domain.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -12,20 +13,24 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Table(name = "menu")
 @Entity
 public class Menu {
+    private static final String MENU_PRODUCTS_EXISTS_EXCEPTION = "메뉴 상품이 존재하지 않습니다!";
+    private static final String MENU_GROUP_EXISTS_EXCEPTION = "메뉴 그룹이 존재하지 않습니다!";
+
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -53,21 +58,41 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
-                MenuGroup menuGroup,
-                UUID menuGroupId) {
+    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
+                List<MenuProduct> menuProducts, UUID menuGroupId) {
+        validateMenuGroupExists(menuGroup);
+        validateMenuProductsExists(menuProducts);
         this.id = id;
         this.name = name;
         this.price = price;
+        this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
-        this.menuGroup = menuGroup;
         this.menuGroupId = menuGroupId;
+    }
+
+    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+                MenuGroup menuGroup,
+                UUID menuGroupId) {
+        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
     }
 
     public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
                 UUID menuGroupId) {
-        this(UUID.randomUUID(), name, price, displayed, menuProducts, menuGroup, menuGroupId);
+        this(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts,
+                menuGroupId);
+    }
+
+    private void validateMenuGroupExists(MenuGroup menuGroup) {
+        if (menuGroup == null) {
+            throw new NoSuchElementException(MENU_GROUP_EXISTS_EXCEPTION);
+        }
+    }
+
+    private void validateMenuProductsExists(List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new NoSuchElementException(MENU_PRODUCTS_EXISTS_EXCEPTION);
+        }
     }
 
     public UUID getId() {
@@ -78,35 +103,39 @@ public class Menu {
         this.id = id;
     }
 
-    public String getName() {
+    public String getInnerName() {
+        return name.getValue();
+    }
+
+    public MenuName getName() {
         return name;
     }
 
     public void setName(final String name) {
-        this.name = name;
+        this.name = new MenuName(name);
     }
 
-    public BigDecimal getPrice() {
+    public BigDecimal getInnerPrice() {
+        return price.getValue();
+    }
+
+    public MenuPrice getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
+    public void changePrice(final BigDecimal price) {
+        this.price = new MenuPrice(price);
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
+    public void changeDisplay(final boolean displayed) {
         this.displayed = displayed;
     }
 
@@ -116,10 +145,6 @@ public class Menu {
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
     }
 
     public UUID getMenuGroupId() {

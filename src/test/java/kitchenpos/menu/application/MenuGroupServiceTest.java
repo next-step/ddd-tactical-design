@@ -9,7 +9,10 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupNameCreationService;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +28,8 @@ class MenuGroupServiceTest {
     @BeforeEach
     void setUp() {
         menuGroupRepository = mock(MenuGroupRepository.class);
-        menuGroupService = new MenuGroupService(menuGroupRepository);
+        MenuGroupNameCreationService menuGroupNameCreationService = new MenuGroupNameCreationService(new FakePurgomalumClient());
+        menuGroupService = new MenuGroupService(menuGroupRepository, menuGroupNameCreationService);
     }
 
     @Test
@@ -50,11 +54,8 @@ class MenuGroupServiceTest {
     @NullAndEmptySource
     @DisplayName("메뉴 그룹 이름이 null이거나 비어있으면 예외가 발생한다")
     void create_MenuGroup_fail(String name) {
-        // given
-        MenuGroup request = new MenuGroup(name);
-
         // when // then
-        assertThatThrownBy(() -> menuGroupService.create(request))
+        assertThatThrownBy(() -> menuGroupService.create(new MenuGroup(name)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
