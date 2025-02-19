@@ -1,6 +1,5 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.ClientTestConfiguration;
 import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
@@ -11,12 +10,11 @@ import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.exception.MenuPriceValidationException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.shared.domain.Profanities;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.shared.port.out.PurgomalumClient;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -41,21 +38,20 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@Import(ClientTestConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class MenuServiceTest {
     private final MenuService menuService;
     private final ProductEntityRepository productEntityRepository;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final MenuEntityRepository menuEntityRepository;
-    private final PurgomalumClient mockPurgomalumClient;
+    private final Profanities profanities;
 
-    public MenuServiceTest(MenuService menuService, ProductEntityRepository productEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, MenuEntityRepository menuEntityRepository, PurgomalumClient mockPurgomalumClient) {
+    public MenuServiceTest(MenuService menuService, ProductEntityRepository productEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, MenuEntityRepository menuEntityRepository, Profanities profanities) {
         this.menuService = menuService;
         this.productEntityRepository = productEntityRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuEntityRepository = menuEntityRepository;
-        this.mockPurgomalumClient = mockPurgomalumClient;
+        this.profanities = Mockito.mock(Profanities.class);
     }
 
     @DisplayName("메뉴 등록하기")
@@ -108,7 +104,7 @@ public class MenuServiceTest {
             String menuName = "holy shit 후라이드치킨";
             MenuProduct menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2);
             CreateMenuRequest request = createMenuRequest(menuName, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
-            Mockito.when(mockPurgomalumClient.containsProfanity(menuName)).thenReturn(Boolean.TRUE);
+            Mockito.when(profanities.contains(menuName)).thenReturn(Boolean.TRUE);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);

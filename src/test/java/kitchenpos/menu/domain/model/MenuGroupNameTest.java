@@ -19,7 +19,7 @@ class MenuGroupNameTest {
         final String name = "메뉴 그룹";
 
         // when
-        final MenuGroupName menuGroupName = MenuGroupName.of(name, n -> {});
+        final MenuGroupName menuGroupName = MenuGroupName.of(name, n -> false);
 
         // then
         assertThat(menuGroupName.isSameName(name)).isTrue();
@@ -31,7 +31,7 @@ class MenuGroupNameTest {
     @ValueSource(strings = {"", " "})
     void createMenuGroupNameWithEmptyOrNull(String name) {
         // when
-        final Throwable thrown = catchThrowable(() -> MenuGroupName.of(name, n -> {}));
+        final Throwable thrown = catchThrowable(() -> MenuGroupName.of(name, n -> false));
 
         // then
         assertThat(thrown).isInstanceOf(MenuGroupNameValidationException.class)

@@ -2,6 +2,7 @@ package kitchenpos.menu.adapter.out.persistance.entity;
 
 import jakarta.persistence.*;
 import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -61,17 +62,17 @@ public class MenuEntity {
         return menuEntity;
     }
 
-    public Menu toDomain() {
+    public Menu toDomain(Profanities profanities) {
         return Menu.create(
                 this.name,
                 this.price,
                 this.displayed,
-                this.menuGroup.toDomain(nm -> {}),
+                this.menuGroup.toDomain(profanities),
                 this.menuProducts
                         .stream()
-                        .map(MenuProductEntity::toDomain)
+                        .map(menuProductEntity -> menuProductEntity.toDomain(profanities))
                         .toList(),
-                nm -> {}
+                profanities
         );
     }
 

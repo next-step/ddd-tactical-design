@@ -1,11 +1,11 @@
 package kitchenpos.product.application.serveice;
 
-import kitchenpos.ClientTestConfiguration;
 import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
+import kitchenpos.shared.domain.Profanities;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
@@ -17,7 +17,6 @@ import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
-import kitchenpos.shared.port.out.PurgomalumClient;
 import org.assertj.core.api.ThrowableAssert;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -40,7 +38,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
-@Import(ClientTestConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class ProductServiceTest {
     private final ProductService productService;
@@ -48,15 +45,15 @@ public class ProductServiceTest {
     private final SaveProductPort saveProductPort;
     private final MenuEntityRepository menuEntityRepository;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
-    private final PurgomalumClient mockPurgomalumClient;
+    private final Profanities profanities;
 
-    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, MenuEntityRepository menuEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, PurgomalumClient mockPurgomalumClient) {
+    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, MenuEntityRepository menuEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, Profanities profanities) {
         this.productService = productService;
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;
         this.menuEntityRepository = menuEntityRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
-        this.mockPurgomalumClient = mockPurgomalumClient;
+        this.profanities = Mockito.mock(Profanities.class);
     }
 
     @DisplayName("상품 등록하기")
@@ -86,7 +83,7 @@ public class ProductServiceTest {
             // given
             String name = "holy shit 맛있는 치킨";
             CreateProductRequest request = new CreateProductRequest(name, BigDecimal.valueOf(16000));
-            Mockito.when(mockPurgomalumClient.containsProfanity(name)).thenReturn(Boolean.TRUE);
+            Mockito.when(profanities.contains(name)).thenReturn(Boolean.TRUE);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
@@ -237,7 +234,7 @@ public class ProductServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
+        ProductName productName = ProductName.of(name, nm -> false);
         ProductPrice productPrice = ProductPrice.of(price);
         return new Product(id, productName, productPrice);
     }

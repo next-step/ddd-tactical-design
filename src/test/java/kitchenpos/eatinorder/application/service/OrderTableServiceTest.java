@@ -289,7 +289,7 @@ public class OrderTableServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
+        ProductName productName = ProductName.of(name, nm -> false);
         ProductPrice productPrice = ProductPrice.of(price);
         return new Product(id, productName, productPrice);
     }

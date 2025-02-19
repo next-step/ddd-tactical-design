@@ -2,6 +2,7 @@ package kitchenpos.menu.adapter.out.persistance.entity;
 
 import jakarta.persistence.*;
 import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.shared.domain.Profanities;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 
 import java.util.UUID;
@@ -40,12 +41,12 @@ public class MenuProductEntity {
         return menuProductEntity;
     }
 
-    public MenuProduct toDomain() {
+    public MenuProduct toDomain(Profanities profanities) {
         final MenuProduct menuProduct = new MenuProduct();
         menuProduct.setSeq(this.seq);
         menuProduct.setQuantity(this.quantity);
         menuProduct.setProductId(this.productId);
-        menuProduct.setProduct(this.product.toDomain(nm -> {}));
+        menuProduct.setProduct(this.product.toDomain(profanities));
         return menuProduct;
     }
 

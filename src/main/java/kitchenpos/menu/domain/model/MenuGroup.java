@@ -1,5 +1,7 @@
 package kitchenpos.menu.domain.model;
 
+import kitchenpos.shared.domain.Profanities;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,11 +17,11 @@ public class MenuGroup {
     public static MenuGroup create(
             final UUID id,
             final String name,
-            final ProfanityFilteringMenuGroupNameValidator validator) {
+            final Profanities profanities) {
         if (id == null) {
             throw new IllegalArgumentException("메뉴 그룹 ID가 Null 입니다.");
         }
-        return new MenuGroup(id, MenuGroupName.of(name, validator));
+        return new MenuGroup(id, MenuGroupName.of(name, profanities));
     }
 
     public UUID getId() {

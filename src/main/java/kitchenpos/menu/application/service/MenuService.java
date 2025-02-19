@@ -5,11 +5,10 @@ import kitchenpos.menu.application.port.out.LoadMenuPort;
 import kitchenpos.menu.application.port.out.SaveMenuPort;
 import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
-import kitchenpos.menu.domain.exception.MenuNameValidationException;
 import kitchenpos.menu.domain.model.*;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.shared.port.out.PurgomalumClient;
+import kitchenpos.shared.domain.Profanities;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +23,20 @@ public class MenuService {
     private final LoadMenuPort loadMenuPort;
     private final LoadMenuGroupPort loadMenuGroupPort;
     private final SaveMenuPort saveMenuPort;
-    private final PurgomalumClient purgomalumClient;
+    private final Profanities profanities;
 
     public MenuService(
             final LoadProductPort loadProductPort,
             final LoadMenuPort loadMenuPort,
             final LoadMenuGroupPort loadMenuGroupPort,
             final SaveMenuPort saveMenuPort,
-            final PurgomalumClient purgomalumClient
+            final Profanities profanities
     ) {
         this.loadProductPort = loadProductPort;
         this.loadMenuPort = loadMenuPort;
         this.loadMenuGroupPort = loadMenuGroupPort;
         this.saveMenuPort = saveMenuPort;
-        this.purgomalumClient = purgomalumClient;
+        this.profanities = profanities;
     }
 
     @Transactional
@@ -85,7 +84,7 @@ public class MenuService {
                 request.isDisplayed(),
                 menuGroup,
                 menuProducts,
-                getProfanityFilteringMenuNameValidator());
+                profanities);
 
         return saveMenuPort.save(menu);
     }
@@ -143,13 +142,5 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return loadMenuPort.findAll();
-    }
-
-    private ProfanityFilteringMenuNameValidator getProfanityFilteringMenuNameValidator() {
-        return n -> {
-            if (purgomalumClient.containsProfanity(n)) {
-                throw new MenuNameValidationException("메뉴 이름에 비속어가 포함되어 있습니다. name=" + n);
-            }
-        };
     }
 }

@@ -23,7 +23,7 @@ class MenuGroupTest {
     @Test
     void create() {
         // when
-        MenuGroup menuGroup = MenuGroup.create(ID, NAME, name -> {});
+        MenuGroup menuGroup = MenuGroup.create(ID, NAME, name -> false);
 
         // then
         assertAll(
@@ -39,7 +39,7 @@ class MenuGroupTest {
     @ValueSource(strings = {EMPTY, BLANK})
     void createWithEmptyName(String name) {
         // when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> MenuGroup.create(ID, name, nm -> {});
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> MenuGroup.create(ID, name, nm -> false);
 
         // then
         assertThatThrownBy(throwingCallable)
@@ -51,7 +51,7 @@ class MenuGroupTest {
     @Test
     void createWithNullId() {
         // when
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> MenuGroup.create(null, NAME, nm -> {});
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> MenuGroup.create(null, NAME, nm -> false);
 
         // then
         assertThatThrownBy(throwingCallable)

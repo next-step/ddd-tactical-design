@@ -1,6 +1,7 @@
 package kitchenpos.menu.domain.model;
 
 import kitchenpos.menu.domain.exception.MenuNameValidationException;
+import kitchenpos.shared.domain.Profanities;
 
 import java.util.Objects;
 
@@ -13,12 +14,14 @@ public class MenuName {
 
     public static MenuName of(
             final String name,
-            final ProfanityFilteringMenuNameValidator validator
+            final Profanities profanities
     ) {
         if (Objects.isNull(name) || name.isBlank()) {
             throw new MenuNameValidationException("메뉴 이름을 입력하세요");
         }
-        validator.validate(name);
+        if (profanities.contains(name)) {
+            throw new MenuNameValidationException("메뉴 이름에 비속어가 포함되어 있습니다. name: " + name);
+        }
         return new MenuName(name);
     }
 

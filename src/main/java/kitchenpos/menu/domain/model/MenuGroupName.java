@@ -1,6 +1,7 @@
 package kitchenpos.menu.domain.model;
 
 import kitchenpos.menu.domain.exception.MenuGroupNameValidationException;
+import kitchenpos.shared.domain.Profanities;
 
 import java.util.Objects;
 
@@ -13,12 +14,14 @@ public class MenuGroupName {
 
     public static MenuGroupName of(
             final String name,
-            final ProfanityFilteringMenuGroupNameValidator validator
+            final Profanities profanities
     ) {
         if (Objects.isNull(name) || name.isBlank()) {
             throw new MenuGroupNameValidationException("메뉴 그룹 이름을 입력하세요");
         }
-        validator.validate(name);
+        if (profanities.contains(name)) {
+            throw new MenuGroupNameValidationException("메뉴 그룹 이름에 비속어가 포함되어 있습니다. name=" + name);
+        }
         return new MenuGroupName(name);
     }
 

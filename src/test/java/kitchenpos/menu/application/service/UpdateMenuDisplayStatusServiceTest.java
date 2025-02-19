@@ -1,6 +1,5 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.ClientTestConfiguration;
 import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -29,7 +27,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Import(ClientTestConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class UpdateMenuDisplayStatusServiceTest {
     private final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase;
@@ -112,7 +109,7 @@ class UpdateMenuDisplayStatusServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
+        ProductName productName = ProductName.of(name, nm -> false);
         ProductPrice productPrice = ProductPrice.of(price);
         return new Product(id, productName, productPrice);
     }

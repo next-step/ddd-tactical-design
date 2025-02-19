@@ -1,6 +1,7 @@
 package kitchenpos.menu.domain.model;
 
 import kitchenpos.menu.domain.exception.MenuPriceValidationException;
+import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Menu {
             final boolean isDisplayed,
             final MenuGroup menuGroup,
             final List<MenuProduct> menuProductList,
-            final ProfanityFilteringMenuNameValidator profanityFilteringMenuNameValidator
+            final Profanities profanities
     ) {
 
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
@@ -37,7 +38,7 @@ public class Menu {
 
         Menu menu = new Menu();
         menu.setId(UUID.randomUUID());
-        menu.setName(MenuName.of(name, profanityFilteringMenuNameValidator));
+        menu.setName(MenuName.of(name, profanities));
         menu.setPrice(menuPrice);
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(isDisplayed);
