@@ -95,7 +95,7 @@ public class EatInOrderService {
         eatInOrder.processOrderFlow(EatInOrderStatus.COMPLETED);
 
         final OrderTable orderTable = eatInOrder.getOrderTable();
-        if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {
+        if (!eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(orderTable, EatInOrderFlow.COMPLETED)) {
             orderTable.releaseTable();
         }
 

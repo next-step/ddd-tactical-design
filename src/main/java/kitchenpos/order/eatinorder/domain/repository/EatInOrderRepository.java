@@ -1,6 +1,7 @@
 package kitchenpos.order.eatinorder.domain.repository;
 
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 
@@ -13,7 +14,7 @@ public interface EatInOrderRepository {
 
     EatInOrder save(EatInOrder eatInOrder);
 
-    boolean existsByOrderTableAndStatusNot(OrderTable orderTable, EatInOrderStatus eatInOrderStatus);
+    boolean existsByOrderTableAndEatInOrderFlowNot(OrderTable orderTable, EatInOrderFlow eatInOrderFlow);
 
     List<EatInOrder> findAll();
 }

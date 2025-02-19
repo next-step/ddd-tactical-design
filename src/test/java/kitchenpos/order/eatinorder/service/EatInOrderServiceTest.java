@@ -76,7 +76,7 @@ class EatInOrderServiceTest {
         order.occupyOrderTable(orderTable);
 
         when(eatInOrderRepository.findById(any())).thenReturn(Optional.of(order));
-        when(eatInOrderRepository.existsByOrderTableAndStatusNot(any(), any())).thenReturn(false);
+        when(eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(any(), any())).thenReturn(false);
 
         // when
         eatInOrderService.complete(order.getId());
