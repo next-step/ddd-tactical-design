@@ -1,17 +1,19 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
-
-import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCT_QUANTITY_CREATION_EXCEPTION;
 
 @Embeddable
 public class MenuProductQuantity {
     @Column(name = "quantity", nullable = false)
     private final Long value;
 
+    @JsonCreator
     public MenuProductQuantity(long value) {
         validateMenuProductQuantity(value);
         this.value = value;
@@ -27,13 +29,16 @@ public class MenuProductQuantity {
         this.value = null;
     }
 
+    @JsonValue
     public Long getValue() {
         return value;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         MenuProductQuantity that = (MenuProductQuantity) o;
         return Objects.equals(value, that.value);
     }

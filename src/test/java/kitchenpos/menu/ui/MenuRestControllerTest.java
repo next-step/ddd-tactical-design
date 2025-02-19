@@ -27,6 +27,7 @@ import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -53,10 +54,7 @@ class MenuRestControllerTest {
     @DisplayName("메뉴를 생성한다")
     void create_menu_success() throws Exception {
         // given
-        MenuGroup menuGroup = createAndSaveMenuGroup();
-        Product product = createAndSaveProduct();
-        Menu request = createMenuRequest(menuGroup, product);
-//        Menu request = new Menu(UUID.randomUUID(), "김치찌개", BigDecimal.valueOf(8000), true);
+        Menu request = createMenuRequest(createAndSaveMenuGroup(), createAndSaveProduct());
 
         // when
         ResultActions result = mockMvc.perform(post("/api/menus")
@@ -67,10 +65,11 @@ class MenuRestControllerTest {
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.name.value").value("김치찌개"))
-                .andExpect(jsonPath("$.price.value").value(8000))
+                .andExpect(jsonPath("$.name").value("김치찌개"))
+                .andExpect(jsonPath("$.price").value(8000))
                 .andExpect(jsonPath("$.menuGroup").exists())
-                .andExpect(jsonPath("$.menuProducts").isNotEmpty());
+                .andExpect(jsonPath("$.menuProducts").isNotEmpty())
+                .andDo(print());
     }
 
     @Test
@@ -108,7 +107,7 @@ class MenuRestControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(menu.getId().toString()))
-                .andExpect(jsonPath("$.price.value").value(8001));
+                .andExpect(jsonPath("$.price").value(8001));
     }
 
     @Test

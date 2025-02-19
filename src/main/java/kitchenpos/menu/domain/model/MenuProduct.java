@@ -64,4 +64,8 @@ public class MenuProduct {
     public UUID getProductId() {
         return productId;
     }
+
+    public MenuProductQuantity getQuantity() {
+        return quantity;
+    }
 }

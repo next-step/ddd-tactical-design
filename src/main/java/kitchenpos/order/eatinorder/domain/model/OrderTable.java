@@ -93,7 +93,11 @@ public class OrderTable {
         return numberOfGuests;
     }
 
-//    public void setOccupied(final boolean occupied) {
+    public OrderTableName getName() {
+        return name;
+    }
+
+    //    public void setOccupied(final boolean occupied) {
 //        this.occupied = occupied;
 //    }
 

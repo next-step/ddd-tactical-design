@@ -1,5 +1,7 @@
 package kitchenpos.menu.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -12,6 +14,7 @@ public class MenuPrice {
     @Column(name = "price", nullable = false)
     private final BigDecimal value;
 
+    @JsonCreator
     public MenuPrice(BigDecimal value) {
         validatePrice(value);
         this.value = value;
@@ -27,6 +30,7 @@ public class MenuPrice {
         }
     }
 
+    @JsonValue
     public BigDecimal getValue() {
         return value;
     }
