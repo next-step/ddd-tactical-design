@@ -1,7 +1,6 @@
 package kitchenpos.order.eatinorder.domain.model;
 
 import jakarta.persistence.*;
-import kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage;
 
 import java.util.UUID;
 
@@ -53,6 +52,31 @@ public class OrderTable {
         }
     }
 
+    public void changeNumberOfGuests(final int numberOfGuests) {
+        validateTableIsOccupied();
+        validateNumberOfGuests(numberOfGuests);
+        this.numberOfGuests = numberOfGuests;
+    }
+
+    private void validateTableIsOccupied() {
+        if (!isOccupied()) {
+            throw new IllegalStateException(EMPTY_ORDER_TABLE_EXCEPTION.getMessage());
+        }
+    }
+
+    public void releaseTable() {
+        this.numberOfGuests = 0;
+        this.occupied = false;
+    }
+
+    public void occupyTable() {
+        this.occupied = true;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -65,36 +89,15 @@ public class OrderTable {
         return name.getValue();
     }
 
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
-
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
 
-    public void changeNumberOfGuests(final int numberOfGuests) {
-        validateTableIsEmpty();
-        validateNumberOfGuests(numberOfGuests);
-        this.numberOfGuests = numberOfGuests;
-    }
+//    public void setOccupied(final boolean occupied) {
+//        this.occupied = occupied;
+//    }
 
-    private void validateTableIsEmpty() {
-        if (!isOccupied()) {
-            throw new IllegalStateException(EMPTY_ORDER_TABLE_EXCEPTION.getMessage());
-        }
-    }
-
-    public void releaseTable() {
-        this.numberOfGuests = 0;
-        this.occupied = false;
-    }
-
-    public boolean isOccupied() {
-        return occupied;
-    }
-
-    public void setOccupied(final boolean occupied) {
-        this.occupied = occupied;
-    }
+//    public void setName(final String name) {
+//        this.name = name;
+//    }
 }

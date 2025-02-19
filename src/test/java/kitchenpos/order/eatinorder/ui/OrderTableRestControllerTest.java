@@ -73,7 +73,7 @@ class OrderTableRestControllerTest {
     void clear_orderTable() throws Exception {
         // given
         OrderTable orderTable = createAndSaveOrderTable(4);
-        orderTable.setOccupied(true);
+        orderTable.occupyTable();
         orderTableRepository.save(orderTable);
 
         // when
@@ -91,7 +91,7 @@ class OrderTableRestControllerTest {
     void change_numberOfGuests() throws Exception {
         // given
         OrderTable orderTable = createAndSaveOrderTable(4);
-        orderTable.setOccupied(true);
+        orderTable.occupyTable();
         orderTableRepository.save(orderTable);
 
         OrderTable request = createOrderTableRequest(6);

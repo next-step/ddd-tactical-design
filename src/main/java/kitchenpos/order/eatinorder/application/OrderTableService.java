@@ -33,7 +33,7 @@ public class OrderTableService {
     public OrderTable sit(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        orderTable.setOccupied(true);
+        orderTable.occupyTable();
         return orderTable;
     }
 

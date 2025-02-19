@@ -178,8 +178,7 @@ public class OrderService {
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = order.getOrderTable();
             if (!orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-                orderTable.changeNumberOfGuests(0);
-                orderTable.setOccupied(false);
+                orderTable.releaseTable();
             }
         }
         return order;
