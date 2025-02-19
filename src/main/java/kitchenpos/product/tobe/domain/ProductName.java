@@ -11,11 +11,12 @@ public class ProductName {
 
     public ProductName(String name, Profanities profanities) {
         this(name);
-        if (profanities.contains(name)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-        }
         if (Objects.isNull(name) || name.isEmpty()) {
             throw new IllegalArgumentException("상품명은 필수값입니다.");
+        }
+
+        if (profanities.contains(name)) {
+            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
         }
     }
 
