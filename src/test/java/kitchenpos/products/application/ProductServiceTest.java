@@ -14,8 +14,9 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
+import kitchenpos.products.application.dto.CreateProductRequestDto;
+import kitchenpos.products.application.dto.CreateProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
 import kitchenpos.products.tobe.domain.service.ProfanityFilterService;
@@ -43,8 +44,10 @@ class ProductServiceTest {
     @DisplayName("상품을 등록할 수 있다.")
     @Test
     void create() {
-        final Product expected = createProductRequest("후라이드", 16_000L);
-        final Product actual = productService.create(expected);
+        final Product product = productRepository.save(product("후라이드", 16_000L));
+
+        final CreateProductRequestDto expected = createProductRequest(product);
+        final CreateProductResponseDto actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -63,22 +66,25 @@ class ProductServiceTest {
             final Product product = productRepository.save(product("후라이드", 16_000L));
             final UUID productId = product.getId();
 
-            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(BigDecimal.valueOf(15_000L));
+            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(
+                BigDecimal.valueOf(15_000L));
             final Product changedProduct = changePriceRequest(product, 15_000L);
 
-            final ChangeProductPriceResponseDto expected = ChangeProductPriceResponseDto.from(changedProduct);
-            final ChangeProductPriceResponseDto actual = productService.changePrice(productId, request);
+            final ChangeProductPriceResponseDto expected = ChangeProductPriceResponseDto.from(
+                changedProduct);
+            final ChangeProductPriceResponseDto actual = productService.changePrice(productId,
+                request);
             assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
         }
 
         @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
         @Test
         void changePriceInMenu() {
-            final Product product = productRepository.save(
-                createProduct("후라이드", BigDecimal.valueOf(16_000L)));
+            final Product product = productRepository.save(product("후라이드", 16_000L));
             final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
 
-            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(BigDecimal.valueOf(8_000L));
+            final ChangeProductPriceRequestDto request = new ChangeProductPriceRequestDto(
+                BigDecimal.valueOf(8_000L));
 
             productService.changePrice(product.getId(), request);
             assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
@@ -94,15 +100,11 @@ class ProductServiceTest {
         assertThat(actual).hasSize(2);
     }
 
-    private Product createProductRequest(final String name, final long price) {
-        return createProduct(name, BigDecimal.valueOf(price));
-    }
-
-    private Product createProduct(final String name, final BigDecimal price) {
-        return new Product(
-            UUID.randomUUID(),
-            new DisplayedName(name, profanityFilterService),
-            new ProductPrice(price)
+    private CreateProductRequestDto createProductRequest(Product product) {
+        return new CreateProductRequestDto(
+            product.getId(),
+            product.getName().getValue(),
+            product.getPrice().getValue()
         );
     }
 

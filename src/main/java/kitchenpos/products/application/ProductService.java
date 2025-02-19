@@ -9,6 +9,8 @@ import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
+import kitchenpos.products.application.dto.CreateProductRequestDto;
+import kitchenpos.products.application.dto.CreateProductResponseDto;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
@@ -35,12 +37,12 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product request) {
-        final DisplayedName displayedName = new DisplayedName(request.getName().getValue(),
+    public CreateProductResponseDto create(final CreateProductRequestDto request) {
+        final DisplayedName displayedName = new DisplayedName(request.getName(),
             profanityFilterService);
-        final ProductPrice productPrice = new ProductPrice(request.getPrice().getValue());
+        final ProductPrice productPrice = new ProductPrice(request.getPrice());
         final Product product = new Product(UUID.randomUUID(), displayedName, productPrice);
-        return productRepository.save(product);
+        return CreateProductResponseDto.from(productRepository.save(product));
     }
 
     @Transactional
