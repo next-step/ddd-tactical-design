@@ -24,7 +24,9 @@ import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.product.domain.service.FakeMenuUpdatePolicy;
+import kitchenpos.menu.domain.service.FakeMenuUpdatePolicy;
+import kitchenpos.product.domain.service.FakeProductCreatePolicy;
+import kitchenpos.product.domain.service.ProductCreatePolicy;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
 import kitchenpos.product.domain.service.ProductServiceImpl;
@@ -49,6 +51,8 @@ class ProductFacadeTest {
     @Mock
     private ProductService productService;
 
+    private ProductCreatePolicy productCreatePolicy;
+
     private MenuUpdatePolicy menuUpdatePolicy;
 
     private ProductRepository productRepository = new InMemoryProductRepository();
@@ -66,8 +70,10 @@ class ProductFacadeTest {
     void setUp() {
         productRepository = new InMemoryProductRepository();
         menuRepository = new InMemoryMenuRepository();
+        productCreatePolicy = new FakeProductCreatePolicy();
         menuUpdatePolicy = new FakeMenuUpdatePolicy(menuRepository);
-        productService = new ProductServiceImpl(productRepository, purgomalumClient, menuUpdatePolicy);
+
+        productService = new ProductServiceImpl(productRepository, purgomalumClient, menuUpdatePolicy, productCreatePolicy);
         productFacade = new ProductFacade(productService);
 
         chicken = ProductFixture.init().create();

@@ -19,21 +19,24 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductPurgomalumClient purgomalumClient;
     private final MenuUpdatePolicy menuUpdatePolicy;
+    private final ProductCreatePolicy productCreatePolicy;
 
     public ProductServiceImpl(
         final ProductRepository productRepository,
         final ProductPurgomalumClient purgomalumClient,
-        final MenuUpdatePolicy menuUpdatePolicy
+        final MenuUpdatePolicy menuUpdatePolicy,
+        final ProductCreatePolicy productCreatePolicy
     ) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
         this.menuUpdatePolicy = menuUpdatePolicy;
+        this.productCreatePolicy = productCreatePolicy;
     }
 
     @Override
     public ProductVo.ProductInfo create(final ProductVo.Create request) {
-        final BigDecimal price = request.price();
-        final String name = new ProductNameValidator(request.name(), purgomalumClient).name();
+        final BigDecimal price = productCreatePolicy.validatePrice(request.price());
+        final String name = productCreatePolicy.validateName(request.name(), purgomalumClient);
 
         return ProductVo.ProductInfo.fromEntity(
             productRepository.save(new Product(UUID.randomUUID(), name, price))
@@ -42,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductVo.ProductInfo changePrice(final ProductVo.Update request) {
-        final BigDecimal price = request.price();
+        final BigDecimal price = productCreatePolicy.validatePrice(request.price());
         final Product product = productRepository.findById(request.productId())
             .orElseThrow(NoSuchElementException::new);
 

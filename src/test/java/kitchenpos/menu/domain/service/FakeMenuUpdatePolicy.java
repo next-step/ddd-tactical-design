@@ -1,4 +1,4 @@
-package kitchenpos.product.domain.service;
+package kitchenpos.menu.domain.service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 
 public class FakeMenuUpdatePolicy implements MenuUpdatePolicy {
     private MenuRepository menuRepository = new InMemoryMenuRepository();

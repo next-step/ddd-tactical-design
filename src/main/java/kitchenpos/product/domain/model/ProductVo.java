@@ -18,19 +18,7 @@ public record ProductVo() {
         }
     }
 
-    public record Create(String name, BigDecimal price) {
-        public Create {
-            if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-                throw new IllegalArgumentException(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
-            }
-        }
-    }
+    public record Create(String name, BigDecimal price) {}
 
-    public record Update(UUID productId, BigDecimal price) {
-        public Update {
-            if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-                throw new IllegalArgumentException(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
-            }
-        }
-    }
+    public record Update(UUID productId, BigDecimal price) {}
 }
