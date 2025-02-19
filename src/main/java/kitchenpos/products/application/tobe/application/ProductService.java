@@ -2,11 +2,15 @@ package kitchenpos.products.application.tobe.application;
 
 
 import kitchenpos.common.vo.Price;
-import kitchenpos.products.tobe.domain.*;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ProductService {
@@ -29,6 +33,16 @@ public class ProductService {
         );
 
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public Product changePrice(final ProductId productId, final Product request) {
+        final Product product = productRepository.findById(productId)
+                .orElseThrow(NoSuchElementException::new);
+
+        final Price newPrice = request.getPrice();
+        product.changePrice(newPrice);
+        return product;
     }
 
     @Transactional(readOnly = true)

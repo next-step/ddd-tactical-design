@@ -2,7 +2,10 @@ package kitchenpos.products.application.tobe.application;
 
 import kitchenpos.common.vo.Price;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.*;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.ProductId;
+import kitchenpos.products.tobe.domain.ProductName;
+import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +42,23 @@ class ProductServiceTest {
                 () -> assertThat(product.getName()).isEqualTo(name),
                 () -> assertThat(product.getPrice()).isEqualTo(price)
         );
+    }
+
+    @DisplayName("상품의 가격을 변경한다")
+    @Test
+    void changePrice() {
+        Product product = productRepository.save(
+                new Product(
+                        ProductId.generate(),
+                        new ProductName("후라이드치킨", (productName) -> false),
+                        new Price(25000)
+                )
+        );
+
+        product.changePrice(new Price(27000));
+        Product result = productService.changePrice(product.getId(), product);
+
+        assertThat(result.getPrice()).isEqualTo(new Price(27000));
     }
 
     @DisplayName("모든 상품 목록을 조회한다")

@@ -3,7 +3,9 @@ package kitchenpos.products.tobe.domain;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import kitchenpos.common.event.Events;
 import kitchenpos.common.vo.Price;
+import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
 
 import java.util.Objects;
 
@@ -30,10 +32,11 @@ public class Product {
 
     public void changePrice(Price newPrice) {
         this.price = newPrice;
+        Events.raise(new ProductPriceChangedEvent(id, price));
     }
 
     public void changePrice(long newPrice) {
-        this.price = new Price(newPrice);
+        this.changePrice(new Price(newPrice));
     }
 
     public ProductId getId() {
