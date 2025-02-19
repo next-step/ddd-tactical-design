@@ -9,6 +9,7 @@ import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
@@ -38,8 +39,8 @@ public class EatInOrderService {
         validateOrderLineItemMenuIsExists(orderLineItemRequests);
 
         final List<OrderLineItem> orderLineItems = createOrderLineItemsByRequest(orderLineItemRequests);
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(),
-                orderLineItems);
+        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+                orderLineItems, EatInOrderFlow.WAITING);
 
         final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
                 .orElseThrow(NoSuchElementException::new);
@@ -75,10 +76,7 @@ public class EatInOrderService {
     public EatInOrder accept(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.WAITING) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.ACCEPTED);
+        eatInOrder.validateOrderFlow(EatInOrderStatus.ACCEPTED);
         return eatInOrder;
     }
 
@@ -86,10 +84,7 @@ public class EatInOrderService {
     public EatInOrder serve(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        if (eatInOrder.getStatus() != EatInOrderStatus.ACCEPTED) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setStatus(EatInOrderStatus.SERVED);
+        eatInOrder.validateOrderFlow(EatInOrderStatus.SERVED);
         return eatInOrder;
     }
 
@@ -97,12 +92,7 @@ public class EatInOrderService {
     public EatInOrder complete(final UUID orderId) {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
-        final EatInOrderStatus status = eatInOrder.getStatus();
-        if (status != EatInOrderStatus.SERVED) {
-            throw new IllegalStateException();
-        }
-
-        eatInOrder.setStatus(EatInOrderStatus.COMPLETED);
+        eatInOrder.validateOrderFlow(EatInOrderStatus.COMPLETED);
 
         final OrderTable orderTable = eatInOrder.getOrderTable();
         if (!eatInOrderRepository.existsByOrderTableAndStatusNot(orderTable, EatInOrderStatus.COMPLETED)) {

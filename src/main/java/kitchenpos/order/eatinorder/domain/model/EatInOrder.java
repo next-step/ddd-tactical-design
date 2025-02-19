@@ -2,11 +2,11 @@ package kitchenpos.order.eatinorder.domain.model;
 
 
 import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION;
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_FLOW_EXCEPTION;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -28,9 +28,9 @@ public class EatInOrder {
     @Id
     private UUID id;
 
-    @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
-    @Enumerated(EnumType.STRING)
-    private EatInOrderStatus status;
+//    @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
+//    @Enumerated(EnumType.STRING)
+//    private EatInOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
@@ -52,25 +52,46 @@ public class EatInOrder {
     )
     private OrderTable orderTable;
 
+    @Enumerated
+    private EatInOrderFlow eatInOrderFlow;
+
     @Transient
     private UUID orderTableId;
 
     public EatInOrder() {
     }
 
-    public EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime,
+    public EatInOrder(UUID id, LocalDateTime orderDateTime,
+                      List<OrderLineItem> orderLineItems, EatInOrderFlow eatInOrderFlow) {
+        validateOrderLineItemIsEmpty(orderLineItems);
+        this.id = id;
+//        this.status = status;
+        this.orderDateTime = orderDateTime;
+        this.orderLineItems = orderLineItems;
+        this.eatInOrderFlow = eatInOrderFlow;
+    }
+
+    public EatInOrder(UUID id, LocalDateTime orderDateTime,
                       List<OrderLineItem> orderLineItems) {
         validateOrderLineItemIsEmpty(orderLineItems);
         this.id = id;
-        this.status = status;
+//        this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
+        this.eatInOrderFlow = EatInOrderFlow.WAITING;
     }
 
     private void validateOrderLineItemIsEmpty(List<OrderLineItem> orderLineItems) {
         if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
             throw new IllegalArgumentException(EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION.getMessage());
         }
+    }
+
+    public void validateOrderFlow(EatInOrderStatus orderStatus) {
+        if (!eatInOrderFlow.validateOrderStatus(orderStatus)) {
+            throw new IllegalStateException(EAT_IN_ORDER_FLOW_EXCEPTION.getMessage());
+        }
+        this.eatInOrderFlow = EatInOrderFlow.findByOrderStatus(orderStatus);
     }
 
     public UUID getId() {
@@ -81,12 +102,17 @@ public class EatInOrder {
         this.id = id;
     }
 
-    public EatInOrderStatus getStatus() {
-        return status;
-    }
+//    public EatInOrderStatus getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(final EatInOrderStatus status) {
+//        this.status = status;
+//    }
 
-    public void setStatus(final EatInOrderStatus status) {
-        this.status = status;
+
+    public EatInOrderFlow getEatInOrderFlow() {
+        return eatInOrderFlow;
     }
 
     public LocalDateTime getOrderDateTime() {

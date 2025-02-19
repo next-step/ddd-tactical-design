@@ -16,18 +16,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.Order;
+import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.common.repository.OrderRepository;
 import kitchenpos.order.deliveryorder.infra.external.KitchenridersClient;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.service.EatInOrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -106,7 +112,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("배달 주문")
-    class DeliveryOrder {
+    class DeliveryOrderTest {
 
         @Test
         @DisplayName("배달 주문 시 주소가 없으면 예외가 발생한다.")
@@ -189,7 +195,7 @@ class OrderServiceTest {
 
     @Nested
     @DisplayName("포장 주문")
-    class TakeOutOrder {
+    class TakeOutOrderTest {
 
         @ParameterizedTest
         @EnumSource(value = OrderStatus.class, names = {"ACCEPTED", "SERVED", "DELIVERING", "DELIVERED", "COMPLETED"})
@@ -240,94 +246,5 @@ class OrderServiceTest {
 
         // 어떤 경우 든 통과함!
         // 포장 주문 기능 추가 시 여기에 추가
-    }
-
-    @Nested
-    @DisplayName("매장 주문")
-    class EatInOrder {
-
-        @Test
-        @DisplayName("이용 중이지 않은 테이블에서 주문 시 예외가 발생한다.")
-        void not_occupied_table_order_exception() {
-            // given
-            Menu menu = createMenuWithProductAndGroup();
-            OrderTable orderTable = createEmptyOrderTable();
-            Order request = createOrderRequestWithOccupiedTable(OrderType.EAT_IN, OrderStatus.WAITING, menu, "서울");
-            request.setOrderTable(orderTable);
-            when(menuRepository.findAllByIdIn(anyList())).thenReturn(List.of(menu));
-            when(menuRepository.findById(any())).thenReturn(Optional.of(menu));
-            when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
-
-            // when // then
-            assertThatThrownBy(() -> orderService.create(request))
-                    .isInstanceOf(IllegalStateException.class);
-        }
-
-        @Test
-        @DisplayName("매장 식사 주문 완료 시 다른 주문이 없으면 테이블을 비운다")
-        void clear_table_with_complete_status() {
-            // given
-            OrderTable orderTable = createUsingOrderTable();
-            Order order = createOrderWithEatInType(createOrderLineItem(createMenuWithProductAndGroup()),
-                    orderTable, OrderStatus.SERVED);
-            order.setOrderTable(orderTable);
-
-            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
-            when(orderRepository.existsByOrderTableAndStatusNot(any(), any())).thenReturn(false);
-
-            // when
-            orderService.complete(order.getId());
-
-            // then
-            assertThat(orderTable.isOccupied()).isFalse();
-            assertThat(orderTable.getNumberOfGuests()).isZero();
-        }
-
-        @ParameterizedTest
-        @EnumSource(value = OrderStatus.class, names = {"ACCEPTED", "SERVED", "DELIVERING", "DELIVERED", "COMPLETED"})
-        @DisplayName("대기 중이 아닌 주문 시 예외가 발생한다.")
-        void accept_exception(OrderStatus status) {
-            // given
-            OrderTable orderTable = createUsingOrderTable();
-            Order order = createOrderWithEatInType(createOrderLineItem(createMenuWithProductAndGroup()),
-                    orderTable, status);
-            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
-
-            // when // then
-            assertThatThrownBy(() -> orderService.accept(order.getId()))
-                    .isInstanceOf(IllegalStateException.class);
-        }
-
-        @Test
-        @DisplayName("대기 중인 주문만 접수할 수 있다")
-        void accept_success() {
-            // given
-            OrderTable orderTable = createUsingOrderTable();
-            Order order = createOrderWithEatInType(createOrderLineItem(createMenuWithProductAndGroup()),
-                    orderTable, OrderStatus.WAITING);
-            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
-
-            // when
-            Order result = orderService.accept(order.getId());
-
-            // then
-            assertThat(result.getStatus()).isEqualTo(OrderStatus.ACCEPTED);
-        }
-
-        @Test
-        @DisplayName("매장 주문은 서빙이 완료 되면 주문을 완료할 수 있다")
-        void complete_order() {
-            // given
-            OrderTable orderTable = createUsingOrderTable();
-            Order order = createOrderWithEatInType(createOrderLineItem(createMenuWithProductAndGroup()),
-                    orderTable, OrderStatus.SERVED);
-            when(orderRepository.findById(any())).thenReturn(Optional.of(order));
-
-            // when
-            Order result = orderService.complete(order.getId());
-
-            // then
-            assertThat(result.getStatus()).isEqualTo(OrderStatus.COMPLETED);
-        }
     }
 }
