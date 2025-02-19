@@ -13,7 +13,7 @@ public class CreateMenuRequest {
     private BigDecimal price;
     private MenuGroup menuGroup;
     private boolean displayed;
-    private List<MenuProduct> menuProducts;
+    private List<CreateMenuProductRequest> menuProducts;
     private UUID menuGroupId;
 
     public CreateMenuRequest() {
@@ -59,11 +59,11 @@ public class CreateMenuRequest {
         this.displayed = displayed;
     }
 
-    public List<MenuProduct> getMenuProducts() {
+    public List<CreateMenuProductRequest> getMenuProducts() {
         return menuProducts;
     }
 
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
+    public void setMenuProducts(final List<CreateMenuProductRequest> menuProducts) {
         this.menuProducts = menuProducts;
     }
 

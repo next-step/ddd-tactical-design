@@ -4,8 +4,12 @@ import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
 import kitchenpos.menu.application.port.out.LoadMenuPort;
 import kitchenpos.menu.application.port.out.SaveMenuPort;
 import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
+import kitchenpos.menu.application.service.model.CreateMenuProductRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
-import kitchenpos.menu.domain.model.*;
+import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.shared.domain.Profanities;
@@ -45,7 +49,7 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
 
         // Request 내에서 검증하기
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+        final List<CreateMenuProductRequest> menuProductRequests = request.getMenuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -53,7 +57,7 @@ public class MenuService {
         // 메소드 추출
         final List<Product> products = loadProductPort.findAllByIdIn(
             menuProductRequests.stream()
-                .map(MenuProduct::getProductId)
+                .map(CreateMenuProductRequest::getProductId)
                 .toList()
         );
 
@@ -65,16 +69,14 @@ public class MenuService {
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
 
         final List<MenuProduct> menuProducts = new ArrayList<>();
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
+        for (final CreateMenuProductRequest menuProductRequest : menuProductRequests) {
             // Request 내에서 검증하기
             final long quantity = menuProductRequest.getQuantity();
             if (quantity < 0) {
                 throw new IllegalArgumentException();
             }
             final Product product = productMap.get(menuProductRequest.getProductId());
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
+            final MenuProduct menuProduct = new MenuProduct(null, product.getId(), quantity, product.getPrice());
             menuProducts.add(menuProduct);
         }
 
@@ -99,11 +101,7 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
+            sum = sum.add(menuProduct.amount());
         }
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
@@ -118,11 +116,7 @@ public class MenuService {
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
+            sum = sum.add(menuProduct.amount());
         }
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();

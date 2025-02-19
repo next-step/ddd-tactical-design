@@ -6,6 +6,7 @@ import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -64,13 +65,14 @@ public class MenuEntity {
 
     public Menu toDomain(Profanities profanities) {
         return Menu.create(
+                this.id,
                 this.name,
                 this.price,
                 this.displayed,
                 this.menuGroup.toDomain(profanities),
                 this.menuProducts
                         .stream()
-                        .map(menuProductEntity -> menuProductEntity.toDomain(profanities))
+                        .map(MenuProductEntity::toDomain)
                         .toList(),
                 profanities
         );
@@ -130,5 +132,17 @@ public class MenuEntity {
 
     public void setMenuGroupId(final UUID menuGroupId) {
         this.menuGroupId = menuGroupId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuEntity that = (MenuEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

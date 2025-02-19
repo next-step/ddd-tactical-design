@@ -2,12 +2,11 @@ package kitchenpos.eatinorder.application.service;
 
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -35,12 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class EeaInOrderServiceTest {
     private final EatInOrderService orderService;
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final OrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
 
-    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, MenuEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
+    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuEntityRepository = menuEntityRepository;
@@ -613,10 +612,11 @@ public class EeaInOrderServiceTest {
         return orderService.create(request);
     }
 
-    private static MenuProductEntity createMenuProduct(UUID productId, Product proudct, int quantity) {
+    private static MenuProductEntity createMenuProduct(UUID productId, Product product, int quantity) {
         MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
-        menuProduct.setProduct(ProductEntity.of(proudct));
+        menuProduct.setProductPrice(product.getPrice());
+        menuProduct.setProductId(product.getId());
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }

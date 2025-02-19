@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface LoadMenuPort {
     List<Menu> findAll();
     Optional<Menu> findById(UUID id);
+    List<Menu> findByProductId(UUID productId);
 }

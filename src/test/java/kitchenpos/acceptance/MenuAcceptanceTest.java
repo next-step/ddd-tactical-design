@@ -1,7 +1,7 @@
 package kitchenpos.acceptance;
 
 import io.restassured.RestAssured;
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ public class MenuAcceptanceTest {
     }
 
     @Autowired
-    private MenuEntityRepository menuEntityRepository;
+    private JpaMenuEntityEntityRepository menuEntityRepository;
 
     @DisplayName("상품 가격이 변경되어 메뉴의 가격이 메뉴상품의 총합보다 높아지면 메뉴를 숨김 처리한다")
     @Test

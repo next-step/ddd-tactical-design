@@ -4,12 +4,11 @@ import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderLineItem;
 import kitchenpos.eatinorder.domain.model.OrderTable;
 import kitchenpos.eatinorder.domain.model.OrderType;
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -38,9 +37,9 @@ public class OrderTableServiceTest {
     private final EatInOrderService orderService;
     private final SaveProductPort saveProductPort;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
 
-    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, MenuGroupEntityRepository menuGroupEntityRepository, MenuEntityRepository menuEntityRepository) {
+    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, MenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository) {
         this.orderTableService = orderTableService;
         this.orderService = orderService;
         this.saveProductPort = saveProductPort;
@@ -313,10 +312,11 @@ public class OrderTableServiceTest {
         return menu;
     }
 
-    private static MenuProductEntity createMenuProduct(UUID productId, Product proudct, int quantity) {
+    private static MenuProductEntity createMenuProduct(UUID productId, Product product, int quantity) {
         MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
-        menuProduct.setProduct(ProductEntity.of(proudct));
+        menuProduct.setProductPrice(product.getPrice());
+        menuProduct.setProductId(product.getId());
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }

@@ -1,12 +1,10 @@
 package kitchenpos.product.application.serveice;
 
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
-import kitchenpos.shared.domain.Profanities;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.application.service.ProductService;
@@ -17,8 +15,8 @@ import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
+import kitchenpos.shared.domain.Profanities;
 import org.assertj.core.api.ThrowableAssert;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,11 +41,11 @@ public class ProductServiceTest {
     private final ProductService productService;
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final Profanities profanities;
 
-    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, MenuEntityRepository menuEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, Profanities profanities) {
+    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, JpaMenuEntityEntityRepository menuEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
         this.productService = productService;
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;
@@ -201,19 +199,11 @@ public class ProductServiceTest {
         }
     }
 
-    @NotNull
-    private static MenuProductEntity createMenuProduct(Product product, int quantity) {
-        MenuProductEntity menuProduct = new MenuProductEntity();
-        menuProduct.setProduct(ProductEntity.of(product));
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
-    }
-
     @DisplayName("상품 목록 조회하기")
     @Nested
     class ProductListTest {
-        private static final int TOTAL_PRODUCT_COUNT = 6;
 
+        private static final int TOTAL_PRODUCT_COUNT = 6;
         @SqlGroup({
                 @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
                 @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -227,10 +217,7 @@ public class ProductServiceTest {
             // then
             assertThat(products).hasSize(TOTAL_PRODUCT_COUNT);
         }
-    }
 
-    private static Product createProduct(String name, int price) {
-        return createProduct(null, name, new BigDecimal(price));
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
@@ -244,6 +231,14 @@ public class ProductServiceTest {
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;
+    }
+
+    private static MenuProductEntity createMenuProduct(Product product, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
+        menuProduct.setProductPrice(product.getPrice());
+        menuProduct.setProductId(product.getId());
+        menuProduct.setQuantity(quantity);
+        return menuProduct;
     }
 
     private static MenuEntity createMenu(UUID id, String name, BigDecimal price, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {

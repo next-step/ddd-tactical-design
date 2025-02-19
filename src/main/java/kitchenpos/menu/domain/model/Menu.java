@@ -27,6 +27,18 @@ public class Menu {
             final List<MenuProduct> menuProductList,
             final Profanities profanities
     ) {
+        return create(UUID.randomUUID(), name, price, isDisplayed, menuGroup, menuProductList, profanities);
+    }
+
+    public static Menu create(
+            final UUID id,
+            final String name,
+            final BigDecimal price,
+            final boolean isDisplayed,
+            final MenuGroup menuGroup,
+            final List<MenuProduct> menuProductList,
+            final Profanities profanities
+    ) {
 
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
 
@@ -37,13 +49,17 @@ public class Menu {
         });
 
         Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
+        menu.setId(id);
         menu.setName(MenuName.of(name, profanities));
         menu.setPrice(menuPrice);
         menu.setMenuGroup(menuGroup);
         menu.setDisplayed(isDisplayed);
         menu.setMenuProducts(menuProducts);
         return menu;
+    }
+
+    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+        menuProducts.changeMenuProductPrice(productId, price);
     }
 
     public UUID getId() {

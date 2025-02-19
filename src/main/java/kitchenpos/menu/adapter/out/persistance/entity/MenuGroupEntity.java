@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.shared.domain.Profanities;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_group")
@@ -51,4 +52,15 @@ public class MenuGroupEntity {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuGroupEntity that = (MenuGroupEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

@@ -1,6 +1,6 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
@@ -13,9 +13,9 @@ import java.util.UUID;
 
 @Service
 public class UpdateMenuDisplayStatusService implements UpdateMenuDisplayStatusUseCase {
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
 
-    public UpdateMenuDisplayStatusService(MenuEntityRepository menuEntityRepository) {
+    public UpdateMenuDisplayStatusService(JpaMenuEntityEntityRepository menuEntityRepository) {
         this.menuEntityRepository = menuEntityRepository;
     }
 
@@ -27,8 +27,7 @@ public class UpdateMenuDisplayStatusService implements UpdateMenuDisplayStatusUs
             BigDecimal sum = BigDecimal.ZERO;
             for (final MenuProductEntity menuProduct : menu.getMenuProducts()) {
                 sum = sum.add(
-                        menuProduct.getProduct()
-                                .getPrice()
+                        menuProduct.getProductPrice()
                                 .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }

@@ -1,6 +1,6 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
@@ -33,14 +33,14 @@ class UpdateMenuDisplayStatusServiceTest {
     private final SaveProductPort saveProductPort;
     private final ProductEntityRepository productEntityRepository;
     private final MenuGroupEntityRepository menuGroupEntityRepository;
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
 
     public UpdateMenuDisplayStatusServiceTest(
             final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase,
             final SaveProductPort saveProductPort,
             final ProductEntityRepository productEntityRepository,
             final MenuGroupEntityRepository menuGroupEntityRepository,
-            final MenuEntityRepository menuEntityRepository
+            final JpaMenuEntityEntityRepository menuEntityRepository
     ) {
         this.updateMenuDisplayStatusUseCase = updateMenuDisplayStatusUseCase;
         this.saveProductPort = saveProductPort;
@@ -73,10 +73,12 @@ class UpdateMenuDisplayStatusServiceTest {
     @Test
     void update_menu_display_status_based_on_product_price() {
         // given
-        ProductEntity productEntity = productEntityRepository.findById(PRODUCT_UUID)
+        MenuEntity menuEntity = menuEntityRepository.findAllByProductId(PRODUCT_UUID).stream().findFirst()
                 .orElseThrow(NoSuchElementException::new);
-        productEntity.setPrice(new BigDecimal(18000));
-        productEntityRepository.save(productEntity);
+        menuEntity.getMenuProducts().forEach(menuProduct -> {
+            menuProduct.setProductPrice(new BigDecimal(18000));
+        });
+        menuEntityRepository.save(menuEntity);
 
         // when
         updateMenuDisplayStatusUseCase.execute(PRODUCT_UUID);
@@ -98,11 +100,12 @@ class UpdateMenuDisplayStatusServiceTest {
         return menu;
     }
 
-    private static MenuProductEntity createMenuProduct(UUID productId, Product proudct, int quantity) {
+    private static MenuProductEntity createMenuProduct(UUID productId, Product product, int quantity) {
         MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
-        if (proudct != null) {
-            menuProduct.setProduct(ProductEntity.of(proudct));
+        if (product != null) {
+            menuProduct.setProductPrice(product.getPrice());
+            menuProduct.setProductId(product.getId());
         }
         menuProduct.setQuantity(quantity);
         return menuProduct;

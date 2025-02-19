@@ -1,52 +1,42 @@
 package kitchenpos.menu.domain.model;
 
-import kitchenpos.product.domain.model.Product;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public class MenuProduct {
-    private Long seq;
-    private Product product;
-    private long quantity;
-    private UUID productId;
+    private final Long seq;
+    private final UUID productId;
+    private final long quantity;
+    private BigDecimal productPrice;
 
-    public MenuProduct() {
+    public MenuProduct(Long seq, UUID productId, long quantity, BigDecimal productPrice) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productPrice = productPrice;
     }
 
-    public BigDecimal calculatePrice() {
-        return product.multiplyPrice(quantity);
+    public BigDecimal amount() {
+        return productPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(final Product product) {
-        this.product = product;
+    public UUID getProductId() {
+        return productId;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+    public BigDecimal getProductPrice() {
+        return productPrice;
     }
 
-    public UUID getProductId() {
-        return productId;
-    }
-
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    public void changeMenuProductPrice(BigDecimal price) {
+        this.productPrice = price;
     }
 }

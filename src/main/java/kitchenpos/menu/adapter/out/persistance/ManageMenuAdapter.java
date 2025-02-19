@@ -13,11 +13,11 @@ import java.util.UUID;
 
 @Component
 public class ManageMenuAdapter implements LoadMenuPort, SaveMenuPort {
-    private final MenuEntityRepository menuRepository;
+    private final JpaMenuEntityEntityRepository menuRepository;
     private final Profanities profanities;
 
     public ManageMenuAdapter(
-            final MenuEntityRepository menuRepository,
+            final JpaMenuEntityEntityRepository menuRepository,
             final Profanities profanities
     ) {
         this.menuRepository = menuRepository;
@@ -39,8 +39,24 @@ public class ManageMenuAdapter implements LoadMenuPort, SaveMenuPort {
     }
 
     @Override
+    public List<Menu> findByProductId(UUID productId) {
+        return menuRepository.findAllByProductId(productId)
+                .stream()
+                .map(menuEntity -> menuEntity.toDomain(profanities))
+                .toList();
+    }
+
+    @Override
     public Menu save(Menu menu) {
         return menuRepository.save(MenuEntity.of(menu))
                 .toDomain(profanities);
+    }
+
+    @Override
+    public void saveAll(List<Menu> menu) {
+        List<MenuEntity> list = menu.stream()
+                .map(MenuEntity::of)
+                .toList();
+        menuRepository.saveAll(list);
     }
 }

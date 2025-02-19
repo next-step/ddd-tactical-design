@@ -3,7 +3,7 @@ package kitchenpos.takeoutorder.application.service;
 import kitchenpos.eatinorder.application.port.out.OrderRepository;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
-import kitchenpos.menu.adapter.out.persistance.MenuEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.takeoutorder.application.port.out.KitchenridersClient;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,13 @@ import java.util.*;
 @Service
 public class TakeOutOrderService {
     private final OrderRepository orderRepository;
-    private final MenuEntityRepository menuEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final OrderTableRepository orderTableRepository;
     private final KitchenridersClient kitchenridersClient;
 
     public TakeOutOrderService(
         final OrderRepository orderRepository,
-        final MenuEntityRepository menuEntityRepository,
+        final JpaMenuEntityEntityRepository menuEntityRepository,
         final OrderTableRepository orderTableRepository,
         final KitchenridersClient kitchenridersClient
     ) {

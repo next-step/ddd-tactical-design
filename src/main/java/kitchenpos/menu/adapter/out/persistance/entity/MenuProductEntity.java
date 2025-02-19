@@ -2,9 +2,9 @@ package kitchenpos.menu.adapter.out.persistance.entity;
 
 import jakarta.persistence.*;
 import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.shared.domain.Profanities;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Table(name = "menu_product")
@@ -15,19 +15,14 @@ public class MenuProductEntity {
     @Id
     private Long seq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private ProductEntity product;
-
     @Column(name = "quantity", nullable = false)
     private long quantity;
 
-    @Transient
+    @Column(name = "product_id", columnDefinition = "binary(16)", nullable = false, updatable = false)
     private UUID productId;
+
+    @Column(name = "product_price", nullable = false)
+    private BigDecimal productPrice;
 
     public MenuProductEntity() {
     }
@@ -37,17 +32,12 @@ public class MenuProductEntity {
         menuProductEntity.setSeq(menuProduct.getSeq());
         menuProductEntity.setQuantity(menuProduct.getQuantity());
         menuProductEntity.setProductId(menuProduct.getProductId());
-        menuProductEntity.setProduct(ProductEntity.of(menuProduct.getProduct()));
+        menuProductEntity.setProductPrice(menuProduct.getProductPrice());
         return menuProductEntity;
     }
 
-    public MenuProduct toDomain(Profanities profanities) {
-        final MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setSeq(this.seq);
-        menuProduct.setQuantity(this.quantity);
-        menuProduct.setProductId(this.productId);
-        menuProduct.setProduct(this.product.toDomain(profanities));
-        return menuProduct;
+    public MenuProduct toDomain() {
+        return new MenuProduct(this.seq, this.productId, this.quantity, this.productPrice);
     }
 
     public Long getSeq() {
@@ -56,14 +46,6 @@ public class MenuProductEntity {
 
     public void setSeq(final Long seq) {
         this.seq = seq;
-    }
-
-    public ProductEntity getProduct() {
-        return product;
-    }
-
-    public void setProduct(final ProductEntity product) {
-        this.product = product;
     }
 
     public long getQuantity() {
@@ -80,5 +62,25 @@ public class MenuProductEntity {
 
     public void setProductId(final UUID productId) {
         this.productId = productId;
+    }
+
+    public BigDecimal getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(BigDecimal productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProductEntity that = (MenuProductEntity) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(seq);
     }
 }
