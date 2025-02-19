@@ -1,6 +1,8 @@
 package kitchenpos.order.eatinorder.domain.model;
 
 
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.order.common.model.OrderLineItem;
 
@@ -56,18 +59,18 @@ public class EatInOrder {
     }
 
     public EatInOrder(UUID id, EatInOrderStatus status, LocalDateTime orderDateTime,
-                      List<OrderLineItem> orderLineItems, OrderTable orderTable, UUID orderTableId) {
+                      List<OrderLineItem> orderLineItems) {
+        validateOrderLineItemIsEmpty(orderLineItems);
         this.id = id;
         this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
-        this.orderTable = orderTable;
-        this.orderTableId = orderTableId;
     }
 
-    public EatInOrder(EatInOrderStatus status, LocalDateTime orderDateTime,
-                      List<OrderLineItem> orderLineItems, OrderTable orderTable, UUID orderTableId) {
-        this(UUID.randomUUID(), status, orderDateTime, orderLineItems, orderTable, orderTableId);
+    private void validateOrderLineItemIsEmpty(List<OrderLineItem> orderLineItems) {
+        if (Objects.isNull(orderLineItems) || orderLineItems.isEmpty()) {
+            throw new IllegalArgumentException(EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION.getMessage());
+        }
     }
 
     public UUID getId() {
@@ -106,7 +109,8 @@ public class EatInOrder {
         return orderTable;
     }
 
-    public void setOrderTable(final OrderTable orderTable) {
+    public void occupyOrderTable(final OrderTable orderTable) {
+        orderTable.validateTableIsOccupied();
         this.orderTable = orderTable;
     }
 

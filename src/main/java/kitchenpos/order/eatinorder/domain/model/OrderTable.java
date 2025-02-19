@@ -58,7 +58,7 @@ public class OrderTable {
         this.numberOfGuests = numberOfGuests;
     }
 
-    private void validateTableIsOccupied() {
+    public void validateTableIsOccupied() {
         if (!isOccupied()) {
             throw new IllegalStateException(EMPTY_ORDER_TABLE_EXCEPTION.getMessage());
         }

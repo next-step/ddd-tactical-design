@@ -1,5 +1,10 @@
 package kitchenpos.order.eatinorder.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.OrderLineItem;
@@ -10,9 +15,6 @@ import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 public class EatInOrderService {
@@ -33,9 +35,20 @@ public class EatInOrderService {
     @Transactional
     public EatInOrder create(final EatInOrder request) {
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+        validateOrderLineItemMenuIsExists(orderLineItemRequests);
+
+        final List<OrderLineItem> orderLineItems = createOrderLineItemsByRequest(orderLineItemRequests);
+        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), EatInOrderStatus.WAITING, LocalDateTime.now(),
+                orderLineItems);
+
+        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
+                .orElseThrow(NoSuchElementException::new);
+        eatInOrder.occupyOrderTable(orderTable);
+
+        return eatInOrderRepository.save(eatInOrder);
+    }
+
+    private void validateOrderLineItemMenuIsExists(List<OrderLineItem> orderLineItemRequests) {
         final List<Menu> menus = menuRepository.findAllByIdIn(
                 orderLineItemRequests.stream()
                         .map(OrderLineItem::getMenuId)
@@ -44,41 +57,18 @@ public class EatInOrderService {
         if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private List<OrderLineItem> createOrderLineItemsByRequest(List<OrderLineItem> orderLineItemRequests) {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem orderLineItemRequest : orderLineItemRequests) {
-            final long quantity = orderLineItemRequest.getQuantity();
-
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-
-            final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
+        for (final OrderLineItem itemRq : orderLineItemRequests) {
+            final Menu menu = menuRepository.findById(itemRq.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
-            if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
-            }
-            if (menu.getInnerPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
-            }
-            final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
+            final OrderLineItem orderLineItem = new OrderLineItem(menu, itemRq.getQuantity(), menu.getId(),
+                    itemRq.getPrice());
             orderLineItems.add(orderLineItem);
         }
-        EatInOrder eatInOrder = new EatInOrder();
-        eatInOrder.setId(UUID.randomUUID());
-        eatInOrder.setStatus(EatInOrderStatus.WAITING);
-        eatInOrder.setOrderDateTime(LocalDateTime.now());
-        eatInOrder.setOrderLineItems(orderLineItems);
-
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-        if (!orderTable.isOccupied()) {
-            throw new IllegalStateException();
-        }
-        eatInOrder.setOrderTable(orderTable);
-
-        return eatInOrderRepository.save(eatInOrder);
+        return orderLineItems;
     }
 
     @Transactional

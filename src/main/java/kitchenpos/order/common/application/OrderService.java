@@ -74,8 +74,8 @@ public class OrderService {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
-            orderLineItem.setMenu(menu);
-            orderLineItem.setQuantity(quantity);
+            orderLineItem.addMenu(menu);
+            orderLineItem.addQuantity(quantity);
             orderLineItems.add(orderLineItem);
         }
         Order order = new Order();

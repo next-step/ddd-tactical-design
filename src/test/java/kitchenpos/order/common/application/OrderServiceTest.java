@@ -92,13 +92,15 @@ class OrderServiceTest {
         void menu_name_exception() {
             // given
             Menu menu = createMenuWithProductAndGroup(false);
-            Order request = createOrderRequestWithEmptyTable(OrderType.DELIVERY, OrderStatus.WAITING, menu, "서울");
             when(menuRepository.findAllByIdIn(anyList())).thenReturn(List.of(menu));
             when(menuRepository.findById(any())).thenReturn(Optional.of(menu));
 
             // when // then
-            assertThatThrownBy(() -> orderService.create(request))
-                    .isInstanceOf(IllegalStateException.class);
+            assertThatThrownBy(() -> {
+                Order request = createOrderRequestWithEmptyTable(OrderType.DELIVERY, OrderStatus.WAITING, menu, "서울");
+                orderService.create(request);
+            }).isInstanceOf(IllegalStateException.class)
+                    .hasMessage("주문 내역의 메뉴가 게시되어 있지 않습니다!");
         }
     }
 
