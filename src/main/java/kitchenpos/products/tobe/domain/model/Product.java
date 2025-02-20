@@ -5,6 +5,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "product")
@@ -42,8 +43,8 @@ public class Product {
         return this.price;
     }
 
-    public void changePrice(ProductPrice newPrice) {
-        this.price = newPrice;
+    public void changePrice(final BigDecimal newPrice) {
+        this.price = new ProductPrice(newPrice);
     }
 }
 

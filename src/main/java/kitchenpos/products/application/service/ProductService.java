@@ -50,7 +50,7 @@ public class ProductService {
         final ChangeProductPriceRequestDto request) {
         final Product product = productRepository.findById(productId)
             .orElseThrow(NoSuchElementException::new);
-        product.changePrice(request.toValueObject());
+        product.changePrice(request.price());
 
         final List<Menu> menus = menuRepository.findAllByProductId(productId);
         for (final Menu menu : menus) {
