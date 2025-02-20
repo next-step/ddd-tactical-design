@@ -9,7 +9,6 @@ import java.util.Objects;
 @Embeddable
 public class ProductName {
     private String name;
-    private PurgomalumClient purgomalum;
 
     protected ProductName() {
     }
@@ -17,7 +16,6 @@ public class ProductName {
     public ProductName(String name, PurgomalumClient purgomalumClient) {
         validate(name, purgomalumClient);
         this.name = name;
-        this.purgomalum = purgomalumClient;
     }
 
     private void validate(String name, PurgomalumClient purgomalumClient) {
