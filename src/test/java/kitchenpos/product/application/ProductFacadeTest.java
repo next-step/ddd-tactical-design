@@ -26,7 +26,6 @@ import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.menu.domain.service.FakeMenuUpdatePolicy;
 import kitchenpos.product.domain.service.FakeProductCreatePolicy;
-import kitchenpos.product.domain.service.ProductCreatePolicy;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
 import kitchenpos.product.domain.service.ProductServiceImpl;

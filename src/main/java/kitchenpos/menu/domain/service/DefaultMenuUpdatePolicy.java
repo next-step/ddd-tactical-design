@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy{
+public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy {
     private final MenuRepository menuRepository;
 
     public DefaultMenuUpdatePolicy(MenuRepository menuRepository) {

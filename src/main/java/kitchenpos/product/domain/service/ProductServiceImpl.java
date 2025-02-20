@@ -3,8 +3,8 @@ package kitchenpos.product.domain.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.event.ProductEventPublisher;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.ProductVo;
@@ -18,19 +18,15 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductPurgomalumClient purgomalumClient;
-    private final MenuUpdatePolicy menuUpdatePolicy;
-    private final ProductCreatePolicy productCreatePolicy;
+    private final ProductEventPublisher productEventPublisher;
 
     public ProductServiceImpl(
         final ProductRepository productRepository,
         final ProductPurgomalumClient purgomalumClient,
-        final MenuUpdatePolicy menuUpdatePolicy,
-        final ProductCreatePolicy productCreatePolicy
-    ) {
+        ProductEventPublisher productEventPublisher) {
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
-        this.menuUpdatePolicy = menuUpdatePolicy;
-        this.productCreatePolicy = productCreatePolicy;
+        this.productEventPublisher = productEventPublisher;
     }
 
     @Override
@@ -51,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.update(price);
 
-        menuUpdatePolicy.hideMenu(request.productId());
+        productEventPublisher.publishProductPriceChangedEvent(request.productId());
 
         return ProductVo.ProductInfo.fromEntity(product);
     }
