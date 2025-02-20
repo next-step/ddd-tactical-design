@@ -1,4 +1,4 @@
-package kitchenpos.products.application;
+package kitchenpos.products.application.service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,8 +39,8 @@ public class ProductService {
 
     @Transactional
     public CreateProductResponseDto create(final CreateProductRequestDto request) {
-        final DisplayedName displayedName = new DisplayedName(request.getName(), purgomalumClient);
-        final ProductPrice productPrice = new ProductPrice(request.getPrice());
+        final DisplayedName displayedName = new DisplayedName(request.name(), purgomalumClient);
+        final ProductPrice productPrice = new ProductPrice(request.price());
         final Product product = new Product(UUID.randomUUID(), displayedName, productPrice);
         return CreateProductResponseDto.from(productRepository.save(product));
     }

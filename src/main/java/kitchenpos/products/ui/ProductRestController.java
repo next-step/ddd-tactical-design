@@ -3,7 +3,7 @@ package kitchenpos.products.ui;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.products.application.ProductService;
+import kitchenpos.products.application.service.ProductService;
 import kitchenpos.products.application.dto.ChangeProductPriceRequestDto;
 import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
@@ -32,7 +32,7 @@ public class ProductRestController {
     public ResponseEntity<CreateProductResponseDto> create(
         @RequestBody final CreateProductRequestDto request) {
         final CreateProductResponseDto response = productService.create(request);
-        return ResponseEntity.created(URI.create("/api/products/" + response.getId()))
+        return ResponseEntity.created(URI.create("/api/products/" + response.id()))
             .body(response);
     }
 

@@ -17,6 +17,7 @@ import kitchenpos.products.application.dto.ChangeProductPriceResponseDto;
 import kitchenpos.products.application.dto.CreateProductRequestDto;
 import kitchenpos.products.application.dto.CreateProductResponseDto;
 import kitchenpos.products.application.dto.FindProductResponseDto;
+import kitchenpos.products.application.service.ProductService;
 import kitchenpos.products.domain.ProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.Product;
@@ -51,9 +52,9 @@ class ProductServiceTest {
         final CreateProductResponseDto actual = productService.create(expected);
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice())
+            () -> assertThat(actual.id()).isNotNull(),
+            () -> assertThat(actual.name()).isEqualTo(expected.name()),
+            () -> assertThat(actual.price()).isEqualTo(expected.price())
         );
     }
 
@@ -75,7 +76,7 @@ class ProductServiceTest {
                 changedProduct);
             final ChangeProductPriceResponseDto actual = productService.changePrice(productId,
                 request);
-            assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+            assertThat(actual.price()).isEqualTo(expected.price());
         }
 
         @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
