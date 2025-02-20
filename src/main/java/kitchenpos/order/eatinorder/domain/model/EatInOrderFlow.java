@@ -1,8 +1,8 @@
 package kitchenpos.order.eatinorder.domain.model;
 
-import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_FLOW_NOT_FOUND_EXCEPTION;
-
 import java.util.Arrays;
+
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_FLOW_NOT_FOUND_EXCEPTION;
 
 public enum EatInOrderFlow {
     WAITING(EatInOrderStatus.NONE),
