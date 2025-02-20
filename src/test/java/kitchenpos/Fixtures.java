@@ -15,7 +15,7 @@ import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
 import kitchenpos.products.tobe.domain.model.Product;
 import kitchenpos.products.tobe.domain.model.ProductPrice;
