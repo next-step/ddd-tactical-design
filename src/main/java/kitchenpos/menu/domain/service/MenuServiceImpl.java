@@ -9,6 +9,7 @@ import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
@@ -17,34 +18,38 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
     private final ProductRepository productRepository;
     private final MenuPurgomalumClient purgomalumClient;
+    private final MenuCreatePolicy menuCreatePolicy;
 
     public MenuServiceImpl(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
         final ProductRepository productRepository,
-        final MenuPurgomalumClient purgomalumClient
+        final MenuPurgomalumClient purgomalumClient,
+        final MenuCreatePolicy menuCreatePolicy
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
         this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
+        this.menuCreatePolicy = menuCreatePolicy;
     }
 
-    @Transactional
-    public Menu create(final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.getMenuGroupId())
+    @Override
+    public MenuVo.MenuInfo create(final MenuVo.Create request) {
+        final BigDecimal price = menuCreatePolicy.validatePrice(request.price());
+        final String name = menuCreatePolicy.validateMenuName(request.name(), purgomalumClient);
+
+        final MenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
             .orElseThrow(NoSuchElementException::new);
-        final List<MenuProduct> menuProductRequests = request.getMenuProducts();
+
+        final List<MenuProduct> menuProductRequests = request.menuProducts();
         if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -77,27 +82,25 @@ public class MenuServiceImpl implements MenuService {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        final String name = request.getName();
-        if (Objects.isNull(name) || purgomalumClient.containsProfanity(name)) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = new Menu();
-        menu.setId(UUID.randomUUID());
-        menu.setName(name);
-        menu.setPrice(price);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(request.isDisplayed());
-        menu.setMenuProducts(menuProducts);
-        return menuRepository.save(menu);
+
+        return MenuVo.MenuInfo.fromEntity(
+            menuRepository.save(
+                new Menu(
+                        UUID.randomUUID(),
+                        name,
+                        price,
+                        menuGroup,
+                        request.displayed(),
+                        menuProducts)
+            )
+        );
     }
 
-    @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
-        final Menu menu = menuRepository.findById(menuId)
+    @Override
+    public MenuVo.MenuInfo changePrice(final MenuVo.Update request) {
+        final BigDecimal price = menuCreatePolicy.validatePrice(request.price());
+
+        final Menu menu = menuRepository.findById(request.menuId())
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
@@ -110,12 +113,12 @@ public class MenuServiceImpl implements MenuService {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(price);
-        return menu;
+        menu.updatePrice(price);
+        return MenuVo.MenuInfo.fromEntity(menu);
     }
 
-    @Transactional
-    public Menu display(final UUID menuId) {
+    @Override
+    public MenuVo.MenuInfo display(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
         BigDecimal sum = BigDecimal.ZERO;
@@ -129,20 +132,23 @@ public class MenuServiceImpl implements MenuService {
         if (menu.getPrice().compareTo(sum) > 0) {
             throw new IllegalStateException();
         }
-        menu.setDisplayed(true);
-        return menu;
+        menu.updateDisplayed(true);
+        return MenuVo.MenuInfo.fromEntity(menu);
     }
 
-    @Transactional
-    public Menu hide(final UUID menuId) {
+    @Override
+    public MenuVo.MenuInfo hide(final UUID menuId) {
         final Menu menu = menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
-        return menu;
+        menu.updateDisplayed(false);
+        return MenuVo.MenuInfo.fromEntity(menu);
     }
 
     @Transactional(readOnly = true)
-    public List<Menu> findAll() {
-        return menuRepository.findAll();
+    public List<MenuVo.MenuInfo> findAll() {
+        return menuRepository.findAll()
+            .stream()
+            .map(MenuVo.MenuInfo::fromEntity)
+            .toList();
     }
 }

@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -50,10 +49,16 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
-
     public Menu() {
+    }
+
+    public Menu(UUID uuid, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+        this.id = uuid;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
     }
 
     public UUID getId() {
@@ -104,11 +109,11 @@ public class Menu {
         this.menuProducts = menuProducts;
     }
 
-    public UUID getMenuGroupId() {
-        return menuGroupId;
+    public void updateDisplayed(boolean displayed) {
+        this.displayed = displayed;
     }
 
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
+    public void updatePrice(BigDecimal price) {
+        this.price = price;
     }
 }
