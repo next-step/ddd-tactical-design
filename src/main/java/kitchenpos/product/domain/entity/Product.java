@@ -1,11 +1,13 @@
 package kitchenpos.product.domain.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import java.util.UUID;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "product")
@@ -17,16 +19,16 @@ public class Product {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private ProductName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private ProductPrice price;
 
     public Product() {
     }
 
-    public Product(UUID uuid, String name, BigDecimal price) {
+    public Product(UUID uuid, ProductName name, ProductPrice price) {
         this.id = uuid;
         this.name = name;
         this.price = price;
@@ -40,15 +42,15 @@ public class Product {
         return id;
     }
 
-    public String getName() {
+    public ProductName getName() {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public ProductPrice getPrice() {
         return price;
     }
 
-    public void update(BigDecimal price) {
+    public void update(ProductPrice price) {
         this.price = price;
     }
 

@@ -26,6 +26,7 @@ public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy{
                 sum = sum.add(
                     menuProduct.getProduct()
                         .getPrice()
+                        .price()
                         .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
                 );
             }
