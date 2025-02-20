@@ -11,14 +11,26 @@ public class MenuDisplayStatus {
     @Column(name = "displayed", nullable = false)
     private boolean value;
 
-    protected MenuDisplayStatus() {}
+    public static MenuDisplayStatus of(boolean value) {
+        return new MenuDisplayStatus(value);
+    }
 
-    public MenuDisplayStatus(boolean value) {
+    private MenuDisplayStatus(boolean value) {
         this.value = value;
     }
 
+    protected MenuDisplayStatus() {}
+
     public boolean isDisplayed() {
         return value;
+    }
+
+    public void show() {
+        this.value = true;
+    }
+
+    public void hide() {
+        this.value = false;
     }
 
     @Override

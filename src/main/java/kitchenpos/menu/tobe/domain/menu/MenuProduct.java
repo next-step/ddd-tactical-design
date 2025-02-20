@@ -1,9 +1,13 @@
 package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.product.domain.Product;
+import kitchenpos.common.exception.MenuException;
 
+import java.util.Objects;
 import java.util.UUID;
+
+import static kitchenpos.common.exception.ErrorCode.*;
+
 
 @Table(name = "menu_product")
 @Entity
@@ -12,42 +16,49 @@ public class MenuProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long seq;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private Product product;
-
     @Column(name = "quantity", nullable = false)
-    private long quantity;
-
-    @Transient
+    private int quantity;
+    @Column(name = "price", nullable = false)
+    private Long price;
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
     protected MenuProduct() {}
 
-    public MenuProduct(Long seq, Product product, long quantity) {
+    public MenuProduct(Long seq, int quantity, Long price, UUID productId) {
         this.seq = seq;
-        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.productId = productId;
+    }
+
+    private void validate() {
+        if (quantity < 0L) {
+            throw new MenuException(MENU_QUANTITY_NEGATIVE);
+        }
+        if (price < 0L) {
+            throw new MenuException(MENU_PRODUCT_PRICE_INVALID);
+        }
+    }
+
+    public void changeQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
-        return product;
+    public void changePrice(Long price) {
+        this.price = price;
     }
 
+    public Long totalPrice() {
+        return price * quantity;
+    }
 
-    public long getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
-
 
     public UUID getProductId() {
         return productId;
     }
-
 
 }

@@ -23,8 +23,7 @@ public class ProductName {
         }
     }
 
-    public ProductName() {
-    }
+    protected ProductName() {}
 
     ProductName(String name) {
         this.name = name;

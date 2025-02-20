@@ -11,10 +11,13 @@ public class MenuName {
     @Column(name = "name", nullable = false)
     private String name;
 
-    protected MenuName() {
+    protected MenuName() {}
+
+    public static MenuName of(String name, Profanities profanities) {
+        return new MenuName(name, profanities);
     }
 
-    public MenuName(String name, Profanities profanities) {
+    private MenuName(String name, Profanities profanities) {
         validate(name, profanities);
         this.name = name;
     }

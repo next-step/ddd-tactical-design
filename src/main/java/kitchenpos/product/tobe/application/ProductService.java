@@ -45,11 +45,6 @@ public class ProductService {
         final Product product = productRepository.findById(productId)
                 .orElseThrow(NoSuchElementException::new);
         product.updatePrice(request.getPrice(), productValidator);
-        /*
-         * 메뉴가 있던 자리
-         * 이때 메뉴를 어떻게 해야하지.. 궁금합니다.. ㅠㅠ
-         * */
-
         return product;
     }
 

@@ -18,8 +18,7 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product() {
-    }
+    protected Product() {}
 
     public Product(String name, long price, Profanities profanities) {
         this.id = UUID.randomUUID();

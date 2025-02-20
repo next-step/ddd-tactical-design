@@ -1,7 +1,7 @@
 package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.*;
-import kitchenpos.menu.tobe.domain.menugroup.MenuGroup;
+import kitchenpos.common.tobe.Profanities;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,41 +20,70 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuGroupId;
 
     @Embedded
     private MenuDisplayStatus displayed;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-            name = "menu_id",
-            nullable = false,
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    private MenuProducts menuProducts;
 
-    @Transient
-    private UUID menuGroupId;
+    protected Menu() {
+    }
 
-    protected Menu() {}
+    // 주 생성 메서드로 of 사용
+    public static Menu of(String name, Long price, UUID menuGroupId, List<MenuProduct> products, boolean displayed, Profanities profanities, MenuValidator menuValidator) {
+        return new Menu(
+                UUID.randomUUID(),
+                MenuName.of(name, profanities),
+                MenuPrice.of(price),
+                menuGroupId,
+                MenuDisplayStatus.of(displayed),
+                MenuProducts.of(products),
+                menuValidator
+        );
+    }
 
-    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, MenuDisplayStatus displayed, List<MenuProduct> menuProducts) {
+    private Menu(UUID id, MenuName name, MenuPrice price, UUID menuGroupId, MenuDisplayStatus displayed, MenuProducts menuProducts, MenuValidator menuValidator) {
+        menuValidator.validateMenuProductSize(menuProducts);
+        menuValidator.validateMenuPrice(menuProducts, price);
+        this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
 
+    public Long getMenuPrice() {
+        return price.getValue();
+    }
+
+    public void changeMenuPrice(final Long price, final MenuValidator menuValidator) {
+        MenuPrice newPrice = MenuPrice.of(price);
+        menuValidator.validateMenuPrice(menuProducts, newPrice);
+        this.price = newPrice;
+    }
+
+    public void show(MenuValidator menuValidator) {
+        menuValidator.validateMenuPrice(menuProducts, price);
+        this.displayed.show();
+    }
+
+    public void hide() {
+        this.displayed.hide();
+    }
+
+    public boolean isDisplayed() {
+        return displayed.isDisplayed();
+    }
+
+    public String getName() {
+        return name.getName();
+    }
+
     public List<MenuProduct> getMenuProducts() {
-        return Collections.unmodifiableList(menuProducts);
+        return Collections.unmodifiableList(menuProducts.getProducts());
     }
 
 

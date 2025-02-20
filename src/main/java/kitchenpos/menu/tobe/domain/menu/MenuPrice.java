@@ -2,6 +2,8 @@ package kitchenpos.menu.tobe.domain.menu;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import kitchenpos.common.exception.ErrorCode;
+import kitchenpos.common.exception.MenuException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,25 +11,24 @@ import java.util.Objects;
 @Embeddable
 public class MenuPrice {
     @Column(name = "price", nullable = false)
-    private BigDecimal value;
+    private Long value;
 
-    protected MenuPrice() {}
+    public static MenuPrice of(Long value) {
+        return new MenuPrice(value);
+    }
 
-    public MenuPrice(BigDecimal value) {
+    private MenuPrice(Long value) {
         validate(value);
         this.value = value;
     }
-
-    private void validate(BigDecimal value) {
-        if (Objects.isNull(value)) {
-            throw new IllegalArgumentException("가격은 필수입니다.");
-        }
-        if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("가격은 0보다 커야 합니다.");
+    protected MenuPrice() {}
+    private void validate(Long value) {
+        if (Objects.isNull(value) || value.compareTo(0L) <= 0 ) { // 맘에안드네 곧 변경예정
+            throw new MenuException(ErrorCode.MENU_PRICE_INVALID);
         }
     }
 
-    public BigDecimal getValue() {
+    public Long getValue() {
         return value;
     }
 
