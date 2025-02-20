@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.model.ProductNameValidator;
 import kitchenpos.product.domain.model.ProductVo;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;

@@ -2,8 +2,9 @@ package kitchenpos.menu.presentation.controller;
 
 import java.net.URI;
 import java.util.List;
-import kitchenpos.menu.domain.service.MenuGroupService;
-import kitchenpos.menu.domain.entity.MenuGroup;
+import kitchenpos.menu.application.dto.MenuGroupRequest;
+import kitchenpos.menu.application.dto.MenuGroupResponse;
+import kitchenpos.menu.application.facade.MenuGroupFacade;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,21 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MenuGroupRestController {
 
-    private final MenuGroupService menuGroupService;
+    private final MenuGroupFacade menuGroupFacade;
 
-    public MenuGroupRestController(final MenuGroupService menuGroupService) {
-        this.menuGroupService = menuGroupService;
+    public MenuGroupRestController(
+        final MenuGroupFacade menuGroupFacade
+    ) {
+        this.menuGroupFacade = menuGroupFacade;
     }
 
     @PostMapping
-    public ResponseEntity<MenuGroup> create(@RequestBody final MenuGroup request) {
-        final MenuGroup response = menuGroupService.create(request);
-        return ResponseEntity.created(URI.create("/api/menu-groups/" + response.getId()))
+    public ResponseEntity<MenuGroupResponse.GetGroup> create(
+        @RequestBody final MenuGroupRequest.Create request
+    ) {
+        final MenuGroupResponse.GetGroup response = menuGroupFacade.create(request);
+        return ResponseEntity.created(URI.create("/api/menu-groups/" + response.id()))
             .body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<MenuGroup>> findAll() {
-        return ResponseEntity.ok(menuGroupService.findAll());
+    public ResponseEntity<List<MenuGroupResponse.GetGroup>> findAll() {
+        return ResponseEntity.ok(menuGroupFacade.findAll());
     }
 }
