@@ -138,6 +138,7 @@ public class EatInOrder {
     public void occupyOrderTable(final OrderTable orderTable) {
         orderTable.validateTableIsOccupied();
         this.orderTable = orderTable;
+        this.orderTableId = orderTable.getId();
     }
 
     public UUID getOrderTableId() {
