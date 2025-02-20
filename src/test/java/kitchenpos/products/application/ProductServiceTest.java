@@ -103,7 +103,6 @@ class ProductServiceTest {
 
     private CreateProductRequestDto createProductRequest(Product product) {
         return new CreateProductRequestDto(
-            product.getId(),
             product.getName().getValue(),
             product.getPrice().getValue()
         );
