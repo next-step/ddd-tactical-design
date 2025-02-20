@@ -1,6 +1,6 @@
 package kitchenpos.product.tobe.domain;
 
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

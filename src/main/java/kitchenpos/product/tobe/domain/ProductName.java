@@ -1,7 +1,7 @@
 package kitchenpos.product.tobe.domain;
 
 import jakarta.persistence.Embeddable;
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 
 import java.util.Objects;
 
@@ -10,17 +10,21 @@ public class ProductName {
     private String name;
 
     public ProductName(String name, Profanities profanities) {
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException("상품명은 필수값입니다.");
-        }
-
-        if (profanities.contains(name)) {
-            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
-        }
+        validate(name, profanities);
         this.name = name;
     }
 
-    public ProductName() {}
+    private static void validate(String name, Profanities profanities) {
+        if (Objects.isNull(name) || name.isEmpty()) {
+            throw new IllegalArgumentException("상품명은 필수값입니다.");
+        }
+        if (profanities.contains(name)) {
+            throw new IllegalArgumentException("비속어가 포함되어 있습니다.");
+        }
+    }
+
+    public ProductName() {
+    }
 
     ProductName(String name) {
         this.name = name;

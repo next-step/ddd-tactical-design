@@ -2,7 +2,7 @@ package kitchenpos.product.tobe.application;
 
 import kitchenpos.menu.domain.MenuRepository;
 
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 import kitchenpos.product.tobe.domain.Product;
 import kitchenpos.product.tobe.domain.ProductRepository;
 

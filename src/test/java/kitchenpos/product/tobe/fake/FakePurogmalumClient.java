@@ -1,6 +1,6 @@
 package kitchenpos.product.tobe.fake;
 
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 
 import java.util.List;
 

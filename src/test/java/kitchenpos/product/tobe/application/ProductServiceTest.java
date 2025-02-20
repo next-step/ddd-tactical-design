@@ -1,7 +1,7 @@
 package kitchenpos.product.tobe.application;
 
 import kitchenpos.fake.repository.InMemoryMenuRepository;
-import kitchenpos.product.tobe.Profanities;
+import kitchenpos.common.tobe.Profanities;
 import kitchenpos.product.tobe.domain.*;
 import kitchenpos.product.tobe.fake.FakePurogmalumClient;
 import kitchenpos.product.tobe.fake.InMemoryProductRepository;
@@ -12,9 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
