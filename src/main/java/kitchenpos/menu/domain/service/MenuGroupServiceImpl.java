@@ -1,36 +1,46 @@
 package kitchenpos.menu.domain.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class MenuGroupServiceImpl implements MenuGroupService {
 
     private final MenuGroupRepository menuGroupRepository;
+    private final MenuGroupCreatePolicy menuGroupCreatePolicy;
+    private final MenuPurgomalumClient menuPurgomalumClient;
 
-    public MenuGroupServiceImpl(final MenuGroupRepository menuGroupRepository) {
+    public MenuGroupServiceImpl(
+        final MenuGroupRepository menuGroupRepository,
+        final MenuGroupCreatePolicy menuGroupCreatePolicy,
+        final MenuPurgomalumClient menuPurgomalumClient
+    ) {
         this.menuGroupRepository = menuGroupRepository;
+        this.menuGroupCreatePolicy = menuGroupCreatePolicy;
+        this.menuPurgomalumClient = menuPurgomalumClient;
     }
 
-    @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    @Override
+    public MenuGroupVo.GroupInfo create(final MenuGroupVo.Create request) {
+        final String name = menuGroupCreatePolicy.validateGroupName(request.name(), menuPurgomalumClient);
+
+        return MenuGroupVo.GroupInfo.fromEntity(
+            menuGroupRepository.save(new MenuGroup(UUID.randomUUID(), name))
+        );
     }
 
     @Transactional(readOnly = true)
-    public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+    @Override
+    public List<MenuGroupVo.GroupInfo> findAll() {
+        return menuGroupRepository.findAll()
+            .stream()
+            .map(MenuGroupVo.GroupInfo::fromEntity)
+            .toList();
     }
 }
