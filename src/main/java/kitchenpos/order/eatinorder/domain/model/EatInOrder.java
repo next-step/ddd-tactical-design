@@ -1,25 +1,16 @@
 package kitchenpos.order.eatinorder.domain.model;
 
 
-import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION;
-import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_FLOW_EXCEPTION;
+import jakarta.persistence.*;
+import kitchenpos.order.common.model.OrderLineItem;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import kitchenpos.order.common.model.OrderLineItem;
+
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_EMPTY_ORDER_LINE_ITEM_EXCEPTION;
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EAT_IN_ORDER_FLOW_EXCEPTION;
 
 @Table(name = "eat_in_orders")
 @Entity

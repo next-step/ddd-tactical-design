@@ -2,7 +2,6 @@ package kitchenpos.order.eatinorder.domain.repository;
 
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
-import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 
 import java.util.List;

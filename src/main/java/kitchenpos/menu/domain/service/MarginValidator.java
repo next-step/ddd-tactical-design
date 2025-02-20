@@ -1,13 +1,13 @@
 package kitchenpos.menu.domain.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.model.Product;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class MarginValidator {

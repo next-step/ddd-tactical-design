@@ -1,12 +1,9 @@
 package kitchenpos.menu.infra.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
+
+import java.util.*;
 
 public class FakeMenuRepository implements MenuRepository {
 

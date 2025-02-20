@@ -1,16 +1,7 @@
 package kitchenpos.menu.application;
 
-import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-
 import kitchenpos.common.application.PurgomalumClient;
+import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuNameCreationService;
@@ -19,17 +10,26 @@ import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
 import kitchenpos.menu.domain.service.MenuProductValidator;
-import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.menu.infra.persistence.FakeMenuGroupRepository;
 import kitchenpos.menu.infra.persistence.FakeMenuRepository;
-import kitchenpos.common.infra.external.FakePurgomalumClient;
+import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.infra.persistence.FakeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MenuServiceTest {
 
