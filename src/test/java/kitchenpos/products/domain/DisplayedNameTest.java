@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import kitchenpos.products.application.FakePurgomalumClient;
-import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameEmptyException;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameIncludeProfanityException;
 import kitchenpos.products.tobe.domain.model.DisplayedName;
+import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

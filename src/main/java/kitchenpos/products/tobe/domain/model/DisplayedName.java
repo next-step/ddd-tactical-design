@@ -6,9 +6,9 @@ import static kitchenpos.common.exception.ExceptionDetails.DISPLAYED_NAME_INCLUD
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
-import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameEmptyException;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameIncludeProfanityException;
+import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 
 @Embeddable
 public class DisplayedName {
