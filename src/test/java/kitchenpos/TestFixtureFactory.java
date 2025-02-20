@@ -89,7 +89,7 @@ public class TestFixtureFactory {
     }
 
     public static OrderTable createUsingOrderTable() {
-        return new OrderTable("사용 중인 테이블", 4, true);
+        return new OrderTable(UUID.randomUUID(), "사용 중인 테이블", 4, true);
     }
 
     public static Product createProduct(String name, long price) {
