@@ -1,12 +1,12 @@
 package kitchenpos.product.domain.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import kitchenpos.menu.domain.service.MenuUpdatePolicy;
 import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.model.ProductNameValidator;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.model.ProductVo;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductVo.ProductInfo create(final ProductVo.Create request) {
-        final BigDecimal price = productCreatePolicy.validatePrice(request.price());
-        final String name = productCreatePolicy.validateName(request.name(), purgomalumClient);
+        final ProductPrice price = request.price();
+        final ProductName name = ProductName.of(request.name(), purgomalumClient);
 
         return ProductVo.ProductInfo.fromEntity(
             productRepository.save(new Product(UUID.randomUUID(), name, price))
@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductVo.ProductInfo changePrice(final ProductVo.Update request) {
-        final BigDecimal price = productCreatePolicy.validatePrice(request.price());
+        final ProductPrice price = request.price();
         final Product product = productRepository.findById(request.productId())
             .orElseThrow(NoSuchElementException::new);
 

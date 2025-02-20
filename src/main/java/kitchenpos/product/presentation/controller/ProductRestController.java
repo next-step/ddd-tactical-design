@@ -1,5 +1,6 @@
 package kitchenpos.product.presentation.controller;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -7,8 +8,6 @@ import kitchenpos.product.application.dto.ProductRequest;
 import kitchenpos.product.application.dto.ProductRequest.UpdatePrice;
 import kitchenpos.product.application.dto.ProductResponse;
 import kitchenpos.product.application.facade.ProductFacade;
-import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,7 @@ public class ProductRestController {
 
     @PostMapping
     public ResponseEntity<ProductResponse.GetProduct> create(
-        @RequestBody final ProductRequest.Create request
+        @RequestBody @Valid final ProductRequest.Create request
     ) {
         final ProductResponse.GetProduct response = productFacade.create(request);
         return ResponseEntity.created(URI.create("/api/products/" + response.id()))
@@ -40,7 +39,7 @@ public class ProductRestController {
     @PutMapping("/{productId}/price")
     public ResponseEntity<ProductResponse.GetProduct> changePrice(
         @PathVariable final UUID productId,
-        @RequestBody final ProductRequest.UpdatePrice request
+        @RequestBody @Valid final ProductRequest.UpdatePrice request
     ) {
         return ResponseEntity.ok(productFacade.changePrice(new UpdatePrice(productId, request.price())));
     }
