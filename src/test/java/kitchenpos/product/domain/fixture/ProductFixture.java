@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.product.application.dto.ProductRequest;
 import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
 
 public record ProductFixture(UUID id, String 상품명, BigDecimal 상품가격) {
 
@@ -24,7 +26,7 @@ public record ProductFixture(UUID id, String 상품명, BigDecimal 상품가격)
     }
 
     public Product toEntity() {
-        return new Product(id, 상품명, 상품가격);
+        return new Product(id, new ProductName(상품명), ProductPrice.of(상품가격));
     }
 
     public ProductRequest.Create create() {
