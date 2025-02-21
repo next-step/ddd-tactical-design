@@ -9,40 +9,39 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
-import static kitchenpos.fixture.ProductFixture.FRIED_CHICKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ProductTest {
 
-    private static final String FRIED_CHICKEN_NAME = "후라이드치킨";
-    private static final long FRIED_CHICKEN_PRICE = 16_000L;
+    private static final String PRODUCT_DEFAULT_NAME = "후라이드치킨";
+    private static final long PRODUCT_DEFAULT_PRICE = 16_000L;
 
     @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
     @ValueSource(strings = "-1000")
     @NullSource
     @ParameterizedTest(name = "{index}. 상품 가격: {0}")
     void createWithInvalidPrice(final long price) {
-        assertThatThrownBy(() -> new Product(null, FRIED_CHICKEN_NAME, price))
+        assertThatThrownBy(() -> new Product(null, PRODUCT_DEFAULT_NAME, price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름에는 비속어가 포함될 수 없다.")
     @ValueSource(strings = {"비속어", "욕설"})
     @ParameterizedTest(name = "{index}. 상품 이름: {0}")
-    void createWithProfanityName(final String profanityName) {
-        final ProfanityName toBeProfanityName = new ProfanityName(List.of("비속어", "욕설"));
+    void createWithProfanityName(final String displayedName) {
+        final ProfanityName profanityName = new ProfanityName(List.of("비속어", "욕설"));
         assertThatThrownBy(() ->
-                new Product(null, profanityName, toBeProfanityName, FRIED_CHICKEN_PRICE)
+                new Product(null, displayedName, profanityName, PRODUCT_DEFAULT_PRICE)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("상품의 이름은 1글자 이상이어야 한다.")
     @ValueSource(strings = {"", " "})
     @ParameterizedTest(name = "{index}. 상품 이름: {0}")
-    void createWithEmptyName(final String name) {
-        assertThatThrownBy(() -> new Product(null, name, FRIED_CHICKEN_PRICE))
+    void createWithEmptyName(final String displayedName) {
+        assertThatThrownBy(() -> new Product(null, displayedName, PRODUCT_DEFAULT_PRICE))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -65,7 +64,7 @@ public class ProductTest {
     @NullSource
     @ParameterizedTest(name = "{index}. 상품 가격: {0}")
     void changePriceWithInvalidPrice(final long price) {
-        final Product product = new Product(null, FRIED_CHICKEN, FRIED_CHICKEN_PRICE);
+        final Product product = new Product(null, PRODUCT_DEFAULT_NAME, PRODUCT_DEFAULT_PRICE);
         assertThatThrownBy(() -> product.changePrice(price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
