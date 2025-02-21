@@ -3,7 +3,6 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
 import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
 import kitchenpos.products.tobe.domain.exception.InvalidPricePeriodException;
-import kitchenpos.products.tobe.domain.vo.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
