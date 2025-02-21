@@ -293,6 +293,7 @@ graph LR
   * `Menu Price`를 변경할 땐 0원 이상 입력하여야 한다.
   * `Menu Price`가 `Menu Products`의 `Total Product Price` 보다 크면 `Menu`는 `Hide Menu`가 된다.
 * `Menu`는 `Display Menu`로 변경할 수 있다
+  * `Menu Price`가 `Menu Products`의 `Total Product Price` 보다 작아야 한다.
 * `Menu`는 `Hide Menu`로 변경할 수 있다
 * `Menu List`를 조회할 수 있다
 * `Product Price`가 변경되어 `Menu Price`가 `Total Product Price` 보다 크게되면 `Menu`는 `Hide Menu`가 된다.

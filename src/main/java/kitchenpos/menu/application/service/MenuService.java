@@ -8,7 +8,6 @@ import kitchenpos.menu.application.service.model.CreateMenuProductRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.domain.model.Product;
@@ -99,14 +98,7 @@ public class MenuService {
         }
         final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(menuProduct.amount());
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        menu.setPrice(MenuPrice.of(price, price /* todo menuProductTotalPrice */));
+        menu.changePrice(price);
         return menu;
     }
 
@@ -114,14 +106,7 @@ public class MenuService {
     public Menu display(final UUID menuId) {
         final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(menuProduct.amount());
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.setDisplayed(true);
+        menu.display();
         return menu;
     }
 
@@ -129,7 +114,7 @@ public class MenuService {
     public Menu hide(final UUID menuId) {
         final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.setDisplayed(false);
+        menu.hide();
         return menu;
     }
 

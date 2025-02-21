@@ -16,13 +16,24 @@ public class MenuPrice {
             final BigDecimal price,
             final BigDecimal menuProductTotalPrice
     ) {
+        validatePrice(price, menuProductTotalPrice);
+        return new MenuPrice(price);
+    }
+
+    public static void validatePrice(
+            final BigDecimal price,
+            final BigDecimal menuProductTotalPrice
+    ) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new MenuPriceValidationException("메뉴 가격은 0보다 큰 금액이어야 합니다.");
         }
         if (price.compareTo(menuProductTotalPrice) > 0) {
             throw new MenuPriceValidationException("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
-        return new MenuPrice(price);
+    }
+
+    public void validatePrice(BigDecimal menuProductTotalPrice) {
+        validatePrice(this.price, menuProductTotalPrice);
     }
 
     public BigDecimal value() {

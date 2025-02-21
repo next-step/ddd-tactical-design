@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class Menu {
-    private UUID id;
-    private MenuName name;
+    private final UUID id;
+    private final MenuName name;
     private MenuPrice price;
-    private MenuGroup menuGroup;
+    private final MenuGroup menuGroup;
     private boolean displayed;
-    private MenuProducts menuProducts;
-    private UUID menuGroupId;
+    private final MenuProducts menuProducts;
+    private final UUID menuGroupId;
 
     private Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
         this.id = id;
@@ -56,59 +56,44 @@ public class Menu {
         menuProducts.changeMenuProductPrice(productId, price);
     }
 
-    public UUID getId() {
-        return id;
+    public void hide() {
+        this.displayed = false;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
+    public void display() {
+        this.price.validatePrice(menuProducts.getTotalPrice());
+        this.displayed = true;
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = MenuPrice.of(price, menuProducts.getTotalPrice());
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name.value();
     }
 
-    public void setName(final MenuName name) {
-        this.name = name;
-    }
-
     public BigDecimal getPrice() {
         return price.value();
-    }
-
-    public void setPrice(final MenuPrice price) {
-        this.price = price;
     }
 
     public MenuGroup getMenuGroup() {
         return menuGroup;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
-    }
-
     public boolean isDisplayed() {
         return displayed;
-    }
-
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
     }
 
     public List<MenuProduct> getMenuProducts() {
         return menuProducts.value();
     }
 
-    public void setMenuProducts(final MenuProducts menuProducts) {
-        this.menuProducts = menuProducts;
-    }
-
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 }
