@@ -5,9 +5,9 @@ import kitchenpos.menus.domain.MenuGroup;
 import kitchenpos.menus.domain.MenuGroupRepository;
 import kitchenpos.menus.domain.MenuProduct;
 import kitchenpos.menus.domain.MenuRepository;
-import kitchenpos.products.domain.Product;
-import kitchenpos.products.domain.ProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.tobe.domain.model.Product;
+import kitchenpos.products.tobe.domain.repository.ProductRepository;
+import kitchenpos.products.tobe.domain.service.PurgomalumClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +67,7 @@ public class MenuService {
             final Product product = productRepository.findById(menuProductRequest.getProductId())
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
-                product.getPrice()
+                product.getPrice().getValue()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -104,7 +104,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
+                    .getPrice().getValue()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
@@ -123,7 +123,7 @@ public class MenuService {
         for (final MenuProduct menuProduct : menu.getMenuProducts()) {
             sum = sum.add(
                 menuProduct.getProduct()
-                    .getPrice()
+                    .getPrice().getValue()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
