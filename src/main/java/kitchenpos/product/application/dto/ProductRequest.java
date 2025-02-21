@@ -25,7 +25,8 @@ public record ProductRequest() {
         UUID productId,
 
         @PositiveOrZero(message = "상품가격은 0원 이상이어야 합니다.")
-        BigDecimal price) {
+        BigDecimal price)
+    {
 
         public ProductVo.Update toVo() {
             return new ProductVo.Update(productId, ProductPrice.of(price));

@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service
+@Component
 public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy {
     private final MenuRepository menuRepository;
 
@@ -20,17 +20,24 @@ public class DefaultMenuUpdatePolicy implements MenuUpdatePolicy {
     @Override
     public void hideMenu(UUID productId) {
         List<Menu> menus = menuRepository.findAllByProductId(productId);
-        for (Menu menu : menus) {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (var menuProduct : menu.getMenuProducts()) {
-                sum = sum.add(
-                    menuProduct.getProduct()
-                        .getPrice()
-                        .price()
-                        .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-                );
-            }
-            menu.setDisplayed(menu.getPrice().compareTo(sum) <= 0);
-        }
+
+        menus.forEach(this::changeMenuDisplay);
+    }
+
+    private void changeMenuDisplay(Menu menu) {
+        BigDecimal totalMenuProductPrice = calculateTotalMenuProductPrice(menu);
+
+        boolean shouldBeDisplayed = menu.getPrice().compareTo(totalMenuProductPrice) <= 0;
+        menu.setDisplayed(shouldBeDisplayed);
+    }
+
+    private BigDecimal calculateTotalMenuProductPrice(Menu menu) {
+        return menu.getMenuProducts().stream()
+            .map(menuProduct -> menuProduct.getProduct()
+                .getPrice()
+                .price()
+                .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
+            )
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

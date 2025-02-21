@@ -7,6 +7,10 @@ import kitchenpos.product.domain.service.ProductPurgomalumClient;
 @Embeddable
 public record ProductName(String name) {
 
+    public ProductName(String name) {
+        this.name = name;
+    }
+
     public static ProductName of(String name, ProductPurgomalumClient purgomalumClient) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException(ErrorCode.PRODUCT_NAME_NOT_ALLOWED.toString());
