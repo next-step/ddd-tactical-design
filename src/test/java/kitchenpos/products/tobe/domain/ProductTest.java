@@ -3,7 +3,7 @@ package kitchenpos.products.tobe.domain;
 import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
 import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
 import kitchenpos.products.tobe.domain.exception.InvalidPricePeriodException;
-import kitchenpos.products.tobe.domain.vo.ProfanityName;
+import kitchenpos.products.tobe.domain.vo.FakeProfanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -24,9 +24,9 @@ public class ProductTest {
     @ValueSource(strings = {"비속어", "욕설"})
     @ParameterizedTest(name = "{index}. 상품 이름: {0}")
     void createWithProfanityName(final String displayedName) {
-        final ProfanityName profanityName = new ProfanityName(List.of("비속어", "욕설"));
+        final FakeProfanities fakeProfanities = new FakeProfanities(List.of("비속어", "욕설"));
         assertThatThrownBy(() ->
-                new Product(null, displayedName, profanityName, PRODUCT_DEFAULT_PRICE)
+                new Product(null, displayedName, fakeProfanities, PRODUCT_DEFAULT_PRICE)
         ).isInstanceOf(DisplayedNameContainsProfanityException.class);
     }
 

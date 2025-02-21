@@ -1,8 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
-import kitchenpos.products.tobe.domain.vo.DisplayedName;
-import kitchenpos.products.tobe.domain.vo.Price;
-import kitchenpos.products.tobe.domain.vo.ProfanityName;
+import kitchenpos.products.tobe.domain.vo.*;
 
 import java.util.Objects;
 
@@ -12,11 +10,11 @@ public class Product {
     private Price price;
 
     public Product(final Long productId, final String displayedName, final long price) {
-        this(productId, displayedName, new ProfanityName(), price);
+        this(productId, displayedName, new EmptyProfanities(), price);
     }
 
-    public Product(final Long productId, final String displayedName, final ProfanityName profanityName, final long price) {
-        this(productId, new DisplayedName(displayedName, profanityName), new Price(price));
+    public Product(final Long productId, final String displayedName, final Profanities profanities, final long price) {
+        this(productId, new DisplayedName(displayedName, profanities), new Price(price));
     }
 
     public Product(final Long productId, final DisplayedName displayedName, final Price price) {

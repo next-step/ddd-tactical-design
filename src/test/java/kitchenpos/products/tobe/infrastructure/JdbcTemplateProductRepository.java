@@ -2,7 +2,7 @@ package kitchenpos.products.tobe.infrastructure;
 
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductRepository;
-import kitchenpos.products.tobe.domain.vo.ProfanityName;
+import kitchenpos.products.tobe.domain.vo.FakeProfanities;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -77,7 +77,7 @@ public class JdbcTemplateProductRepository implements ProductRepository {
         return new Product(
                 resultSet.getLong(KEY_COLUMN),
                 resultSet.getString(NAME_COLUMN),
-                new ProfanityName(),
+                new FakeProfanities(),
                 resultSet.getLong(PRICE_COLUMN)
         );
     }

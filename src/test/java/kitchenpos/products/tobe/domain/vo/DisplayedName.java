@@ -15,9 +15,9 @@ public class DisplayedName {
         this.productName = productName;
     }
 
-    public DisplayedName(final String displayedName, final ProfanityName profanityName) {
+    public DisplayedName(final String displayedName, final Profanities profanities) {
         this(displayedName);
-        if (profanityName.contains(productName)) {
+        if (profanities.contains(productName)) {
             throw new DisplayedNameContainsProfanityException();
         }
     }
