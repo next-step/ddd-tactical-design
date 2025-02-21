@@ -1,19 +1,20 @@
 package kitchenpos.products.tobe.domain.vo;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Price {
-    private final BigDecimal price;
+    private static final int MINIMUM_PRICE = 0;
 
-    public Price(final BigDecimal price) {
-        if (Objects.isNull(price)|| price.compareTo(BigDecimal.ZERO) < 0) {
+    private final long price;
+
+    public Price(final long price) {
+        if (price < MINIMUM_PRICE) {
             throw new IllegalArgumentException("상품의 가격은 0 이상이어야 한다.");
         }
         this.price = price;
     }
 
-    public BigDecimal getPrice() {
+    public long getPrice() {
         return price;
     }
 

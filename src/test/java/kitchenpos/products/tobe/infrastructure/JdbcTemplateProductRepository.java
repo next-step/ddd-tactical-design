@@ -78,7 +78,7 @@ public class JdbcTemplateProductRepository implements ProductRepository {
                 resultSet.getLong(KEY_COLUMN),
                 resultSet.getString(NAME_COLUMN),
                 new ProfanityName(),
-                resultSet.getBigDecimal(PRICE_COLUMN)
+                resultSet.getLong(PRICE_COLUMN)
         );
     }
 }

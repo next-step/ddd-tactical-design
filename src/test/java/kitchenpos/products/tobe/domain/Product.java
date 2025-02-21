@@ -13,14 +13,10 @@ public class Product {
     private Price price;
 
     public Product(final Long productId, final String displayedName, final Long price) {
-        this(productId, displayedName, BigDecimal.valueOf(price));
+        this(productId, displayedName, new ProfanityName(), price);
     }
 
-    public Product(final Long productId, final String displayedName, final BigDecimal price) {
-        this(productId, new DisplayedName(displayedName, new ProfanityName()), new Price(price));
-    }
-
-    public Product(final Long productId, final String displayedName, final ProfanityName profanityName, final BigDecimal price) {
+    public Product(final Long productId, final String displayedName, final ProfanityName profanityName, final long price) {
         this(productId, new DisplayedName(displayedName, profanityName), new Price(price));
     }
 
@@ -38,11 +34,11 @@ public class Product {
         return displayedName.getDisplayedName();
     }
 
-    public BigDecimal getPrice() {
+    public long getPrice() {
         return price.getPrice();
     }
 
-    public Product changePrice(final BigDecimal price) {
+    public Product changePrice(final long price) {
         return new Product(productId, displayedName, new Price(price));
     }
 
