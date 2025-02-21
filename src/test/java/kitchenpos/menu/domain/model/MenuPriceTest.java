@@ -17,7 +17,7 @@ class MenuPriceTest {
         final BigDecimal price = BigDecimal.valueOf(10000);
 
         // when
-        final MenuPrice menuPrice = MenuPrice.of(price, p -> {});
+        final MenuPrice menuPrice = MenuPrice.of(price, price);
 
         // then
         assertThat(menuPrice.value()).isEqualTo(price);
@@ -27,7 +27,7 @@ class MenuPriceTest {
     @Test
     void createMenuPriceWithEmptyOrNull() {
         // when
-        final Throwable thrown = catchThrowable(() -> MenuPrice.of(null, p -> {}));
+        final Throwable thrown = catchThrowable(() -> MenuPrice.of(null, BigDecimal.ZERO));
 
         // then
         assertThat(thrown).isInstanceOf(MenuPriceValidationException.class)
@@ -38,23 +38,25 @@ class MenuPriceTest {
     @Test
     void createMenuPriceWithNegative() {
         // when
-        final Throwable thrown = catchThrowable(() -> MenuPrice.of(BigDecimal.valueOf(-1), p -> {}));
+        final Throwable thrown = catchThrowable(() -> MenuPrice.of(BigDecimal.valueOf(-1), BigDecimal.ZERO));
 
         // then
         assertThat(thrown).isInstanceOf(MenuPriceValidationException.class)
                 .hasMessage("메뉴 가격은 0보다 큰 금액이어야 합니다.");
     }
 
-    @DisplayName("MenuPrice의 검증이 실패하면 예외가 발생한다")
+    @DisplayName("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 한다")
     @Test
     void createMenuPriceWithInvalidValidator() {
+        // given
+        final BigDecimal menuPrice = BigDecimal.valueOf(10_000);
+        final BigDecimal menuProductTotalPrice = BigDecimal.valueOf(5_000);
+
         // when
-        final Throwable thrown = catchThrowable(() -> MenuPrice.of(BigDecimal.valueOf(10000), p -> {
-            throw new MenuPriceValidationException("검증 실패");
-        }));
+        final Throwable thrown = catchThrowable(() -> MenuPrice.of(menuPrice, menuProductTotalPrice));
 
         // then
         assertThat(thrown).isInstanceOf(MenuPriceValidationException.class)
-                .hasMessage("검증 실패");
+                .hasMessage("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
     }
 }

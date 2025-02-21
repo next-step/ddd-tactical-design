@@ -106,7 +106,7 @@ public class MenuService {
         if (price.compareTo(sum) > 0) {
             throw new IllegalArgumentException();
         }
-        menu.setPrice(MenuPrice.of(price, p -> {}));
+        menu.setPrice(MenuPrice.of(price, price /* todo menuProductTotalPrice */));
         return menu;
     }
 

@@ -1,6 +1,5 @@
 package kitchenpos.menu.domain.model;
 
-import kitchenpos.menu.domain.exception.MenuPriceValidationException;
 import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
@@ -16,7 +15,14 @@ public class Menu {
     private MenuProducts menuProducts;
     private UUID menuGroupId;
 
-    public Menu() {
+    private Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.menuGroup = menuGroup;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
     }
 
     public static Menu create(
@@ -40,22 +46,10 @@ public class Menu {
             final Profanities profanities
     ) {
 
+        MenuName menuName = MenuName.of(name, profanities);
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
-
-        MenuPrice menuPrice = MenuPrice.of(price, p -> {
-            if (price.compareTo(menuProducts.getTotalPrice()) > 0) {
-                throw new MenuPriceValidationException("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
-            }
-        });
-
-        Menu menu = new Menu();
-        menu.setId(id);
-        menu.setName(MenuName.of(name, profanities));
-        menu.setPrice(menuPrice);
-        menu.setMenuGroup(menuGroup);
-        menu.setDisplayed(isDisplayed);
-        menu.setMenuProducts(menuProducts);
-        return menu;
+        MenuPrice menuPrice = MenuPrice.of(price, menuProducts.getTotalPrice());
+        return new Menu(id, menuName, menuPrice, menuGroup, isDisplayed, menuProducts, menuGroup.getId());
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {

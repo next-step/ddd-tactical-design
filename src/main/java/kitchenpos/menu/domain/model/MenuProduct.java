@@ -1,6 +1,7 @@
 package kitchenpos.menu.domain.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MenuProduct {
@@ -38,5 +39,17 @@ public class MenuProduct {
 
     public void changeMenuProductPrice(BigDecimal price) {
         this.productPrice = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProduct that = (MenuProduct) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(seq);
     }
 }
