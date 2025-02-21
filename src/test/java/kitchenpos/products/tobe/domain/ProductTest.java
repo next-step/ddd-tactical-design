@@ -68,4 +68,15 @@ public class ProductTest {
         assertThatThrownBy(() -> product.changePrice(price))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @DisplayName("상품의 가격을 변경할 수 있다.")
+    @CsvSource(value = {"1:피자:15_000:14_000", "2:후라이드치킨:16_000:17_000", "3:양념치킨:16_000:16_000"}, delimiter = ':')
+    @ParameterizedTest
+    void changePrice(final long productId, final String displayedName, final long price, final long changedPrice) {
+        final Product product = new Product(productId, displayedName, price);
+
+        final Product actual = product.changePrice(changedPrice);
+
+        assertThat(actual.getPrice()).isEqualTo(BigDecimal.valueOf(changedPrice));
+    }
 }
