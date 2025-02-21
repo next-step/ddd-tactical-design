@@ -2,6 +2,7 @@ package kitchenpos.products.tobe.domain;
 
 import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
 import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
+import kitchenpos.products.tobe.domain.exception.InvalidPricePeriodException;
 import kitchenpos.products.tobe.domain.vo.ProfanityName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,7 +43,7 @@ public class ProductTest {
     @ParameterizedTest(name = "{index}. 상품 가격: {0}")
     void createWithInvalidPrice(final Long price) {
         assertThatThrownBy(() -> new Product(null, PRODUCT_DEFAULT_NAME, price))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidPricePeriodException.class);
     }
 
     @DisplayName("상품을 생성할 수 있다.")
@@ -65,7 +66,7 @@ public class ProductTest {
     void changePriceWithInvalidPrice(final Long price) {
         final Product product = new Product(null, PRODUCT_DEFAULT_NAME, PRODUCT_DEFAULT_PRICE);
         assertThatThrownBy(() -> product.changePrice(price))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidPricePeriodException.class);
     }
 
     @DisplayName("상품의 가격을 변경할 수 있다.")

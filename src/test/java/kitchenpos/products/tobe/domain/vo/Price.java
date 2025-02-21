@@ -1,5 +1,7 @@
 package kitchenpos.products.tobe.domain.vo;
 
+import kitchenpos.products.tobe.domain.exception.InvalidPricePeriodException;
+
 import java.util.Objects;
 
 public class Price {
@@ -9,7 +11,7 @@ public class Price {
 
     public Price(final long price) {
         if (price < MINIMUM_PRICE) {
-            throw new IllegalArgumentException("상품의 가격은 0 이상이어야 한다.");
+            throw new InvalidPricePeriodException();
         }
         this.price = price;
     }
