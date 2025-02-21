@@ -1,5 +1,8 @@
 package kitchenpos.products.tobe.domain.vo;
 
+import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
+import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
+
 import java.util.Objects;
 
 public class DisplayedName {
@@ -7,7 +10,7 @@ public class DisplayedName {
 
     public DisplayedName(final String productName) {
         if (Objects.isNull(productName) || productName.isBlank()) {
-            throw new IllegalArgumentException("상품명은 필수로 입력해야 합니다.");
+            throw new InvalidDisplayedNameException();
         }
         this.productName = productName;
     }
@@ -15,7 +18,7 @@ public class DisplayedName {
     public DisplayedName(final String displayedName, final ProfanityName profanityName) {
         this(displayedName);
         if (profanityName.contains(productName)) {
-            throw new IllegalArgumentException("상품명에 비속어가 포함되어 있습니다.");
+            throw new DisplayedNameContainsProfanityException();
         }
     }
 
@@ -36,3 +39,5 @@ public class DisplayedName {
         return Objects.hashCode(productName);
     }
 }
+
+

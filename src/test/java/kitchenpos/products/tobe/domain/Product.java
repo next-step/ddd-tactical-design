@@ -4,7 +4,6 @@ import kitchenpos.products.tobe.domain.vo.DisplayedName;
 import kitchenpos.products.tobe.domain.vo.Price;
 import kitchenpos.products.tobe.domain.vo.ProfanityName;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product {
@@ -12,7 +11,7 @@ public class Product {
     private DisplayedName displayedName;
     private Price price;
 
-    public Product(final Long productId, final String displayedName, final Long price) {
+    public Product(final Long productId, final String displayedName, final long price) {
         this(productId, displayedName, new ProfanityName(), price);
     }
 
