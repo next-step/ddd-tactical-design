@@ -1,5 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.vo.DisplayedName;
+import kitchenpos.products.tobe.domain.vo.Price;
+import kitchenpos.products.tobe.domain.vo.ProfanityName;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 

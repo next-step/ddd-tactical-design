@@ -1,5 +1,6 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.products.tobe.domain.vo.ProfanityName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
@@ -23,7 +24,6 @@ public class ProductTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-
     @DisplayName("상품의 이름에는 비속어가 포함될 수 없다.")
     @ValueSource(strings = {"비속어", "욕설"})
     @ParameterizedTest
@@ -41,6 +41,8 @@ public class ProductTest {
         assertThatThrownBy(() -> new Product(null, name, FRIED_CHICKEN_PRICE))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+
 
 
     @DisplayName("상품의 가격이 올바르지 않으면 변경할 수 없다.")
