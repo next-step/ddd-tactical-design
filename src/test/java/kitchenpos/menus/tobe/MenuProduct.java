@@ -19,4 +19,8 @@ public class MenuProduct {
         this.quantity = quantity;
         this.productId = productId;
     }
+
+    public long amount() {
+        return Math.multiplyExact(price.getValue(), quantity.getValue());
+    }
 }
