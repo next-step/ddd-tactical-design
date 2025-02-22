@@ -41,4 +41,13 @@ public class Menu {
             throw new InvalidMenuPriceException();
         }
     }
+
+    public Menu changePrice(final long changedPrice) {
+        final MenuPrice changedMenuPrice = new MenuPrice(changedPrice);
+        long totalAmount = menuProducts.totalAmount();
+        if (changedMenuPrice.isGreaterThan(totalAmount)) {
+            throw new InvalidMenuPriceException();
+        }
+        return new Menu(id, name, changedMenuPrice, menuGroup, menuProducts, displayed);
+    }
 }
