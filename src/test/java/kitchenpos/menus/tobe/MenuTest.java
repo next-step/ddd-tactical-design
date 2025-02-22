@@ -1,9 +1,11 @@
 package kitchenpos.menus.tobe;
 
+import kitchenpos.menus.tobe.exception.InvalidMenuNameException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPricePeriodException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
@@ -37,8 +39,8 @@ public class MenuTest {
         ).isExactlyInstanceOf(InvalidMenuPricePeriodException.class);
     }
 
-    @DisplayName("메뉴의 이름은 1글자 이상이어야 한다.")
-    @ValueSource(strings = {"", " ", "  "})
+    @DisplayName("메뉴의 이름이 없거나 비어있으면 생성할 수 없다.")
+    @NullAndEmptySource
     @ParameterizedTest(name = "{index}. 메뉴 이름 : `{0}`")
     void createWithInvalidName(final String name) {
         assertThatThrownBy(
