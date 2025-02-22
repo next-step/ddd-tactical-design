@@ -4,8 +4,10 @@ import kitchenpos.menus.tobe.exception.InvalidMenuProductPricePeriodException;
 import kitchenpos.menus.tobe.exception.InvalidMenuProductQuantityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MenuProductTest {
@@ -26,5 +28,14 @@ public class MenuProductTest {
         assertThatThrownBy(
                 () -> new MenuProduct(null, 1_000L, quantity, 1L)
         ).isInstanceOf(InvalidMenuProductQuantityException.class);
+    }
+
+    @DisplayName("메뉴 상품은 가격과 수량을 곱한 금액을 반환한다.")
+    @CsvSource(value = {"1_000:1:1_000", "1_000:2:2_000", "2000:2:4000"}, delimiter = ':')
+    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`")
+    void amount(final long price, final long quantity, final long expected) {
+        final MenuProduct menuProduct = new MenuProduct(null, price, quantity, 1L);
+
+        assertThat(menuProduct.amount()).isEqualTo(expected);
     }
 }
