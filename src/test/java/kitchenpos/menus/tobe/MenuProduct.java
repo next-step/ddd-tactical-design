@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class MenuProduct {
     private final Long seq;
-    private final MenuProductPrice price;
+    private MenuProductPrice price;
     private final MenuProductQuantity quantity;
     private final long productId;
 
@@ -30,8 +30,8 @@ public class MenuProduct {
         return Math.multiplyExact(price.getValue(), quantity.getValue());
     }
 
-    public MenuProduct changePrice(final long changedPrice) {
-        return new MenuProduct(seq, new MenuProductPrice(changedPrice), quantity, productId);
+    public void changePrice(final long changedPrice) {
+        this.price = new MenuProductPrice(changedPrice);
     }
     
     @Override

@@ -21,15 +21,15 @@ public class MenuProducts {
                 .sum();
     }
 
-    public MenuProducts changedProductPrice(final long productId, final long changedFirstPrice) {
-        final MenuProduct menuProduct = menuProducts.stream()
+    public void changedProductPrice(final long productId, final long changedFirstPrice) {
+        menuProducts.stream()
                 .filter(it -> it.isSame(productId))
                 .findFirst()
-                .map(it -> it.changePrice(changedFirstPrice))
-                .orElseThrow(InvalidMenuArgumentException::new);
-        return new MenuProducts(menuProducts.stream()
-                .map(it -> it.isSame(productId) ? menuProduct : it)
-                .toList());
+                .ifPresentOrElse(it -> it.changePrice(changedFirstPrice),
+                        () -> {
+                            throw new InvalidMenuArgumentException();
+                        }
+                );
     }
 
     @Override
