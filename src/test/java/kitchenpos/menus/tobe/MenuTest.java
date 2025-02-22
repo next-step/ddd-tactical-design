@@ -2,8 +2,8 @@ package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.*;
 import kitchenpos.products.tobe.domain.FakeProfanities;
-import kitchenpos.products.tobe.domain.Product;
-import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
+import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
+import kitchenpos.products.tobe.domain.vo.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,11 +20,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MenuTest {
 
+    private Profanities profanities;
     private MenuGroup menuGroup;
     private List<MenuProduct> menuProducts;
 
     @BeforeEach
     void setUp() {
+        profanities = new EmptyProfanities();
         menuGroup = new MenuGroup(UUID.randomUUID(), "메뉴 그룹");
         menuProducts = new ArrayList<>(
                 List.of(
@@ -39,7 +41,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 가격 : `{0}`")
     void createWithNegativePrice(final long price) {
         assertThatThrownBy(
-                () -> new Menu(null, "메뉴", price, menuGroup, menuProducts, true)
+                () -> new Menu(null, "메뉴", profanities, price, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuPricePeriodException.class);
     }
 
@@ -48,7 +50,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 이름 : `{0}`")
     void createWithInvalidName(final String name) {
         assertThatThrownBy(
-                () -> new Menu(null, name, 1000L, menuGroup, menuProducts, true)
+                () -> new Menu(null, name, profanities, 1000L, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuNameException.class);
     }
 
@@ -67,7 +69,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 그룹 : `{0}`")
     void createWithNullMenuGroup(final MenuGroup menuGroup) {
         assertThatThrownBy(
-                () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
+                () -> new Menu(null, "메뉴", profanities, 1000L, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 
@@ -76,15 +78,15 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 상품 : `{0}`")
     void createWithInvalidMenuProducts(final List<MenuProduct> menuProducts) {
         assertThatThrownBy(
-                () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
+                () -> new Menu(null, "메뉴", profanities, 1000L, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 
     @DisplayName("메뉴의 가격은 모든 메뉴 상품 금액의 총합보다 작아야 한다.")
     @CsvSource(value = {"1_000:1:1_000:1:2_001", "2_000:1:2_000:2:6_001", "1_000:3:3_000:2:9_001"}, delimiter = ':')
     @ParameterizedTest(name = """
-        {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`
-    """)
+                {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`
+            """)
     void createWithInvalidPrice(final long firstPrice, final long firstQuantity,
                                 final long secondPrice, final long secondQuantity,
                                 final long menuPrice) {
@@ -93,7 +95,7 @@ public class MenuTest {
                 new MenuProduct(2L, secondPrice, secondQuantity, 2L)
         );
         assertThatThrownBy(
-                () -> new Menu(null, "메뉴", menuPrice, menuGroup, menuProducts, true)
+                () -> new Menu(null, "메뉴", profanities, menuPrice, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuPriceException.class);
     }
 }

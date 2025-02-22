@@ -19,10 +19,6 @@ public class Menu {
     private final MenuProducts menuProducts;
     private final boolean displayed;
 
-    public Menu(final UUID id, final String name, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(id, new MenuName(name, new EmptyProfanities()), new MenuPrice(price), menuGroup, new MenuProducts(menuProducts), displayed);
-    }
-
     public Menu(final UUID id, final String name, final Profanities profanities, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
         this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroup, new MenuProducts(menuProducts), displayed);
     }
