@@ -21,7 +21,7 @@ public class Menu {
     }
 
     public Menu(final UUID id, final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this.verify(name, price, menuGroup);
+        this.verify(name, price, menuGroup, menuProducts);
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,8 +30,11 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup) {
+    private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
         if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroup)) {
+            throw new InvalidMenuArgumentException();
+        }
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new InvalidMenuArgumentException();
         }
     }
