@@ -82,7 +82,7 @@ public class MenuTest {
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격은 모든 메뉴 상품 금액의 총합보다 작아야 한다.")
+    @DisplayName("메뉴의 가격은 모든 메뉴 상품 금액의 총합보다 같거나 작아야 한다.")
     @CsvSource(value = {"1_000:1:1_000:1:2_001", "2_000:1:2_000:2:6_001", "1_000:3:3_000:2:9_001"}, delimiter = ':')
     @ParameterizedTest(name = """
                 {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`
@@ -96,6 +96,25 @@ public class MenuTest {
         );
         assertThatThrownBy(
                 () -> new Menu(null, "메뉴", profanities, menuPrice, menuGroup, menuProducts, true)
+        ).isExactlyInstanceOf(InvalidMenuPriceException.class);
+    }
+
+    @DisplayName("메뉴는 모든 메뉴 상품 금액의 총합보다 높은 가격으로 변경할 수 없다.")
+    @CsvSource(value = {"1_000:1:1_000:1:2_000:2_001", "2_000:1:2_000:2:6_000:6_001", "1_000:3:3_000:2:9_000:9_001"}, delimiter = ':')
+    @ParameterizedTest(name = """
+                {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`, 변경할 메뉴 가격 : `{5}`
+            """)
+    void changePriceWithInvalidPrice(final long firstPrice, final long firstQuantity,
+                                     final long secondPrice, final long secondQuantity,
+                                     final long menuPrice, final long changedMenuPrice) {
+        final List<MenuProduct> menuProducts = List.of(
+                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+        );
+        final Menu menu = new Menu(null, "메뉴", profanities, menuPrice, menuGroup, menuProducts, true);
+
+        assertThatThrownBy(
+                () -> menu.changePrice(changedMenuPrice)
         ).isExactlyInstanceOf(InvalidMenuPriceException.class);
     }
 }
