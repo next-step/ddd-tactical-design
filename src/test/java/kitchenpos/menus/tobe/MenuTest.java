@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MenuTest {
@@ -136,5 +137,23 @@ public class MenuTest {
 
         assertThatThrownBy(menu::display)
                 .isExactlyInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("메뉴의 가격이 모든 메뉴 상품 금액의 총합보다 같거나 작은 경우 메뉴를 노출할 수 있다.")
+    @CsvSource(value = {"1_000:1:1_000:1:2_000", "2_000:1:2_000:2:6_000", "1_000:3:3_000:2:9_000"}, delimiter = ':')
+    @ParameterizedTest(name = """
+                {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`
+            """)
+    void display(final long firstPrice, final long firstQuantity,
+                 final long secondPrice, final long secondQuantity,
+                 final long menuPrice) {
+        final List<MenuProduct> menuProducts = List.of(
+                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+        );
+        final Menu menu = new Menu(UUID.randomUUID(), "메뉴", profanities, menuPrice, menuGroup, menuProducts, false);
+        menu.display();
+
+        assertThat(menu.isDisplayed()).isTrue();
     }
 }
