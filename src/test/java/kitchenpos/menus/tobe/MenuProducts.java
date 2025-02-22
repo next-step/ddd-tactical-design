@@ -23,7 +23,7 @@ public class MenuProducts {
 
     public void changedProductPrice(final long productId, final long changedFirstPrice) {
         menuProducts.stream()
-                .filter(it -> it.isSame(productId))
+                .filter(it -> it.isSameProduct(productId))
                 .findFirst()
                 .ifPresentOrElse(it -> it.changePrice(changedFirstPrice),
                         () -> {

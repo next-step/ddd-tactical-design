@@ -22,8 +22,8 @@ public class MenuProduct {
         this.productId = productId;
     }
 
-    public boolean isSame(final long productId) {
-        return this.seq == productId;
+    public boolean isSameProduct(final long productId) {
+        return this.productId == productId;
     }
     
     public long amount() {
