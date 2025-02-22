@@ -1,5 +1,5 @@
 package kitchenpos.deliveryorder.domain;
 
-public enum OrderType {
+public enum DeliveryOrderType {
     DELIVERY
 }
