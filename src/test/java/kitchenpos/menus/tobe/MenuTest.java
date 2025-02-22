@@ -4,6 +4,9 @@ import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 import kitchenpos.menus.tobe.exception.InvalidMenuNameException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPricePeriodException;
+import kitchenpos.products.tobe.domain.FakeProfanities;
+import kitchenpos.products.tobe.domain.Product;
+import kitchenpos.products.tobe.domain.exception.DisplayedNameContainsProfanityException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -50,6 +53,16 @@ public class MenuTest {
         assertThatThrownBy(
                 () -> new Menu(null, name, 1000L, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuNameException.class);
+    }
+
+    @DisplayName("메뉴의 이름에는 비속어가 포함될 수 없다.")
+    @ValueSource(strings = {"비속어", "욕설"})
+    @ParameterizedTest(name = "{index}. 상품 이름: {0}")
+    void createWithProfanityName(final String name) {
+        final FakeProfanities fakeProfanities = new FakeProfanities(List.of("비속어", "욕설"));
+        assertThatThrownBy(() ->
+                new Menu(null, name, fakeProfanities, 1000L, menuGroup, menuProducts, true)
+        ).isInstanceOf(MenuNameContainsProfanityException.class);
     }
 
     @DisplayName("메뉴는 메뉴 그룹이 있어야 한다.")
