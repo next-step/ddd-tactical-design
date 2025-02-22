@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
+import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.vo.MenuName;
 import kitchenpos.menus.tobe.vo.MenuPrice;
 
@@ -13,14 +14,14 @@ public class Menu {
     private final MenuName name;
     private final MenuPrice price;
     private final MenuGroup menuGroup;
-    private final List<MenuProduct> menuProducts;
+    private final MenuProducts menuProducts;
     private final boolean displayed;
 
     public Menu(final UUID id, final String name, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(id, new MenuName(name), new MenuPrice(price), menuGroup, menuProducts, displayed);
+        this(id, new MenuName(name), new MenuPrice(price), menuGroup, new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final UUID id, final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
+    public Menu(final UUID id, final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuProducts menuProducts, final boolean displayed) {
         this.verify(name, price, menuGroup, menuProducts);
         this.id = id;
         this.name = name;
@@ -30,18 +31,13 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts) {
+    private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuProducts menuProducts) {
         if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroup)) {
             throw new InvalidMenuArgumentException();
         }
-        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
-            throw new InvalidMenuArgumentException();
-        }
-        long sum = menuProducts.stream()
-                .mapToLong(MenuProduct::amount)
-                .sum();
-        if (price.getValue() > sum) {
-            throw new InvalidMenuArgumentException();
+        long totalAmount = menuProducts.totalAmount();
+        if(price.isGreaterThan(totalAmount)) {
+            throw new InvalidMenuPriceException();
         }
     }
 }

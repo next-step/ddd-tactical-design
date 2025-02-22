@@ -2,10 +2,10 @@ package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 import kitchenpos.menus.tobe.exception.InvalidMenuNameException;
+import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPricePeriodException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -70,20 +70,20 @@ public class MenuTest {
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 
-    @DisplayName("메뉴의 가격은 메뉴 상품의 가격과 수량을 곱한 금액의 합보다 작아야 한다.")
+    @DisplayName("메뉴의 가격은 모든 메뉴 상품 금액의 총합보다 작아야 한다.")
     @CsvSource(value = {"1_000:1:1_000:1:2_001", "2_000:1:2_000:2:6_001", "1_000:3:3_000:2:9_001"}, delimiter = ':')
-    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`, 메뉴 가격 : `{2}`")
+    @ParameterizedTest(name = """
+        {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 두 번째 메뉴 상품 가격 : `{2}`, 두 번째 메뉴 상품 수량 : `{3}`, 메뉴 가격 : `{4}`
+    """)
     void createWithInvalidPrice(final long firstPrice, final long firstQuantity,
                                 final long secondPrice, final long secondQuantity,
                                 final long menuPrice) {
-        final List<MenuProduct> menuProducts = new ArrayList<>(
-                List.of(
-                        new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                        new MenuProduct(2L, secondPrice, secondQuantity, 2L)
-                )
+        final List<MenuProduct> menuProducts = List.of(
+                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
         );
         assertThatThrownBy(
                 () -> new Menu(null, "메뉴", menuPrice, menuGroup, menuProducts, true)
-        ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
+        ).isExactlyInstanceOf(InvalidMenuPriceException.class);
     }
 }

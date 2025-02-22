@@ -14,7 +14,7 @@ public class MenuPrice {
         this.value = value;
     }
 
-    public long getValue() {
-        return value;
+    public boolean isGreaterThan(final long price) {
+        return this.value > price;
     }
 }
