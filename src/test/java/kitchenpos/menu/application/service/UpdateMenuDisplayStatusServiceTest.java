@@ -1,13 +1,11 @@
 package kitchenpos.menu.application.service;
 
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -31,20 +29,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UpdateMenuDisplayStatusServiceTest {
     private final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase;
     private final SaveProductPort saveProductPort;
-    private final ProductEntityRepository productEntityRepository;
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
 
     public UpdateMenuDisplayStatusServiceTest(
             final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase,
             final SaveProductPort saveProductPort,
-            final ProductEntityRepository productEntityRepository,
-            final MenuGroupEntityRepository menuGroupEntityRepository,
+            final JpaMenuGroupEntityRepository menuGroupEntityRepository,
             final JpaMenuEntityEntityRepository menuEntityRepository
     ) {
         this.updateMenuDisplayStatusUseCase = updateMenuDisplayStatusUseCase;
         this.saveProductPort = saveProductPort;
-        this.productEntityRepository = productEntityRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuEntityRepository = menuEntityRepository;
     }

@@ -13,11 +13,11 @@ import java.util.UUID;
 
 @Component
 public class ManageMenuGroupAdapter implements LoadMenuGroupPort, SaveMenuGroupPort {
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final Profanities profanities;
 
     public ManageMenuGroupAdapter(
-            final MenuGroupEntityRepository menuGroupEntityRepository,
+            final JpaMenuGroupEntityRepository menuGroupEntityRepository,
             final Profanities profanities
     ) {
         this.menuGroupEntityRepository = menuGroupEntityRepository;

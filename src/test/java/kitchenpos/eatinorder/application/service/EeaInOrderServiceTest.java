@@ -3,7 +3,7 @@ package kitchenpos.eatinorder.application.service;
 import kitchenpos.eatinorder.application.port.out.OrderTableRepository;
 import kitchenpos.eatinorder.domain.model.*;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
@@ -37,9 +37,9 @@ public class EeaInOrderServiceTest {
     private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final OrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
 
-    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
+    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuEntityRepository = menuEntityRepository;

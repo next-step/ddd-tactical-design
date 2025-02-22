@@ -2,7 +2,7 @@ package kitchenpos.menu.application.service;
 
 import kitchenpos.MockBeanConfiguration;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
@@ -11,6 +11,7 @@ import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuProductRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.exception.MenuPriceValidationException;
+import kitchenpos.menu.domain.exception.MenuValidationException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 public class MenuServiceTest {
     private final MenuService menuService;
     private final ProductEntityRepository productEntityRepository;
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final Profanities profanities;
     private final MenuProductMapper menuProductMapper;
@@ -56,7 +56,7 @@ public class MenuServiceTest {
     public MenuServiceTest(
             MenuService menuService,
             ProductEntityRepository productEntityRepository,
-            MenuGroupEntityRepository menuGroupEntityRepository,
+            JpaMenuGroupEntityRepository menuGroupEntityRepository,
             JpaMenuEntityEntityRepository menuEntityRepository,
             Profanities profanities,
             MenuProductMapper menuProductMapper
@@ -108,7 +108,7 @@ public class MenuServiceTest {
                     () -> assertThat(menu.getName()).isEqualTo(request.getName()),
                     () -> assertThat(menu.getPrice()).isEqualTo(request.getPrice()),
                     () -> assertThat(menu.isDisplayed()).isEqualTo(request.isDisplayed()),
-                    () -> assertThat(menu.getMenuGroup().getId()).isEqualTo(request.getMenuGroupId()),
+                    () -> assertThat(menu.getMenuGroupId()).isEqualTo(request.getMenuGroupId()),
                     () -> assertThat(menu.getMenuProducts()).hasSize(menuProducts.size())
             );
         }
@@ -216,13 +216,15 @@ public class MenuServiceTest {
         void create_menu_without_menu_group() {
             // given
             CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 1);
-            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, UUID.randomUUID(), List.of(menuProduct));
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, null, List.of(menuProduct));
 
             // when
-            Executable executable = () -> menuService.create(request);
+            ThrowableAssert.ThrowingCallable throwable = () -> menuService.create(request);
 
             // then
-            assertThrows(NoSuchElementException.class, executable);
+            assertThatThrownBy(throwable)
+                    .isInstanceOf(MenuValidationException.class)
+                    .hasMessage("메뉴 그룹을 반드시 선택해야 합니다.");
         }
     }
 

@@ -25,17 +25,17 @@ public class MenuTest {
         @Test
         void createMenuTest() {
             // given
-            final MenuGroup menuGroup = createMenuGroup();
+            final UUID menuGroupId = UUID.randomUUID();
             final List<MenuProduct> menuProductList = createMenuProducts();
 
             // when
-            final Menu menu = createMenu(BigDecimal.valueOf(16_000), menuGroup, menuProductList);
+            final Menu menu = createMenu(BigDecimal.valueOf(16_000), menuGroupId, menuProductList);
 
             // then
             assertThat(menu.getName()).isEqualTo("후라이드 치킨");
             assertThat(menu.getPrice()).isEqualTo(BigDecimal.valueOf(16_000));
             assertThat(menu.isDisplayed()).isFalse();
-            assertThat(menu.getMenuGroup()).isEqualTo(menuGroup);
+            assertThat(menu.getMenuGroupId()).isEqualTo(menuGroupId);
             assertThat(menu.getMenuProducts()).isEqualTo(menuProductList);
         }
 
@@ -43,11 +43,11 @@ public class MenuTest {
         @Test
         void hideMenuIfMenuPriceIsGreaterThanTotalProductPrice() {
             // given
-            final MenuGroup menuGroup = createMenuGroup();
+            final UUID menuGroupId = UUID.randomUUID();
             final List<MenuProduct> menuProductList = createMenuProducts();
 
             // when
-            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroup, menuProductList);
+            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroupId, menuProductList);
 
             // then
             assertThatThrownBy(throwable)
@@ -59,10 +59,10 @@ public class MenuTest {
         @Test
         void menuShouldContainMenuProducts() {
             // given
-            final MenuGroup menuGroup = createMenuGroup();
+            final UUID menuGroupId = UUID.randomUUID();
 
             // when
-            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroup, List.of());
+            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroupId, List.of());
 
             // then
             assertThatThrownBy(throwable)
@@ -74,11 +74,11 @@ public class MenuTest {
         @Test
         void menuShouldBelongToOneOrMoreMenuGroups() {
             // given
+            final UUID menuGroupId = null;
             final List<MenuProduct> menuProductList = createMenuProducts();
-            final MenuGroup menuGroup = null;
 
             // when
-            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroup, menuProductList);
+            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroupId, menuProductList);
 
             // then
             assertThatThrownBy(throwable)
@@ -169,15 +169,15 @@ public class MenuTest {
 
     }
     private static Menu createMenu() {
-        return createMenu(BigDecimal.valueOf(16_000), createMenuGroup(), createMenuProducts());
+        return createMenu(BigDecimal.valueOf(16_000), UUID.randomUUID(), createMenuProducts());
     }
 
-    private static Menu createMenu(BigDecimal menuPrice, MenuGroup menuGroup, List<MenuProduct> menuProductList) {
+    private static Menu createMenu(BigDecimal menuPrice, UUID menuGroupId, List<MenuProduct> menuProductList) {
         return Menu.create(
                 "후라이드 치킨",
                 menuPrice,
                 false,
-                menuGroup,
+                menuGroupId,
                 menuProductList,
                 name -> false
         );
@@ -185,10 +185,6 @@ public class MenuTest {
 
     private static void updateFirstMenuProductPrice(Menu menu, int price) {
         menu.changeMenuProductPrice(menu.getMenuProducts().get(0).getProductId(), BigDecimal.valueOf(price));
-    }
-
-    private static MenuGroup createMenuGroup() {
-        return MenuGroup.create(UUID.randomUUID(), "치킨", name -> false);
     }
 
     private static List<MenuProduct> createMenuProducts() {

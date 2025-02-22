@@ -1,7 +1,7 @@
 package kitchenpos.product.application.serveice;
 
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
-import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
@@ -42,10 +42,10 @@ public class ProductServiceTest {
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
-    private final MenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
     private final Profanities profanities;
 
-    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, JpaMenuEntityEntityRepository menuEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository) {
+    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, JpaMenuEntityEntityRepository menuEntityRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
         this.productService = productService;
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;

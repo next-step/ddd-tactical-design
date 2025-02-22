@@ -11,16 +11,14 @@ public class Menu {
     private final UUID id;
     private final MenuName name;
     private MenuPrice price;
-    private final MenuGroup menuGroup;
     private boolean displayed;
     private final MenuProducts menuProducts;
     private final UUID menuGroupId;
 
-    private Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+    private Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
         this.menuGroupId = menuGroupId;
@@ -30,11 +28,11 @@ public class Menu {
             final String name,
             final BigDecimal price,
             final boolean isDisplayed,
-            final MenuGroup menuGroup,
+            final UUID menuGroupId,
             final List<MenuProduct> menuProductList,
             final Profanities profanities
     ) {
-        return create(UUID.randomUUID(), name, price, isDisplayed, menuGroup, menuProductList, profanities);
+        return create(UUID.randomUUID(), name, price, isDisplayed, menuGroupId, menuProductList, profanities);
     }
 
     public static Menu create(
@@ -42,17 +40,17 @@ public class Menu {
             final String name,
             final BigDecimal price,
             final boolean isDisplayed,
-            final MenuGroup menuGroup,
+            final UUID menuGroupId,
             final List<MenuProduct> menuProductList,
             final Profanities profanities
     ) {
-        if (menuGroup == null) {
+        if (menuGroupId == null) {
             throw new MenuValidationException("메뉴 그룹을 반드시 선택해야 합니다.");
         }
         MenuName menuName = MenuName.of(name, profanities);
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
         MenuPrice menuPrice = MenuPrice.of(price, menuProducts.getTotalPrice());
-        return new Menu(id, menuName, menuPrice, menuGroup, isDisplayed, menuProducts, menuGroup.getId());
+        return new Menu(id, menuName, menuPrice, isDisplayed, menuProducts, menuGroupId);
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
@@ -82,10 +80,6 @@ public class Menu {
 
     public BigDecimal getPrice() {
         return price.value();
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
     }
 
     public boolean isDisplayed() {

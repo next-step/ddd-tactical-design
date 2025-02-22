@@ -1,13 +1,11 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
 import kitchenpos.menu.application.port.out.LoadMenuPort;
 import kitchenpos.menu.application.port.out.MenuProductMapper;
 import kitchenpos.menu.application.port.out.SaveMenuPort;
 import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.shared.domain.Profanities;
 import org.springframework.stereotype.Service;
@@ -21,34 +19,29 @@ import java.util.UUID;
 public class MenuService {
     private final MenuProductMapper menuProductMapper;
     private final LoadMenuPort loadMenuPort;
-    private final LoadMenuGroupPort loadMenuGroupPort;
     private final SaveMenuPort saveMenuPort;
     private final Profanities profanities;
 
     public MenuService(
             final MenuProductMapper menuProductMapper,
             final LoadMenuPort loadMenuPort,
-            final LoadMenuGroupPort loadMenuGroupPort,
             final SaveMenuPort saveMenuPort,
             final Profanities profanities
     ) {
         this.menuProductMapper = menuProductMapper;
         this.loadMenuPort = loadMenuPort;
-        this.loadMenuGroupPort = loadMenuGroupPort;
         this.saveMenuPort = saveMenuPort;
         this.profanities = profanities;
     }
 
     @Transactional
     public Menu create(final CreateMenuRequest request) {
-        final MenuGroup menuGroup = loadMenuGroupPort.findById(request.getMenuGroupId())
-                .orElseThrow(NoSuchElementException::new);
         final List<MenuProduct> menuProducts = menuProductMapper.toMenuProducts(request.getProductQuantities());
         final Menu menu = Menu.create(
                 request.getName(),
                 request.getPrice(),
                 request.isDisplayed(),
-                menuGroup,
+                request.getMenuGroupId(),
                 menuProducts,
                 profanities);
         return saveMenuPort.save(menu);

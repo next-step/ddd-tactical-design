@@ -48,14 +48,14 @@ public class MenuEntity {
     public MenuEntity() {
     }
 
-    public static MenuEntity of(Menu menu) {
+    public static MenuEntity of(Menu menu, MenuGroupEntity menuGroupEntity) {
         MenuEntity menuEntity = new MenuEntity();
         menuEntity.setId(menu.getId());
         menuEntity.setName(menu.getName());
         menuEntity.setPrice(menu.getPrice());
         menuEntity.setMenuGroupId(menu.getMenuGroupId());
         menuEntity.setDisplayed(menu.isDisplayed());
-        menuEntity.setMenuGroup(MenuGroupEntity.of(menu.getMenuGroup()));
+        menuEntity.setMenuGroup(menuGroupEntity);
         menuEntity.setMenuProducts(menu.getMenuProducts()
                 .stream()
                 .map(MenuProductEntity::of)
@@ -69,7 +69,7 @@ public class MenuEntity {
                 this.name,
                 this.price,
                 this.displayed,
-                this.menuGroup.toDomain(profanities),
+                this.menuGroup.getId(),
                 this.menuProducts
                         .stream()
                         .map(MenuProductEntity::toDomain)
