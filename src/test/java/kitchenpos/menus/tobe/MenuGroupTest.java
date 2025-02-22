@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.products.tobe.domain.exception.InvalidMenuGroupNameException;
+import kitchenpos.menus.tobe.exception.InvalidMenuGroupNameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;

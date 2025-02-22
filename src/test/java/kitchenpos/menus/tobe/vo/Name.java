@@ -1,6 +1,6 @@
 package kitchenpos.menus.tobe.vo;
 
-import kitchenpos.products.tobe.domain.exception.InvalidMenuGroupNameException;
+import kitchenpos.menus.tobe.exception.InvalidMenuGroupNameException;
 
 import java.util.Objects;
 
