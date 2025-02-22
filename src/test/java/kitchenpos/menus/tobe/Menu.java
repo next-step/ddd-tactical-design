@@ -4,7 +4,6 @@ import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.vo.MenuName;
 import kitchenpos.menus.tobe.vo.MenuPrice;
-import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
 import kitchenpos.products.tobe.domain.vo.Profanities;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class Menu {
             throw new InvalidMenuArgumentException();
         }
         long totalAmount = menuProducts.totalAmount();
-        if(price.isGreaterThan(totalAmount)) {
+        if (price.isGreaterThan(totalAmount)) {
             throw new InvalidMenuPriceException();
         }
     }

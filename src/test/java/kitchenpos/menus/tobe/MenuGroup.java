@@ -1,19 +1,19 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.menus.tobe.vo.Name;
+import kitchenpos.menus.tobe.vo.MenuGroupName;
 
 import java.util.Objects;
 import java.util.UUID;
 
 public class MenuGroup {
     private final UUID id;
-    private final Name name;
+    private final MenuGroupName name;
 
     public MenuGroup(final UUID id, final String name) {
-        this(id, new Name(name));
+        this(id, new MenuGroupName(name));
     }
 
-    public MenuGroup(final UUID id, final Name name) {
+    public MenuGroup(final UUID id, final MenuGroupName name) {
         this.id = id;
         this.name = name;
     }
@@ -22,8 +22,8 @@ public class MenuGroup {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final MenuGroup menuGroup = (MenuGroup) o;
-        return Objects.equals(id, menuGroup.id);
+        final MenuGroup that = (MenuGroup) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
