@@ -309,37 +309,37 @@ docker compose -p kitchenpos up -d
 ### `menuGroup`의 목록을 조회할 수 있습니다.
 
 
-## 7.orderTable
-`orderTable`은 `eatInOrder`를 원하는 `customer`을 위해 설치한 테이블입니다.<br/>
-`orderTable`은 `name`, `numberOfCustomers`, `occupied`를 가지고 있습니다.<br/>
-`clearedTable`은 `customer`이 없는 `orderTable`이며, `customer`가 없는 `orderTable`은 `customer`를 `sit`하여 `order`를 받을 수 있습니다.
-`customer`의 `orderStatus`가 `completedOrder`이면 `orderTable`을 `clear`하여 `clearedTable`로 만듭니다.
+## 7.eatInOrderTable
+`eatInOrderTable`은 `eatInOrder`를 원하는 `customer`을 위해 설치한 테이블입니다.<br/>
+`eatInOrderTable`은 `name`, `numberOfCustomers`, `occupied`를 가지고 있습니다.<br/>
+`clearedTable`은 `customer`이 없는 `eatInOrderTable`이며, `customer`가 없는 `eatInOrderTable`은 `customer`를 `sit`하여 `eatInOrder`를 받을 수 있습니다.
+`customer`의 `orderStatus`가 `completedOrder`이면 `eatInOrderTable`을 `clear`하여 `clearedTable`로 만듭니다.
 
-### `orderTable`을 등록할 수 있습니다.
-- `orderTable`의 `name`, `numberOfCustomers`, `occupied`를 입력하여 등록합니다.
-- `orderTable`의 `numberOfCustomer`는 0이 됩니다.
-- `orderTable`의 `occupied`는 `false`로 설정합니다.
+### `eatInOrderTable`을 등록할 수 있습니다.
+- `eatInOrderTable`의 `name`, `numberOfCustomers`, `occupied`를 입력하여 등록합니다.
+- `eatInOrderTable`의 `numberOfCustomer`는 0이 됩니다.
+- `eatInOrderTable`의 `occupied`는 `false`로 설정합니다.
   - ### 검증
-    - `orderTable`의 `name`은 비워 둘 수 없습니다.
+    - `eatInOrderTable`의 `name`은 비워 둘 수 없습니다.
 
-### `orderTable`이 `assignedTable`가 됩니다.
-- `orderTable`의 `occupied`를 `true`로 변경합니다.
+### `eatInOrderTable`이 `assignedTable`가 됩니다.
+- `eatInOrderTable`의 `occupied`를 `true`로 변경합니다.
   - ### 검증
-    - `sit`을 하기 위한 `orderTable`은 등록되어 있어야 합니다.
+    - `sit`을 하기 위한 `eatInOrderTable`은 등록되어 있어야 합니다.
 
-### `orderTable`이 `clearedTable`이 됩니다.
-- `orderTable`의 `occupied`를 `false`로 변경합니다.
-- `orderTable`의 `numberOfCustomers`를 0으로 변경합니다.
+### `eatInOrderTable`이 `clearedTable`이 됩니다.
+- `eatInOrderTable`의 `occupied`를 `false`로 변경합니다.
+- `eatInOrderTable`의 `numberOfCustomers`를 0으로 변경합니다.
   - ### 검증
-    - `clear`를 하기 위한 `orderTable`은 등록되어 있어야 합니다.
-    - `orderTable`의 `orderStatus`가 `completeOrder`일 때만 `clear`할 수 있습니다.
+    - `clear`를 하기 위한 `eatInOrderTable`은 등록되어 있어야 합니다.
+    - `eatInOrderTable`의 `orderStatus`가 `completeOrder`일 때만 `clear`할 수 있습니다.
 
-### `orderTable`의 `numberOfCustomers`를 변경할 수 있습니다.
-- `orderTable`의 `numberOfCustomers`를 변경합니다.
+### `eatInOrderTable`의 `numberOfCustomers`를 변경할 수 있습니다.
+- `eatInOrderTable`의 `numberOfCustomers`를 변경합니다.
   - ### 검증
     - `numberOfCustomers`는 0 이상이어야 합니다.
-    - `orderTable`의 `occupied`가 `false`일 때만 변경할 수 있습니다.
-### `orderTable`의 목록을 조회할 수 있습니다.
+    - `eatInOrderTable`의 `occupied`가 `false`일 때만 변경할 수 있습니다.
+### `eatInOrderTable`의 목록을 조회할 수 있습니다.
 
 
 
@@ -389,30 +389,30 @@ stateDiagram-v2
 ### `acceptedOrder`가 됩니다
 - `deliveryAgent`를 호출하고, `orderMenu`속 `menuProduct`의 `price` 총합, `deliveryAddress`,
   `orderId`를 전달합니다.
-- `order`의 `orderStatus`를 `acceptOrder`로 변경합니다.
+- `deliveryOrder`의 `orderStatus`를 `acceptOrder`로 변경합니다.
   - ### 검증
-    - `order`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
+    - `deliveryOrder`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
 ### `servedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `servedOrder`로 변경합니다.
+- `deliveryOrder`의 `orderStatus`를 `servedOrder`로 변경합니다.
   - ### 검증
-    - 등록된 `order`만 제공할 수 있습니다.
-    - `order`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
+    - 등록된 `deliveryOrder`만 제공할 수 있습니다.
+    - `deliveryOrder`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
 ### `deliveringOrder`가 됩니다.
-- `order`의 `orderStatus`를 `deliveringOrder`로 변경합니다.
+- `deliveryOrder`의 `orderStatus`를 `deliveringOrder`로 변경합니다.
   - ### 검증
-    - 등록된 `order`만 배달할 수 있습니다.
-    - `order`의 현재 `orderType`이 `deliveryOrder`일 때만 `delivery`를 시작할 수 있습니다.
-    - `order`의 현재 `orderStatus`가 `servedOrder`일 때만 `delivery`를 시작할 수 있습니다.
+    - 등록된 `deliveryOrder`만 배달할 수 있습니다.
+    - `deliveryOrder`의 현재 `orderType`이 `deliveryOrder`일 때만 `delivery`를 시작할 수 있습니다.
+    - `deliveryOrder`의 현재 `orderStatus`가 `servedOrder`일 때만 `delivery`를 시작할 수 있습니다.
 ### `deliveredOrder`가 됩니다.
-- `order`의 `orderStatus`를 `deliveredOrder`로 변경합니다.
+- `deliveryOrder`의 `orderStatus`를 `deliveredOrder`로 변경합니다.
   - ### 검증
-    - 등록된 `order`만 배달할 수 있습니다.
-    - `order`의 현재 `orderStatus`가 `deliveringOrder`일 때만 `delivery`를 완료할 수 있습니다.
+    - 등록된 `deliveryOrder`만 배달할 수 있습니다.
+    - `deliveryOrder`의 현재 `orderStatus`가 `deliveringOrder`일 때만 `delivery`를 완료할 수 있습니다.
 ### `completedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `completeOrder`로 변경합니다.
+- `deliveryOrder`의 `orderStatus`를 `completeOrder`로 변경합니다.
 - ### 검증
-  - 등록된 `order`만 완료할 수 있습니다.
-  - `order`의 현재 `orderStatus`가 `deliveredOrder`일 때만 `order`를 완료할 수 있습니다.
+  - 등록된 `deliveryOrder`만 완료할 수 있습니다.
+  - `deliveryOrder`의 현재 `orderStatus`가 `deliveredOrder`일 때만 `deliveryOrder`를 완료할 수 있습니다.
   
 
 
@@ -430,19 +430,19 @@ stateDiagram-v2
     - 공통 주문 등록 정책을 만족해야 합니다.
     - `orderMenu`의 `quantity`가 0 미만이면 안됩니다.
 ### `acceptedOrder`가 됩니다
-- `order`의 `orderStatus`를 `acceptOrder`로 변경합니다.
+- `takeOutOrder`의 `orderStatus`를 `acceptOrder`로 변경합니다.
   - ### 검증
-    - `order`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
+    - `takeOutOrder`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
 ### `servedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `servedOrder`로 변경합니다.
+- `takeOutOrder`의 `orderStatus`를 `servedOrder`로 변경합니다.
   - ### 검증
-    - 등록된 `order`만 제공할 수 있습니다.
-    - `order`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
+    - 등록된 `takeOutOrder`만 제공할 수 있습니다.
+    - `takeOutOrder`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
 ### `completedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `completeOrder`로 변경합니다.
+- `takeOutOrder`의 `orderStatus`를 `completeOrder`로 변경합니다.
 - ### 검증
-  - 등록된 `order`만 완료할 수 있습니다.
-  - `order`의 현재 `orderStatus`가 `servedOrder`일 때만 `order`를 완료할 수 있습니다.
+  - 등록된 `takeOutOrder`만 완료할 수 있습니다.
+  - `takeOutOrder`의 현재 `orderStatus`가 `servedOrder`일 때만 `takeOutOrder`를 완료할 수 있습니다.
 
 
 ## 11. eatInOrder 주문
@@ -454,28 +454,28 @@ stateDiagram-v2
 제공된&nbsp;주문<br/>servedOrder -->  완료된&nbsp;주문<br/>completedOrder
 ```
 ### `eatInorder`를 등록합니다.
-`orderTable`을 `order`에 설정합니다.
+`eatInOrderTable`을 `eatInOrder`에 설정합니다.
 - 주문 등록 공통 기능을 진행합니다.
   - ### 검증
     - 공통 주문 등록 정책을 만족해야 합니다.
     - `clearedTable`이면 등록할 수 없습니다.
 ### `acceptedOrder`가 됩니다
-- `order`의 `orderStatus`를 `acceptOrder`로 변경합니다.
+- `eatInOrder`의 `orderStatus`를 `acceptOrder`로 변경합니다.
   - ### 검증
-    - `order`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
+    - `eatInOrder`의 현재 `orderStatus`가 `waitingOrder`일 때만 접수할 수 있습니다.
 ### `servedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `servedOrder`로 변경합니다.
+- `eatInOrder`의 `orderStatus`를 `servedOrder`로 변경합니다.
   - ### 검증
-    - 등록된 `order`만 제공할 수 있습니다.
-    - `order`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
+    - 등록된 `eatInOrder`만 제공할 수 있습니다.
+    - `eatInOrder`의 현재 `orderStatus`가 `acceptOrder`일 때만 상품제공을 할 수 있습니다.
 ### `completedOrder`가 됩니다.
-- `order`의 `orderStatus`를 `completeOrder`로 변경합니다.
+- `eatInOrder`의 `orderStatus`를 `completeOrder`로 변경합니다.
   - `pendingOrderTable`이 아닌 경우 `clearedTable`로 변경합니다.
-    - `orderTable`의 `occupied`를 `false`로 변경합니다.
-    - `orderTable`의 `numberOfCustomers`를 0으로 변경합니다.
+    - `eatInOrderTable`의 `occupied`를 `false`로 변경합니다.
+    - `eatInOrderTable`의 `numberOfCustomers`를 0으로 변경합니다.
 - ### 검증
-  - 등록된 `order`만 완료할 수 있습니다.
-  - `order`의 현재 `orderStatus`가 `servedOrder`일 때만 `order`를 완료할 수 있습니다.
+  - 등록된 `eatInOrder`만 완료할 수 있습니다.
+  - `eatInOrder`의 현재 `orderStatus`가 `servedOrder`일 때만 `eatInOrder`를 완료할 수 있습니다.
 
 
 
