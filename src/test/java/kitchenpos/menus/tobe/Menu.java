@@ -13,10 +13,10 @@ import java.util.UUID;
 public class Menu {
     private final UUID id;
     private final MenuName name;
-    private final MenuPrice price;
+    private MenuPrice price;
     private final MenuGroup menuGroup;
-    private final MenuProducts menuProducts;
-    private final boolean displayed;
+    private MenuProducts menuProducts;
+    private boolean displayed;
 
     public Menu(final UUID id, final String name, final Profanities profanities, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
         this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroup, new MenuProducts(menuProducts), displayed);
@@ -42,12 +42,26 @@ public class Menu {
         }
     }
 
-    public Menu changePrice(final long changedPrice) {
+    public void changePrice(final long changedPrice) {
         final MenuPrice changedMenuPrice = new MenuPrice(changedPrice);
-        long totalAmount = menuProducts.totalAmount();
+        final long totalAmount = menuProducts.totalAmount();
         if (changedMenuPrice.isGreaterThan(totalAmount)) {
             throw new InvalidMenuPriceException();
         }
-        return new Menu(id, name, changedMenuPrice, menuGroup, menuProducts, displayed);
+        this.price = changedMenuPrice;
+    }
+
+    public void changedProductPrice(final long productId, final long changedFirstPrice) {
+        final MenuProducts changedMenuProducts = menuProducts.changedProductPrice(productId, changedFirstPrice);
+        final long totalAmount = changedMenuProducts.totalAmount();
+        this.menuProducts = changedMenuProducts;
+        this.displayed = !(price.isGreaterThan(totalAmount));
+    }
+
+    public void display() {
+        long totalAmount = menuProducts.totalAmount();
+        if(price.isGreaterThan(totalAmount)) {
+            throw new IllegalStateException();
+        }
     }
 }

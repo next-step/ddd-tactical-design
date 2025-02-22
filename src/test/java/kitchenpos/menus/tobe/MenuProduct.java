@@ -22,10 +22,18 @@ public class MenuProduct {
         this.productId = productId;
     }
 
+    public boolean isSame(final long productId) {
+        return this.seq == productId;
+    }
+    
     public long amount() {
         return Math.multiplyExact(price.getValue(), quantity.getValue());
     }
 
+    public MenuProduct changePrice(final long changedPrice) {
+        return new MenuProduct(seq, new MenuProductPrice(changedPrice), quantity, productId);
+    }
+    
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

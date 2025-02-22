@@ -119,7 +119,7 @@ public class MenuTest {
     }
 
     @DisplayName("메뉴의 가격이 모든 메뉴 상품 금액의 총합보다 높은 경우 메뉴를 노출할 수 없다.")
-    @CsvSource(value = {"1_000:1:1_001:1_000:1:2_000", "2_000:1:2_001:2_000:2:6_000", "1_000:3:1_001:3_000:2:9_000"}, delimiter = ':')
+    @CsvSource(value = {"1_000:1:999:1_000:1:2_000", "2_000:1:1_999:2_000:2:6_000", "1_000:3:999:3_000:2:9_000"}, delimiter = ':')
     @ParameterizedTest(name = """
                 {index}. 첫 번째 메뉴 상품 가격 : `{0}`, 첫 번째 메뉴 상품 수량 : `{1}`, 변경할 첫 번째 메뉴 상품 가격 : `{2}`, 
                 두 번째 메뉴 상품 가격 : `{3}`, 두 번째 메뉴 상품 수량 : `{4}`, 메뉴 가격 : `{5}`
@@ -127,16 +127,14 @@ public class MenuTest {
     void displayWithInvalidPrice(final long firstPrice, final long firstQuantity, final long changedFirstPrice,
                                  final long secondPrice, final long secondQuantity,
                                  final long menuPrice) {
-        final MenuProduct firstMenuProduct = new MenuProduct(1L, firstPrice, firstQuantity, 1L);
         final List<MenuProduct> menuProducts = List.of(
-                firstMenuProduct,
+                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
                 new MenuProduct(2L, secondPrice, secondQuantity, 2L)
         );
         final Menu menu = new Menu(null, "메뉴", profanities, menuPrice, menuGroup, menuProducts, false);
-        final Menu changedMenu = menu.changedProductPrice(1L, changedFirstPrice);
+        menu.changedProductPrice(1L, changedFirstPrice);
 
-        assertThatThrownBy(
-                () -> changedMenu.display()
-        ).isExactlyInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(menu::display)
+                .isExactlyInstanceOf(IllegalStateException.class);
     }
 }
