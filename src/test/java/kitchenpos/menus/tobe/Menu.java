@@ -34,7 +34,7 @@ public class Menu {
     }
 
     private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuProducts menuProducts) {
-        if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroup)) {
+        if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroup) || Objects.isNull(menuProducts)) {
             throw new InvalidMenuArgumentException();
         }
         long totalAmount = menuProducts.totalAmount();
