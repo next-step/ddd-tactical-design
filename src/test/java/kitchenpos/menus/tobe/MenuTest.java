@@ -1,9 +1,11 @@
 package kitchenpos.menus.tobe;
 
+import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 import kitchenpos.menus.tobe.exception.InvalidMenuNameException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPricePeriodException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
@@ -51,9 +53,10 @@ public class MenuTest {
 
     @DisplayName("메뉴는 메뉴 그룹이 있어야 한다.")
     @NullSource
+    @ParameterizedTest(name = "{index}. 메뉴 그룹 : `{0}`")
     void createWithNullMenuGroup(final MenuGroup menuGroup) {
         assertThatThrownBy(
                 () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
-        ).isExactlyInstanceOf(IllegalArgumentException.class);
+        ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 }
