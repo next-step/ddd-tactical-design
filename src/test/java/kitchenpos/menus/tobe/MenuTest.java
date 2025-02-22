@@ -59,4 +59,13 @@ public class MenuTest {
                 () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
+
+    @DisplayName("메뉴는 메뉴 상품이 없거나 비어있으면 생성할 수 없다.")
+    @NullAndEmptySource
+    @ParameterizedTest(name = "{index}. 메뉴 상품 : `{0}`")
+    void createWithInvalidMenuProducts(final List<MenuProduct> menuProducts) {
+        assertThatThrownBy(
+                () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
+        ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
+    }
 }
