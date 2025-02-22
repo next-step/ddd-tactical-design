@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -66,6 +67,23 @@ public class MenuTest {
     void createWithInvalidMenuProducts(final List<MenuProduct> menuProducts) {
         assertThatThrownBy(
                 () -> new Menu(null, "메뉴", 1000L, menuGroup, menuProducts, true)
+        ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
+    }
+
+    @DisplayName("메뉴의 가격은 메뉴 상품의 가격과 수량을 곱한 금액의 합보다 작아야 한다.")
+    @CsvSource(value = {"1_000:1:1_000:1:2_001", "2_000:1:2_000:2:6_001", "1_000:3:3_000:2:9_001"}, delimiter = ':')
+    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`, 메뉴 가격 : `{2}`")
+    void createWithInvalidPrice(final long firstPrice, final long firstQuantity,
+                                final long secondPrice, final long secondQuantity,
+                                final long menuPrice) {
+        final List<MenuProduct> menuProducts = new ArrayList<>(
+                List.of(
+                        new MenuProduct(1L, firstPrice, firstQuantity, 1L),
+                        new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+                )
+        );
+        assertThatThrownBy(
+                () -> new Menu(null, "메뉴", menuPrice, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
     }
 }
