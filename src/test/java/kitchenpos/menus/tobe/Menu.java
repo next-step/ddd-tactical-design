@@ -37,5 +37,11 @@ public class Menu {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
             throw new InvalidMenuArgumentException();
         }
+        long sum = menuProducts.stream()
+                .mapToLong(MenuProduct::amount)
+                .sum();
+        if (price.getValue() > sum) {
+            throw new InvalidMenuArgumentException();
+        }
     }
 }
