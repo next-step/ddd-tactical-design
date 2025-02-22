@@ -1,11 +1,13 @@
 package kitchenpos.menu.application.service.model;
 
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuProduct;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CreateMenuRequest {
     private UUID id;
@@ -17,6 +19,20 @@ public class CreateMenuRequest {
     private UUID menuGroupId;
 
     public CreateMenuRequest() {
+    }
+
+    public Map<UUID, Long> getProductQuantities() {
+        if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
+            throw new IllegalArgumentException("메뉴 상품을 입력해 주세요.");
+        }
+
+        return menuProducts.stream()
+                .collect(
+                        Collectors.toMap(
+                                CreateMenuProductRequest::getProductId,
+                                CreateMenuProductRequest::getQuantity
+                        )
+                );
     }
 
     public UUID getId() {

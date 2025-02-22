@@ -7,14 +7,22 @@ import java.util.UUID;
 public class MenuProduct {
     private final Long seq;
     private final UUID productId;
-    private final long quantity;
+    private long quantity;
     private BigDecimal productPrice;
+
+    public MenuProduct(UUID productId, long quantity, BigDecimal productPrice) {
+        this(null, productId, quantity, productPrice);
+    }
 
     public MenuProduct(Long seq, UUID productId, long quantity, BigDecimal productPrice) {
         this.seq = seq;
         this.productId = productId;
         this.quantity = quantity;
         this.productPrice = productPrice;
+    }
+
+    public void changeQuantity(long quantity) {
+        this.quantity = quantity;
     }
 
     public BigDecimal amount() {

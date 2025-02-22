@@ -1,16 +1,19 @@
 package kitchenpos.menu.application.service;
 
+import kitchenpos.MockBeanConfiguration;
 import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.MenuGroupEntityRepository;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
 import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
+import kitchenpos.menu.application.port.out.MenuProductMapper;
 import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuProductRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
 import kitchenpos.menu.domain.exception.MenuPriceValidationException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
 import kitchenpos.product.domain.model.Product;
@@ -23,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -36,8 +40,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@Import(MockBeanConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class MenuServiceTest {
     private final MenuService menuService;
@@ -45,13 +51,22 @@ public class MenuServiceTest {
     private final MenuGroupEntityRepository menuGroupEntityRepository;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final Profanities profanities;
+    private final MenuProductMapper menuProductMapper;
 
-    public MenuServiceTest(MenuService menuService, ProductEntityRepository productEntityRepository, MenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository) {
+    public MenuServiceTest(
+            MenuService menuService,
+            ProductEntityRepository productEntityRepository,
+            MenuGroupEntityRepository menuGroupEntityRepository,
+            JpaMenuEntityEntityRepository menuEntityRepository,
+            Profanities profanities,
+            MenuProductMapper menuProductMapper
+    ) {
         this.menuService = menuService;
         this.productEntityRepository = productEntityRepository;
         this.menuGroupEntityRepository = menuGroupEntityRepository;
         this.menuEntityRepository = menuEntityRepository;
-        this.profanities = Mockito.mock(Profanities.class);
+        this.profanities = profanities;
+        this.menuProductMapper = menuProductMapper;
     }
 
     @DisplayName("메뉴 등록하기")
@@ -79,8 +94,10 @@ public class MenuServiceTest {
         void create_menu_successfully() {
             // given
             List<CreateMenuProductRequest> menuProducts = List.of(createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2));
-            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, menuProducts);
-            request.setDisplayed(true);
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, menuProducts, true);
+            when(menuProductMapper.toMenuProducts(request.getProductQuantities())).thenReturn(
+                    List.of(new MenuProduct(후라이드치킨_PRODUCT_UUID, 2, 후라이드치킨_DEFAULT_PRICE))
+            );
 
             // when
             Menu menu = menuService.create(request);
@@ -104,7 +121,7 @@ public class MenuServiceTest {
             String menuName = "holy shit 후라이드치킨";
             CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2);
             CreateMenuRequest request = createMenuRequest(menuName, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
-            Mockito.when(profanities.contains(menuName)).thenReturn(Boolean.TRUE);
+            when(profanities.contains(menuName)).thenReturn(Boolean.TRUE);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -363,7 +380,11 @@ public class MenuServiceTest {
     }
 
     private static CreateMenuRequest createMenuRequest(String name, int price, UUID menuGroupId, List<CreateMenuProductRequest> menuProducts) {
-        return createMenuRequest(null, name, new BigDecimal(price), menuGroupId, null, menuProducts);
+        return createMenuRequest(null, name, new BigDecimal(price), menuGroupId, null, menuProducts, true);
+    }
+
+    private static CreateMenuRequest createMenuRequest(String name, int price, UUID menuGroupId, List<CreateMenuProductRequest> menuProducts, boolean displayed) {
+        return createMenuRequest(null, name, new BigDecimal(price), menuGroupId, null, menuProducts, displayed);
     }
 
     private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
@@ -377,7 +398,7 @@ public class MenuServiceTest {
         return menu;
     }
 
-    private static CreateMenuRequest createMenuRequest(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<CreateMenuProductRequest> menuProducts) {
+    private static CreateMenuRequest createMenuRequest(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<CreateMenuProductRequest> menuProducts, boolean displayed) {
         CreateMenuRequest menu = new CreateMenuRequest();
         menu.setId(id);
         menu.setName(name);
@@ -385,6 +406,7 @@ public class MenuServiceTest {
         menu.setMenuGroupId(menuGroupId);
         menu.setMenuGroup(menuGroup);
         menu.setMenuProducts(menuProducts);
+        menu.setDisplayed(displayed);
         return menu;
     }
 

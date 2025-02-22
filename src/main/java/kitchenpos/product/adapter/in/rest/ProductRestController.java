@@ -6,6 +6,7 @@ import kitchenpos.product.application.port.in.LoadProductListUseCase;
 import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.model.CreateProductRequest;
 import kitchenpos.product.domain.model.Product;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<Product>> findAll(@RequestParam(value = "ids", required = false) List<UUID> ids) {
         return ResponseEntity.ok(loadProductListUseCase.findAll());
     }
 }
