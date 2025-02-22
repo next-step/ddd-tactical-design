@@ -16,24 +16,28 @@ public class MenuPrice {
             final BigDecimal price,
             final BigDecimal menuProductTotalPrice
     ) {
-        validatePrice(price, menuProductTotalPrice);
+        validateNegativePrice(price);
+        validateMenuPriceAgainstTotalProductPrice(price, menuProductTotalPrice);
         return new MenuPrice(price);
     }
 
-    public static void validatePrice(
-            final BigDecimal price,
-            final BigDecimal menuProductTotalPrice
-    ) {
+    private static void validateNegativePrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new MenuPriceValidationException("메뉴 가격은 0보다 큰 금액이어야 합니다.");
         }
+    }
+
+    public static void validateMenuPriceAgainstTotalProductPrice(
+            final BigDecimal price,
+            final BigDecimal menuProductTotalPrice
+    ) {
         if (price.compareTo(menuProductTotalPrice) > 0) {
             throw new MenuPriceValidationException("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
     }
 
-    public void validatePrice(BigDecimal menuProductTotalPrice) {
-        validatePrice(this.price, menuProductTotalPrice);
+    public void validateMenuPriceAgainstTotalProductPrice(BigDecimal menuProductTotalPrice) {
+        validateMenuPriceAgainstTotalProductPrice(this.price, menuProductTotalPrice);
     }
 
     public BigDecimal value() {

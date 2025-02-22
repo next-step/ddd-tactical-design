@@ -1,5 +1,7 @@
 package kitchenpos.menu.domain.model;
 
+import kitchenpos.menu.domain.exception.MenuProductValidationException;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +16,9 @@ public class MenuProducts {
     }
 
     public static MenuProducts of(final List<MenuProduct> menuProducts) {
+        if (menuProducts == null || menuProducts.isEmpty()) {
+            throw new MenuProductValidationException("메뉴 상품은 1개 이상 입력해야 합니다.");
+        }
         return new MenuProducts(menuProducts);
     }
 

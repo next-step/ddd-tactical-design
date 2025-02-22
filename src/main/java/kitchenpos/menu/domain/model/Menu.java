@@ -1,5 +1,6 @@
 package kitchenpos.menu.domain.model;
 
+import kitchenpos.menu.domain.exception.MenuValidationException;
 import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
@@ -45,7 +46,9 @@ public class Menu {
             final List<MenuProduct> menuProductList,
             final Profanities profanities
     ) {
-
+        if (menuGroup == null) {
+            throw new MenuValidationException("메뉴 그룹을 반드시 선택해야 합니다.");
+        }
         MenuName menuName = MenuName.of(name, profanities);
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
         MenuPrice menuPrice = MenuPrice.of(price, menuProducts.getTotalPrice());
@@ -61,7 +64,7 @@ public class Menu {
     }
 
     public void display() {
-        this.price.validatePrice(menuProducts.getTotalPrice());
+        this.price.validateMenuPriceAgainstTotalProductPrice(menuProducts.getTotalPrice());
         this.displayed = true;
     }
 

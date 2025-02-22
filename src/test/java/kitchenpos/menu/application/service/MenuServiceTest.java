@@ -273,8 +273,9 @@ public class MenuServiceTest {
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(MenuPriceValidationException.class)
+                    .hasMessage("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
     }
 

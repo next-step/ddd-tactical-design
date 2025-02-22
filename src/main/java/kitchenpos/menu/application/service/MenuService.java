@@ -92,13 +92,9 @@ public class MenuService {
 
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
-        final BigDecimal price = request.getPrice();
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
         final Menu menu = loadMenuPort.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(price);
+        menu.changePrice(request.getPrice());
         return menu;
     }
 

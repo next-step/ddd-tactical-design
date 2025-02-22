@@ -291,7 +291,7 @@ graph LR
 * `Menu` 등록은 `메뉴 등록 정책`을 만족시켜야 한다
 * `Menu Price`를 변경할 수 있다.
   * `Menu Price`를 변경할 땐 0원 이상 입력하여야 한다.
-  * `Menu Price`가 `Menu Products`의 `Total Product Price` 보다 크면 `Menu`는 `Hide Menu`가 된다.
+  * `Menu Price`가 `Menu Products`의 `Total Product Price` 보다 작아야 한다.
 * `Menu`는 `Display Menu`로 변경할 수 있다
   * `Menu Price`가 `Menu Products`의 `Total Product Price` 보다 작아야 한다.
 * `Menu`는 `Hide Menu`로 변경할 수 있다
