@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Table(name = "order_line_item")
 @Entity
-public class OrderLineItem {
+public class TakeOutOrderLineItem {
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -16,9 +16,9 @@ public class OrderLineItem {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
+            name = "menu_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
     )
     private Menu menu;
 
@@ -31,7 +31,7 @@ public class OrderLineItem {
     @Transient
     private BigDecimal price;
 
-    public OrderLineItem() {
+    public TakeOutOrderLineItem() {
     }
 
     public Long getSeq() {

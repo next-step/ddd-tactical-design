@@ -1,5 +1,5 @@
 package kitchenpos.takeoutorder.domain;
 
-public enum OrderType {
+public enum TakeOutOrderType {
     TAKEOUT
 }

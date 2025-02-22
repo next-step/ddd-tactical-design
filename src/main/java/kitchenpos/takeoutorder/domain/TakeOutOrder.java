@@ -8,46 +8,36 @@ import java.util.UUID;
 
 @Table(name = "orders")
 @Entity
-public class Order {
+public class TakeOutOrder {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
 
     @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
-    private OrderType type;
+    private TakeOutOrderType type;
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private TakeOutOrderStatus status;
 
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "order_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
+            name = "order_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_order_line_item_to_orders")
     )
-    private List<OrderLineItem> orderLineItems;
+    private List<TakeOutOrderLineItem> takeOutOrderLineItems;
 
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
-    @ManyToOne
-    @JoinColumn(
-        name = "order_table_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private OrderTable orderTable;
 
-    @Transient
-    private UUID orderTableId;
-
-    public Order() {
+    public TakeOutOrder() {
     }
 
     public UUID getId() {
@@ -58,19 +48,19 @@ public class Order {
         this.id = id;
     }
 
-    public OrderType getType() {
+    public TakeOutOrderType getType() {
         return type;
     }
 
-    public void setType(final OrderType type) {
+    public void setType(final TakeOutOrderType type) {
         this.type = type;
     }
 
-    public OrderStatus getStatus() {
+    public TakeOutOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(final OrderStatus status) {
+    public void setStatus(final TakeOutOrderStatus status) {
         this.status = status;
     }
 
@@ -82,12 +72,12 @@ public class Order {
         this.orderDateTime = orderDateTime;
     }
 
-    public List<OrderLineItem> getOrderLineItems() {
-        return orderLineItems;
+    public List<TakeOutOrderLineItem> getOrderLineItems() {
+        return takeOutOrderLineItems;
     }
 
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
+    public void setOrderLineItems(final List<TakeOutOrderLineItem> takeOutOrderLineItems) {
+        this.takeOutOrderLineItems = takeOutOrderLineItems;
     }
 
     public String getDeliveryAddress() {
@@ -96,21 +86,5 @@ public class Order {
 
     public void setDeliveryAddress(final String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final OrderTable orderTable) {
-        this.orderTable = orderTable;
-    }
-
-    public UUID getOrderTableId() {
-        return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }
