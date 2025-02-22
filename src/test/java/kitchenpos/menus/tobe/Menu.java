@@ -63,5 +63,23 @@ public class Menu {
         if(price.isGreaterThan(totalAmount)) {
             throw new IllegalStateException();
         }
+        this.displayed = true;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
