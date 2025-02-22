@@ -26,4 +26,19 @@ public class MenuProductsTest {
         );
         assertThat(menuProducts.totalAmount()).isEqualTo(expected);
     }
+
+    @DisplayName("메뉴 상품 목록의 가격을 변경할 수 있다.")
+    @CsvSource(value = {"1_000:1:1_001:1_001", "2_000:2:2_001:4002", "3_000:3:3_001:9_003"}, delimiter = ':')
+    @ParameterizedTest(name = """
+                {index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`, 
+                변경할 메뉴 상품 가격 : `{2}`, 총합 금액 : `{3}`
+            """)
+    void changedProductPrice(final long price, final long quantity, final long changedPrice, final long expected) {
+        final MenuProducts menuProducts = new MenuProducts(
+                List.of(new MenuProduct(1L, price, quantity, 1L))
+        );
+        menuProducts.changedProductPrice(1L, changedPrice);
+
+        assertThat(menuProducts.totalAmount()).isEqualTo(expected);
+    }
 }
