@@ -44,6 +44,6 @@ public class ProductRestController {
 
     @GetMapping
     public ResponseEntity<List<Product>> findAll(@RequestParam(value = "ids", required = false) List<UUID> ids) {
-        return ResponseEntity.ok(loadProductListUseCase.findAll());
+        return ResponseEntity.ok(loadProductListUseCase.findAll(ids));
     }
 }

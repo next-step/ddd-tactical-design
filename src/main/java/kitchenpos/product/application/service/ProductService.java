@@ -61,8 +61,11 @@ public class ProductService implements CreateProductUseCase, ChangeProductPriceU
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return loadProductPort.findAll();
+    public List<Product> findAll(List<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return loadProductPort.findAll();
+        }
+        return loadProductPort.findAllByIdIn(ids);
     }
 
     private void publishEvent(Product product) {

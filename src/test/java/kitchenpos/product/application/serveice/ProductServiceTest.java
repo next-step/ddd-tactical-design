@@ -204,6 +204,7 @@ public class ProductServiceTest {
     class ProductListTest {
 
         private static final int TOTAL_PRODUCT_COUNT = 6;
+
         @SqlGroup({
                 @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
                 @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -212,10 +213,29 @@ public class ProductServiceTest {
         @Test
         void it_can_retrieve_all_products() {
             // when
-            List<Product> products = productService.findAll();
+            List<Product> products = productService.findAll(null);
 
             // then
             assertThat(products).hasSize(TOTAL_PRODUCT_COUNT);
+        }
+
+        @SqlGroup({
+                @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+                @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        })
+        @DisplayName("상품 ID 목록을 이용하여 상품을 조회할 수 있다")
+        @Test
+        void it_can_retrieve_products_by_ids() {
+            // given
+            UUID 후라이드치킨_PRODUCT_UUID = UUID.fromString("3b528244-34f7-406b-bb7e-690912f66b10");
+            UUID 양념치킨_PRODUCT_UUID = UUID.fromString("4721ee72-2ff3-417f-ade3-acd0a804605b");
+            List<UUID> productIds = List.of(후라이드치킨_PRODUCT_UUID, 양념치킨_PRODUCT_UUID);
+
+            // when
+            List<Product> products = productService.findAll(productIds);
+
+            // then
+            assertThat(products).hasSize(productIds.size());
         }
 
     }
