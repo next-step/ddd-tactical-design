@@ -9,7 +9,10 @@ public class Name {
     private String value;
 
     public Name(final String value) {
-        throw new InvalidMenuGroupNameException();
+        if (Objects.isNull(value) || value.isBlank()) {
+            throw new InvalidMenuGroupNameException();
+        }
+        this.value = value;
     }
 
     public String getValue() {

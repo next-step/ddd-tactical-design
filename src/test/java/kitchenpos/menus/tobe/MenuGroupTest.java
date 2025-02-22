@@ -14,7 +14,7 @@ public class MenuGroupTest {
     @DisplayName("메뉴 그룹 이름이 null 이거나 빈 문자열일 경우 메뉴 그룹을 생성할 수 없다.")
     @NullAndEmptySource
     @ParameterizedTest(name = "{index}. 메뉴 그룹 이름: `{0}`")
-    void create(final String name) {
+    void createWithInvalidName(final String name) {
         final UUID uuid = UUID.randomUUID();
 
         assertThatThrownBy(() -> new MenuGroup(uuid, name)
