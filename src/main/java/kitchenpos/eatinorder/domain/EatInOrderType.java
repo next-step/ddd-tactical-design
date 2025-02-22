@@ -1,5 +1,5 @@
 package kitchenpos.eatinorder.domain;
 
-public enum OrderType {
+public enum EatInOrderType {
     EAT_IN
 }
