@@ -36,4 +36,13 @@ public class MenuTest {
                 () -> new Menu(null, "메뉴", price, menuGroup, menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuPricePeriodException.class);
     }
+
+    @DisplayName("메뉴의 이름은 1글자 이상이어야 한다.")
+    @ValueSource(strings = {"", " ", "  "})
+    @ParameterizedTest(name = "{index}. 메뉴 이름 : `{0}`")
+    void createWithInvalidName(final String name) {
+        assertThatThrownBy(
+                () -> new Menu(null, name, 1000L, menuGroup, menuProducts, true)
+        ).isExactlyInstanceOf(InvalidMenuNameException.class);
+    }
 }
