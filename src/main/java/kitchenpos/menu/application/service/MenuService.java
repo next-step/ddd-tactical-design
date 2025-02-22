@@ -5,6 +5,7 @@ import kitchenpos.menu.application.port.out.MenuProductMapper;
 import kitchenpos.menu.application.port.out.SaveMenuPort;
 import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
 import kitchenpos.menu.application.service.model.CreateMenuRequest;
+import kitchenpos.menu.domain.exception.MenuNotFoundException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.shared.domain.Profanities;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -50,7 +50,7 @@ public class MenuService {
     @Transactional
     public Menu changePrice(final UUID menuId, final ChangeMenuPriceRequest request) {
         final Menu menu = loadMenuPort.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new MenuNotFoundException(menuId));
         menu.changePrice(request.getPrice());
         return menu;
     }
@@ -58,7 +58,7 @@ public class MenuService {
     @Transactional
     public Menu display(final UUID menuId) {
         final Menu menu = loadMenuPort.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new MenuNotFoundException(menuId));
         menu.display();
         return menu;
     }
@@ -66,7 +66,7 @@ public class MenuService {
     @Transactional
     public Menu hide(final UUID menuId) {
         final Menu menu = loadMenuPort.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
+            .orElseThrow(() -> new MenuNotFoundException(menuId));
         menu.hide();
         return menu;
     }
