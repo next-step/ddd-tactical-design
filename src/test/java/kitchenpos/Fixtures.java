@@ -1,14 +1,14 @@
 package kitchenpos;
 
-import kitchenpos.eatinorders.domain.Order;
-import kitchenpos.eatinorders.domain.OrderLineItem;
-import kitchenpos.eatinorders.domain.OrderStatus;
-import kitchenpos.eatinorders.domain.OrderTable;
-import kitchenpos.eatinorders.domain.OrderType;
-import kitchenpos.menus.domain.Menu;
-import kitchenpos.menus.domain.MenuGroup;
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.domain.Product;
+import kitchenpos.eatinorder.domain.EatInOrderTable;
+import kitchenpos.menu.domain.Menu;
+import kitchenpos.menu.domain.MenuGroup;
+import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.order.domain.Order;
+import kitchenpos.order.domain.OrderLineItem;
+import kitchenpos.order.domain.OrderStatus;
+import kitchenpos.order.domain.OrderType;
+import kitchenpos.product.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -86,7 +86,7 @@ public class Fixtures {
         return order;
     }
 
-    public static Order order(final OrderStatus status, final OrderTable orderTable) {
+    public static Order order(final OrderStatus status, final EatInOrderTable orderTable) {
         final Order order = new Order();
         order.setId(UUID.randomUUID());
         order.setType(OrderType.EAT_IN);
@@ -104,17 +104,17 @@ public class Fixtures {
         return orderLineItem;
     }
 
-    public static OrderTable orderTable() {
+    public static EatInOrderTable orderTable() {
         return orderTable(false, 0);
     }
 
-    public static OrderTable orderTable(final boolean occupied, final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setId(UUID.randomUUID());
-        orderTable.setName("1번");
-        orderTable.setNumberOfGuests(numberOfGuests);
-        orderTable.setOccupied(occupied);
-        return orderTable;
+    public static EatInOrderTable orderTable(final boolean occupied, final int numberOfGuests) {
+        final EatInOrderTable eatInOrderTable = new EatInOrderTable();
+        eatInOrderTable.setId(UUID.randomUUID());
+        eatInOrderTable.setName("1번");
+        eatInOrderTable.setNumberOfGuests(numberOfGuests);
+        eatInOrderTable.setOccupied(occupied);
+        return eatInOrderTable;
     }
 
     public static Product product() {
