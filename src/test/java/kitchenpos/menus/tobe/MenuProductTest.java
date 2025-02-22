@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class MenuProductTest {
 
     @DisplayName("메뉴 상품의 가격은 0원 이상이어 한다.")
+    @ValueSource(longs = {-1, -1000, -100000})
     @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`")
-    @ValueSource(strings = {"-1", "-1000", "-100000"})
     void createWithNegativePrice(final long price) {
         assertThatThrownBy(
                 () -> new MenuProduct(null, price, 1L, 1L)
@@ -22,8 +22,8 @@ public class MenuProductTest {
     }
 
     @DisplayName("메뉴 상품의 수량은 0개 이상이어야 한다.")
+    @ValueSource(longs = {-1, -1000, -100000})
     @ParameterizedTest(name = "{index}. 메뉴 상품 수량 : `{0}`")
-    @ValueSource(strings = {"-1", "-1000", "-100000"})
     void createWithNegativeQuantity(final long quantity) {
         assertThatThrownBy(
                 () -> new MenuProduct(null, 1_000L, quantity, 1L)
@@ -31,8 +31,8 @@ public class MenuProductTest {
     }
 
     @DisplayName("메뉴 상품을 생성할 수 있다.")
-    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`")
     @CsvSource(value = {"1_000:1", "1_000:2", "2_000:2"}, delimiter = ':')
+    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`")
     void create(final long price, final long quantity) {
         final MenuProduct menuProduct = new MenuProduct(null, price, quantity, 1L);
 
