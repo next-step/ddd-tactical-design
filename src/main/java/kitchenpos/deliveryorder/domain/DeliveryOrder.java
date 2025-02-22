@@ -1,7 +1,6 @@
 package kitchenpos.deliveryorder.domain;
 
 import jakarta.persistence.*;
-import kitchenpos.eatinorder.domain.EatInOrderTable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,13 +36,7 @@ public class DeliveryOrder {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "order_table_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_orders_to_order_table")
-    )
-    private EatInOrderTable orderTable;
+
 
     @Transient
     private UUID orderTableId;
@@ -97,14 +90,6 @@ public class DeliveryOrder {
 
     public void setDeliveryAddress(final String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
-    }
-
-    public EatInOrderTable getOrderTable() {
-        return orderTable;
-    }
-
-    public void setOrderTable(final EatInOrderTable orderTable) {
-        this.orderTable = orderTable;
     }
 
     public UUID getOrderTableId() {

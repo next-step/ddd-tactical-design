@@ -1,6 +1,5 @@
 package kitchenpos.takeoutorder.application.service;
 
-import kitchenpos.deliveryorder.adapter.out.api.KitchenridersClient;
 import kitchenpos.menu.application.port.out.MenuRepository;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.takeoutorder.application.port.out.TakeOutOrderRepository;
@@ -18,16 +17,13 @@ import java.util.*;
 public class TakeOutOrderService {
     private final TakeOutOrderRepository orderRepository;
     private final MenuRepository menuRepository;
-    private final KitchenridersClient kitchenridersClient;
 
     public TakeOutOrderService(
             final TakeOutOrderRepository takeOutOrderRepository,
-            final MenuRepository menuRepository,
-            final KitchenridersClient kitchenridersClient
+            final MenuRepository menuRepository
     ) {
         this.orderRepository = takeOutOrderRepository;
         this.menuRepository = menuRepository;
-        this.kitchenridersClient = kitchenridersClient;
     }
 
     @Transactional
