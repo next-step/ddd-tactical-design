@@ -30,6 +30,15 @@ public class MenuProductTest {
         ).isInstanceOf(InvalidMenuProductQuantityException.class);
     }
 
+    @DisplayName("메뉴 상품을 생성할 수 있다.")
+    @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`")
+    @CsvSource(value = {"1_000:1", "1_000:2", "2_000:2"}, delimiter = ':')
+    void create(final long price, final long quantity) {
+        final MenuProduct menuProduct = new MenuProduct(null, price, quantity, 1L);
+
+        assertThat(menuProduct).isNotNull();
+    }
+
     @DisplayName("메뉴 상품은 가격과 수량을 곱한 금액을 계산한다.")
     @CsvSource(value = {"1_000:1:1_000", "1_000:2:2_000", "2_000:2:4_000"}, delimiter = ':')
     @ParameterizedTest(name = "{index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`")
