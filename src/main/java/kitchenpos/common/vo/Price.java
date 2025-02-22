@@ -13,6 +13,10 @@ public class Price {
     protected Price() {
     }
 
+    public static Price ZERO() {
+        return new Price(0);
+    }
+
     public Price(final long value) {
         this(toBigDecimal(value));
     }
@@ -44,6 +48,19 @@ public class Price {
 
     public Price add(long other) {
         return new Price(value.add(BigDecimal.valueOf(other)));
+    }
+
+    public Price multiply(int quantity) {
+        BigDecimal result = value.multiply(BigDecimal.valueOf(quantity));
+        return new Price(result);
+    }
+
+    public Price multiply(PositiveNumber quantity) {
+        return multiply(quantity.getValue());
+    }
+
+    public boolean isGreaterThan(Price other) {
+        return value.compareTo(other.value) > 0;
     }
 
     public BigDecimal getValue() {
