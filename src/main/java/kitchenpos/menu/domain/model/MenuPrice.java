@@ -21,6 +21,11 @@ public class MenuPrice {
         return new MenuPrice(price);
     }
 
+    public static MenuPrice of(BigDecimal price) {
+        validateNegativePrice(price);
+        return new MenuPrice(price);
+    }
+
     private static void validateNegativePrice(BigDecimal price) {
         if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new MenuPriceValidationException("메뉴 가격은 0보다 큰 금액이어야 합니다.");
@@ -54,5 +59,9 @@ public class MenuPrice {
     @Override
     public int hashCode() {
         return Objects.hashCode(price);
+    }
+
+    public boolean isGreaterThan(BigDecimal totalPrice) {
+        return price.compareTo(totalPrice) > 0;
     }
 }

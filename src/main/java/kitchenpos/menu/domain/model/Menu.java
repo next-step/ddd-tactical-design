@@ -15,7 +15,7 @@ public class Menu {
     private final MenuProducts menuProducts;
     private final UUID menuGroupId;
 
-    private Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+    public Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -68,6 +68,12 @@ public class Menu {
 
     public void changePrice(BigDecimal price) {
         this.price = MenuPrice.of(price, menuProducts.getTotalPrice());
+    }
+
+    public void hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice() {
+        if (this.price.isGreaterThan(menuProducts.getTotalPrice())) {
+            this.displayed = false;
+        }
     }
 
     public UUID getId() {
