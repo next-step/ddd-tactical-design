@@ -67,6 +67,7 @@ public class MenuServiceImpl implements MenuService {
                 .orElseThrow(NoSuchElementException::new);
             sum = sum.add(
                 product.getPrice()
+                    .price()
                     .multiply(BigDecimal.valueOf(quantity))
             );
             final MenuProduct menuProduct = new MenuProduct();
@@ -104,6 +105,7 @@ public class MenuServiceImpl implements MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
+                    .price()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
@@ -123,6 +125,7 @@ public class MenuServiceImpl implements MenuService {
             sum = sum.add(
                 menuProduct.getProduct()
                     .getPrice()
+                    .price()
                     .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
             );
         }
