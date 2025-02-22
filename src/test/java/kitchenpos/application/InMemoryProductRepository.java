@@ -1,14 +1,9 @@
 package kitchenpos.application;
 
-import kitchenpos.product.domain.Product;
 import kitchenpos.product.application.port.out.ProductRepository;
+import kitchenpos.product.domain.Product;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryProductRepository implements ProductRepository {
     private final Map<UUID, Product> products = new HashMap<>();
@@ -32,8 +27,8 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public List<Product> findAllByIdIn(final List<UUID> ids) {
         return products.values()
-            .stream()
-            .filter(product -> ids.contains(product.getId()))
-            .toList();
+                .stream()
+                .filter(product -> ids.contains(product.getId()))
+                .toList();
     }
 }
