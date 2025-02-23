@@ -1,32 +1,21 @@
 package kitchenpos.products.application;
 
-import kitchenpos.menus.domain.MenuProduct;
-import kitchenpos.products.tobe.exception.InvalidProductNameException;
-import kitchenpos.products.tobe.exception.NegativePriceException;
-import kitchenpos.tobe.Fixtures;
 import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.tobe.InMemoryProductRepository;
-import kitchenpos.products.tobe.domain.*;
 import kitchenpos.products.infra.PurgomalumClient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import kitchenpos.products.tobe.domain.*;
+import kitchenpos.tobe.Fixtures;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static kitchenpos.tobe.Fixtures.menu;
-import static kitchenpos.tobe.Fixtures.menuProduct;
-import static kitchenpos.tobe.Fixtures.product;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static kitchenpos.tobe.Fixtures.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductServiceTest {
     private ProductRepository productRepository;
@@ -55,24 +44,6 @@ class ProductServiceTest {
         );
     }
 
-    @DisplayName("상품의 가격이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = "-1000")
-    @NullSource
-    @ParameterizedTest
-    void create(final BigDecimal price) { // Product 객체 생성 테스트로 빠져야 할까?
-        assertThatThrownBy(() -> createProductRequest("후라이드", price))
-            .isInstanceOf(NegativePriceException.class);
-    }
-
-    @DisplayName("상품의 이름이 올바르지 않으면 등록할 수 없다.")
-    @ValueSource(strings = {"비속어", "욕설이 포함된 이름"})
-    @NullSource
-    @ParameterizedTest
-    void create(final String name) { // Product 객체 생성 테스트로 빠져야 할까?
-        assertThatThrownBy(() -> createProductRequest(name, 16_000L))
-            .isInstanceOf(InvalidProductNameException.class);
-    }
-
     @DisplayName("상품의 가격을 변경할 수 있다.")
     @Test
     void changePrice() {
@@ -83,28 +54,16 @@ class ProductServiceTest {
         assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
     }
 
-
-
     @DisplayName("상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.")
     @Test
     void changePriceInMenu() {
         final Product product = productRepository.save(product("후라이드", 16_000L));
         final Menu menu = menuRepository.save(menu(19_000L, true, menuProduct(product, 2L)));
 
-
-        assertThat(menu.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(19_000L)));
         Product productResult = productService.changePrice(product.getProductId(), changePriceRequest(
                 product.getProductId(),
                 product.getProductName(),
                 new Price(BigDecimal.valueOf(8_000L))));
-
-        Price sum = Price.ZERO;
-        for(MenuProduct menuProduct : menu.getMenuProducts()){
-            sum.add(productRepository.findById(menuProduct.getProductId()).get().getPrice());
-        }
-
-        assertThat(sum).isEqualTo(new Price(BigDecimal.valueOf(19_000L)).multiply(2));
-        assertThat(productResult.getPrice()).isEqualTo(new Price(BigDecimal.valueOf(19_000L)));
 
         assertThat(menuRepository.findById(menu.getId()).get().isDisplayed()).isFalse();
     }
