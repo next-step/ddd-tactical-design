@@ -9,7 +9,7 @@ public record MenuGroupResponse() {
         String name
     ) {
         public static GetGroup fromVo(MenuGroupVo.GroupInfo vo) {
-            return new GetGroup(vo.id(), vo.name());
+            return new GetGroup(vo.id(), vo.name().name());
         }
     }
 }

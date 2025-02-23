@@ -7,7 +7,7 @@ public record MenuGroupVo() {
 
     public record GroupInfo(
         UUID id,
-        String name
+        MenuGroupName name
     ) {
         public static GroupInfo fromEntity(MenuGroup entity) {
             return new GroupInfo(entity.getId(), entity.getName());

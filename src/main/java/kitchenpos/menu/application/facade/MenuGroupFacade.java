@@ -18,13 +18,13 @@ public class MenuGroupFacade {
     }
 
     public MenuGroupResponse.GetGroup create(MenuGroupRequest.Create request) {
-        return MenuGroupResponse.GetGroup .fromVo(menuGroupService.create(request.toVo()));
+        return MenuGroupResponse.GetGroup.fromVo(menuGroupService.create(request.toVo()));
     }
 
-    public List<MenuGroupResponse.GetGroup > findAll() {
+    public List<MenuGroupResponse.GetGroup> findAll() {
         return menuGroupService.findAll()
            .stream()
-           .map(MenuGroupResponse.GetGroup ::fromVo)
+           .map(MenuGroupResponse.GetGroup::fromVo)
            .toList();
     }
 }

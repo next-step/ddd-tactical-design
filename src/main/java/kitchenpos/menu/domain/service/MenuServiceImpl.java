@@ -6,14 +6,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuName;
+import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.service.ProductContextService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,120 +27,57 @@ public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductRepository productRepository;
     private final MenuPurgomalumClient purgomalumClient;
-    private final MenuCreatePolicy menuCreatePolicy;
+
+    private final MenuPolicy menuPolicy;
+
+    private final ProductContextService productContextService;
 
     public MenuServiceImpl(
         final MenuRepository menuRepository,
         final MenuGroupRepository menuGroupRepository,
-        final ProductRepository productRepository,
         final MenuPurgomalumClient purgomalumClient,
-        final MenuCreatePolicy menuCreatePolicy
+        final MenuPolicy menuPolicy,
+        final ProductContextService productContextService
     ) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productRepository = productRepository;
         this.purgomalumClient = purgomalumClient;
-        this.menuCreatePolicy = menuCreatePolicy;
+        this.menuPolicy = menuPolicy;
+        this.productContextService = productContextService;
     }
 
     @Override
     public MenuVo.MenuInfo create(final MenuVo.Create request) {
-        final BigDecimal price = menuCreatePolicy.validatePrice(request.price());
-        final String name = menuCreatePolicy.validateMenuName(request.name(), purgomalumClient);
+        final MenuPrice price = request.price();
+        final MenuName name = MenuName.of(request.name(), purgomalumClient);
+        final MenuGroup menuGroup = getMenuGroup(request.menuGroupId());
+        final List<MenuProduct> menuProducts = createMenuProducts(request.menuProducts());
 
-        final MenuGroup menuGroup = menuGroupRepository.findById(request.menuGroupId())
-            .orElseThrow(NoSuchElementException::new);
-
-        final List<MenuProduct> menuProductRequests = request.menuProducts();
-        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final List<Product> products = productRepository.findAllByIdIn(
-            menuProductRequests.stream()
-                .map(MenuProduct::getProductId)
-                .toList()
-        );
-        if (products.size() != menuProductRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-        final List<MenuProduct> menuProducts = new ArrayList<>();
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProductRequest : menuProductRequests) {
-            final long quantity = menuProductRequest.getQuantity();
-            if (quantity < 0) {
-                throw new IllegalArgumentException();
-            }
-            final Product product = productRepository.findById(menuProductRequest.getProductId())
-                .orElseThrow(NoSuchElementException::new);
-            sum = sum.add(
-                product.getPrice()
-                    .price()
-                    .multiply(BigDecimal.valueOf(quantity))
-            );
-            final MenuProduct menuProduct = new MenuProduct();
-            menuProduct.setProduct(product);
-            menuProduct.setQuantity(quantity);
-            menuProducts.add(menuProduct);
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
+        menuPolicy.validateMenuPrice(price, menuProducts);
 
         return MenuVo.MenuInfo.fromEntity(
-            menuRepository.save(
-                new Menu(
-                        UUID.randomUUID(),
-                        name,
-                        price,
-                        menuGroup,
-                        request.displayed(),
-                        menuProducts)
-            )
+            menuRepository.save(new Menu(
+                UUID.randomUUID(),
+                name,
+                price,
+                menuGroup,
+                request.displayed(),
+                menuProducts
+            ))
         );
     }
 
     @Override
     public MenuVo.MenuInfo changePrice(final MenuVo.Update request) {
-        final BigDecimal price = menuCreatePolicy.validatePrice(request.price());
+        final MenuPrice price = request.price();
 
-        final Menu menu = menuRepository.findById(request.menuId())
-            .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .price()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (price.compareTo(sum) > 0) {
-            throw new IllegalArgumentException();
-        }
-        menu.updatePrice(price);
-        return MenuVo.MenuInfo.fromEntity(menu);
+        return menuPolicy.changePrice(request.menuId(), price);
     }
 
     @Override
     public MenuVo.MenuInfo display(final UUID menuId) {
-        final Menu menu = menuRepository.findById(menuId)
-            .orElseThrow(NoSuchElementException::new);
-        BigDecimal sum = BigDecimal.ZERO;
-        for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-            sum = sum.add(
-                menuProduct.getProduct()
-                    .getPrice()
-                    .price()
-                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-            );
-        }
-        if (menu.getPrice().compareTo(sum) > 0) {
-            throw new IllegalStateException();
-        }
-        menu.updateDisplayed(true);
-        return MenuVo.MenuInfo.fromEntity(menu);
+        return menuPolicy.display(menuId);
     }
 
     @Override
@@ -154,4 +95,41 @@ public class MenuServiceImpl implements MenuService {
             .map(MenuVo.MenuInfo::fromEntity)
             .toList();
     }
+
+    private MenuGroup getMenuGroup(UUID menuGroupId) {
+        return menuGroupRepository.findById(menuGroupId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_MENU_GROUP.toString()));
+    }
+
+    private List<MenuProduct> createMenuProducts(List<MenuProduct> menuProductRequests) {
+        if (Objects.isNull(menuProductRequests) || menuProductRequests.isEmpty()) {
+            throw new IllegalArgumentException(ErrorCode.NOT_FOUND_MENU_PRODUCT.toString());
+        }
+
+        final List<Product> products = productContextService.findAllByIds(
+            menuProductRequests.stream().map(MenuProduct::getProductId).toList()
+        );
+
+        if (products.size() != menuProductRequests.size()) {
+            throw new IllegalArgumentException(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
+        }
+
+        return menuProductRequests.stream()
+            .map(request -> createMenuProduct(request, products))
+            .toList();
+    }
+
+    private MenuProduct createMenuProduct(MenuProduct request, List<Product> products) {
+        if (request.getQuantity() < 0) {
+            throw new IllegalArgumentException(ErrorCode.PRODUCT_QTY_NOT_ALLOWED.toString());
+        }
+
+        final Product product = products.stream()
+            .filter(p -> p.getId().equals(request.getProductId()))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
+
+        return new MenuProduct(product, request.getQuantity());
+    }
+
 }

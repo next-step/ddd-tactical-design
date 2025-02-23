@@ -12,7 +12,7 @@ public record MenuResponse() {
         boolean displayed
     ) {
         public static GetMenu fromVo(MenuVo.MenuInfo vo) {
-            return new GetMenu(vo.id(), vo.name(), vo.price(), vo.displayed());
+            return new GetMenu(vo.id(), vo.name().name(), vo.price().price(), vo.displayed());
         }
     }
 }

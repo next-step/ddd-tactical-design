@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.application.dto.MenuResponse;
-import kitchenpos.menu.domain.service.MenuPurgomalumClient;
 import kitchenpos.menu.domain.service.MenuService;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +11,11 @@ import org.springframework.stereotype.Component;
 public class MenuFacade {
 
     private final MenuService menuService;
-    private final MenuPurgomalumClient purgomalumClient;
 
     public MenuFacade(
-        MenuService menuService,
-        MenuPurgomalumClient purgomalumClient
+        MenuService menuService
     ) {
         this.menuService = menuService;
-        this.purgomalumClient = purgomalumClient;
     }
 
     public MenuResponse.GetMenu create(MenuRequest.Create request) {

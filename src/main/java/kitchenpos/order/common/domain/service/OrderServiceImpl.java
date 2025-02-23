@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
             if (!menu.isDisplayed()) {
                 throw new IllegalStateException();
             }
-            if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
+            if (menu.getPrice().price().compareTo(orderLineItemRequest.getPrice()) != 0) {
                 throw new IllegalArgumentException();
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
                 sum = orderLineItem.getMenu()
                     .getPrice()
+                    .price()
                     .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
             }
             deliveryKitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());

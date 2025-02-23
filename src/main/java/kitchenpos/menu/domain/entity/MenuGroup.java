@@ -1,10 +1,13 @@
 package kitchenpos.menu.domain.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import kitchenpos.menu.domain.model.MenuGroupName;
+import kitchenpos.product.domain.model.ProductName;
 
 @Table(name = "menu_group")
 @Entity
@@ -14,13 +17,13 @@ public class MenuGroup {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuGroupName name;
 
     public MenuGroup() {
     }
 
-    public MenuGroup(UUID id, String name) {
+    public MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;
         this.name = name;
     }
@@ -33,11 +36,11 @@ public class MenuGroup {
         this.id = id;
     }
 
-    public String getName() {
+    public MenuGroupName getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final MenuGroupName name) {
         this.name = name;
     }
 }

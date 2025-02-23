@@ -10,8 +10,8 @@ public record MenuVo() {
 
     public record MenuInfo(
         UUID id,
-        String name,
-        BigDecimal price,
+        MenuName name,
+        MenuPrice price,
         boolean displayed
     ) {
         public static MenuInfo fromEntity(Menu entity) {
@@ -21,12 +21,12 @@ public record MenuVo() {
 
     public record Create(
         String name,
-        BigDecimal price,
+        MenuPrice price,
         UUID menuGroupId,
         boolean displayed,
         List<MenuProduct> menuProducts
     ) {
     }
 
-    public record Update(UUID menuId, BigDecimal price) {}
+    public record Update(UUID menuId, MenuPrice price) {}
 }

@@ -2,6 +2,7 @@ package kitchenpos.menu.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -12,6 +13,9 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.menu.domain.model.MenuGroupName;
+import kitchenpos.menu.domain.model.MenuName;
+import kitchenpos.menu.domain.model.MenuPrice;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "menu")
@@ -23,11 +27,11 @@ public class Menu {
     @Id
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Embedded
+    private MenuName name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Embedded
+    private MenuPrice price;
 
     @ManyToOne(optional = false)
     @JoinColumn(
@@ -52,7 +56,7 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID uuid, String name, BigDecimal price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(UUID uuid, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = uuid;
         this.name = name;
         this.price = price;
@@ -69,19 +73,19 @@ public class Menu {
         this.id = id;
     }
 
-    public String getName() {
+    public MenuName getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final MenuName name) {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
+    public MenuPrice getPrice() {
         return price;
     }
 
-    public void setPrice(final BigDecimal price) {
+    public void setPrice(final MenuPrice price) {
         this.price = price;
     }
 
@@ -113,7 +117,7 @@ public class Menu {
         this.displayed = displayed;
     }
 
-    public void updatePrice(BigDecimal price) {
+    public void updatePrice(MenuPrice price) {
         this.price = price;
     }
 }
