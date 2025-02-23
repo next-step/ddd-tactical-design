@@ -53,8 +53,6 @@ class ProductFacadeTest {
     @Mock
     private ProductEventPublisher productEventPublisher;
 
-    @Mock
-    private ProductEventListener productEventListener;
 
     private FakeMenuUpdatePolicy menuUpdatePolicy;
 
@@ -79,7 +77,7 @@ class ProductFacadeTest {
 
         chicken = ProductFixture.init().create();
         updateChicken = ProductFixture.init().update();
-        chickenMenu = MenuFixture.init().create();
+        chickenMenu = MenuFixture.init().toEntity();
     }
 
     @Nested
@@ -184,7 +182,7 @@ class ProductFacadeTest {
                     ).toEntity(),
                     100
                 ).create())
-            ).create();
+            ).toEntity();
             var menu = menuRepository.save(chickenMenu);
 
             productService.changePrice(updateChicken.toVo());

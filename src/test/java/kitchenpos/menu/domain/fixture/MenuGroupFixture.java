@@ -1,7 +1,9 @@
 package kitchenpos.menu.domain.fixture;
 
 import java.util.UUID;
+import kitchenpos.menu.application.dto.MenuGroupRequest;
 import kitchenpos.menu.domain.entity.MenuGroup;
+import kitchenpos.menu.domain.model.MenuGroupName;
 
 public record MenuGroupFixture(UUID id, String 메뉴그룹명) {
 
@@ -18,12 +20,12 @@ public record MenuGroupFixture(UUID id, String 메뉴그룹명) {
         );
     }
 
-    public MenuGroup create() {
-        var menuGroup = new MenuGroup();
-        menuGroup.setId(id);
-        menuGroup.setName(메뉴그룹명);
+    public MenuGroup toEntity() {
+        return new MenuGroup(id, new MenuGroupName(메뉴그룹명));
+    }
 
-        return menuGroup;
+    public MenuGroupRequest.Create create() {
+        return new MenuGroupRequest.Create(메뉴그룹명);
     }
 }
 

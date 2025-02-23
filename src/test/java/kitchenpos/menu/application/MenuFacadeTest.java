@@ -1,87 +1,100 @@
-//package kitchenpos.menu.application;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.assertj.core.api.Assertions.assertThatCode;
-//import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-//import static org.junit.jupiter.api.Assertions.assertAll;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertNotNull;
-//import static org.mockito.ArgumentMatchers.anyString;
-//import static org.mockito.Mockito.when;
-//
-//import java.math.BigDecimal;
-//import java.util.List;
-//import java.util.NoSuchElementException;
-//import java.util.Optional;
-//import java.util.stream.Collectors;
-//import kitchenpos.menu.domain.entity.Menu;
-//import kitchenpos.menu.domain.entity.MenuProduct;
-//import kitchenpos.menu.domain.fixture.MenuFixture;
-//import kitchenpos.menu.domain.fixture.MenuProductFixture;
-//import kitchenpos.menu.domain.repository.MenuGroupRepository;
-//import kitchenpos.menu.domain.repository.MenuRepository;
-//import kitchenpos.menu.domain.service.MenuPurgomalumClient;
-//import kitchenpos.menu.domain.service.MenuService;
-//import kitchenpos.product.domain.entity.Product;
-//import kitchenpos.product.domain.fixture.ProductFixture;
-//import kitchenpos.product.domain.repository.ProductRepository;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Nested;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.junit.jupiter.params.ParameterizedTest;
-//import org.junit.jupiter.params.provider.CsvSource;
-//import org.junit.jupiter.params.provider.ValueSource;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.Mockito;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//
-//@ExtendWith(MockitoExtension.class)
-//class MenuFacadeTest {
-//
-//    @InjectMocks
-//    private MenuService menuService;
-//
-//    @Mock
-//    private MenuRepository menuRepository;
-//
-//    @Mock
-//    private MenuGroupRepository menuGroupRepository;
-//
-//    @Mock
-//    private ProductRepository productRepository;
-//
-//    @Mock
-//    private MenuPurgomalumClient purgomalumClient;
-//
-//    private Menu chickenMenu;
-//
-//    private Product chicken;
-//
-//    @BeforeEach
-//    void setUp() {
-//        chickenMenu = MenuFixture.init().create();
-//        chicken = ProductFixture.init().toEntity();
-//    }
-//
-//    @Nested
-//    @DisplayName("메뉴 조회")
-//    class 메뉴_조회 {
-//
-//        @Test
-//        @DisplayName("성공 : 특정 조건 없이 상품의 모든 목록을 조회할 수 있다.")
-//        void 메뉴목록_조회() {
-//            when(menuRepository.findAll()).thenReturn(List.of(chickenMenu));
-//            List<Menu> result = menuService.findAll();
-//
-//            assertAll(
-//                () -> assertThat(result).isNotEmpty(),
-//                () -> assertEquals(result.size(), 1)
-//            );
-//        }
-//    }
+package kitchenpos.menu.application;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import kitchenpos.menu.application.dto.MenuResponse;
+import kitchenpos.menu.application.facade.MenuFacade;
+import kitchenpos.menu.domain.entity.Menu;
+import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.fixture.MenuFixture;
+import kitchenpos.menu.domain.fixture.MenuProductFixture;
+import kitchenpos.menu.domain.repository.MenuGroupRepository;
+import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.FakeMenuUpdatePolicy;
+import kitchenpos.menu.domain.service.MenuPurgomalumClient;
+import kitchenpos.menu.domain.service.MenuService;
+import kitchenpos.menu.domain.service.MenuServiceImpl;
+import kitchenpos.product.domain.entity.Product;
+import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.service.ProductContextService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class MenuFacadeTest {
+
+    @InjectMocks
+    private MenuFacade menuFacade;
+
+    @Mock
+    private MenuService menuService;
+
+    @Mock
+    private MenuRepository menuRepository;
+
+    @Mock
+    private MenuGroupRepository menuGroupRepository;
+
+    @Mock
+    private ProductRepository productRepository;
+
+    @Mock
+    private MenuPurgomalumClient purgomalumClient;
+
+    private FakeMenuUpdatePolicy menuPolicy;
+
+    @Mock
+    private ProductContextService productContextService;
+
+    private Menu chickenMenu;
+
+    private Product chicken;
+
+    @BeforeEach
+    void setUp() {
+        menuPolicy = new FakeMenuUpdatePolicy(menuRepository);
+        menuService = new MenuServiceImpl(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextService);
+        menuFacade = new MenuFacade(menuService);
+        chickenMenu = MenuFixture.init().toEntity();
+        chicken = ProductFixture.init().toEntity();
+    }
+
+    @Nested
+    @DisplayName("메뉴 조회")
+    class 메뉴_조회 {
+
+        @Test
+        @DisplayName("성공 : 특정 조건 없이 상품의 모든 목록을 조회할 수 있다.")
+        void 메뉴목록_조회() {
+            when(menuRepository.findAll()).thenReturn(List.of(chickenMenu));
+            List<MenuResponse.GetMenu> result = menuFacade.findAll();
+
+            assertAll(
+                () -> assertThat(result).isNotEmpty(),
+                () -> assertEquals(result.size(), 1)
+            );
+        }
+    }
 //
 //    @Nested
 //    @DisplayName("메뉴 등록")
@@ -208,46 +221,46 @@
 //
 //    }
 //
-//    @Nested
-//    @DisplayName("메뉴 노출")
-//    class 메뉴_노출 {
-//
-//        @Test
-//        @DisplayName("성공")
-//        void 메뉴_노출_성공() {
+    @Nested
+    @DisplayName("메뉴 노출")
+    class 메뉴_노출 {
+
+        @Test
+        @DisplayName("성공")
+        void 메뉴_노출_성공() {
 //            mockFindByMenu();
-//
-//            assertThatCode(() -> {
-//                menuService.display(chickenMenu.getId());
-//            }).doesNotThrowAnyException();
-//
-//        }
-//
-//        @DisplayName("메뉴가격이 구성 상품 총 금액보다 크지 않아야 한다.")
-//        @ParameterizedTest
-//        @CsvSource({"100000, 100"})
-//        void 변경가격_비교_검사(final int price1, final int price2) {
-//            chickenMenu = MenuFixture.test(
-//                null,
-//                BigDecimal.valueOf(price1),
-//                null,
-//                true,
-//                List.of(new MenuProductFixture(
-//                    new ProductFixture(
-//                        null,
-//                        null,
-//                        BigDecimal.valueOf(price2)
-//                    ).toEntity(),
-//                    100
-//                ).create())
-//            ).create();
-//
-//            mockFindByMenu();
-//
-//            assertThatExceptionOfType(IllegalStateException.class)
-//                .isThrownBy(() -> menuService.display(chickenMenu.getId()));
-//        }
-//    }
+
+            assertThatCode(() -> {
+                menuService.display(chickenMenu.getId());
+            }).doesNotThrowAnyException();
+
+        }
+
+        @DisplayName("메뉴가격이 구성 상품 총 금액보다 크지 않아야 한다.")
+        @ParameterizedTest
+        @CsvSource({"100000, 100"})
+        void 변경가격_비교_검사(final int price1, final int price2) {
+            chickenMenu = MenuFixture.test(
+                null,
+                BigDecimal.valueOf(price1),
+                null,
+                true,
+                List.of(new MenuProductFixture(
+                    new ProductFixture(
+                        null,
+                        null,
+                        BigDecimal.valueOf(price2)
+                    ).toEntity(),
+                    100
+                ).create())
+            ).toEntity();
+
+            mockFindByMenu();
+
+            assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(() -> menuService.display(chickenMenu.getId()));
+        }
+    }
 //
 //    @Nested
 //    @DisplayName("메뉴 숨김")
@@ -330,43 +343,43 @@
 //                .isThrownBy(() -> menuService.changePrice(chickenMenu.getId(), chickenMenu));
 //        }
 //    }
-//
-//    private void mockCreateMenu(boolean isProfanity) {
-//        mockFindByMenuGroup();
-//        mockFindAllByProduct();
-//        mockFindByProduct(chicken);
-//        mockCheckMenuName(isProfanity);
-//    }
-//
-//    private void mockFindByMenu() {
-//        when(menuRepository.findById(Mockito.any()))
-//            .thenReturn(Optional.of(chickenMenu));
-//    }
-//
-//    private void mockFindByMenuGroup() {
-//        when(menuGroupRepository.findById(Mockito.any()))
-//            .thenReturn(Optional.of(chickenMenu.getMenuGroup()));
-//    }
-//
-//    private void mockFindAllByProduct() {
-//        when(productRepository.findAllByIdIn(Mockito.any()))
-//            .thenReturn(chickenMenu.getMenuProducts()
-//                .stream()
-//                .map(MenuProduct::getProduct)
-//                .collect(Collectors.toList()));
-//    }
-//
-//    private void mockFindByProduct(Product chicken) {
-//        when(productRepository.findById(Mockito.any()))
-//            .thenReturn(Optional.of(chicken));
-//    }
-//
-//    private void mockCheckMenuName(boolean isProfanity) {
-//        when(purgomalumClient.containsProfanity(anyString())).thenReturn(isProfanity);
-//    }
-//
-//    private void mockSaveMenu() {
-//        when(menuRepository.save(Mockito.any(Menu.class))).thenReturn(chickenMenu);
-//    }
-//
-//}
+
+    private void mockCreateMenu(boolean isProfanity) {
+        mockFindByMenuGroup();
+        mockFindAllByProduct();
+        mockFindByProduct(chicken);
+        mockCheckMenuName(isProfanity);
+    }
+
+    private void mockFindByMenu() {
+        when(menuRepository.findById(Mockito.any()))
+            .thenReturn(Optional.of(chickenMenu));
+    }
+
+    private void mockFindByMenuGroup() {
+        when(menuGroupRepository.findById(Mockito.any()))
+            .thenReturn(Optional.of(chickenMenu.getMenuGroup()));
+    }
+
+    private void mockFindAllByProduct() {
+        when(productRepository.findAllByIdIn(Mockito.any()))
+            .thenReturn(chickenMenu.getMenuProducts()
+                .stream()
+                .map(MenuProduct::getProduct)
+                .collect(Collectors.toList()));
+    }
+
+    private void mockFindByProduct(Product chicken) {
+        when(productRepository.findById(Mockito.any()))
+            .thenReturn(Optional.of(chicken));
+    }
+
+    private void mockCheckMenuName(boolean isProfanity) {
+        when(purgomalumClient.containsProfanity(anyString())).thenReturn(isProfanity);
+    }
+
+    private void mockSaveMenu() {
+        when(menuRepository.save(Mockito.any(Menu.class))).thenReturn(chickenMenu);
+    }
+
+}

@@ -7,6 +7,8 @@ import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
+import kitchenpos.menu.domain.model.MenuName;
+import kitchenpos.menu.domain.model.MenuPrice;
 
 public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
                           MenuGroup 메뉴그룹, boolean 노출여부, List<MenuProduct> 메뉴구성품) {
@@ -19,7 +21,7 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             UUID.randomUUID(),
             DEFAULT_MENU_NAME,
             DEFAULT_MENU_PRICE,
-            MenuGroupFixture.init().create(),
+            MenuGroupFixture.init().toEntity(),
             true,
             List.of(MenuProductFixture.init().create()));
     }
@@ -30,22 +32,14 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
             UUID.randomUUID(),
             Objects.requireNonNullElse(메뉴명, DEFAULT_MENU_NAME),
             Objects.requireNonNullElse(메뉴가격, DEFAULT_MENU_PRICE),
-            Objects.requireNonNullElse(메뉴그룹, MenuGroupFixture.init().create()),
+            Objects.requireNonNullElse(메뉴그룹, MenuGroupFixture.init().toEntity()),
             노출여부,
             Objects.requireNonNullElse(메뉴구성품, List.of(MenuProductFixture.init().create()))
         );
     }
 
-    public Menu create() {
-        var menu = new Menu();
-        menu.setId(id);
-        menu.setName(메뉴명);
-        menu.setPrice(메뉴가격);
-        menu.setDisplayed(노출여부);
-        menu.setMenuGroup(메뉴그룹);
-        menu.setMenuProducts(메뉴구성품);
-
-        return menu;
+    public Menu toEntity() {
+        return new Menu(id, new MenuName(메뉴명), MenuPrice.of(메뉴가격), 메뉴그룹, 노출여부, 메뉴구성품);
     }
 }
 

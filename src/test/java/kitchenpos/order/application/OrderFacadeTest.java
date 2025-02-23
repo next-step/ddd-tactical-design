@@ -65,7 +65,7 @@ class OrderFacadeTest {
 
     @BeforeEach
     void setUp() {
-        chickenMenu = MenuFixture.init().create();
+        chickenMenu = MenuFixture.init().toEntity();
         order = OrderFixture.init().create();
     }
 
@@ -191,7 +191,7 @@ class OrderFacadeTest {
         @DisplayName("메뉴가격과 주문 아이템 가격이 다르면 안된다.")
         void 메뉴가격_주문아이템가격_비교() {
             chickenMenu = MenuFixture.test(null, BigDecimal.valueOf(500_000), null, true, null)
-                .create();
+                .toEntity();
 
             mockFindAllByMenu(order);
 

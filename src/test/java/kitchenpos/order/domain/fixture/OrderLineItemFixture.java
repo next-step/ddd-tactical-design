@@ -13,7 +13,7 @@ public record OrderLineItemFixture(Menu 메뉴, long 주문수량, BigDecimal �
 
     public static OrderLineItemFixture init() {
         return new OrderLineItemFixture(
-            MenuFixture.init().create(),
+            MenuFixture.init().toEntity(),
             DEFAULT_ORDER_LINE_ITEM_QTY,
             DEFAULT_ORDER_LINE_ITEM_PRICE
         );
@@ -21,7 +21,7 @@ public record OrderLineItemFixture(Menu 메뉴, long 주문수량, BigDecimal �
 
     public static OrderLineItemFixture test(Menu 메뉴, long 주문수량, BigDecimal 주문가격) {
         return new OrderLineItemFixture(
-            Objects.requireNonNullElse(메뉴, MenuFixture.init().create()),
+            Objects.requireNonNullElse(메뉴, MenuFixture.init().toEntity()),
             Objects.requireNonNullElse(주문수량, DEFAULT_ORDER_LINE_ITEM_QTY),
             Objects.requireNonNullElse(주문가격, DEFAULT_ORDER_LINE_ITEM_PRICE)
         );
