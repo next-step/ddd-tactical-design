@@ -1,26 +1,27 @@
 package kitchenpos.product.application;
 
+import kitchenpos.TestFixtureFactory;
+import kitchenpos.common.application.PurgomalumClient;
+import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.menu.domain.service.MarginValidator;
+import kitchenpos.product.domain.model.Product;
+import kitchenpos.product.domain.model.ProductNameCreationService;
+import kitchenpos.product.domain.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import kitchenpos.common.application.PurgomalumClient;
-import kitchenpos.menu.domain.service.MarginValidator;
-import kitchenpos.product.domain.model.ProductNameCreationService;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.TestFixtureFactory;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 class ProductServiceTest {
 

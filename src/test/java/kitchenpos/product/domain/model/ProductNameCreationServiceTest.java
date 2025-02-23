@@ -1,12 +1,12 @@
 package kitchenpos.product.domain.model;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ProductNameCreationServiceTest {
 

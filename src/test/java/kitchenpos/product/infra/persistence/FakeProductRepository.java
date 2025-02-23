@@ -1,12 +1,9 @@
 package kitchenpos.product.infra.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
+
+import java.util.*;
 
 public class FakeProductRepository implements ProductRepository {
 

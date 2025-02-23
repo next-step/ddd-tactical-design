@@ -1,9 +1,5 @@
 package kitchenpos;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
@@ -20,6 +16,11 @@ import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductNameCreationService;
 import kitchenpos.product.domain.model.ProductPrice;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 public class TestFixtureFactory {
 
@@ -85,7 +86,7 @@ public class TestFixtureFactory {
     }
 
     public static OrderTable createUsingOrderTable() {
-        return new OrderTable("사용 중인 테이블", 4, true);
+        return new OrderTable(UUID.randomUUID(), "사용 중인 테이블", 4, true);
     }
 
     public static Product createProduct(String name, long price) {

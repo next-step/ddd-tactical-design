@@ -2,7 +2,6 @@ package kitchenpos.order.eatinorder.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage;
 
 import java.util.Objects;
 
