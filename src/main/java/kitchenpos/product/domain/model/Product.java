@@ -60,10 +60,6 @@ public class Product {
         return name;
     }
 
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
-
     public BigDecimal getInnerPrice() {
         return price.getValue();
     }
@@ -75,8 +71,4 @@ public class Product {
     public void changePrice(BigDecimal price) {
         this.price = new ProductPrice(price);
     }
-
-//    public void setPrice(final BigDecimal price) {
-//        this.price = price;
-//    }
 }

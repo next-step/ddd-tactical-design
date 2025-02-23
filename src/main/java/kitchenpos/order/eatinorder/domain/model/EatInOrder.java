@@ -28,17 +28,12 @@ public class EatInOrder {
     @Id
     private UUID id;
 
-//    @Column(name = "status", nullable = false, columnDefinition = "varchar(255)")
-//    @Enumerated(EnumType.STRING)
-//    private EatInOrderStatus status;
-
     @Column(name = "order_date_time", nullable = false)
     private LocalDateTime orderDateTime;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
             name = "eat_in_order_id",
-//            nullable = false,
             columnDefinition = "binary(16)",
             foreignKey = @ForeignKey(name = "fk_order_line_item_to_eat_in_orders")
     )
@@ -65,20 +60,9 @@ public class EatInOrder {
                       List<OrderLineItem> orderLineItems, EatInOrderFlow eatInOrderFlow) {
         validateOrderLineItemIsEmpty(orderLineItems);
         this.id = id;
-//        this.status = status;
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
         this.eatInOrderFlow = eatInOrderFlow;
-    }
-
-    public EatInOrder(UUID id, LocalDateTime orderDateTime,
-                      List<OrderLineItem> orderLineItems) {
-        validateOrderLineItemIsEmpty(orderLineItems);
-        this.id = id;
-//        this.status = status;
-        this.orderDateTime = orderDateTime;
-        this.orderLineItems = orderLineItems;
-        this.eatInOrderFlow = EatInOrderFlow.WAITING;
     }
 
     private void validateOrderLineItemIsEmpty(List<OrderLineItem> orderLineItems) {
@@ -102,33 +86,12 @@ public class EatInOrder {
         this.id = id;
     }
 
-//    public EatInOrderStatus getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(final EatInOrderStatus status) {
-//        this.status = status;
-//    }
-
-
     public EatInOrderFlow getEatInOrderFlow() {
         return eatInOrderFlow;
     }
 
-    public LocalDateTime getOrderDateTime() {
-        return orderDateTime;
-    }
-
-    public void setOrderDateTime(final LocalDateTime orderDateTime) {
-        this.orderDateTime = orderDateTime;
-    }
-
     public List<OrderLineItem> getOrderLineItems() {
         return orderLineItems;
-    }
-
-    public void setOrderLineItems(final List<OrderLineItem> orderLineItems) {
-        this.orderLineItems = orderLineItems;
     }
 
     public OrderTable getOrderTable() {
@@ -142,9 +105,5 @@ public class EatInOrder {
 
     public UUID getOrderTableId() {
         return orderTableId;
-    }
-
-    public void setOrderTableId(final UUID orderTableId) {
-        this.orderTableId = orderTableId;
     }
 }

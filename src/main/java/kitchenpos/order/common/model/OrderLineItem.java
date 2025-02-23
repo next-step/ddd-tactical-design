@@ -74,14 +74,6 @@ public class OrderLineItem {
         }
     }
 
-    public Long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
     public Menu getMenu() {
         return menu;
     }
@@ -100,10 +92,6 @@ public class OrderLineItem {
 
     public UUID getMenuId() {
         return menuId;
-    }
-
-    public void setMenuId(final UUID menuId) {
-        this.menuId = menuId;
     }
 
     public BigDecimal getPrice() {

@@ -17,10 +17,6 @@ public enum DeliveryOrderFlow {
         this.previousStatus = previousStatus;
     }
 
-    public static DeliveryOrderFlow from(DeliveryOrderStatus status) {
-        return valueOf(status.name());
-    }
-
     public boolean validateOrderStatus(DeliveryOrderStatus nextOrderStatus) {
         DeliveryOrderFlow nextStatus = Arrays.stream(values())
                 .filter(v -> v.nextStatus == nextOrderStatus)

@@ -96,12 +96,4 @@ public class OrderTable {
     public OrderTableName getName() {
         return name;
     }
-
-    //    public void setOccupied(final boolean occupied) {
-//        this.occupied = occupied;
-//    }
-
-//    public void setName(final String name) {
-//        this.name = name;
-//    }
 }
