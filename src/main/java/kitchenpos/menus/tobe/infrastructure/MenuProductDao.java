@@ -1,4 +1,4 @@
-package kitchenpos.menus.infrastructure;
+package kitchenpos.menus.tobe.infrastructure;
 
 import kitchenpos.menus.tobe.domain.MenuProduct;
 

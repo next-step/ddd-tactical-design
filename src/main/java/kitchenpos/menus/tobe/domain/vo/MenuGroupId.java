@@ -14,7 +14,7 @@ public class MenuGroupId {
     }
 
     public MenuGroupId(final UUID id) {
-        if(Objects.isNull(id)) {
+        if (Objects.isNull(id)) {
             throw new InvalidMenuGroupIdException();
         }
         this.id = id;

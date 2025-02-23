@@ -17,7 +17,7 @@ public class MenuId {
     }
 
     public MenuId(final UUID value) {
-        if(Objects.isNull(value)) {
+        if (Objects.isNull(value)) {
             throw new InvalidMenuIdException();
         }
         this.value = value;

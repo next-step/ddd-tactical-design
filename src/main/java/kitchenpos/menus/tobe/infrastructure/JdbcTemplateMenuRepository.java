@@ -1,4 +1,4 @@
-package kitchenpos.menus.infrastructure;
+package kitchenpos.menus.tobe.infrastructure;
 
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
@@ -25,6 +25,7 @@ public class JdbcTemplateMenuRepository implements MenuRepository {
     /**
      * Menu 의 식별자가 UUID 로서, 애플리케이션 레벨에서 미리 정의되었다 가정한다.
      * 반면에 MenuProducts 의 경우 Auto Increment 통해 정의된다 가정하기에 select 를 통해 조회 후 사용한다.
+     *
      * @param menu
      * @return
      */
