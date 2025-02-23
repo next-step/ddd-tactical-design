@@ -2,6 +2,7 @@ package kitchenpos.menus.infrastructure;
 
 import kitchenpos.menus.tobe.Menu;
 import kitchenpos.menus.tobe.MenuProduct;
+import kitchenpos.menus.tobe.vo.MenuGroupId;
 import kitchenpos.menus.tobe.vo.MenuId;
 import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -79,7 +80,7 @@ public class JdbcTemplateMenuDao implements MenuDao {
                 resultSet.getString(NAME),
                 new EmptyProfanities(),
                 resultSet.getLong(PRICE),
-                UUID.fromString(resultSet.getString(MENU_GROUP_ID)),
+                new MenuGroupId(resultSet.getString(MENU_GROUP_ID)),
                 menuProductMap.get(UUID.fromString(resultSet.getString(ID))),
                 resultSet.getBoolean(DISPLAYED)
         );

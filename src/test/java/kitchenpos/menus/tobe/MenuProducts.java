@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
+import kitchenpos.menus.tobe.exception.InvalidMenuProductSizeException;
+import kitchenpos.menus.tobe.exception.NoSuchMenuProductException;
 import kitchenpos.menus.tobe.vo.MenuId;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class MenuProducts {
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
         if (Objects.isNull(menuProducts) || menuProducts.isEmpty()) {
-            throw new InvalidMenuArgumentException();
+            throw new InvalidMenuProductSizeException();
         }
         this.menuProducts = menuProducts;
     }
@@ -27,7 +28,7 @@ public class MenuProducts {
         final MenuProduct menuProduct = menuProducts.stream()
                 .filter(it -> it.isSameProduct(productId))
                 .findFirst()
-                .orElseThrow(InvalidMenuArgumentException::new);
+                .orElseThrow(NoSuchMenuProductException::new);
         menuProduct.changePrice(changedFirstPrice);
     }
 

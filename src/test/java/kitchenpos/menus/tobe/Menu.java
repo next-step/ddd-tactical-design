@@ -2,6 +2,7 @@ package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentNullPointException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
+import kitchenpos.menus.tobe.vo.MenuGroupId;
 import kitchenpos.menus.tobe.vo.MenuId;
 import kitchenpos.menus.tobe.vo.MenuName;
 import kitchenpos.menus.tobe.vo.MenuPrice;
@@ -15,19 +16,19 @@ public class Menu {
     private final MenuId id;
     private final MenuName name;
     private MenuPrice price;
-    private final UUID menuGroupId;
+    private final MenuGroupId menuGroupId;
     private MenuProducts menuProducts;
     private boolean displayed;
 
     public Menu(final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(new MenuId(), new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
+        this(new MenuId(), new MenuName(name, profanities), new MenuPrice(price), new MenuGroupId(menuGroupId), new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final MenuId id, final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
+    public Menu(final MenuId id, final String name, final Profanities profanities, final long price, final MenuGroupId menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
         this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final MenuId id, final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts, final boolean displayed) {
+    public Menu(final MenuId id, final MenuName name, final MenuPrice price, final MenuGroupId menuGroupId, final MenuProducts menuProducts, final boolean displayed) {
         this.verify(name, price, menuGroupId, menuProducts);
         this.id = id;
         this.name = name;
@@ -38,7 +39,7 @@ public class Menu {
         menuProducts.setMenuId(id);
     }
 
-    private void verify(final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts) {
+    private void verify(final MenuName name, final MenuPrice price, final MenuGroupId menuGroupId, final MenuProducts menuProducts) {
         if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroupId) || Objects.isNull(menuProducts)) {
             throw new InvalidMenuArgumentNullPointException();
         }
