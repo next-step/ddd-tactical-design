@@ -59,6 +59,7 @@ public class Menu {
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {
         menuProducts.changeMenuProductPrice(productId, price);
+        hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice();
     }
 
     public void hide() {
@@ -74,7 +75,7 @@ public class Menu {
         this.price = MenuPrice.of(price, menuProducts.getTotalPrice());
     }
 
-    public void hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice() {
+    private void hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice() {
         if (this.price.isGreaterThan(menuProducts.getTotalPrice())) {
             this.displayed = false;
         }
