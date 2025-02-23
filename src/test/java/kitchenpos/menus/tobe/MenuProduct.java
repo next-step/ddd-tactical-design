@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MenuProduct {
-    private final Long seq;
+    private Long seq;
     private MenuProductPrice price;
     private final MenuProductQuantity quantity;
     private MenuId menuId;
@@ -58,8 +58,8 @@ public class MenuProduct {
         this.menuId = menuId;
     }
 
-    public Long seq() {
-        return seq;
+    public void setSeq(final long seq) {
+        this.seq = seq;
     }
 
     @Override

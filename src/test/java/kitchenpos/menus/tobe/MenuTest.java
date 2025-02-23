@@ -115,7 +115,7 @@ public class MenuTest {
                 () -> assertThat(menu).isNotNull(),
                 () -> assertThat(menu.getIdValue()).isNotNull(),
                 () -> assertThat(menu.menuProducts()).hasSize(2),
-                () -> assertThat(menu.menuProducts()).anyMatch(menuProduct -> menuProduct.menuIdValue() != null)
+                () -> assertThat(menu.menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
         );
     }
 

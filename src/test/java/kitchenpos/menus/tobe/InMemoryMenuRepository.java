@@ -1,13 +1,17 @@
 package kitchenpos.menus.tobe;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryMenuRepository implements MenuRepository {
 
     private final Map<UUID, Menu> menus = new HashMap<>();
+    private final AtomicLong sequence = new AtomicLong(0);
 
     @Override
     public Menu save(final Menu menu) {
+        menu.menuProducts()
+                .forEach(it -> it.setSeq(sequence.incrementAndGet()));
         menus.put(menu.getIdValue(), menu);
         return menu;
     }
