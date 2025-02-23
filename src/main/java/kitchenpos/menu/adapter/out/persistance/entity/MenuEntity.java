@@ -67,7 +67,7 @@ public class MenuEntity {
     }
 
     public Menu toDomain(Profanities profanities) {
-        return new Menu(
+        return Menu.create(
                 this.id,
                 MenuName.of(this.name, profanities),
                 MenuPrice.of(this.price),

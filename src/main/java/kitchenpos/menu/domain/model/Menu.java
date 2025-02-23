@@ -15,7 +15,7 @@ public class Menu {
     private final MenuProducts menuProducts;
     private final UUID menuGroupId;
 
-    public Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+    private Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,13 +44,17 @@ public class Menu {
             final List<MenuProduct> menuProductList,
             final Profanities profanities
     ) {
-        if (menuGroupId == null) {
-            throw new MenuValidationException("메뉴 그룹을 반드시 선택해야 합니다.");
-        }
         MenuName menuName = MenuName.of(name, profanities);
         MenuProducts menuProducts = MenuProducts.of(menuProductList);
         MenuPrice menuPrice = MenuPrice.of(price, menuProducts.getTotalPrice());
-        return new Menu(id, menuName, menuPrice, isDisplayed, menuProducts, menuGroupId);
+        return create(id, menuName, menuPrice, isDisplayed, menuProducts, menuGroupId);
+    }
+
+    public static Menu create(UUID id, MenuName menuName, MenuPrice menuPrice, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+        if (menuGroupId == null) {
+            throw new MenuValidationException("메뉴 그룹을 반드시 선택해야 합니다.");
+        }
+        return new Menu(id, menuName, menuPrice, displayed, menuProducts, menuGroupId);
     }
 
     public void changeMenuProductPrice(UUID productId, BigDecimal price) {

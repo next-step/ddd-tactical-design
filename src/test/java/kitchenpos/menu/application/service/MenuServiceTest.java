@@ -217,6 +217,9 @@ public class MenuServiceTest {
             // given
             CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 1);
             CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, null, List.of(menuProduct));
+            when(menuProductMapper.toMenuProducts(request.getProductQuantities())).thenReturn(
+                    List.of(new MenuProduct(후라이드치킨_PRODUCT_UUID, 1, 후라이드치킨_DEFAULT_PRICE))
+            );
 
             // when
             ThrowableAssert.ThrowingCallable throwable = () -> menuService.create(request);

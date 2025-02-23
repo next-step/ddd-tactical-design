@@ -78,7 +78,7 @@ public class MenuTest {
             final List<MenuProduct> menuProductList = createMenuProducts();
 
             // when
-            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(20_000), menuGroupId, menuProductList);
+            ThrowableAssert.ThrowingCallable throwable = () -> createMenu(BigDecimal.valueOf(16_000), menuGroupId, menuProductList);
 
             // then
             assertThatThrownBy(throwable)
