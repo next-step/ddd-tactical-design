@@ -41,7 +41,7 @@ public class MenuRepositoryTest {
     @DisplayName("매뉴를 저장할 수 있다.")
     @Test
     void save() {
-        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.getIdValue(), menuProducts, false));
+        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         assertAll(
                 () -> assertThat(menu).isNotNull(),
@@ -53,7 +53,7 @@ public class MenuRepositoryTest {
     @DisplayName("메뉴를 조회할 수 있다.")
     @Test
     void findById() {
-        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.getIdValue(), menuProducts, false));
+        final Menu menu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         final Menu actual = menuRepository.findById(menu.getIdValue()).get();
         assertAll(
@@ -73,7 +73,7 @@ public class MenuRepositoryTest {
     @DisplayName("모든 메뉴를 조회할 수 있다.")
     @Test
     void findAll() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.getIdValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         final List<Menu> actual = menuRepository.findAll();
         assertAll(
@@ -87,7 +87,7 @@ public class MenuRepositoryTest {
     @DisplayName("여러 메뉴를 조회할 수 있다.")
     @Test
     void findAllByIdIn() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.getIdValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
 
         final List<Menu> actual = menuRepository.findAllByIdIn(List.of(savedMenu.getIdValue()));
         assertAll(
@@ -101,7 +101,7 @@ public class MenuRepositoryTest {
     @DisplayName("상품 ID로 메뉴를 조회할 수 있다.")
     @Test
     void findAllByProductId() {
-        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.getIdValue(), menuProducts, false));
+        final Menu savedMenu = menuRepository.save(new Menu(name, profanities, price, menuGroup.id(), menuProducts, false));
         final Long productId = savedMenu.menuProducts().stream()
                 .map(MenuProduct::productId)
                 .findFirst()

@@ -8,7 +8,7 @@ public class InMemoryMenuGroupRepository implements MenuGroupRepository {
 
     @Override
     public MenuGroup save(final MenuGroup menuGroup) {
-        menuGroups.put(menuGroup.getIdValue(), menuGroup);
+        menuGroups.put(menuGroup.id(), menuGroup);
         return menuGroup;
     }
 
