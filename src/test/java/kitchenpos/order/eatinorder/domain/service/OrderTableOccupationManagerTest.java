@@ -1,0 +1,54 @@
+package kitchenpos.order.eatinorder.domain.service;
+
+import static kitchenpos.TestFixtureFactory.createMenu;
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createOrderLineItem;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import kitchenpos.order.common.model.OrderLineItem;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
+import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
+import kitchenpos.order.eatinorder.infra.persistence.FakeEatInOrderRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class OrderTableOccupationManagerTest {
+
+    @Test
+    @DisplayName("매장 주문이 완료 되면 테이블의 점유 상태를 해지한다.")
+    void release() {
+        // given
+        EatInOrderRepository eatInOrderRepository = new FakeEatInOrderRepository(new HashMap<>());
+        OrderTableOccupationManager manager = new OrderTableOccupationManager(eatInOrderRepository);
+
+        OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
+        EatInOrder eatInOrder = createCompleteEatInOrder(orderTable);
+
+        eatInOrderRepository.save(eatInOrder);
+
+        // when
+        manager.release(orderTable);
+
+        // then
+        assertThat(orderTable.isOccupied()).isEqualTo(false);
+        assertThat(orderTable.getNumberOfGuests()).isEqualTo(0);
+    }
+
+    private EatInOrder createCompleteEatInOrder(OrderTable orderTable) {
+        List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(createMenu(createMenuGroup(), createProduct(
+                BigDecimal.TWO), 3)));
+        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+                orderLineItems,
+                EatInOrderFlow.COMPLETED);
+        eatInOrder.occupyOrderTable(orderTable);
+        return eatInOrder;
+    }
+}
