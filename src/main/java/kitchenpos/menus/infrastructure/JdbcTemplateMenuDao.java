@@ -2,9 +2,9 @@ package kitchenpos.menus.infrastructure;
 
 import kitchenpos.menus.tobe.domain.Menu;
 import kitchenpos.menus.tobe.domain.MenuProduct;
+import kitchenpos.menus.tobe.domain.vo.EmptyProfanities;
 import kitchenpos.menus.tobe.domain.vo.MenuGroupId;
 import kitchenpos.menus.tobe.domain.vo.MenuId;
-import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
 
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

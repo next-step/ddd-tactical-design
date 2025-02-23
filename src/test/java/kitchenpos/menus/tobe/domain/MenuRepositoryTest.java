@@ -1,7 +1,7 @@
 package kitchenpos.menus.tobe.domain;
 
-import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
-import kitchenpos.products.tobe.domain.vo.Profanities;
+import kitchenpos.menus.tobe.domain.vo.EmptyProfanities;
+import kitchenpos.menus.tobe.domain.vo.Profanities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

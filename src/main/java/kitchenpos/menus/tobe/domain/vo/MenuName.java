@@ -2,7 +2,6 @@ package kitchenpos.menus.tobe.domain.vo;
 
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuNameException;
 import kitchenpos.menus.tobe.domain.exception.MenuNameContainsProfanityException;
-import kitchenpos.products.tobe.domain.vo.Profanities;
 
 import java.util.Objects;
 
