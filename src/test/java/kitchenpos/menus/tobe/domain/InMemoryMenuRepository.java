@@ -12,7 +12,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public Menu save(final Menu menu) {
         menu.menuProducts()
                 .forEach(it -> it.setSeq(sequence.incrementAndGet()));
-        menus.put(menu.getIdValue(), menu);
+        menus.put(menu.idValue(), menu);
         return menu;
     }
 
@@ -30,7 +30,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
                 .stream()
-                .filter(menu -> ids.contains(menu.getIdValue()))
+                .filter(menu -> ids.contains(menu.idValue()))
                 .toList();
     }
 

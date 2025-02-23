@@ -20,7 +20,7 @@ public class MenuGroup {
         this.name = name;
     }
 
-    public UUID id() {
+    public UUID idValue() {
         return id.getValue();
     }
 

@@ -48,7 +48,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 가격 : `{0}`")
     void createWithNegativePrice(final long price) {
         assertThatThrownBy(
-                () -> new Menu("메뉴", profanities, price, menuGroup.id(), menuProducts, true)
+                () -> new Menu("메뉴", profanities, price, menuGroup.idValue(), menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuPricePeriodException.class);
     }
 
@@ -57,7 +57,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 이름 : `{0}`")
     void createWithInvalidName(final String name) {
         assertThatThrownBy(
-                () -> new Menu(name, profanities, 1000L, menuGroup.id(), menuProducts, true)
+                () -> new Menu(name, profanities, 1000L, menuGroup.idValue(), menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuNameException.class);
     }
 
@@ -67,7 +67,7 @@ public class MenuTest {
     void createWithProfanityName(final String name) {
         final FakeProfanities fakeProfanities = new FakeProfanities(List.of("비속어", "욕설"));
         assertThatThrownBy(() ->
-                new Menu(name, fakeProfanities, price, menuGroup.id(), menuProducts, true)
+                new Menu(name, fakeProfanities, price, menuGroup.idValue(), menuProducts, true)
         ).isInstanceOf(MenuNameContainsProfanityException.class);
     }
 
@@ -85,7 +85,7 @@ public class MenuTest {
     @ParameterizedTest(name = "{index}. 메뉴 상품 : `{0}`")
     void createWithInvalidMenuProducts(final List<MenuProduct> menuProducts) {
         assertThatThrownBy(
-                () -> new Menu(name, profanities, price, menuGroup.id(), menuProducts, true)
+                () -> new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuProductSizeException.class);
     }
 
@@ -102,17 +102,17 @@ public class MenuTest {
                 new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
         assertThatThrownBy(
-                () -> new Menu(name, profanities, price, menuGroup.id(), menuProducts, true)
+                () -> new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, true)
         ).isExactlyInstanceOf(InvalidMenuPriceException.class);
     }
 
     @DisplayName("메뉴를 생성할 수 있다.")
     @Test
     void create() {
-        final Menu menu = new Menu(name, profanities, price, menuGroup.id(), menuProducts, false);
+        final Menu menu = new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false);
         assertAll(
                 () -> assertThat(menu).isNotNull(),
-                () -> assertThat(menu.getIdValue()).isNotNull(),
+                () -> assertThat(menu.idValue()).isNotNull(),
                 () -> assertThat(menu.menuProducts()).hasSize(2),
                 () -> assertThat(menu.menuProducts()).allMatch(menuProduct -> menuProduct.menuIdValue() != null)
         );
@@ -130,7 +130,7 @@ public class MenuTest {
                 new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
                 new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
-        final Menu menu = new Menu(name, profanities, price, menuGroup.id(), menuProducts, true);
+        final Menu menu = new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, true);
 
         assertThatThrownBy(
                 () -> menu.changePrice(changedMenuPrice)
@@ -150,7 +150,7 @@ public class MenuTest {
                 new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
                 new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
-        final Menu menu = new Menu(name, profanities, price, menuGroup.id(), menuProducts, false);
+        final Menu menu = new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false);
         menu.changedProductPrice(1L, changedFirstPrice);
 
         assertThatThrownBy(menu::display)
@@ -169,7 +169,7 @@ public class MenuTest {
                 new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
                 new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
-        final Menu menu = new Menu(name, profanities, price, menuGroup.id(), menuProducts, false);
+        final Menu menu = new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, false);
         menu.display();
 
         assertThat(menu.isDisplayed()).isTrue();
@@ -186,7 +186,7 @@ public class MenuTest {
         final List<MenuProduct> menuProducts = List.of(
                 new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
                 new MenuProduct(2L, secondPrice, secondQuantity, null, 2L));
-        final Menu menu = new Menu(name, profanities, price, menuGroup.id(), menuProducts, true);
+        final Menu menu = new Menu(name, profanities, price, menuGroup.idValue(), menuProducts, true);
         menu.hide();
 
         assertThat(menu.isDisplayed()).isFalse();

@@ -77,7 +77,7 @@ public class Menu {
         return displayed;
     }
 
-    public UUID getIdValue() {
+    public UUID idValue() {
         return id.getValue();
     }
 
