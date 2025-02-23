@@ -8,7 +8,7 @@ public class InMemoryMenuRepository implements MenuRepository {
 
     @Override
     public Menu save(final Menu menu) {
-        menus.put(menu.getId(), menu);
+        menus.put(menu.getIdValue(), menu);
         return menu;
     }
 
@@ -26,7 +26,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByIdIn(final List<UUID> ids) {
         return menus.values()
                 .stream()
-                .filter(menu -> ids.contains(menu.getId()))
+                .filter(menu -> ids.contains(menu.getIdValue()))
                 .toList();
     }
 

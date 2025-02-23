@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("메뉴 상품 단위 테스트")
 public class MenuProductTest {
 
     @DisplayName("메뉴 상품의 가격은 0원 이상이어 한다.")

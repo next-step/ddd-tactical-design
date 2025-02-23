@@ -25,8 +25,8 @@ public class JdbcTemplateMenuRepository implements MenuRepository {
     public Menu save(final Menu menu) {
         menuDao.save(menu);
         menuProductDao.saveAll(menu.menuProducts());
-        final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuId(menu.getId());
-        return menuDao.findAllById(menu.getId(), menuProducts);
+        final List<MenuProduct> menuProducts = menuProductDao.findAllByMenuId(menu.getIdValue());
+        return menuDao.findAllById(menu.getIdValue(), menuProducts);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class JdbcTemplateMenuRepository implements MenuRepository {
     }
 
     private List<UUID> getMenuIds(final List<MenuProduct> menuProducts) {
-        return menuProducts.stream().map(MenuProduct::menuId).toList();
+        return menuProducts.stream().map(MenuProduct::menuIdValue).toList();
     }
 }

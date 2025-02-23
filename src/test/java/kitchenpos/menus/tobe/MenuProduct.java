@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe;
 
+import kitchenpos.menus.tobe.vo.MenuId;
 import kitchenpos.menus.tobe.vo.MenuProductPrice;
 import kitchenpos.menus.tobe.vo.MenuProductQuantity;
 
@@ -10,24 +11,25 @@ public class MenuProduct {
     private final Long seq;
     private MenuProductPrice price;
     private final MenuProductQuantity quantity;
-    private UUID menuId;
+    private MenuId menuId;
     private final long productId;
 
-    public MenuProduct(final Long seq, final long price, final long quantity, final UUID menuId, final long productId) {
+    public MenuProduct(final Long seq, final long price, final long quantity, final MenuId menuId, final long productId) {
         this(seq, new MenuProductPrice(price), new MenuProductQuantity(quantity), menuId, productId);
     }
 
-    public MenuProduct(final Long seq, final MenuProductPrice price, final MenuProductQuantity quantity, final UUID menuId, final long productId) {
+    public MenuProduct(final Long seq, final MenuProductPrice price, final MenuProductQuantity quantity, final MenuId menuId, final long productId) {
         this.seq = seq;
         this.price = price;
         this.quantity = quantity;
+        this.menuId = menuId;
         this.productId = productId;
     }
 
     public boolean isSameProduct(final long productId) {
         return this.productId == productId;
     }
-    
+
     public long amount() {
         return Math.multiplyExact(price.getValue(), quantity.getValue());
     }
@@ -48,11 +50,11 @@ public class MenuProduct {
         return productId;
     }
 
-    public UUID menuId() {
-        return menuId;
+    public UUID menuIdValue() {
+        return menuId.getValue();
     }
 
-    public void setMenuId(final UUID menuId) {
+    public void setMenuId(final MenuId menuId) {
         this.menuId = menuId;
     }
 

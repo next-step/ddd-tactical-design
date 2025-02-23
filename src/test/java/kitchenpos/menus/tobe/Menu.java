@@ -1,8 +1,8 @@
 package kitchenpos.menus.tobe;
 
-import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentNullPointException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
+import kitchenpos.menus.tobe.vo.MenuId;
 import kitchenpos.menus.tobe.vo.MenuName;
 import kitchenpos.menus.tobe.vo.MenuPrice;
 import kitchenpos.products.tobe.domain.vo.Profanities;
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Menu {
-    private final UUID id;
+    private final MenuId id;
     private final MenuName name;
     private MenuPrice price;
     private final UUID menuGroupId;
@@ -20,14 +20,14 @@ public class Menu {
     private boolean displayed;
 
     public Menu(final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(UUID.randomUUID(), new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
+        this(new MenuId(), new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final UUID id, final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
+    public Menu(final MenuId id, final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
         this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final UUID id, final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts, final boolean displayed) {
+    public Menu(final MenuId id, final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts, final boolean displayed) {
         this.verify(name, price, menuGroupId, menuProducts);
         this.id = id;
         this.name = name;
@@ -65,7 +65,7 @@ public class Menu {
 
     public void display() {
         long totalAmount = menuProducts.totalAmount();
-        if(price.isGreaterThan(totalAmount)) {
+        if (price.isGreaterThan(totalAmount)) {
             throw new IllegalStateException();
         }
         this.displayed = true;
@@ -79,8 +79,8 @@ public class Menu {
         return displayed;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getIdValue() {
+        return id.getValue();
     }
 
     public boolean hasProduct(final Long productId) {

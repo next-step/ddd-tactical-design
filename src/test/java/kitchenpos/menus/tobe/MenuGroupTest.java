@@ -11,6 +11,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("메뉴 그룹 단위 테스트")
 public class MenuGroupTest {
 
     @DisplayName("메뉴 그룹 이름이 null 이거나 빈 문자열일 경우 메뉴 그룹을 생성할 수 없다.")

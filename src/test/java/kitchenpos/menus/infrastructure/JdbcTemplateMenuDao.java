@@ -2,6 +2,7 @@ package kitchenpos.menus.infrastructure;
 
 import kitchenpos.menus.tobe.Menu;
 import kitchenpos.menus.tobe.MenuProduct;
+import kitchenpos.menus.tobe.vo.MenuId;
 import kitchenpos.products.tobe.domain.vo.EmptyProfanities;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -74,7 +75,7 @@ public class JdbcTemplateMenuDao implements MenuDao {
 
     private Menu toEntity(final ResultSet resultSet, final Map<UUID, List<MenuProduct>> menuProductMap) throws SQLException {
         return new Menu(
-                UUID.fromString(resultSet.getString(ID)),
+                new MenuId(resultSet.getString(ID)),
                 resultSet.getString(NAME),
                 new EmptyProfanities(),
                 resultSet.getLong(PRICE),
@@ -86,6 +87,6 @@ public class JdbcTemplateMenuDao implements MenuDao {
 
     private Map<UUID, List<MenuProduct>> menuProductMap(final List<MenuProduct> menuProducts) {
         return menuProducts.stream()
-                .collect(groupingBy(MenuProduct::menuId));
+                .collect(groupingBy(MenuProduct::menuIdValue));
     }
 }

@@ -5,10 +5,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("메뉴 상품 목록 단위 테스트")
 public class MenuProductsTest {
 
     @DisplayName("메뉴 상품 목록의 총합 금액을 계산할 수 있다.")
@@ -19,11 +19,10 @@ public class MenuProductsTest {
                 메뉴 상품 목록의 총합 금액 : `{4}`
             """)
     void totalAmount(final long firstPrice, final long firstQuantity, final long secondPrice, final long secondQuantity, final long expected) {
-        final UUID menuId = UUID.randomUUID();
         final MenuProducts menuProducts = new MenuProducts(
                 List.of(
-                        new MenuProduct(1L, firstPrice, firstQuantity, menuId, 1L),
-                        new MenuProduct(2L, secondPrice, secondQuantity, menuId, 2L)
+                        new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                        new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
                 )
         );
         assertThat(menuProducts.totalAmount()).isEqualTo(expected);
@@ -36,9 +35,8 @@ public class MenuProductsTest {
                 변경할 메뉴 상품 가격 : `{2}`, 총합 금액 : `{3}`
             """)
     void changedProductPrice(final long price, final long quantity, final long changedPrice, final long expected) {
-        final UUID menuId = UUID.randomUUID();
         final MenuProducts menuProducts = new MenuProducts(
-                List.of(new MenuProduct(1L, price, quantity, menuId, 1L))
+                List.of(new MenuProduct(1L, price, quantity, null, 1L))
         );
         menuProducts.changedProductPrice(1L, changedPrice);
 
