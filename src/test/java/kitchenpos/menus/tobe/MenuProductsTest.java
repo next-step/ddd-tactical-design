@@ -1,5 +1,6 @@
 package kitchenpos.menus.tobe;
 
+import kitchenpos.menus.tobe.exception.NoSuchMenuProductException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -7,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("메뉴 상품 목록 단위 테스트")
 public class MenuProductsTest {
@@ -26,6 +28,20 @@ public class MenuProductsTest {
                 )
         );
         assertThat(menuProducts.totalAmount()).isEqualTo(expected);
+    }
+
+    @DisplayName("메뉴 상품 목록에 메뉴 상품이 존재하지 않으면 가격을 변경할 수 없다.")
+    @CsvSource(value = {"1_000:1:1_001", "2_000:2:2_001", "3_000:3:3_001"}, delimiter = ':')
+    @ParameterizedTest(name = """
+                {index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`, 
+                변경할 메뉴 상품 가격 : `{2}`
+            """)
+    void changePriceWithInvalidProduct(final long price, final long quantity, final long changedPrice) {
+        final MenuProducts menuProducts = new MenuProducts(
+                List.of(new MenuProduct(1L, price, quantity, null, 1L))
+        );
+        assertThatThrownBy(() -> menuProducts.changedProductPrice(2L, changedPrice))
+                .isExactlyInstanceOf(NoSuchMenuProductException.class);
     }
 
     @DisplayName("메뉴 상품 목록의 가격을 변경할 수 있다.")
