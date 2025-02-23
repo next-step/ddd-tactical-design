@@ -25,8 +25,7 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product() {
-    }
+    protected Product() {}
 
     public Product(UUID uuid, ProductName name, ProductPrice price) {
         this.id = uuid;

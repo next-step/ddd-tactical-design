@@ -2,8 +2,8 @@ package kitchenpos.menu.domain.event;
 
 import kitchenpos.global.event.ProductEvent;
 import kitchenpos.menu.domain.service.MenuPolicy;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class DefaultProductEventListener implements ProductEventListener {
@@ -14,7 +14,7 @@ public class DefaultProductEventListener implements ProductEventListener {
         this.menuPolicy = menuPolicy;
     }
 
-    @EventListener
+    @TransactionalEventListener
     @Override
     public void handle(ProductEvent event) {
         if (event instanceof ProductEvent.ProductPriceChangedEvent priceChangedEvent) {

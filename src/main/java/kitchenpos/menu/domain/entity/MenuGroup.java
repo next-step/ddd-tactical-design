@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import kitchenpos.menu.domain.model.MenuGroupName;
-import kitchenpos.product.domain.model.ProductName;
 
 @Table(name = "menu_group")
 @Entity
@@ -20,8 +19,7 @@ public class MenuGroup {
     @Embedded
     private MenuGroupName name;
 
-    public MenuGroup() {
-    }
+    protected MenuGroup() {}
 
     public MenuGroup(UUID id, MenuGroupName name) {
         this.id = id;

@@ -10,10 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import kitchenpos.menu.domain.model.MenuGroupName;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
 import org.hibernate.annotations.DynamicUpdate;
@@ -53,8 +51,7 @@ public class Menu {
     )
     private List<MenuProduct> menuProducts;
 
-    public Menu() {
-    }
+    protected Menu() {}
 
     public Menu(UUID uuid, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = uuid;
