@@ -3,7 +3,6 @@ package kitchenpos.menus.domain;
 import jakarta.persistence.*;
 import kitchenpos.products.tobe.domain.Price;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
