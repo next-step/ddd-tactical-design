@@ -7,7 +7,7 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.FakePurgomalumClient;
 import kitchenpos.products.application.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.domain.PurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

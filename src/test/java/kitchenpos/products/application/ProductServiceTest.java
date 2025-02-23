@@ -4,7 +4,7 @@ import kitchenpos.menus.application.InMemoryMenuRepository;
 import kitchenpos.menus.domain.Menu;
 import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.tobe.InMemoryProductRepository;
-import kitchenpos.products.infra.PurgomalumClient;
+import kitchenpos.products.domain.PurgomalumClient;
 import kitchenpos.products.tobe.domain.*;
 import org.junit.jupiter.api.*;
 
