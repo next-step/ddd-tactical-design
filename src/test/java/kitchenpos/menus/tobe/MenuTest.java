@@ -31,8 +31,8 @@ public class MenuTest {
         menuGroup = new MenuGroup(UUID.randomUUID(), "메뉴 그룹");
         menuProducts = new ArrayList<>(
                 List.of(
-                        new MenuProduct(1L, 1000L, 1L, 1L),
-                        new MenuProduct(2L, 2000L, 2L, 2L)
+                        new MenuProduct(1L, 1000L, 1L, null, 1L),
+                        new MenuProduct(2L, 2000L, 2L, null, 2L)
                 )
         );
     }
@@ -92,8 +92,8 @@ public class MenuTest {
                                 final long secondPrice, final long secondQuantity,
                                 final long menuPrice) {
         final List<MenuProduct> menuProducts = List.of(
-                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+                new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
         assertThatThrownBy(
                 () -> new Menu(null, "메뉴", profanities, menuPrice, menuGroup.getId(), menuProducts, true)
@@ -109,8 +109,8 @@ public class MenuTest {
                                      final long secondPrice, final long secondQuantity,
                                      final long menuPrice, final long changedMenuPrice) {
         final List<MenuProduct> menuProducts = List.of(
-                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+                new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
         final Menu menu = new Menu(null, "메뉴", profanities, menuPrice, menuGroup.getId(), menuProducts, true);
 
@@ -129,8 +129,8 @@ public class MenuTest {
                                  final long secondPrice, final long secondQuantity,
                                  final long menuPrice) {
         final List<MenuProduct> menuProducts = List.of(
-                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+                new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
         final Menu menu = new Menu(null, "메뉴", profanities, menuPrice, menuGroup.getId(), menuProducts, false);
         menu.changedProductPrice(1L, changedFirstPrice);
@@ -148,8 +148,8 @@ public class MenuTest {
                  final long secondPrice, final long secondQuantity,
                  final long menuPrice) {
         final List<MenuProduct> menuProducts = List.of(
-                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                new MenuProduct(2L, secondPrice, secondQuantity, 2L)
+                new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, null, 2L)
         );
         final Menu menu = new Menu(UUID.randomUUID(), "메뉴", profanities, menuPrice, menuGroup.getId(), menuProducts, false);
         menu.display();
@@ -166,8 +166,8 @@ public class MenuTest {
               final long secondPrice, final long secondQuantity,
               final long menuPrice) {
         final List<MenuProduct> menuProducts = List.of(
-                new MenuProduct(1L, firstPrice, firstQuantity, 1L),
-                new MenuProduct(2L, secondPrice, secondQuantity, 2L));
+                new MenuProduct(1L, firstPrice, firstQuantity, null, 1L),
+                new MenuProduct(2L, secondPrice, secondQuantity, null, 2L));
         final Menu menu = new Menu(UUID.randomUUID(), "메뉴", profanities, menuPrice, menuGroup.getId(), menuProducts, true);
         menu.hide();
 

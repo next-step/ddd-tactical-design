@@ -18,6 +18,10 @@ public class Menu {
     private MenuProducts menuProducts;
     private boolean displayed;
 
+    public Menu(final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
+        this(UUID.randomUUID(), new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
+    }
+
     public Menu(final UUID id, final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
         this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
@@ -30,6 +34,7 @@ public class Menu {
         this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.displayed = displayed;
+        menuProducts.setMenuId(id);
     }
 
     private void verify(final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts) {
@@ -79,6 +84,10 @@ public class Menu {
 
     public boolean hasProduct(final Long productId) {
         return menuProducts.hasProduct(productId);
+    }
+
+    public List<MenuProduct> menuProducts() {
+        return menuProducts.menuProducts();
     }
 
     @Override

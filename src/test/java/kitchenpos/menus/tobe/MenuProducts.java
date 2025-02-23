@@ -2,8 +2,10 @@ package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class MenuProducts {
     private final List<MenuProduct> menuProducts;
@@ -37,6 +39,14 @@ public class MenuProducts {
                 .anyMatch(it -> it.isSameProduct(productId));
     }
 
+    public void setMenuId(final UUID menuId) {
+        menuProducts.forEach(it -> it.setMenuId(menuId));
+    }
+
+    public List<MenuProduct> menuProducts() {
+        return new ArrayList<>(menuProducts);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -49,4 +59,5 @@ public class MenuProducts {
     public int hashCode() {
         return Objects.hashCode(menuProducts);
     }
+
 }

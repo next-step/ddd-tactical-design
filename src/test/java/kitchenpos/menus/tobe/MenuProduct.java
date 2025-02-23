@@ -4,18 +4,20 @@ import kitchenpos.menus.tobe.vo.MenuProductPrice;
 import kitchenpos.menus.tobe.vo.MenuProductQuantity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class MenuProduct {
     private final Long seq;
     private MenuProductPrice price;
     private final MenuProductQuantity quantity;
+    private UUID menuId;
     private final long productId;
 
-    public MenuProduct(final Long seq, final long price, final long quantity, final long productId) {
-        this(seq, new MenuProductPrice(price), new MenuProductQuantity(quantity), productId);
+    public MenuProduct(final Long seq, final long price, final long quantity, final UUID menuId, final long productId) {
+        this(seq, new MenuProductPrice(price), new MenuProductQuantity(quantity), menuId, productId);
     }
 
-    public MenuProduct(final Long seq, final MenuProductPrice price, final MenuProductQuantity quantity, final long productId) {
+    public MenuProduct(final Long seq, final MenuProductPrice price, final MenuProductQuantity quantity, final UUID menuId, final long productId) {
         this.seq = seq;
         this.price = price;
         this.quantity = quantity;
@@ -33,7 +35,31 @@ public class MenuProduct {
     public void changePrice(final long changedPrice) {
         this.price = new MenuProductPrice(changedPrice);
     }
-    
+
+    public long priceValue() {
+        return price.getValue();
+    }
+
+    public long quantityValue() {
+        return quantity.getValue();
+    }
+
+    public long productId() {
+        return productId;
+    }
+
+    public UUID menuId() {
+        return menuId;
+    }
+
+    public void setMenuId(final UUID menuId) {
+        this.menuId = menuId;
+    }
+
+    public Long seq() {
+        return seq;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -46,4 +72,5 @@ public class MenuProduct {
     public int hashCode() {
         return Objects.hashCode(seq);
     }
+
 }
