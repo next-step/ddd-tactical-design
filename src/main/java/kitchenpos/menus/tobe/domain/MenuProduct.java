@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MenuProduct {
+
     private Long seq;
     private MenuProductPrice price;
     private final MenuProductQuantity quantity;

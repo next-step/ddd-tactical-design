@@ -5,6 +5,7 @@ import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductQuantityExceptio
 import java.util.Objects;
 
 public class MenuProductQuantity {
+
     private static final int MINIMUM_VALUE = 0;
 
     private final long value;

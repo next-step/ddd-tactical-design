@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MenuGroup {
+
     private final MenuGroupId id;
     private final MenuGroupName name;
 

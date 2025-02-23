@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class MenuGroupName {
 
-    private String value;
+    private final String value;
 
     public MenuGroupName(final String value) {
         if (Objects.isNull(value) || value.isBlank()) {

@@ -6,6 +6,7 @@ import kitchenpos.menus.tobe.domain.exception.MenuNameContainsProfanityException
 import java.util.Objects;
 
 public class MenuName {
+
     private final String value;
 
     public MenuName(final String value, final Profanities profanities) {

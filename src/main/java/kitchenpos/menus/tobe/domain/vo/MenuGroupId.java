@@ -6,22 +6,22 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MenuGroupId {
-    private final UUID id;
 
+    private final UUID value;
 
     public MenuGroupId(final String string) {
         this(UUID.fromString(string));
     }
 
-    public MenuGroupId(final UUID id) {
-        if (Objects.isNull(id)) {
+    public MenuGroupId(final UUID value) {
+        if (Objects.isNull(value)) {
             throw new InvalidMenuGroupIdException();
         }
-        this.id = id;
+        this.value = value;
     }
 
     public UUID getValue() {
-        return id;
+        return value;
     }
 
     @Override
@@ -29,11 +29,11 @@ public class MenuGroupId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final MenuGroupId that = (MenuGroupId) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(value);
     }
 }

@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Menu {
+
     private final MenuId id;
     private final MenuName name;
     private MenuPrice price;

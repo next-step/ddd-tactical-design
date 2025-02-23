@@ -3,14 +3,15 @@ package kitchenpos.products.tobe.domain.vo;
 import java.util.Objects;
 
 public class ProductId {
-    private final Long id;
 
-    public ProductId(final Long id) {
-        this.id = id;
+    private final Long value;
+
+    public ProductId(final Long value) {
+        this.value = value;
     }
 
     public Long getValue() {
-        return id;
+        return value;
     }
 
     @Override

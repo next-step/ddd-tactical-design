@@ -5,6 +5,7 @@ import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductPricePeriodExcep
 import java.util.Objects;
 
 public class MenuProductPrice {
+
     private static final int MINIMUM_VALUE = 0;
 
     private final long value;

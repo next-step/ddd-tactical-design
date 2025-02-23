@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class FakeProfanities implements Profanities {
-    private final List<String> profanityNames;
 
-    public FakeProfanities() {
-        this(List.of());
-    }
+    private final List<String> profanityNames;
 
     public FakeProfanities(final List<String> profanityNames) {
         this.profanityNames = profanityNames;

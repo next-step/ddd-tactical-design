@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MenuProducts {
+
     private final List<MenuProduct> menuProducts;
 
     public MenuProducts(final List<MenuProduct> menuProducts) {
