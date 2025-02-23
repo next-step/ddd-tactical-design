@@ -6,7 +6,6 @@ import kitchenpos.menus.domain.MenuRepository;
 import kitchenpos.products.application.tobe.InMemoryProductRepository;
 import kitchenpos.products.infra.PurgomalumClient;
 import kitchenpos.products.tobe.domain.*;
-import kitchenpos.tobe.Fixtures;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -84,7 +83,7 @@ class ProductServiceTest {
     private Product createProductRequest(final String name, final BigDecimal price) {
         final Product product = new Product(
                 new ProductId(UUID.randomUUID()),
-                new ProductName(name, Fixtures.purgomalumClient),
+                new ProductName(name, purgomalumClient),
                 new Price(price)
         );
         return product;
