@@ -32,6 +32,7 @@ public class JdbcTemplateMenuDao implements MenuDao {
     private static final String PRICE = "price";
     private static final String MENU_GROUP_ID = "menu_group_id";
     private static final String DISPLAYED = "displayed";
+    private static final int EXECUTE_FAILED = 0;
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert menuJdbcInsert;
@@ -47,7 +48,7 @@ public class JdbcTemplateMenuDao implements MenuDao {
     public void save(final Menu menu) {
         final SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(menu);
         final int execute = menuJdbcInsert.execute(parameterSource);
-        if (execute == 0) {
+        if (execute == EXECUTE_FAILED) {
             throw new IllegalArgumentException("메뉴 저장에 실패했습니다.");
         }
     }
