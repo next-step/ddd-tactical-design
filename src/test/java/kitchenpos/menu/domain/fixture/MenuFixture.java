@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import kitchenpos.menu.application.dto.MenuRequest;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.model.MenuName;
 import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.product.application.dto.ProductRequest;
 
 public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
                           MenuGroup 메뉴그룹, boolean 노출여부, List<MenuProduct> 메뉴구성품) {
@@ -40,6 +42,14 @@ public record MenuFixture(UUID id, String 메뉴명, BigDecimal 메뉴가격,
 
     public Menu toEntity() {
         return new Menu(id, new MenuName(메뉴명), MenuPrice.of(메뉴가격), 메뉴그룹, 노출여부, 메뉴구성품);
+    }
+
+    public MenuRequest.Create create() {
+        return new MenuRequest.Create(메뉴명, 메뉴가격, 메뉴그룹.getId(), 노출여부, 메뉴구성품);
+    }
+
+    public MenuRequest.UpdatePrice update() {
+        return new MenuRequest.UpdatePrice(id, 메뉴가격);
     }
 }
 

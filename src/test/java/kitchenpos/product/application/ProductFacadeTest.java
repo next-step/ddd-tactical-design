@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.event.ProductEventListener;
 import kitchenpos.menu.domain.fixture.MenuFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.menu.domain.service.FakeMenuUpdatePolicy;
+import kitchenpos.menu.domain.service.FakeMenuPolicy;
 import kitchenpos.product.application.dto.ProductRequest;
 import kitchenpos.product.application.dto.ProductRequest.UpdatePrice;
 import kitchenpos.product.application.dto.ProductResponse;
@@ -54,7 +53,7 @@ class ProductFacadeTest {
     private ProductEventPublisher productEventPublisher;
 
 
-    private FakeMenuUpdatePolicy menuUpdatePolicy;
+    private FakeMenuPolicy menuPolicy;
 
     private ProductRepository productRepository;
 
@@ -70,7 +69,7 @@ class ProductFacadeTest {
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
-        menuUpdatePolicy = new FakeMenuUpdatePolicy(menuRepository);
+        menuPolicy = new FakeMenuPolicy(menuRepository);
 
         productService = new ProductServiceImpl(productRepository, purgomalumClient, productEventPublisher);
         productFacade = new ProductFacade(productService);
@@ -187,7 +186,7 @@ class ProductFacadeTest {
 
             productService.changePrice(updateChicken.toVo());
 
-            menuUpdatePolicy.hideMenu(productId);
+            menuPolicy.hideMenu(productId);
 
             var result = menuRepository.findById(menu.getId()).orElseThrow();
 

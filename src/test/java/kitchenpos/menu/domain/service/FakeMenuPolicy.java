@@ -9,11 +9,11 @@ import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
 
-public class FakeMenuUpdatePolicy implements MenuPolicy {
+public class FakeMenuPolicy implements MenuPolicy {
 
     private final MenuRepository menuRepository;
 
-    public FakeMenuUpdatePolicy(MenuRepository menuRepository) {
+    public FakeMenuPolicy(MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
     }
 
@@ -34,7 +34,7 @@ public class FakeMenuUpdatePolicy implements MenuPolicy {
 
     @Override
     public MenuInfo display(UUID menuId) {
-        return MenuInfo.fromEntity(MenuFixture.init().toEntity());
+        throw new IllegalStateException();
     }
 
     @Override
