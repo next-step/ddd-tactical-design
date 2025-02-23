@@ -14,26 +14,26 @@ public class Menu {
     private final UUID id;
     private final MenuName name;
     private MenuPrice price;
-    private final MenuGroup menuGroup;
+    private final UUID menuGroupId;
     private MenuProducts menuProducts;
     private boolean displayed;
 
-    public Menu(final UUID id, final String name, final Profanities profanities, final long price, final MenuGroup menuGroup, final List<MenuProduct> menuProducts, final boolean displayed) {
-        this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroup, new MenuProducts(menuProducts), displayed);
+    public Menu(final UUID id, final String name, final Profanities profanities, final long price, final UUID menuGroupId, final List<MenuProduct> menuProducts, final boolean displayed) {
+        this(id, new MenuName(name, profanities), new MenuPrice(price), menuGroupId, new MenuProducts(menuProducts), displayed);
     }
 
-    public Menu(final UUID id, final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuProducts menuProducts, final boolean displayed) {
-        this.verify(name, price, menuGroup, menuProducts);
+    public Menu(final UUID id, final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts, final boolean displayed) {
+        this.verify(name, price, menuGroupId, menuProducts);
         this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.displayed = displayed;
     }
 
-    private void verify(final MenuName name, final MenuPrice price, final MenuGroup menuGroup, final MenuProducts menuProducts) {
-        if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroup) || Objects.isNull(menuProducts)) {
+    private void verify(final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts) {
+        if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroupId) || Objects.isNull(menuProducts)) {
             throw new InvalidMenuArgumentException();
         }
         long totalAmount = menuProducts.totalAmount();
@@ -71,6 +71,14 @@ public class Menu {
 
     public boolean isDisplayed() {
         return displayed;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public boolean hasProduct(final Long productId) {
+        return menuProducts.hasProduct(productId);
     }
 
     @Override
