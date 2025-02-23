@@ -24,7 +24,7 @@ public class MenuProducts {
                 .sum();
     }
 
-    public void changedProductPrice(final long productId, final long changedFirstPrice) {
+    public void changeProductPrice(final long productId, final long changedFirstPrice) {
         final MenuProduct menuProduct = menuProducts.stream()
                 .filter(it -> it.isSameProduct(productId))
                 .findFirst()

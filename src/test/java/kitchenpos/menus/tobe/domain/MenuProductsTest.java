@@ -40,7 +40,7 @@ public class MenuProductsTest {
         final MenuProducts menuProducts = new MenuProducts(
                 List.of(new MenuProduct(1L, price, quantity, null, 1L))
         );
-        assertThatThrownBy(() -> menuProducts.changedProductPrice(2L, changedPrice))
+        assertThatThrownBy(() -> menuProducts.changeProductPrice(2L, changedPrice))
                 .isExactlyInstanceOf(NoSuchMenuProductException.class);
     }
 
@@ -50,11 +50,11 @@ public class MenuProductsTest {
                 {index}. 메뉴 상품 가격 : `{0}`, 메뉴 상품 수량 : `{1}`, 
                 변경할 메뉴 상품 가격 : `{2}`, 총합 금액 : `{3}`
             """)
-    void changedProductPrice(final long price, final long quantity, final long changedPrice, final long expected) {
+    void changeProductPrice(final long price, final long quantity, final long changedPrice, final long expected) {
         final MenuProducts menuProducts = new MenuProducts(
                 List.of(new MenuProduct(1L, price, quantity, null, 1L))
         );
-        menuProducts.changedProductPrice(1L, changedPrice);
+        menuProducts.changeProductPrice(1L, changedPrice);
 
         assertThat(menuProducts.totalAmount()).isEqualTo(expected);
     }

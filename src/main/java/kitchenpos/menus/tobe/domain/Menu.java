@@ -55,7 +55,7 @@ public class Menu {
     }
 
     public void changedProductPrice(final long productId, final long changedFirstPrice) {
-        menuProducts.changedProductPrice(productId, changedFirstPrice);
+        menuProducts.changeProductPrice(productId, changedFirstPrice);
         final long totalAmount = menuProducts.totalAmount();
         this.displayed = !(price.isGreaterThan(totalAmount));
     }
