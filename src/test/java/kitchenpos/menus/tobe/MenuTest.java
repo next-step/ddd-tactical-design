@@ -79,7 +79,7 @@ public class MenuTest {
     void createWithNullMenuGroup(final UUID menuGroupId) {
         assertThatThrownBy(
                 () -> new Menu(id, name, profanities, price, menuGroupId, menuProducts, true)
-        ).isExactlyInstanceOf(InvalidMenuArgumentException.class);
+        ).isExactlyInstanceOf(InvalidMenuArgumentNullPointException.class);
     }
 
     @DisplayName("메뉴는 메뉴 상품이 없거나 비어있으면 생성할 수 없다.")

@@ -1,6 +1,7 @@
 package kitchenpos.menus.tobe;
 
 import kitchenpos.menus.tobe.exception.InvalidMenuArgumentException;
+import kitchenpos.menus.tobe.exception.InvalidMenuArgumentNullPointException;
 import kitchenpos.menus.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.menus.tobe.vo.MenuName;
 import kitchenpos.menus.tobe.vo.MenuPrice;
@@ -39,7 +40,7 @@ public class Menu {
 
     private void verify(final MenuName name, final MenuPrice price, final UUID menuGroupId, final MenuProducts menuProducts) {
         if (Objects.isNull(name) || Objects.isNull(price) || Objects.isNull(menuGroupId) || Objects.isNull(menuProducts)) {
-            throw new InvalidMenuArgumentException();
+            throw new InvalidMenuArgumentNullPointException();
         }
         long totalAmount = menuProducts.totalAmount();
         if (price.isGreaterThan(totalAmount)) {

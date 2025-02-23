@@ -24,14 +24,11 @@ public class MenuProducts {
     }
 
     public void changedProductPrice(final long productId, final long changedFirstPrice) {
-        menuProducts.stream()
+        final MenuProduct menuProduct = menuProducts.stream()
                 .filter(it -> it.isSameProduct(productId))
                 .findFirst()
-                .ifPresentOrElse(it -> it.changePrice(changedFirstPrice),
-                        () -> {
-                            throw new InvalidMenuArgumentException();
-                        }
-                );
+                .orElseThrow(InvalidMenuArgumentException::new);
+        menuProduct.changePrice(changedFirstPrice);
     }
 
     public boolean hasProduct(final Long productId) {
