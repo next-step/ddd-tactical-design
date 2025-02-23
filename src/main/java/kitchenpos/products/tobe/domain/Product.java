@@ -5,34 +5,34 @@ import kitchenpos.products.tobe.domain.vo.*;
 import java.util.Objects;
 
 public class Product {
-    private Long productId;
+    private ProductId productId;
     private DisplayedName displayedName;
     private Price price;
 
     public Product(final Long productId, final String displayedName, final long price) {
-        this(productId, displayedName, new EmptyProfanities(), price);
+        this(new ProductId(productId), displayedName, new EmptyProfanities(), price);
     }
 
-    public Product(final Long productId, final String displayedName, final Profanities profanities, final long price) {
+    public Product(final ProductId productId, final String displayedName, final Profanities profanities, final long price) {
         this(productId, new DisplayedName(displayedName, profanities), new Price(price));
     }
 
-    public Product(final Long productId, final DisplayedName displayedName, final Price price) {
+    public Product(final ProductId productId, final DisplayedName displayedName, final Price price) {
         this.productId = productId;
         this.displayedName = displayedName;
         this.price = price;
     }
 
-    public Long getId() {
-        return productId;
+    public Long id() {
+        return productId.getValue();
     }
 
-    public String getName() {
-        return displayedName.getDisplayedName();
+    public String displayedName() {
+        return displayedName.getValue();
     }
 
-    public long getPrice() {
-        return price.getPrice();
+    public long price() {
+        return price.getValue();
     }
 
     public Product changePrice(final long price) {

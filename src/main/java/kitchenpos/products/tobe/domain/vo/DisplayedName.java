@@ -6,24 +6,20 @@ import kitchenpos.products.tobe.domain.exception.InvalidDisplayedNameException;
 import java.util.Objects;
 
 public class DisplayedName {
-    private final String productName;
+    private final String value;
 
-    public DisplayedName(final String productName) {
-        if (Objects.isNull(productName) || productName.isBlank()) {
+    public DisplayedName(final String value, final Profanities profanities) {
+        if (Objects.isNull(value) || value.isBlank()) {
             throw new InvalidDisplayedNameException();
         }
-        this.productName = productName;
-    }
-
-    public DisplayedName(final String displayedName, final Profanities profanities) {
-        this(displayedName);
-        if (profanities.contains(productName)) {
+        if (profanities.contains(value)) {
             throw new DisplayedNameContainsProfanityException();
         }
+        this.value = value;
     }
 
-    public String getDisplayedName() {
-        return productName;
+    public String getValue() {
+        return value;
     }
 
     @Override
@@ -31,12 +27,12 @@ public class DisplayedName {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final DisplayedName that = (DisplayedName) o;
-        return Objects.equals(productName, that.productName);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(productName);
+        return Objects.hashCode(value);
     }
 }
 

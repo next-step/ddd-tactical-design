@@ -7,17 +7,17 @@ import java.util.Objects;
 public class Price {
     private static final int MINIMUM_PRICE = 0;
 
-    private final long price;
+    private final long value;
 
-    public Price(final long price) {
-        if (price < MINIMUM_PRICE) {
+    public Price(final long value) {
+        if (value < MINIMUM_PRICE) {
             throw new InvalidPricePeriodException();
         }
-        this.price = price;
+        this.value = value;
     }
 
-    public long getPrice() {
-        return price;
+    public long getValue() {
+        return value;
     }
 
     @Override
@@ -25,11 +25,11 @@ public class Price {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final Price that = (Price) o;
-        return Objects.equals(price, that.price);
+        return Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(price);
+        return Objects.hashCode(value);
     }
 }
