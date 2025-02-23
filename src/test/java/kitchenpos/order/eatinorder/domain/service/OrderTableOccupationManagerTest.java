@@ -15,6 +15,7 @@ import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.infra.persistence.FakeEatInOrderRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +32,12 @@ class OrderTableOccupationManagerTest {
 
         OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
         EatInOrder eatInOrder = createCompleteEatInOrder(orderTable);
+        ReleaseOrderTableEvent event = new ReleaseOrderTableEvent(orderTable);
 
         eatInOrderRepository.save(eatInOrder);
 
         // when
-        manager.release(orderTable);
+        manager.release(event);
 
         // then
         assertThat(orderTable.isOccupied()).isEqualTo(false);

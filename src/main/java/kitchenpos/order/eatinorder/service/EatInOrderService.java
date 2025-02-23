@@ -9,9 +9,7 @@ import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
-import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
-import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,11 +70,6 @@ public class EatInOrderService {
         final EatInOrder eatInOrder = eatInOrderRepository.findById(orderId)
                 .orElseThrow(NoSuchElementException::new);
         eatInOrder.processOrderFlow(EatInOrderStatus.COMPLETED);
-
-        final OrderTable orderTable = eatInOrder.getOrderTable();
-        if (!eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(orderTable, EatInOrderFlow.COMPLETED)) {
-            orderTable.releaseTable();
-        }
 
         return eatInOrder;
     }

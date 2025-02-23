@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import kitchenpos.order.common.model.OrderLineItem;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 @Table(name = "eat_in_orders")
 @Entity
-public class EatInOrder {
+public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     private UUID id;
@@ -76,6 +77,10 @@ public class EatInOrder {
             throw new IllegalStateException(EAT_IN_ORDER_FLOW_EXCEPTION.getMessage());
         }
         this.eatInOrderFlow = EatInOrderFlow.findByOrderStatus(orderStatus);
+
+        if (this.eatInOrderFlow == EatInOrderFlow.COMPLETED) {
+            registerEvent(new ReleaseOrderTableEvent(this.orderTable));
+        }
     }
 
     public UUID getId() {

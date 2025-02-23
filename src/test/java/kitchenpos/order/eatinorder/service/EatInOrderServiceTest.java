@@ -15,13 +15,15 @@ import java.util.List;
 import java.util.Optional;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
+import kitchenpos.order.common.model.OrderLineItemValidator;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
-import kitchenpos.order.common.model.OrderLineItemValidator;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class EatInOrderServiceTest {
@@ -37,16 +41,16 @@ class EatInOrderServiceTest {
     private EatInOrderRepository eatInOrderRepository;
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
-    private OrderLineItemValidator orderLineItemValidator;
-    private EatInOrderFactory eatInOrderFactory;
+    private OrderTableOccupationManager orderTableOccupationManager;
 
     @BeforeEach
     void setUp() {
         eatInOrderRepository = mock(EatInOrderRepository.class);
         menuRepository = mock(MenuRepository.class);
         orderTableRepository = mock(OrderTableRepository.class);
-        orderLineItemValidator = new OrderLineItemValidator(menuRepository);
-        eatInOrderFactory = new EatInOrderFactory(orderLineItemValidator, orderTableRepository);
+        OrderLineItemValidator orderLineItemValidator = new OrderLineItemValidator(menuRepository);
+        EatInOrderFactory eatInOrderFactory = new EatInOrderFactory(orderLineItemValidator, orderTableRepository);
+        orderTableOccupationManager = new OrderTableOccupationManager(eatInOrderRepository);
         eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, eatInOrderFactory);
     }
 
@@ -67,6 +71,9 @@ class EatInOrderServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
+    /**
+     * 이 테스트를 어떻게 할 지 고민해봐야 함!
+     */
     @Test
     @DisplayName("매장 식사 주문 완료 시 다른 주문이 없으면 테이블을 비운다")
     void clear_table_with_complete_status() {
@@ -80,11 +87,25 @@ class EatInOrderServiceTest {
         when(eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(any(), any())).thenReturn(false);
 
         // when
-        eatInOrderService.complete(order.getId());
+        EatInOrder eatInOrder = eatInOrderService.complete(order.getId());
+        orderTableOccupationManager.release(new ReleaseOrderTableEvent(orderTable));
 
         // then
+        List<Object> events = getEvents(eatInOrder);
+        assertThat(events)
+                .hasSize(1)
+                .hasOnlyElementsOfType(ReleaseOrderTableEvent.class);
+
         assertThat(orderTable.isOccupied()).isFalse();
         assertThat(orderTable.getNumberOfGuests()).isZero();
+    }
+
+    private List<Object> getEvents(EatInOrder eatInOrder) {
+        return (List<Object>) ReflectionTestUtils.getField(
+                eatInOrder,
+                AbstractAggregateRoot.class,
+                "domainEvents"
+        );
     }
 
     @ParameterizedTest
