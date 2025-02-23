@@ -48,13 +48,4 @@ public class FakeMenuRepository implements MenuRepository {
                         .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
                 .toList();
     }
-
-    public List<Menu> saveAll(List<Menu> menus) {
-        for (Menu menu : menus) {
-            UUID id = UUID.randomUUID();
-            menu.setId(id);
-            storage.put(id, menu);
-        }
-        return new ArrayList<>(storage.values());
-    }
 }

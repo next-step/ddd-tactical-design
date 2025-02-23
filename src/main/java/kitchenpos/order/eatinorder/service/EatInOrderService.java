@@ -1,6 +1,5 @@
 package kitchenpos.order.eatinorder.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -9,11 +8,11 @@ import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
-import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,48 +20,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class EatInOrderService {
     private final EatInOrderRepository eatInOrderRepository;
     private final MenuRepository menuRepository;
-    private final OrderTableRepository orderTableRepository;
+    private final EatInOrderFactory eatInOrderFactory;
 
     public EatInOrderService(
             final EatInOrderRepository eatInOrderRepository,
             final MenuRepository menuRepository,
-            final OrderTableRepository orderTableRepository
+            final EatInOrderFactory eatInOrderFactory
     ) {
         this.eatInOrderRepository = eatInOrderRepository;
         this.menuRepository = menuRepository;
-        this.orderTableRepository = orderTableRepository;
+        this.eatInOrderFactory = eatInOrderFactory;
     }
 
     @Transactional
     public EatInOrder create(final EatInOrder request) {
-        final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
-        validateOrderLineItemMenuIsExists(orderLineItemRequests);
-
-        final List<OrderLineItem> orderLineItems = createOrderLineItemsByRequest(orderLineItemRequests);
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
-                orderLineItems, EatInOrderFlow.WAITING);
-
-        final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
-        eatInOrder.occupyOrderTable(orderTable);
-
+        final List<OrderLineItem> orderLineItems = toOrderLineItems(request.getOrderLineItems());
+        EatInOrder eatInOrder = eatInOrderFactory.create(orderLineItems, request.getOrderTableId());
         return eatInOrderRepository.save(eatInOrder);
     }
 
-    private void validateOrderLineItemMenuIsExists(List<OrderLineItem> orderLineItemRequests) {
-        final List<Menu> menus = menuRepository.findAllByIdIn(
-                orderLineItemRequests.stream()
-                        .map(OrderLineItem::getMenuId)
-                        .toList()
-        );
-        if (menus.size() != orderLineItemRequests.size()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private List<OrderLineItem> createOrderLineItemsByRequest(List<OrderLineItem> orderLineItemRequests) {
+    private List<OrderLineItem> toOrderLineItems(List<OrderLineItem> request) {
         final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem itemRq : orderLineItemRequests) {
+        for (final OrderLineItem itemRq : request) {
             final Menu menu = menuRepository.findById(itemRq.getMenuId())
                     .orElseThrow(NoSuchElementException::new);
             final OrderLineItem orderLineItem = new OrderLineItem(menu, itemRq.getQuantity(), menu.getId(),

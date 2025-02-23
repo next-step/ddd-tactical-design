@@ -11,17 +11,14 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.order.common.model.OrderLineItem;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
-import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
+import kitchenpos.order.common.model.OrderLineItemValidator;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
@@ -40,13 +37,17 @@ class EatInOrderServiceTest {
     private EatInOrderRepository eatInOrderRepository;
     private MenuRepository menuRepository;
     private OrderTableRepository orderTableRepository;
+    private OrderLineItemValidator orderLineItemValidator;
+    private EatInOrderFactory eatInOrderFactory;
 
     @BeforeEach
     void setUp() {
         eatInOrderRepository = mock(EatInOrderRepository.class);
         menuRepository = mock(MenuRepository.class);
         orderTableRepository = mock(OrderTableRepository.class);
-        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, orderTableRepository);
+        orderLineItemValidator = new OrderLineItemValidator(menuRepository);
+        eatInOrderFactory = new EatInOrderFactory(orderLineItemValidator, orderTableRepository);
+        eatInOrderService = new EatInOrderService(eatInOrderRepository, menuRepository, eatInOrderFactory);
     }
 
     @Test
