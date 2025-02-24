@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableTest {
     @DisplayName("OrderTable을 생성한다")
@@ -46,5 +46,32 @@ class OrderTableTest {
                 () -> assertThat(orderTable).isNotNull(),
                 () -> assertThat(orderTable.isEmpty()).isTrue()
         );
+    }
+
+    @DisplayName("OrderTable을 사용중 상태로 변경한다")
+    @Test
+    void sit() {
+        // given
+        final OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), "테이블", nm -> false);
+
+        // when
+        orderTable.sit();
+
+        // then
+        assertThat(orderTable.isOccupied()).isTrue();
+    }
+
+    @DisplayName("OrderTable을 공석 상태로 변경한다")
+    @Test
+    void clear() {
+        // given
+        final OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), "테이블", nm -> false);
+        orderTable.sit();
+
+        // when
+        orderTable.clear();
+
+        // then
+        assertThat(orderTable.isEmpty()).isTrue();
     }
 }

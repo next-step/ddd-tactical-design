@@ -7,8 +7,8 @@ import java.util.UUID;
 public class OrderTable {
     private final UUID id;
     private final OrderTableName name;
-    private final NumberOfGuests numberOfGuests;
-    private final OrderTableOccupiedState orderTableOccupiedState;
+    private NumberOfGuests numberOfGuests;
+    private OrderTableOccupiedState orderTableOccupiedState;
 
     private OrderTable(
             final UUID id,
@@ -33,6 +33,15 @@ public class OrderTable {
                 NumberOfGuests.ZERO,
                 OrderTableOccupiedState.VACANT
         );
+    }
+
+    public void sit() {
+        orderTableOccupiedState = orderTableOccupiedState.occupy();
+    }
+
+    public void clear() {
+        orderTableOccupiedState = orderTableOccupiedState.vacate();
+        numberOfGuests = NumberOfGuests.ZERO;
     }
 
     public boolean isEmpty() {
