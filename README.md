@@ -299,9 +299,9 @@ graph LR
   * `Order Table Name`은 반드시 입력해야 한다
   * `Order Table Name`에는 `Profanity`를 사용할 수 없다.
 * `매장 식사 주문 생성 정책` : 
-  * `Order Item`이 1개 이상 포함되어야 한다.
-  * `Order Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.
-  * `Order Item`의 가격은 `Menu`에 설정된 가격과 동일해야 한다.
+  * `Order Line Item`이 1개 이상 포함되어야 한다.
+  * `Order Line Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.
+  * `Order Line Item`의 가격은 `Menu`에 설정된 가격과 동일해야 한다.
   * `Order Table`을 반드시 지정해야 한다.
 
 행위

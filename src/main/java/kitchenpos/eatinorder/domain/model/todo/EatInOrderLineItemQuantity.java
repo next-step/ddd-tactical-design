@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.domain.model.todo;
 
+import java.util.Objects;
+
 public class EatInOrderLineItemQuantity {
     private final long quantity;
 
@@ -14,7 +16,19 @@ public class EatInOrderLineItemQuantity {
         return new EatInOrderLineItemQuantity(quantity);
     }
 
-    public long getQuantity() {
+    public long value() {
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrderLineItemQuantity that = (EatInOrderLineItemQuantity) o;
+        return quantity == that.quantity;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(quantity);
     }
 }

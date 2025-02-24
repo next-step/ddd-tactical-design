@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.domain.model.todo;
 
+import java.util.Objects;
+
 public class EatInOrderLineItemPrice {
     private final long price;
 
@@ -14,7 +16,19 @@ public class EatInOrderLineItemPrice {
         return new EatInOrderLineItemPrice(price);
     }
 
-    public long getPrice() {
+    public long value() {
         return price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        EatInOrderLineItemPrice that = (EatInOrderLineItemPrice) o;
+        return price == that.price;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(price);
     }
 }

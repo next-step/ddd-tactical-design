@@ -19,7 +19,7 @@ class EatInOrderLineItemPriceTest {
         // then
         assertAll(
                 () -> assertThat(eatInOrderLineItemPrice).isNotNull(),
-                () -> assertThat(eatInOrderLineItemPrice.getPrice()).isEqualTo(price)
+                () -> assertThat(eatInOrderLineItemPrice.value()).isEqualTo(price)
         );
     }
 

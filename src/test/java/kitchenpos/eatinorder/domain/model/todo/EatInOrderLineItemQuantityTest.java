@@ -19,7 +19,7 @@ class EatInOrderLineItemQuantityTest {
         // then
         assertAll(
                 () -> assertThat(eatInOrderLineItemQuantity).isNotNull(),
-                () -> assertThat(eatInOrderLineItemQuantity.getQuantity()).isEqualTo(quantity)
+                () -> assertThat(eatInOrderLineItemQuantity.value()).isEqualTo(quantity)
         );
     }
 
