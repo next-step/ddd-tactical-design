@@ -6,6 +6,8 @@ import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.infra.MenuProductsValidatorService;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
+import kitchenpos.menus.ui.dto.MenuChangePriceRequest;
+import kitchenpos.menus.ui.dto.MenuChangePriceResponse;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuCreateResponse;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
@@ -110,9 +112,9 @@ class MenuServiceTest {
                 MENU_GROUP,
                 menuProducts
         ));
+        MenuChangePriceRequest request = new MenuChangePriceRequest(id.value(), 26_000);
 
-        menu.changePrice(new Price(26_000));
-        Menu result = menuService.changePrice(id, menu);
+        MenuChangePriceResponse result = menuService.changePrice(request);
 
         assertThat(result.getPrice()).isEqualTo(new Price(26_000));
     }

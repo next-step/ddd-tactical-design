@@ -1,6 +1,9 @@
 package kitchenpos.menus.application.tobe;
 
+import kitchenpos.common.vo.Price;
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.ui.dto.MenuChangePriceRequest;
+import kitchenpos.menus.ui.dto.MenuChangePriceResponse;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuCreateResponse;
 import org.springframework.stereotype.Service;
@@ -31,11 +34,15 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final MenuId menuId, final Menu request) {
-        final Menu menu = menuRepository.findById(menuId)
+    public MenuChangePriceResponse changePrice(final MenuChangePriceRequest request) {
+        MenuId id = new MenuId(request.getId());
+        Price price = new Price(request.getPrice());
+
+        final Menu menu = menuRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
-        menu.changePrice(request.getPrice());
-        return menu;
+        menu.changePrice(price);
+
+        return MenuChangePriceResponse.from(menu);
     }
 
     @Transactional

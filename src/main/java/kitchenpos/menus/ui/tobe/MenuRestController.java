@@ -2,13 +2,12 @@ package kitchenpos.menus.ui.tobe;
 
 
 import kitchenpos.menus.application.tobe.MenuService;
+import kitchenpos.menus.ui.dto.MenuChangePriceRequest;
+import kitchenpos.menus.ui.dto.MenuChangePriceResponse;
 import kitchenpos.menus.ui.dto.MenuCreateRequest;
 import kitchenpos.menus.ui.dto.MenuCreateResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -28,11 +27,11 @@ public class MenuRestController {
                 .body(response);
     }
 
-    /*@PutMapping("/{menuId}/price")
-    public ResponseEntity<Menu> changePrice(@PathVariable final UUID menuId, @RequestBody final Menu request) {
-        return ResponseEntity.ok(menuService.changePrice(menuId, request));
+    @PutMapping("/{menuId}/price")
+    public ResponseEntity<MenuChangePriceResponse> changePrice(@RequestBody final MenuChangePriceRequest request) {
+        return ResponseEntity.ok(menuService.changePrice(request));
     }
-
+/*
     @PutMapping("/{menuId}/display")
     public ResponseEntity<Menu> display(@PathVariable final UUID menuId) {
         return ResponseEntity.ok(menuService.display(menuId));
