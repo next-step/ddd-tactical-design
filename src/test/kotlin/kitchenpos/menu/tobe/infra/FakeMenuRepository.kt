@@ -1,8 +1,8 @@
 package kitchenpos.menu.tobe.infra
 
+import java.util.*
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuRepository
-import java.util.*
 
 class FakeMenuRepository(
     private val menus: MutableMap<UUID, Menu> = mutableMapOf()

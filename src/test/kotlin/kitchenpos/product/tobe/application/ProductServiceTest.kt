@@ -1,5 +1,6 @@
 package kitchenpos.product.tobe.application
 
+import java.math.BigDecimal
 import kitchenpos.common.domain.Profanities
 import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.menu.tobe.infra.FakeMenuRepository
@@ -13,7 +14,6 @@ import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 class ProductServiceTest {
     private lateinit var productRepository: ProductRepository

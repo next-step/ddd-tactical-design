@@ -1,11 +1,11 @@
 package kitchenpos.product.tobe.domain
 
+import java.math.BigDecimal
 import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 
 class ProductTest {

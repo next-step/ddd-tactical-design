@@ -1,12 +1,12 @@
 package kitchenpos.utils
 
+import java.util.*
 import kitchenpos.menu.domain.MenuGroup
 import kitchenpos.menu.tobe.domain.Menu
 import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.infra.FakeProfanities
-import java.util.*
 
 class Fixtures {
     companion object {

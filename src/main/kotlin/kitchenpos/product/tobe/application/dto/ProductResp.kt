@@ -1,8 +1,8 @@
 package kitchenpos.product.tobe.application.dto
 
-import kitchenpos.product.tobe.domain.Product
 import java.math.BigDecimal
 import java.util.*
+import kitchenpos.product.tobe.domain.Product
 
 data class ProductResp(
     val id: UUID,

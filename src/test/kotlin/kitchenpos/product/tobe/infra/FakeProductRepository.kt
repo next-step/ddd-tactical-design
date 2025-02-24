@@ -1,8 +1,8 @@
 package kitchenpos.product.tobe.infra
 
+import java.util.*
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductRepository
-import java.util.*
 
 class FakeProductRepository(
     private val products: MutableMap<UUID, Product> = mutableMapOf()
