@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -39,7 +38,7 @@ import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.product.domain.service.ProductContextService;
+import kitchenpos.menu.domain.service.ProductContextService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +88,7 @@ class MenuFacadeTest {
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
-        menuPolicy = new FakeMenuPolicy(menuRepository, productContextService);
+        menuPolicy = new FakeMenuPolicy(menuRepository);
         menuService = new MenuServiceImpl(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextService);
         menuFacade = new MenuFacade(menuService);
 
@@ -133,8 +132,6 @@ class MenuFacadeTest {
         void 메뉴등록_성공() {
 
             mockCreateMenu();
-            mockGetTotalMenuProductPrice(false);
-
             var result = menuService.create(createMenu.toVo());
 
             assertAll(
@@ -211,8 +208,12 @@ class MenuFacadeTest {
                 List.of(new MenuProductFixture(chicken.getId(), 100).toEntity())
             ).create();
 
+            chicken = new Product(chicken.getId(), chicken.getName(), ProductPrice.of(BigDecimal.valueOf(price2)));
+
+            productRepository.save(chicken);
+
             mockCreateMenu();
-            mockGetTotalMenuProductPrice(true);
+            menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> menuService.create(createMenu.toVo()))
@@ -266,7 +267,6 @@ class MenuFacadeTest {
         @Test
         @DisplayName("성공")
         void 메뉴_노출_성공() {
-            mockGetTotalMenuProductPrice(false);
 
             assertThatCode(() -> {
                 menuService.display(defaultMenu.getId());
@@ -296,7 +296,7 @@ class MenuFacadeTest {
 
             menuRepository.save(defaultMenu);
 
-            mockGetTotalMenuProductPrice(true);
+            menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price1)));
 
             assertThatExceptionOfType(IllegalStateException.class)
                 .isThrownBy(() -> menuService.display(defaultMenu.getId()))
@@ -328,8 +328,6 @@ class MenuFacadeTest {
         void 메뉴_가격변경_성공(final int price) {
 
             updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
-
-            mockGetTotalMenuProductPrice(false);
 
             assertThatCode(() -> {
                 menuFacade.changePrice(updatePriceMenu);
@@ -363,7 +361,7 @@ class MenuFacadeTest {
 
             updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
 
-            mockGetTotalMenuProductPrice(true);
+            menuPolicy.setExceptionStatus(isOver(BigDecimal.valueOf(price)));
 
             assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> menuService.changePrice(updatePriceMenu.toVo()))
@@ -391,10 +389,12 @@ class MenuFacadeTest {
         });
     }
 
-    private void mockGetTotalMenuProductPrice(boolean over) {
-        doReturn(over ? defaultMenu.getPrice().price().subtract(BigDecimal.valueOf(100))
-            : defaultMenu.getPrice().price().add(BigDecimal.valueOf(100)))
-            .when(productContextService).getTotalPrice(Mockito.any(), Mockito.any());
+    private boolean isOver(BigDecimal price) {
+        return defaultMenu.getMenuProducts().stream()
+            .map(mp -> {
+                return chicken.getPrice().price().multiply(BigDecimal.valueOf(mp.getQuantity()));
+            })
+            .reduce(BigDecimal.ZERO, BigDecimal::add).compareTo(price) < 0;
     }
 
 }

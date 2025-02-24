@@ -26,7 +26,7 @@ import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
-import kitchenpos.product.domain.service.ProductContextService;
+import kitchenpos.menu.domain.service.ProductContextService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
 import kitchenpos.product.domain.service.ProductServiceImpl;
@@ -73,7 +73,7 @@ class ProductFacadeTest {
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
-        menuPolicy = new FakeMenuPolicy(menuRepository, productContextService);
+        menuPolicy = new FakeMenuPolicy(menuRepository);
 
         productService = new ProductServiceImpl(productRepository, purgomalumClient, productEventPublisher);
         productFacade = new ProductFacade(productService);

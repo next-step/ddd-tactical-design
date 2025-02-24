@@ -1,6 +1,5 @@
 package kitchenpos.menu.domain.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -11,20 +10,19 @@ import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.domain.service.ProductContextService;
 
 public class FakeMenuPolicy implements MenuPolicy {
 
     private final MenuRepository menuRepository;
 
-    private final ProductContextService productContextService;
+    private Boolean exceptionStatus = false;
 
-    public FakeMenuPolicy(
-        final MenuRepository menuRepository,
-        final ProductContextService productContextService
-    ) {
+    public FakeMenuPolicy(final MenuRepository menuRepository) {
         this.menuRepository = menuRepository;
-        this.productContextService = productContextService;
+    }
+
+    public void setExceptionStatus(boolean condition) {
+        this.exceptionStatus = condition;
     }
 
     @Override
@@ -40,51 +38,31 @@ public class FakeMenuPolicy implements MenuPolicy {
     @Override
     public MenuInfo changePrice(UUID menuId, MenuPrice price) {
         var menu = getMenu(menuId);
-        diffMenuAndTotalMenuProductPrice(
-            menu.getMenuProducts(), price,
-            total -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
     public MenuInfo display(UUID menuId) {
         var menu = getMenu(menuId);
-        diffMenuAndTotalMenuProductPrice(
-            menu.getMenuProducts(), menu.getPrice(),
-            total -> new IllegalStateException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new IllegalStateException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
         return MenuInfo.fromEntity(menu);
     }
 
     @Override
     public void validateMenuPrice(MenuPrice price, List<MenuProduct> menuProducts) {
-        diffMenuAndTotalMenuProductPrice(
-            menuProducts, price,
-            total -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
+        fakePriceValidation(exceptionStatus -> new IllegalArgumentException(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString()));
     }
 
-    private BigDecimal calculate(List<MenuProduct> menuProducts) {
-        return menuProducts.stream()
-        .map(menuProduct -> productContextService.getTotalPrice(menuProduct.getProductId(), BigDecimal.valueOf(menuProduct.getQuantity())))
-        .reduce(BigDecimal::add)
-        .orElse(BigDecimal.ZERO);
+    private void fakePriceValidation(Function<Boolean, RuntimeException> exceptionFunction) {
+        if (exceptionStatus) {
+            throw exceptionFunction.apply(exceptionStatus);
+        }
     }
 
     private Menu getMenu(UUID menuId) {
         return menuRepository.findById(menuId)
             .orElseThrow(NoSuchElementException::new);
-    }
-
-    private void diffMenuAndTotalMenuProductPrice(
-        List<MenuProduct> menuProducts,
-        MenuPrice price,
-        Function<BigDecimal, RuntimeException> exceptionFunction
-    ) {
-        final BigDecimal menuPrice = price.price();
-        final BigDecimal totalMenuProductPrice = calculate(menuProducts);
-
-        if (menuPrice.compareTo(totalMenuProductPrice) > 0) {
-            throw exceptionFunction.apply(totalMenuProductPrice);
-        }
     }
 }
 
