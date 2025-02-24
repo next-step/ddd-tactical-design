@@ -1,7 +1,5 @@
 package kitchenpos.menu.domain.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -16,7 +14,6 @@ import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.product.domain.entity.Product;
-import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.domain.service.ProductContextService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +58,7 @@ public class MenuServiceImpl implements MenuService {
                 UUID.randomUUID(),
                 name,
                 price,
-                menuGroup,
+                request.menuGroupId(),
                 request.displayed(),
                 menuProducts
             ))
@@ -129,7 +126,7 @@ public class MenuServiceImpl implements MenuService {
             .findFirst()
             .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
 
-        return new MenuProduct(product, request.getQuantity());
+        return new MenuProduct(product.getId(), request.getQuantity());
     }
 
 }

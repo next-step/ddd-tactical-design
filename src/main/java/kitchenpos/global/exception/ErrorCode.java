@@ -10,12 +10,12 @@ public enum ErrorCode implements ErrorType {
     NOT_FOUND_MENU_PRODUCT("404", "메뉴상품을 찾을 수 없습니다."),
     PRODUCT_PRICE_NOT_ALLOWED("500", "상품가격은 0원 이상이어야 합니다."),
     PRODUCT_NAME_NOT_ALLOWED("500", "상품명은 반드시 있어야 합니다."),
-    PRODUCT_NAME_PROFANITY_NOT_ALLOWED("500", "상품명은 반드시 있어야 합니다."),
+    PRODUCT_NAME_PROFANITY_NOT_ALLOWED("500", "상품명은 비속어를 포함할 수 없습니다."),
     PRODUCT_QTY_NOT_ALLOWED("500", "상품수량은 0개 이상이어야 합니다."),
     MENU_GROUP_NAME_NOT_ALLOWED("500", "메뉴그룹명은 반드시 있어야 합니다."),
-    MENU_GROUP_NAME_PROFANITY_NOT_ALLOWED("500", "메뉴그룹명은 반드시 있어야 합니다."),
+    MENU_GROUP_NAME_PROFANITY_NOT_ALLOWED("500", "메뉴그룹명은 비속어를 포함할 수 없습니다."),
     MENU_NAME_NOT_ALLOWED("500", "메뉴명은 반드시 있어야 합니다."),
-    MENU_NAME_PROFANITY_NOT_ALLOWED("500", "메뉴명은 반드시 있어야 합니다."),
+    MENU_NAME_PROFANITY_NOT_ALLOWED("500", "메뉴명은 비속어를 포함할 수 없습니다."),
     MENU_PRICE_NOT_ALLOWED("500", "메뉴가격은 0원 이상이어야 합니다."),
     MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED("500", "메뉴가격은 구성 상품의 총 금액보다 클 수 없습니다.");
 

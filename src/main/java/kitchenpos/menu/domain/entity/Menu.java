@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
@@ -31,13 +30,8 @@ public class Menu {
     @Embedded
     private MenuPrice price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    @Column(name = "menu_group_id", columnDefinition = "binary(16)", nullable = false)
+    private UUID menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -53,11 +47,11 @@ public class Menu {
 
     protected Menu() {}
 
-    public Menu(UUID uuid, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed, List<MenuProduct> menuProducts) {
+    public Menu(UUID uuid, MenuName name, MenuPrice price, UUID menuGroupId, boolean displayed, List<MenuProduct> menuProducts) {
         this.id = uuid;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.displayed = displayed;
         this.menuProducts = menuProducts;
     }
@@ -86,12 +80,12 @@ public class Menu {
         this.price = price;
     }
 
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
+    public UUID getMenuGroupId() {
+        return menuGroupId;
     }
 
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
+    public void setMenuGroupId(final UUID menuGroupId) {
+        this.menuGroupId = menuGroupId;
     }
 
     public boolean isDisplayed() {

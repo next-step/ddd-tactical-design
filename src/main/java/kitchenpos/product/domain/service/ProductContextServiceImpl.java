@@ -1,7 +1,10 @@
 package kitchenpos.product.domain.service;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -21,5 +24,16 @@ public class ProductContextServiceImpl implements ProductContextService {
     @Override
     public List<Product> findAllByIds(List<UUID> productIds) {
         return productRepository.findAllByIdIn(productIds);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public BigDecimal getTotalPrice(UUID productId, BigDecimal qty) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException(ErrorCode.NOT_FOUND_PRODUCT.toString()));
+
+        return product.getPrice()
+            .price()
+            .multiply(qty);
     }
 }
