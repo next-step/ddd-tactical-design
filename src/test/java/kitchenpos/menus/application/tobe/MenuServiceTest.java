@@ -22,9 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MenuServiceTest {
     private static final ProductId CHICKEN = ProductId.generate();
     private static final ProductId COKE = ProductId.generate();
-    private static final MenuGroupId GROUP = MenuGroupId.generate();
-
-    private MenuGroup menuGroup;
+    private static final MenuGroupId MENU_GROUP = MenuGroupId.generate();
 
     private ProductRepository productRepository;
     private MenuGroupRepository menuGroupRepository;
@@ -43,7 +41,7 @@ class MenuServiceTest {
         productRepository.save(createProduct(CHICKEN, "후라이드치킨", 25_000));
         productRepository.save(createProduct(COKE, "제로콜라", 2_000));
 
-        this.menuGroup = menuGroupRepository.save(createMenuGroup(GROUP, "치킨"));
+        menuGroupRepository.save(createMenuGroup(MENU_GROUP, "치킨"));
     }
 
     @DisplayName("메뉴를 생성할 수 있다")
@@ -57,14 +55,14 @@ class MenuServiceTest {
                 MenuId.generate(),
                 "후라이드치킨세트",
                 27_000,
-                menuGroup,
+                MENU_GROUP,
                 menuProducts
         );
 
         Menu result = menuService.create(menu);
 
         assertAll(
-                () -> assertThat(result.getGroupId()).isEqualTo(menuGroup.getId()),
+                () -> assertThat(result.getGroupId()).isEqualTo(menu.getGroupId()),
                 () -> assertThat(result.getMenuProducts()).isEqualTo(menuProducts),
                 () -> assertThat(result.getName()).isEqualTo(new MenuName("후라이드치킨세트", (name) -> false)),
                 () -> assertThat(result.getPrice()).isEqualTo(new Price(27_000))
@@ -82,7 +80,7 @@ class MenuServiceTest {
                 MenuId.generate(),
                 "후라이드치킨세트",
                 27_000,
-                menuGroup,
+                MENU_GROUP,
                 menuProducts
         );
 
@@ -102,7 +100,7 @@ class MenuServiceTest {
                 id,
                 "후라이드치킨세트",
                 27_000,
-                menuGroup,
+                MENU_GROUP,
                 menuProducts
         ));
 
@@ -124,7 +122,7 @@ class MenuServiceTest {
                 id,
                 "후라이드치킨세트",
                 27_000,
-                menuGroup,
+                MENU_GROUP,
                 menuProducts
         ));
 
@@ -145,7 +143,7 @@ class MenuServiceTest {
                 id,
                 "후라이드치킨세트",
                 27_000,
-                menuGroup,
+                MENU_GROUP,
                 menuProducts
         ));
 
@@ -162,12 +160,12 @@ class MenuServiceTest {
         return new Product(id, new ProductName(name, (productName) -> false), new Price(price));
     }
 
-    private Menu createMenu(MenuId id, String name, int price, MenuGroup menuGroup, MenuProducts menuProducts) {
+    private Menu createMenu(MenuId id, String name, int price, MenuGroupId menuGroupId, MenuProducts menuProducts) {
         return new Menu(
                 id,
                 new MenuName(name, (menuName) -> false),
                 new Price(price),
-                menuGroup,
+                menuGroupId,
                 menuProducts,
                 true
         );

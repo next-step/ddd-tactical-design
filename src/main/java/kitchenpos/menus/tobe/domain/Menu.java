@@ -1,6 +1,9 @@
 package kitchenpos.menus.tobe.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import kitchenpos.common.vo.Price;
 import kitchenpos.menus.application.tobe.exception.InvalidMenuPriceException;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -20,13 +23,9 @@ public class Menu {
     @Embedded
     private Price price;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(
-            name = "menu_group_id",
-            columnDefinition = "binary(16)",
-            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
+    @Column(name = "menu_group_id", nullable = false)
+    @Embedded
+    private MenuGroupId menuGroupId;
 
     @Column(name = "displayed", nullable = false)
     private boolean displayed;
@@ -37,19 +36,19 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(MenuName name, Price price, MenuGroup menuGroup, MenuProducts menuProducts, boolean displayed) {
-        this(MenuId.generate(), name, price, menuGroup, menuProducts, displayed);
+    public Menu(MenuName name, Price price, MenuGroupId menuGroupId, MenuProducts menuProducts, boolean displayed) {
+        this(MenuId.generate(), name, price, menuGroupId, menuProducts, displayed);
     }
 
-    public Menu(MenuId id, MenuName name, Price price, MenuGroup menuGroup, MenuProducts menuProducts, boolean displayed) {
+    public Menu(MenuId id, MenuName name, Price price, MenuGroupId menuGroupId, MenuProducts menuProducts, boolean displayed) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.menuGroup = menuGroup;
+        this.menuGroupId = menuGroupId;
         this.menuProducts = menuProducts;
         this.displayed = displayed;
 
-        if(this.isPriceInvalid()){
+        if (this.isPriceInvalid()) {
             throw new InvalidMenuPriceException("메뉴 가격이 메뉴상품 가격 총 합보다 큽니다");
         }
     }
@@ -67,11 +66,11 @@ public class Menu {
         this.price = price;
     }
 
-    public void show(){
+    public void show() {
         this.displayed = true;
     }
 
-    public void hide(){
+    public void hide() {
         this.displayed = false;
     }
 
@@ -88,7 +87,7 @@ public class Menu {
     }
 
     public MenuGroupId getGroupId() {
-        return menuGroup.getId();
+        return menuGroupId;
     }
 
     public boolean isDisplayed() {

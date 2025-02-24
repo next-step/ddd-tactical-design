@@ -25,7 +25,7 @@ class MenuTest {
                 id,
                 new MenuName("후라이드치킨", (menuName) -> false),
                 new Price(25_000),
-                createMenuGroup(MenuGroupId.generate(), "치킨"),
+                MenuGroupId.generate(),
                 menuProducts,
                 true
         );
@@ -47,16 +47,16 @@ class MenuTest {
                         MenuId.generate(),
                         new MenuName("후라이드치킨", (menuName) -> false),
                         new Price(menuPrice),
-                        createMenuGroup(MenuGroupId.generate(), "치킨"),
+                        MenuGroupId.generate(),
                         menuProducts,
                         true
                 )
         ).isInstanceOf(InvalidMenuPriceException.class);
     }
-    
+
     @DisplayName("메뉴의 가격을 변경한다")
     @Test
-    void changePrice(){
+    void changePrice() {
         MenuProducts menuProducts = new MenuProducts(
                 new MenuProduct(ProductId.generate(), 1, 25_000),
                 new MenuProduct(ProductId.generate(), 1, 2_000)
@@ -65,7 +65,7 @@ class MenuTest {
                 MenuId.generate(),
                 new MenuName("후라이드치킨", (menuName) -> false),
                 new Price(25_000),
-                createMenuGroup(MenuGroupId.generate(), "치킨"),
+                MenuGroupId.generate(),
                 menuProducts,
                 true
         );
@@ -74,10 +74,10 @@ class MenuTest {
 
         assertThat(menu.getPrice()).isEqualTo(new Price(24_000));
     }
-    
+
     @DisplayName("메뉴를 전시한다")
     @Test
-    void show(){
+    void show() {
         MenuProducts menuProducts = new MenuProducts(
                 new MenuProduct(ProductId.generate(), 1, 25_000),
                 new MenuProduct(ProductId.generate(), 1, 2_000)
@@ -86,7 +86,7 @@ class MenuTest {
                 MenuId.generate(),
                 new MenuName("후라이드치킨", (menuName) -> false),
                 new Price(25_000),
-                createMenuGroup(MenuGroupId.generate(), "치킨"),
+                MenuGroupId.generate(),
                 menuProducts,
                 true
         );
@@ -95,10 +95,10 @@ class MenuTest {
 
         assertThat(menu.isDisplayed()).isTrue();
     }
-    
+
     @DisplayName("메뉴를 숨긴다")
     @Test
-    void hide(){
+    void hide() {
         MenuProducts menuProducts = new MenuProducts(
                 new MenuProduct(ProductId.generate(), 1, 25_000),
                 new MenuProduct(ProductId.generate(), 1, 2_000)
@@ -107,7 +107,7 @@ class MenuTest {
                 MenuId.generate(),
                 new MenuName("후라이드치킨", (menuName) -> false),
                 new Price(25_000),
-                createMenuGroup(MenuGroupId.generate(), "치킨"),
+                MenuGroupId.generate(),
                 menuProducts,
                 true
         );
@@ -115,9 +115,5 @@ class MenuTest {
         menu.hide();
 
         assertThat(menu.isDisplayed()).isFalse();
-    }
-
-    private MenuGroup createMenuGroup(MenuGroupId id, String name) {
-        return new MenuGroup(id, new MenuGroupName(name));
     }
 }
