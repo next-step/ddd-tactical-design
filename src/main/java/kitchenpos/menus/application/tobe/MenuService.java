@@ -1,9 +1,6 @@
 package kitchenpos.menus.application.tobe;
 
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
-import kitchenpos.products.application.tobe.application.ProductInfoQuery;
-import kitchenpos.products.tobe.domain.ProductId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +12,12 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final MenuGroupRepository menuGroupRepository;
-    private final ProductInfoQuery productInfoQuery;
+    private final MenuProductsValidator menuProductsValidator;
 
-    public MenuService(MenuRepository menuRepository, MenuGroupRepository menuGroupRepository, ProductInfoQuery productInfoQuery) {
+    public MenuService(MenuRepository menuRepository, MenuGroupRepository menuGroupRepository, MenuProductsValidator menuProductsValidator) {
         this.menuRepository = menuRepository;
         this.menuGroupRepository = menuGroupRepository;
-        this.productInfoQuery = productInfoQuery;
+        this.menuProductsValidator = menuProductsValidator;
     }
 
     @Transactional
@@ -65,20 +62,7 @@ public class MenuService {
     }
 
     private void validateMenuProducts(Menu menu) {
-        /*
-        MenuProduct 검증을 위해서 ProductRepository를 직접 호출하는 상황
-        Menu context에서 ProductRepository 직접 참조를 막기 위해서
-
-        ACL 역할을 하는 ProductInfoQuery 생성하여
-        ProductInfoQuery 통해서 Product 조회하도록 변경
-        */
-        final MenuProducts menuProductRequests = menu.getMenuProducts();
-        final List<ProductId> productIds = menuProductRequests.productIds();
-
-        int productSize = productInfoQuery.size(productIds);
-        if (menuProductRequests.isSizeMismatch(productSize)) {
-            throw new InvalidMenuProductsException();
-        }
-
+        //메뉴 상품의 검증을 하는 도메인 서비스  menuProductsValidator 사용하도록 변경
+        menuProductsValidator.validate(menu.getMenuProducts());
     }
 }

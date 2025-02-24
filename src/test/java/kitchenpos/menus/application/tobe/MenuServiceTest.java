@@ -3,9 +3,9 @@ package kitchenpos.menus.application.tobe;
 import kitchenpos.common.vo.Price;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
+import kitchenpos.menus.infra.MenuProductsValidatorService;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
-import kitchenpos.products.application.tobe.application.ProductInfoQuery;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -26,8 +26,9 @@ class MenuServiceTest {
 
     private ProductRepository productRepository;
     private MenuGroupRepository menuGroupRepository;
+
     private MenuRepository menuRepository;
-    private ProductInfoQuery productInfoQuery;
+    private MenuProductsValidator menuProductsValidator;
     private MenuService menuService;
 
     @BeforeEach
@@ -35,8 +36,8 @@ class MenuServiceTest {
         this.productRepository = new InMemoryProductRepository();
         this.menuGroupRepository = new InMemoryMenuGroupRepository();
         this.menuRepository = new InMemoryMenuRepository();
-        this.productInfoQuery = new ProductInfoQuery(productRepository);
-        this.menuService = new MenuService(menuRepository, menuGroupRepository, productInfoQuery);
+        this.menuProductsValidator = new MenuProductsValidatorService(this.productRepository);
+        this.menuService = new MenuService(menuRepository, menuGroupRepository, menuProductsValidator);
 
         productRepository.save(createProduct(CHICKEN, "후라이드치킨", 25_000));
         productRepository.save(createProduct(COKE, "제로콜라", 2_000));
