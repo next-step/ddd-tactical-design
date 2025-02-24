@@ -1,1 +1,1 @@
-rootProject.name = "ddd-kitchenpos"
+rootProject.name = "ddd-tactical-design"

@@ -29,10 +29,10 @@ public class OrderService {
     private final KitchenridersClient kitchenridersClient;
 
     public OrderService(
-        final OrderRepository orderRepository,
-        final MenuRepository menuRepository,
-        final OrderTableRepository orderTableRepository,
-        final KitchenridersClient kitchenridersClient
+            final OrderRepository orderRepository,
+            final MenuRepository menuRepository,
+            final OrderTableRepository orderTableRepository,
+            final KitchenridersClient kitchenridersClient
     ) {
         this.orderRepository = orderRepository;
         this.menuRepository = menuRepository;
@@ -44,16 +44,16 @@ public class OrderService {
     public Order create(final Order request) {
         final OrderType type = request.getType();
         if (Objects.isNull(type)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문 유형이 존재해야 합니다");
         }
         final List<OrderLineItem> orderLineItemRequests = request.getOrderLineItems();
         if (Objects.isNull(orderLineItemRequests) || orderLineItemRequests.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("주문 항목이 존재해야 합니다.");
         }
         final List<Menu> menus = menuRepository.findAllByIdIn(
-            orderLineItemRequests.stream()
-                .map(OrderLineItem::getMenuId)
-                .toList()
+                orderLineItemRequests.stream()
+                        .map(OrderLineItem::getMenuId)
+                        .toList()
         );
         if (menus.size() != orderLineItemRequests.size()) {
             throw new IllegalArgumentException();
@@ -63,16 +63,16 @@ public class OrderService {
             final long quantity = orderLineItemRequest.getQuantity();
             if (type != OrderType.EAT_IN) {
                 if (quantity < 0) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("주문 유형이 `배달` 혹은 `테이크아웃`시 주문 수량이 0보다 커야 합니다");
                 }
             }
             final Menu menu = menuRepository.findById(orderLineItemRequest.getMenuId())
-                .orElseThrow(NoSuchElementException::new);
+                    .orElseThrow(NoSuchElementException::new);
             if (!menu.isDisplayed()) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("메뉴가 표시되어야 주문이 가능합니다.");
             }
             if (menu.getPrice().compareTo(orderLineItemRequest.getPrice()) != 0) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("주문항목에 있는 가격이 메뉴에 있는 가격과 동일해야 합니다.");
             }
             final OrderLineItem orderLineItem = new OrderLineItem();
             orderLineItem.setMenu(menu);
@@ -88,15 +88,15 @@ public class OrderService {
         if (type == OrderType.DELIVERY) {
             final String deliveryAddress = request.getDeliveryAddress();
             if (Objects.isNull(deliveryAddress) || deliveryAddress.isEmpty()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("주문 유형이 `배달`이면 배달에 필요한 주소가 존재해야 한다.");
             }
             order.setDeliveryAddress(deliveryAddress);
         }
         if (type == OrderType.EAT_IN) {
             final OrderTable orderTable = orderTableRepository.findById(request.getOrderTableId())
-                .orElseThrow(NoSuchElementException::new);
+                    .orElseThrow(NoSuchElementException::new);
             if (!orderTable.isOccupied()) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("주문 유형이 `매장 내 식사`이면 가게 안에 자리가 꽉 차지 않아야 한다.");
             }
             order.setOrderTable(orderTable);
         }
@@ -106,7 +106,7 @@ public class OrderService {
     @Transactional
     public Order accept(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.WAITING) {
             throw new IllegalStateException();
         }
@@ -114,8 +114,8 @@ public class OrderService {
             BigDecimal sum = BigDecimal.ZERO;
             for (final OrderLineItem orderLineItem : order.getOrderLineItems()) {
                 sum = orderLineItem.getMenu()
-                    .getPrice()
-                    .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
+                        .getPrice()
+                        .multiply(BigDecimal.valueOf(orderLineItem.getQuantity()));
             }
             kitchenridersClient.requestDelivery(orderId, sum, order.getDeliveryAddress());
         }
@@ -126,7 +126,7 @@ public class OrderService {
     @Transactional
     public Order serve(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.ACCEPTED) {
             throw new IllegalStateException();
         }
@@ -137,7 +137,7 @@ public class OrderService {
     @Transactional
     public Order startDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (order.getType() != OrderType.DELIVERY) {
             throw new IllegalStateException();
         }
@@ -151,7 +151,7 @@ public class OrderService {
     @Transactional
     public Order completeDelivery(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         if (order.getStatus() != OrderStatus.DELIVERING) {
             throw new IllegalStateException();
         }
@@ -162,7 +162,7 @@ public class OrderService {
     @Transactional
     public Order complete(final UUID orderId) {
         final Order order = orderRepository.findById(orderId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
         final OrderType type = order.getType();
         final OrderStatus status = order.getStatus();
         if (type == OrderType.DELIVERY) {

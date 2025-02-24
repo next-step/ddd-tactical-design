@@ -13,6 +13,7 @@ import jakarta.persistence.Transient;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Table(name = "menu")
@@ -30,9 +31,9 @@ public class Menu {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
+            name = "menu_group_id",
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
     )
     private MenuGroup menuGroup;
 
@@ -41,10 +42,10 @@ public class Menu {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
+            name = "menu_id",
+            nullable = false,
+            columnDefinition = "binary(16)",
+            foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
     )
     private List<MenuProduct> menuProducts;
 
@@ -103,6 +104,9 @@ public class Menu {
     }
 
     public UUID getMenuGroupId() {
+        if (menuGroup == null) {
+            throw new NoSuchElementException("메뉴는 특정 메뉴 그룹에 속해야 한다.");
+        }
         return menuGroupId;
     }
 
