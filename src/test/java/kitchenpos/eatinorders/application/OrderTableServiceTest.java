@@ -1,29 +1,32 @@
 package kitchenpos.eatinorders.application;
 
 import kitchenpos.eatinorders.domain.OrderRepository;
-import kitchenpos.eatinorders.domain.OrderStatus;
 import kitchenpos.eatinorders.domain.OrderTable;
 import kitchenpos.eatinorders.domain.OrderTableRepository;
+import kitchenpos.fixtures.OrderTableFixtures;
+import static kitchenpos.fixtures.OrderTableFixtures.changeOrderTable;
+import static kitchenpos.fixtures.OrderTableFixtures.clearOrderTable;
+import static kitchenpos.fixtures.OrderTableFixtures.createOrderTable;
+import static kitchenpos.fixtures.OrderTableFixtures.sitOrderTable;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static kitchenpos.Fixtures.order;
-import static kitchenpos.Fixtures.orderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableServiceTest {
+
+    private OrderTableService orderTableService;
     private OrderTableRepository orderTableRepository;
     private OrderRepository orderRepository;
-    private OrderTableService orderTableService;
 
     @BeforeEach
     void setUp() {
@@ -31,104 +34,138 @@ class OrderTableServiceTest {
         orderRepository = new InMemoryOrderRepository();
         orderTableService = new OrderTableService(orderTableRepository, orderRepository);
     }
-
-    @DisplayName("주문 테이블을 등록할 수 있다.")
     @Test
-    void create() {
-        final OrderTable expected = createOrderTableRequest("1번");
-        final OrderTable actual = orderTableService.create(expected);
+    void 주문_테이블을_등록하면_손님_수는_0명이고_사용_가능_상태여야_한다() {
+        // given
+        OrderTable expected = OrderTableFixtures.createOrderTable("1번 테이블");
+
+        // when
+        OrderTable actual = orderTableService.create(expected);
+
+        // then
         assertThat(actual).isNotNull();
         assertAll(
-            () -> assertThat(actual.getId()).isNotNull(),
-            () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getNumberOfGuests()).isEqualTo(0),
+                () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
 
-    @DisplayName("주문 테이블의 이름이 올바르지 않으면 등록할 수 없다.")
-    @NullAndEmptySource
     @ParameterizedTest
-    void create(final String name) {
-        final OrderTable expected = createOrderTableRequest(name);
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "   "})
+    void 주문_테이블의_이름이_없으면_등록할_수_없다(final String invalidName) {
+        // given
+        OrderTable expected = new OrderTable();
+        expected.setName(invalidName);
+
+        // when & then
         assertThatThrownBy(() -> orderTableService.create(expected))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 테이블 이름이 존재해야 합니다.");
     }
 
-    @DisplayName("빈 테이블을 해지할 수 있다.")
     @Test
-    void sit() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable actual = orderTableService.sit(orderTableId);
+    void 주문_테이블에_손님이_앉으면_사용중_상태로_변경된다() {
+        // given
+        OrderTable orderTable = sitOrderTable(UUID.randomUUID(), "1번 테이블", false, 0);
+        OrderTable expected = orderTableRepository.save(orderTable);
+
+        // when
+        OrderTable actual = orderTableService.sit(expected.getId());
+
+        // then
         assertThat(actual.isOccupied()).isTrue();
     }
 
-    @DisplayName("빈 테이블로 설정할 수 있다.")
     @Test
-    void clear() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 4)).getId();
-        final OrderTable actual = orderTableService.clear(orderTableId);
+    void 존재하지_않는_주문_테이블에_손님이_앉으려_하면_예외가_발생한다() {
+        // given
+        UUID nonExistentTableId = UUID.randomUUID();
+
+        // when & then
+        assertThatThrownBy(() -> orderTableService.sit(nonExistentTableId))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("주문 테이블이 존재해야 한다.");
+    }
+
+    @Test
+    void 주문이_완료된_경우_주문_테이블을_정리할_수_있다() {
+        // given
+        OrderTable orderTable = clearOrderTable(UUID.randomUUID(), "1번 테이블", true, 4);
+        OrderTable expected = orderTableRepository.save(orderTable);
+
+        // when
+        OrderTable actual = orderTableService.clear(expected.getId());
+
+        // then
         assertAll(
-            () -> assertThat(actual.getNumberOfGuests()).isZero(),
-            () -> assertThat(actual.isOccupied()).isFalse()
+                () -> assertThat(actual.getNumberOfGuests()).isEqualTo(0),
+                () -> assertThat(actual.isOccupied()).isFalse()
         );
     }
 
-    @DisplayName("완료되지 않은 주문이 있는 주문 테이블은 빈 테이블로 설정할 수 없다.")
     @Test
-    void clearWithUncompletedOrders() {
-        final OrderTable orderTable = orderTableRepository.save(orderTable(true, 4));
-        final UUID orderTableId = orderTable.getId();
-        orderRepository.save(order(OrderStatus.ACCEPTED, orderTable));
-        assertThatThrownBy(() -> orderTableService.clear(orderTableId))
-            .isInstanceOf(IllegalStateException.class);
+    void 주문_테이블의_손님_수를_변경할_수_있다() {
+        // given
+        OrderTable orderTable = changeOrderTable(UUID.randomUUID(), "1번 테이블", true, 4);
+        orderTableRepository.save(orderTable);
+
+        // when
+        orderTable.setNumberOfGuests(5);
+        OrderTable updatedTable = orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable);
+
+        // then
+        assertThat(updatedTable.getNumberOfGuests()).isEqualTo(5);
     }
 
-    @DisplayName("방문한 손님 수를 변경할 수 있다.")
     @Test
-    void changeNumberOfGuests() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
-        final OrderTable actual = orderTableService.changeNumberOfGuests(orderTableId, expected);
-        assertThat(actual.getNumberOfGuests()).isEqualTo(4);
+    void 손님_수가_0_미만이면_변경할_수_없다() {
+        // given
+        OrderTable orderTable = changeOrderTable(UUID.randomUUID(), "1번 테이블", true, 4);
+        orderTableRepository.save(orderTable);
+
+        // when & then
+        orderTable.setNumberOfGuests(-1);
+        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("손님 수가 0명 이상이어야 합니다.");
     }
 
-    @DisplayName("방문한 손님 수가 올바르지 않으면 변경할 수 없다.")
-    @ValueSource(ints = -1)
-    @ParameterizedTest
-    void changeNumberOfGuests(final int numberOfGuests) {
-        final UUID orderTableId = orderTableRepository.save(orderTable(true, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(numberOfGuests);
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
-            .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @DisplayName("빈 테이블은 방문한 손님 수를 변경할 수 없다.")
     @Test
-    void changeNumberOfGuestsInEmptyTable() {
-        final UUID orderTableId = orderTableRepository.save(orderTable(false, 0)).getId();
-        final OrderTable expected = changeNumberOfGuestsRequest(4);
-        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTableId, expected))
-            .isInstanceOf(IllegalStateException.class);
+    void 주문_테이블이_사용중이_아니면_손님_수를_변경할_수_없다() {
+        // given
+        OrderTable orderTable = changeOrderTable(UUID.randomUUID(), "1번 테이블", false, 4);
+        orderTableRepository.save(orderTable);
+
+        // when & then
+        orderTable.setNumberOfGuests(4);
+        assertThatThrownBy(() -> orderTableService.changeNumberOfGuests(orderTable.getId(), orderTable))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문 테이블이 사용중이어야 합니다.");
     }
 
-    @DisplayName("주문 테이블의 목록을 조회할 수 있다.")
     @Test
-    void findAll() {
-        orderTableRepository.save(orderTable());
-        final List<OrderTable> actual = orderTableService.findAll();
-        assertThat(actual).hasSize(1);
-    }
+    void 등록된_주문_테이블을_모두_조회할_수_있다() {
+        // given
+        OrderTable orderTable1 = createOrderTable(UUID.randomUUID(),"1번 테이블");
+        orderTableRepository.save(orderTable1);
+        OrderTable orderTable2 = createOrderTable(UUID.randomUUID(),"2번 테이블");
+        orderTableRepository.save(orderTable2);
 
-    private OrderTable createOrderTableRequest(final String name) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setName(name);
-        return orderTable;
-    }
+        // when
+        List<OrderTable> orderTables = orderTableService.findAll();
 
-    private OrderTable changeNumberOfGuestsRequest(final int numberOfGuests) {
-        final OrderTable orderTable = new OrderTable();
-        orderTable.setNumberOfGuests(numberOfGuests);
-        return orderTable;
+        // then
+        assertThat(orderTables).hasSize(2);
+        assertAll(
+                () -> assertThat(orderTable1).isNotNull(),
+                () -> assertThat(orderTable1.getName()).isEqualTo("1번 테이블")
+        );
+        assertAll(
+                () -> assertThat(orderTable2).isNotNull(),
+                () -> assertThat(orderTable2.getName()).isEqualTo("2번 테이블")
+        );
     }
 }
