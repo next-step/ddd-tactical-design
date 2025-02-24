@@ -1,9 +1,18 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.*;
-import kitchenpos.product.domain.model.Product;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.UUID;
+import kitchenpos.product.domain.model.Product;
 
 @Table(name = "menu_product")
 @Entity

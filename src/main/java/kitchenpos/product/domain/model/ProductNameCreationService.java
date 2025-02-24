@@ -1,9 +1,9 @@
 package kitchenpos.product.domain.model;
 
+import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_NAME_VALIDATION_EXCEPTION;
+
 import kitchenpos.common.application.PurgomalumClient;
 import org.springframework.stereotype.Service;
-
-import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_NAME_VALIDATION_EXCEPTION;
 
 @Service
 public class ProductNameCreationService {

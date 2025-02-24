@@ -1,12 +1,22 @@
 package kitchenpos.order.common.model;
 
-import jakarta.persistence.*;
-import kitchenpos.menu.domain.model.Menu;
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_MENU_DISPLAY_EXCEPTION;
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_PRICE_EXCEPTION;
+import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.ORDER_LINE_ITEM_QUANTITY_EXCEPTION;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.UUID;
-
-import static kitchenpos.order.common.exception.OrderLineItemExceptionMessage.*;
+import kitchenpos.menu.domain.model.Menu;
 
 @Table(name = "order_line_item")
 @Entity

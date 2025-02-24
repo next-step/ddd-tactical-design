@@ -1,5 +1,13 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.stream.Stream;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -10,16 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static kitchenpos.TestFixtureFactory.createMenuGroup;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 class MenuTest {
+
+    private static Stream<List<MenuProduct>> invalidMenuProductProvider() {
+        return Stream.of(
+                null,
+                List.of()
+        );
+    }
 
     @Test
     @DisplayName("메뉴가 생성될 때, 메뉴 그룹이 포함되지 않으면 예외가 발생한다.")
@@ -62,12 +68,5 @@ class MenuTest {
                 menuGroup.getId()
         )).isInstanceOf(NoSuchElementException.class)
                 .hasMessage("메뉴 상품이 존재하지 않습니다!");
-    }
-
-    private static Stream<List<MenuProduct>> invalidMenuProductProvider() {
-        return Stream.of(
-                null,
-                List.of()
-        );
     }
 }

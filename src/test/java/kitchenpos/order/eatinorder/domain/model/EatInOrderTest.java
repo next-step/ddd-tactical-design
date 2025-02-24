@@ -1,13 +1,13 @@
 package kitchenpos.order.eatinorder.domain.model;
 
-import kitchenpos.menu.domain.model.Menu;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
 import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import kitchenpos.menu.domain.model.Menu;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class EatInOrderTest {
 

@@ -1,6 +1,18 @@
 package kitchenpos.menu.application;
 
-import kitchenpos.menu.domain.model.*;
+import static kitchenpos.menu.exception.MenuExceptionMessage.NONE_MARGIN_EXCEPTION;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+import kitchenpos.menu.domain.model.Menu;
+import kitchenpos.menu.domain.model.MenuGroup;
+import kitchenpos.menu.domain.model.MenuName;
+import kitchenpos.menu.domain.model.MenuNameCreationService;
+import kitchenpos.menu.domain.model.MenuPrice;
+import kitchenpos.menu.domain.model.MenuProduct;
+import kitchenpos.menu.domain.model.MenuProductQuantity;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
 import kitchenpos.menu.domain.repository.MenuRepository;
 import kitchenpos.menu.domain.service.MarginValidator;
@@ -9,13 +21,6 @@ import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
-import static kitchenpos.menu.exception.MenuExceptionMessage.NONE_MARGIN_EXCEPTION;
 
 @Service
 public class MenuService {
@@ -55,7 +60,8 @@ public class MenuService {
         final String name = request.getInnerName();
         MenuName menuName = menuNameCreationService.createName(name);
 
-        final Menu menu = new Menu(menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        final Menu menu = new Menu(menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts,
+                menuGroup.getId());
         validateMargin(menu);
 
         return menuRepository.save(menu);

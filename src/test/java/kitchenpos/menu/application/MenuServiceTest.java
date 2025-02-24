@@ -1,5 +1,14 @@
 package kitchenpos.menu.application;
 
+import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
@@ -21,16 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 class MenuServiceTest {
 
     private MenuService menuService;
@@ -48,7 +47,8 @@ class MenuServiceTest {
         MarginValidator marginValidator = new MarginValidator(menuRepository);
         MenuProductValidator menuProductValidator = new MenuProductValidator(productRepository);
         MenuNameCreationService menuNameCreationService = new MenuNameCreationService(purgomalumClient);
-        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, marginValidator, menuProductValidator, menuNameCreationService);
+        menuService = new MenuService(menuRepository, menuGroupRepository, productRepository, marginValidator,
+                menuProductValidator, menuNameCreationService);
     }
 
     @Test

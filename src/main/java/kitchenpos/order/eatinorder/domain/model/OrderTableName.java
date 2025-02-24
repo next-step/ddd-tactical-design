@@ -1,11 +1,10 @@
 package kitchenpos.order.eatinorder.domain.model;
 
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.ORDER_TABLE_NAME_CREATION_EXCEPTION;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
-
-import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.ORDER_TABLE_NAME_CREATION_EXCEPTION;
 
 @Embeddable
 public class OrderTableName {
@@ -34,7 +33,9 @@ public class OrderTableName {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         OrderTableName that = (OrderTableName) o;
         return Objects.equals(value, that.value);
     }

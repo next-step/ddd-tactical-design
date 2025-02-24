@@ -1,12 +1,11 @@
 package kitchenpos.product.domain.model;
 
+import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_PRICE_CREATION_EXCEPTION;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static kitchenpos.product.exception.ProductExceptionMessage.PRODUCT_PRICE_CREATION_EXCEPTION;
 
 @Embeddable
 public class ProductPrice {

@@ -1,9 +1,21 @@
 package kitchenpos.order.eatinorder.application;
 
+import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
+import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
+import static kitchenpos.TestFixtureFactory.createMenu;
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
-import kitchenpos.order.common.model.OrderStatus;
-import kitchenpos.order.common.repository.OrderRepository;
+import java.util.List;
+import java.util.Optional;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
@@ -16,20 +28,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import java.util.List;
-import java.util.Optional;
-
-import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
-import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
-import static kitchenpos.TestFixtureFactory.createMenu;
-import static kitchenpos.TestFixtureFactory.createMenuGroup;
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class OrderTableServiceTest {
 

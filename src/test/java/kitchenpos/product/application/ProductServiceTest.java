@@ -1,5 +1,15 @@
 package kitchenpos.product.application;
 
+import static kitchenpos.TestFixtureFactory.createProduct;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import kitchenpos.TestFixtureFactory;
 import kitchenpos.common.application.PurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
@@ -11,17 +21,6 @@ import kitchenpos.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import static kitchenpos.TestFixtureFactory.createProduct;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ProductServiceTest {
 

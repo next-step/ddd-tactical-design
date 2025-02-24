@@ -1,5 +1,11 @@
 package kitchenpos.menu.ui;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.MenuGroup;
@@ -15,10 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class MenuGroupRestControllerTest {
@@ -33,7 +35,8 @@ class MenuGroupRestControllerTest {
     @DisplayName("메뉴 그룹을 생성한다.")
     void create_success() throws Exception {
         // given
-        MenuGroupNameCreationService menuGroupNameCreationService = new MenuGroupNameCreationService(new FakePurgomalumClient());
+        MenuGroupNameCreationService menuGroupNameCreationService = new MenuGroupNameCreationService(
+                new FakePurgomalumClient());
         MenuGroup request = new MenuGroup(menuGroupNameCreationService.createName("한식"));
 
         // when
