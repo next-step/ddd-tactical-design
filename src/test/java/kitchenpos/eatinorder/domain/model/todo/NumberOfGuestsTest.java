@@ -38,4 +38,30 @@ class NumberOfGuestsTest {
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("손님 수는 0 미만일 수 없습니다.");
     }
+
+    @DisplayName("NumberOfGuests가 0인지 확인한다.")
+    @Test
+    void isZero() {
+        // given
+        final NumberOfGuests numberOfGuests = NumberOfGuests.of(0);
+
+        // when
+        final boolean result = numberOfGuests.isZero();
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("NumberOfGuests가 0이 아닌지 확인한다.")
+    @Test
+    void isNotZero() {
+        // given
+        final NumberOfGuests numberOfGuests = NumberOfGuests.of(1);
+
+        // when
+        final boolean result = numberOfGuests.isZero();
+
+        // then
+        assertThat(result).isFalse();
+    }
 }

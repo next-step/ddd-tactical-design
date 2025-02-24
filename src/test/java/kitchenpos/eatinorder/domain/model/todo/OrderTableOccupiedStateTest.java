@@ -34,10 +34,11 @@ class OrderTableOccupiedStateTest {
 
         // then
         assertThat(occupiedOrderTable.isOccupied()).isTrue();
+        assertThat(occupiedOrderTable.isVacant()).isFalse();
     }
 
     // test vacate
-    @DisplayName("OrderTableOccupiedState를 비어있는 상태로 변경한다.")
+    @DisplayName("OrderTableOccupiedState를 공석 상태로 변경한다.")
     @Test
     void vacate() {
         // given
@@ -47,6 +48,7 @@ class OrderTableOccupiedStateTest {
         final OrderTableOccupiedState vacantOrderTable = orderTableOccupiedState.vacate();
 
         // then
+        assertThat(vacantOrderTable.isVacant()).isTrue();
         assertThat(vacantOrderTable.isOccupied()).isFalse();
     }
 }

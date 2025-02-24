@@ -3,6 +3,7 @@ package kitchenpos.eatinorder.domain.model.todo;
 import java.util.Objects;
 
 public class NumberOfGuests {
+    public static final NumberOfGuests ZERO = new NumberOfGuests(0);
     private final int value;
 
     private NumberOfGuests(final int value) {
@@ -18,6 +19,10 @@ public class NumberOfGuests {
 
     public int value() {
         return value;
+    }
+
+    public boolean isZero() {
+        return this.equals(ZERO);
     }
 
     @Override
