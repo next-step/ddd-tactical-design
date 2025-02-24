@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.application.dto.MenuGroupRequest;
 import kitchenpos.menu.application.dto.MenuGroupResponse;
@@ -101,7 +102,8 @@ class MenuGroupFacadeTest {
             menuGroup = MenuGroupFixture.test(name).create();
 
             assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> menuGroupFacade.create(menuGroup));
+                .isThrownBy(() -> menuGroupFacade.create(menuGroup))
+                .withMessage(ErrorCode.MENU_GROUP_NAME_NOT_ALLOWED.toString());
         }
     }
 

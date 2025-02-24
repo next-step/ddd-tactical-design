@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.repository.MenuRepository;
 
 public class InMemoryMenuRepository implements MenuRepository {
 
@@ -24,7 +23,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(UUID productId) {
         return menus.values().stream()
             .filter(menu -> menu.getMenuProducts().stream()
-                .anyMatch(menuProduct -> menuProduct.getProduct().getId().equals(productId)))
+                .anyMatch(menuProduct -> menuProduct.getProductId().equals(productId)))
             .toList();
     }
 

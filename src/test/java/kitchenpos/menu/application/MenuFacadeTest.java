@@ -6,22 +6,25 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
+import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.application.dto.MenuRequest;
+import kitchenpos.menu.application.dto.MenuRequest.UpdatePrice;
 import kitchenpos.menu.application.dto.MenuResponse;
 import kitchenpos.menu.application.facade.MenuFacade;
 import kitchenpos.menu.domain.entity.Menu;
-import kitchenpos.menu.domain.entity.MenuGroup;
 import kitchenpos.menu.domain.entity.MenuProduct;
 import kitchenpos.menu.domain.fixture.MenuFixture;
+import kitchenpos.menu.domain.fixture.MenuGroupFixture;
 import kitchenpos.menu.domain.fixture.MenuProductFixture;
 import kitchenpos.menu.domain.repository.InMemoryMenuRepository;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
@@ -32,8 +35,12 @@ import kitchenpos.menu.domain.service.MenuService;
 import kitchenpos.menu.domain.service.MenuServiceImpl;
 import kitchenpos.product.domain.entity.Product;
 import kitchenpos.product.domain.fixture.ProductFixture;
+import kitchenpos.product.domain.model.ProductName;
+import kitchenpos.product.domain.model.ProductPrice;
+import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
 import kitchenpos.product.domain.service.ProductContextService;
+import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -59,12 +66,13 @@ class MenuFacadeTest {
     @Mock
     private MenuGroupRepository menuGroupRepository;
 
-    @Mock
     private ProductRepository productRepository;
 
     private MenuRepository menuRepository;
 
     private final MenuPurgomalumClient purgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
+
+    private final ProductPurgomalumClient menuPurgomalumClient = new FakeProfanityClient(List.of("나쁜", "XXX"));
 
     private FakeMenuPolicy menuPolicy;
 
@@ -73,22 +81,31 @@ class MenuFacadeTest {
 
     private MenuRequest.Create createMenu;
     private MenuRequest.UpdatePrice updatePriceMenu;
-    private Menu chickenMenu;
+    private Menu defaultMenu;
 
     private Product chicken;
 
     @BeforeEach
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
-        menuPolicy = new FakeMenuPolicy(menuRepository);
+        productRepository = new InMemoryProductRepository();
+        menuPolicy = new FakeMenuPolicy(menuRepository, productContextService);
         menuService = new MenuServiceImpl(menuRepository, menuGroupRepository, purgomalumClient, menuPolicy, productContextService);
         menuFacade = new MenuFacade(menuService);
 
         createMenu = MenuFixture.init().create();
-        chickenMenu = MenuFixture.init().toEntity();
-        chicken = ProductFixture.init().toEntity();
 
-        menuRepository.save(chickenMenu);
+        chicken = ProductFixture.init().toEntity();
+        defaultMenu = MenuFixture.test(
+            null,
+            null,
+            null,
+            true,
+            List.of(new MenuProductFixture(chicken.getId(), 10).toEntity())
+        ).toEntity();
+
+        productRepository.save(chicken);
+        menuRepository.save(defaultMenu);
     }
 
     @Nested
@@ -114,7 +131,9 @@ class MenuFacadeTest {
         @Test
         @DisplayName("성공")
         void 메뉴등록_성공() {
+
             mockCreateMenu();
+            mockGetTotalMenuProductPrice(false);
 
             var result = menuService.create(createMenu.toVo());
 
@@ -123,8 +142,6 @@ class MenuFacadeTest {
                 () -> assertEquals(result.name().name(), createMenu.name()),
                 () -> assertEquals(result.price().price(), createMenu.price()),
                 () -> assertEquals(result.displayed(), createMenu.displayed())
-//                () -> assertEquals(result.getMenuGroup(), chickenMenu.getMenuGroup()),
-//                () -> assertEquals(result.getMenuProducts(), chickenMenu.getMenuProducts())
             );
 
         }
@@ -143,7 +160,8 @@ class MenuFacadeTest {
 
             if (price < 0) {
                 assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> menuFacade.create(createMenu));
+                    .isThrownBy(() -> menuFacade.create(createMenu))
+                    .withMessage(ErrorCode.MENU_PRICE_NOT_ALLOWED.toString());
             }
         }
 
@@ -153,13 +171,14 @@ class MenuFacadeTest {
             createMenu = MenuFixture.test(
                 null,
                 null,
-                new MenuGroup(null, null),
+                null,
                 true,
                 null
             ).create();
 
             assertThatExceptionOfType(NoSuchElementException.class)
-                .isThrownBy(() -> menuFacade.create(createMenu));
+                .isThrownBy(() -> menuFacade.create(createMenu))
+                .withMessage(ErrorCode.NOT_FOUND_MENU_GROUP.toString());
         }
 
         @DisplayName("메뉴명도 상품명처럼 비속어를 포함하면 안된다.")
@@ -176,27 +195,30 @@ class MenuFacadeTest {
             ).create();
 
             assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> menuFacade.create(createMenu));
+                .isThrownBy(() -> menuFacade.create(createMenu))
+                .withMessage(ErrorCode.MENU_NAME_PROFANITY_NOT_ALLOWED.toString());
         }
 
-//        @DisplayName("등록 메뉴가격이 구성 상품의 총 금액보다 크지 않아야 한다.")
-//        @ParameterizedTest
-//        @CsvSource({"100000, 100"})
-//        void 메뉴_구성상품_금액_비교검사(final int price1, final int price2) {
-//            chicken = new ProductFixture(
-//                null,
-//                null,
-//                BigDecimal.valueOf(price2)
-//            ).toEntity();
-//
-//            mockFindByMenuGroup();
-//            mockFindAllByProduct();
-//            mockFindByProduct(chicken);
-//
-//            assertThatExceptionOfType(IllegalArgumentException.class)
-//                .isThrownBy(() -> menuService.create(chickenMenu));
-//        }
-//
+        @DisplayName("등록 메뉴가격이 구성 상품의 총 금액보다 크지 않아야 한다.")
+        @ParameterizedTest
+        @CsvSource({"100000, 100"})
+        void 메뉴_구성상품_금액_비교검사(final int price1, final int price2) {
+            createMenu = MenuFixture.test(
+                null,
+                BigDecimal.valueOf(price1),
+                null,
+                true,
+                List.of(new MenuProductFixture(chicken.getId(), 100).toEntity())
+            ).create();
+
+            mockCreateMenu();
+            mockGetTotalMenuProductPrice(true);
+
+            assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> menuService.create(createMenu.toVo()))
+                .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
+        }
+
         @Test
         @DisplayName("메뉴 상품 정보를 반드시 가진다.")
         void 메뉴구성상품_검사() {
@@ -210,37 +232,31 @@ class MenuFacadeTest {
             mockFindByMenuGroup();
 
             assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> menuFacade.create(createMenu));
+                .isThrownBy(() -> menuFacade.create(createMenu))
+                .withMessage(ErrorCode.NOT_FOUND_ANY_PRODUCT.toString());
         }
-//
-//        @DisplayName("메뉴 상품 정보에 속한 상품의 수량은 0개 이상이어야 한다.")
-//        @ParameterizedTest
-//        @ValueSource(ints = {-100, 0, 100})
-//        void 메뉴구성상품_수량_검사(final int qty) {
-//            chickenMenu = MenuFixture.test(
-//                null,
-//                null,
-//                null,
-//                true,
-//                List.of(new MenuProductFixture(
-//                    new ProductFixture(
-//                        null,
-//                        null,
-//                        null
-//                    ).toEntity(),
-//                    qty
-//                ).create())
-//            ).create();
-//
-//            if (qty < 0) {
-//                mockFindByMenuGroup();
-//                mockFindAllByProduct();
-//                assertThatExceptionOfType(IllegalArgumentException.class)
-//                    .isThrownBy(() -> menuService.create(chickenMenu));
-//            }
-//        }
-//
-//
+
+        @DisplayName("메뉴 상품 정보에 속한 상품의 수량은 0개 이상이어야 한다.")
+        @ParameterizedTest
+        @ValueSource(ints = {-100, 0, 100})
+        void 메뉴구성상품_수량_검사(final int qty) {
+            createMenu = MenuFixture.test(
+                null,
+                null,
+                null,
+                true,
+                List.of(new MenuProductFixture(chicken.getId(), qty).toEntity())
+            ).create();
+
+            if (qty < 0) {
+                mockCreateMenu();
+                assertThatExceptionOfType(IllegalArgumentException.class)
+                    .isThrownBy(() -> menuService.create(createMenu.toVo()))
+                    .withMessage(ErrorCode.PRODUCT_QTY_NOT_ALLOWED.toString());
+            }
+        }
+
+
     }
 
     @Nested
@@ -250,10 +266,10 @@ class MenuFacadeTest {
         @Test
         @DisplayName("성공")
         void 메뉴_노출_성공() {
-//            mockFindByMenu();
+            mockGetTotalMenuProductPrice(false);
 
             assertThatCode(() -> {
-                menuService.display(chickenMenu.getId());
+                menuService.display(defaultMenu.getId());
             }).doesNotThrowAnyException();
 
         }
@@ -262,26 +278,29 @@ class MenuFacadeTest {
         @ParameterizedTest
         @CsvSource({"100000, 100"})
         void 변경가격_비교_검사(final int price1, final int price2) {
-            chickenMenu = MenuFixture.test(
+            chicken = new ProductFixture(
+                        null,
+                        null,
+                        BigDecimal.valueOf(price2)
+                    ).toEntity();
+
+            productRepository.save(chicken);
+
+            defaultMenu = MenuFixture.test(
                 null,
                 BigDecimal.valueOf(price1),
                 null,
                 true,
-                List.of(new MenuProductFixture(
-                    new ProductFixture(
-                        null,
-                        null,
-                        BigDecimal.valueOf(price2)
-                    ).toEntity(),
-                    100
-                ).create())
+                List.of(new MenuProductFixture(chicken.getId(), 100).toEntity())
             ).toEntity();
 
-            menuRepository.save(chickenMenu);
+            menuRepository.save(defaultMenu);
 
-            // TODO
+            mockGetTotalMenuProductPrice(true);
+
             assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> menuService.display(chickenMenu.getId()));
+                .isThrownBy(() -> menuService.display(defaultMenu.getId()))
+                .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
 
@@ -293,9 +312,9 @@ class MenuFacadeTest {
         @DisplayName("성공 : 등록 메뉴를 숨긴다.")
         void 메뉴_숨김_성공() {
 
-            menuService.hide(chickenMenu.getId());
+            menuService.hide(defaultMenu.getId());
 
-            assertThat(chickenMenu.isDisplayed()).isFalse();
+            assertThat(defaultMenu.isDisplayed()).isFalse();
         }
     }
 
@@ -308,13 +327,9 @@ class MenuFacadeTest {
         @ValueSource(ints = {0, 1000, 10000})
         void 메뉴_가격변경_성공(final int price) {
 
-            updatePriceMenu = MenuFixture.test(
-                null,
-                BigDecimal.valueOf(price),
-                null,
-                true,
-                null
-            ).update();
+            updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
+
+            mockGetTotalMenuProductPrice(false);
 
             assertThatCode(() -> {
                 menuFacade.changePrice(updatePriceMenu);
@@ -336,72 +351,50 @@ class MenuFacadeTest {
 
             if (price < 0) {
                 assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> menuFacade.changePrice(updatePriceMenu));
+                    .isThrownBy(() -> menuFacade.changePrice(updatePriceMenu))
+                    .withMessage(ErrorCode.MENU_PRICE_NOT_ALLOWED.toString());
             }
         }
 
         @DisplayName("변경가격이 메뉴 구성 상품 총 금액보다 크지 않아야 한다.")
         @ParameterizedTest
-        @CsvSource({"100000, 100"})
-        void 변경가격_비교_검사(final int price1, final int price2) {
+        @ValueSource(ints = {250000, 300000})
+        void 변경가격_비교_검사(final int price) {
 
-            updatePriceMenu = MenuFixture.test(
-                null,
-                BigDecimal.valueOf(price1),
-                null,
-                true,
-                List.of(new MenuProductFixture(
-                    new ProductFixture(
-                        null,
-                        null,
-                        BigDecimal.valueOf(price2)
-                    ).toEntity(),
-                    100
-                ).create())
-            ).update();
+            updatePriceMenu = new UpdatePrice(defaultMenu.getId(), BigDecimal.valueOf(price));
 
-            mockFindByMenu();
+            mockGetTotalMenuProductPrice(true);
 
-//            assertThatExceptionOfType(IllegalArgumentException.class)
-//                .isThrownBy(() -> menuService.changePrice(chickenMenu.getId(), chickenMenu));
+            assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> menuService.changePrice(updatePriceMenu.toVo()))
+                .withMessage(ErrorCode.MENU_PRICE_OVER_TOTAL_PRODUCTS_NOT_ALLOWED.toString());
         }
     }
 
     private void mockCreateMenu() {
         mockFindByMenuGroup();
-        mockFindAllByProduct();
-        mockFindByProduct(chicken);
-    }
-
-    private void mockFindByMenu() {
-        when(menuRepository.findById(Mockito.any()))
-            .thenReturn(Optional.of(chickenMenu));
+        mockFindAllByProductContext();
     }
 
     private void mockFindByMenuGroup() {
         when(menuGroupRepository.findById(Mockito.any()))
-            .thenReturn(Optional.of(chickenMenu.getMenuGroup()));
+            .thenReturn(Optional.of(MenuGroupFixture.init().toEntity()));
     }
 
-    private void mockFindAllByProduct() {
-        when(productRepository.findAllByIdIn(Mockito.any()))
-            .thenReturn(chickenMenu.getMenuProducts()
-                .stream()
-                .map(MenuProduct::getProduct)
-                .collect(Collectors.toList()));
+    private void mockFindAllByProductContext() {
+    when(productContextService.findAllByIds(anyList()))
+        .thenAnswer(invocation -> {
+            List<UUID> requestedProductIds = invocation.getArgument(0);
+            return requestedProductIds.stream()
+                .map(id -> new Product(id, ProductName.of("치킨", menuPurgomalumClient), ProductPrice.of(BigDecimal.TEN))) // UUID 일치하는 Product 생성
+                .toList();
+        });
     }
 
-    private void mockFindByProduct(Product chicken) {
-        when(productRepository.findById(Mockito.any()))
-            .thenReturn(Optional.of(chicken));
-    }
-
-    private void mockCheckMenuName(boolean isProfanity) {
-        when(purgomalumClient.containsProfanity(anyString())).thenReturn(isProfanity);
-    }
-
-    private void mockSaveMenu() {
-        when(menuRepository.save(Mockito.any(Menu.class))).thenReturn(chickenMenu);
+    private void mockGetTotalMenuProductPrice(boolean over) {
+        doReturn(over ? defaultMenu.getPrice().price().subtract(BigDecimal.valueOf(100))
+            : defaultMenu.getPrice().price().add(BigDecimal.valueOf(100)))
+            .when(productContextService).getTotalPrice(Mockito.any(), Mockito.any());
     }
 
 }

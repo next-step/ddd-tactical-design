@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import kitchenpos.global.exception.ErrorCode;
 import kitchenpos.global.infrastructure.external.FakeProfanityClient;
 import kitchenpos.menu.domain.entity.Menu;
 import kitchenpos.menu.domain.fixture.MenuFixture;
@@ -25,6 +26,7 @@ import kitchenpos.product.domain.fixture.ProductFixture;
 import kitchenpos.product.domain.repository.InMemoryMenuRepository;
 import kitchenpos.product.domain.repository.InMemoryProductRepository;
 import kitchenpos.product.domain.repository.ProductRepository;
+import kitchenpos.product.domain.service.ProductContextService;
 import kitchenpos.product.domain.service.ProductPurgomalumClient;
 import kitchenpos.product.domain.service.ProductService;
 import kitchenpos.product.domain.service.ProductServiceImpl;
@@ -52,6 +54,8 @@ class ProductFacadeTest {
     @Mock
     private ProductEventPublisher productEventPublisher;
 
+    @Mock
+    private ProductContextService productContextService;
 
     private FakeMenuPolicy menuPolicy;
 
@@ -69,7 +73,7 @@ class ProductFacadeTest {
     void setUp() {
         menuRepository = new InMemoryMenuRepository();
         productRepository = new InMemoryProductRepository();
-        menuPolicy = new FakeMenuPolicy(menuRepository);
+        menuPolicy = new FakeMenuPolicy(menuRepository, productContextService);
 
         productService = new ProductServiceImpl(productRepository, purgomalumClient, productEventPublisher);
         productFacade = new ProductFacade(productService);
@@ -107,7 +111,8 @@ class ProductFacadeTest {
             chicken = ProductFixture.test(name, null).create();
 
             assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> productService.create(chicken.toVo()));
+                .isThrownBy(() -> productService.create(chicken.toVo()))
+                .withMessage(ErrorCode.PRODUCT_NAME_PROFANITY_NOT_ALLOWED.toString());
         }
 
         @DisplayName("상품가격은 0원 이상이어야 한다.")
@@ -118,7 +123,8 @@ class ProductFacadeTest {
 
             if (price < 0) {
                 assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> productFacade.create(chicken));
+                    .isThrownBy(() -> productFacade.create(chicken))
+                    .withMessage(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
             }
         }
 
@@ -153,20 +159,21 @@ class ProductFacadeTest {
 
             if (price < 0) {
                 assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> productFacade.changePrice(updateChicken));
+                    .isThrownBy(() -> productFacade.changePrice(updateChicken))
+                    .withMessage(ErrorCode.PRODUCT_PRICE_NOT_ALLOWED.toString());
             }
         }
 
         @DisplayName("메뉴의 가격이 메뉴 구성 상품들의 총 금액보다 크면 해당 메뉴는 숨겨진다.")
         @ParameterizedTest
-        @CsvSource({"10000, 100"})
-        void 가격비교_숨김처리(final int price1, final int price2) {
+        @CsvSource({"10000"})
+        void 가격비교_숨김처리(final int price) {
             final UUID productId = productFacade.create(chicken).id();
 
             var product = productRepository.findById(productId);
 
 
-            updateChicken = new UpdatePrice(productId, BigDecimal.valueOf(price1));
+            updateChicken = new UpdatePrice(productId, BigDecimal.valueOf(price));
 
             chickenMenu = MenuFixture.test(
                 null,
@@ -174,13 +181,9 @@ class ProductFacadeTest {
                 null,
                 true,
                 List.of(new MenuProductFixture(
-                    new ProductFixture(
-                        productId,
-                        null,
-                        BigDecimal.valueOf(price2)
-                    ).toEntity(),
+                    productId,
                     100
-                ).create())
+                ).toEntity())
             ).toEntity();
             var menu = menuRepository.save(chickenMenu);
 
