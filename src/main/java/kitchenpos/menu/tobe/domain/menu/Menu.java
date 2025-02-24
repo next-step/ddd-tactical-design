@@ -64,11 +64,11 @@ public class Menu {
     }
 
     public void changeMenuPrice(final Long price, final MenuValidator menuValidator) {
-        System.out.println("hererere");
+
         MenuPrice newPrice = MenuPrice.of(price);
-        System.out.println("newPrice = " + newPrice);
+
         menuValidator.validateMenuPrice(menuProducts, newPrice);
-        System.out.println("newPrice = " + newPrice);
+
         this.price = newPrice;
     }
 
@@ -93,6 +93,9 @@ public class Menu {
         return Collections.unmodifiableList(menuProducts.getProducts());
     }
 
+    public MenuProducts getMenuProduct() {
+        return menuProducts;
+    }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
