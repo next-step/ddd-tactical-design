@@ -2,6 +2,7 @@ package kitchenpos.product.tobe.domain
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
+import kitchenpos.common.domain.Profanities
 
 @Embeddable
 class ProductName(

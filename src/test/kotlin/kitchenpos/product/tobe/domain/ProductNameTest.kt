@@ -1,5 +1,6 @@
 package kitchenpos.product.tobe.domain
 
+import kitchenpos.product.tobe.infra.FakeProfanities
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName

@@ -1,4 +1,6 @@
-package kitchenpos.product.tobe.domain
+package kitchenpos.product.tobe.infra
+
+import kitchenpos.common.domain.Profanities
 
 class FakeProfanities(
     private val profanities: List<String> = emptyList()
