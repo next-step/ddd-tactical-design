@@ -3,10 +3,13 @@ package kitchenpos.eatinorder.domain.model.todo;
 import kitchenpos.shared.domain.Profanities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class OrderTableTest {
@@ -73,5 +76,49 @@ class OrderTableTest {
 
         // then
         assertThat(orderTable.isEmpty()).isTrue();
+    }
+
+    @DisplayName("OrderTable의 손님 수를 변경한다")
+    @ValueSource(ints = {0, 1})
+    @ParameterizedTest
+    void changeNumberOfGuests(int numberOfGuests) {
+        // given
+        final OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), "테이블", nm -> false);
+        orderTable.sit();
+
+        // when
+        orderTable.changeNumberOfGuests(numberOfGuests);
+
+        // then
+        assertThat(orderTable.getNumberOfGuests()).isEqualTo(numberOfGuests);
+    }
+
+    @DisplayName("OrderTable의 손님 수를 변경할 때 손님 수가 0 미만인 경우 예외를 던진다")
+    @Test
+    void changeNumberOfGuestsWithNegativeValue() {
+        // given
+        final OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), "테이블", nm -> false);
+        orderTable.sit();
+
+        // when
+        final Throwable thrown = catchThrowable(() -> orderTable.changeNumberOfGuests(-1));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("손님 수는 0 미만일 수 없습니다.");
+    }
+
+    @DisplayName("EmptyTable의 손님 수를 변경할 수 없다")
+    @Test
+    void changeNumberOfGuestsOfEmptyTable() {
+        // given
+        final OrderTable orderTable = OrderTable.createEmptyTable(UUID.randomUUID(), "테이블", nm -> false);
+
+        // when
+        final Throwable thrown = catchThrowable(() -> orderTable.changeNumberOfGuests(1));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalStateException.class)
+                .hasMessage("빈 테이블의 손님 수는 변경할 수 없습니다.");
     }
 }

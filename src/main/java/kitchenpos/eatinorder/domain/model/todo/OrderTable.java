@@ -2,6 +2,7 @@ package kitchenpos.eatinorder.domain.model.todo;
 
 import kitchenpos.shared.domain.Profanities;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class OrderTable {
@@ -44,6 +45,13 @@ public class OrderTable {
         numberOfGuests = NumberOfGuests.ZERO;
     }
 
+    public void changeNumberOfGuests(final int numberOfGuests) {
+        if (orderTableOccupiedState.isVacant()) {
+            throw new IllegalStateException("빈 테이블의 손님 수는 변경할 수 없습니다.");
+        }
+        this.numberOfGuests = NumberOfGuests.of(numberOfGuests);
+    }
+
     public boolean isEmpty() {
         return numberOfGuests.isZero() && orderTableOccupiedState.isVacant();
     }
@@ -62,5 +70,17 @@ public class OrderTable {
 
     public boolean isOccupied() {
         return orderTableOccupiedState.isOccupied();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderTable that = (OrderTable) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
