@@ -1,14 +1,16 @@
 package kitchenpos.order.eatinorder.ui;
 
+import static kitchenpos.TestFixtureFactory.createEatInOrderRq;
 import static kitchenpos.TestFixtureFactory.createMenu;
 import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createOrderLineItem;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
+import static kitchenpos.TestFixtureFactory.matchUUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.repository.MenuGroupRepository;
@@ -26,6 +29,7 @@ import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -64,7 +68,12 @@ class EatInOrderRestControllerTest {
     @DisplayName("주문을 생성한다.")
     void create_success() throws Exception {
         // given
-        EatInOrder request = createEatInOrderRequest();
+        Menu menu1 = createAndSaveMenu(createAndSaveMenuGroup(), createAndSaveProduct());
+        Menu menu2 = createAndSaveMenu(createAndSaveMenuGroup(), createAndSaveProduct());
+        OrderTable orderTable = createAndSaveUsingOrderTable();
+
+        List<UUID> menuIds = List.of(menu1.getId(), menu2.getId());
+        CreateEatInOrderRq request = createEatInOrderRq(menuIds, orderTable.getId());
 
         // when
         ResultActions result = mockMvc.perform(post("/api/eatInOrder")
@@ -74,10 +83,8 @@ class EatInOrderRestControllerTest {
         // then
         result.andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.orderLineItems").isArray())
-                .andExpect(jsonPath("$.eatInOrderFlow").value(EatInOrderFlow.WAITING.toString()))
-                .andDo(print());
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string(matchUUID()));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package kitchenpos.order.eatinorder.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -11,6 +10,8 @@ import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFactory;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderStatus;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
+import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,22 +32,20 @@ public class EatInOrderService {
     }
 
     @Transactional
-    public EatInOrder create(final EatInOrder request) {
-        final List<OrderLineItem> orderLineItems = toOrderLineItems(request.getOrderLineItems());
+    public UUID create(final CreateEatInOrderServiceRq request) {
+        final List<OrderLineItem> orderLineItems = toOrderLineItems(request.getOrderLineItemDtos());
         EatInOrder eatInOrder = eatInOrderFactory.create(orderLineItems, request.getOrderTableId());
-        return eatInOrderRepository.save(eatInOrder);
+        return eatInOrderRepository.save(eatInOrder).getId();
     }
 
-    private List<OrderLineItem> toOrderLineItems(List<OrderLineItem> request) {
-        final List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (final OrderLineItem itemRq : request) {
-            final Menu menu = menuRepository.findById(itemRq.getMenuId())
-                    .orElseThrow(NoSuchElementException::new);
-            final OrderLineItem orderLineItem = new OrderLineItem(menu, itemRq.getQuantity(), menu.getId(),
-                    itemRq.getPrice());
-            orderLineItems.add(orderLineItem);
-        }
-        return orderLineItems;
+    private List<OrderLineItem> toOrderLineItems(List<OrderLineItemServiceDto> request) {
+        return request.stream()
+                .map(itemRq -> {
+                    final Menu menu = menuRepository.findById(itemRq.getMenuId())
+                            .orElseThrow(NoSuchElementException::new);
+                    return new OrderLineItem(menu, itemRq.getQuantity(), menu.getId(), itemRq.getPrice());
+                })
+                .toList();
     }
 
     @Transactional

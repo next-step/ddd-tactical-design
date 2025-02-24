@@ -1,8 +1,11 @@
 package kitchenpos;
 
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import kitchenpos.common.infra.external.FakePurgomalumClient;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
@@ -15,10 +18,16 @@ import kitchenpos.order.common.model.OrderType;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
+import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq.OrderLineItemServiceDto;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq.OrderLineItemDto;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductNameCreationService;
 import kitchenpos.product.domain.model.ProductPrice;
+import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 
 public class TestFixtureFactory {
 
@@ -123,5 +132,28 @@ public class TestFixtureFactory {
                                                                    EatInOrderFlow eatInOrderFlow) {
         return new EatInOrder(LocalDateTime.now(),
                 List.of(new OrderLineItem(menu, 1, menu.getId(), BigDecimal.valueOf(8000))), eatInOrderFlow);
+    }
+
+    public static CreateEatInOrderServiceRq createEatInOrderServiceRq(Menu menu, UUID orderTableId) {
+        return new CreateEatInOrderServiceRq(
+                List.of(new OrderLineItemServiceDto(menu.getId(), 1, BigDecimal.valueOf(8000))), orderTableId);
+    }
+
+    public static CreateEatInOrderRq createEatInOrderRq(Menu menu, UUID orderTableId) {
+        return new CreateEatInOrderRq(
+                List.of(new OrderLineItemDto(menu.getId(), 1, BigDecimal.valueOf(8000))), orderTableId);
+    }
+
+    public static CreateEatInOrderRq createEatInOrderRq(List<UUID> menuIds, UUID orderTableId) {
+        return new CreateEatInOrderRq(
+                menuIds.stream()
+                        .map(id -> new OrderLineItemDto(id, 2, BigDecimal.valueOf(8000)))
+                        .toList(),
+                orderTableId);
+    }
+
+    public static @NotNull Matcher<String> matchUUID() {
+        return matchesPattern(
+                "\"[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\"");
     }
 }

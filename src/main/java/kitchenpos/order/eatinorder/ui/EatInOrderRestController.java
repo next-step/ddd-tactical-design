@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import kitchenpos.order.eatinorder.domain.model.EatInOrder;
 import kitchenpos.order.eatinorder.service.EatInOrderService;
+import kitchenpos.order.eatinorder.ui.dto.CreateEatInOrderRq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +25,10 @@ public class EatInOrderRestController {
     }
 
     @PostMapping
-    public ResponseEntity<EatInOrder> create(@RequestBody final EatInOrder request) {
-        final EatInOrder response = eatInOrderService.create(request);
-        return ResponseEntity.created(URI.create("/api/orders/" + response.getId()))
-                .body(response);
+    public ResponseEntity<UUID> create(@RequestBody final CreateEatInOrderRq request) {
+        final UUID eatInOrderId = eatInOrderService.create(request.createServiceRq());
+        return ResponseEntity.created(URI.create("/api/orders/" + eatInOrderId))
+                .body(eatInOrderId);
     }
 
     @PutMapping("/{eatInOrderId}/accept")

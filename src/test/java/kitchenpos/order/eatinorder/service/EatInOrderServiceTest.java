@@ -1,6 +1,7 @@
 package kitchenpos.order.eatinorder.service;
 
 import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
+import static kitchenpos.TestFixtureFactory.createEatInOrderServiceRq;
 import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
 import static kitchenpos.TestFixtureFactory.createMenuWithProductAndGroup;
 import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
@@ -24,6 +25,7 @@ import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
 import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
 import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
+import kitchenpos.order.eatinorder.service.dto.CreateEatInOrderServiceRq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +62,8 @@ class EatInOrderServiceTest {
         // given
         Menu menu = createMenuWithProductAndGroup();
         OrderTable orderTable = createEmptyOrderTable();
-        EatInOrder request = createEatInOrderRequestWithEmptyTable(menu, EatInOrderFlow.WAITING);
+
+        CreateEatInOrderServiceRq request = createEatInOrderServiceRq(menu, orderTable.getId());
 
         when(menuRepository.findAllByIdIn(anyList())).thenReturn(List.of(menu));
         when(menuRepository.findById(any())).thenReturn(Optional.of(menu));
