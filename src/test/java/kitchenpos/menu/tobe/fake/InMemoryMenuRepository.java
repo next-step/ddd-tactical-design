@@ -1,8 +1,9 @@
 package kitchenpos.menu.tobe.fake;
 
 
-import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuRepository;
+
+import kitchenpos.menu.tobe.domain.menu.Menu;
+import kitchenpos.menu.tobe.domain.menu.MenuRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,9 +13,7 @@ public class InMemoryMenuRepository implements MenuRepository {
 
     @Override
     public Menu save(Menu menu) {
-        if (menu.getId() == null) {
-            menu.setId(UUID.randomUUID());
-        }
+
         store.put(menu.getId(), menu);
         return menu;
     }
@@ -35,7 +34,7 @@ public class InMemoryMenuRepository implements MenuRepository {
     public List<Menu> findAllByProductId(UUID productId) {
         return store.values().stream()
                 .filter(menu -> menu.getMenuProducts().stream()
-                        .anyMatch(mp -> mp.getProduct().getId().equals(productId)))
+                        .anyMatch(mp -> mp.getProductId().equals(productId)))
                 .collect(Collectors.toList());
     }
 

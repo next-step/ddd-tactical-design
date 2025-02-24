@@ -33,9 +33,9 @@ public class MenuPriceValidator implements MenuValidator {
     public void validateMenuPrice(MenuProducts menuProducts, MenuPrice menuPrice) {
         // 메뉴 상품들의 총 가격 계산
         Long totalProductPrice = calculateTotalProductPrice(menuProducts);
-
-        // 메뉴 가격이 총 상품 가격보다 크면 안됨
-        if (menuPrice.getValue() < totalProductPrice) {
+        System.out.println("totalProductPrice = " + totalProductPrice);
+        System.out.println("menuPrice.getValue() = " + menuPrice.getValue());
+        if (menuPrice.getValue() > totalProductPrice) {
             throw new MenuException(MENU_PRICE_INVALID);
         }
     }

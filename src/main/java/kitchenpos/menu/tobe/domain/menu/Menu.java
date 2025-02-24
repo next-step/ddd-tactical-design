@@ -59,9 +59,16 @@ public class Menu {
         return price.getValue();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public void changeMenuPrice(final Long price, final MenuValidator menuValidator) {
+        System.out.println("hererere");
         MenuPrice newPrice = MenuPrice.of(price);
+        System.out.println("newPrice = " + newPrice);
         menuValidator.validateMenuPrice(menuProducts, newPrice);
+        System.out.println("newPrice = " + newPrice);
         this.price = newPrice;
     }
 

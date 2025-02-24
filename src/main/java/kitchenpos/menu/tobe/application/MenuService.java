@@ -33,13 +33,13 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final Menu request) throws MenuException {
+    public Menu create(final MenuRequest request) throws MenuException {
         menuGroupRepository.findById(request.getMenuGroupId())
                 .orElseThrow(() -> new MenuException(MENU_GROUP_NOT_FOUND));
 
         return menuRepository.save(Menu.of(
                 request.getName(),
-                request.getMenuPrice(),
+                request.getPrice(),
                 request.getMenuGroupId(),
                 request.getMenuProducts(),
                 request.isDisplayed(),
@@ -49,10 +49,10 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu changePrice(final UUID menuId, final Menu request) {
+    public Menu changePrice(final UUID menuId, final MenuRequest request) {
         final Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new MenuNotFoundException(MENU_NOT_FOUND));
-        menu.changeMenuPrice(request.getMenuPrice(), menuValidator);
+        menu.changeMenuPrice(request.getPrice(), menuValidator);
         return menu;
     }
 

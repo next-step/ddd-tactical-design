@@ -26,13 +26,14 @@ public class MenuProduct {
     protected MenuProduct() {}
 
     public MenuProduct(Long seq, int quantity, Long price, UUID productId) {
+        validate(quantity, price);
         this.seq = seq;
         this.quantity = quantity;
         this.price = price;
         this.productId = productId;
     }
 
-    private void validate() {
+    private void validate(int quantity, Long price) {
         if (quantity < 0L) {
             throw new MenuException(MENU_QUANTITY_NEGATIVE);
         }
