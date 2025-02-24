@@ -14,7 +14,7 @@ class EatInOrderLineItemsTest {
     @Test
     void create() {
         // given
-        final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.of(1L, UUID.randomUUID(), 1L, 1L);
+        final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.of(1L, UUID.randomUUID(), 1L, 1L, true);
 
         // when
         final EatInOrderLineItems eatInOrderLineItems = EatInOrderLineItems.of(List.of(eatInOrderLineItem));

@@ -25,8 +25,12 @@ public class EatInOrderLineItem {
             final Long seq,
             final UUID menuId,
             final long quantity,
-            final long menuPrice
+            final long menuPrice,
+            final boolean isDisplayedMenu
     ) {
+        if (!isDisplayedMenu) {
+            throw new IllegalStateException("주문할 수 없는 메뉴입니다. menuId=" + menuId);
+        }
         return new EatInOrderLineItem(seq, menuId, EatInOrderLineItemQuantity.of(quantity), EatInOrderLineItemPrice.of(menuPrice));
     }
 

@@ -19,7 +19,7 @@ class EatInOrderLineItemTest {
         final long menuPrice = 1L;
 
         // when
-        final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.of(seq, menuId, quantity, menuPrice);
+        final EatInOrderLineItem eatInOrderLineItem = EatInOrderLineItem.of(seq, menuId, quantity, menuPrice, true);
 
         // then
         assertAll(
@@ -29,5 +29,20 @@ class EatInOrderLineItemTest {
                 () -> assertThat(eatInOrderLineItem.getQuantity()).isEqualTo(quantity),
                 () -> assertThat(eatInOrderLineItem.getPrice()).isEqualTo(menuPrice)
         );
+    }
+
+    @DisplayName("Order Line Item`에 포함된 `Menu`는 반드시 `Display Menu`여야 한다.")
+    @Test
+    void createWithNotDisplayMenu() {
+        // given
+        UUID menuId = UUID.randomUUID();
+        boolean isDisplayedMenu = false;
+
+        // when
+        final Throwable thrown = catchThrowable(() -> EatInOrderLineItem.of(1L, menuId, 1L, 1L, isDisplayedMenu));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문할 수 없는 메뉴입니다. menuId=" + menuId);
     }
 }
