@@ -1,10 +1,14 @@
 package kitchenpos.product.tobe.application
 
 import kitchenpos.common.domain.Profanities
+import kitchenpos.menu.domain.MenuRepository
+import kitchenpos.menu.infra.InMemoryMenuRepository
+import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.domain.ProductRepository
 import kitchenpos.product.tobe.infra.FakeProductRepository
 import kitchenpos.product.tobe.infra.FakeProfanities
+import kitchenpos.utils.Fixtures
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -13,14 +17,16 @@ import java.math.BigDecimal
 
 class ProductServiceTest {
     private lateinit var productRepository: ProductRepository
+    private lateinit var menuRepository: MenuRepository
     private lateinit var profanities: Profanities
     private lateinit var productService: ProductService
 
     @BeforeEach
     fun setUp() {
         productRepository = FakeProductRepository()
+        menuRepository = InMemoryMenuRepository()
         profanities = FakeProfanities()
-        productService = ProductService(productRepository, profanities)
+        productService = ProductService(productRepository, menuRepository, profanities)
     }
 
     @Test
@@ -51,6 +57,20 @@ class ProductServiceTest {
 
         // then
         assertThat(products.size).isEqualTo(2)
+    }
+
+    @Test
+    @DisplayName("상품가격변경 / 성공")
+    fun changePrice() {
+        // given
+        val product = productRepository.save(Fixtures.product(name = "양념치킨", price = 16000))
+        val menu = menuRepository.save(Fixtures.menu(name = "양념+양념", price = 32000, displayed = true))
+
+        // when
+        val changedProduct = productService.changePrice(product.id!!, ChangeProductPriceReq(BigDecimal.valueOf(17000)))
+
+        // then
+        assertThat(changedProduct.price).isEqualTo(BigDecimal.valueOf(17000))
     }
 
 

@@ -10,7 +10,9 @@ class FakeProductRepository(
 ) : ProductRepository {
 
     override fun save(product: Product): Product {
-        product.id = UUID.randomUUID()
+        if (product.id == null) {
+            product.id = UUID.randomUUID()
+        }
         products[product.id!!] = product
         return product
     }

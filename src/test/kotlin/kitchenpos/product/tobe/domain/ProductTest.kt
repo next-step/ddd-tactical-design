@@ -31,4 +31,30 @@ class ProductTest {
             )
         }
     }
+
+    @Test
+    @DisplayName("상품가격 변경 / 성공")
+    fun changePrice() {
+        val product = Product(
+            productName = ProductName(FakeProfanities(), "양념치킨"),
+            price = BigDecimal.valueOf(16000)
+        )
+
+        product.changePrice(BigDecimal.valueOf(17000))
+
+        assertThat(product.price).isEqualTo(BigDecimal.valueOf(17000))
+    }
+
+    @Test
+    @DisplayName("상품가격 0원 미만/ 상품가격 변경 / 실패")
+    fun changePriceFail() {
+        val product = Product(
+            productName = ProductName(FakeProfanities(), "양념치킨"),
+            price = BigDecimal.valueOf(16000)
+        )
+
+        assertThatIllegalArgumentException().isThrownBy {
+            product.changePrice(BigDecimal.valueOf(-1))
+        }
+    }
 }

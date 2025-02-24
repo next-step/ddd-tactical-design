@@ -34,4 +34,8 @@ class Product(
         require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
     }
 
+    fun changePrice(price: BigDecimal) {
+        require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
+        this.price = price
+    }
 }
