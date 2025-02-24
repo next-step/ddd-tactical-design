@@ -15,7 +15,7 @@ class OrderLineItemTest {
     @DisplayName("주문 내역의 메뉴 수량은 0 이하면 예외를 던진다.")
     void validate_order_line_item_quantity() {
         // given
-        Menu menu = new Menu(UUID.randomUUID(), "김치", BigDecimal.ONE, true);
+        Menu menu = new Menu("김치", BigDecimal.ONE, true);
 
         // when // then
         assertThatThrownBy(() -> new OrderLineItem(menu, 0, menu.getId(), BigDecimal.ONE))
@@ -27,7 +27,7 @@ class OrderLineItemTest {
     @DisplayName("주문 내역의 메뉴가 게시 상태가 아니면 예외를 던진다.")
     void validate_order_line_item_menu_display() {
         // given
-        Menu menu = new Menu(UUID.randomUUID(), "김치", BigDecimal.ONE, false);
+        Menu menu = new Menu("김치", BigDecimal.ONE, false);
 
         // when // then
         assertThatThrownBy(() -> new OrderLineItem(menu, 1, menu.getId(), BigDecimal.ONE))
@@ -39,7 +39,7 @@ class OrderLineItemTest {
     @DisplayName("주문 내역의 가격과 메뉴의 가격이 다르면 예외를 던진다.")
     void validate_order_line_item_price() {
         // given
-        Menu menu = new Menu(UUID.randomUUID(), "김치", BigDecimal.TEN, true);
+        Menu menu = new Menu("김치", BigDecimal.TEN, true);
 
         // when // then
         assertThatThrownBy(() -> new OrderLineItem(menu, 1, menu.getId(), BigDecimal.ONE))

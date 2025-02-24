@@ -24,7 +24,7 @@ public class MenuGroupService {
     public MenuGroup create(final MenuGroup request) {
         final String name = request.getName();
         MenuGroupName menuGroupName = menuGroupNameCreationService.createName(name);
-        final MenuGroup menuGroup = new MenuGroup(menuGroupName, UUID.randomUUID());
+        final MenuGroup menuGroup = new MenuGroup(menuGroupName);
         return menuGroupRepository.save(menuGroup);
     }
 

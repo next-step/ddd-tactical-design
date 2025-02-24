@@ -55,7 +55,7 @@ public class MenuService {
         final String name = request.getInnerName();
         MenuName menuName = menuNameCreationService.createName(name);
 
-        final Menu menu = new Menu(UUID.randomUUID(), menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
+        final Menu menu = new Menu(menuName, new MenuPrice(price), menuGroup, request.isDisplayed(), menuProducts, menuGroup.getId());
         validateMargin(menu);
 
         return menuRepository.save(menu);

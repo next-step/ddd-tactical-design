@@ -26,7 +26,7 @@ class MenuTest {
     void validate_menu_group_exists_exception() {
         // given
         ProductName productName = new ProductNameCreationService(new FakePurgomalumClient()).createName("배추");
-        Product product = new Product(productName, new ProductPrice(BigDecimal.ONE), UUID.randomUUID());
+        Product product = new Product(productName, new ProductPrice(BigDecimal.ONE));
         MenuProduct menuProduct = new MenuProduct(
                 product,
                 new MenuProductQuantity(1),
@@ -35,7 +35,6 @@ class MenuTest {
 
         // when // then
         assertThatThrownBy(() -> new Menu(
-                UUID.randomUUID(),
                 new MenuName("김치"),
                 new MenuPrice(BigDecimal.ONE),
                 null,
@@ -55,7 +54,6 @@ class MenuTest {
 
         // when // then
         assertThatThrownBy(() -> new Menu(
-                UUID.randomUUID(),
                 new MenuName("김치"),
                 new MenuPrice(BigDecimal.ONE),
                 menuGroup,

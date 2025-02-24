@@ -35,7 +35,7 @@ public class ProductService {
         final BigDecimal price = request.getInnerPrice();
         final String name = request.getInnerName();
         final ProductName validProductName = productNameCreationService.createName(name);
-        final Product product = new Product(validProductName, new ProductPrice(price), UUID.randomUUID());
+        final Product product = new Product(validProductName, new ProductPrice(price));
         return productRepository.save(product);
     }
 

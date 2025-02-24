@@ -1,7 +1,10 @@
 package kitchenpos.product.domain.model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -18,26 +21,18 @@ public class Product {
     @Embedded
     private ProductPrice price;
 
-    public Product(ProductName name, ProductPrice price, UUID id) {
+    public Product(ProductName name, ProductPrice price) {
         this.name = name;
         this.price = price;
-        this.id = id;
-    }
-
-    public Product(ProductName name, ProductPrice price) {
-        this(name, price, UUID.randomUUID());
+        this.id = UUID.randomUUID();
     }
 
     protected Product() {
 
     }
 
-    public Product(String name, BigDecimal price, UUID id) {
-        this(new ProductName(name), new ProductPrice(price), id);
-    }
-
     public Product(String name, BigDecimal price) {
-        this(name, price, UUID.randomUUID());
+        this(new ProductName(name), new ProductPrice(price));
     }
 
     public UUID getId() {

@@ -1,14 +1,23 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.*;
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_EXISTS_EXCEPTION;
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCTS_EXISTS_EXCEPTION;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-
-import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_EXISTS_EXCEPTION;
-import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_PRODUCTS_EXISTS_EXCEPTION;
 
 @Table(name = "menu")
 @Entity
@@ -49,18 +58,18 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed) {
-        this.id = id;
+    public Menu(String name, BigDecimal price, boolean displayed) {
+        this.id = UUID.randomUUID();
         this.name = new MenuName(name);
         this.price = new MenuPrice(price);
         this.displayed = displayed;
     }
 
-    public Menu(UUID id, MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
+    public Menu(MenuName name, MenuPrice price, MenuGroup menuGroup, boolean displayed,
                 List<MenuProduct> menuProducts, UUID menuGroupId) {
         validateMenuGroupExists(menuGroup);
         validateMenuProductsExists(menuProducts);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.price = price;
         this.menuGroup = menuGroup;
@@ -69,16 +78,10 @@ public class Menu {
         this.menuGroupId = menuGroupId;
     }
 
-    public Menu(UUID id, String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
+    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts,
                 MenuGroup menuGroup,
                 UUID menuGroupId) {
-        this(id, new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
-    }
-
-    public Menu(String name, BigDecimal price, boolean displayed, List<MenuProduct> menuProducts, MenuGroup menuGroup,
-                UUID menuGroupId) {
-        this(UUID.randomUUID(), new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts,
-                menuGroupId);
+        this(new MenuName(name), new MenuPrice(price), menuGroup, displayed, menuProducts, menuGroupId);
     }
 
     private void validateMenuGroupExists(MenuGroup menuGroup) {
