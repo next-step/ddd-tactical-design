@@ -25,7 +25,7 @@ public class OrderTableService {
     @Transactional
     public OrderTable create(final OrderTable request) {
         final String name = request.getInnerName();
-        final OrderTable orderTable = new OrderTable(UUID.randomUUID(), new OrderTableName(name));
+        final OrderTable orderTable = new OrderTable(new OrderTableName(name));
         return orderTableRepository.save(orderTable);
     }
 

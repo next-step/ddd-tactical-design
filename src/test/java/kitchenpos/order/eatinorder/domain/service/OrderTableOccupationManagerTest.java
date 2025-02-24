@@ -31,7 +31,7 @@ class OrderTableOccupationManagerTest {
         EatInOrderRepository eatInOrderRepository = new FakeEatInOrderRepository(new HashMap<>());
         OrderTableOccupationManager manager = new OrderTableOccupationManager(eatInOrderRepository);
 
-        OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
+        OrderTable orderTable = new OrderTable("1번 테이블", 3, true);
         EatInOrder eatInOrder = createEatInOrder(orderTable, EatInOrderFlow.COMPLETED);
         ReleaseOrderTableEvent event = new ReleaseOrderTableEvent(orderTable);
 
@@ -52,7 +52,7 @@ class OrderTableOccupationManagerTest {
         EatInOrderRepository eatInOrderRepository = new FakeEatInOrderRepository(new HashMap<>());
         OrderTableOccupationManager manager = new OrderTableOccupationManager(eatInOrderRepository);
 
-        OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
+        OrderTable orderTable = new OrderTable("1번 테이블", 3, true);
         EatInOrder eatInOrder = createEatInOrder(orderTable, EatInOrderFlow.SERVED);
         ReleaseOrderTableEvent event = new ReleaseOrderTableEvent(orderTable);
 
@@ -67,7 +67,7 @@ class OrderTableOccupationManagerTest {
     private EatInOrder createEatInOrder(OrderTable orderTable, EatInOrderFlow eatInOrderFlow) {
         List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(createMenu(createMenuGroup(), createProduct(
                 BigDecimal.TWO), 3)));
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+        EatInOrder eatInOrder = new EatInOrder(LocalDateTime.now(),
                 orderLineItems,
                 eatInOrderFlow);
         eatInOrder.occupyOrderTable(orderTable);

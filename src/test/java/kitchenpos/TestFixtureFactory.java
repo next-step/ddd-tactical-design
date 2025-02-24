@@ -86,7 +86,7 @@ public class TestFixtureFactory {
     }
 
     public static OrderTable createUsingOrderTable() {
-        return new OrderTable(UUID.randomUUID(), "사용 중인 테이블", 4, true);
+        return new OrderTable("사용 중인 테이블", 4, true);
     }
 
     public static Product createProduct(String name, long price) {
@@ -123,7 +123,7 @@ public class TestFixtureFactory {
 
     public static EatInOrder createEatInOrderRequestWithEmptyTable(Menu menu,
                                                                    EatInOrderFlow eatInOrderFlow) {
-        return new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+        return new EatInOrder(LocalDateTime.now(),
                 List.of(new OrderLineItem(menu, 1, menu.getId(), BigDecimal.valueOf(8000))), eatInOrderFlow);
     }
 }

@@ -57,10 +57,10 @@ public class EatInOrder extends AbstractAggregateRoot<EatInOrder> {
     public EatInOrder() {
     }
 
-    public EatInOrder(UUID id, LocalDateTime orderDateTime,
+    public EatInOrder(LocalDateTime orderDateTime,
                       List<OrderLineItem> orderLineItems, EatInOrderFlow eatInOrderFlow) {
         validateOrderLineItemIsEmpty(orderLineItems);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.orderDateTime = orderDateTime;
         this.orderLineItems = orderLineItems;
         this.eatInOrderFlow = eatInOrderFlow;

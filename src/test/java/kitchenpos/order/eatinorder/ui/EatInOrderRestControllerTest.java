@@ -171,7 +171,7 @@ class EatInOrderRestControllerTest {
     }
 
     private EatInOrder createEatInOrder(OrderLineItem orderLineItem, OrderTable orderTable, EatInOrderFlow flow) {
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(), List.of(orderLineItem), flow);
+        EatInOrder eatInOrder = new EatInOrder(LocalDateTime.now(), List.of(orderLineItem), flow);
         eatInOrder.occupyOrderTable(orderTable);
         return eatInOrder;
     }

@@ -23,7 +23,7 @@ public class EatInOrderFactory {
     public EatInOrder create(List<OrderLineItem> orderLineItems, UUID orderTableId) {
         orderLineItemValidator.validate(orderLineItems);
 
-        EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
+        EatInOrder eatInOrder = new EatInOrder(LocalDateTime.now(),
                 orderLineItems, EatInOrderFlow.WAITING);
 
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)

@@ -1,11 +1,14 @@
 package kitchenpos.order.eatinorder.domain.model;
 
-import jakarta.persistence.*;
-
-import java.util.UUID;
-
 import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.EMPTY_ORDER_TABLE_EXCEPTION;
 import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.NUMBER_OF_GUESTS_EXCEPTION;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.UUID;
 
 @Table(name = "order_table")
 @Entity
@@ -26,24 +29,20 @@ public class OrderTable {
     public OrderTable() {
     }
 
-    public OrderTable(UUID id, OrderTableName name, int numberOfGuests, boolean occupied) {
+    public OrderTable(OrderTableName name, int numberOfGuests, boolean occupied) {
         validateNumberOfGuests(numberOfGuests);
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.name = name;
         this.numberOfGuests = numberOfGuests;
         this.occupied = occupied;
     }
 
-    public OrderTable(UUID id, OrderTableName name) {
-        this(id, name, 0, false);
-    }
-
-    public OrderTable(UUID id, String name, int numberOfGuests, boolean occupied) {
-        this(id, new OrderTableName(name), numberOfGuests, occupied);
+    public OrderTable(OrderTableName name) {
+        this(name, 0, false);
     }
 
     public OrderTable(String name, int numberOfGuests, boolean occupied) {
-        this(UUID.randomUUID(), name, numberOfGuests, occupied);
+        this(new OrderTableName(name), numberOfGuests, occupied);
     }
 
     private void validateNumberOfGuests(int numberOfGuests) {
