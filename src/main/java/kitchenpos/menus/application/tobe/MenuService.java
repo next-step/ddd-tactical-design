@@ -1,6 +1,8 @@
 package kitchenpos.menus.application.tobe;
 
 import kitchenpos.menus.tobe.domain.*;
+import kitchenpos.menus.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.ui.dto.MenuCreateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,11 @@ public class MenuService {
     }
 
     @Transactional
-    public Menu create(final Menu request) {
-        validateMenuGroup(request);
-        validateMenuProducts(request);
-        return menuRepository.save(request);
+    public MenuCreateResponse create(final MenuCreateRequest request) {
+        Menu menu = MenuCreateRequest.From(request);
+        validateMenuGroup(menu.getGroupId());
+        validateMenuProducts(menu.getMenuProducts());
+        return MenuCreateResponse.from(menuRepository.save(menu));
     }
 
     @Transactional
@@ -56,13 +59,13 @@ public class MenuService {
         return menuRepository.findAll();
     }
 
-    private void validateMenuGroup(Menu request) {
-        menuGroupRepository.findById(request.getGroupId())
+    private void validateMenuGroup(MenuGroupId menuGroupId) {
+        menuGroupRepository.findById(menuGroupId)
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private void validateMenuProducts(Menu menu) {
+    private void validateMenuProducts(MenuProducts menuProducts) {
         //메뉴 상품의 검증을 하는 도메인 서비스  menuProductsValidator 사용하도록 변경
-        menuProductsValidator.validate(menu.getMenuProducts());
+        menuProductsValidator.validate(menuProducts);
     }
 }

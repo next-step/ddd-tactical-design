@@ -6,6 +6,8 @@ import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.infra.MenuProductsValidatorService;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
+import kitchenpos.menus.ui.dto.MenuCreateRequest;
+import kitchenpos.menus.ui.dto.MenuCreateResponse;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -14,6 +16,8 @@ import kitchenpos.products.tobe.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -48,23 +52,24 @@ class MenuServiceTest {
     @DisplayName("메뉴를 생성할 수 있다")
     @Test
     void create() {
-        MenuProducts menuProducts = new MenuProducts(
+        List<MenuProduct> products = List.of(
                 new MenuProduct(CHICKEN, 1, 25_000),
                 new MenuProduct(COKE, 1, 2_000)
         );
-        Menu menu = createMenu(
-                MenuId.generate(),
-                "후라이드치킨세트",
+        MenuCreateRequest request = new MenuCreateRequest(
+            "후라이드치킨세트",
+                (name) -> false,
                 27_000,
-                MENU_GROUP,
-                menuProducts
+                MENU_GROUP.value(),
+                true,
+                products
         );
 
-        Menu result = menuService.create(menu);
+        MenuCreateResponse result = menuService.create(request);
 
         assertAll(
-                () -> assertThat(result.getGroupId()).isEqualTo(menu.getGroupId()),
-                () -> assertThat(result.getMenuProducts()).isEqualTo(menuProducts),
+                () -> assertThat(result.getMenuGroupId()).isEqualTo(new MenuGroupId(request.getMenuGroupId())),
+                () -> assertThat(result.getProducts()).isEqualTo(new MenuProducts(products)),
                 () -> assertThat(result.getName()).isEqualTo(new MenuName("후라이드치킨세트", (name) -> false)),
                 () -> assertThat(result.getPrice()).isEqualTo(new Price(27_000))
         );
@@ -73,19 +78,20 @@ class MenuServiceTest {
     @DisplayName("등록되지 않은 상품으로 메뉴를 등록 시 예외가 발생한다")
     @Test
     void invalidMenuProduct() {
-        MenuProducts menuProducts = new MenuProducts(
+        List<MenuProduct> products = List.of(
                 new MenuProduct(CHICKEN, 1, 25_000),
                 new MenuProduct(ProductId.generate(), 1, 2_000)
         );
-        Menu menu = createMenu(
-                MenuId.generate(),
+        MenuCreateRequest request = new MenuCreateRequest(
                 "후라이드치킨세트",
+                (name) -> false,
                 27_000,
-                MENU_GROUP,
-                menuProducts
+                MENU_GROUP.value(),
+                true,
+                products
         );
 
-        assertThatThrownBy(() -> menuService.create(menu))
+        assertThatThrownBy(() -> menuService.create(request))
                 .isInstanceOf(InvalidMenuProductsException.class);
     }
 
