@@ -19,7 +19,7 @@ docker compose -p kitchenpos up -d
 - 상품의 가격을 변경할 수 있다.
 - 상품의 가격이 올바르지 않으면 변경할 수 없다.
   - 상품의 가격은 0원 이상이어야 한다.
-- 상품의 가격이 변경될 때 메뉴의 가격이 메뉴에 속한 상품 금액의 합보다 크면 메뉴가 숨겨진다.
+- 상품의 가격이 변경될 때 메뉴가격이 메뉴금액보다 크면 메뉴가 비노출된다.
 - 상품의 목록을 조회할 수 있다.
 
 ### 메뉴 그룹
@@ -105,14 +105,15 @@ docker compose -p kitchenpos up -d
 
 ### 메뉴
 
-| 한글명 | 영문명 | 설명 |
-| --- | --- | --- |
-| 금액 | amount | 가격 * 수량 |
-| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위 |
-| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹 |
-| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품 |
-| 숨겨진 메뉴 | not displayed menu | 주문할 수 없는 숨겨진 메뉴 |
-| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소 |
+| 한글명 | 영문명 | 설명                                             |
+| --- | --- |------------------------------------------------|
+| 금액 | amount | 메뉴상품가격 * 수량                                    |
+| 메뉴 | menu | 메뉴 그룹에 속하는 실제 주문 가능 단위                         |
+| 메뉴 그룹 | menu group | 각각의 메뉴를 성격에 따라 분류하여 묶어둔 그룹                     |
+| 메뉴 상품 | menu product | 메뉴에 속하는 수량이 있는 상품                              |
+| 노출 메뉴   | Displayed Menu           | 손님에게 보이는 메뉴         |
+| 비노출 메뉴  | Not Displayed Menu       | 손님에게 보이지 않는 메뉴   |
+| 이름 | displayed name | 음식을 상상하게 만드는 중요한 요소                            |
 
 ### 매장 주문
 
@@ -168,7 +169,7 @@ docker compose -p kitchenpos up -d
 - `Product`를 등록
 - `Product`를 전체조회
 - `Product`의 `price`를 변경
-  - `Product`를 포함한 `Menu`들 중  `MenuPrice <= ProductPrice * MenuProductQuantity`를 만족하지 못하는 `Menu`는 `Not Displayed`된다
+  - `Product`를 포함한 `Menu`들 중  `MenuPrice <= MenuAmount`를 만족하지 못하는 `Menu`는 `Not Displayed`된다
 
 ### 메뉴
 - `MenuGroup`은 식별자와 이름을 가진다.

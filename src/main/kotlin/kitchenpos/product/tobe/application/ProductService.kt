@@ -1,7 +1,7 @@
 package kitchenpos.product.tobe.application
 
 import kitchenpos.common.domain.Profanities
-import kitchenpos.menu.domain.MenuRepository
+import kitchenpos.menu.tobe.domain.MenuRepository
 import kitchenpos.product.tobe.application.dto.ChangeProductPriceReq
 import kitchenpos.product.tobe.application.dto.CreateProductReq
 import kitchenpos.product.tobe.application.dto.ProductResp
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-@Primary
 class ProductService(
     private val productRepository: ProductRepository,
     private val menuRepository: MenuRepository,
@@ -38,6 +37,15 @@ class ProductService(
         val product = productRepository.findById(productId)
             .orElseThrow { throw NoSuchElementException("상품을 찾을 수 없습니다.") }
         product.changePrice(request.price)
+        val menus = menuRepository.findAllByProductId(productId)
+        menus.forEach { menu ->
+            run {
+                if (menu.price > menu.amount()) {
+                    //TODO Menu 리팩토링 시 처리
+                    menu.displayed = false
+                }
+            }
+        }
         return ProductResp.of(productRepository.save(product))
     }
 }

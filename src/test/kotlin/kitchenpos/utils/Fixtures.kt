@@ -1,7 +1,8 @@
 package kitchenpos.utils
 
-import kitchenpos.menu.domain.Menu
 import kitchenpos.menu.domain.MenuGroup
+import kitchenpos.menu.tobe.domain.Menu
+import kitchenpos.menu.tobe.domain.MenuProduct
 import kitchenpos.product.tobe.domain.Product
 import kitchenpos.product.tobe.domain.ProductName
 import kitchenpos.product.tobe.infra.FakeProfanities
@@ -27,14 +28,28 @@ class Fixtures {
             price: Long,
             displayed: Boolean,
             menuGroup: MenuGroup = menuGroup(),
+            menuProducts: List<MenuProduct> = emptyList()
         ): Menu {
-            val menu = Menu()
-            menu.id = id
-            menu.name = name
-            menu.price = price.toBigDecimal()
-            menu.isDisplayed = displayed
-            menu.menuGroup = menuGroup
-            return menu
+            return Menu(
+                id = id,
+                name = name,
+                price = price.toBigDecimal(),
+                displayed = displayed,
+                menuGroup = menuGroup,
+                menuProducts = menuProducts,
+                menuGroupId = menuGroup.id
+            )
+        }
+
+        fun menuProduct(
+            product: Product,
+            quantity: Long,
+        ): MenuProduct {
+            return MenuProduct(
+                product = product,
+                quantity = quantity,
+                productId = product.id!!
+            )
         }
 
         fun menuGroup(

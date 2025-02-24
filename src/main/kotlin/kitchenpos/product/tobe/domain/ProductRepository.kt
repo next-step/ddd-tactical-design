@@ -2,7 +2,6 @@ package kitchenpos.product.tobe.domain
 
 import java.util.*
 
-
 interface ProductRepository {
     fun save(product: Product): Product
 
