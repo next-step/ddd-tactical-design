@@ -32,14 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-public class EeaInOrderServiceTest {
+public class EatInOrderServiceTest {
     private final EatInOrderService orderService;
     private final JpaMenuEntityEntityRepository menuEntityRepository;
     private final OrderTableRepository orderTableRepository;
     private final SaveProductPort saveProductPort;
     private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
 
-    public EeaInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
+    public EatInOrderServiceTest(SaveProductPort saveProductPort, EatInOrderService orderService, JpaMenuEntityEntityRepository menuEntityRepository, OrderTableRepository orderTableRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
         this.saveProductPort = saveProductPort;
         this.orderService = orderService;
         this.menuEntityRepository = menuEntityRepository;
