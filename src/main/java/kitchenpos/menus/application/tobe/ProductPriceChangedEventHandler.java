@@ -1,36 +1,40 @@
 package kitchenpos.menus.application.tobe;
 
-import kitchenpos.menus.application.MenuService;
+import kitchenpos.menus.tobe.domain.Menu;
+import kitchenpos.menus.tobe.domain.MenuRepository;
 import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+import java.util.List;
 
 @Component
 public class ProductPriceChangedEventHandler {
 
-    private final MenuService menuService;
+    /*
+    상품의 가격을 변경 시 실행되는 이벤트 핸들러
 
+    1. 가격 변경한 상품을 가진 메뉴들을 조회
+    2. 메뉴를 루프 돌면서, 가격 변경된 상품 ID와 메뉴 상품의 ID가 일치할 때
+    해당 상품의 가격을 변경
+    3. 메뉴의 가격와 메뉴 상품의 합을 비교하여
+    메뉴 가격 > 메뉴 상품의 총 합인 경우, 비전시된 메뉴로 만든다
 
-    public ProductPriceChangedEventHandler(MenuService menuService) {
-        this.menuService = menuService;
+    */
+    private final MenuRepository menuRepository;
+
+    public ProductPriceChangedEventHandler(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
     }
 
-    //@AfterDomainEventPublication
-    @EventListener(ProductPriceChangedEvent.class)
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handle(ProductPriceChangedEvent event) {
-        //TODO 메뉴 도메인 구현 시 아래도 구현 할 것
-//        final List<Menu> menus = menuRepository.findAllByProductId(productId);
-//            for (final Menu menu : menus) {
-//                BigDecimal sum = BigDecimal.ZERO;
-//                for (final MenuProduct menuProduct : menu.getMenuProducts()) {
-//                    sum = sum.add(
-//                            menuProduct.getProduct()
-//                                    .getPrice()
-//                                    .multiply(BigDecimal.valueOf(menuProduct.getQuantity()))
-//                    );
-//                }
-//                if (menu.getPrice().compareTo(sum) > 0) {
-//                    menu.setDisplayed(false);
-//                }
+        List<Menu> menus = menuRepository.findAllByProductId(event.getId());
+        for (Menu menu : menus) {
+            menu.changeProductPrice(event.getId(), event.getPrice());
+        }
     }
 }

@@ -57,6 +57,13 @@ public class MenuProducts {
         return products.size() != productSize;
     }
 
+    public void changePrice(ProductId productId, Price newPrice) {
+        for (MenuProduct product : products) {
+            if (product.isSame(productId)) {
+                product.changePrice(newPrice);
+            }
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

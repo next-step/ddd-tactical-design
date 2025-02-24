@@ -47,6 +47,14 @@ public class MenuProduct {
         return productPrice.multiply(quantity);
     }
 
+    public boolean isSame(ProductId productId) {
+        return this.productId.equals(productId);
+    }
+
+    public void changePrice(Price newPrice) {
+        this.productPrice = newPrice;
+    }
+
     public ProductId getProductId() {
         return productId;
     }

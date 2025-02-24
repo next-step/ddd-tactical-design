@@ -77,4 +77,19 @@ class MenuProductsTest {
         assertThat(menuProducts.isSizeMismatch(2)).isFalse();
         assertThat(menuProducts.isSizeMismatch(3)).isTrue();
     }
+
+    @DisplayName("메뉴를 구성하는 특정 상품의 가격을 변경할 수 있다")
+    @Test
+    void changeProductPrice(){
+        ProductId id1 = ProductId.generate();
+        ProductId id2 = ProductId.generate();
+        MenuProducts menuProducts = new MenuProducts(
+                new MenuProduct(id1, 1, 10_000),
+                new MenuProduct(id2, 1, 20_000)
+        );
+
+        menuProducts.changePrice(id1, new Price(15_000));
+
+        assertThat(menuProducts.totalPrice()).isEqualTo(new Price(35_000));
+    }
 }

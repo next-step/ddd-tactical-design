@@ -30,4 +30,24 @@ class MenuProductTest {
 
         assertThat(amount).isEqualTo(new Price(5000));
     }
+
+    @DisplayName("메뉴 상품의 id가 동일한지 확인한다")
+    @Test
+    void isSame() {
+        ProductId id = ProductId.generate();
+        MenuProduct menuProduct = new MenuProduct(id, 5, 1000);
+
+        assertThat(menuProduct.isSame(id)).isTrue();
+    }
+
+    @DisplayName("메뉴 상품의 가격을 변경한다")
+    @Test
+    void changePrice() {
+        ProductId id = ProductId.generate();
+        MenuProduct menuProduct = new MenuProduct(id, 1, 1000);
+
+        menuProduct.changePrice(new Price(5000));
+
+        assertThat(menuProduct.getProductPrice()).isEqualTo(new Price(5000));
+    }
 }

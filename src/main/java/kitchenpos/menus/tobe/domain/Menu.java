@@ -88,6 +88,13 @@ public class Menu {
         this.displayed = false;
     }
 
+    public void changeProductPrice(ProductId productId, Price newPrice){
+        menuProducts.changePrice(productId, newPrice);
+        if (this.isPriceInvalid(this.price)) {
+            this.hide();
+        }
+    }
+
     public MenuId getId() {
         return id;
     }

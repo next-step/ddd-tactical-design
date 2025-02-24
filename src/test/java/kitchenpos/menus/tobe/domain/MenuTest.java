@@ -158,4 +158,28 @@ class MenuTest {
 
         assertThat(menu.isDisplayed()).isFalse();
     }
+
+    @DisplayName("특정 메뉴 상품의 가격을 변경하여 메뉴 가격이 메뉴 상품 총 합보다 커지면 비전시된 메뉴가 된다")
+    @ValueSource(longs = {24_000})
+    @ParameterizedTest
+    void changeProductPrice(long productPrice){
+        ProductId id1 = ProductId.generate();
+        ProductId id2 = ProductId.generate();
+        MenuProducts menuProducts = new MenuProducts(
+                new MenuProduct(id1, 1, 25_000),
+                new MenuProduct(id2, 1, 2_000)
+        );
+        Menu menu = new Menu(
+                MenuId.generate(),
+                new MenuName("후라이드치킨세트", (menuName) -> false),
+                new Price(27_000),
+                MenuGroupId.generate(),
+                menuProducts,
+                true
+        );
+
+        menu.changeProductPrice(id1, new Price(productPrice));
+        
+        assertThat(menu.isDisplayed()).isFalse();
+    }
 }
