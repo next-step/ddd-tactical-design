@@ -1,9 +1,8 @@
 package kitchenpos.order.deliveryorder.infra.external;
 
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultKitchenridersClient implements KitchenridersClient {

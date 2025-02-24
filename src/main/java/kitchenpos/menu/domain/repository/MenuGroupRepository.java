@@ -1,10 +1,9 @@
 package kitchenpos.menu.domain.repository;
 
-import kitchenpos.menu.domain.model.MenuGroup;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import kitchenpos.menu.domain.model.MenuGroup;
 
 public interface MenuGroupRepository {
     MenuGroup save(MenuGroup menuGroup);

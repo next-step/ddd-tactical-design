@@ -1,13 +1,12 @@
 package kitchenpos.menu.domain.model;
 
+import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_NAME_CREATION_EXCEPTION;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.util.Objects;
-
-import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_NAME_CREATION_EXCEPTION;
 
 @Embeddable
 public class MenuName {

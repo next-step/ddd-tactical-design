@@ -5,8 +5,6 @@ import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_NAME_VAL
 import kitchenpos.common.application.PurgomalumClient;
 import org.springframework.stereotype.Service;
 
-import static kitchenpos.menu.exception.MenuExceptionMessage.MENU_GROUP_NAME_VALIDATION_EXCEPTION;
-
 @Service
 public class MenuGroupNameCreationService {
     private final PurgomalumClient purgomalumClient;
