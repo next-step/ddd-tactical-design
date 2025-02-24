@@ -24,7 +24,7 @@ class OrderTableNameTest {
         // then
         assertAll(
                 () -> assertThat(orderTableName).isNotNull(),
-                () -> assertThat(orderTableName.value()).isSameAs(name)
+                () -> assertThat(orderTableName.isSameAs(name)).isTrue()
         );
     }
 

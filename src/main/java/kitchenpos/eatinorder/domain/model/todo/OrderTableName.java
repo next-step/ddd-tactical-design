@@ -28,4 +28,16 @@ public class OrderTableName {
     public boolean isSameAs(final String name) {
         return Objects.equals(this.name, name);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderTableName that = (OrderTableName) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }

@@ -1,5 +1,7 @@
 package kitchenpos.eatinorder.domain.model.todo;
 
+import java.util.Objects;
+
 public class NumberOfGuests {
     private final int value;
 
@@ -16,5 +18,17 @@ public class NumberOfGuests {
 
     public int value() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        NumberOfGuests that = (NumberOfGuests) o;
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }
