@@ -1,64 +1,63 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.*;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
-
+import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "menu_product")
-@Entity
 public class MenuProduct {
-    @Column(name = "seq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long seq;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "product_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_product")
-    )
-    private ProductEntity product;
-
-    @Column(name = "quantity", nullable = false)
+    private final Long seq;
+    private final UUID productId;
     private long quantity;
+    private BigDecimal productPrice;
 
-    @Transient
-    private UUID productId;
+    public MenuProduct(UUID productId, long quantity, BigDecimal productPrice) {
+        this(null, productId, quantity, productPrice);
+    }
 
-    public MenuProduct() {
+    public MenuProduct(Long seq, UUID productId, long quantity, BigDecimal productPrice) {
+        this.seq = seq;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productPrice = productPrice;
+    }
+
+    public void changeQuantity(long quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal amount() {
+        return productPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
     public Long getSeq() {
         return seq;
     }
 
-    public void setSeq(final Long seq) {
-        this.seq = seq;
-    }
-
-    public ProductEntity getProduct() {
-        return product;
-    }
-
-    public void setProduct(final ProductEntity product) {
-        this.product = product;
+    public UUID getProductId() {
+        return productId;
     }
 
     public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final long quantity) {
-        this.quantity = quantity;
+    public BigDecimal getProductPrice() {
+        return productPrice;
     }
 
-    public UUID getProductId() {
-        return productId;
+    public void changeMenuProductPrice(BigDecimal price) {
+        this.productPrice = price;
     }
 
-    public void setProductId(final UUID productId) {
-        this.productId = productId;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuProduct that = (MenuProduct) o;
+        return Objects.equals(seq, that.seq);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(seq);
     }
 }

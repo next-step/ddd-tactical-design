@@ -1,112 +1,107 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import kitchenpos.menu.domain.exception.MenuValidationException;
+import kitchenpos.shared.domain.Profanities;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "menu")
-@Entity
 public class Menu {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(
-        name = "menu_group_id",
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_to_menu_group")
-    )
-    private MenuGroup menuGroup;
-
-    @Column(name = "displayed", nullable = false)
+    private final UUID id;
+    private final MenuName name;
+    private MenuPrice price;
     private boolean displayed;
+    private final MenuProducts menuProducts;
+    private final UUID menuGroupId;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(
-        name = "menu_id",
-        nullable = false,
-        columnDefinition = "binary(16)",
-        foreignKey = @ForeignKey(name = "fk_menu_product_to_menu")
-    )
-    private List<MenuProduct> menuProducts;
+    private Menu(UUID id, MenuName name, MenuPrice price, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.displayed = displayed;
+        this.menuProducts = menuProducts;
+        this.menuGroupId = menuGroupId;
+    }
 
-    @Transient
-    private UUID menuGroupId;
+    public static Menu create(
+            final String name,
+            final BigDecimal price,
+            final boolean isDisplayed,
+            final UUID menuGroupId,
+            final List<MenuProduct> menuProductList,
+            final Profanities profanities
+    ) {
+        return create(UUID.randomUUID(), name, price, isDisplayed, menuGroupId, menuProductList, profanities);
+    }
 
-    public Menu() {
+    public static Menu create(
+            final UUID id,
+            final String name,
+            final BigDecimal price,
+            final boolean isDisplayed,
+            final UUID menuGroupId,
+            final List<MenuProduct> menuProductList,
+            final Profanities profanities
+    ) {
+        MenuName menuName = MenuName.of(name, profanities);
+        MenuProducts menuProducts = MenuProducts.of(menuProductList);
+        MenuPrice menuPrice = MenuPrice.of(price, menuProducts.getTotalPrice());
+        return create(id, menuName, menuPrice, isDisplayed, menuProducts, menuGroupId);
+    }
+
+    public static Menu create(UUID id, MenuName menuName, MenuPrice menuPrice, boolean displayed, MenuProducts menuProducts, UUID menuGroupId) {
+        if (menuGroupId == null) {
+            throw new MenuValidationException("메뉴 그룹을 반드시 선택해야 합니다.");
+        }
+        return new Menu(id, menuName, menuPrice, displayed, menuProducts, menuGroupId);
+    }
+
+    public void changeMenuProductPrice(UUID productId, BigDecimal price) {
+        menuProducts.changeMenuProductPrice(productId, price);
+        hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice();
+    }
+
+    public void hide() {
+        this.displayed = false;
+    }
+
+    public void display() {
+        this.price.validateMenuPriceAgainstTotalProductPrice(menuProducts.getTotalPrice());
+        this.displayed = true;
+    }
+
+    public void changePrice(BigDecimal price) {
+        this.price = MenuPrice.of(price, menuProducts.getTotalPrice());
+    }
+
+    private void hideMenuWhenMenuProductTotalPriceLowerThanMenuPrice() {
+        if (this.price.isGreaterThan(menuProducts.getTotalPrice())) {
+            this.displayed = false;
+        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
+        return name.value();
     }
 
     public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public MenuGroup getMenuGroup() {
-        return menuGroup;
-    }
-
-    public void setMenuGroup(final MenuGroup menuGroup) {
-        this.menuGroup = menuGroup;
+        return price.value();
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
     public List<MenuProduct> getMenuProducts() {
-        return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
+        return menuProducts.value();
     }
 
     public UUID getMenuGroupId() {
         return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 }

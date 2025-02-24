@@ -19,7 +19,7 @@ class ProductTest {
 
     @BeforeEach
     void setUp() {
-        final ProductName name = ProductName.of("상품", nm -> {});
+        final ProductName name = ProductName.of("상품", nm -> false);
         final ProductPrice price = ProductPrice.of(BigDecimal.valueOf(1000));
         product = new MockProduct(UUID.randomUUID(), name, price);
     }

@@ -1,38 +1,46 @@
 package kitchenpos.menu.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import kitchenpos.shared.domain.Profanities;
 
+import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "menu_group")
-@Entity
 public class MenuGroup {
-    @Column(name = "id", columnDefinition = "binary(16)")
-    @Id
-    private UUID id;
+    private final UUID id;
+    private final MenuGroupName name;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    private MenuGroup(UUID id, MenuGroupName name) {
+        this.id = id;
+        this.name = name;
+    }
 
-    public MenuGroup() {
+    public static MenuGroup create(
+            final UUID id,
+            final String name,
+            final Profanities profanities) {
+        if (id == null) {
+            throw new IllegalArgumentException("메뉴 그룹 ID가 Null 입니다.");
+        }
+        return new MenuGroup(id, MenuGroupName.of(name, profanities));
     }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
-        return name;
+        return name.value();
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuGroup menuGroup = (MenuGroup) o;
+        return Objects.equals(id, menuGroup.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

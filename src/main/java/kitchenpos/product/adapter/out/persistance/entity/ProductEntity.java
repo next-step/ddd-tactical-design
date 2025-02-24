@@ -4,10 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kitchenpos.shared.domain.Profanities;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
-import kitchenpos.product.domain.model.ProfanityFilteringProductNameValidator;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -38,8 +38,8 @@ public class ProductEntity {
         return new ProductEntity(product.getId(), product.getName(), product.getPrice());
     }
 
-    public Product toDomain(ProfanityFilteringProductNameValidator profanityFilteringProductNameValidator) {
-        ProductName name = ProductName.of(this.name, profanityFilteringProductNameValidator);
+    public Product toDomain(Profanities profanities) {
+        ProductName name = ProductName.of(this.name, profanities);
         ProductPrice price = ProductPrice.of(this.price);
         return new Product(id, name, price);
     }

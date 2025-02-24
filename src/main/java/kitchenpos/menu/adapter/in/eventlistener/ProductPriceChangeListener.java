@@ -1,22 +1,23 @@
 package kitchenpos.menu.adapter.in.eventlistener;
 
-import kitchenpos.menu.application.port.in.UpdateMenuDisplayStatusUseCase;
+import kitchenpos.menu.application.port.in.UpdateMenuProductPriceUseCase;
 import kitchenpos.shared.event.ProductPriceChangedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductPriceChangeListener {
+    private final UpdateMenuProductPriceUseCase updateMenuProductPriceUseCase;
 
-    private final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase;
-
-    public ProductPriceChangeListener(final UpdateMenuDisplayStatusUseCase updateMenuDisplayStatusUseCase) {
-        this.updateMenuDisplayStatusUseCase = updateMenuDisplayStatusUseCase;
+    public ProductPriceChangeListener(
+            final UpdateMenuProductPriceUseCase updateMenuProductPriceUseCase
+    ) {
+        this.updateMenuProductPriceUseCase = updateMenuProductPriceUseCase;
     }
 
     @EventListener
     public void handleProductPriceChange(ProductPriceChangedEvent event) {
-        updateMenuDisplayStatusUseCase.execute(event.productId());
+        updateMenuProductPriceUseCase.execute(event.productId(), event.newPrice());
     }
 }
 

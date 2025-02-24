@@ -32,6 +32,10 @@ public class ProductPrice {
         return this.price.compareTo(price) == 0;
     }
 
+    public BigDecimal multiply(long quantity) {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

@@ -1,9 +1,12 @@
 package kitchenpos.product.domain.model;
 
+import kitchenpos.shared.domain.Profanities;
+import kitchenpos.product.domain.exception.ProductNameEmptyException;
+import kitchenpos.product.domain.exception.ProductNameValidationException;
+
 import java.util.Objects;
 
 public class ProductName {
-    private final static ProductNameValidator DEFAULT_PRODUCT_NAME_VALIDATOR = new DefaultProductNameValidator();
 
     private final String name;
 
@@ -13,13 +16,13 @@ public class ProductName {
 
     public static ProductName of(
             final String name,
-            final ProfanityFilteringProductNameValidator profanityFilteringProductNameValidator,
-            final ProductNameValidator ... additionalProductNameValidators
-    ) {
-        DEFAULT_PRODUCT_NAME_VALIDATOR.validate(name);
-        profanityFilteringProductNameValidator.validate(name);
-        for (ProductNameValidator productNameValidator : additionalProductNameValidators) {
-            productNameValidator.validate(name);
+            final Profanities profanities
+            ) {
+        if (name == null || name.isBlank()) {
+            throw new ProductNameEmptyException();
+        }
+        if (profanities.contains(name)) {
+            throw new ProductNameValidationException("상품 이름에 비속어가 포함되어 있습니다. name: " + name);
         }
         return new ProductName(name);
     }

@@ -31,6 +31,10 @@ public class Product extends AggregateRoot {
         return this.price.isSamePrice(price);
     }
 
+    public BigDecimal multiplyPrice(long quantity) {
+        return this.price.multiply(quantity);
+    }
+
     public UUID getId() {
         return id;
     }

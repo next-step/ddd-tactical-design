@@ -1,26 +1,29 @@
 package kitchenpos.menu.application.service;
 
-import kitchenpos.ClientTestConfiguration;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
+import kitchenpos.MockBeanConfiguration;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
+import kitchenpos.menu.application.port.out.MenuProductMapper;
+import kitchenpos.menu.application.service.model.ChangeMenuPriceRequest;
+import kitchenpos.menu.application.service.model.CreateMenuProductRequest;
+import kitchenpos.menu.application.service.model.CreateMenuRequest;
+import kitchenpos.menu.domain.exception.MenuPriceValidationException;
+import kitchenpos.menu.domain.exception.MenuValidationException;
 import kitchenpos.menu.domain.model.Menu;
 import kitchenpos.menu.domain.model.MenuGroup;
 import kitchenpos.menu.domain.model.MenuProduct;
 import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
 import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
-import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
-import kitchenpos.product.domain.model.ProductName;
-import kitchenpos.product.domain.model.ProductPrice;
-import kitchenpos.shared.port.out.PurgomalumClient;
+import kitchenpos.shared.domain.Profanities;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
@@ -35,24 +38,33 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@Import(ClientTestConfiguration.class)
+@Import(MockBeanConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class MenuServiceTest {
     private final MenuService menuService;
-    private final SaveProductPort saveProductPort;
-    private final MenuGroupRepository menuGroupRepository;
-    private final MenuRepository menuRepository;
-    private final PurgomalumClient mockPurgomalumClient;
+    private final ProductEntityRepository productEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
+    private final Profanities profanities;
+    private final MenuProductMapper menuProductMapper;
 
-    public MenuServiceTest(MenuService menuService, SaveProductPort saveProductPort, MenuGroupRepository menuGroupRepository, MenuRepository menuRepository, PurgomalumClient mockPurgomalumClient) {
+    public MenuServiceTest(
+            MenuService menuService,
+            ProductEntityRepository productEntityRepository,
+            JpaMenuGroupEntityRepository menuGroupEntityRepository,
+            JpaMenuEntityEntityRepository menuEntityRepository,
+            Profanities profanities,
+            MenuProductMapper menuProductMapper
+    ) {
         this.menuService = menuService;
-        this.saveProductPort = saveProductPort;
-        this.menuGroupRepository = menuGroupRepository;
-        this.menuRepository = menuRepository;
-        this.mockPurgomalumClient = mockPurgomalumClient;
+        this.productEntityRepository = productEntityRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
+        this.menuEntityRepository = menuEntityRepository;
+        this.profanities = profanities;
+        this.menuProductMapper = menuProductMapper;
     }
 
     @DisplayName("메뉴 등록하기")
@@ -67,11 +79,11 @@ public class MenuServiceTest {
 
         @BeforeEach
         void setup() {
-            Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
-            saveProductPort.save(product);
+            ProductEntity product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
+            productEntityRepository.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+            menuGroupEntityRepository.save(menuGroup);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -79,9 +91,11 @@ public class MenuServiceTest {
         @Test
         void create_menu_successfully() {
             // given
-            List<MenuProduct> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, 2));
-            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, menuProducts);
-            request.setDisplayed(true);
+            List<CreateMenuProductRequest> menuProducts = List.of(createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2));
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, menuProducts, true);
+            when(menuProductMapper.toMenuProducts(request.getProductQuantities())).thenReturn(
+                    List.of(new MenuProduct(후라이드치킨_PRODUCT_UUID, 2, 후라이드치킨_DEFAULT_PRICE))
+            );
 
             // when
             Menu menu = menuService.create(request);
@@ -92,7 +106,7 @@ public class MenuServiceTest {
                     () -> assertThat(menu.getName()).isEqualTo(request.getName()),
                     () -> assertThat(menu.getPrice()).isEqualTo(request.getPrice()),
                     () -> assertThat(menu.isDisplayed()).isEqualTo(request.isDisplayed()),
-                    () -> assertThat(menu.getMenuGroup().getId()).isEqualTo(request.getMenuGroupId()),
+                    () -> assertThat(menu.getMenuGroupId()).isEqualTo(request.getMenuGroupId()),
                     () -> assertThat(menu.getMenuProducts()).hasSize(menuProducts.size())
             );
         }
@@ -103,9 +117,9 @@ public class MenuServiceTest {
         void registration_menu_with_profanity() {
             // given
             String menuName = "holy shit 후라이드치킨";
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 2);
-            Menu request = createMenu(menuName, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
-            Mockito.when(mockPurgomalumClient.containsProfanity(menuName)).thenReturn(Boolean.TRUE);
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2);
+            CreateMenuRequest request = createMenuRequest(menuName, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            when(profanities.contains(menuName)).thenReturn(Boolean.TRUE);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -120,8 +134,8 @@ public class MenuServiceTest {
         @Test
         void name_must_be_input() {
             // given
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 2);
-            Menu request = createMenu(null, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 2);
+            CreateMenuRequest request = createMenuRequest(null, 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -136,7 +150,7 @@ public class MenuServiceTest {
         @Test
         void create_menu_without_products() {
             // given
-            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, Collections.emptyList());
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, Collections.emptyList());
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -151,8 +165,8 @@ public class MenuServiceTest {
         @Test
         void product_quantity_must_be_positive() {
             // given
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, -1);
-            Menu request = createMenu("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, -1);
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -167,8 +181,8 @@ public class MenuServiceTest {
         @Test
         void create_menu_with_invalid_price() {
             // given
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
-            Menu request = createMenu("후라이드치킨", -100, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 1);
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", -100, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -183,8 +197,8 @@ public class MenuServiceTest {
         @Test
         void create_menu_with_price_exceeding_product_total() {
             // given
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
-            Menu request = createMenu("후라이드치킨", 50000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 1);
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 50000, 치킨류_MENU_GROUP_UUID, List.of(menuProduct));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.create(request);
@@ -199,14 +213,19 @@ public class MenuServiceTest {
         @Test
         void create_menu_without_menu_group() {
             // given
-            MenuProduct menuProduct = createMenuProduct(후라이드치킨_PRODUCT_UUID, 1);
-            Menu request = createMenu("후라이드치킨", 16000, UUID.randomUUID(), List.of(menuProduct));
+            CreateMenuProductRequest menuProduct = createMenuProductRequest(후라이드치킨_PRODUCT_UUID, 1);
+            CreateMenuRequest request = createMenuRequest("후라이드치킨", 16000, null, List.of(menuProduct));
+            when(menuProductMapper.toMenuProducts(request.getProductQuantities())).thenReturn(
+                    List.of(new MenuProduct(후라이드치킨_PRODUCT_UUID, 1, 후라이드치킨_DEFAULT_PRICE))
+            );
 
             // when
-            Executable executable = () -> menuService.create(request);
+            ThrowableAssert.ThrowingCallable throwable = () -> menuService.create(request);
 
             // then
-            assertThrows(NoSuchElementException.class, executable);
+            assertThatThrownBy(throwable)
+                    .isInstanceOf(MenuValidationException.class)
+                    .hasMessage("메뉴 그룹을 반드시 선택해야 합니다.");
         }
     }
 
@@ -220,15 +239,15 @@ public class MenuServiceTest {
 
         @BeforeEach
         void setup() {
-            Product product = createProduct(PRODUCT_UUID, "양념치킨", new BigDecimal(20000));
-            saveProductPort.save(product);
+            ProductEntity product = createProduct(PRODUCT_UUID, "양념치킨", new BigDecimal(20000));
+            productEntityRepository.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupEntityRepository.save(menuGroup);
 
-            List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
-            Menu menu = createMenu(MENU_UUID, "양념치킨", new BigDecimal(20000), MENU_GROUP_UUID, menuGroup, menuProducts);
-            menuRepository.save(menu);
+            List<MenuProductEntity> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
+            MenuEntity menu = createMenu(MENU_UUID, "양념치킨", new BigDecimal(20000), MENU_GROUP_UUID, menuGroup, menuProducts);
+            menuEntityRepository.save(menu);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -236,7 +255,7 @@ public class MenuServiceTest {
         @Test
         void change_menu_price() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(18000));
 
             // when
@@ -251,15 +270,15 @@ public class MenuServiceTest {
         @Test
         void price_must_be_positive() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(-1000));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -267,15 +286,16 @@ public class MenuServiceTest {
         @Test
         void price_must_be_lower_than_sum_of_products() {
             // given
-            Menu request = new Menu();
+            ChangeMenuPriceRequest request = new ChangeMenuPriceRequest();
             request.setPrice(new BigDecimal(30000));
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.changePrice(MENU_UUID, request);
 
             // then
-            assertThatIllegalArgumentException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(MenuPriceValidationException.class)
+                    .hasMessage("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
     }
 
@@ -289,15 +309,15 @@ public class MenuServiceTest {
 
         @BeforeEach
         void setup() {
-            Product product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
-            saveProductPort.save(product);
+            ProductEntity product = createProduct(PRODUCT_UUID, "간장치킨", new BigDecimal(19000));
+            productEntityRepository.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(MENU_GROUP_UUID, "치킨류");
+            menuGroupEntityRepository.save(menuGroup);
 
-            List<MenuProduct> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
-            Menu menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
-            menuRepository.save(menu);
+            List<MenuProductEntity> menuProducts = List.of(createMenuProduct(PRODUCT_UUID, product, 1));
+            MenuEntity menu = createMenu(MENU_UUID, "간장치킨", new BigDecimal(19000), MENU_GROUP_UUID, menuGroup, menuProducts);
+            menuEntityRepository.save(menu);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -316,17 +336,18 @@ public class MenuServiceTest {
         @Test
         void price_must_be_lower_than_sum_of_products() {
             // given
-            Menu menu = menuRepository.findById(MENU_UUID)
+            MenuEntity menu = menuEntityRepository.findById(MENU_UUID)
                     .orElseThrow(NoSuchElementException::new);
             menu.setPrice(new BigDecimal(60000));
-            menuRepository.save(menu);
+            menuEntityRepository.save(menu);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> menuService.display(MENU_UUID);
 
             // then
-            assertThatIllegalStateException()
-                    .isThrownBy(throwingCallable);
+            assertThatThrownBy(throwingCallable)
+                    .isInstanceOf(MenuPriceValidationException.class)
+                    .hasMessage("메뉴 가격은 메뉴 상품 가격의 총합보다 작거나 같아야 합니다.");
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -361,12 +382,16 @@ public class MenuServiceTest {
         }
     }
 
-    private static Menu createMenu(String name, int price, UUID menuGroupId, List<MenuProduct> menuProducts) {
-        return createMenu(null, name, new BigDecimal(price), menuGroupId, null, menuProducts);
+    private static CreateMenuRequest createMenuRequest(String name, int price, UUID menuGroupId, List<CreateMenuProductRequest> menuProducts) {
+        return createMenuRequest(null, name, new BigDecimal(price), menuGroupId, null, menuProducts, true);
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
+    private static CreateMenuRequest createMenuRequest(String name, int price, UUID menuGroupId, List<CreateMenuProductRequest> menuProducts, boolean displayed) {
+        return createMenuRequest(null, name, new BigDecimal(price), menuGroupId, null, menuProducts, displayed);
+    }
+
+    private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
+        MenuEntity menu = new MenuEntity();
         menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
@@ -376,28 +401,49 @@ public class MenuServiceTest {
         return menu;
     }
 
-    private static MenuProduct createMenuProduct(UUID productId, int quantity) {
-        return createMenuProduct(productId, null, quantity);
+    private static CreateMenuRequest createMenuRequest(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<CreateMenuProductRequest> menuProducts, boolean displayed) {
+        CreateMenuRequest menu = new CreateMenuRequest();
+        menu.setId(id);
+        menu.setName(name);
+        menu.setPrice(price);
+        menu.setMenuGroupId(menuGroupId);
+        menu.setMenuGroup(menuGroup);
+        menu.setMenuProducts(menuProducts);
+        menu.setDisplayed(displayed);
+        return menu;
     }
 
-    private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
-        MenuProduct menuProduct = new MenuProduct();
+    private static CreateMenuProductRequest createMenuProductRequest(UUID productId, int quantity) {
+        return createMenuProductRequest(productId, null, quantity);
+    }
+
+    private static MenuProductEntity createMenuProduct(UUID productId, ProductEntity product, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
-        if (proudct != null) {
-            menuProduct.setProduct(ProductEntity.of(proudct));
+        if (product != null) {
+            menuProduct.setProductPrice(product.getPrice());
+            menuProduct.setProductId(product.getId());
         }
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
 
-    private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
-        ProductPrice productPrice = ProductPrice.of(price);
-        return new Product(id, productName, productPrice);
+    private static CreateMenuProductRequest createMenuProductRequest(UUID productId, Product product, int quantity) {
+        CreateMenuProductRequest menuProduct = new CreateMenuProductRequest();
+        menuProduct.setProductId(productId);
+        if (product != null) {
+            menuProduct.setProductId(product.getId());
+        }
+        menuProduct.setQuantity(quantity);
+        return menuProduct;
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static ProductEntity createProduct(UUID id, String name, BigDecimal price) {
+        return new ProductEntity(id, name, price);
+    }
+
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;

@@ -1,36 +1,40 @@
 package kitchenpos.menu.application.service;
 
+import kitchenpos.menu.application.port.out.LoadMenuGroupPort;
+import kitchenpos.menu.application.port.out.SaveMenuGroupPort;
+import kitchenpos.menu.application.service.model.CreateMenuGroupRequest;
 import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
+import kitchenpos.shared.domain.Profanities;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class MenuGroupService {
-    private final MenuGroupRepository menuGroupRepository;
+    private final LoadMenuGroupPort loadMenuGroupPort;
+    private final SaveMenuGroupPort saveMenuGroupPort;
+    private final Profanities profanities;
 
-    public MenuGroupService(final MenuGroupRepository menuGroupRepository) {
-        this.menuGroupRepository = menuGroupRepository;
+    public MenuGroupService(
+            final LoadMenuGroupPort loadMenuGroupPort,
+            final SaveMenuGroupPort saveMenuGroupPort,
+            final Profanities profanities
+    ) {
+        this.loadMenuGroupPort = loadMenuGroupPort;
+        this.saveMenuGroupPort = saveMenuGroupPort;
+        this.profanities = profanities;
     }
 
     @Transactional
-    public MenuGroup create(final MenuGroup request) {
-        final String name = request.getName();
-        if (Objects.isNull(name) || name.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        final MenuGroup menuGroup = new MenuGroup();
-        menuGroup.setId(UUID.randomUUID());
-        menuGroup.setName(name);
-        return menuGroupRepository.save(menuGroup);
+    public MenuGroup create(final CreateMenuGroupRequest request) {
+        final MenuGroup menuGroup = MenuGroup.create(UUID.randomUUID(), request.getName(), profanities);
+        return saveMenuGroupPort.save(menuGroup);
     }
 
     @Transactional(readOnly = true)
     public List<MenuGroup> findAll() {
-        return menuGroupRepository.findAll();
+        return loadMenuGroupPort.findAll();
     }
 }

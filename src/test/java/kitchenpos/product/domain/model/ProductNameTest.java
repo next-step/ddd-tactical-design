@@ -20,7 +20,7 @@ class ProductNameTest {
         final String name = "상품";
 
         // when
-        final ProductName productName = ProductName.of(name, getProfanityFilteringProductNameValidator());
+        final ProductName productName = ProductName.of(name, n -> false);
 
         // then
         assertThat(productName.isSameName(name)).isTrue();
@@ -32,26 +32,24 @@ class ProductNameTest {
     @ValueSource(strings = {"", " "})
     void createProductNameWithEmptyOrNull(final String name) {
         // when
-        final Throwable thrown = catchThrowable(() -> ProductName.of(name, getProfanityFilteringProductNameValidator()));
+        final Throwable thrown = catchThrowable(() -> ProductName.of(name, n -> false));
 
         // then
         assertThat(thrown).isInstanceOf(ProductNameEmptyException.class);
     }
 
-    @DisplayName("`Product Name` 추가적인 생성규칙에 맞지 않으면 예외가 발생한다")
+    @DisplayName("`Product Name`에 비속어가 포함되어 있으면 예외가 발생한다")
     @Test
-    void createProductNameWithEmptyOrNull() {
+    void createProductNameWithProfanities() {
         // given
-        final String name = "invalid name";
-        final ProductNameValidator additionalProductNameValidator = nm -> {
-            throw new ProductNameValidationException("검증 실패");
-        };
+        String name = "비속어";
 
         // when
-        final Throwable thrown = catchThrowable(() -> ProductName.of(name, getProfanityFilteringProductNameValidator(), additionalProductNameValidator));
+        final Throwable thrown = catchThrowable(() -> ProductName.of(name, n -> true));
 
         // then
-        assertThat(thrown).isInstanceOf(ProductNameValidationException.class);
+        assertThat(thrown).isInstanceOf(ProductNameValidationException.class)
+                .hasMessage("상품 이름에 비속어가 포함되어 있습니다. name: " + name);
     }
 
     @DisplayName("isSameName 메소드 테스트")
@@ -59,7 +57,7 @@ class ProductNameTest {
     @CsvSource(value = {"상품, 상품, true", "상품, 상품2, false"})
     void testIsSameName(String actualName, String expectedName, boolean expected) {
         // given
-        final ProductName productName = ProductName.of(actualName, getProfanityFilteringProductNameValidator());
+        final ProductName productName = ProductName.of(actualName, n -> false);
 
         // when
         final boolean isSameName = productName.isSameName(expectedName);
@@ -72,16 +70,12 @@ class ProductNameTest {
     @Test
     void testIsSameNameWhenNullValue() {
         // given
-        final ProductName productName = ProductName.of("상품", getProfanityFilteringProductNameValidator());
+        final ProductName productName = ProductName.of("상품", n -> false);
 
         // when
         final boolean isSameName = productName.isSameName(null);
 
         // then
         assertThat(isSameName).isFalse();
-    }
-
-    private static ProfanityFilteringProductNameValidator getProfanityFilteringProductNameValidator() {
-        return nm -> { /* do nothing */};
     }
 }

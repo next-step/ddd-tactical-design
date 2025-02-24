@@ -1,16 +1,7 @@
 package kitchenpos.eatinorder.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import kitchenpos.menu.domain.model.Menu;
+import jakarta.persistence.*;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -29,7 +20,7 @@ public class OrderLineItem {
         columnDefinition = "binary(16)",
         foreignKey = @ForeignKey(name = "fk_order_line_item_to_menu")
     )
-    private Menu menu;
+    private MenuEntity menu;
 
     @Column(name = "quantity", nullable = false)
     private long quantity;
@@ -51,11 +42,11 @@ public class OrderLineItem {
         this.seq = seq;
     }
 
-    public Menu getMenu() {
+    public MenuEntity getMenu() {
         return menu;
     }
 
-    public void setMenu(final Menu menu) {
+    public void setMenu(final MenuEntity menu) {
         this.menu = menu;
     }
 

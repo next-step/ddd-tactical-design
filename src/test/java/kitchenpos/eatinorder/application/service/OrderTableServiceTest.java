@@ -4,13 +4,11 @@ import kitchenpos.eatinorder.domain.model.Order;
 import kitchenpos.eatinorder.domain.model.OrderLineItem;
 import kitchenpos.eatinorder.domain.model.OrderTable;
 import kitchenpos.eatinorder.domain.model.OrderType;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.ProductEntityRepository;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.product.application.port.out.SaveProductPort;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
@@ -19,7 +17,6 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
@@ -39,15 +36,15 @@ public class OrderTableServiceTest {
     private final OrderTableService orderTableService;
     private final EatInOrderService orderService;
     private final SaveProductPort saveProductPort;
-    private final MenuGroupRepository menuGroupRepository;
-    private final MenuRepository menuRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
 
-    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, MenuGroupRepository menuGroupRepository, MenuRepository menuRepository) {
+    public OrderTableServiceTest(OrderTableService orderTableService, EatInOrderService orderService, SaveProductPort saveProductPort, JpaMenuGroupEntityRepository menuGroupEntityRepository, JpaMenuEntityEntityRepository menuEntityRepository) {
         this.orderTableService = orderTableService;
         this.orderService = orderService;
         this.saveProductPort = saveProductPort;
-        this.menuGroupRepository = menuGroupRepository;
-        this.menuRepository = menuRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
+        this.menuEntityRepository = menuEntityRepository;
     }
 
     @DisplayName("주문 테이블 등록하기")
@@ -270,12 +267,12 @@ public class OrderTableServiceTest {
         Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
         saveProductPort.save(product);
 
-        MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
-        menuGroupRepository.save(menuGroup);
+        MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+        menuGroupEntityRepository.save(menuGroup);
 
-        List<MenuProduct> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
-        Menu menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
-        menuRepository.save(menu);
+        List<MenuProductEntity> menuProducts = List.of(createMenuProduct(후라이드치킨_PRODUCT_UUID, product, 1));
+        MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, 치킨류_MENU_GROUP_UUID, menuGroup, menuProducts);
+        menuEntityRepository.save(menu);
 
         List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(후라이드치킨_MENU_UUID, 2, 후라이드치킨_MENU_DEFAULT_PRICE));
         Order request = createOrder(OrderType.EAT_IN, orderLineItems, "서울시 강남구", orderTable.getId(), orderTable);
@@ -291,20 +288,20 @@ public class OrderTableServiceTest {
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
+        ProductName productName = ProductName.of(name, nm -> false);
         ProductPrice productPrice = ProductPrice.of(price);
         return new Product(id, productName, productPrice);
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
+    private static MenuEntity createMenu(UUID id, String name, BigDecimal price, UUID menuGroupId, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
+        MenuEntity menu = new MenuEntity();
         menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
@@ -315,10 +312,11 @@ public class OrderTableServiceTest {
         return menu;
     }
 
-    private static MenuProduct createMenuProduct(UUID productId, Product proudct, int quantity) {
-        MenuProduct menuProduct = new MenuProduct();
+    private static MenuProductEntity createMenuProduct(UUID productId, Product product, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
         menuProduct.setProductId(productId);
-        menuProduct.setProduct(ProductEntity.of(proudct));
+        menuProduct.setProductPrice(product.getPrice());
+        menuProduct.setProductId(product.getId());
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }

@@ -1,32 +1,28 @@
 package kitchenpos.product.application.serveice;
 
-import kitchenpos.ClientTestConfiguration;
-import kitchenpos.menu.application.port.out.MenuGroupRepository;
-import kitchenpos.menu.application.port.out.MenuRepository;
-import kitchenpos.menu.domain.model.Menu;
-import kitchenpos.menu.domain.model.MenuGroup;
-import kitchenpos.menu.domain.model.MenuProduct;
-import kitchenpos.product.adapter.out.persistance.entity.ProductEntity;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuEntityEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.JpaMenuGroupEntityRepository;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuGroupEntity;
+import kitchenpos.menu.adapter.out.persistance.entity.MenuProductEntity;
 import kitchenpos.product.application.port.out.LoadProductPort;
 import kitchenpos.product.application.port.out.SaveProductPort;
-import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.ProductService;
+import kitchenpos.product.application.service.model.ChangeProductPriceRequest;
 import kitchenpos.product.application.service.model.CreateProductRequest;
 import kitchenpos.product.domain.exception.ProductNameEmptyException;
 import kitchenpos.product.domain.exception.ProductPriceValidationException;
 import kitchenpos.product.domain.model.Product;
 import kitchenpos.product.domain.model.ProductName;
 import kitchenpos.product.domain.model.ProductPrice;
-import kitchenpos.shared.port.out.PurgomalumClient;
+import kitchenpos.shared.domain.Profanities;
 import org.assertj.core.api.ThrowableAssert;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -40,23 +36,22 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
-@Import(ClientTestConfiguration.class)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public class ProductServiceTest {
     private final ProductService productService;
     private final LoadProductPort loadProductPort;
     private final SaveProductPort saveProductPort;
-    private final MenuRepository menuRepository;
-    private final MenuGroupRepository menuGroupRepository;
-    private final PurgomalumClient mockPurgomalumClient;
+    private final JpaMenuEntityEntityRepository menuEntityRepository;
+    private final JpaMenuGroupEntityRepository menuGroupEntityRepository;
+    private final Profanities profanities;
 
-    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, MenuRepository menuRepository, MenuGroupRepository menuGroupRepository, PurgomalumClient mockPurgomalumClient) {
+    public ProductServiceTest(ProductService productService, LoadProductPort loadProductPort, SaveProductPort saveProductPort, JpaMenuEntityEntityRepository menuEntityRepository, JpaMenuGroupEntityRepository menuGroupEntityRepository) {
         this.productService = productService;
         this.loadProductPort = loadProductPort;
         this.saveProductPort = saveProductPort;
-        this.menuRepository = menuRepository;
-        this.menuGroupRepository = menuGroupRepository;
-        this.mockPurgomalumClient = mockPurgomalumClient;
+        this.menuEntityRepository = menuEntityRepository;
+        this.menuGroupEntityRepository = menuGroupEntityRepository;
+        this.profanities = Mockito.mock(Profanities.class);
     }
 
     @DisplayName("상품 등록하기")
@@ -86,7 +81,7 @@ public class ProductServiceTest {
             // given
             String name = "holy shit 맛있는 치킨";
             CreateProductRequest request = new CreateProductRequest(name, BigDecimal.valueOf(16000));
-            Mockito.when(mockPurgomalumClient.containsProfanity(name)).thenReturn(Boolean.TRUE);
+            Mockito.when(profanities.contains(name)).thenReturn(Boolean.TRUE);
 
             // when
             ThrowableAssert.ThrowingCallable throwingCallable = () -> productService.create(request);
@@ -144,13 +139,13 @@ public class ProductServiceTest {
             Product product = createProduct(후라이드치킨_PRODUCT_UUID, 후라이드치킨_PRODUCT_NAME, 후라이드치킨_DEFAULT_PRICE);
             product = saveProductPort.save(product);
 
-            MenuGroup menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
-            menuGroupRepository.save(menuGroup);
+            MenuGroupEntity menuGroup = createMenuGroup(치킨류_MENU_GROUP_UUID, 치킨류_MENU_GROUP_NAME);
+            menuGroupEntityRepository.save(menuGroup);
 
-            List<MenuProduct> menuProducts = List.of(createMenuProduct(product, 1));
-            Menu menu = createMenu(후라이드치킨_MENU_UUID, 후라이드_치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, menuGroup, menuProducts);
+            List<MenuProductEntity> menuProducts = List.of(createMenuProduct(product, 1));
+            MenuEntity menu = createMenu(후라이드치킨_MENU_UUID, 후라이드_치킨_MENU_NAME, 후라이드치킨_MENU_DEFAULT_PRICE, menuGroup, menuProducts);
             menu.setDisplayed(true);
-            menuRepository.save(menu);
+            menuEntityRepository.save(menu);
         }
 
         @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -198,23 +193,16 @@ public class ProductServiceTest {
             productService.changePrice(product.getId(), new ChangeProductPriceRequest(newPrice));
 
             // then
-            Menu menu = menuRepository.findById(후라이드치킨_MENU_UUID)
+            MenuEntity menu = menuEntityRepository.findById(후라이드치킨_MENU_UUID)
                     .orElseThrow(NoSuchElementException::new);
             assertThat(menu.isDisplayed()).isFalse();
         }
     }
 
-    @NotNull
-    private static MenuProduct createMenuProduct(Product product, int quantity) {
-        MenuProduct menuProduct = new MenuProduct();
-        menuProduct.setProduct(ProductEntity.of(product));
-        menuProduct.setQuantity(quantity);
-        return menuProduct;
-    }
-
     @DisplayName("상품 목록 조회하기")
     @Nested
     class ProductListTest {
+
         private static final int TOTAL_PRODUCT_COUNT = 6;
 
         @SqlGroup({
@@ -225,32 +213,56 @@ public class ProductServiceTest {
         @Test
         void it_can_retrieve_all_products() {
             // when
-            List<Product> products = productService.findAll();
+            List<Product> products = productService.findAll(null);
 
             // then
             assertThat(products).hasSize(TOTAL_PRODUCT_COUNT);
         }
-    }
 
-    private static Product createProduct(String name, int price) {
-        return createProduct(null, name, new BigDecimal(price));
+        @SqlGroup({
+                @Sql(value = "/setup.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+                @Sql(value = "/delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+        })
+        @DisplayName("상품 ID 목록을 이용하여 상품을 조회할 수 있다")
+        @Test
+        void it_can_retrieve_products_by_ids() {
+            // given
+            UUID 후라이드치킨_PRODUCT_UUID = UUID.fromString("3b528244-34f7-406b-bb7e-690912f66b10");
+            UUID 양념치킨_PRODUCT_UUID = UUID.fromString("4721ee72-2ff3-417f-ade3-acd0a804605b");
+            List<UUID> productIds = List.of(후라이드치킨_PRODUCT_UUID, 양념치킨_PRODUCT_UUID);
+
+            // when
+            List<Product> products = productService.findAll(productIds);
+
+            // then
+            assertThat(products).hasSize(productIds.size());
+        }
+
     }
 
     private static Product createProduct(UUID id, String name, BigDecimal price) {
-        ProductName productName = ProductName.of(name, nm -> {});
+        ProductName productName = ProductName.of(name, nm -> false);
         ProductPrice productPrice = ProductPrice.of(price);
         return new Product(id, productName, productPrice);
     }
 
-    private static MenuGroup createMenuGroup(UUID id, String name) {
-        MenuGroup menuGroup = new MenuGroup();
+    private static MenuGroupEntity createMenuGroup(UUID id, String name) {
+        MenuGroupEntity menuGroup = new MenuGroupEntity();
         menuGroup.setId(id);
         menuGroup.setName(name);
         return menuGroup;
     }
 
-    private static Menu createMenu(UUID id, String name, BigDecimal price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
-        Menu menu = new Menu();
+    private static MenuProductEntity createMenuProduct(Product product, int quantity) {
+        MenuProductEntity menuProduct = new MenuProductEntity();
+        menuProduct.setProductPrice(product.getPrice());
+        menuProduct.setProductId(product.getId());
+        menuProduct.setQuantity(quantity);
+        return menuProduct;
+    }
+
+    private static MenuEntity createMenu(UUID id, String name, BigDecimal price, MenuGroupEntity menuGroup, List<MenuProductEntity> menuProducts) {
+        MenuEntity menu = new MenuEntity();
         menu.setId(id);
         menu.setName(name);
         menu.setPrice(price);
