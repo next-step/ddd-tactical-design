@@ -5,6 +5,7 @@ import static kitchenpos.TestFixtureFactory.createMenuGroup;
 import static kitchenpos.TestFixtureFactory.createOrderLineItem;
 import static kitchenpos.TestFixtureFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ class OrderTableOccupationManagerTest {
         OrderTableOccupationManager manager = new OrderTableOccupationManager(eatInOrderRepository);
 
         OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
-        EatInOrder eatInOrder = createCompleteEatInOrder(orderTable);
+        EatInOrder eatInOrder = createEatInOrder(orderTable, EatInOrderFlow.COMPLETED);
         ReleaseOrderTableEvent event = new ReleaseOrderTableEvent(orderTable);
 
         eatInOrderRepository.save(eatInOrder);
@@ -44,12 +45,31 @@ class OrderTableOccupationManagerTest {
         assertThat(orderTable.getNumberOfGuests()).isEqualTo(0);
     }
 
-    private EatInOrder createCompleteEatInOrder(OrderTable orderTable) {
+    @Test
+    @DisplayName("매장 주문이 완료 되지 않은 경우, 테이블 점유 상태를 해지하려 하면 예외가 발생한다.")
+    void release_exception() {
+        // given
+        EatInOrderRepository eatInOrderRepository = new FakeEatInOrderRepository(new HashMap<>());
+        OrderTableOccupationManager manager = new OrderTableOccupationManager(eatInOrderRepository);
+
+        OrderTable orderTable = new OrderTable(UUID.randomUUID(), "1번 테이블", 3, true);
+        EatInOrder eatInOrder = createEatInOrder(orderTable, EatInOrderFlow.SERVED);
+        ReleaseOrderTableEvent event = new ReleaseOrderTableEvent(orderTable);
+
+        eatInOrderRepository.save(eatInOrder);
+
+        // when // then
+        assertThatThrownBy(() -> manager.release(event))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문이 완료되지 않은 매장 테이블은 정리할 수 없습니다.");
+    }
+
+    private EatInOrder createEatInOrder(OrderTable orderTable, EatInOrderFlow eatInOrderFlow) {
         List<OrderLineItem> orderLineItems = List.of(createOrderLineItem(createMenu(createMenuGroup(), createProduct(
                 BigDecimal.TWO), 3)));
         EatInOrder eatInOrder = new EatInOrder(UUID.randomUUID(), LocalDateTime.now(),
                 orderLineItems,
-                EatInOrderFlow.COMPLETED);
+                eatInOrderFlow);
         eatInOrder.occupyOrderTable(orderTable);
         return eatInOrder;
     }
