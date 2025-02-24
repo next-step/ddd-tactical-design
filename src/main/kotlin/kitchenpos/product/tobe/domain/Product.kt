@@ -22,8 +22,10 @@ class Product(
     @Column(name = "id", columnDefinition = "binary(16)")
     @Id
     var id: UUID? = null,
+
     @Embedded
     var productName: ProductName,
+
     @Column(name = "price", nullable = false)
     var price: BigDecimal,
 ) {
@@ -31,6 +33,5 @@ class Product(
     init {
         require(price >= BigDecimal.ZERO) { "상품 가격은 0원 이상이어야 합니다." }
     }
-
 
 }
