@@ -1,25 +1,25 @@
 package kitchenpos.order.eatinorder.application;
 
-import kitchenpos.order.common.model.OrderStatus;
-import kitchenpos.order.common.repository.OrderRepository;
-import kitchenpos.order.eatinorder.domain.model.OrderTable;
-import kitchenpos.order.eatinorder.domain.model.OrderTableName;
-import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.domain.model.OrderTableName;
+import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
+import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderTableService {
     private final OrderTableRepository orderTableRepository;
-    private final OrderRepository orderRepository;
+    private final OrderTableOccupationManager orderTableOccupationManager;
 
-    public OrderTableService(final OrderTableRepository orderTableRepository, final OrderRepository orderRepository) {
+    public OrderTableService(final OrderTableRepository orderTableRepository,
+                             final OrderTableOccupationManager orderTableOccupationManager) {
         this.orderTableRepository = orderTableRepository;
-        this.orderRepository = orderRepository;
+        this.orderTableOccupationManager = orderTableOccupationManager;
     }
 
     @Transactional
@@ -41,10 +41,7 @@ public class OrderTableService {
     public OrderTable clear(final UUID orderTableId) {
         final OrderTable orderTable = orderTableRepository.findById(orderTableId)
                 .orElseThrow(NoSuchElementException::new);
-        if (orderRepository.existsByOrderTableAndStatusNot(orderTable, OrderStatus.COMPLETED)) {
-            throw new IllegalStateException();
-        }
-        orderTable.releaseTable();
+        orderTableOccupationManager.release(new ReleaseOrderTableEvent(orderTable));
         return orderTable;
     }
 

@@ -1,9 +1,16 @@
 package kitchenpos.order.eatinorder.application;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import kitchenpos.order.common.model.OrderStatus;
 import kitchenpos.order.common.repository.OrderRepository;
+import kitchenpos.order.eatinorder.domain.model.EatInOrder;
+import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
+import kitchenpos.order.eatinorder.domain.repository.EatInOrderRepository;
 import kitchenpos.order.eatinorder.domain.repository.OrderTableRepository;
+import kitchenpos.order.eatinorder.domain.service.OrderTableOccupationManager;
+import kitchenpos.order.eatinorder.infra.persistence.FakeEatInOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +20,11 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import java.util.List;
 import java.util.Optional;
 
+import static kitchenpos.TestFixtureFactory.createEatInOrderRequestWithEmptyTable;
 import static kitchenpos.TestFixtureFactory.createEmptyOrderTable;
+import static kitchenpos.TestFixtureFactory.createMenu;
+import static kitchenpos.TestFixtureFactory.createMenuGroup;
+import static kitchenpos.TestFixtureFactory.createProduct;
 import static kitchenpos.TestFixtureFactory.createUsingOrderTable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,13 +35,15 @@ class OrderTableServiceTest {
 
     private OrderTableService orderTableService;
     private OrderTableRepository orderTableRepository;
-    private OrderRepository orderRepository;
+    private EatInOrderRepository eatInOrderRepository;
+    private OrderTableOccupationManager orderTableOccupationManager;
 
     @BeforeEach
     void setUp() {
         orderTableRepository = mock(OrderTableRepository.class);
-        orderRepository = mock(OrderRepository.class);
-        orderTableService = new OrderTableService(orderTableRepository, orderRepository);
+        eatInOrderRepository = new FakeEatInOrderRepository(new HashMap<>());
+        orderTableOccupationManager = new OrderTableOccupationManager(eatInOrderRepository);
+        orderTableService = new OrderTableService(orderTableRepository, orderTableOccupationManager);
     }
 
     @Test
@@ -96,16 +109,19 @@ class OrderTableServiceTest {
     void clear() {
         // given
         OrderTable orderTable = createUsingOrderTable();
+        EatInOrder eatInOrder = createEatInOrderRequestWithEmptyTable(
+                createMenu(createMenuGroup(), createProduct(BigDecimal.valueOf(1000))), EatInOrderFlow.COMPLETED);
+        eatInOrder.occupyOrderTable(orderTable);
+        eatInOrderRepository.save(eatInOrder);
 
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
-        when(orderRepository.existsByOrderTableAndStatusNot(any(), any())).thenReturn(false);
 
         // when
-        OrderTable cleared = orderTableService.clear(orderTable.getId());
+        OrderTable clearedOrderTable = orderTableService.clear(orderTable.getId());
 
         // then
-        assertThat(cleared.isOccupied()).isFalse();
-        assertThat(cleared.getNumberOfGuests()).isZero();
+        assertThat(clearedOrderTable.isOccupied()).isFalse();
+        assertThat(clearedOrderTable.getNumberOfGuests()).isZero();
     }
 
     @Test
@@ -113,12 +129,17 @@ class OrderTableServiceTest {
     void orderTable_occupied_exception() {
         // given
         OrderTable orderTable = createUsingOrderTable();
+        EatInOrder eatInOrder = createEatInOrderRequestWithEmptyTable(
+                createMenu(createMenuGroup(), createProduct(BigDecimal.valueOf(1000))), EatInOrderFlow.SERVED);
+        eatInOrder.occupyOrderTable(orderTable);
+        eatInOrderRepository.save(eatInOrder);
+
         when(orderTableRepository.findById(any())).thenReturn(Optional.of(orderTable));
-        when(orderRepository.existsByOrderTableAndStatusNot(any(), eq(OrderStatus.COMPLETED))).thenReturn(true);
 
         // when // then
         assertThatThrownBy(() -> orderTableService.clear(orderTable.getId()))
-                .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문이 완료되지 않은 매장 테이블은 정리할 수 없습니다.");
     }
 
     @Test

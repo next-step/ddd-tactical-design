@@ -1,5 +1,7 @@
 package kitchenpos.order.eatinorder.domain.service;
 
+import static kitchenpos.order.eatinorder.exception.EatInOrderExceptionMessage.RELEASE_ORDER_TABLE_EXCEPTION;
+
 import kitchenpos.order.eatinorder.domain.model.EatInOrderFlow;
 import kitchenpos.order.eatinorder.domain.model.OrderTable;
 import kitchenpos.order.eatinorder.domain.model.ReleaseOrderTableEvent;
@@ -18,8 +20,9 @@ public class OrderTableOccupationManager {
     @EventListener
     public void release(ReleaseOrderTableEvent event) {
         OrderTable orderTable = event.orderTable();
-        if (!eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(orderTable, EatInOrderFlow.COMPLETED)) {
-            orderTable.releaseTable();
+        if (eatInOrderRepository.existsByOrderTableAndEatInOrderFlowNot(orderTable, EatInOrderFlow.COMPLETED)) {
+            throw new IllegalStateException(RELEASE_ORDER_TABLE_EXCEPTION.getMessage());
         }
+        orderTable.releaseTable();
     }
 }
