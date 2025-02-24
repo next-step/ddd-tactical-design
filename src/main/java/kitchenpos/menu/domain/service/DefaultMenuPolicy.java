@@ -12,7 +12,6 @@ import kitchenpos.menu.domain.model.MenuPrice;
 import kitchenpos.menu.domain.model.MenuVo;
 import kitchenpos.menu.domain.model.MenuVo.MenuInfo;
 import kitchenpos.menu.domain.repository.MenuRepository;
-import kitchenpos.product.domain.service.ProductContextService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
