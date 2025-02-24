@@ -48,12 +48,20 @@ public class Menu {
         this.menuProducts = menuProducts;
         this.displayed = displayed;
 
-        if (this.isPriceInvalid()) {
-            throw new InvalidMenuPriceException("메뉴 가격이 메뉴상품 가격 총 합보다 큽니다");
+        validate();
+    }
+
+    private void validate() {
+        if (this.isValidPriceForDisplay()) {
+            throw new InvalidMenuPriceException("전시된 메뉴는 메뉴 가격이 메뉴상품 가격 총 합보다 클 수 없습니다.");
         }
     }
 
-    private boolean isPriceInvalid() {
+    private boolean isValidPriceForDisplay() {
+        return this.displayed && this.isPriceInvalid(this.price);
+    }
+
+    private boolean isPriceInvalid(Price price) {
         Price totalProductPrice = menuProducts.totalPrice();
         return price.isGreaterThan(totalProductPrice);
     }
@@ -63,10 +71,16 @@ public class Menu {
     }
 
     public void changePrice(Price price) {
+        if (this.isPriceInvalid(price)) {
+            throw new InvalidMenuPriceException("메뉴상품 가격 총 합보다 큰 가격으로 변경할 수 없습니다");
+        }
         this.price = price;
     }
 
     public void show() {
+        if (this.isPriceInvalid(this.price)) {
+            throw new InvalidMenuPriceException("메뉴 가격이 메뉴상품 가격 총 합보다 크면 전시할 수 없습니다");
+        }
         this.displayed = true;
     }
 

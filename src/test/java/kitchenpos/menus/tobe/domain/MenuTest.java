@@ -75,6 +75,27 @@ class MenuTest {
         assertThat(menu.getPrice()).isEqualTo(new Price(24_000));
     }
 
+    @DisplayName("메뉴 가격을 메뉴 상품의 총 가격 합보다 높게 변경할 경우, 예외가 발생한다")
+    @ValueSource(longs = 28_000)
+    @ParameterizedTest
+    void changeInvalidPrice(long newPrice) {
+        MenuProducts menuProducts = new MenuProducts(
+                new MenuProduct(ProductId.generate(), 1, 25_000),
+                new MenuProduct(ProductId.generate(), 1, 2_000)
+        );
+        Menu menu = new Menu(
+                MenuId.generate(),
+                new MenuName("후라이드치킨", (menuName) -> false),
+                new Price(27_000),
+                MenuGroupId.generate(),
+                menuProducts,
+                true
+        );
+
+        assertThatThrownBy(() -> menu.changePrice(new Price(newPrice)))
+                .isInstanceOf(InvalidMenuPriceException.class);
+    }
+
     @DisplayName("메뉴를 전시한다")
     @Test
     void show() {
@@ -94,6 +115,27 @@ class MenuTest {
         menu.show();
 
         assertThat(menu.isDisplayed()).isTrue();
+    }
+
+    @DisplayName("메뉴의 가격이 메뉴 상품의 총 가격 합보다 클 경우, 메뉴를 전시할 때 예외가 발생한다")
+    @ValueSource(longs = 28_000)
+    @ParameterizedTest
+    void validatePriceForDisplay(long menuPrice) {
+        MenuProducts menuProducts = new MenuProducts(
+                new MenuProduct(ProductId.generate(), 1, 25_000),
+                new MenuProduct(ProductId.generate(), 1, 2_000)
+        );
+        Menu menu = new Menu(
+                MenuId.generate(),
+                new MenuName("후라이드치킨", (menuName) -> false),
+                new Price(menuPrice),
+                MenuGroupId.generate(),
+                menuProducts,
+                false
+        );
+
+        assertThatThrownBy(menu::show)
+                .isInstanceOf(InvalidMenuPriceException.class);
     }
 
     @DisplayName("메뉴를 숨긴다")
