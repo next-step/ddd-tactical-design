@@ -49,7 +49,7 @@ public class Product {
         return price;
     }
 
-    public void update(ProductPrice price) {
+    public void updatePrice(ProductPrice price) {
         this.price = price;
     }
 

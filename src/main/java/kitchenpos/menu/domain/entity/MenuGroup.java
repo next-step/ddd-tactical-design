@@ -30,15 +30,7 @@ public class MenuGroup {
         return id;
     }
 
-    public void setId(final UUID id) {
-        this.id = id;
-    }
-
     public MenuGroupName getName() {
         return name;
-    }
-
-    public void setName(final MenuGroupName name) {
-        this.name = name;
     }
 }

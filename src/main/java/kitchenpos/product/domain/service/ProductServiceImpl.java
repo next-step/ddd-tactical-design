@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
         final Product product = productRepository.findById(request.productId())
             .orElseThrow(NoSuchElementException::new);
 
-        product.update(price);
+        product.updatePrice(price);
 
         productEventPublisher.publish(new ProductPriceChangedEvent(request.productId()));
 

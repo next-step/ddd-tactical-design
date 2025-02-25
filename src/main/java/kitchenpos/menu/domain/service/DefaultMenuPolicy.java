@@ -74,7 +74,7 @@ public class DefaultMenuPolicy implements MenuPolicy {
         BigDecimal totalMenuProductPrice = calculateTotalMenuProductPrice(menu.getMenuProducts());
 
         boolean shouldBeDisplayed = menu.isLessThanOrEqual(totalMenuProductPrice);
-        menu.setDisplayed(shouldBeDisplayed);
+        menu.updateDisplayed(shouldBeDisplayed);
     }
 
     private BigDecimal calculateTotalMenuProductPrice(List<MenuProduct> menuProducts) {

@@ -69,40 +69,16 @@ public class Menu {
         return name;
     }
 
-    public void setName(final MenuName name) {
-        this.name = name;
-    }
-
     public MenuPrice getPrice() {
         return price;
-    }
-
-    public void setPrice(final MenuPrice price) {
-        this.price = price;
-    }
-
-    public UUID getMenuGroupId() {
-        return menuGroupId;
-    }
-
-    public void setMenuGroupId(final UUID menuGroupId) {
-        this.menuGroupId = menuGroupId;
     }
 
     public boolean isDisplayed() {
         return displayed;
     }
 
-    public void setDisplayed(final boolean displayed) {
-        this.displayed = displayed;
-    }
-
     public List<MenuProduct> getMenuProducts() {
         return menuProducts;
-    }
-
-    public void setMenuProducts(final List<MenuProduct> menuProducts) {
-        this.menuProducts = menuProducts;
     }
 
     public void updateDisplayed(boolean displayed) {

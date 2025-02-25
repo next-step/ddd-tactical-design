@@ -30,8 +30,7 @@ public class FakeMenuPolicy implements MenuPolicy {
         List<Menu> menus = menuRepository.findAllByProductId(productId);
 
         menus.forEach(menu -> {
-            menu.setDisplayed(false);
-            menuRepository.save(menu);
+            menu.updateDisplayed(false);
         });
     }
 

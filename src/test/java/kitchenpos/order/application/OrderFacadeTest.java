@@ -178,7 +178,7 @@ class OrderFacadeTest {
         @Test
         @DisplayName("메뉴가 노출된 상태여야 한다.")
         void 메뉴가_노출상태인지_검사() {
-            chickenMenu.setDisplayed(false);
+            chickenMenu.updateDisplayed(false);
 
             mockFindAllByMenu(order);
             mockFindByMenu(chickenMenu);
