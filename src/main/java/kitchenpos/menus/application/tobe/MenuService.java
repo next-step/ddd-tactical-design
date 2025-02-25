@@ -1,11 +1,8 @@
 package kitchenpos.menus.application.tobe;
 
 import kitchenpos.common.vo.Price;
+import kitchenpos.menus.presentation.dto.*;
 import kitchenpos.menus.tobe.domain.*;
-import kitchenpos.menus.presentation.dto.MenuChangePriceRequest;
-import kitchenpos.menus.presentation.dto.MenuChangePriceResponse;
-import kitchenpos.menus.presentation.dto.MenuCreateRequest;
-import kitchenpos.menus.presentation.dto.MenuCreateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +61,15 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Menu> findAll() {
         return menuRepository.findAll();
+    }
+
+    @Transactional
+    public MenuProductPriceChangeResponse changeProductPrice(final MenuProductPriceChangeRequest request){
+        List<Menu> menus = menuRepository.findAllByProductId(request.getId());
+        for (Menu menu : menus) {
+            menu.changeProductPrice(request.getId(), request.getPrice());
+        }
+        return MenuProductPriceChangeResponse.from(menus);
     }
 
     private void validateMenuGroup(MenuGroupId menuGroupId) {

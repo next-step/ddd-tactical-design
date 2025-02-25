@@ -1,14 +1,12 @@
-package kitchenpos.menus.application.tobe;
+package kitchenpos.menus.presentation.tobe;
 
-import kitchenpos.menus.tobe.domain.Menu;
-import kitchenpos.menus.tobe.domain.MenuRepository;
+import kitchenpos.menus.application.tobe.MenuService;
+import kitchenpos.menus.presentation.dto.MenuProductPriceChangeRequest;
 import kitchenpos.products.tobe.domain.event.ProductPriceChangedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
-import java.util.List;
 
 @Component
 public class ProductPriceChangedEventHandler {
@@ -23,18 +21,15 @@ public class ProductPriceChangedEventHandler {
     메뉴 가격 > 메뉴 상품의 총 합인 경우, 비전시된 메뉴로 만든다
 
     */
-    private final MenuRepository menuRepository;
+    private final MenuService menuService;
 
-    public ProductPriceChangedEventHandler(MenuRepository menuRepository) {
-        this.menuRepository = menuRepository;
+    public ProductPriceChangedEventHandler(MenuService menuService) {
+        this.menuService = menuService;
     }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handle(ProductPriceChangedEvent event) {
-        List<Menu> menus = menuRepository.findAllByProductId(event.getId());
-        for (Menu menu : menus) {
-            menu.changeProductPrice(event.getId(), event.getPrice());
-        }
+        menuService.changeProductPrice(MenuProductPriceChangeRequest.from(event));
     }
 }

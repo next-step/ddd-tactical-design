@@ -4,12 +4,9 @@ import kitchenpos.common.vo.Price;
 import kitchenpos.menus.infra.InMemoryMenuGroupRepository;
 import kitchenpos.menus.infra.InMemoryMenuRepository;
 import kitchenpos.menus.infra.MenuProductsValidatorService;
+import kitchenpos.menus.presentation.dto.*;
 import kitchenpos.menus.tobe.domain.*;
 import kitchenpos.menus.tobe.domain.exception.InvalidMenuProductsException;
-import kitchenpos.menus.presentation.dto.MenuChangePriceRequest;
-import kitchenpos.menus.presentation.dto.MenuChangePriceResponse;
-import kitchenpos.menus.presentation.dto.MenuCreateRequest;
-import kitchenpos.menus.presentation.dto.MenuCreateResponse;
 import kitchenpos.products.infra.tobe.InMemoryProductRepository;
 import kitchenpos.products.tobe.domain.Product;
 import kitchenpos.products.tobe.domain.ProductId;
@@ -59,7 +56,7 @@ class MenuServiceTest {
                 new MenuProduct(COKE, 1, 2_000)
         );
         MenuCreateRequest request = new MenuCreateRequest(
-            "후라이드치킨세트",
+                "후라이드치킨세트",
                 (name) -> false,
                 27_000,
                 MENU_GROUP.value(),
@@ -159,6 +156,24 @@ class MenuServiceTest {
         Menu result = menuService.hide(id);
 
         assertThat(result.isDisplayed()).isFalse();
+    }
+
+    @DisplayName("메뉴들 중 특정 메뉴 상품의 가격을 변경한다. 변경 후, 메뉴 가격이 메뉴 상품 총 합보다 크면 비전시된 메뉴가 된다")
+    @Test
+    void changeProductPrice() {
+        MenuId id = MenuId.generate();
+        MenuProducts menuProducts = new MenuProducts(
+                new MenuProduct(CHICKEN, 1, 25_000),
+                new MenuProduct(COKE, 1, 2_000)
+        );
+        menuRepository.save(createMenu(id, "후라이드치킨세트1", 27_000, MENU_GROUP, menuProducts));
+
+        MenuProductPriceChangeResponse result = menuService.changeProductPrice(new MenuProductPriceChangeRequest(CHICKEN, new Price(24_000)));
+
+        assertThat(result.getResults()).hasSize(1);
+        assertThat(result.getResults().getFirst())
+                .extracting("id", "displayed")
+                        .contains(id, false);
     }
 
     private MenuGroup createMenuGroup(MenuGroupId id, String name) {
